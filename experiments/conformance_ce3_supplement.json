@@ -4,9 +4,15 @@
     "by_verdict": {
       "confirmed_counterexample": 25
     },
+    "how_this_number_was_obtained": "COMPUTED per row by conform.eval_under_domain under carrier Rat with exact division and signed subtraction, at the same bindings, and tallied here — not asserted, and not a floor. Either reading was publishable; this one is what the tree returned.",
+    "of_confirmed_rows": 25,
     "refuted_counterexamples": [],
+    "rows_that_fail_over_exact_rationals": 0,
+    "rows_that_hold_over_exact_rationals": 25,
+    "rows_whose_exact_rational_reading_errored": 0,
     "rows_whose_substitution_did_not_reproduce_the_run": [],
-    "substitution_cross_check": "Every presented row's substituted tree is re-evaluated by conform.eval_under_domain under the row's own declared domain and compared to the left/right values the registered run printed. A row that did not reproduce them would mean this writer substituted a different point, and its checker verdict would be about a statement nobody measured."
+    "substitution_cross_check": "Every presented row's substituted tree is re-evaluated by conform.eval_under_domain under the row's own declared domain and compared to the left/right values the registered run printed. A row that did not reproduce them would mean this writer substituted a different point, and its checker verdict would be about a statement nobody measured.",
+    "what_the_agreement_therefore_PRICES": "25 of the 25 confirmed rows HOLD at the very same point when the same statement is read over exact rationals with signed subtraction. So these counterexamples are products of the DECLARED DOMAIN — truncating `/`, truncated-at-zero `-` over Nat — and not of the source statements. What the checker's agreement prices is therefore ARITHMETIC-IMPLEMENTATION risk: two independent implementations of the SAME declared arithmetic (this repository's evaluator and Lean's Nat operations) compute the same values and the same failures. It prices NOTHING about whether that declared arithmetic is the right reading of the Lean source statement. DOMAIN risk — the standing correlated-interpretation label on every NONCONFORMANT verdict — is untouched, and a reader who takes 25/25 as evidence the corpus is wrong has read this artifact backwards."
   },
   "amends": "experiments/conformance_prereg.json -> amendments[] (the dated entry naming this rider)",
   "authority": "docs/ROADMAP-v0.21.md §4.0(1), the bug-not-result clause: the no-chase rule governs controls that RAN and read unfavourably; C-E3 provably never executed on the sampled class, which is a bug. The precedent for the shape is foreign_voice_rate.json -> foreign_voice_rate2.json: own dated amendment, NEW artifact, original never edited or re-scored.",
@@ -18,10 +24,12 @@
     "timeout_seconds": 120,
     "toolchain": "leanprover/lean4:v4.32.2"
   },
-  "commit": "a98fa3cc17813e879cad6e8df095ab3f3863e0ab",
+  "commit": "651128d9083d5bca1b43d530e9abd608f4df42f0",
   "corrections_to_this_writer_after_its_first_execution": {
-    "disclosed_because_the_ordering_matters": "The first execution read 25/25 confirmed. TWO DEFECTS IN THE RECEIPT — not in any verdict — were found by reading that output, fixed, and the run re-executed. Both are recorded here rather than quietly folded in.",
-    "no_verdict_moved": "Neither fix touches substitution, rendering or the decision procedure. All 25 verdicts and both probe `source_sha256` values per row are identical before and after.",
+    "and_a_second_regeneration_after_adversarial_review": "DATED 2026-08-26. Adversarial review found two things this artifact owed and one it could cheaply add: DESIGN-statements-that-run's Correction 7 requires the honest non-claim PER COUNTEREXAMPLE and these rows carried none (`honest_non_claim` is now on every row, keyed to the verdict by a closed table); and the exact-rational reading of each point was one evaluation away and separates arithmetic-implementation risk from domain risk (see the aggregate). The artifact was REGENERATED THROUGH THE WRITER rather than edited — this run is deterministic and §4.0(2) welcomes reproductions — and the regeneration moved exactly the intended fields plus `commit` and the wall-clock `seconds`. Every decide verdict and every probe digest is unchanged. This artifact never had a byte-reproduction proof at stake, which is what made regeneration the right repair here and the wrong one for foreign_voice_rate2.",
+    "disclosed_because_the_ordering_matters": "The first execution read 25/25 confirmed. THREE DEFECTS IN THE RECEIPT — not in any verdict — were found by reading that output, fixed, and the run re-executed. All three are recorded here rather than quietly folded in.",
+    "no_verdict_moved": "None of the three fixes touches substitution, rendering or the decision procedure. All 25 verdicts and both probe `source_sha256` values per row are identical before and after.",
+    "the_checkers_absolute_path_named_this_machines_home_directory": "`checker.binary` recorded `C:\\Users\\<user>\\.elan\\...`, a fact about one account, inside an artifact that tells a reader the rest of it reproduces. It is now recorded home-relative as `~/.elan/...`, with `binary_sha256` as the binary's actual identity.",
     "the_probe_output_was_decoded_by_the_console_codepage": "`subprocess.run(text=True)` decoded Lean's diagnostics with the locale encoding, so `≥` reached the receipt as `â‰¥`. The probe now captures bytes and decodes UTF-8 explicitly.",
     "the_temporary_directorys_random_name_reached_the_artifact": "Lean prefixes its diagnostics with the source path, and the source lived in a fresh `TemporaryDirectory`, so a random string sat inside a field this artifact tells a reader is deterministic. The path is now normalised to `<probe>.lean` and the artifact reproduces byte-for-byte apart from the wall-clock `seconds` fields."
   },
@@ -46,7 +54,7 @@
   "reproduction": {
     "determinism": "Deterministic given the pinned checker and the committed run artifact: the rows, the bindings and the rendered propositions are all functions of committed bytes, and `decide` is a decision procedure. Per ROADMAP-v0.21 §4.0(2) this artifact is committed from a deterministic runner and reproductions are welcome and recorded.",
     "how": "python scripts/conformance_ce3_supplement.py",
-    "what_is_not_byte_identical": "`checker.timeout_seconds` aside, the per-probe `seconds` fields are wall-clock and differ between runs by construction. Every other field is a function of the inputs."
+    "what_is_not_byte_identical": "Two fields, named so a reader diffing two runs knows what to expect: the per-probe `seconds`, which are wall-clock and differ by construction, and `commit`, which records the HEAD the run happened on and cannot reproduce from a different one. Every other field is a function of the inputs."
   },
   "roadmap": "docs/ROADMAP-v0.21.md §2",
   "rows": [
@@ -63,7 +71,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.353,
+          "seconds": 0.359,
           "source_sha256": "f249eaea9ccfae4d1d643ec72113b0afe89ef8e27fdab6ebac8334f21a30f4d6"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -71,7 +79,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:210: error: Tactic `decide` proved that the proposition\n  3 / 2 * (2 + 7 + 1) * (3 * (2 + 7 + 1) ^ 2 + 2 * 7 + 2 * 1 + 7 * 1) ≥\n    (3 * 2 + 7 + 1) * (3 * 7 + 2 + 1) * (3 * 1 + 2 + 7)\nis false",
           "returncode": 1,
-          "seconds": 0.346,
+          "seconds": 0.373,
           "source_sha256": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f"
         }
       },
@@ -88,7 +96,14 @@
         "right": "4032",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "4845",
+        "right": "4032",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "3230",
@@ -110,7 +125,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.339,
+          "seconds": 0.351,
           "source_sha256": "04d2df4523a2beb12f34016084296ae53281ef137dd6c4a0165a39e31053ce52"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -118,7 +133,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:92: error: Tactic `decide` proved that the proposition\n  (1 + 3) ^ 3 * (1 + 16 / 3 ^ 3) ≥ 81\nis false",
           "returncode": 1,
-          "seconds": 0.338,
+          "seconds": 0.344,
           "source_sha256": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f"
         }
       },
@@ -135,7 +150,14 @@
         "right": "81",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "2752/27",
+        "right": "81",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "64",
@@ -159,7 +181,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.369,
+          "seconds": 0.38,
           "source_sha256": "bd8ced8242ffda6aded97330177707e90583d8d4d666e6b419b49618bcf10a45"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -167,7 +189,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:216: error: Tactic `decide` proved that the proposition\n  5 / 3 * (3 ^ 2 + 7 ^ 2 + 0 ^ 2) ^ 2 ≥\n    2 * (3 ^ 3 * 7 + 7 ^ 3 * 0 + 0 ^ 3 * 3) + 3 * (3 * 7 ^ 3 + 7 * 0 ^ 3 + 0 * 3 ^ 3)\nis false",
           "returncode": 1,
-          "seconds": 0.376,
+          "seconds": 0.377,
           "source_sha256": "eecaae562274263a3f9319dd9512a5b90adc8067b2044809881f9b2ad0df165b"
         }
       },
@@ -184,7 +206,14 @@
         "right": "3465",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "16820/3",
+        "right": "3465",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "3364",
@@ -209,7 +238,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.365,
+          "seconds": 0.376,
           "source_sha256": "1b7ef824d57fa5e8c5a7105344c8e9ec5bea6130828d8034b39eda4a1e82847d"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -217,7 +246,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:208: error: Tactic `decide` proved that the proposition\n  1 / 4 * (1 ^ 2 + 2 ^ 2 + 11 ^ 2 + 7 ^ 2) ^ 2 ≥ 1 ^ 2 * 2 * 11 + 7 * 2 ^ 2 * 11 + 7 * 1 * 11 ^ 2 + 7 ^ 2 * 1 * 2\nis false",
           "returncode": 1,
-          "seconds": 0.365,
+          "seconds": 0.37,
           "source_sha256": "d68d50aa4cffeb193b54a8d8f8683e7649de29264176f995950d5d4c9ad6842d"
         }
       },
@@ -234,7 +263,14 @@
         "right": "1275",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "30625/4",
+        "right": "1275",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "0",
@@ -258,7 +294,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.328,
+          "seconds": 0.33,
           "source_sha256": "64cc4e175759826ce8b743849665dc171e9abccd560086e32e938bafd53be032"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -266,7 +302,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:148: error: Tactic `decide` proved that the proposition\n  5 / 3 + 3 / 5 + 5 / 5 ≥ (5 + 3) / (3 + 5) + (3 + 5) / (5 + 3) + 1\nis false",
           "returncode": 1,
-          "seconds": 0.327,
+          "seconds": 0.346,
           "source_sha256": "a1e12ad31e8b7e4a38c9f03af01559236bd48fee58a7e44277733fb17a3f907d"
         }
       },
@@ -283,7 +319,14 @@
         "right": "3",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "49/15",
+        "right": "3",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "2",
@@ -305,7 +348,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.346,
+          "seconds": 0.335,
           "source_sha256": "391798beb93bdbe46dbb785cd853535bbc0349c7aba8de0c49980812d58a7a34"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -313,7 +356,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:129: error: Tactic `decide` proved that the proposition\n  0 ^ 4 + 3 = ((0 - 1) * (0 + 1)) ^ 2 + (0 - 1) ^ 2 + (0 + 1) ^ 2\nis false",
           "returncode": 1,
-          "seconds": 0.349,
+          "seconds": 0.337,
           "source_sha256": "c16478fec40e8359bbf1fbf5035890dc3362fff03939bc8bd00357e6a95fa2ac"
         }
       },
@@ -330,7 +373,14 @@
         "right": "1",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "3",
+        "right": "3",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "3",
@@ -354,7 +404,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.338,
+          "seconds": 0.336,
           "source_sha256": "7df2062508095b93030850eb000fadc83609522b1707c9055c7c4d4a23f46ff6"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -362,7 +412,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:174: error: Tactic `decide` proved that the proposition\n  5 / (7 + 5) + 7 / (5 + 5) + 5 / (5 + 7) + 4 * 5 * 7 * 5 / ((5 + 7) * (7 + 5) * (5 + 5)) ≥ 2\nis false",
           "returncode": 1,
-          "seconds": 0.328,
+          "seconds": 0.342,
           "source_sha256": "8850d13ef31411148044dae981749d4806086f17b4b5b90db2ad41b96289413d"
         }
       },
@@ -379,7 +429,14 @@
         "right": "2",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "727/360",
+        "right": "2",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "0",
@@ -403,7 +460,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.366,
+          "seconds": 0.359,
           "source_sha256": "c7688d6be0ce8295987d13d12c6229cff9db6554c2dce8e581bb1ed78f39433e"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -411,7 +468,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:179: error: Tactic `decide` proved that the proposition\n  2 * (7 ^ 3 + 5 ^ 3 + 7 ^ 3) / (7 * 5 * 7) + 9 * (7 + 5 + 7) ^ 2 / (7 ^ 2 + 5 ^ 2 + 7 ^ 2) ≥ 33\nis false",
           "returncode": 1,
-          "seconds": 0.346,
+          "seconds": 0.351,
           "source_sha256": "3fa01fc49e77311f6cd47d7acdc4402636b56080e1ad313168d9c60d09068bbd"
         }
       },
@@ -428,7 +485,14 @@
         "right": "33",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "331837/10045",
+        "right": "33",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "32",
@@ -452,7 +516,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.337,
+          "seconds": 0.349,
           "source_sha256": "ec06ad12910f78bbc5882154b651c0b244b717d8080f3150e65d6dc9651a956f"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -460,7 +524,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:169: error: Tactic `decide` proved that the proposition\n  (5 + 4 + 1) ^ 2 * (5 * 4 + 4 * 1 + 1 * 5) ≤ 9 / 16 * ((5 + 4) ^ 4 + (4 + 1) ^ 4 + (1 + 5) ^ 4)\nis false",
           "returncode": 1,
-          "seconds": 0.339,
+          "seconds": 0.363,
           "source_sha256": "365cb9d1bed2a66208d4c3b157c9fabc2937a8b17ac91afb54efc4fbb847c00f"
         }
       },
@@ -477,7 +541,14 @@
         "right": "0",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "2900",
+        "right": "38169/8",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "2900",
@@ -501,7 +572,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.36,
+          "seconds": 0.332,
           "source_sha256": "e2417dfa6d1095886553152837aa743d713188816bb2381dd1b04bbcc1ec6665"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -509,7 +580,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:193: error: Tactic `decide` proved that the proposition\n  4 / (4 + 1) + 1 / (1 + 2) + 2 / (2 + 4) ≥ 27 * 4 * 1 * 2 / (2 * (4 + 1 + 2) * (4 * 1 + 1 * 2 + 2 * 4))\nis false",
           "returncode": 1,
-          "seconds": 0.34,
+          "seconds": 0.355,
           "source_sha256": "d45559c0333cea6ad09fe00c6dc683d8b1022829d1cfea460da3eb19569444aa"
         }
       },
@@ -526,7 +597,14 @@
         "right": "1",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "22/15",
+        "right": "54/49",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "0",
@@ -549,7 +627,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.343,
+          "seconds": 0.354,
           "source_sha256": "7ab0b36b16e8d1a7688afefbf11868f5eb20623c851d912c5cc1404e1abbb3aa"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -557,7 +635,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:93: error: Tactic `decide` proved that the proposition\n  11 ^ 2 + 4 ^ 2 ≤ 10 / 3 * 11 * 4\nis false",
           "returncode": 1,
-          "seconds": 0.343,
+          "seconds": 0.345,
           "source_sha256": "169ec5cc7b4a252f9dc95d38b3cf2b9a8dd89d50216211fd5b65060275072aeb"
         }
       },
@@ -574,7 +652,14 @@
         "right": "132",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "137",
+        "right": "440/3",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "137",
@@ -598,7 +683,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.354,
+          "seconds": 0.35,
           "source_sha256": "a680902116a87f6c98d1536e447adba760000e867f729f0cdc78cad200aeccfa"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -606,7 +691,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:146: error: Tactic `decide` proved that the proposition\n  2 * (4 ^ 2 / (4 + 3) + 4 ^ 2 / (3 + 4) + 3 ^ 2 / (4 + 4)) ≥ 4 + 4 + 3\nis false",
           "returncode": 1,
-          "seconds": 0.341,
+          "seconds": 0.348,
           "source_sha256": "397fc5c6ab65029889cb8dc5ddea64efd32a57b8654f3cce2cd1c7c500113619"
         }
       },
@@ -623,7 +708,14 @@
         "right": "11",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "319/28",
+        "right": "11",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "10",
@@ -645,7 +737,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.339,
+          "seconds": 0.345,
           "source_sha256": "91ac28f6fba89be3b558526834ba87116b6ea8c8043b63953b35f9073bbcda8a"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -653,7 +745,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:155: error: Tactic `decide` proved that the proposition\n  (0 + 1) / (0 ^ 2 + 1) + 1 / 4 = 1 / 4 * (0 ^ 2 + 4 * 0 + 5) / (0 ^ 2 + 1)\nis false",
           "returncode": 1,
-          "seconds": 0.343,
+          "seconds": 0.348,
           "source_sha256": "3ef65e4bfff2bf4b2daf110eda80def4c823c4138bf04f0cf8a3f5bcd8c39fff"
         }
       },
@@ -670,7 +762,14 @@
         "right": "0",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "5/4",
+        "right": "5/4",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "1",
@@ -694,7 +793,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.359,
+          "seconds": 0.363,
           "source_sha256": "ce1aee7415e375feca1028a8db01568aeeaf2a44061f459a5c59dd64cc4e8089"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -702,7 +801,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:150: error: Tactic `decide` proved that the proposition\n  4 ^ 2 / (1 + 4 + 2 * 4) ≤ 1 / 4 * (4 ^ 2 / (1 + 4) + 4 ^ 2 / (4 + 4))\nis false",
           "returncode": 1,
-          "seconds": 0.336,
+          "seconds": 0.355,
           "source_sha256": "c80a971c7bd4ff7905da9771e1c15eb35082012674ee8754c5425131ddcebe1a"
         }
       },
@@ -719,7 +818,14 @@
         "right": "0",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "16/13",
+        "right": "13/10",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "1",
@@ -743,7 +849,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.339,
+          "seconds": 0.358,
           "source_sha256": "e01c3a06b81d18d5e70aa9a25d2922d17da1fb9e22d7dd64180576a853fd3ab0"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -751,7 +857,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:176: error: Tactic `decide` proved that the proposition\n  (4 ^ 2 + 3 * 2) / (3 + 2) + (3 ^ 2 + 2 * 4) / (2 + 4) + (2 ^ 2 + 4 * 3) / (4 + 3) ≥ 4 + 3 + 2\nis false",
           "returncode": 1,
-          "seconds": 0.331,
+          "seconds": 0.364,
           "source_sha256": "68d55666b30c9e3408cd63783108c3597049f75fb135b52071f8b4f4c4e19f09"
         }
       },
@@ -768,7 +874,14 @@
         "right": "9",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "1999/210",
+        "right": "9",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "8",
@@ -792,7 +905,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.344,
+          "seconds": 0.342,
           "source_sha256": "90fda4989731db365e233bf9347c592e8ea96b2c439e2f8ae99c51e0bbbd4ff0"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -800,7 +913,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:123: error: Tactic `decide` proved that the proposition\n  2 * 4 ^ 2 + 5 * 7 = 4 * (4 + 5 + 7) + (4 - 5) * (4 - 7)\nis false",
           "returncode": 1,
-          "seconds": 0.337,
+          "seconds": 0.329,
           "source_sha256": "ddd1fb5449c7c98f0dc1d3905dd6f89e09e3826537cc0298bc157af9f7b070f0"
         }
       },
@@ -817,7 +930,14 @@
         "right": "64",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "67",
+        "right": "67",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "67",
@@ -841,7 +961,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.33,
+          "seconds": 0.327,
           "source_sha256": "dbeaa97a8b197a95b3373a3ed4f3824e83d2e7fefcc20569328ee2544318ca70"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -849,7 +969,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:224: error: Tactic `decide` proved that the proposition\n  1 / 2 + 1 / 2 + 1 / 4 ≥ (4 * (2 + 2 + 4) ^ 2 - 3 * (2 * 2 + 2 * 4 + 4 * 2)) / (2 + 2 + 4) / (2 * 2 + 2 * 4 + 4 * 2)\nis false",
           "returncode": 1,
-          "seconds": 0.333,
+          "seconds": 0.373,
           "source_sha256": "4c9e7a828751d556374dfbe73ee8d3947a0a9550699cc627184b254cda202694"
         }
       },
@@ -866,7 +986,14 @@
         "right": "1",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "5/4",
+        "right": "49/40",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "0",
@@ -890,7 +1017,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.354,
+          "seconds": 0.355,
           "source_sha256": "0d315f08216a614a8cdac8223d27b05d15412df96337de67c10f7fa995c430b3"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -898,7 +1025,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:169: error: Tactic `decide` proved that the proposition\n  11 ^ 2 * (1 + 5 - 11) + 1 ^ 2 * (5 + 11 - 1) + 5 ^ 2 * (11 + 1 - 5) ≤ 3 * 11 * 1 * 5\nis false",
           "returncode": 1,
-          "seconds": 0.347,
+          "seconds": 0.345,
           "source_sha256": "52cc032dadfa5db4f1c89eda3d11c207af6335d695aa9394b76b6abddf0a7498"
         }
       },
@@ -915,7 +1042,14 @@
         "right": "165",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "-415",
+        "right": "165",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "190",
@@ -939,7 +1073,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.34,
+          "seconds": 0.341,
           "source_sha256": "71bdea3a3a9f9d7df3cc63f41badd73bb8cba68dff874a49073dbfa25f0e7dd8"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -947,7 +1081,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:148: error: Tactic `decide` proved that the proposition\n  7 / (11 + 11 - 7) + 11 / (11 + 7 - 11) + 11 / (7 + 11 - 11) ≥ 3\nis false",
           "returncode": 1,
-          "seconds": 0.347,
+          "seconds": 0.34,
           "source_sha256": "2065f135337caf144e0e84004033844800205127ecb0d97bd6baaaac6184a41d"
         }
       },
@@ -964,7 +1098,14 @@
         "right": "3",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "379/105",
+        "right": "3",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "2",
@@ -988,7 +1129,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.35,
+          "seconds": 0.347,
           "source_sha256": "484cff560a359b2286abf8beccfec72cb7f8f31c857b4f1a2f2b3f7f502ab58b"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -996,7 +1137,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:150: error: Tactic `decide` proved that the proposition\n  4 ^ 2 / (5 + 5) + 5 ^ 2 / (5 + 4) + 5 ^ 2 / (4 + 5) ≥ (4 + 5 + 5) / 2\nis false",
           "returncode": 1,
-          "seconds": 0.353,
+          "seconds": 0.337,
           "source_sha256": "164b693518c039cfe3233075945c14bf8958da72a107517950315e1aeb2938cf"
         }
       },
@@ -1013,7 +1154,14 @@
         "right": "7",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "322/45",
+        "right": "7",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "5",
@@ -1036,7 +1184,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.353,
+          "seconds": 0.361,
           "source_sha256": "52dc4dad29756774556060ddd4bcbd4dac148c7f31fd24d023b942195c974f8e"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -1044,7 +1192,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:112: error: Tactic `decide` proved that the proposition\n  (2 ^ 2 + 2) / (2 + 2) + 2 ^ 2 / (2 * 2 + 1) ≥ 2\nis false",
           "returncode": 1,
-          "seconds": 0.347,
+          "seconds": 0.342,
           "source_sha256": "4d593cb4cba6961c9e76362a4844fef2f1002d9f1e6771803bd9399acd44e806"
         }
       },
@@ -1061,7 +1209,14 @@
         "right": "2",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "23/10",
+        "right": "2",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "1",
@@ -1093,7 +1248,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:110: error: Tactic `decide` proved that the proposition\n  1 / 5 * (2 + 3) + 5 * (1 / 2 + 1 / 3) ≥ 5\nis false",
           "returncode": 1,
-          "seconds": 0.327,
+          "seconds": 0.332,
           "source_sha256": "e10b0a28696cf496d5249585877363d0554702bad66b2840d0210cb4a77b68df"
         }
       },
@@ -1110,7 +1265,14 @@
         "right": "5",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "31/6",
+        "right": "5",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "0",
@@ -1134,7 +1296,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.352,
+          "seconds": 0.363,
           "source_sha256": "c8dc5deae7633e97e3801f7f62e57862f41f5369b8b52b73a14537a3e651e008"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -1142,7 +1304,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:168: error: Tactic `decide` proved that the proposition\n  3 ^ 3 / (3 + 3) + 3 ^ 3 / (3 + 2) + 2 ^ 3 / (2 + 3) ≥ (3 ^ 2 + 3 ^ 2 + 2 ^ 2) / 2\nis false",
           "returncode": 1,
-          "seconds": 0.341,
+          "seconds": 0.356,
           "source_sha256": "66af4f1d4b0a714f4a0b052a6314839a26fe8d3c2e4c9e81e6535423a9721579"
         }
       },
@@ -1159,7 +1321,14 @@
         "right": "11",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "23/2",
+        "right": "11",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "10",
@@ -1181,7 +1350,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.357,
+          "seconds": 0.349,
           "source_sha256": "df3dd13b91b02edb6968cf078babaec65a0eed500b8e6fa9d1e31b8daa45aadd"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -1189,7 +1358,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:133: error: Tactic `decide` proved that the proposition\n  0 ^ 4 - 4 * 0 ^ 3 + 8 * 0 + 4 = (0 ^ 2 - 2 * 0 - 2) ^ 2\nis false",
           "returncode": 1,
-          "seconds": 0.366,
+          "seconds": 0.35,
           "source_sha256": "7f9df9c298bed167a7032c84e6436699ae84098dfb4bdede9cdd520bd34817ae"
         }
       },
@@ -1206,7 +1375,14 @@
         "right": "0",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "4",
+        "right": "4",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "4",
@@ -1230,7 +1406,7 @@
           "accepted": true,
           "checker_output_head": "",
           "returncode": 0,
-          "seconds": 0.379,
+          "seconds": 0.363,
           "source_sha256": "87feaa54c9830ebbd1aa8d16681699daaca139c665212bc494c01d7453a182d2"
         },
         "pattern": "example : (<prop> : Prop) := by decide",
@@ -1238,7 +1414,7 @@
           "accepted": false,
           "checker_output_head": "<probe>.lean:1:254: error: Tactic `decide` proved that the proposition\n  (2 * (5 - 2) ^ 2 + 2 * 5 ^ 2 + 5 * 2) * (2 * (2 - 5) ^ 2 + 2 * 5 ^ 2 + 2 * 5) *\n      (2 * (5 - 5) ^ 2 + 2 * 2 ^ 2 + 5 * 5) ≥\n    (5 ^ 2 + 5 ^ 2 + 2 ^ 2) ^ 3\nis false",
           "returncode": 1,
-          "seconds": 0.426,
+          "seconds": 0.372,
           "source_sha256": "25d88b935bdfeca27c542b731df8cdbdd6744f35864351dd97339d94213d098e"
         }
       },
@@ -1255,7 +1431,14 @@
         "right": "157464",
         "still_a_counterexample_under_the_evaluator": true
       },
+      "honest_non_claim": "independent adjudication WAS available for this carrier and it agreed. What is still not claimed: the DOMAIN under which this point was drawn was declared by this repository, and the checker was handed that declaration rather than an independent reading of the Lean source statement. The standing correlated-interpretation label on this NONCONFORMANT verdict is untouched by this row",
       "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "over_exact_rationals": {
+        "holds": true,
+        "left": "200772",
+        "right": "157464",
+        "this_is_not_the_declared_domain": "carrier Rat, division exact, subtraction signed — NOT the domain the schema declared for this row and NOT what any verdict here is measured under. It is reported so a reader can see which risk the checker's agreement priced."
+      },
       "run_recorded": {
         "c_e3_said": "decide did not reduce in either direction",
         "left": "154440",

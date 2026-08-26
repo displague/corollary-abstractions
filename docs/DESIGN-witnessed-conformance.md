@@ -1,9 +1,11 @@
 # WITNESS — a discharged obligation instead of a sample
 
 **Status: DESIGN-ONLY.** Nothing here is built, no floor here is frozen, no
-run is registered by this document. ROADMAP-v0.21 §2 orders the reviewed
-design *before* the slice; this is that document, and its §4 names a census
-and a pilot that must land before the first floor can honestly freeze.
+run is registered by this document. ROADMAP-v0.21 §2 (*"WITNESS — the
+conformance void's claim-kind successor"*, and its ordering obligation: *"Its
+compact design lands before its slice"*) orders the reviewed design **before**
+the slice; this is that document, and its §4 names a census and a pilot that
+must land before the first floor can honestly freeze.
 
 ## 1. The claim-kind this repairs
 
@@ -22,7 +24,10 @@ becoming a claim the instrument cannot support.
 
 `reports/design-direction-v0.21.json`
 `outcomes.series_1.preregistration_draft`, recorded **before ROADMAP-v0.21
-was written** — this design's input, not its registration. Verbatim:
+was written** — this design's input, not its registration. Its five fields
+below carry the receipt's strings unaltered; the **bold labels and the line
+breaks are this document's**, since the receipt stores each field as one
+unwrapped line:
 
 > **fragment:** quantified linear arithmetic over Z and Q (decidable)
 >

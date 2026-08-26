@@ -249,6 +249,21 @@ cycle inherits the disposition and not a rumour.
   boundary. Belongs to its own registration; running a control again after
   its cycle's numbers were read is the chase §8 forbids.
 
+  > **DISCHARGED (2026-08-26).** ROADMAP-v0.21 §4.0(1) narrowed the no-chase
+  > rule to controls that RAN, and this one provably did not, so the repair
+  > got its own registration exactly as this entry said it must:
+  > `experiments/conformance_prereg.json` `amendments[]` (dated, labelled
+  > RETROSPECTIVE), a NEW writer at
+  > `scripts/conformance_ce3_supplement.py`, and a NEW artifact at
+  > `experiments/conformance_ce3_supplement.json`.
+  > `measure_conformance.py` was **not** edited — the dead code stays as the
+  > evidence. **The reading: 25 of 25 `confirmed_counterexample`**, so
+  > Correction 7's carrier boundary on the sampled class is now measured
+  > (`decide` reaches closed `Nat` terms of this size) and no corpus error is
+  > filed. What did **not** change: the domain is still this repository's
+  > declaration, and the correlated-interpretation label stands on every
+  > NONCONFORMANT verdict.
+
 - **E5 and C-E1's second arm were registered and never executed
   (2026-08-25, from review).** §6's E5 (*two full runs on one tree produce
   byte-identical artifacts*) and §7's C-E1 false-alarm half (*0 of N unmutated
@@ -259,6 +274,36 @@ cycle inherits the disposition and not a rumour.
   statement**, which is a much smaller claim. Both arms are owed by the next
   registration of this lane, and executing them now — after the cycle's
   numbers are public — would not be the control they were specified as.
+
+  > **RUN LATE (2026-08-26), under ROADMAP-v0.21 §4.0(2), which says a
+  > byte-identity check cannot be gamed by when it runs and asks for the
+  > lateness to be dated instead.** `experiments/conformance_e5_late.json`.
+  > **E5 HOLDS**: two fresh runs on the tree at `a98fa3c` are byte-identical
+  > (`f55ba4a9…`), zero differing fields. C-E1's second arm **rides that same
+  > evidence** — an identical artifact is a superset of *0 of N unmutated
+  > statements changed verdict* — and needs no separate measurement. The
+  > sentence above about `conformance_run.json` having no byte-reproduction
+  > proof is now **superseded**: a third run at the registered limits
+  > (`--ce1-limit 300 --ce2-limit 600`) reproduces it with exactly two
+  > differing fields, `commit` and the hand-added `post_run_corrections`.
+  > What the lateness still costs, and the artifact says so: E5 was a **stop
+  > condition**, and a stop condition checked after the cycle it could have
+  > stopped is a check, not a gate.
+
+- **A deterministic runner whose artifact does not record its own invocation
+  (2026-08-26, found while running E5 late).**
+  `scripts/measure_conformance.py` defaults to `--ce1-limit 200
+  --ce2-limit 400`; the registered run used **300 and 600**, and *nothing in
+  `experiments/conformance_run.json` says so*. The values had to be
+  **recovered by matching** `c_e1.statements_examined` and
+  `c_e2.statements_compared` against the artifact before a reproduction could
+  be attempted. Reproducibility that requires the reader to already know the
+  arguments is not reproducibility; §4.0(2) now rests the whole protection on
+  *"artifact committed from a deterministic runner"*, which makes this a
+  hole in the load-bearing rule rather than a tidiness complaint. **The fix
+  is one field** — record `argv` or the resolved limits in the artifact — and
+  it belongs to the next writer that registers a run, not to a retroactive
+  edit of a sealed one.
 
 - **E4's injection probes cannot exercise the boundary they certify
   (2026-08-25, from review).** `scripts/measure_conformance.py:681` probes
@@ -323,6 +368,18 @@ cycle inherits the disposition and not a rumour.
   sampled class is what would discharge them** — and the first thing it needs
   is the substitution step, not Mathlib, which remains outside the hermetic
   budget as design law.
+
+  > **LANDED (2026-08-26).** The adjudicator this entry asked for is
+  > `scripts/conformance_ce3_supplement.py`, and the entry was right about
+  > what it needed: the substitution step and no Mathlib. It substitutes the
+  > record's bindings **structurally, at the parsed tree's `slot` nodes**
+  > rather than textually, and reaches all 25 rows over `Nat`. The **25
+  > adjudications agree with the evaluator**, which strengthens those rows'
+  > provisional labels — and **discharges none of them**, because this entry's
+  > own diagnosis holds: the label is there *for want of an independent
+  > domain*, and the checker was handed this repository's domain. Discharging
+  > it needs an independent reading of the source statement, which is
+  > `docs/DESIGN-witnessed-conformance.md` §6's residual and not this rider.
 
 ## Filed at the v0.19 rotation (the foreign voice, and the probes)
 

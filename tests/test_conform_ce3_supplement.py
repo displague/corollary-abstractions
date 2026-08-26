@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -220,9 +221,14 @@ class TheArtifactSaysWhatItIsAndWhatItCannotDo(unittest.TestCase):
         self.assertEqual(self.doc["ordering"], "RETROSPECTIVE")
         self.assertIn("4.0(1)", self.doc["authority"])
         self.assertIn("found by REVIEW AFTER", self.doc["ordering_disclosed"])
-        self.assertIn("byte-frozen",
-                      self.doc["measure_conformance_is_byte_frozen"].lower()
-                      + " byte-frozen")
+        # NOT `assertIn(needle, haystack + needle)`, which is what this line
+        # used to be: an assertion that appends its own needle to the
+        # haystack cannot go red, and §4's standing review question is
+        # exactly that. This reads the field.
+        self.assertIn("is NOT edited by this rider",
+                      self.doc["measure_conformance_is_byte_frozen"])
+        self.assertIn(":434-438",
+                      self.doc["measure_conformance_is_byte_frozen"])
 
     def test_the_original_run_is_read_only_and_digested(self) -> None:
         source = self.doc["source"]
@@ -251,6 +257,10 @@ class TheArtifactSaysWhatItIsAndWhatItCannotDo(unittest.TestCase):
             with self.subTest(statement=row["statement_id"]):
                 self.assertIn(row["decide_verdict"], allowed)
                 self.assertEqual(row["means"], sup.MEANS[row["decide_verdict"]])
+                # Correction 7 requires the honest non-claim PER
+                # COUNTEREXAMPLE, not once per artifact.
+                self.assertEqual(row["honest_non_claim"],
+                                 sup.HONEST_NON_CLAIM[row["decide_verdict"]])
                 self.assertTrue(row["bindings"])
                 self.assertIn("adjudicated_index", row)
                 if row["decide_verdict"] == sup.NOT_PRESENTED:
@@ -302,6 +312,40 @@ class TheArtifactSaysWhatItIsAndWhatItCannotDo(unittest.TestCase):
                 self.assertEqual(recomputation["right"],
                                  row["run_recorded"]["right"])
 
+    def test_the_exact_rational_reading_is_recomputed_not_trusted(self) -> None:
+        """H1: the number that says which risk the agreement priced.
+
+        Recomputed here from the corpus and the record's own bindings, so the
+        artifact's aggregate is checked against the tree rather than read back
+        out of itself.
+        """
+        run = json.loads((ROOT / sup.RUN).read_text(encoding="utf-8"))
+        entries = sup.sampled_rows(run)
+        nodes = sup.corpus_nodes({e["e2_row"]["statement_id"] for e in entries})
+        holds = 0
+        for entry in entries:
+            e2_row = entry["e2_row"]
+            node = nodes[e2_row["statement_id"]]
+            closed = sup.substitute(
+                census.parse(
+                    (node.get("formal_statement") or {}).get(
+                        "canonical_ascii", "")),
+                e2_row["counterexample"]["bindings"])
+            left = conform.eval_under_domain(
+                closed[2][0], {}, "Rat", "exact", "signed")
+            right = conform.eval_under_domain(
+                closed[2][1], {}, "Rat", "exact", "signed")
+            holds += conform.decide_relation(closed[1], left, right)
+        self.assertEqual(
+            self.doc["aggregate"]["rows_that_hold_over_exact_rationals"],
+            holds)
+
+    def test_the_agreement_is_not_sold_as_a_corpus_finding(self) -> None:
+        prices = self.doc["aggregate"]["what_the_agreement_therefore_PRICES"]
+        self.assertIn("DOMAIN risk", prices)
+        self.assertIn("is therefore ARITHMETIC-IMPLEMENTATION risk", prices)
+        self.assertIn("untouched", prices)
+
     def test_the_aggregate_tallies_the_rows_it_published(self) -> None:
         tally = self.doc["aggregate"]["by_verdict"]
         self.assertEqual(sum(tally.values()), len(self.doc["rows"]))
@@ -336,6 +380,79 @@ class TheArtifactSaysWhatItIsAndWhatItCannotDo(unittest.TestCase):
                     row["run_recorded"]["c_e3_said"],
                     "decide did not reduce in either direction",
                     "this row was not one of the 25 the gap withheld")
+
+
+PREREG = ROOT / sup.PREREG
+
+#: main's tip when this branch was cut. A FIXED commit rather than the moving
+#: `main`, so the reversibility check below asks the same question forever.
+BASE_COMMIT = "a98fa3cc17813e879cad6e8df095ab3f3863e0ab"
+
+
+class TheAmendmentIsDatedRetrospectiveAndAppendOnly(unittest.TestCase):
+    """The prereg amendment carries its own authority, or it is decoration."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.doc = json.loads(PREREG.read_text(encoding="utf-8"))
+        cls.entry = next(
+            a for a in cls.doc["amendments"]
+            if a["amendment_id"] == "conformance.prereg.amendment.ce3-supplement"
+        )
+
+    def test_it_is_dated_and_says_on_what_basis(self) -> None:
+        self.assertEqual(self.entry["dated"], "2026-08-26")
+        self.assertIn("UTC", self.entry["dated_basis"])
+        self.assertIn("2026-08-25", self.entry["dated_basis"],
+                      "the local clock read a different day; say so")
+
+    def test_the_ordering_is_labelled_retrospective_in_the_field_itself(
+            self) -> None:
+        self.assertTrue(self.entry["ordering"].startswith("RETROSPECTIVE"),
+                        self.entry["ordering"])
+        self.assertIn("found by REVIEW AFTER", self.entry["ordering_disclosed"])
+        self.assertIn("weaker than a floor frozen before",
+                      self.entry["ordering_disclosed"])
+
+    def test_it_names_the_relaxation_that_permits_it(self) -> None:
+        self.assertIn("§4.0(1)", self.entry["authority"])
+        self.assertIn("bug-not-result", self.entry["authority"])
+        self.assertIn("foreign_voice_rate",
+                      self.entry["precedent_for_the_shape"])
+
+    def test_it_lists_what_it_cannot_do_and_the_list_is_not_a_gesture(
+            self) -> None:
+        cannot = self.entry["what_it_cannot_do"]
+        self.assertGreaterEqual(len(cannot), 6)
+        joined = " ".join(cannot)
+        self.assertIn("NEVER un-voids", joined)
+        self.assertIn("read-only", joined)
+        self.assertIn("verified_by", joined)
+
+    def test_deleting_the_amendment_restores_the_sealed_file_byte_for_byte(
+            self) -> None:
+        """APPEND-ONLY, checked mechanically rather than promised.
+
+        The house rule for an in-place edit to a canonical artifact is that a
+        reader can undo it and get the original back. Here that is literally
+        true: the amendment is one contiguous block, and removing it restores
+        the blob sealed at `BASE_COMMIT`.
+        """
+        try:
+            original = subprocess.run(
+                ["git", "show", f"{BASE_COMMIT}:{sup.PREREG}"],
+                cwd=ROOT, capture_output=True, check=True).stdout
+        except (OSError, subprocess.CalledProcessError) as exc:
+            self.skipTest(f"git could not read the sealed blob: {exc}")
+
+        current = PREREG.read_bytes().replace(b"\r\n", b"\n")
+        start = current.index(b'  "amendments": [')
+        end = current.index(b'  "census": {')
+        reconstructed = current[:start] + current[end:]
+        self.assertEqual(
+            reconstructed, original.replace(b"\r\n", b"\n"),
+            "the amendment is not append-only: removing the block does not "
+            "restore the preregistration as it was sealed")
 
 
 @unittest.skipUnless((ROOT / "experiments" / "conformance_e5_late.json").exists(),

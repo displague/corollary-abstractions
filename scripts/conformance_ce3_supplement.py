@@ -101,6 +101,36 @@ MEANS = {
         "printed. Nothing was handed to the checker, so nothing is claimed",
 }
 
+#: The honest non-claim, PER ROW, because DESIGN-statements-that-run's
+#: Correction 7 requires it per counterexample rather than once per artifact:
+#: *"A design that silently let the reachable half stand for the whole would
+#: be doing the thing this control was added to prevent."* The registered
+#: run's rows carry it for the rows the adjudicator could not reach; these
+#: rows carry it for a different reason, and the difference is the point. An
+#: adjudication that RAN still leaves the domain unadjudicated.
+HONEST_NON_CLAIM = {
+    CONFIRMED:
+        "independent adjudication WAS available for this carrier and it "
+        "agreed. What is still not claimed: the DOMAIN under which this point "
+        "was drawn was declared by this repository, and the checker was "
+        "handed that declaration rather than an independent reading of the "
+        "Lean source statement. The standing correlated-interpretation label "
+        "on this NONCONFORMANT verdict is untouched by this row",
+    REFUTED:
+        "independent adjudication WAS available for this carrier and it "
+        "DISAGREED. This row is filed as a candidate corpus-or-compiler error "
+        "and is not repaired here; no claim is made about which of the two "
+        "implementations is wrong, and none about the domain either",
+    DID_NOT_REDUCE:
+        "no independent adjudication was available for this carrier; the "
+        "verdict is this repository's arithmetic under this repository's "
+        "schema",
+    NOT_PRESENTED:
+        "no independent adjudication was available for this carrier; the "
+        "verdict is this repository's arithmetic under this repository's "
+        "schema",
+}
+
 
 class Unpresentable(Exception):
     """No closed proposition can be built. Carries the reason, nothing else."""
@@ -501,6 +531,7 @@ def adjudicate(entry: dict, node: dict, binary: Path, timeout: int) -> dict:
             domain["subtraction"])
     except Unpresentable as exc:
         record.update(decide_verdict=NOT_PRESENTED, means=MEANS[NOT_PRESENTED],
+                      honest_non_claim=HONEST_NON_CLAIM[NOT_PRESENTED],
                       not_presented_because=str(exc))
         return record
 
@@ -530,9 +561,36 @@ def adjudicate(entry: dict, node: dict, binary: Path, timeout: int) -> dict:
         record["evaluator_recomputation"] = {
             "failed": f"{type(exc).__name__}: {str(exc)[:160]}"}
 
+    # THE SAME POINT, READ OVER EXACT RATIONALS. Computed, never asserted.
+    # The declared domain's `truncating` division and `truncated-at-zero`
+    # subtraction are what make these points counterexamples; asking what the
+    # same statement does at the same point under exact `/` and signed `-` is
+    # the cheapest available separation of ARITHMETIC-implementation risk
+    # from DOMAIN risk, and it costs one more evaluation per row.
+    try:
+        exact_left = conform.eval_under_domain(
+            closed[2][0], {}, "Rat", "exact", "signed")
+        exact_right = conform.eval_under_domain(
+            closed[2][1], {}, "Rat", "exact", "signed")
+        record["over_exact_rationals"] = {
+            "left": str(exact_left), "right": str(exact_right),
+            "holds": conform.decide_relation(closed[1], exact_left,
+                                             exact_right),
+            "this_is_not_the_declared_domain": (
+                "carrier Rat, division exact, subtraction signed — NOT the "
+                "domain the schema declared for this row and NOT what any "
+                "verdict here is measured under. It is reported so a reader "
+                "can see which risk the checker's agreement priced."
+            ),
+        }
+    except Exception as exc:  # noqa: BLE001 - recorded, never raised
+        record["over_exact_rationals"] = {
+            "failed": f"{type(exc).__name__}: {str(exc)[:160]}"}
+
     verdict, receipt = decide_both_directions(proposition, binary, timeout)
     record["decide_verdict"] = verdict
     record["means"] = MEANS[verdict]
+    record["honest_non_claim"] = HONEST_NON_CLAIM[verdict]
     record["checker_receipt"] = receipt
     return record
 
@@ -563,6 +621,13 @@ def build(timeout: int, limit: int | None = None) -> dict:
         if not r.get("evaluator_recomputation", {}).get(
             "reproduces_the_runs_numbers", True)
     ]
+    confirmed_rows = [r for r in rows if r["decide_verdict"] == CONFIRMED]
+    exact_hold = [r["statement_id"] for r in confirmed_rows
+                  if r.get("over_exact_rationals", {}).get("holds") is True]
+    exact_fail = [r["statement_id"] for r in confirmed_rows
+                  if r.get("over_exact_rationals", {}).get("holds") is False]
+    exact_errored = [r["statement_id"] for r in confirmed_rows
+                     if "holds" not in r.get("over_exact_rationals", {})]
 
     return {
         "supplement_id": "conformance.ce3.supplement.v1",
@@ -640,6 +705,35 @@ def build(timeout: int, limit: int | None = None) -> dict:
             "refuted_counterexamples": sorted(refuted),
             "rows_whose_substitution_did_not_reproduce_the_run": sorted(
                 unreproduced),
+            "rows_that_hold_over_exact_rationals": len(exact_hold),
+            "rows_that_fail_over_exact_rationals": len(exact_fail),
+            "rows_whose_exact_rational_reading_errored": len(exact_errored),
+            "of_confirmed_rows": len(confirmed_rows),
+            "what_the_agreement_therefore_PRICES": (
+                f"{len(exact_hold)} of the {len(confirmed_rows)} confirmed "
+                f"rows HOLD at the very same point when the same statement is "
+                f"read over exact rationals with signed subtraction. So these "
+                f"counterexamples are products of the DECLARED DOMAIN — "
+                f"truncating `/`, truncated-at-zero `-` over Nat — and not of "
+                f"the source statements. What the checker's agreement prices "
+                f"is therefore ARITHMETIC-IMPLEMENTATION risk: two "
+                f"independent implementations of the SAME declared arithmetic "
+                f"(this repository's evaluator and Lean's Nat operations) "
+                f"compute the same values and the same failures. It prices "
+                f"NOTHING about whether that declared arithmetic is the right "
+                f"reading of the Lean source statement. DOMAIN risk — the "
+                f"standing correlated-interpretation label on every "
+                f"NONCONFORMANT verdict — is untouched, and a reader who "
+                f"takes 25/25 as evidence the corpus is wrong has read this "
+                f"artifact backwards."
+            ),
+            "how_this_number_was_obtained": (
+                "COMPUTED per row by conform.eval_under_domain under carrier "
+                "Rat with exact division and signed subtraction, at the same "
+                "bindings, and tallied here — not asserted, and not a floor. "
+                "Either reading was publishable; this one is what the tree "
+                "returned."
+            ),
             "substitution_cross_check": (
                 "Every presented row's substituted tree is re-evaluated by "
                 "conform.eval_under_domain under the row's own declared "
@@ -687,10 +781,10 @@ def build(timeout: int, limit: int | None = None) -> dict:
         },
         "corrections_to_this_writer_after_its_first_execution": {
             "disclosed_because_the_ordering_matters": (
-                "The first execution read 25/25 confirmed. TWO DEFECTS IN THE "
-                "RECEIPT — not in any verdict — were found by reading that "
-                "output, fixed, and the run re-executed. Both are recorded "
-                "here rather than quietly folded in."
+                "The first execution read 25/25 confirmed. THREE DEFECTS IN "
+                "THE RECEIPT — not in any verdict — were found by reading "
+                "that output, fixed, and the run re-executed. All three are "
+                "recorded here rather than quietly folded in."
             ),
             "the_probe_output_was_decoded_by_the_console_codepage": (
                 "`subprocess.run(text=True)` decoded Lean's diagnostics with "
@@ -705,10 +799,36 @@ def build(timeout: int, limit: int | None = None) -> dict:
                 "and the artifact reproduces byte-for-byte apart from the "
                 "wall-clock `seconds` fields."
             ),
+            "the_checkers_absolute_path_named_this_machines_home_directory": (
+                "`checker.binary` recorded `C:\\Users\\<user>\\.elan\\...`, a "
+                "fact about one account, inside an artifact that tells a "
+                "reader the rest of it reproduces. It is now recorded "
+                "home-relative as `~/.elan/...`, with `binary_sha256` as the "
+                "binary's actual identity."
+            ),
             "no_verdict_moved": (
-                "Neither fix touches substitution, rendering or the decision "
-                "procedure. All 25 verdicts and both probe `source_sha256` "
-                "values per row are identical before and after."
+                "None of the three fixes touches substitution, rendering or "
+                "the decision procedure. All 25 verdicts and both probe "
+                "`source_sha256` values per row are identical before and "
+                "after."
+            ),
+            "and_a_second_regeneration_after_adversarial_review": (
+                "DATED 2026-08-26. Adversarial review found two things this "
+                "artifact owed and one it could cheaply add: "
+                "DESIGN-statements-that-run's Correction 7 requires the "
+                "honest non-claim PER COUNTEREXAMPLE and these rows carried "
+                "none (`honest_non_claim` is now on every row, keyed to the "
+                "verdict by a closed table); and the exact-rational reading of "
+                "each point was one evaluation away and separates "
+                "arithmetic-implementation risk from domain risk (see the "
+                "aggregate). The artifact was REGENERATED THROUGH THE WRITER "
+                "rather than edited — this run is deterministic and §4.0(2) "
+                "welcomes reproductions — and the regeneration moved exactly "
+                "the intended fields plus `commit` and the wall-clock "
+                "`seconds`. Every decide verdict and every probe digest is "
+                "unchanged. This artifact never had a byte-reproduction proof "
+                "at stake, which is what made regeneration the right repair "
+                "here and the wrong one for foreign_voice_rate2."
             ),
         },
         "what_this_answers": {
@@ -773,9 +893,11 @@ def build(timeout: int, limit: int | None = None) -> dict:
                 "reproductions are welcome and recorded."
             ),
             "what_is_not_byte_identical": (
-                "`checker.timeout_seconds` aside, the per-probe `seconds` "
-                "fields are wall-clock and differ between runs by "
-                "construction. Every other field is a function of the inputs."
+                "Two fields, named so a reader diffing two runs knows what to "
+                "expect: the per-probe `seconds`, which are wall-clock and "
+                "differ by construction, and `commit`, which records the HEAD "
+                "the run happened on and cannot reproduce from a different "
+                "one. Every other field is a function of the inputs."
             ),
         },
     }
