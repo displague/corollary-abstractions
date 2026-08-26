@@ -669,5 +669,152 @@ class P4Determinism(unittest.TestCase):
         self.assertIn("not a proof of determinism", self.p4["the_honest_limit"])
 
 
+class TheWiring(unittest.TestCase):
+    """Row 12's pre-router, and the quarantine that makes it believable."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        from resolver import default_index  # noqa: PLC0415
+
+        cls.index = default_index()
+
+    def _session(self, proposer=None):
+        from harness import CoreSession  # noqa: PLC0415
+
+        session = CoreSession.boot(REPO, offline=True)
+        session.resolver_index = self.index
+        session.proposer = proposer
+        return session
+
+    def test_g4_every_earlier_row_is_byte_identical_on_and_off(self) -> None:
+        """The quarantine invariant, over lines the registered rows claim.
+
+        Voiding sentence: *a single differing verdict voids the whole
+        reading.* So this compares whole verdict dicts, not a summary.
+        """
+
+        import plain_router  # noqa: PLC0415
+        from harness import render_verdict, route_line  # noqa: PLC0415
+
+        lines = [
+            "",
+            "2 + 2",
+            "owns x ^ 2",
+            "suppose the corpus is complete",
+            "retract a999",
+            "twin programming.euclid.recursive",
+            "twin no.such.statement",
+            "de morgan laws",
+            "tell me a story",
+            "conform no.such.statement a=1",
+            "what is the cosine of a double angle",
+            "the quadratic formula",
+        ]
+        router = plain_router.PlainRouter()
+        for line in lines:
+            off = route_line(REPO, self._session(None), line or None)
+            on = route_line(REPO, self._session(router), line or None)
+            self.assertEqual(
+                render_verdict(off), render_verdict(on),
+                f"proposer changed a verdict on an earlier row: {line!r}",
+            )
+            self.assertEqual(off.get("route"), on.get("route"), line)
+            self.assertEqual(off.get("status"), on.get("status"), line)
+
+    def test_a_session_with_no_proposer_runs_the_old_code(self) -> None:
+        from harness import CoreSession  # noqa: PLC0415
+
+        self.assertIsNone(CoreSession.boot(REPO, offline=True).proposer)
+
+    def test_g6_an_absent_model_exhausts_exactly_as_today(self) -> None:
+        """Bar clause 3, at the wiring level rather than the client level."""
+
+        import plain_proposer as pp  # noqa: PLC0415
+        import plain_router  # noqa: PLC0415
+        from harness import render_verdict, route_line  # noqa: PLC0415
+
+        line = "how do i change a tyre"
+        off = route_line(REPO, self._session(None), line)
+        router = plain_router.PlainRouter()
+        original = pp.ENDPOINT
+        pp.ENDPOINT = "http://127.0.0.1:9/none"
+        try:
+            on = route_line(REPO, self._session(router), line)
+        finally:
+            pp.ENDPOINT = original
+        self.assertEqual(render_verdict(off), render_verdict(on))
+        self.assertTrue(router.traces[-1].unavailable)
+
+    def test_the_conditional_answer_is_a_label_around_an_existing_answer(
+        self,
+    ) -> None:
+        """§7: 'a LABEL WRAPPED AROUND AN EXISTING ANSWER, not a generated one'."""
+
+        import plain_router  # noqa: PLC0415
+        from harness import route_line  # noqa: PLC0415
+
+        router = plain_router.PlainRouter()
+        verdict = router._conditional(
+            REPO,
+            self._session(None),
+            "irrelevant",
+            _StubVerified("Pythagorean Identity"),
+            [_StubVerified("Pythagorean Identity")],
+        )
+        self.assertEqual(verdict["status"], "conditional")
+        underlying = route_line(REPO, self._session(None), "Pythagorean Identity")
+        for line in (underlying.get("answer") or []):
+            self.assertIn(line, verdict["answer"])
+
+    def test_the_conditional_receipt_carries_what_section_3b_requires(
+        self,
+    ) -> None:
+        import plain_router  # noqa: PLC0415
+
+        router = plain_router.PlainRouter()
+        verdict = router._conditional(
+            REPO, self._session(None), "irrelevant",
+            _StubVerified("Pythagorean Identity"),
+            [_StubVerified("Pythagorean Identity"), _StubVerified("Other", 1)],
+        )
+        receipt = verdict["receipt"]
+        self.assertEqual(len(receipt["suppositions"]), 1)
+        self.assertEqual(receipt["suppositions"][0]["source"], "proposed")
+        self.assertIn("verification_strength", receipt)
+        self.assertEqual(receipt["alternatives_not_taken"], ["Other"])
+
+    def test_g9_is_adjudicated_not_met_in_advance_with_its_reason(self) -> None:
+        """The finding this slice reports rather than discovers."""
+
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        amendment = next(
+            a for a in prereg["amendments"] if a["amendment"] == 3
+        )
+        self.assertEqual(amendment["the_adjudication"]["G9"], "NOT MET, and not repaired inside this slice.")
+        self.assertIn(
+            "one row upstream",
+            amendment["the_adjudication"]["what_this_is_evidence_of"],
+        )
+
+
+class _StubVerified:
+    """A Verified stand-in, so the shape tests need no model."""
+
+    def __init__(self, line: str, index: int = 0) -> None:
+        from candidate_enumerator import Candidate  # noqa: PLC0415
+
+        self.candidate = Candidate(
+            index=index,
+            line=line,
+            route_expect="resolver",
+            source="committed_statement",
+            statement_id="trigonometry.identities.pythagorean",
+            why="stub",
+        )
+        self.verification_strength = "word_match"
+        self.detail = "stub"
+        self.evidence = {}
+
+
 if __name__ == "__main__":
     unittest.main()

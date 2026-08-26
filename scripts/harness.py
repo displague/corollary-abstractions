@@ -583,6 +583,20 @@ class CoreSession:
     #: this module for its rendering, and a type annotation here would be a
     #: cycle bought for nothing.
     assumptions: object | None = None
+    #: DESIGN-plain-input's proposer, or None.
+    #:
+    #: `None` is the shipped default, and it is what makes G4 and G6
+    #: checkable at all: with no proposer attached, every route below —
+    #: including row 12's exhaustion — runs the code it ran before slice 2
+    #: existed, byte for byte. A `plain_router.PlainRouter` is attached only
+    #: by a recorder or a gate runner, never by `main()` and never by the
+    #: chat skin, so ¶DEV-1's fresh-session rule is untouched and this skin
+    #: cannot serve `conditional` (SPEC ¶AMD-1 records the wire-schema debt
+    #: that would fall due the day it can).
+    #:
+    #: Duck-typed for the same reason `assumptions` is: `plain_router`
+    #: imports this module, and an annotation here would buy a cycle.
+    proposer: object | None = None
 
     # -- boot -------------------------------------------------------------
 
@@ -2343,7 +2357,34 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
     defined = _route_gloss(session, line)
     if defined is not None:
         return {"line": line, **defined}
+    # DESIGN-plain-input §2.2: the proposer is "a pre-router for row 12 only,
+    # and nothing else". It sits HERE — after every registered route has
+    # declined — so rows 0-13 are byte-identical with it attached or absent,
+    # which is what makes G4's quarantine assertion mechanical rather than
+    # rhetorical. With no proposer attached this line does nothing at all.
+    proposed = _route_proposed(repo_root, session, line)
+    if proposed is not None:
+        return {"line": line, **proposed}
     return {"line": line, **_route_dispatch(session, line)}
+
+
+def _route_proposed(
+    repo_root: Path, session: "CoreSession", line: str
+) -> dict | None:
+    """The plain-input branch, or `None` to fall through to today's row 12.
+
+    Every decision here is made by exact code. The proposer's output is an
+    integer index into a list exact code enumerated, and it is an input to
+    verification — never to the branch. So the learned component is never
+    the difference between refusing and answering; it may only be the
+    difference between `exhausted` and `conditional`, which is
+    DESIGN-plain-input §3b's operative form of the standing invariant.
+    """
+
+    router = getattr(session, "proposer", None)
+    if router is None:
+        return None
+    return router.route(repo_root, session, line)
 
 
 def render_verdict(verdict: dict) -> list[str]:

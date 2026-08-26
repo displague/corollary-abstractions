@@ -232,6 +232,65 @@
         "why_this_is_recorded_here_rather_than_quietly_fixed": "it is a property of the instrument that changes what its headline means, found before the run and disclosed before the run. Tightening the enumerator to make G1 read better would be tuning a denominator after seeing how it behaves."
       },
       "what_it_changes": "no gate, no floor, no voiding sentence, no standard. It freezes one parameter that a control's baseline depends on, and discloses one weakness in what G1's rate means."
+    },
+    {
+      "amendment": 2,
+      "dated": "2026-08-26",
+      "made_before": "the proposer is wired into any route, before the slice-2 corpus is recorded, and before any gate is scored.",
+      "subject": "the conditional-versus-clarify branch rule this preregistration froze CONTRADICTS the design it implements. It is corrected against the design's own text, and the original is not edited.",
+      "the_rule_as_first_frozen": {
+        "serve_conditional_when": "exactly ONE candidate verifies, AND the utterance leaves a framing variable the verifier could not resolve.",
+        "ask_when": "TWO OR MORE candidates verify."
+      },
+      "why_it_is_wrong": {
+        "the_designs_own_sentence": "The clarifying-question loop does not go away; it becomes the branch taken when suppositions multiply past a declared bound.",
+        "what_that_says": "the ask branch is triggered by SUPPOSITIONS multiplying past a bound — not by RIVALS existing. This preregistration froze the bound at ONE supposition per answer, and a single selected reading is ONE supposition however many rivals verified alongside it. So under the design's rule, rivals do not force the ask branch; a second needed supposition does.",
+        "and_the_design_carries_a_field_that_settles_it": "§3b's ConditionalAnswer table includes `alternatives_not_taken` — 'the other verified candidates, named, with their suppositions'. A conditional answer is SPECIFIED to name its rivals. A rule that sent every case with rivals to the ask branch would make that field unreachable, and a design does not carry a field for a state its own rule forbids.",
+        "so_the_error_was_a_misreading": "not a judgement call that went one way. The first rule read 'underdetermined' as 'more than one candidate verifies', when the design means 'the person did not say which, and the system must not silently pick'."
+      },
+      "the_corrected_rule": {
+        "serve_conditional_when": "the proposer SELECTS a candidate and committed code VERIFIES that selection. The selected reading becomes ONE named supposition — at the frozen bound — the answer is served under it with status `conditional`, and every other verified candidate is named in `alternatives_not_taken`.",
+        "ask_when": "the proposer selects nothing, or its selection fails verification, AND two or more candidates verify. The residue would need more than one supposition to serve, which is the bound multiplying past one, so the person is asked with the readings named.",
+        "exhaust_when": "no candidate verifies. Row 12 exhausts exactly as today, and G6 requires that to be byte-identical with the proposer OFF.",
+        "who_decides_is_unchanged": "exact code, from the selection and the verification. The model's output is an integer and is an input to verification, never to this branch. The learned component is still never the difference between refusing and answering — only between `exhausted` and `conditional`."
+      },
+      "does_this_make_the_gates_easier": {
+        "G9": "no. G9 requires p04 and p10 to stop being served as a bare `found` with no receipt recording a choice. Both the conditional branch and the ask branch satisfy that; the corrected rule changes WHICH repair they get, not WHETHER they are repaired.",
+        "G2": "no. Every served interpretation must still be verifier-confirmed or supposition-labelled, and a conditional answer is supposition-labelled by construction.",
+        "the_honest_risk_it_adds": "the conditional branch now fires more often than the first rule would have allowed, so more answers are served under a named supposition. That is more service, and it is exactly why `conditional` scores ZERO useful tokens and why G7b tests that from the scoring path — the branch that got easier is the branch that cannot inflate the metric.",
+        "and_what_it_costs_the_reader": "a reader must now check `alternatives_not_taken` to see what was passed over. That field is part of the served receipt, which is the design's answer to the same worry."
+      },
+      "why_this_is_not_tuning_after_watching_it_behave": "the correction is made against the design's own two sentences, both quoted above and both written before any of this existed. It is not made against a measurement of how the rule performed — the rule has never run, because the proposer is not yet wired into any route. A reader who disagrees can check the design rather than the results.",
+      "the_original_rule_is_not_edited": "it stays where it was frozen, above, and this amendment quotes it. A rule that was wrong and is quietly deleted teaches nothing."
+    },
+    {
+      "amendment": 3,
+      "dated": "2026-08-26",
+      "made_after": "the proposer was wired into row 12 and the frozen question set was served through it. Made BEFORE the slice-2 corpus is recorded and before any gate is scored.",
+      "subject": "G9 CANNOT BE MET BY THIS DESIGN, and the reason is the design's own placement rule. Recorded as a finding rather than repaired.",
+      "what_was_measured": {
+        "how": "all thirty G1 questions served through a CoreSession with the proposer attached.",
+        "result": "13 of 30 came back `found` from the RESOLVER, before the proposer was consulted at all. The proposer branch fired on 4 (1 conditional, 3 ask) and 8 exhausted. p04's and p10's own utterances — the two G9 fixtures — are among the resolver's 13."
+      },
+      "why_the_proposer_never_sees_them": {
+        "the_designs_placement_rule": "DESIGN-plain-input §2.2: the proposer is 'a pre-router for row 12 only, and nothing else' — row 12 in the design's 13-row table is `everything else -> dispatcher -> exhausted`. The wiring obeys it: `_route_proposed` sits after every registered route has declined.",
+        "but_the_silent_binding_is_not_at_row_12": "P2 measured p04 and p10 being silently bound by the RESOLVER, which is an earlier row. A pre-router for the dispatcher row is downstream of the defect it was supposed to repair.",
+        "and_G4_protects_that_row": "G4 requires every verdict on rows 0-11 to be byte-identical with the proposer ON and OFF. The resolver is inside that range. Moving the proposer ahead of the resolver would breach G4's own quarantine — the gate that makes the rest of this design believable."
+      },
+      "the_repair_that_looked_available_and_why_it_still_does_not_satisfy_G9": {
+        "the_idea": "give the resolver's BIND verdict a receipt naming the statement it chose, so the choosing stops being silent.",
+        "it_is_technically_safe_and_that_was_checked": "`harness.render_verdict` does not render `receipt`, so answer bytes would not move and slice 1's sealed journals would still replay (B2 safe). The chat skin's `_resolution_receipt` builds its own receipt from the answer LINES and never reads the verdict's, so `scored.receipted` would not move either — and the throughput book contains ZERO resolver-route tasks, so K would not move. All three were verified rather than assumed.",
+        "but_G9_asks_for_something_else": "G9 as frozen requires each fixture to come back 'either supposition-labelled (naming the reading taken) or as a clarification naming the sealed alternatives'. A receipt is neither. Serving a receipt and calling G9 met would be meeting a gate by re-reading it after seeing what was reachable."
+      },
+      "the_adjudication": {
+        "G9": "NOT MET, and not repaired inside this slice.",
+        "why_not_repaired": "every available repair breaks something the preregistration froze first: moving the proposer upstream breaches G4, and re-reading G9 to accept a receipt would be moving a gate to meet an implementation.",
+        "what_this_is_evidence_of": "a real limit in DESIGN-plain-input as written. Its proposer is confined to the row where NOTHING is bound, so it can convert exhaustions into conditionals — which §3b argues is the whole safe move — but it cannot touch a reading the resolver already took silently. The defect P2 found lives one row upstream of the machinery this design builds.",
+        "where_the_defect_goes": "it stays filed in docs/BACKLOG.md with its two committed fixtures and the number to move (`raw_prompts_silently_bound_today`, currently 2), now with this finding attached: the repair needs a design that may touch the resolver row, which means it needs its own G4 and its own throughput re-measurement.",
+        "what_is_NOT_claimed_because_of_this": "that this slice repairs the silent binding. It does not. Any release note quoting P2's defect beside this slice must say that the defect is unrepaired."
+      },
+      "and_the_finding_that_comes_with_it": "13 of 30 maintainer-authored plain questions are ALREADY bound by the resolver at `found`. That is a larger number than P2's 2-of-10 suggested, measured on a bigger set, and it says the silent-binding surface is wider than the fixtures. It is published here rather than left inside the run.",
+      "what_it_changes": "no gate text, no floor, no voiding sentence. G9's verdict is adjudicated in advance of the run as NOT MET, with the reason, so the run reports it rather than discovering it."
     }
   ]
 }
