@@ -32,6 +32,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 
 P1_ARTIFACT = REPO / "experiments" / "session_p1_command_bound.json"
 P1_BUILDER = REPO / "scripts" / "measure_command_bound.py"
+P2_SEAL = REPO / "experiments" / "session_p2_prompt_seal.json"
 P2_ARTIFACT = REPO / "experiments" / "session_p2_separator_probe.json"
 P2_BUILDER = REPO / "scripts" / "probe_separator_expressibility.py"
 
@@ -188,12 +189,61 @@ class P2SeparatorProbe(unittest.TestCase):
                 len(prompt["candidate_readings"]), 2, prompt["prompt_id"]
             )
 
-    def test_seal_digest_covers_the_sealed_half(self) -> None:
+    def test_seal_digest_is_the_committed_seal_files_bytes(self) -> None:
+        """The probe consumed the frozen seal; it did not author one."""
+
         import probe_separator_expressibility as probe  # noqa: PLC0415
 
         self.assertEqual(
-            self.artifact["seal"]["seal_digest"],
-            probe.seal_digest(self.artifact["seal"]["prompts"]),
+            self.artifact["seal"]["file_digest"],
+            probe.file_digest(P2_SEAL),
+        )
+
+    def test_the_artifacts_copy_of_the_seal_matches_the_seal_file(self) -> None:
+        """A copy that can disagree with its original is a place to hide.
+
+        `conversation.py:388-394` states the rule this test applies: the
+        artifact carries the prompts for a reader's convenience, and the
+        convenience copy must equal the authority.
+        """
+
+        sealed = _load(P2_SEAL)
+        self.assertEqual(self.artifact["seal"]["prompts"], sealed["prompts"])
+
+    def test_the_seal_commit_precedes_the_probe_commit(self) -> None:
+        """Order, checked against git rather than asserted in prose."""
+
+        def _first_commit(path: Path) -> str:
+            out = subprocess.run(
+                [
+                    "git",
+                    "log",
+                    "--diff-filter=A",
+                    "--format=%H",
+                    "--",
+                    str(path.relative_to(REPO)).replace("\\", "/"),
+                ],
+                cwd=REPO,
+                capture_output=True,
+                text=True,
+            )
+            lines = [line for line in out.stdout.split() if line]
+            return lines[-1] if lines else ""
+
+        seal_commit = _first_commit(P2_SEAL)
+        probe_commit = _first_commit(P2_ARTIFACT)
+        if not seal_commit or not probe_commit:
+            self.skipTest("history unavailable in this checkout")
+        order = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", seal_commit, probe_commit],
+            cwd=REPO,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(
+            order.returncode,
+            0,
+            "the seal's commit must be an ancestor of the probe artifact's",
         )
 
     def test_verdicts_name_only_sealed_readings(self) -> None:
@@ -238,6 +288,46 @@ class P2SeparatorProbe(unittest.TestCase):
 
     def test_this_is_a_measurement_and_not_a_gate(self) -> None:
         self.assertIn("not_a_gate", self.artifact)
+
+    def test_the_answer_follows_the_designs_decision_rule(self) -> None:
+        """The rule is the design's; this pins the artifact to applying it.
+
+        §6 P2: *"If no separator exists for most, the clarifying-question arm
+        has nothing to ask and the conditional-answer arm wins by
+        measurement."* The sentence in the artifact must swing on that
+        majority and carry the counts, or it is a conclusion written beside
+        its evidence rather than from it.
+        """
+
+        aggregate = self.artifact["aggregate"]
+        answer = self.artifact["answer_to_the_incumbents_question"]
+        self.assertIn(str(aggregate["prompts_with_a_separator"]), answer)
+        self.assertIn(str(aggregate["prompts_total"]), answer)
+        majority = (
+            aggregate["prompts_with_a_separator"] * 2
+            > aggregate["prompts_total"]
+        )
+        if majority:
+            self.assertIn("is NOT met", answer)
+        else:
+            self.assertIn("IS met", answer)
+
+    def test_a_gated_row_is_kept_and_marked_rather_than_dropped(self) -> None:
+        """The offline boot turns one sealed reading's row off; it stays.
+
+        A seal that quietly avoided the gated row would be a seal chosen to
+        read well, so the probe serves it anyway and marks it.
+        """
+
+        marked = [
+            reading
+            for verdict in self.artifact["verdicts"]
+            for reading in verdict["reading_results"]
+            if not reading["row_served_on_this_boot"]
+        ]
+        self.assertTrue(marked, "no gated reading was recorded")
+        for reading in marked:
+            self.assertTrue(reading["row_requires"])
 
 
 if __name__ == "__main__":
