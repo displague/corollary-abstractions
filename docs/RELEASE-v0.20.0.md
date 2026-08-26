@@ -857,23 +857,39 @@ forget at the v0.20 one.
 
 ## The suite at the tip
 
-`[SUITE-GATE-V20: full-suite verdict and timing at the frozen v0.20 tip land
-here before the tag, with the receipts under `reports/test_gate_v020/`. The
-baseline is v0.19.0's gate — **2,106 tests, 0 failures, 5 skipped, 21,767.5 s
-(6 h 03 m)**, green on the first run, receipts in `reports/test_gate_v019/`.
-This cycle adds **seven** wholly new modules — `test_conform`,
-`test_conform_prereg`, `test_conform_register`, `test_cv4_replay`,
-`test_grouping_agreement`, `test_grouping_canonical`, `test_machine_reader` —
-and grows **thirteen** existing ones (`test_answers`, `test_evaluate`,
-`test_foreign_voice`, `test_foreign_voice_b0d`, `test_foreign_voice_lexicon`,
-`test_foreign_voice_register`, `test_harness_line`,
-`test_measure_foreign_voice`, `test_measure_realization`,
-`test_realization_lexicon`, `test_realize_term`, `test_serve_chat`,
-`test_transliteration`). Rotation-time targeted runs on the merged tree read
-**386 green** across the nine conform-adjacent modules and **512 green**
-across the fourteen batch-adjacent modules; the full discover count and the
-five standing skips are confirmed at the gate. **The two runs' receipts —
-one red and one green, or one green — are retained either way.**]
+Two runs, both retained in `reports/test_gate_v020/`, and the red one is
+part of the record:
+
+| run | tip | result |
+|---|---|---|
+| 1 | `e3ed3b5` | **2,326 ran, FAILED (failures=3, skipped=5), 21,715.8 s (6 h 02 m)** |
+| 2 | `3dc26d0` | **2,326 ran, OK (skipped=5), 21,828.9 s (6 h 04 m)** |
+
+**All three run-1 failures were the exact-literals change reaching code the
+batch never listed.** Two were one pin: the convention census's provenance
+digest for `reports/signature_matches.json`, which legitimately moved when
+4b changed the parser the report records — regenerated with **exactly one
+leaf differing** and every census number byte-identical (the v0.16
+`ambiguity_rate` precedent: numbers identical, pins moved, adjudicated).
+The third was real: `analogygen.serialize` floated every numeral before
+emitting, so the 76-digit exact literal 4b taught the parser to keep came
+back as `4.444e+75` — a different term. The serializer now emits exact
+ints as `str(int)` (every curated spelling unchanged) and the split
+deserializer mirrors it; the failing suite test is the regression test.
+The batch had verified its change against every numeral surface it knew —
+25,554 skeletons, 14,830 answer lines — and the suite found the one
+serializer nobody named. **A targeted suite proves the surfaces you
+listed; the full gate proves the ones you forgot.**
+
+Run 2, at the fixed tip with the maintainer's governance relaxations
+(ROADMAP-v0.21 §4.0) in the tree: **2,326 tests, 0 failures, 5 skips**,
+up from v0.19.0's 2,106 by the cycle's **seven** wholly new modules —
+`test_conform`, `test_conform_prereg`, `test_conform_register`,
+`test_cv4_replay`, `test_grouping_agreement`, `test_grouping_canonical`,
+`test_machine_reader` — and growth in thirteen existing ones. The five
+skips are the standing set. Slowest single test remains
+`test_corpus_analogy_split`'s blind control (~4,181 s), as measured and
+expected.
 
 ## Reproduce
 

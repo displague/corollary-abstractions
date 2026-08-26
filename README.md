@@ -503,15 +503,16 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # incl. its five pre-green runs). The 5 skips: 3 standing environment
 # skips + test_transliteration's 2 slow-regeneration cases, hand-run
 # green (44/44, 180s) before the gate.
-# [SUITE-GATE-V20] v0.20.0's full-suite count, timing and skip list land
-# here when the gate runs on the frozen tip; receipts to
-# reports/test_gate_v020/. This cycle adds seven new modules
-# (test_conform, test_conform_prereg, test_conform_register,
-# test_cv4_replay, test_grouping_agreement, test_grouping_canonical,
-# test_machine_reader) and grows thirteen existing ones. Rotation-time
-# targeted runs on the merged tree: 386 green across the nine
-# conform-adjacent modules, 512 green across the fourteen batch-adjacent
-# ones.
+# 2,326 tests, 0 failures, 5 skipped at v0.20.0 -- 6h04m serial
+# (21,828.9s) at tip 3dc26d0, green on run 2. Run 1 (6h02m) was red by
+# three: one moved provenance pin counted twice, and one real defect --
+# the analogy serializer floating the 76-digit exact literal -- fixed
+# with the suite test as its regression test. Both runs' receipts:
+# reports/test_gate_v020/ (runs.md, run1-red.log, run2-green.log).
+# This cycle adds seven new modules (test_conform, test_conform_prereg,
+# test_conform_register, test_cv4_replay, test_grouping_agreement,
+# test_grouping_canonical, test_machine_reader) and grows thirteen
+# existing ones.
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
