@@ -313,6 +313,26 @@
       },
       "b1_clause_1_stays_missed": "the ordering slip — the replayer committed before the seal — is not touched by any of this. It stays published as MISSED, it is R1-exempt by this file's own text, and it is not reinterpreted.",
       "what_it_changes_in_this_file": "no clause, floor, seed, cap, denominator or verdict. It records an adjudication, a repair design, a mechanical sweep and a re-run protocol, all dated before the repair exists."
+    },
+    {
+      "amendment": 4,
+      "dated": "2026-08-26",
+      "made_after": "runs 1, 2 and 3, on independent review of the merge candidate.",
+      "subject": "the floor sentence's grammar, and the RETRACTION of the justification amendment 1 gave for reading it as it did.",
+      "orchestrator_ruling_verbatim": "The design author adjudicates the floor sentence's grammar: 'in half B's share alone' modifies the final clause (binding-dependent turns ≥36) only; the sessions (≥30) and turns (≥120) floors are corpus-wide, which is how the prereg read it and how the design's own meetability argument was authored. The roadmap's compressed all-three-in-half-B reading was a transcription artifact, corrected here rather than inherited. The prereg's original justification ('a coin flip on a hash-derived split') is RETRACTED as factually wrong — the split was deterministic and knowable when the ids froze; the correct justification is authorial intent plus the meetability argument's own text. Both readings' numbers stay published in the seal (25 in half B; the roadmap reading would have stopped).",
+      "what_this_replaces": {
+        "where": "this file's floors_and_their_meetability.P3_corpus_floor.why_this_reading_and_the_discrepancy_it_resolves",
+        "the_retracted_sentence": "under the roadmap's reading, 30 sessions in half B against a 60-session cap would be a coin flip on a hash-derived split — an unmeetable-by-construction floor of exactly the shape §4.0(3) was written after C-E1 to forbid.",
+        "why_it_was_wrong": "the split is `half = 'B' if int(sha256(session_id)[:2],16) % 2 else 'A'` over ids fixed by a counter in this very file. It is DETERMINISTIC and was knowable the moment the ids froze — before any recording. Calling it a coin flip described a randomness that does not exist, and dressed an authorial reading in a governance argument it did not need.",
+        "the_correct_justification": "authorial intent, adjudicated by the design's author above, plus the design's own meetability argument, which was written for a corpus-wide reading and does not parse under the other one.",
+        "the_original_is_not_edited": "the retracted sentence stays where it was written. This amendment replaces it; it does not erase it. A justification that was wrong and is quietly deleted teaches nothing, and a reader who wants to know whether the reading was chosen for a good reason needs to see the bad reason it was first given."
+      },
+      "what_does_not_change": {
+        "the_reading": "unchanged — 30 sessions and 120 turns corpus-wide, 36 binding-dependent in half B. Amendment 1's reading was right; only its reason was wrong.",
+        "the_numbers": "unchanged. 60 sessions, 410 turns, 58 binding-dependent in half B. Floor met.",
+        "what_stays_published": "BOTH readings' numbers stay in experiments/session_corpus_seal.json. Half B holds 25 sessions, and under the roadmap's compressed reading this cycle would have STOPPED and published 'multi-turn binding is rare in practice'. That number is not removed by the ruling; a ruling that deleted the number the other reading would have produced would make itself uncheckable."
+      },
+      "also_corrected_outside_this_file": "docs/ROADMAP-v0.21.md §1.1 carries a dated one-line correction, because the transcription artifact lives there and a roadmap that keeps saying the wrong thing is a roadmap the next cycle inherits."
     }
   ]
 }

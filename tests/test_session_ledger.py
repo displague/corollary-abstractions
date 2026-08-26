@@ -183,6 +183,42 @@ class PreregIsVerbatim(unittest.TestCase):
         self.assertIn("changes no clause", amendment["what_this_amendment_does_not_do"])
         self.assertIsNone(self.prereg["recording_protocol"]["recorder_code_digest"])
 
+    def test_the_floor_ruling_retracts_without_erasing(self) -> None:
+        """H2: amendment 4 replaces a justification; it does not delete one.
+
+        A wrong reason that is quietly removed teaches nothing, and a reader
+        asking whether the reading was chosen well needs to see the bad
+        reason it was first given. So the retracted sentence must still be
+        where it was written, and the amendment must quote it.
+        """
+
+        amendment = next(
+            item for item in self.prereg["amendments"] if item["amendment"] == 4
+        )
+        original = self.prereg["floors_and_their_meetability"][
+            "P3_corpus_floor"
+        ]["why_this_reading_and_the_discrepancy_it_resolves"]
+        self.assertIn("coin flip", original, "the original was edited")
+        self.assertIn(
+            amendment["what_this_replaces"]["the_retracted_sentence"][:60],
+            original,
+            "the amendment quotes a sentence the original does not contain",
+        )
+        self.assertIn(
+            "deterministic",
+            amendment["what_this_replaces"]["why_it_was_wrong"].lower(),
+        )
+
+    def test_the_roadmap_carries_the_dated_floor_correction(self) -> None:
+        roadmap = (REPO / "docs" / "ROADMAP-v0.21.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Corrected 2026-08-26 by the design author", roadmap)
+        self.assertIn(
+            "corpus-wide, and ≥36 binding-dependent turns in half B's share",
+            _flat(roadmap),
+        )
+
     def test_determinism_replaces_execute_once(self) -> None:
         clause = self.prereg["determinism_clause"]
         self.assertEqual(

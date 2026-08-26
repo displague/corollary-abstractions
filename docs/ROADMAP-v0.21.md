@@ -83,10 +83,23 @@ is frozen.
   `experiments/session_corpus_seal.json` carrying every journal's
   whole-file digest and an A/B split by the committed hash-derived rule
   reused verbatim from `throughput_tasks.json`. **Half B's first execution
-  is the registered run.** Floor in half B's share alone: **≥30 sessions,
-  ≥120 turns, ≥36 binding-dependent turns.** If the capped protocol cannot
-  reach the floor, **STOP** and publish *"multi-turn binding is rare in
-  practice"* as the cycle's finding.
+  is the registered run.** Floor: **≥30 sessions and ≥120 turns
+  corpus-wide, and ≥36 binding-dependent turns in half B's share alone.** If
+  the capped protocol cannot reach the floor, **STOP** and publish
+  *"multi-turn binding is rare in practice"* as the cycle's finding.
+
+  > **Corrected 2026-08-26 by the design author.** This line previously read
+  > *"Floor in half B's share alone: ≥30 sessions, ≥120 turns, ≥36
+  > binding-dependent turns"*, attaching the half-B qualifier to all three
+  > clauses. That was a **transcription artifact of this summary**, not the
+  > design: in DESIGN-session-ledger §6 P3 the qualifier modifies the final
+  > clause only, and the design's own meetability argument was authored for
+  > a corpus-wide reading of the first two. Corrected here rather than
+  > inherited by the next cycle. The full ruling — and the **retraction** of
+  > the wrong justification the preregistration first gave for reading it
+  > this way — is `experiments/session_ledger_prereg.json` amendment 4. Both
+  > readings' numbers stay published in the corpus seal: half B holds 25
+  > sessions, so under the compressed reading this cycle would have stopped.
 
 **A placement rule the design fixes and this roadmap inherits.** Journals
 live under `experiments/`, never under `data/` — `check_regeneration.py`
