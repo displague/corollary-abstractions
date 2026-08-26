@@ -1,0 +1,1287 @@
+{
+  "aggregate": {
+    "adjudicated": 25,
+    "by_verdict": {
+      "confirmed_counterexample": 25
+    },
+    "refuted_counterexamples": [],
+    "rows_whose_substitution_did_not_reproduce_the_run": [],
+    "substitution_cross_check": "Every presented row's substituted tree is re-evaluated by conform.eval_under_domain under the row's own declared domain and compared to the left/right values the registered run printed. A row that did not reproduce them would mean this writer substituted a different point, and its checker verdict would be about a statement nobody measured."
+  },
+  "amends": "experiments/conformance_prereg.json -> amendments[] (the dated entry naming this rider)",
+  "authority": "docs/ROADMAP-v0.21.md §4.0(1), the bug-not-result clause: the no-chase rule governs controls that RAN and read unfavourably; C-E3 provably never executed on the sampled class, which is a bug. The precedent for the shape is foreign_voice_rate.json -> foreign_voice_rate2.json: own dated amendment, NEW artifact, original never edited or re-scored.",
+  "checker": {
+    "binary": "~/.elan/toolchains/leanprover--lean4---v4.32.2/bin/lean.exe",
+    "binary_sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+    "decision_procedure": "by decide, both directions, always both",
+    "invocation": "the pinned binary by absolute path; no elan proxy, no lake, no Mathlib, no network",
+    "timeout_seconds": 120,
+    "toolchain": "leanprover/lean4:v4.32.2"
+  },
+  "commit": "a98fa3cc17813e879cad6e8df095ab3f3863e0ab",
+  "corrections_to_this_writer_after_its_first_execution": {
+    "disclosed_because_the_ordering_matters": "The first execution read 25/25 confirmed. TWO DEFECTS IN THE RECEIPT — not in any verdict — were found by reading that output, fixed, and the run re-executed. Both are recorded here rather than quietly folded in.",
+    "no_verdict_moved": "Neither fix touches substitution, rendering or the decision procedure. All 25 verdicts and both probe `source_sha256` values per row are identical before and after.",
+    "the_probe_output_was_decoded_by_the_console_codepage": "`subprocess.run(text=True)` decoded Lean's diagnostics with the locale encoding, so `≥` reached the receipt as `â‰¥`. The probe now captures bytes and decodes UTF-8 explicitly.",
+    "the_temporary_directorys_random_name_reached_the_artifact": "Lean prefixes its diagnostics with the source path, and the source lived in a fresh `TemporaryDirectory`, so a random string sat inside a field this artifact tells a reader is deterministic. The path is now normalised to `<probe>.lean` and the artifact reproduces byte-for-byte apart from the wall-clock `seconds` fields."
+  },
+  "could_this_have_gone_red": {
+    "the_refuted_path_is_demonstrably_reachable": "tests/test_conform_ce3_supplement.py::TheRenderingMeansToLeanWhatItMeansToTheEvaluator drives this same `decide_both_directions` over seven fixtures, four of which HOLD at their point and therefore come back `refuted_counterexample`. The verdict this run did not produce is produced mechanically by the suite, on the same code path, against the same pinned binary. That is the difference between an instrument that did not go red and one that could not.",
+    "the_standing_review_question": "ROADMAP-v0.21 §4's recurring catch of the cycle: a green assertion that could not have gone red is not evidence. This run read 25 of 25 confirmed — a clean sweep — and a clean sweep is exactly the shape that question exists to interrogate.",
+    "what_a_sweep_still_does_not_license": "Nothing about the other 750 counterexamples, nothing about the declared domain's fidelity to the Lean source statement, and nothing that moves a voided control.",
+    "why_a_sweep_is_the_EXPECTED_reading_here": "Unlike a gate, this rider has no floor and no voiding sentence: it asks whether two independent implementations of the SAME declared arithmetic agree at 25 specific points. If both are correct they agree, so agreement is the null result and disagreement would have been the finding. The content is not that the number is high; it is that Lean's Nat subtraction, Nat floor division and Nat comparison re-derive, from a term this repository never gave it before, the same 25 failures the evaluator printed."
+  },
+  "design": "docs/DESIGN-statements-that-run.md §7 (C-E3), Correction 7",
+  "measure_conformance_is_byte_frozen": "scripts/measure_conformance.py is NOT edited by this rider. It is the record of what ran, including the dead `_lean_expression` at :434-438 and the discarded `typed` at :463 that are the evidence for the correction. A supplementary run that edited the writer it supplements would destroy its own subject.",
+  "non_claims": [
+    "This run does not un-void experiments/conformance_run.json. C-E1 missed its floor and C-E2 voided; both stand, and every NO_COUNTEREXAMPLE_FOUND in that run remains void.",
+    "This run publishes no conformance rate, and agreement here is not evidence any statement is true — a counterexample decides and agreement at a point decides nothing.",
+    "This run adjudicates the 25 rows C-E3 reached and says nothing about the other counterexamples in the registered run.",
+    "The domain under which each point was drawn is this repository's declaration. An independent adjudication of the DOMAIN is not what this run is; that is WITNESS's problem.",
+    "No verified_by link is created and nothing enters prover/verifier-verdicts/. A decided ground proposition at a sampled point is not a proof artifact."
+  ],
+  "ordering": "RETROSPECTIVE",
+  "ordering_disclosed": "The gap this run closes was found by REVIEW AFTER the registered run was read, not before it. The prereg amendment naming this rider is dated 2026-08-26 and the run it supplements is dated 2026-08-25. Nothing about that ordering is hidden by calling the amendment a preregistration: what is preregistered is the PROCEDURE and the reading rule — whatever the checker says is the answer — and both were fixed before this writer was run.",
+  "registered": "2026-08-26",
+  "reproduction": {
+    "determinism": "Deterministic given the pinned checker and the committed run artifact: the rows, the bindings and the rendered propositions are all functions of committed bytes, and `decide` is a decision procedure. Per ROADMAP-v0.21 §4.0(2) this artifact is committed from a deterministic runner and reproductions are welcome and recorded.",
+    "how": "python scripts/conformance_ce3_supplement.py",
+    "what_is_not_byte_identical": "`checker.timeout_seconds` aside, the per-probe `seconds` fields are wall-clock and differ between runs by construction. Every other field is a function of the inputs."
+  },
+  "roadmap": "docs/ROADMAP-v0.21.md §2",
+  "rows": [
+    {
+      "adjudicated_index": 15,
+      "bindings": {
+        "x": "2",
+        "y": "7",
+        "z": "1"
+      },
+      "canonical_ascii": "(3 / 2) * (x + y + z) * (3 * (x + y + z) ^ 2 + x * y + x * z + y * z) ≥ (3 * x + y + z) * (3 * y + x + z) * (3 * z + x + y)",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.353,
+          "source_sha256": "f249eaea9ccfae4d1d643ec72113b0afe89ef8e27fdab6ebac8334f21a30f4d6"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:210: error: Tactic `decide` proved that the proposition\n  3 / 2 * (2 + 7 + 1) * (3 * (2 + 7 + 1) ^ 2 + 2 * 7 + 2 * 1 + 7 * 1) ≥\n    (3 * 2 + 7 + 1) * (3 * 7 + 2 + 1) * (3 * 1 + 2 + 7)\nis false",
+          "returncode": 1,
+          "seconds": 0.346,
+          "source_sha256": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "3230",
+        "reproduces_the_runs_numbers": true,
+        "right": "4032",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "3230",
+        "relation": ">=",
+        "right": "4032",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10096",
+      "substituted_proposition": "((((((3) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))) : Nat) >= ((((((3 * 2) + 7) + 1) * (((3 * 7) + 2) + 1)) * (((3 * 1) + 2) + 7)) : Nat))"
+    },
+    {
+      "adjudicated_index": 16,
+      "bindings": {
+        "x": "3"
+      },
+      "canonical_ascii": "(1 + x) ^ 3 * (1 + 16 / x ^ 3) ≥ 81",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.339,
+          "source_sha256": "04d2df4523a2beb12f34016084296ae53281ef137dd6c4a0165a39e31053ce52"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:92: error: Tactic `decide` proved that the proposition\n  (1 + 3) ^ 3 * (1 + 16 / 3 ^ 3) ≥ 81\nis false",
+          "returncode": 1,
+          "seconds": 0.338,
+          "source_sha256": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "64",
+        "reproduces_the_runs_numbers": true,
+        "right": "81",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "64",
+        "relation": ">=",
+        "right": "81",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10197",
+      "substituted_proposition": "(((((1 + 3) ^ 3) * (1 + ((16) / ((3 ^ 3))))) : Nat) >= (81 : Nat))"
+    },
+    {
+      "adjudicated_index": 17,
+      "bindings": {
+        "a": "3",
+        "b": "7",
+        "c": "0"
+      },
+      "canonical_ascii": "(5 / 3) * (a ^ 2 + b ^ 2 + c ^ 2) ^ 2 ≥ 2 * (a ^ 3 * b + b ^ 3 * c + c ^ 3 * a) + 3 * (a * b ^ 3 + b * c ^ 3 + c * a ^ 3)",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.369,
+          "source_sha256": "bd8ced8242ffda6aded97330177707e90583d8d4d666e6b419b49618bcf10a45"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:216: error: Tactic `decide` proved that the proposition\n  5 / 3 * (3 ^ 2 + 7 ^ 2 + 0 ^ 2) ^ 2 ≥\n    2 * (3 ^ 3 * 7 + 7 ^ 3 * 0 + 0 ^ 3 * 3) + 3 * (3 * 7 ^ 3 + 7 * 0 ^ 3 + 0 * 3 ^ 3)\nis false",
+          "returncode": 1,
+          "seconds": 0.376,
+          "source_sha256": "eecaae562274263a3f9319dd9512a5b90adc8067b2044809881f9b2ad0df165b"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "3364",
+        "reproduces_the_runs_numbers": true,
+        "right": "3465",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "3364",
+        "relation": ">=",
+        "right": "3465",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_1032",
+      "substituted_proposition": "(((((5) / (3)) * ((((3 ^ 2) + (7 ^ 2)) + (0 ^ 2)) ^ 2)) : Nat) >= (((2 * ((((3 ^ 3) * 7) + ((7 ^ 3) * 0)) + ((0 ^ 3) * 3))) + (3 * (((3 * (7 ^ 3)) + (7 * (0 ^ 3))) + (0 * (3 ^ 3))))) : Nat))"
+    },
+    {
+      "adjudicated_index": 18,
+      "bindings": {
+        "a": "7",
+        "b": "1",
+        "c": "2",
+        "d": "11"
+      },
+      "canonical_ascii": "(1 / 4) * (b ^ 2 + c ^ 2 + d ^ 2 + a ^ 2) ^ 2 ≥ b ^ 2 * c * d + a * c ^ 2 * d + a * b * d ^ 2 + a ^ 2 * b * c",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.365,
+          "source_sha256": "1b7ef824d57fa5e8c5a7105344c8e9ec5bea6130828d8034b39eda4a1e82847d"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:208: error: Tactic `decide` proved that the proposition\n  1 / 4 * (1 ^ 2 + 2 ^ 2 + 11 ^ 2 + 7 ^ 2) ^ 2 ≥ 1 ^ 2 * 2 * 11 + 7 * 2 ^ 2 * 11 + 7 * 1 * 11 ^ 2 + 7 ^ 2 * 1 * 2\nis false",
+          "returncode": 1,
+          "seconds": 0.365,
+          "source_sha256": "d68d50aa4cffeb193b54a8d8f8683e7649de29264176f995950d5d4c9ad6842d"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "0",
+        "reproduces_the_runs_numbers": true,
+        "right": "1275",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "0",
+        "relation": ">=",
+        "right": "1275",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10425",
+      "substituted_proposition": "(((((1) / (4)) * (((((1 ^ 2) + (2 ^ 2)) + (11 ^ 2)) + (7 ^ 2)) ^ 2)) : Nat) >= (((((((1 ^ 2) * 2) * 11) + ((7 * (2 ^ 2)) * 11)) + ((7 * 1) * (11 ^ 2))) + (((7 ^ 2) * 1) * 2)) : Nat))"
+    },
+    {
+      "adjudicated_index": 19,
+      "bindings": {
+        "a": "5",
+        "b": "3",
+        "c": "5"
+      },
+      "canonical_ascii": "a / b + b / c + c / a ≥ (a + b) / (b + c) + (b + c) / (a + b) + 1",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.328,
+          "source_sha256": "64cc4e175759826ce8b743849665dc171e9abccd560086e32e938bafd53be032"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:148: error: Tactic `decide` proved that the proposition\n  5 / 3 + 3 / 5 + 5 / 5 ≥ (5 + 3) / (3 + 5) + (3 + 5) / (5 + 3) + 1\nis false",
+          "returncode": 1,
+          "seconds": 0.327,
+          "source_sha256": "a1e12ad31e8b7e4a38c9f03af01559236bd48fee58a7e44277733fb17a3f907d"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "2",
+        "reproduces_the_runs_numbers": true,
+        "right": "3",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "2",
+        "relation": ">=",
+        "right": "3",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10482",
+      "substituted_proposition": "((((((5) / (3)) + ((3) / (5))) + ((5) / (5))) : Nat) >= ((((((5 + 3)) / ((3 + 5))) + (((3 + 5)) / ((5 + 3)))) + 1) : Nat))"
+    },
+    {
+      "adjudicated_index": 20,
+      "bindings": {
+        "n": "0"
+      },
+      "canonical_ascii": "n^4 + 3 = ((n-1)*(n+1))^2 + (n-1)^2 + (n+1)^2",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.346,
+          "source_sha256": "391798beb93bdbe46dbb785cd853535bbc0349c7aba8de0c49980812d58a7a34"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:129: error: Tactic `decide` proved that the proposition\n  0 ^ 4 + 3 = ((0 - 1) * (0 + 1)) ^ 2 + (0 - 1) ^ 2 + (0 + 1) ^ 2\nis false",
+          "returncode": 1,
+          "seconds": 0.349,
+          "source_sha256": "c16478fec40e8359bbf1fbf5035890dc3362fff03939bc8bd00357e6a95fa2ac"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "3",
+        "reproduces_the_runs_numbers": true,
+        "right": "1",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "3",
+        "relation": "=",
+        "right": "1",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10626",
+      "substituted_proposition": "((((0 ^ 4) + 3) : Nat) = (((((((0) - (1)) * (0 + 1)) ^ 2) + (((0) - (1)) ^ 2)) + ((0 + 1) ^ 2)) : Nat))"
+    },
+    {
+      "adjudicated_index": 21,
+      "bindings": {
+        "a": "5",
+        "b": "7",
+        "c": "5"
+      },
+      "canonical_ascii": "(a / (b + c) + b / (a + c) + c / (a + b) + 4 * a * b * c / ( (a + b) * (b + c) * (c + a))) ≥ 2",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.338,
+          "source_sha256": "7df2062508095b93030850eb000fadc83609522b1707c9055c7c4d4a23f46ff6"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:174: error: Tactic `decide` proved that the proposition\n  5 / (7 + 5) + 7 / (5 + 5) + 5 / (5 + 7) + 4 * 5 * 7 * 5 / ((5 + 7) * (7 + 5) * (5 + 5)) ≥ 2\nis false",
+          "returncode": 1,
+          "seconds": 0.328,
+          "source_sha256": "8850d13ef31411148044dae981749d4806086f17b4b5b90db2ad41b96289413d"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "0",
+        "reproduces_the_runs_numbers": true,
+        "right": "2",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "0",
+        "relation": ">=",
+        "right": "2",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10772",
+      "substituted_proposition": "(((((((5) / ((7 + 5))) + ((7) / ((5 + 5)))) + ((5) / ((5 + 7)))) + (((((4 * 5) * 7) * 5)) / ((((5 + 7) * (7 + 5)) * (5 + 5))))) : Nat) >= (2 : Nat))"
+    },
+    {
+      "adjudicated_index": 22,
+      "bindings": {
+        "a": "7",
+        "b": "5",
+        "c": "7"
+      },
+      "canonical_ascii": "(2 * (a ^ 3 + b ^ 3 + c ^ 3) / (a * b * c) + 9 * (a + b + c) ^ 2 / (a ^ 2 + b ^ 2 + c ^ 2)) ≥ 33",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.366,
+          "source_sha256": "c7688d6be0ce8295987d13d12c6229cff9db6554c2dce8e581bb1ed78f39433e"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:179: error: Tactic `decide` proved that the proposition\n  2 * (7 ^ 3 + 5 ^ 3 + 7 ^ 3) / (7 * 5 * 7) + 9 * (7 + 5 + 7) ^ 2 / (7 ^ 2 + 5 ^ 2 + 7 ^ 2) ≥ 33\nis false",
+          "returncode": 1,
+          "seconds": 0.346,
+          "source_sha256": "3fa01fc49e77311f6cd47d7acdc4402636b56080e1ad313168d9c60d09068bbd"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "32",
+        "reproduces_the_runs_numbers": true,
+        "right": "33",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "32",
+        "relation": ">=",
+        "right": "33",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10796",
+      "substituted_proposition": "((((((2 * (((7 ^ 3) + (5 ^ 3)) + (7 ^ 3)))) / (((7 * 5) * 7))) + (((9 * (((7 + 5) + 7) ^ 2))) / ((((7 ^ 2) + (5 ^ 2)) + (7 ^ 2))))) : Nat) >= (33 : Nat))"
+    },
+    {
+      "adjudicated_index": 23,
+      "bindings": {
+        "a": "5",
+        "b": "4",
+        "c": "1"
+      },
+      "canonical_ascii": "(a + b + c) ^ 2 * (a * b + b * c + c * a) ≤ (9 / 16) * ((a + b) ^ 4 + (b + c) ^ 4 + (c + a) ^ 4)",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.337,
+          "source_sha256": "ec06ad12910f78bbc5882154b651c0b244b717d8080f3150e65d6dc9651a956f"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:169: error: Tactic `decide` proved that the proposition\n  (5 + 4 + 1) ^ 2 * (5 * 4 + 4 * 1 + 1 * 5) ≤ 9 / 16 * ((5 + 4) ^ 4 + (4 + 1) ^ 4 + (1 + 5) ^ 4)\nis false",
+          "returncode": 1,
+          "seconds": 0.339,
+          "source_sha256": "365cb9d1bed2a66208d4c3b157c9fabc2937a8b17ac91afb54efc4fbb847c00f"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "2900",
+        "reproduces_the_runs_numbers": true,
+        "right": "0",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "2900",
+        "relation": "<=",
+        "right": "0",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10812",
+      "substituted_proposition": "((((((5 + 4) + 1) ^ 2) * (((5 * 4) + (4 * 1)) + (1 * 5))) : Nat) <= ((((9) / (16)) * ((((5 + 4) ^ 4) + ((4 + 1) ^ 4)) + ((1 + 5) ^ 4))) : Nat))"
+    },
+    {
+      "adjudicated_index": 24,
+      "bindings": {
+        "a": "4",
+        "b": "1",
+        "c": "2"
+      },
+      "canonical_ascii": "(a / (a + b) + b / (b + c) + c / (c + a)) ≥ 27 * a * b * c / (2 * (a + b + c) * (a * b + b * c + c * a))",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.36,
+          "source_sha256": "e2417dfa6d1095886553152837aa743d713188816bb2381dd1b04bbcc1ec6665"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:193: error: Tactic `decide` proved that the proposition\n  4 / (4 + 1) + 1 / (1 + 2) + 2 / (2 + 4) ≥ 27 * 4 * 1 * 2 / (2 * (4 + 1 + 2) * (4 * 1 + 1 * 2 + 2 * 4))\nis false",
+          "returncode": 1,
+          "seconds": 0.34,
+          "source_sha256": "d45559c0333cea6ad09fe00c6dc683d8b1022829d1cfea460da3eb19569444aa"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "0",
+        "reproduces_the_runs_numbers": true,
+        "right": "1",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "0",
+        "relation": ">=",
+        "right": "1",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10878",
+      "substituted_proposition": "((((((4) / ((4 + 1))) + ((1) / ((1 + 2)))) + ((2) / ((2 + 4)))) : Nat) >= ((((((27 * 4) * 1) * 2)) / (((2 * ((4 + 1) + 2)) * (((4 * 1) + (1 * 2)) + (2 * 4))))) : Nat))"
+    },
+    {
+      "adjudicated_index": 25,
+      "bindings": {
+        "a": "11",
+        "b": "4"
+      },
+      "canonical_ascii": "a^2 + b^2 ≤ (10/3) * a * b",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.343,
+          "source_sha256": "7ab0b36b16e8d1a7688afefbf11868f5eb20623c851d912c5cc1404e1abbb3aa"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:93: error: Tactic `decide` proved that the proposition\n  11 ^ 2 + 4 ^ 2 ≤ 10 / 3 * 11 * 4\nis false",
+          "returncode": 1,
+          "seconds": 0.343,
+          "source_sha256": "169ec5cc7b4a252f9dc95d38b3cf2b9a8dd89d50216211fd5b65060275072aeb"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "137",
+        "reproduces_the_runs_numbers": true,
+        "right": "132",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "137",
+        "relation": "<=",
+        "right": "132",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_10948",
+      "substituted_proposition": "((((11 ^ 2) + (4 ^ 2)) : Nat) <= (((((10) / (3)) * 11) * 4) : Nat))"
+    },
+    {
+      "adjudicated_index": 26,
+      "bindings": {
+        "a": "4",
+        "b": "4",
+        "c": "3"
+      },
+      "canonical_ascii": "2 * (a^2 / (b + c) + b^2 / (c + a) + c^2 / (a + b)) ≥ a + b + c",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.354,
+          "source_sha256": "a680902116a87f6c98d1536e447adba760000e867f729f0cdc78cad200aeccfa"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:146: error: Tactic `decide` proved that the proposition\n  2 * (4 ^ 2 / (4 + 3) + 4 ^ 2 / (3 + 4) + 3 ^ 2 / (4 + 4)) ≥ 4 + 4 + 3\nis false",
+          "returncode": 1,
+          "seconds": 0.341,
+          "source_sha256": "397fc5c6ab65029889cb8dc5ddea64efd32a57b8654f3cce2cd1c7c500113619"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "10",
+        "reproduces_the_runs_numbers": true,
+        "right": "11",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "10",
+        "relation": ">=",
+        "right": "11",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11019",
+      "substituted_proposition": "(((2 * (((((4 ^ 2)) / ((4 + 3))) + (((4 ^ 2)) / ((3 + 4)))) + (((3 ^ 2)) / ((4 + 4))))) : Nat) >= (((4 + 4) + 3) : Nat))"
+    },
+    {
+      "adjudicated_index": 27,
+      "bindings": {
+        "x": "0"
+      },
+      "canonical_ascii": "(x + 1) / (x ^ 2 + 1) + 1 / 4 = 1 / 4 * (x ^ 2 + 4 * x + 5) / (x ^ 2 + 1)",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.339,
+          "source_sha256": "91ac28f6fba89be3b558526834ba87116b6ea8c8043b63953b35f9073bbcda8a"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:155: error: Tactic `decide` proved that the proposition\n  (0 + 1) / (0 ^ 2 + 1) + 1 / 4 = 1 / 4 * (0 ^ 2 + 4 * 0 + 5) / (0 ^ 2 + 1)\nis false",
+          "returncode": 1,
+          "seconds": 0.343,
+          "source_sha256": "3ef65e4bfff2bf4b2daf110eda80def4c823c4138bf04f0cf8a3f5bcd8c39fff"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "1",
+        "reproduces_the_runs_numbers": true,
+        "right": "0",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "1",
+        "relation": "=",
+        "right": "0",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11106",
+      "substituted_proposition": "((((((0 + 1)) / (((0 ^ 2) + 1))) + ((1) / (4))) : Nat) = ((((((1) / (4)) * (((0 ^ 2) + (4 * 0)) + 5))) / (((0 ^ 2) + 1))) : Nat))"
+    },
+    {
+      "adjudicated_index": 28,
+      "bindings": {
+        "a": "1",
+        "b": "4",
+        "c": "4"
+      },
+      "canonical_ascii": "(c^2 / (a + b + 2 * c)) ≤ (1 / 4) * (c^2 / (a + c) + c^2 / (b + c))",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.359,
+          "source_sha256": "ce1aee7415e375feca1028a8db01568aeeaf2a44061f459a5c59dd64cc4e8089"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:150: error: Tactic `decide` proved that the proposition\n  4 ^ 2 / (1 + 4 + 2 * 4) ≤ 1 / 4 * (4 ^ 2 / (1 + 4) + 4 ^ 2 / (4 + 4))\nis false",
+          "returncode": 1,
+          "seconds": 0.336,
+          "source_sha256": "c80a971c7bd4ff7905da9771e1c15eb35082012674ee8754c5425131ddcebe1a"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "1",
+        "reproduces_the_runs_numbers": true,
+        "right": "0",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "1",
+        "relation": "<=",
+        "right": "0",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_1114",
+      "substituted_proposition": "(((((4 ^ 2)) / (((1 + 4) + (2 * 4)))) : Nat) <= ((((1) / (4)) * ((((4 ^ 2)) / ((1 + 4))) + (((4 ^ 2)) / ((4 + 4))))) : Nat))"
+    },
+    {
+      "adjudicated_index": 29,
+      "bindings": {
+        "a": "4",
+        "b": "3",
+        "c": "2"
+      },
+      "canonical_ascii": "(a^2 + b * c) / (b + c) + (b^2 + c * a) / (c + a) + (c^2 + a * b) / (a + b) ≥ a + b + c",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.339,
+          "source_sha256": "e01c3a06b81d18d5e70aa9a25d2922d17da1fb9e22d7dd64180576a853fd3ab0"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:176: error: Tactic `decide` proved that the proposition\n  (4 ^ 2 + 3 * 2) / (3 + 2) + (3 ^ 2 + 2 * 4) / (2 + 4) + (2 ^ 2 + 4 * 3) / (4 + 3) ≥ 4 + 3 + 2\nis false",
+          "returncode": 1,
+          "seconds": 0.331,
+          "source_sha256": "68d55666b30c9e3408cd63783108c3597049f75fb135b52071f8b4f4c4e19f09"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "8",
+        "reproduces_the_runs_numbers": true,
+        "right": "9",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "8",
+        "relation": ">=",
+        "right": "9",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11205",
+      "substituted_proposition": "((((((((4 ^ 2) + (3 * 2))) / ((3 + 2))) + ((((3 ^ 2) + (2 * 4))) / ((2 + 4)))) + ((((2 ^ 2) + (4 * 3))) / ((4 + 3)))) : Nat) >= (((4 + 3) + 2) : Nat))"
+    },
+    {
+      "adjudicated_index": 30,
+      "bindings": {
+        "a": "4",
+        "b": "5",
+        "c": "7"
+      },
+      "canonical_ascii": "2 * a ^ 2 + b * c = a * (a + b + c) + (a - b) * (a - c)",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.344,
+          "source_sha256": "90fda4989731db365e233bf9347c592e8ea96b2c439e2f8ae99c51e0bbbd4ff0"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:123: error: Tactic `decide` proved that the proposition\n  2 * 4 ^ 2 + 5 * 7 = 4 * (4 + 5 + 7) + (4 - 5) * (4 - 7)\nis false",
+          "returncode": 1,
+          "seconds": 0.337,
+          "source_sha256": "ddd1fb5449c7c98f0dc1d3905dd6f89e09e3826537cc0298bc157af9f7b070f0"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "67",
+        "reproduces_the_runs_numbers": true,
+        "right": "64",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "67",
+        "relation": "=",
+        "right": "64",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11268",
+      "substituted_proposition": "((((2 * (4 ^ 2)) + (5 * 7)) : Nat) = (((4 * ((4 + 5) + 7)) + (((4) - (5)) * ((4) - (7)))) : Nat))"
+    },
+    {
+      "adjudicated_index": 31,
+      "bindings": {
+        "x": "2",
+        "y": "2",
+        "z": "4"
+      },
+      "canonical_ascii": "1/x + 1/y + 1/z ≥ (4 * (x + y + z) ^ 2 - 3 * (x*y + y*z + z*x)) / (x + y + z) / (x*y + y*z + z*x)",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.33,
+          "source_sha256": "dbeaa97a8b197a95b3373a3ed4f3824e83d2e7fefcc20569328ee2544318ca70"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:224: error: Tactic `decide` proved that the proposition\n  1 / 2 + 1 / 2 + 1 / 4 ≥ (4 * (2 + 2 + 4) ^ 2 - 3 * (2 * 2 + 2 * 4 + 4 * 2)) / (2 + 2 + 4) / (2 * 2 + 2 * 4 + 4 * 2)\nis false",
+          "returncode": 1,
+          "seconds": 0.333,
+          "source_sha256": "4c9e7a828751d556374dfbe73ee8d3947a0a9550699cc627184b254cda202694"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "0",
+        "reproduces_the_runs_numbers": true,
+        "right": "1",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "0",
+        "relation": ">=",
+        "right": "1",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11364",
+      "substituted_proposition": "((((((1) / (2)) + ((1) / (2))) + ((1) / (4))) : Nat) >= ((((((((4 * (((2 + 2) + 4) ^ 2))) - ((3 * (((2 * 2) + (2 * 4)) + (4 * 2)))))) / (((2 + 2) + 4)))) / ((((2 * 2) + (2 * 4)) + (4 * 2)))) : Nat))"
+    },
+    {
+      "adjudicated_index": 32,
+      "bindings": {
+        "a": "11",
+        "b": "1",
+        "c": "5"
+      },
+      "canonical_ascii": "a^2 * (b + c - a) + b^2 * (c + a - b) + c^2 * (a + b - c) ≤ 3 * a * b * c",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.354,
+          "source_sha256": "0d315f08216a614a8cdac8223d27b05d15412df96337de67c10f7fa995c430b3"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:169: error: Tactic `decide` proved that the proposition\n  11 ^ 2 * (1 + 5 - 11) + 1 ^ 2 * (5 + 11 - 1) + 5 ^ 2 * (11 + 1 - 5) ≤ 3 * 11 * 1 * 5\nis false",
+          "returncode": 1,
+          "seconds": 0.347,
+          "source_sha256": "52cc032dadfa5db4f1c89eda3d11c207af6335d695aa9394b76b6abddf0a7498"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "190",
+        "reproduces_the_runs_numbers": true,
+        "right": "165",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "190",
+        "relation": "<=",
+        "right": "165",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11420",
+      "substituted_proposition": "((((((11 ^ 2) * (((1 + 5)) - (11))) + ((1 ^ 2) * (((5 + 11)) - (1)))) + ((5 ^ 2) * (((11 + 1)) - (5)))) : Nat) <= ((((3 * 11) * 1) * 5) : Nat))"
+    },
+    {
+      "adjudicated_index": 33,
+      "bindings": {
+        "a": "7",
+        "b": "11",
+        "c": "11"
+      },
+      "canonical_ascii": "a / (b + c - a) + b / (c + a - b) + c / (a + b - c) ≥ 3",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.34,
+          "source_sha256": "71bdea3a3a9f9d7df3cc63f41badd73bb8cba68dff874a49073dbfa25f0e7dd8"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:148: error: Tactic `decide` proved that the proposition\n  7 / (11 + 11 - 7) + 11 / (11 + 7 - 11) + 11 / (7 + 11 - 11) ≥ 3\nis false",
+          "returncode": 1,
+          "seconds": 0.347,
+          "source_sha256": "2065f135337caf144e0e84004033844800205127ecb0d97bd6baaaac6184a41d"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "2",
+        "reproduces_the_runs_numbers": true,
+        "right": "3",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "2",
+        "relation": ">=",
+        "right": "3",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11519",
+      "substituted_proposition": "((((((7) / ((((11 + 11)) - (7)))) + ((11) / ((((11 + 7)) - (11))))) + ((11) / ((((7 + 11)) - (11))))) : Nat) >= (3 : Nat))"
+    },
+    {
+      "adjudicated_index": 34,
+      "bindings": {
+        "a": "4",
+        "b": "5",
+        "c": "5"
+      },
+      "canonical_ascii": "a^2 / (b + c) + b^2 / (c + a) + c^2 / (a + b) ≥ (a + b + c) / 2",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.35,
+          "source_sha256": "484cff560a359b2286abf8beccfec72cb7f8f31c857b4f1a2f2b3f7f502ab58b"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:150: error: Tactic `decide` proved that the proposition\n  4 ^ 2 / (5 + 5) + 5 ^ 2 / (5 + 4) + 5 ^ 2 / (4 + 5) ≥ (4 + 5 + 5) / 2\nis false",
+          "returncode": 1,
+          "seconds": 0.353,
+          "source_sha256": "164b693518c039cfe3233075945c14bf8958da72a107517950315e1aeb2938cf"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "5",
+        "reproduces_the_runs_numbers": true,
+        "right": "7",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "5",
+        "relation": ">=",
+        "right": "7",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11523",
+      "substituted_proposition": "(((((((4 ^ 2)) / ((5 + 5))) + (((5 ^ 2)) / ((5 + 4)))) + (((5 ^ 2)) / ((4 + 5)))) : Nat) >= (((((4 + 5) + 5)) / (2)) : Nat))"
+    },
+    {
+      "adjudicated_index": 35,
+      "bindings": {
+        "a": "2",
+        "b": "2"
+      },
+      "canonical_ascii": "(b^2 + 2) / (a + b) + a^2 / (a * b + 1) ≥ 2",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.353,
+          "source_sha256": "52dc4dad29756774556060ddd4bcbd4dac148c7f31fd24d023b942195c974f8e"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:112: error: Tactic `decide` proved that the proposition\n  (2 ^ 2 + 2) / (2 + 2) + 2 ^ 2 / (2 * 2 + 1) ≥ 2\nis false",
+          "returncode": 1,
+          "seconds": 0.347,
+          "source_sha256": "4d593cb4cba6961c9e76362a4844fef2f1002d9f1e6771803bd9399acd44e806"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "1",
+        "reproduces_the_runs_numbers": true,
+        "right": "2",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "1",
+        "relation": ">=",
+        "right": "2",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11599",
+      "substituted_proposition": "(((((((2 ^ 2) + 2)) / ((2 + 2))) + (((2 ^ 2)) / (((2 * 2) + 1)))) : Nat) >= (2 : Nat))"
+    },
+    {
+      "adjudicated_index": 36,
+      "bindings": {
+        "a": "5",
+        "b": "2",
+        "c": "3"
+      },
+      "canonical_ascii": "1 / a * (b + c) + a * (1 / b + 1 / c) ≥ 5",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.337,
+          "source_sha256": "f46ab2382d042681d89aa158b4bfa83e69300a4778bbc1e9d0bdc23ac7feb4df"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:110: error: Tactic `decide` proved that the proposition\n  1 / 5 * (2 + 3) + 5 * (1 / 2 + 1 / 3) ≥ 5\nis false",
+          "returncode": 1,
+          "seconds": 0.327,
+          "source_sha256": "e10b0a28696cf496d5249585877363d0554702bad66b2840d0210cb4a77b68df"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "0",
+        "reproduces_the_runs_numbers": true,
+        "right": "5",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "0",
+        "relation": ">=",
+        "right": "5",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11611",
+      "substituted_proposition": "((((((1) / (5)) * (2 + 3)) + (5 * (((1) / (2)) + ((1) / (3))))) : Nat) >= (5 : Nat))"
+    },
+    {
+      "adjudicated_index": 37,
+      "bindings": {
+        "x": "3",
+        "y": "3",
+        "z": "2"
+      },
+      "canonical_ascii": "(x ^ 3 / (x + y) + y ^ 3 / (y + z) + z ^ 3 / (z + x)) ≥ (x ^ 2 + y ^ 2 + z ^ 2) / 2",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.352,
+          "source_sha256": "c8dc5deae7633e97e3801f7f62e57862f41f5369b8b52b73a14537a3e651e008"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:168: error: Tactic `decide` proved that the proposition\n  3 ^ 3 / (3 + 3) + 3 ^ 3 / (3 + 2) + 2 ^ 3 / (2 + 3) ≥ (3 ^ 2 + 3 ^ 2 + 2 ^ 2) / 2\nis false",
+          "returncode": 1,
+          "seconds": 0.341,
+          "source_sha256": "66af4f1d4b0a714f4a0b052a6314839a26fe8d3c2e4c9e81e6535423a9721579"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "10",
+        "reproduces_the_runs_numbers": true,
+        "right": "11",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "10",
+        "relation": ">=",
+        "right": "11",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11617",
+      "substituted_proposition": "(((((((3 ^ 3)) / ((3 + 3))) + (((3 ^ 3)) / ((3 + 2)))) + (((2 ^ 3)) / ((2 + 3)))) : Nat) >= ((((((3 ^ 2) + (3 ^ 2)) + (2 ^ 2))) / (2)) : Nat))"
+    },
+    {
+      "adjudicated_index": 38,
+      "bindings": {
+        "x": "0"
+      },
+      "canonical_ascii": "x^4 - 4 * x^3 + 8 * x + 4 = (x^2 - 2 * x - 2)^2",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.357,
+          "source_sha256": "df3dd13b91b02edb6968cf078babaec65a0eed500b8e6fa9d1e31b8daa45aadd"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:133: error: Tactic `decide` proved that the proposition\n  0 ^ 4 - 4 * 0 ^ 3 + 8 * 0 + 4 = (0 ^ 2 - 2 * 0 - 2) ^ 2\nis false",
+          "returncode": 1,
+          "seconds": 0.366,
+          "source_sha256": "7f9df9c298bed167a7032c84e6436699ae84098dfb4bdede9cdd520bd34817ae"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "4",
+        "reproduces_the_runs_numbers": true,
+        "right": "0",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "4",
+        "relation": "=",
+        "right": "0",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_11706",
+      "substituted_proposition": "(((((((0 ^ 4)) - ((4 * (0 ^ 3)))) + (8 * 0)) + 4) : Nat) = (((((((0 ^ 2)) - ((2 * 0)))) - (2)) ^ 2) : Nat))"
+    },
+    {
+      "adjudicated_index": 39,
+      "bindings": {
+        "a": "5",
+        "b": "5",
+        "c": "2"
+      },
+      "canonical_ascii": "(2 * (b - c) ^ 2 + 2 * a ^ 2 + b * c) * (2 * (c - a) ^ 2 + 2 * b ^ 2 + c * a) * (2 * (a - b) ^ 2 + 2 * c ^ 2 + a * b) ≥ (a ^ 2 + b ^ 2 + c ^ 2) ^ 3",
+      "checker_receipt": {
+        "negative_probe": {
+          "accepted": true,
+          "checker_output_head": "",
+          "returncode": 0,
+          "seconds": 0.379,
+          "source_sha256": "87feaa54c9830ebbd1aa8d16681699daaca139c665212bc494c01d7453a182d2"
+        },
+        "pattern": "example : (<prop> : Prop) := by decide",
+        "positive_probe": {
+          "accepted": false,
+          "checker_output_head": "<probe>.lean:1:254: error: Tactic `decide` proved that the proposition\n  (2 * (5 - 2) ^ 2 + 2 * 5 ^ 2 + 5 * 2) * (2 * (2 - 5) ^ 2 + 2 * 5 ^ 2 + 2 * 5) *\n      (2 * (5 - 5) ^ 2 + 2 * 2 ^ 2 + 5 * 5) ≥\n    (5 ^ 2 + 5 ^ 2 + 2 ^ 2) ^ 3\nis false",
+          "returncode": 1,
+          "seconds": 0.426,
+          "source_sha256": "25d88b935bdfeca27c542b731df8cdbdd6744f35864351dd97339d94213d098e"
+        }
+      },
+      "decide_verdict": "confirmed_counterexample",
+      "domain": {
+        "carrier": "Nat",
+        "division": "truncating",
+        "subtraction": "truncated-at-zero"
+      },
+      "evaluator_recomputation": {
+        "holds": false,
+        "left": "154440",
+        "reproduces_the_runs_numbers": true,
+        "right": "157464",
+        "still_a_counterexample_under_the_evaluator": true
+      },
+      "means": "the pinned checker accepted the NEGATION of the substituted proposition: at this point the statement is false, and the run's counterexample is confirmed by an implementation that is not this repository's evaluator",
+      "run_recorded": {
+        "c_e3_said": "decide did not reduce in either direction",
+        "left": "154440",
+        "relation": ">=",
+        "right": "157464",
+        "verdict_in_the_run": "NONCONFORMANT"
+      },
+      "statement_id": "leanworkbook.skel.lean_workbook_1220",
+      "substituted_proposition": "(((((((2 * (((5) - (2)) ^ 2)) + (2 * (5 ^ 2))) + (5 * 2)) * (((2 * (((2) - (5)) ^ 2)) + (2 * (5 ^ 2))) + (2 * 5))) * (((2 * (((5) - (5)) ^ 2)) + (2 * (2 ^ 2))) + (5 * 5))) : Nat) >= (((((5 ^ 2) + (5 ^ 2)) + (2 ^ 2)) ^ 3) : Nat))"
+    }
+  ],
+  "source": {
+    "of_the_runs_counterexamples": 775,
+    "rows_selected": 25,
+    "run_artifact": "experiments/conformance_run.json",
+    "run_artifact_is_read_only_here": true,
+    "run_artifact_sha256_lf": "5f419000bf8f4f7b9a4fc27dc911012230e654b78036ce8d4b57932323ee8b85",
+    "selection": "every c_e3.adjudicated row whose statement_id carries a counterexample in e2.counterexamples_exhaustively — i.e. the SAMPLED class, derived rather than indexed. In the committed run these are indices 15-39.",
+    "why_not_all_of_them": "C-E3 ran under a committed 40-row limit and adjudicated the 40 rows it reached. This supplement adjudicates exactly those rows again, correctly. The remaining counterexamples were never presented to any checker and this run does not present them: extending the sample would be a new measurement, not the repair of a gap."
+  },
+  "supplement_id": "conformance.ce3.supplement.v1",
+  "what_this_answers": {
+    "agreement": "A confirmed_counterexample strengthens the credibility of that row's PROVISIONAL NONCONFORMANT label: the failure is reproduced by an implementation that is not this repository's evaluator. It does NOT make the label unconditional — the DOMAIN under which the point was drawn is still this repository's declaration, and the checker was handed that declaration rather than an independent reading of the source statement.",
+    "did_not_reduce": "The decision procedure did not settle the term. That is a fact about `decide` on this term — and, unlike the registered run's 25 identical rows, it is now a fact measured on a CLOSED proposition rather than an elaboration failure on an open one. Correction 7's carrier prediction becomes testable here for the first time.",
+    "disagreement": "A refuted_counterexample is an evaluator-versus-checker disagreement on a closed ground proposition, which is the first mechanically-confirmed candidate corpus-or-compiler error this project has produced. It is FILED here with its receipt and is NOT fixed by this run: repairing the evaluator or the corpus on the strength of a reading is the chase this project's rules exist to prevent.",
+    "the_question_the_gap_withheld": "For each sampled counterexample: does the pinned checker, given the CLOSED proposition the record's own bindings produce, agree with the evaluator that the statement fails at that point?"
+  },
+  "writer": "scripts/conformance_ce3_supplement.py"
+}

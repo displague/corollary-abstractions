@@ -1,0 +1,53 @@
+{
+  "artifact_id": "conformance.e5.late.v1",
+  "authority": "docs/ROADMAP-v0.21.md §4.0(2), determinism-plus-commit. Late determinism checks — v0.20's unrun E5 and C-E1's stability arm are the two it names by name — may be run after first reading WITH A DATED DISCLOSURE OF THE LATENESS, because a byte-identity check cannot be gamed by when it runs. This artifact is that disclosure and that check.",
+  "c_e1_stability_arm": {
+    "rides_the_same_evidence": "C-E1's stability arm asks whether the UNMUTATED set produces the same verdicts on re-execution. Runs 1 and 2 are byte-identical whole-file, and c_e1.per_class carries the source-side counts for every mutation class, so every unmutated source verdict behind those counts was stable across two fresh process invocations. There is no separate measurement to make: an identical artifact is a superset of the arm's claim.",
+    "what_it_does_not_show": "Stability is not correctness and it is not sensitivity. C-E1 MISSED its 0.99 flip floor at 0.650 and that miss stands; a stable sampler that flips 65% of mutants is stably reading 65%. Re-executing it changed nothing and was never going to.",
+    "the_floor_stays_missed": "0.650438 against 0.99, reproduced exactly. ROADMAP-v0.21 §4.0(3)'s meetable-floor rule exists because of this number, and nothing here revisits it.",
+    "verdict": "HOLDS — stable, and the void it stabilises is unchanged"
+  },
+  "commit": "a98fa3cc17813e879cad6e8df095ab3f3863e0ab",
+  "e5": {
+    "byte_identical": true,
+    "gate": "E5 — the sampler is a function, or no verdict means anything (docs/DESIGN-statements-that-run.md §8: 'if E5's two runs diverge — the sampler is then not a function and no verdict means anything')",
+    "method": "scripts/measure_conformance.py executed twice, in two fresh processes, on the committed tree at a98fa3c, each writing to its own path OUTSIDE the repository. The two output files were compared by whole-file sha256 and, independently, by a recursive structural diff.",
+    "run_1_command": "python scripts/measure_conformance.py --out <scratch>/e5_run1.json",
+    "run_1_sha256": "f55ba4a9e4a5180bfc04dcea5984e7c43bf3ccd28107aff1966f4ad76a59cac5",
+    "run_1_started_utc": "2026-08-26T02:25:46Z",
+    "run_2_command": "python scripts/measure_conformance.py --out <scratch>/e5_run2.json",
+    "run_2_sha256": "f55ba4a9e4a5180bfc04dcea5984e7c43bf3ccd28107aff1966f4ad76a59cac5",
+    "run_2_started_utc": "2026-08-26T02:27:04Z",
+    "structural_diff": "zero differing fields, including every per-statement record, every sampler seed and every C-E3 row",
+    "verdict": "HOLDS"
+  },
+  "lateness_disclosure": "E5 was registered in DESIGN-statements-that-run §6 and WAS NOT RUN in the v0.20 cycle. It is run here, on 2026-08-26 UTC, AFTER the registered run of 2026-08-25 was written, read, published, and had its verdicts quoted in a release. That ordering is the whole reason this file exists as a disclosure rather than as a line in the run artifact, and it is stated first rather than inferred from a timestamp. What the lateness costs: nothing that a byte-identity check can be talked into. What it does not buy back: E5 was a STOP CONDITION of the design, and a stop condition checked after the thing it could have stopped had already shipped is a check, not a gate.",
+  "roadmap": "docs/ROADMAP-v0.21.md §2 (the C-E3 rider's ride-along clause: 'the late determinism checks ride the same commit, each with its dated lateness disclosure')",
+  "ran_on": "2026-08-26",
+  "ran_on_basis": "UTC. The authoring machine's local clock read 2026-08-25.",
+  "the_c_e4_revalidation_did_not_refuse": {
+    "checked": "All six preregistered digests in experiments/conformance_prereg.json frozen[] were revalidated against the tree at a98fa3c by the run's own revalidate_prereg(), which is the first thing build() calls.",
+    "roles_revalidated": ["parser", "evaluator", "domain_schema", "sampler", "census", "schema_loader"],
+    "what_was_prepared_for": "The commission anticipated that C-E4 might refuse on today's tree, in which case THE REFUSAL WOULD HAVE BEEN THE E5 RESULT and would have been recorded as such rather than worked around. It did not refuse; the parser, the evaluator, the schema, the sampler, the census and the schema loader are all byte-identical to their preregistration digests, so the runs proceeded and E5 has a reading rather than a refusal.",
+    "verdict": "HOLDS"
+  },
+  "the_committed_artifact_reproduces": {
+    "differs_only_in": {
+      "commit": "c428cfb (the registered run's HEAD) vs a98fa3c (today's). A field that records where the run happened cannot reproduce from a different commit and is not expected to.",
+      "post_run_corrections": "absent from the reproduction and present in the committed file. This is the block the v0.20 review ADDED BY HAND after the run — the 97-line in-place correction ROADMAP-v0.21 §4 describes — so its absence from a fresh run's output is the correction working exactly as documented, and it is checkable: removing those lines restores the file the writer emits."
+    },
+    "run_3_command": "python scripts/measure_conformance.py --ce1-limit 300 --ce2-limit 600 --out <scratch>/e5_run3_registered_limits.json",
+    "run_3_sha256": "837d0caf1b665188e94255707ba566d850189bc0a82c16c61f08fb30f684a755",
+    "what_this_is": "Not part of E5, and stronger than E5. A third fresh run reproduces experiments/conformance_run.json — E1, E2, E3, E4, C-E1, C-E2, C-E3 and C-E4, every per-statement record and every seed — with exactly two differing fields, both explained below. §4.0(2) asks for reproductions to be welcomed and recorded; this is one.",
+    "why_the_limits_are_on_the_command_line": "THE COMMITTED ARTIFACT DOES NOT RECORD ITS OWN INVOCATION. scripts/measure_conformance.py defaults to --ce1-limit 200 --ce2-limit 400, and the registered run used 300 and 600; nothing in conformance_run.json says so, and the values had to be RECOVERED by matching c_e1.statements_examined (300) and c_e2.statements_compared (600) against the artifact. Runs 1 and 2 used the defaults, which is why their C-E1 and C-E2 blocks differ from the committed file while everything else is identical. This is a small instrument finding and it is filed here rather than repaired: a deterministic runner whose artifact does not record the arguments it was given is reproducible only by a reader who already knows them."
+  },
+  "the_original_was_not_written_over": true,
+  "the_original_was_not_written_over_how": "Every one of the three runs wrote to a path outside the repository, passed with --out. experiments/conformance_run.json was opened read-only, was not re-scored, and its bytes are unchanged: sha256 of the LF-normalised file is 5f419000bf8f4f7b9a4fc27dc911012230e654b78036ce8d4b57932323ee8b85 both before and after. scripts/measure_conformance.py is likewise byte-frozen by this lane (sha256_lf ef7309626cfc979ad09a36fee8a0b17f160f21a17634f42d278888a6e94a760b) — it is the record of what ran, dead code and all.",
+  "what_this_artifact_does_not_claim": [
+    "It does not un-void anything. C-E1 missed its floor, C-E2 voided at 1.75x against a 10x floor, and every NO_COUNTEREXAMPLE_FOUND in the registered run remains void. Determinism is not a verdict.",
+    "It does not make E5 a gate retroactively. E5 was a stop condition and it was checked after the cycle it could have stopped.",
+    "It says nothing about whether the sampler samples WELL. E5 asks only whether it is a function of its inputs, and being a function is the cheapest property a sampler can have.",
+    "It makes no claim about the C-E3 supplementary run, which is a separate artifact with its own dated amendment: experiments/conformance_ce3_supplement.json."
+  ],
+  "writer": "recorded by hand from three executions of scripts/measure_conformance.py; there is no writer script, because a record of what happened on a console is not a computation and a script that asserted it would be asserting its own inputs"
+}

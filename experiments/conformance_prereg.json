@@ -1,4 +1,37 @@
 {
+  "amendments": [
+    {
+      "amendment_id": "conformance.prereg.amendment.ce3-supplement",
+      "dated": "2026-08-26",
+      "dated_basis": "UTC. The authoring machine's local clock reads 2026-08-25; the date is disclosed rather than rounded to whichever reads better.",
+      "names": "the C-E3 supplementary run, ROADMAP-v0.21 §2's named early rider",
+      "authority": "docs/ROADMAP-v0.21.md §4.0(1), the bug-not-result clause, dated 2026-08-26. The no-chase rule governs a control that RAN and read unfavourably. C-E3 provably never executed on the sampled class: scripts/measure_conformance.py:709-717 built the adjudication list from each record's raw formal_statement.canonical_ascii and :464 handed that raw text to _lean_decide, so a universally quantified statement reached the checker with its free variables unbound and failed at ELABORATION long before `decide` was reached. The dead _lean_expression at :434-438 (its one return guarded by a literal `if False`) and the discarded `typed` at :463 are the committed evidence. That is an instrument gap, which is a bug and not a reading.",
+      "ordering": "RETROSPECTIVE, and this word is the point of the entry.",
+      "ordering_disclosed": "The gap was found by REVIEW AFTER the registered run of 2026-08-25 was written and read, and it is recorded in that artifact's own post_run_corrections block under `c_e3_never_adjudicated_the_sampled_counterexample_class`. This amendment is therefore not a preregistration of a question nobody had yet asked. What IS fixed before the supplementary writer is run, and what this entry registers, is the PROCEDURE and the READING RULE — see below. A reader who wants the strongest form of preregistration should read this entry as what it is: a dated amendment to a sealed prereg, entered after the gap was known, permitted by a maintainer-dated relaxation, and weaker than a floor frozen before the instrument existed.",
+      "registers_the_procedure": [
+        "Read experiments/conformance_run.json READ-ONLY and select every c_e3.adjudicated row whose statement_id carries a counterexample in e2.counterexamples_exhaustively — the SAMPLED class, derived rather than indexed. In the committed run these are indices 15-39, 25 rows.",
+        "Substitute each record's own counterexample.bindings STRUCTURALLY, at the parsed tree's `slot` nodes — the names conform.py binds — never textually. A statement carrying both `x` and `x1` must not have its `x1` corrupted by a substitution for `x`.",
+        "Render the closed tree over the row's DECLARED domain, with both sides type-ascribed so no literal defaults, and REFUSE to present where the declared readings and the carrier's Lean semantics do not coincide (Int under a truncating `/`; Rat at all, per the design's Correction 7).",
+        "Cross-check before reading any verdict: the substituted tree, re-evaluated by conform.eval_under_domain under the row's own domain, must reproduce the left and right values the registered run printed. A row that does not reproduce them is a row this writer substituted wrongly.",
+        "Hand the closed proposition to the pinned checker's decision procedure in BOTH directions — `example : (<prop> : Prop) := by decide` and the same on the negation — always both, so the receipt shows that exactly one direction was accepted.",
+        "Invoke the pinned toolchain binary BY PATH. No elan proxy, no lake, no Mathlib, no network, and never a download."
+      ],
+      "registers_the_reading_rule": "Whatever the checker reads is the answer, and all three verdicts were written down before it ran. `confirmed_counterexample` (the negation is accepted) strengthens the credibility of that row's PROVISIONAL NONCONFORMANT label. `refuted_counterexample` (the proposition itself is accepted) is an evaluator-versus-checker disagreement and files as the first mechanically-confirmed candidate corpus-or-compiler error — FILED, with its receipt, and NOT repaired by this run. `did_not_reduce` adjudicates nothing either way and is a fact about the decision procedure on that term.",
+      "new_artifact": "experiments/conformance_ce3_supplement.json",
+      "new_writer": "scripts/conformance_ce3_supplement.py",
+      "precedent_for_the_shape": "experiments/foreign_voice_rate.json -> experiments/foreign_voice_rate2.json: a successor run gets its own dated amendment and its own NEW artifact, and the original is never edited or re-scored.",
+      "measure_conformance_stays_byte_frozen": "scripts/measure_conformance.py is NOT edited by this rider. It is the record of what ran, dead code included, and a supplementary run that edited the writer it supplements would destroy its own subject. The fixed adjudicator is a new file.",
+      "what_it_cannot_do": [
+        "It NEVER un-voids experiments/conformance_run.json. C-E1 missed its floor and C-E2 voided at 1.75x against a 10x floor; both stand, and every NO_COUNTEREXAMPLE_FOUND in that run remains void.",
+        "It does not edit, re-score or supersede experiments/conformance_run.json in any field. That file is opened read-only and its whole-file digest is recorded in the supplement.",
+        "It publishes no conformance rate and no corpus-error claim. Agreement at a point is not evidence any statement is true.",
+        "It says nothing about the counterexamples outside C-E3's committed 40-row limit. Extending the sample would be a new measurement, not the repair of a gap.",
+        "It does not adjudicate the DOMAIN. Every domain row in this cycle was authored by this repository and the checker was handed that declaration, not an independent reading of the source statement. An independent domain is WITNESS's problem, not this rider's.",
+        "It creates no verified_by link and nothing enters prover/verifier-verdicts/."
+      ],
+      "determinism": "Registered per ROADMAP-v0.21 §4.0(2) as `artifact committed from a deterministic runner; reproductions welcome and recorded`, not as `executed once`. Every field but the per-probe wall-clock `seconds` is a function of committed bytes and the pinned checker."
+    }
+  ],
   "census": {
     "buckets": {
       "ground": 297,
