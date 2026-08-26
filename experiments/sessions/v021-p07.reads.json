@@ -1,0 +1,18 @@
+{
+  "events": [
+    {
+      "assumption_id": "a001",
+      "turn_index": 2
+    },
+    {
+      "assumption_id": "a001",
+      "turn_index": 6
+    },
+    {
+      "assumption_id": "a002",
+      "turn_index": 6
+    }
+  ],
+  "schema": "corollary.session-read-log/1",
+  "session_id": "v021-p07"
+}

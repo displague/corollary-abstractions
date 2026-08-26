@@ -1,0 +1,140 @@
+{
+  "assumptions": [],
+  "header": {
+    "created_utc": "2026-08-26T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "proposer_model_digest": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-p02"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "how many edges does a complete graph have",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "12b198a173d7424fd374cb5bb3dfe92984c339224da3c652756b736f2b448e42",
+      "prev_turn_digest": "b462508666f77a6c93ce5798ffa78a1cac10d30f60c9bef849c3afc0791fdcb4",
+      "receipt_digest": "d9de00845687b85b974424a2294e49e882081aaf473f49e58b490e15bc5b70bf",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "1b1d33b711b59125615f7dada0c649eeaf0c57db2900e9d2b0a0ca1183fcf12b",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the handshake lemma",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "a810498a9b12c05673b98d841c147690807c4e238b5556466046761e1edec2b5",
+      "prev_turn_digest": "e2a53bb0563fe3b842594c3495be3177c777ef1699105441f52b5a53ffeeb533",
+      "receipt_digest": "2255d17f9fafcd9dd744effeb95fc9e97ce462a5b0a781799d29076f38f0f627",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "9fb06fd95f2eac1ee4571feb6dbb667a290241c6afebdbcce2d039dddbd40bc0",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "is x squared bigger than x",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "991911a5a0c2c82fff5d8aa70fcb8161bbbad3c45bfd8fe77f2a7f7ba20df3d8",
+      "prev_turn_digest": "c6d875b2b303d043deb7f9c77721944925f146b2db75b7f226d220f20ab08ffa",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "9db32b8f51f57360977a29638978e8cdab4c0efc237d31cd294f1c5e9493fc41",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what does the corpus say about factorials",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "9795ce74a828ef229bd3fdbf3e335fca3877910e7dcce4c77584c6d424676a6b",
+      "prev_turn_digest": "3164e8ba697225ee2bb0cf8534fede85a3757dbf8ed664929939297e6882a0f4",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "03257762e4a17e4b55cc17bb6822ad254689cc21b47c223253bbb1b1f32a49a7",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the quadratic formula",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "685d515fdde179f8b508e9f1d113be2312dce1b7350816825d594173b410ddbb",
+      "prev_turn_digest": "d48bfa8c27dbf4e969a2da276581508cf24405de93d44874da0dd7fe04c83f62",
+      "receipt_digest": "20261a4fb8ed45a4f6b23915eb66b9acc831d98fd06a9342b6f84be0c6dba28f",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "3e81d6b40747c46851f0284ce1394d96fe684a61630215ba0ca5e60ea4f65efd",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 4
+    }
+  ]
+}

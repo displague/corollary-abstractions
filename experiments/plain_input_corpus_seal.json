@@ -1,0 +1,832 @@
+{
+  "built_by": "scripts/record_plain_corpus.py",
+  "completes": "docs/DESIGN-plain-input.md",
+  "counts": {
+    "assumptions_declared": 3,
+    "binding_dependent_turns_admitted": 3,
+    "by_half": {
+      "A": {
+        "sessions": 5,
+        "turns": 29
+      },
+      "B": {
+        "sessions": 3,
+        "turns": 19
+      }
+    },
+    "citing_turns_admitted": 4,
+    "prompts_retained": 16,
+    "recording_seconds": 11.9,
+    "refusal_turns_admitted": 11,
+    "sessions_admitted": 8,
+    "sessions_excluded_by_the_no_write_gate_rule": 0,
+    "sessions_recorded": 8,
+    "turns_admitted": 48,
+    "turns_the_proposer_was_consulted_on": 16
+  },
+  "created_utc": "2026-08-26T00:00:00Z",
+  "denominators": {
+    "exhaust_authored": {
+      "question_ids": [
+        "g1-08",
+        "g1-23",
+        "g1-24",
+        "g1-25",
+        "g1-26",
+        "g1-27",
+        "g1-28",
+        "g1-29",
+        "g1-30"
+      ],
+      "size": 9,
+      "what_it_means": "authored to EXHAUST — outside the corpus, or not questions with an exact answer at all. The question set's own words: 'a candidate that verified for one of them would be the proposer inventing rather than selecting'. The sealed ceiling of 21/30 is what this subset costs.",
+      "which_gates_score_over_it": [
+        "G1, as part of its thirty — and G1's rate is published against the sealed 21/30 ceiling rather than against 30"
+      ]
+    },
+    "gate_denominators": {
+      "B10": "every turn of this corpus with an empty `assumptions_cited`, part 1 and part 2 together.",
+      "B12": "every turn of this corpus.",
+      "B9": "every prompt retained by this recording — part 1 and part 2 together, because a prompt is a prompt whether or not the question was a repeat.",
+      "G1": "all thirty sealed questions. G1 asks what fraction yield at least one VERIFIED candidate, which the enumerator answers for every question regardless of which route serves it. Amendment 1's disclosure applies: enumeration is generous and `word_match` verification is nearly free, so the selection-plus-verification number is published beside it and G1's own rate is labelled the weaker one.",
+      "G2": "the served turns of this corpus's part 1, on the proposer-reachable remainder. Stated as a subset because G2 is a property of what THIS SLICE serves; the resolver's thirteen are adjudicated at G9, not here.",
+      "G3": "the distractor pairs that SURVIVE the pre-check. Pairs whose two sentences do not denote two different verified queries are excluded from the denominator and the exclusion is counted and published — the clause C-V4 dropped.",
+      "G5": "the same thirty, both arms, drawing from the same enumerated list. The comparison isolates selection."
+    },
+    "measured_how": "each sealed question served once through a fresh offline CoreSession against the committed tree; the subsets are read off the route and status of the verdict, not asserted.",
+    "proposer_reachable_remainder": {
+      "question_ids": [
+        "g1-02",
+        "g1-04",
+        "g1-08",
+        "g1-09",
+        "g1-13",
+        "g1-23",
+        "g1-24",
+        "g1-25",
+        "g1-26",
+        "g1-28",
+        "g1-29",
+        "g1-30"
+      ],
+      "size": 12,
+      "what_it_means": "every registered route declined, so row 12's pre-router runs. This is the whole surface slice 2 adds, and the only subset on which the served behaviour can differ from the committed tree's.",
+      "which_gates_score_over_it": [
+        "G2 (zero silent binds, over what THIS SLICE serves)",
+        "the served-behaviour counts in the run's readout"
+      ]
+    },
+    "resolver_found_before_the_proposer_is_consulted": {
+      "question_ids": [
+        "g1-03",
+        "g1-05",
+        "g1-06",
+        "g1-07",
+        "g1-10",
+        "g1-12",
+        "g1-14",
+        "g1-15",
+        "g1-17",
+        "g1-18",
+        "g1-19",
+        "g1-20",
+        "g1-22"
+      ],
+      "size": 13,
+      "what_it_means": "the resolver bound these to a statement and served `found` with nothing in the verdict recording that a reading was chosen. The proposer never sees them: DESIGN-plain-input §2.2 confines it to row 12 and G4 protects the resolver row by name.",
+      "which_gates_score_over_it": [
+        "NONE of this slice's gates. It is the STANDING DEFECT, ruled NOT MET at G9 by prereg amendment 4 and filed in docs/BACKLOG.md with these thirteen as its fixtures."
+      ]
+    },
+    "resolver_waiting_pre_empted_but_not_silently": {
+      "question_ids": [
+        "g1-01",
+        "g1-11",
+        "g1-16",
+        "g1-21",
+        "g1-27"
+      ],
+      "size": 5,
+      "what_it_means": "the resolver's own ASK subloop claimed these and NAMED its alternatives. Pre-empted from the proposer, but not silently bound — which is why they are a separate subset and not folded into the thirteen.",
+      "which_gates_score_over_it": [
+        "none"
+      ]
+    },
+    "the_overlap_is_real_and_is_not_hidden": {
+      "exhaust_authored_that_the_resolver_pre_empted": [
+        "g1-27"
+      ],
+      "why_it_matters": "the subsets INTERSECT, so their sizes cannot be added. A question authored to exhaust that the resolver claimed at `waiting` belongs to two of the blocks above and to neither exclusively."
+    },
+    "why_this_block_exists": "the thirty sealed questions are not one population, and a rate over all thirty would average a gate's result with a subset that gate cannot reach. Every subset below is named with its members and its size, and the sizes are NEVER SUMMED into a headline."
+  },
+  "design": "docs/DESIGN-session-ledger.md",
+  "design_clause": "§5 slice 2, recorded under §6 P3's protocol",
+  "determinism": "artifact committed from a deterministic runner; reproductions welcome and recorded (ROADMAP-v0.21 §4.0(2)). The proposer arm earned that in P4 — experiments/plain_proposer_determinism.json, two passes, byte-identical — and P4's honest limit travels with it: byte-identity across two passes on one machine on one day is not a proof of determinism.",
+  "digest_algorithm": "sha256 over the journal file's bytes as written",
+  "excluded_sessions": [],
+  "no_ab_split_is_used_and_here_is_why": "slice 1's A/B rule is applied to these ids and PUBLISHED per session, because the rule is committed and a reader may want it. It is not used as a denominator: slice 2's preregistration registered no half-B rule, and minting one now — after the corpus exists — would be choosing a denominator with the results in view. Every gate below scores over a named subset instead.",
+  "non_claims": [
+    "maintainer-authored: no stranger-usability claim, here or anywhere in this cycle (DESIGN-plain-input §5 G1's STRANGER park is cited, not re-encountered)",
+    "reproducible, not correct — a wrong answer replays as faithfully as a right one",
+    "no throughput claim: `conditional` is non-answering and this corpus appears in no sentence containing a K number",
+    "no completeness over readings: the candidate list is what exact code could enumerate",
+    "slice 2 does not repair the silent binding P2 measured — see the denominators block and prereg amendment 4"
+  ],
+  "prereg": "experiments/plain_input_prereg.json",
+  "prompts_artifact": "experiments/plain_input_prompts.json",
+  "prompts_artifact_digest": "62bfbe055d9850eb5d8095f4e7451847db08dcf2f5d1602f329e46b680fe02f2",
+  "protocol": {
+    "ab_split_rule": "half = 'B' if int(sha256(session_id)[:2], 16) % 2 else 'A'",
+    "inherited_from": "experiments/session_ledger_prereg.json",
+    "live_assumption_cap": 8,
+    "no_write_gate_turn_rule": "a recorded session contains no corpus-mutating line. A session that acquires one is excluded WHOLE, and the exclusion is counted and published in the seal. This is what makes B2 askable at all: P5 was adjudicated MISSED IN KIND because a session that mutates the corpus meets a different world on its second run.",
+    "recorder_code_digest": "e3070dd3b118aee7681b8091b5db6a434ba6c54551081794228e9eb91d087c43",
+    "session_count_cap": 60,
+    "session_id_rule": "`v021-p{NN}`, in order from a counter. A distinct namespace from slice 1's `v021-s{NN}`, whose seal is CLOSED and whose journals this recording never touches.",
+    "turn_cap_per_session": 64
+  },
+  "recorder_code_digest": "e3070dd3b118aee7681b8091b5db6a434ba6c54551081794228e9eb91d087c43",
+  "schema": "corollary.plain-input-corpus-seal/1",
+  "served_turns": [
+    {
+      "branch": null,
+      "line": "what does the corpus say about de morgan's laws",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p01",
+      "status": "waiting",
+      "turn_index": 0
+    },
+    {
+      "branch": "exhaust",
+      "line": "how do you compute the greatest common divisor recursively",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p01",
+      "status": "exhausted",
+      "turn_index": 1
+    },
+    {
+      "branch": null,
+      "line": "what is the cosine of a double angle",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p01",
+      "status": "found",
+      "turn_index": 2
+    },
+    {
+      "branch": "conditional",
+      "line": "what is two to the tenth",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "plain_input",
+      "session_id": "v021-p01",
+      "status": "conditional",
+      "turn_index": 3
+    },
+    {
+      "branch": null,
+      "line": "tell me the pythagorean identity",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p01",
+      "status": "found",
+      "turn_index": 4
+    },
+    {
+      "branch": null,
+      "line": "how many edges does a complete graph have",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p02",
+      "status": "found",
+      "turn_index": 0
+    },
+    {
+      "branch": null,
+      "line": "what is the handshake lemma",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p02",
+      "status": "found",
+      "turn_index": 1
+    },
+    {
+      "branch": "exhaust",
+      "line": "is x squared bigger than x",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p02",
+      "status": "exhausted",
+      "turn_index": 2
+    },
+    {
+      "branch": "exhaust",
+      "line": "what does the corpus say about factorials",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p02",
+      "status": "exhausted",
+      "turn_index": 3
+    },
+    {
+      "branch": null,
+      "line": "what is the quadratic formula",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p02",
+      "status": "found",
+      "turn_index": 4
+    },
+    {
+      "branch": null,
+      "line": "what is three plus four",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p03",
+      "status": "waiting",
+      "turn_index": 0
+    },
+    {
+      "branch": null,
+      "line": "what does absorption mean in boolean algebra",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p03",
+      "status": "found",
+      "turn_index": 1
+    },
+    {
+      "branch": "ask",
+      "line": "how do you compute a factorial iteratively",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "plain_input",
+      "session_id": "v021-p03",
+      "status": "waiting",
+      "turn_index": 2
+    },
+    {
+      "branch": null,
+      "line": "what is the tangent of an angle defined as",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p03",
+      "status": "found",
+      "turn_index": 3
+    },
+    {
+      "branch": null,
+      "line": "what is cayley's formula",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p03",
+      "status": "found",
+      "turn_index": 4
+    },
+    {
+      "branch": null,
+      "line": "what happens when you double an even number",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p04",
+      "status": "waiting",
+      "turn_index": 0
+    },
+    {
+      "branch": null,
+      "line": "what is the sine of a sum of two angles",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p04",
+      "status": "found",
+      "turn_index": 1
+    },
+    {
+      "branch": null,
+      "line": "how many edges does a tree have",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p04",
+      "status": "found",
+      "turn_index": 2
+    },
+    {
+      "branch": null,
+      "line": "what is double negation",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p04",
+      "status": "found",
+      "turn_index": 3
+    },
+    {
+      "branch": null,
+      "line": "what is five times six",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p04",
+      "status": "found",
+      "turn_index": 4
+    },
+    {
+      "branch": null,
+      "line": "what is the binary method for exponentiation",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p05",
+      "status": "waiting",
+      "turn_index": 0
+    },
+    {
+      "branch": null,
+      "line": "what does the corpus say about the distributive law",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p05",
+      "status": "found",
+      "turn_index": 1
+    },
+    {
+      "branch": "exhaust",
+      "line": "what will the weather be tomorrow",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p05",
+      "status": "exhausted",
+      "turn_index": 2
+    },
+    {
+      "branch": "exhaust",
+      "line": "who wrote the iliad",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p05",
+      "status": "exhausted",
+      "turn_index": 3
+    },
+    {
+      "branch": "exhaust",
+      "line": "what is the capital city of australia",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p05",
+      "status": "exhausted",
+      "turn_index": 4
+    },
+    {
+      "branch": "ask",
+      "line": "how do i change a tyre",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "plain_input",
+      "session_id": "v021-p06",
+      "status": "waiting",
+      "turn_index": 0
+    },
+    {
+      "branch": null,
+      "line": "what is the best programming language",
+      "part": 1,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p06",
+      "status": "waiting",
+      "turn_index": 1
+    },
+    {
+      "branch": "exhaust",
+      "line": "should i buy this stock",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p06",
+      "status": "exhausted",
+      "turn_index": 2
+    },
+    {
+      "branch": "ask",
+      "line": "what did i ask you before",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "plain_input",
+      "session_id": "v021-p06",
+      "status": "waiting",
+      "turn_index": 3
+    },
+    {
+      "branch": "exhaust",
+      "line": "prove the riemann hypothesis",
+      "part": 1,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p06",
+      "status": "exhausted",
+      "turn_index": 4
+    },
+    {
+      "branch": null,
+      "line": "suppose x = 5",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "supposition",
+      "session_id": "v021-p07",
+      "status": "waiting",
+      "turn_index": 0
+    },
+    {
+      "branch": null,
+      "line": "what does the corpus say about de morgan's laws",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p07",
+      "status": "waiting",
+      "turn_index": 1
+    },
+    {
+      "branch": null,
+      "line": "x ^ 2",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "evaluate",
+      "session_id": "v021-p07",
+      "status": "solved",
+      "turn_index": 2
+    },
+    {
+      "branch": null,
+      "line": "what is the handshake lemma",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p07",
+      "status": "found",
+      "turn_index": 3
+    },
+    {
+      "branch": null,
+      "line": "suppose y = 3",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "supposition",
+      "session_id": "v021-p07",
+      "status": "waiting",
+      "turn_index": 4
+    },
+    {
+      "branch": "ask",
+      "line": "how do you compute a factorial iteratively",
+      "part": 2,
+      "proposer_consulted": true,
+      "route": "plain_input",
+      "session_id": "v021-p07",
+      "status": "waiting",
+      "turn_index": 5
+    },
+    {
+      "branch": null,
+      "line": "x + y",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "evaluate",
+      "session_id": "v021-p07",
+      "status": "solved",
+      "turn_index": 6
+    },
+    {
+      "branch": null,
+      "line": "what is double negation",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p07",
+      "status": "found",
+      "turn_index": 7
+    },
+    {
+      "branch": "exhaust",
+      "line": "what is the capital city of australia",
+      "part": 2,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p07",
+      "status": "exhausted",
+      "turn_index": 8
+    },
+    {
+      "branch": null,
+      "line": "suppose n = 7",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "supposition",
+      "session_id": "v021-p08",
+      "status": "waiting",
+      "turn_index": 0
+    },
+    {
+      "branch": null,
+      "line": "how many edges does a complete graph have",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p08",
+      "status": "found",
+      "turn_index": 1
+    },
+    {
+      "branch": null,
+      "line": "n ^ 2",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "evaluate",
+      "session_id": "v021-p08",
+      "status": "solved",
+      "turn_index": 2
+    },
+    {
+      "branch": null,
+      "line": "what does absorption mean in boolean algebra",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p08",
+      "status": "found",
+      "turn_index": 3
+    },
+    {
+      "branch": null,
+      "line": "retract a001",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "retraction",
+      "session_id": "v021-p08",
+      "status": "canceled",
+      "turn_index": 4
+    },
+    {
+      "branch": null,
+      "line": "n ^ 2",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p08",
+      "status": "waiting",
+      "turn_index": 5
+    },
+    {
+      "branch": null,
+      "line": "how many edges does a tree have",
+      "part": 2,
+      "proposer_consulted": false,
+      "route": "resolver",
+      "session_id": "v021-p08",
+      "status": "found",
+      "turn_index": 6
+    },
+    {
+      "branch": "exhaust",
+      "line": "who wrote the iliad",
+      "part": 2,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p08",
+      "status": "exhausted",
+      "turn_index": 7
+    },
+    {
+      "branch": "exhaust",
+      "line": "prove the riemann hypothesis",
+      "part": 2,
+      "proposer_consulted": true,
+      "route": "dispatcher",
+      "session_id": "v021-p08",
+      "status": "exhausted",
+      "turn_index": 8
+    }
+  ],
+  "sessions": [
+    {
+      "assumptions": 0,
+      "binding_dependent_turns": 0,
+      "citing_turns": 0,
+      "excluded": null,
+      "half": "B",
+      "journal": "experiments/sessions/v021-p01.json",
+      "journal_digest": "162d8d3bb34224a3f5b15300c17e2fcaf8172c7c9ff17d19db34462f6b2b9bec",
+      "part": 1,
+      "proposer_turns": 2,
+      "question_ids": [
+        "g1-01",
+        "g1-02",
+        "g1-03",
+        "g1-04",
+        "g1-05"
+      ],
+      "read_log": "experiments/sessions/v021-p01.reads.json",
+      "read_log_digest": "a240734ba3f95ff225d8babd1f3b226ed3f6bbc43a66d86d6a12fa4007f6f6aa",
+      "refusal_turns": 1,
+      "session_id": "v021-p01",
+      "turns": 5
+    },
+    {
+      "assumptions": 0,
+      "binding_dependent_turns": 0,
+      "citing_turns": 0,
+      "excluded": null,
+      "half": "B",
+      "journal": "experiments/sessions/v021-p02.json",
+      "journal_digest": "a357fd9d59a77975e4c62167c6552a6d5f6a622c1913ae02124bd1859b1d87df",
+      "part": 1,
+      "proposer_turns": 2,
+      "question_ids": [
+        "g1-06",
+        "g1-07",
+        "g1-08",
+        "g1-09",
+        "g1-10"
+      ],
+      "read_log": "experiments/sessions/v021-p02.reads.json",
+      "read_log_digest": "b0169fa55ccf96be08b1299143c93acd986c2ff642bc61d43a5aa50747acfb10",
+      "refusal_turns": 2,
+      "session_id": "v021-p02",
+      "turns": 5
+    },
+    {
+      "assumptions": 0,
+      "binding_dependent_turns": 0,
+      "citing_turns": 0,
+      "excluded": null,
+      "half": "A",
+      "journal": "experiments/sessions/v021-p03.json",
+      "journal_digest": "2a7d01f754c058fb5ed601fdb9f739932bb4eaae84ee7447ec00dcbaec06ce3b",
+      "part": 1,
+      "proposer_turns": 1,
+      "question_ids": [
+        "g1-11",
+        "g1-12",
+        "g1-13",
+        "g1-14",
+        "g1-15"
+      ],
+      "read_log": "experiments/sessions/v021-p03.reads.json",
+      "read_log_digest": "92841031b054910290d7451308105af638cb2a157f6945083fbc7a1686aad099",
+      "refusal_turns": 0,
+      "session_id": "v021-p03",
+      "turns": 5
+    },
+    {
+      "assumptions": 0,
+      "binding_dependent_turns": 0,
+      "citing_turns": 0,
+      "excluded": null,
+      "half": "A",
+      "journal": "experiments/sessions/v021-p04.json",
+      "journal_digest": "ffe2a257209b1972c0464d3cb670b589babc5465dd4e0e9966c4b82295cfcdc8",
+      "part": 1,
+      "proposer_turns": 0,
+      "question_ids": [
+        "g1-16",
+        "g1-17",
+        "g1-18",
+        "g1-19",
+        "g1-20"
+      ],
+      "read_log": "experiments/sessions/v021-p04.reads.json",
+      "read_log_digest": "74cf699914431727b69a702cc91487924ae72d4c928b59a4cc8d87949c9f6fd3",
+      "refusal_turns": 0,
+      "session_id": "v021-p04",
+      "turns": 5
+    },
+    {
+      "assumptions": 0,
+      "binding_dependent_turns": 0,
+      "citing_turns": 0,
+      "excluded": null,
+      "half": "A",
+      "journal": "experiments/sessions/v021-p05.json",
+      "journal_digest": "39ae2fc25b18dc17da98ef023aa7cbd611cbe1302583662f75ee0d5431b18e5a",
+      "part": 1,
+      "proposer_turns": 3,
+      "question_ids": [
+        "g1-21",
+        "g1-22",
+        "g1-23",
+        "g1-24",
+        "g1-25"
+      ],
+      "read_log": "experiments/sessions/v021-p05.reads.json",
+      "read_log_digest": "20d95b498aa88b2c5496f3642c091fd4f85c6e8cc0712d744600023738f54e32",
+      "refusal_turns": 3,
+      "session_id": "v021-p05",
+      "turns": 5
+    },
+    {
+      "assumptions": 0,
+      "binding_dependent_turns": 0,
+      "citing_turns": 0,
+      "excluded": null,
+      "half": "A",
+      "journal": "experiments/sessions/v021-p06.json",
+      "journal_digest": "c6e62e5c3aced49d1ed6b775aac79ce1a03c6cc8e092166a6cb17d91882d2723",
+      "part": 1,
+      "proposer_turns": 4,
+      "question_ids": [
+        "g1-26",
+        "g1-27",
+        "g1-28",
+        "g1-29",
+        "g1-30"
+      ],
+      "read_log": "experiments/sessions/v021-p06.reads.json",
+      "read_log_digest": "bc83148a6b963ab3bf3e3ff05b01094e93b6f8d01aa87faf1b41bbfb22b2f852",
+      "refusal_turns": 2,
+      "session_id": "v021-p06",
+      "turns": 5
+    },
+    {
+      "assumptions": 2,
+      "binding_dependent_turns": 2,
+      "citing_turns": 2,
+      "excluded": null,
+      "half": "B",
+      "journal": "experiments/sessions/v021-p07.json",
+      "journal_digest": "f9500fbd103779d09792ce84395b123b1cd0e86a9e3ffe11de2641dd21d7de31",
+      "part": 2,
+      "proposer_turns": 2,
+      "question_ids": [
+        "g1-01",
+        "g1-07",
+        "g1-13",
+        "g1-19",
+        "g1-25"
+      ],
+      "read_log": "experiments/sessions/v021-p07.reads.json",
+      "read_log_digest": "c4beccb75bc48999ce79bf57335bdfe4f79a56435e69f13ffac63ff7bbaf906e",
+      "refusal_turns": 1,
+      "session_id": "v021-p07",
+      "turns": 9
+    },
+    {
+      "assumptions": 1,
+      "binding_dependent_turns": 1,
+      "citing_turns": 2,
+      "excluded": null,
+      "half": "A",
+      "journal": "experiments/sessions/v021-p08.json",
+      "journal_digest": "4bce724137c1871253b312a40a560d83390bed29f2bb2fd1a9503a5d80b3c93b",
+      "part": 2,
+      "proposer_turns": 2,
+      "question_ids": [
+        "g1-06",
+        "g1-12",
+        "g1-18",
+        "g1-24",
+        "g1-30"
+      ],
+      "read_log": "experiments/sessions/v021-p08.reads.json",
+      "read_log_digest": "6353909545d481d6b22f40006907772fd0f04e34475204465f956432795d288a",
+      "refusal_turns": 2,
+      "session_id": "v021-p08",
+      "turns": 9
+    }
+  ],
+  "slice": 2,
+  "slice_1s_seal_is_closed_and_untouched": "experiments/session_corpus_seal.json covers `v021-s*` and is not read, re-scored or re-recorded here. This corpus is `v021-p*` and is its own denominator.",
+  "the_proposer_model_pin": {
+    "bytes": 2497280480,
+    "provider_tag": "ollama:qwen3:4b-instruct",
+    "the_refusal_discipline": "machine_reader.verify_weights hashes the blob's BYTES and refuses on absence or mismatch. It never downloads. The filename ollama gives a blob is its digest, so trusting the name would be checking the copy against itself.",
+    "verified_before_any_question_was_asked": true,
+    "weights_blob_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+    "why_the_header_carries_it_now": "DESIGN-session-ledger §3 lists `proposer_model_digest` as 'slice 2 only, key omitted until then, omission meaning \"no proposer served\"'. Slice 1's headers omit it; these carry it, so the omission keeps meaning what it meant."
+  },
+  "the_recorder_is_slice_1s_unmodified": "checked against the digest experiments/session_ledger_prereg.json froze before slice 1 recorded. Slice 2 records under the same recorder or it is not recording under the same protocol.",
+  "what_a_stranger_can_and_cannot_check": "every journal against the digests below: yes, offline, with no key. Any per-record MAC: no — the key descends from a root secret under .runtime/, which .gitignore excludes, because B8's threat model is that the tamperer holds no key.",
+  "where_the_digests_live": "here, out of band. §3 puts a journal's whole-file digest in the seal and never inside the journal it covers."
+}

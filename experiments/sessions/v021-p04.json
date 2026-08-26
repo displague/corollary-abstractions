@@ -1,0 +1,140 @@
+{
+  "assumptions": [],
+  "header": {
+    "created_utc": "2026-08-26T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "proposer_model_digest": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-p04"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what happens when you double an even number",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "996f2793d5a5d11c2fc2757c468829a2f6cd806a0d6b9d844a718e5de420c029",
+      "prev_turn_digest": "d0f36a2c9cb516191a509810d901d3cf8f1324cdf2c05baa117893b194e69fa1",
+      "receipt_digest": "aa1405d65e704d6b600145da4afce81096210fb2437d8024581eb863122d3eef",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "31b35a1e21e9fe1893689d43541dad101aa2118d109082bc15f69054325cc131",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the sine of a sum of two angles",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "099ecdbd31f220e4bacb221746aeb6fff0800186dbe43f05fb85b94c48144f42",
+      "prev_turn_digest": "6530fdb7d5be6abcd5f5c1c738b6aaac8401771f81bb62463e51758dcc31cde2",
+      "receipt_digest": "1a6b279624cffcaf950905c14ac779052dfd6d6aae24b9c887743fb24a02ebd8",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "de31dc376cc0007bd9c425b4ec656df29c6e38267fc0fd1d5b4c55b07e207529",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "how many edges does a tree have",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "af03e7b7a0a47ce8943a59ee3652b82f2161fc9434c26a128a27b521da9837f8",
+      "prev_turn_digest": "e5d70c41c1490af41a6eebff7ebe90c13a38b8fa48113e1b97c0b0f4b00ccd0b",
+      "receipt_digest": "b6d0f94978a90db20c495a938e795a51eaa5d16f9b37a9846abfb354288b9161",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "afb1de152b18713e649eeb32962379adc34b52d6450b214ba2323b80d34b524f",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is double negation",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "488eab06ffed29edc00a820490f29b5501358789259f5988dba8f686ae09d1a7",
+      "prev_turn_digest": "a13350d6880130f698af9e8994f02c622dddb2566523100cbfb0157def9f4fa1",
+      "receipt_digest": "b36783c4c1cb5f0bbfaef4c36d53ba05275b9d20c229214822d58887ae4310cb",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "e43e908b814a93d3ac2d7dfd31f694e732c6b225977da24b184ccdd7ba93511d",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is five times six",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "00fb465afb353444fa8c7b47a60733740dae0f489bb221cee3f2c9954a09cf4a",
+      "prev_turn_digest": "696fdf15169765c8e33eb7ae469392ae79f1d1e1e1f4bd37cd188590bfef544e",
+      "receipt_digest": "a3d9d7233f0a42aa3fac00898c9afde3aeeb5d6bb7f0db38375dd377dfd074c8",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "cd9a7531bcdabdd173e6d0116e24f9e4d3982a5db0992f04d3cb890109d777b8",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 4
+    }
+  ]
+}

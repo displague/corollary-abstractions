@@ -1,0 +1,140 @@
+{
+  "assumptions": [],
+  "header": {
+    "created_utc": "2026-08-26T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "proposer_model_digest": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-p01"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what does the corpus say about de morgan's laws",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "eb67433834760440d910e0e26d4d99ea9d218bd6ff0acb8f4261403ed0bc4e0e",
+      "prev_turn_digest": "989b266a3c060da8d4115b32914af2470f3345c7b18fc4623685a83d5f71b998",
+      "receipt_digest": "b9719c63f72e40c5eb969d912a548c06aa53804dea50b93324d3d1831a5c83f4",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "a2ffa66cbd51208074845bbb90c724b760c2e59dcd5bd476236e4c43174d9780",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "how do you compute the greatest common divisor recursively",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "667b7f19712beb36da97588639018967eec3b0f5711a13f1c4b4227a073188f6",
+      "prev_turn_digest": "8fe7ebbe5773dbf92d8549cdc290e0f7647028aebab7978f4585754af5167c1a",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "9601404f019ec92188e5481323cb5b1722932cf2065f28b4c89e26c5bcec4290",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the cosine of a double angle",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "eb5a437c802ae4c50e95cfc5224fc5960dbf837d786b7a8098607295d33a35b1",
+      "prev_turn_digest": "892f3273eaff3cd20f58ed85f45cec438244ff2448745c2b3b0d4db6b66b96c9",
+      "receipt_digest": "051ba38238c98075da9c6ff233bb545b85e3fa8b32324dc064337ca51d81be22",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "390d62895f448cd257437928bb22e4fe8669cd44d79a09ea795e9bde6611dc39",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is two to the tenth",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "5e70f81a4d7a9b2d0a7fa4d63f75ce477e583a9bc6b92257b8e9e92ef56629f3",
+      "prev_turn_digest": "c870d018e39a48ab0d3f5bc43bdd5e29b27c71ced7dd1a29613a7f59a04de034",
+      "receipt_digest": "ce7481d0694ce45ee8bf13bb1407e6b5545985c3c2b0b8f814cd01ee36023b77",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": null,
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "8d5c9d6638e857159ea0241a9b46d9a5f2eb329ff67a09ddb3ccc0c99a3c4b5e",
+        "kind": "conditional",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "tell me the pythagorean identity",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "064236dfcb19d0e8db2ee502b8c58de737fafac61e898be1ea32e98db70a7ae7",
+      "prev_turn_digest": "07612632099000ff00d2fc65b75037454e43b6af3f137eb4148f1ab10b05f9bc",
+      "receipt_digest": "4dab4805606fe1ee37537ac70a8ef8a2d581a679d93ffc10ba44e19e264f38c9",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "8218aa8105c21e14338271dbe52f5a712544a6a14f4676192a7bab716753c98c",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 4
+    }
+  ]
+}

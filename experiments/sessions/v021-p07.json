@@ -1,0 +1,264 @@
+{
+  "assumptions": [
+    {
+      "assumption_id": "a001",
+      "declared_at_turn": 0,
+      "key_id": "k-052dec4ba59dedcf",
+      "mac": "7eec298159ab48266dc819c136469c591f76ea19e7f74fe70340e6fe4004201d",
+      "normal_form": [
+        "x = 5",
+        true
+      ],
+      "status": "live",
+      "superseded_by": null,
+      "text_bytes": "x = 5"
+    },
+    {
+      "assumption_id": "a002",
+      "declared_at_turn": 4,
+      "key_id": "k-052dec4ba59dedcf",
+      "mac": "0c87cbc6f1f50e09cdd54177a34820f5db5f80e6c54bec518b14ddfd8c8889e2",
+      "normal_form": [
+        "y = 3",
+        true
+      ],
+      "status": "live",
+      "superseded_by": null,
+      "text_bytes": "y = 3"
+    }
+  ],
+  "header": {
+    "created_utc": "2026-08-26T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "proposer_model_digest": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-p07"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [
+        "a001"
+      ],
+      "input_bytes": "suppose x = 5",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "e09e9e9ea096393a80eeb01aa5f0389450e28b48a89b58e068a782d4080c27b9",
+      "mac": "af80a6ad8bf6cdd37bb56edc0e8594fd8419f21fc1f168f5f3ed8c078e07bf2d",
+      "prev_turn_digest": "f41ca9e0210f25b0f4fd93510a898158f51eb1aa1fd1871032dac15ae7c11b1b",
+      "receipt_digest": "71833da9672bd8e82866754e7ee73058da810c1970e9e7c9ea0592a408a3ef08",
+      "resolution": {
+        "assumption_id": "a001",
+        "grammar_query": "suppose <claim>",
+        "kind": "supposition"
+      },
+      "result": {
+        "answer_bytes_digest": "ccf42391dd46c66ec9aa6019bb9585b640f535838038c1d606391709edbc000e",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what does the corpus say about de morgan's laws",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "e09e9e9ea096393a80eeb01aa5f0389450e28b48a89b58e068a782d4080c27b9",
+      "mac": "89b137631e700396fbbb23f9b787423ecd5173887d56f91d93be25e99570c837",
+      "prev_turn_digest": "d0b2903761f2788bc289b2e3abf398d003ca09f1d9a595ceeb13228f555207fb",
+      "receipt_digest": "7b532fb1fb68fa8f4c3679b5f84de27989c3c1ded5eb376d6f5070345c5fbc8e",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "a2ffa66cbd51208074845bbb90c724b760c2e59dcd5bd476236e4c43174d9780",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [
+        "a001"
+      ],
+      "assumptions_declared": [],
+      "input_bytes": "x ^ 2",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "e09e9e9ea096393a80eeb01aa5f0389450e28b48a89b58e068a782d4080c27b9",
+      "mac": "496e709baa7eb0f7a2f550815bd768b16766f14c0d1d9ab5f83ad9f57d4aaa0b",
+      "prev_turn_digest": "66f87858e3742b0b61867ef6fa549e344c52e5abb9ed0f7cc211cee6fa36100e",
+      "receipt_digest": "54e203b830a68df8a3dc780e3a9a75a7358fd05c6d3d637c52cba21d8155491b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "d6647da64f4efbb881c725100a903f05123638190c2ae21479ece65fd019b5e4",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the handshake lemma",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "e09e9e9ea096393a80eeb01aa5f0389450e28b48a89b58e068a782d4080c27b9",
+      "mac": "1c6424b260977e0cfa1796686d629b7644c0a2dec5867622c3837c4f9f1f98b0",
+      "prev_turn_digest": "d91e4af9daeeddc418805acfa902d7f994ef3f22bd00aed3c06b9aabeb106321",
+      "receipt_digest": "21a0d5ce6683dc1372dc15f260c662fc4ba0d51a6e56ed2ef42defd68f204817",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "9fb06fd95f2eac1ee4571feb6dbb667a290241c6afebdbcce2d039dddbd40bc0",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [
+        "a002"
+      ],
+      "input_bytes": "suppose y = 3",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0a1185d5d44b5f3e7e2817c713fd8211f6d2b45cc6d7a7862efad9d8a8ecddc9",
+      "mac": "243281f9add77116d9ffd63f480f03ea3377b0865f6c3bba584fab018033b8b0",
+      "prev_turn_digest": "0768452134075768ce98caabfcb376c6ce8914bc4589c0df56e7b3867e93d3a7",
+      "receipt_digest": "c79c724f0972ba36e01c61284a3f3de23a73250122314c095c841be549516108",
+      "resolution": {
+        "assumption_id": "a002",
+        "grammar_query": "suppose <claim>",
+        "kind": "supposition"
+      },
+      "result": {
+        "answer_bytes_digest": "aecd3552aaa5b669d9c1d59c7d3e3edbff230062c95e3e5884f285f81bc57817",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 4
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "how do you compute a factorial iteratively",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0a1185d5d44b5f3e7e2817c713fd8211f6d2b45cc6d7a7862efad9d8a8ecddc9",
+      "mac": "dc9f6407f38895e72b7d0fd1ef56f1d50228f433cc0cd6f5ca2729fadde5ffd6",
+      "prev_turn_digest": "5ede009a01c9d3949557d2bd48be7e9e2289dc3c9e8703f4783ee31bb4f6e459",
+      "receipt_digest": "d5fe1ce155e9e9714b99dac2c1383013a73546ec4c0442cc43a512f2dfbbca72",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": null,
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "3bb1983a239c6929134d1839e9c514afad29629b396fd853c509b067687c1740",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 5
+    },
+    {
+      "assumptions_cited": [
+        "a001",
+        "a002"
+      ],
+      "assumptions_declared": [],
+      "input_bytes": "x + y",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0a1185d5d44b5f3e7e2817c713fd8211f6d2b45cc6d7a7862efad9d8a8ecddc9",
+      "mac": "c3d4a0e19edf0ea5025d110f1d12614e56d8ed54e502cdb2db3d3818fd6df2d3",
+      "prev_turn_digest": "72d5a9709923c939811c35fdcd9cc46be39642dcd6b90b890ff51860b6224f8b",
+      "receipt_digest": "9be5bd81d0aade43dfa9bd19d1e0f73e767264ef75bc14bcb433586bad819baa",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "d7186f7254df3ce266b0d4b2ea199c284a71c513a509f6e3cd0845d1acd15341",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 6
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is double negation",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0a1185d5d44b5f3e7e2817c713fd8211f6d2b45cc6d7a7862efad9d8a8ecddc9",
+      "mac": "4060c382f7a3411e1cb22348bef18f8a73401585a1a7561f268638c6745cea0e",
+      "prev_turn_digest": "a99d6b13debeb9b513b292baa24b1460b78b06c352edba7ce5410cdb03d7a94e",
+      "receipt_digest": "0dd3fd871c1deb145c03f313aa2d173342db2659954679e0f965dbd552878a1c",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "e43e908b814a93d3ac2d7dfd31f694e732c6b225977da24b184ccdd7ba93511d",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 7
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the capital city of australia",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0a1185d5d44b5f3e7e2817c713fd8211f6d2b45cc6d7a7862efad9d8a8ecddc9",
+      "mac": "18100734eeaaf815492f8b3c455d954cfbd571cad380a10c0a93a36a1ba61a18",
+      "prev_turn_digest": "cddcbb4259038072b411b057b1865d599eb6e300fe154b50ecb7d455966411e4",
+      "receipt_digest": "e38db09a2bcb0042416b789c69dd800b9767c30c180b5757d0c256ff8db0eeb2",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "204c1c07f6414120ab1019adc12960b61d18dd75c731b052e770dc41c4feb2fd",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 8
+    }
+  ]
+}

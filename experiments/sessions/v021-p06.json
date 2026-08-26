@@ -1,0 +1,140 @@
+{
+  "assumptions": [],
+  "header": {
+    "created_utc": "2026-08-26T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "proposer_model_digest": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-p06"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "how do i change a tyre",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "9daf0b714afed1fac5fbcc1642484bfa4a6e99ff0f526bde6848161634e7acbd",
+      "prev_turn_digest": "1406d823ad9ddec645fce9abbaf3f5ab7a4977f4a94e2bb4e1991dc51d14ce89",
+      "receipt_digest": "142a5ae6790d481d0e3a5f35c7091ddc5f24404e106d49f5c06cf1d8d95c57ac",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": null,
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "33772c2f4a9925df560ab5bd5e3b195036ffbaa999014967c25eacaffaf0b84e",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the best programming language",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "adb5e722635e08a6046bcdc345940558dd4c20973279c04d3612a5954997be52",
+      "prev_turn_digest": "fa486264a148566fb894850359d924838e7aa1cb2b9cb33ce90521cc6648094f",
+      "receipt_digest": "b56d5a458f57180f3817f263daa880ebb6ac16c1887e924897eb3f5a657908d3",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "db74fc6d8799ac84dd79e557618ce1b0a3e76def47ae358f839ae5d7117f6b6c",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "should i buy this stock",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "f6125519f7b8a51e08205f04fdf571b8fe37bf830ceace20871f78b037978aa6",
+      "prev_turn_digest": "144f7da6489367830ddf2854b73fd725b5d9e985ad60be688ab44b2c68be3262",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "aee8a7f2ad55518add8a20215d38c1b250b190a77789730deadeb8962e2530ba",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what did i ask you before",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "83eacea99f5fc11305916294f9c45b11aa0869f7a0f6776ea664e88208905b12",
+      "prev_turn_digest": "2c44178c2bb7a3154af2cc6dfb7f2faf149e5696f6ec4a7da3b3341050d4e4d6",
+      "receipt_digest": "b776a2fac9c2611841e211edc23b67d9dcbe8c6b72bf7b243c1c10f918a3718b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": null,
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "6e653f6f605ad73f9b9134af99e8e44dbf66ca8886ca7da46766100f7e0316b6",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "prove the riemann hypothesis",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "d8e5a31faffd69b6c25d5ae8a0382fdbb9ab229c814f2db9f24ba0b2f7fc718a",
+      "prev_turn_digest": "f276246920d9cbcf2802d21934399fb48144f92faaaca4ee08a920ace9da268f",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "39d54682faa92815b629ebb38cc62c0185d842e0fbbe5ba87f7f1935f6b59d54",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 4
+    }
+  ]
+}

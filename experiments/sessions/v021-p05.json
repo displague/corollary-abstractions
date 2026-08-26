@@ -1,0 +1,140 @@
+{
+  "assumptions": [],
+  "header": {
+    "created_utc": "2026-08-26T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "proposer_model_digest": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-p05"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the binary method for exponentiation",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "a3db83e37b345a91fc87babe0aae635b03e81ea6af060d052b5b46a92f1ca483",
+      "prev_turn_digest": "42e9925a07b48566a8fd3d7929ecce0b80c2236fa221603bd030554cf109c4d8",
+      "receipt_digest": "b1822a27a0c115864ce5324c096094e7708e26f0a7f04620f3b3db524b51041a",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "aca8573baeeee7c1ddf569c4c49612e678f22f23f4b7ee904e81390d0ad30c3f",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what does the corpus say about the distributive law",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "d3ea1ccadf502c146aa711ff2f9199b50673681b9adc2e22d2cde24179dc66d2",
+      "prev_turn_digest": "8c5821b2e60363eeb6a283043879f2224555b50e22154d326a1d0b812739160a",
+      "receipt_digest": "e83fadae201ed1e6c853359777e7415839f1227eec6d6788c3ff83480539b63c",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "7154b48d0ef02c492801621dfd71d2cfc4a2c9414b6467da45b5146a5aa02f01",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what will the weather be tomorrow",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "669e1b828c64bd4df83ad5a9eb090a6a242648d558ec6f4f86d2e4536954e4bb",
+      "prev_turn_digest": "3d33fbba3f944ef6303a9c74715e76bd2a9d75d3aa33d8da211d969ecc3e91db",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "a9be9b4c6f5df53e31c095414a5526d5725f8ef25a054d729490f0264bb3cbbf",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "who wrote the iliad",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "5fbdcdb7e19353936b43a3a7136135ea5d34d5a388b502495622bcba46cbd53d",
+      "prev_turn_digest": "b1ea838c18798b15a810719594b02658bdb64a78c5d309df9e1c10b7d4878a46",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "f3d28a6e5f9dfeee60a7aee5f44219540d5c41489c9c1568378718fc580e91dd",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what is the capital city of australia",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "8571bc86f475ccae54f1fac0bf08123954f470c00600ccdce5e35b065142c3b2",
+      "prev_turn_digest": "6563a4fa9c22f85e0a21cf50378e2f15d6c6a1fb694eca9214adb71d02f8e786",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "204c1c07f6414120ab1019adc12960b61d18dd75c731b052e770dc41c4feb2fd",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 4
+    }
+  ]
+}

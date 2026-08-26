@@ -1,0 +1,248 @@
+{
+  "assumptions": [
+    {
+      "assumption_id": "a001",
+      "declared_at_turn": 0,
+      "key_id": "k-052dec4ba59dedcf",
+      "mac": "c458eee039f2d805f001302d80257b582556c672de0cee049ca414187f412af9",
+      "normal_form": [
+        "n = 7",
+        true
+      ],
+      "status": "retracted",
+      "superseded_by": null,
+      "text_bytes": "n = 7"
+    }
+  ],
+  "header": {
+    "created_utc": "2026-08-26T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "proposer_model_digest": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-p08"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [
+        "a001"
+      ],
+      "input_bytes": "suppose n = 7",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0dccfb60c76b0de585db3f6f6a95cb11aca7774025ef00eec810fd317ede51ba",
+      "mac": "32a568c75e95e78d2d003c564e640def287fd632e62f266143db0d9cc2589aff",
+      "prev_turn_digest": "0b69cf223550840462fb6633e9f27f6f77c0d788169a384b9e3fa44bb2ff5f00",
+      "receipt_digest": "c1c3e2542819e9ac2fadb3906f0f52faec146f38d1fd6c4bfea7b357a917e1bd",
+      "resolution": {
+        "assumption_id": "a001",
+        "grammar_query": "suppose <claim>",
+        "kind": "supposition"
+      },
+      "result": {
+        "answer_bytes_digest": "5a7ef4855dec9e58ce104572aefea6e3bce7f1636f9d97223354a0b4bf873149",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "how many edges does a complete graph have",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0dccfb60c76b0de585db3f6f6a95cb11aca7774025ef00eec810fd317ede51ba",
+      "mac": "1b214639afe8b6452f42d9a0f7981b870dc12a3f5089a30fdc2a078bfed0906a",
+      "prev_turn_digest": "32209bd7232ca3b8a5e3aaa759cc1180625fc1fa37bb8ca5b3442ce74e8d26fd",
+      "receipt_digest": "3a471ba5755ced76025df4a0a5581c4ace7b4858d613bb69bd60c60fcd8a3ecf",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "1b1d33b711b59125615f7dada0c649eeaf0c57db2900e9d2b0a0ca1183fcf12b",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [
+        "a001"
+      ],
+      "assumptions_declared": [],
+      "input_bytes": "n ^ 2",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0dccfb60c76b0de585db3f6f6a95cb11aca7774025ef00eec810fd317ede51ba",
+      "mac": "d875cf9cf390eefd2f0cc208bce13d870365d6f4b98930af7cda858cdc0c6da1",
+      "prev_turn_digest": "a95a937a6c66521ceb0b7252f778bd02b8591220f517af8ce7e1f9873792df3d",
+      "receipt_digest": "1c5239b8c3feb357f777449e3cddfecb20ad230676815d10962fd416c3ca9b0b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "861b69e5848ad25557af30e62d28eacbf25072b6c74bfa12f7c30fae6e37ab5d",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "what does absorption mean in boolean algebra",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "0dccfb60c76b0de585db3f6f6a95cb11aca7774025ef00eec810fd317ede51ba",
+      "mac": "b56c2bc54c43ef27f1e572088d3fb22384b4b01f81f8b388549bad34341455f3",
+      "prev_turn_digest": "d81077e7b999bfa60f559d740b1b53c3a3aa5e8040bd8e17a5c0a698a95cef0f",
+      "receipt_digest": "d384742073c028ff25ae0652724a2d166be6b73d047b7f6476df8c01e0b98595",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "f7bfeb68fa357e5e0be02bc78beef7c2d8ecc28652e0d7da39b850d101f72a66",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [
+        "a001"
+      ],
+      "assumptions_declared": [],
+      "input_bytes": "retract a001",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "c0dbee85c5f572931c5f6a1d0e5e73b3a0f3351aa6ad3fc4bb4a49e4a0ce7f67",
+      "prev_turn_digest": "ec594b5438246867dae0c4e74d8f22999492e1de59d1555628cac195a0e4332f",
+      "receipt_digest": "ea4be94a17aeb990d30605468d05eec2028d959084017b0da6012717d2f786c7",
+      "resolution": {
+        "assumption_id": "a001",
+        "grammar_query": "retract <assumption-id>",
+        "kind": "supposition"
+      },
+      "result": {
+        "answer_bytes_digest": "02893d5ef1b722944e2f5b631c8e410a956ffbf970fe15021e82464ca51b59ae",
+        "kind": "canceled",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 4
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "n ^ 2",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "7e6ab0348f68ff04757554ba25b03e7b28069a79b0048817b3990f31a3e45f51",
+      "prev_turn_digest": "875a6e42606f6d44a6577e8d194a80bd76cb8decfc207818cbf12056edc4d670",
+      "receipt_digest": "5bb11811f905298885ce4f27b1624a17367895617e4b25a0c8596443cd7089e7",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "e5f7872704dc0fb0182589e2217ff8f8e319f040e5adf938b3fe81649955e0e8",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 5
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "how many edges does a tree have",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "0aebab21122228ff0b338e5fc32c8e16e56f42a8d663104053750de3fee6f0a5",
+      "prev_turn_digest": "06bc46a183a4420e2c2e06e561cff808dec49d9da03fab594e25e81491b48115",
+      "receipt_digest": "b6d0f94978a90db20c495a938e795a51eaa5d16f9b37a9846abfb354288b9161",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "afb1de152b18713e649eeb32962379adc34b52d6450b214ba2323b80d34b524f",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 6
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "who wrote the iliad",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "ddefbd5d1181bf8fd84dfb6c2383d0b8afd40610d082801f6bac9d76691a0527",
+      "prev_turn_digest": "281b6a74389a8acafda44d1273ad8843cd3371c09d556df541c81c24db3420f1",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "f3d28a6e5f9dfeee60a7aee5f44219540d5c41489c9c1568378718fc580e91dd",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 7
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "prove the riemann hypothesis",
+      "key_id": "k-052dec4ba59dedcf",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "97cea7a8f2e113eac22c88c8974bffe8d12c5c22bb4c79337e0fae1ae6c06610",
+      "prev_turn_digest": "8a6806819d2bc4f3b62d7bc8ff89d67bea8f617a7774eb209956bb3ecd30c1c4",
+      "receipt_digest": "02d90bcd27b7a61bb48d36a166ff67b42485ff14e85e1b6e107a4e894f5b155b",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<everything else>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "39d54682faa92815b629ebb38cc62c0185d842e0fbbe5ba87f7f1935f6b59d54",
+        "kind": "exhausted",
+        "refusal_type": "dispatcher_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 8
+    }
+  ]
+}

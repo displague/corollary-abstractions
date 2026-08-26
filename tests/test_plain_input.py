@@ -1232,6 +1232,209 @@ class TheDesignsAppendOnlyNotes(unittest.TestCase):
         self.assertIn("13 of 30 return `found` from the resolver", self.flat)
 
 
+class TheSliceTwoCorpusAndItsSeal(unittest.TestCase):
+    """The corpus recorded under slice 1's protocol, and its own dated seal.
+
+    Slice 1's seal is CLOSED and covers `v021-s*`. This one covers `v021-p*`
+    and is checked the way slice 1's was: digests revalidated against the
+    committed journals, caps obeyed, exclusions counted.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.seal = json.loads(
+            (REPO / "experiments" / "plain_input_corpus_seal.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        cls.prompts = json.loads(
+            (REPO / "experiments" / "plain_input_prompts.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+    def test_every_journal_revalidates_against_the_seal(self) -> None:
+        """B11's shape: the seal's digests are checked, not trusted."""
+
+        import session_ledger as sl  # noqa: PLC0415
+
+        for entry in self.seal["sessions"]:
+            journal = (REPO / entry["journal"]).read_text(encoding="utf-8")
+            self.assertEqual(
+                sl.text_digest(journal), entry["journal_digest"],
+                entry["session_id"],
+            )
+            reads = (REPO / entry["read_log"]).read_text(encoding="utf-8")
+            self.assertEqual(
+                sl.text_digest(reads), entry["read_log_digest"],
+                entry["session_id"],
+            )
+
+    def test_the_prompts_artifact_is_pinned_by_the_seal(self) -> None:
+        import session_ledger as sl  # noqa: PLC0415
+
+        text = (REPO / "experiments" / "plain_input_prompts.json").read_text(
+            encoding="utf-8"
+        )
+        self.assertEqual(
+            sl.text_digest(text), self.seal["prompts_artifact_digest"]
+        )
+
+    def test_slice_1s_closed_corpus_is_not_touched(self) -> None:
+        for entry in self.seal["sessions"]:
+            self.assertTrue(entry["session_id"].startswith("v021-p"))
+            self.assertNotIn("v021-s", entry["journal"])
+
+    def test_the_protocol_caps_are_slice_1s_and_are_obeyed(self) -> None:
+        protocol = self.seal["protocol"]
+        ledger_prereg = json.loads(
+            (REPO / "experiments" / "session_ledger_prereg.json").read_text(
+                encoding="utf-8"
+            )
+        )["recording_protocol"]
+        for key in (
+            "session_count_cap", "turn_cap_per_session", "live_assumption_cap"
+        ):
+            self.assertEqual(protocol[key], ledger_prereg[key], key)
+        self.assertLessEqual(
+            len(self.seal["sessions"]), protocol["session_count_cap"]
+        )
+        for entry in self.seal["sessions"]:
+            self.assertLessEqual(
+                entry["turns"], protocol["turn_cap_per_session"],
+                entry["session_id"],
+            )
+
+    def test_the_no_write_gate_rule_ran_and_its_count_is_published(
+        self,
+    ) -> None:
+        counts = self.seal["counts"]
+        self.assertIn(
+            "sessions_excluded_by_the_no_write_gate_rule", counts
+        )
+        self.assertEqual(
+            counts["sessions_excluded_by_the_no_write_gate_rule"],
+            len(self.seal["excluded_sessions"]),
+        )
+
+    def test_the_header_carries_the_pin_slice_1_omitted(self) -> None:
+        """§3's sixth pin, and it is the MEASURED weights digest."""
+
+        import machine_reader  # noqa: PLC0415
+
+        pinned = machine_reader.MANIFEST["model"]["weights_blob_sha256"]
+        for entry in self.seal["sessions"]:
+            journal = json.loads(
+                (REPO / entry["journal"]).read_text(encoding="utf-8")
+            )
+            self.assertEqual(
+                journal["header"]["pins"]["proposer_model_digest"], pinned,
+                entry["session_id"],
+            )
+
+    def test_part_one_is_the_sealed_order_chunked_by_a_counter(self) -> None:
+        """No question was placed to make a session read well."""
+
+        questions = json.loads(
+            (REPO / "experiments" / "plain_question_set.json").read_text(
+                encoding="utf-8"
+            )
+        )["questions"]
+        sealed = [item["question_id"] for item in questions]
+        part_one = [
+            entry for entry in self.seal["sessions"] if entry["part"] == 1
+        ]
+        flattened = [
+            question_id
+            for entry in part_one
+            for question_id in entry["question_ids"]
+        ]
+        self.assertEqual(flattened, sealed)
+
+    def test_part_two_questions_are_repeats_and_are_marked_as_such(
+        self,
+    ) -> None:
+        part_two = [
+            entry for entry in self.seal["sessions"] if entry["part"] == 2
+        ]
+        self.assertTrue(part_two)
+        self.assertIn("part", self.seal["served_turns"][0])
+        for entry in part_two:
+            self.assertTrue(entry["assumptions"] > 0, entry["session_id"])
+
+
+class TheDenominatorsBlock(unittest.TestCase):
+    """Published, never summed — the block to read before any rate."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        seal = json.loads(
+            (REPO / "experiments" / "plain_input_corpus_seal.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        cls.block = seal["denominators"]
+
+    def test_each_subset_names_its_members_and_its_size(self) -> None:
+        for name, entry in self.block.items():
+            if not isinstance(entry, dict) or "size" not in entry:
+                continue
+            self.assertEqual(
+                entry["size"], len(entry["question_ids"]), name
+            )
+            self.assertIn("which_gates_score_over_it", entry)
+
+    def test_the_three_subsets_are_the_measured_ones(self) -> None:
+        self.assertEqual(
+            self.block["resolver_found_before_the_proposer_is_consulted"][
+                "size"
+            ],
+            13,
+        )
+        self.assertEqual(
+            self.block["resolver_waiting_pre_empted_but_not_silently"]["size"],
+            5,
+        )
+        self.assertEqual(
+            self.block["proposer_reachable_remainder"]["size"], 12
+        )
+        self.assertEqual(self.block["exhaust_authored"]["size"], 9)
+
+    def test_the_subsets_overlap_and_the_overlap_is_published(self) -> None:
+        """Which is why the sizes cannot be added."""
+
+        overlap = self.block["the_overlap_is_real_and_is_not_hidden"]
+        self.assertTrue(
+            overlap["exhaust_authored_that_the_resolver_pre_empted"],
+            "an overlap of zero would make the never-sum rule decorative",
+        )
+        exhaust = set(self.block["exhaust_authored"]["question_ids"])
+        reachable = set(
+            self.block["proposer_reachable_remainder"]["question_ids"]
+        )
+        found = set(
+            self.block["resolver_found_before_the_proposer_is_consulted"][
+                "question_ids"
+            ]
+        )
+        self.assertEqual(found & reachable, set())
+        self.assertTrue(exhaust & reachable)
+
+    def test_the_resolver_subsets_carry_no_gate_of_this_slice(self) -> None:
+        """The standing defect is not absorbed by a gate that passes."""
+
+        gates = self.block[
+            "resolver_found_before_the_proposer_is_consulted"
+        ]["which_gates_score_over_it"]
+        self.assertIn("NONE", " ".join(gates))
+        self.assertIn("G9", " ".join(gates))
+
+    def test_every_gate_names_a_denominator(self) -> None:
+        named = self.block["gate_denominators"]
+        for gate in ("G1", "G2", "G3", "G5", "B9", "B10", "B12"):
+            self.assertTrue(named.get(gate, "").strip(), gate)
+
+
 class _StubVerified:
     """A Verified stand-in, so the shape tests need no model."""
 
