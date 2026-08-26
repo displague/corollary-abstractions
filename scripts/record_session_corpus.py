@@ -85,6 +85,11 @@ PREREG = "experiments/session_ledger_prereg.json"
 SEAL = "experiments/session_corpus_seal.json"
 SEAL_SCHEMA = "corollary.session-corpus-seal/1"
 
+#: The pre-repair seal, retained byte for byte when the corpus is recorded
+#: again at a fixed tree (prereg amendment 3). A re-recording that erased
+#: what it superseded would make its own delta uncheckable.
+PRIOR_SEAL = "experiments/session_corpus_seal_pre_repair.json"
+
 #: From the protocol, not the clock.
 CREATED_UTC = "2026-08-25T00:00:00Z"
 
@@ -188,6 +193,53 @@ def session_lines(index: int) -> tuple[str, ...]:
     )
 
 
+def _delta_finding(
+    changed: int, lines: list[str], pin_moves: dict[str, int]
+) -> str:
+    """What the re-recording actually moved, written from the numbers.
+
+    Assembled rather than asserted for the same reason P1's finding is: the
+    registered expectation for this delta was TEN changed turns, and a
+    hand-typed sentence saying so would still have said so at zero.
+    """
+
+    pins = ", ".join(f"{name} ({count} headers)" for name, count in sorted(pin_moves.items()))
+    head = (
+        f"{changed} turn answer-digest(s) moved"
+        + (f" across lines {lines}" if lines else "")
+        + f"; header pins that moved: {pins or 'none'}."
+    )
+    if changed == 10 and lines == ["retract a999"]:
+        return head + (
+            " This is the registered expectation exactly: the repair reached "
+            "the defect and nothing else."
+        )
+    if changed == 0:
+        return head + (
+            " THE REGISTERED EXPECTATION MISSED, and the miss is the "
+            "interesting part. Amendment 3 predicted ten changed turns on the "
+            "assumption that the repair would move the RECORDED side of B10's "
+            "comparison. It did not, and could not: a recorded session always "
+            "has a ledger attached, so `retract a999` always took the "
+            "unknown-id arm and always rendered 'no live assumption ... in "
+            "this session' — which is precisely the string fix (a) chose to "
+            "keep. What moved was the STATELESS side, the fresh ledgerless "
+            "session B10 compares against, which used to say 'this session "
+            "keeps no assumption ledger'. The two sides now agree because the "
+            "un-recorded one came to the recorded one. The corpus is recorded "
+            "again anyway, and had to be: harness.py is a rendering module, so "
+            "rendering_module_digests moved and every journal's pin with it. "
+            "A journal carrying the old pin would have been refused "
+            "`stale-environment` by B3's own machinery on every replay."
+        )
+    return head + (
+        " THE REGISTERED EXPECTATION MISSED. Amendment 3 froze it at ten "
+        "turns on the line `retract a999`; this is neither, and it is "
+        "published as a finding rather than absorbed. More than the defect's "
+        "own turns means the repair reached further than the defect."
+    )
+
+
 def _protocol() -> dict:
     prereg = json.loads((REPO / PREREG).read_text(encoding="utf-8"))
     protocol = prereg["recording_protocol"]
@@ -221,9 +273,24 @@ def record(repo_root: Path) -> dict:
 
     sessions: list[dict] = []
     excluded: list[dict] = []
+    # Per-turn answer digests as they stand BEFORE this recording overwrites
+    # them. A re-recording at a fixed tree owes a checkable claim about what
+    # it changed, and the claim is only checkable if the old numbers are read
+    # before they are replaced (prereg amendment 3).
+    prior_digests: dict[str, dict[int, str]] = {}
     started = time.time()
     for position in range(1, protocol["session_count_cap"] + 1):
         session_id = f"v021-s{position:02d}"
+        existing = ledger.journal_path(repo_root, session_id)
+        if existing.exists():
+            old = json.loads(existing.read_text(encoding="utf-8"))
+            prior_digests[session_id] = {
+                "turns": {
+                    turn["turn_index"]: turn["result"]["answer_bytes_digest"]
+                    for turn in old["turns"]
+                },
+                "pins": old["header"]["pins"],
+            }
         recorder = SessionRecorder(
             repo_root,
             session_id,
@@ -358,9 +425,96 @@ def record(repo_root: Path) -> dict:
         ),
     }
 
+    prior_seal_path = repo_root / PRIOR_SEAL
+    delta = None
+    if prior_digests:
+        changed = []
+        pin_moves: dict[str, int] = {}
+        for entry in sessions:
+            old = prior_digests.get(entry["session_id"], {})
+            journal = json.loads(
+                (repo_root / entry["journal"]).read_text(encoding="utf-8")
+            )
+            for name, value in journal["header"]["pins"].items():
+                if old.get("pins", {}).get(name) != value:
+                    pin_moves[name] = pin_moves.get(name, 0) + 1
+            for turn in journal["turns"]:
+                was = old.get("turns", {}).get(turn["turn_index"])
+                now = turn["result"]["answer_bytes_digest"]
+                if was is not None and was != now:
+                    changed.append(
+                        {
+                            "session_id": entry["session_id"],
+                            "turn_index": turn["turn_index"],
+                            "input_bytes": turn["input_bytes"],
+                            "answer_bytes_digest_was": was,
+                            "answer_bytes_digest_now": now,
+                        }
+                    )
+        prior_seal = (
+            json.loads(prior_seal_path.read_text(encoding="utf-8"))
+            if prior_seal_path.exists()
+            else None
+        )
+        lines_changed = sorted({row["input_bytes"] for row in changed})
+        delta = {
+            "why_the_corpus_was_recorded_again": (
+                "the B10 repair touches scripts/harness.py, which is in "
+                "build_throughput_tasks.RENDERING_MODULES, so the "
+                "rendering_module_digests pin moves. A journal recorded "
+                "before the serving path changed MUST NOT replay against the "
+                "code after it — every replay would refuse "
+                "`stale-environment`, which is B3's mechanism working, not a "
+                "failure. So the same authored corpus is recorded again at "
+                "the fixed tree, exactly as a suite gate re-runs at a fixed "
+                "tree (prereg amendment 3)."
+            ),
+            "the_corpus_itself_did_not_move": (
+                "the same 60 authored sessions, the same lines, the same ids "
+                "from the same counter, the same protocol, the same caps and "
+                "the same A/B split. scripts/record_session_corpus.py's "
+                "authoring is unedited."
+            ),
+            "prior_seal_retained_at": PRIOR_SEAL,
+            "prior_seal_digest": (
+                ledger.text_digest(
+                    prior_seal_path.read_text(encoding="utf-8")
+                )
+                if prior_seal_path.exists()
+                else None
+            ),
+            "registered_expectation": (
+                "EXACTLY the ten turns B10 named, and no others. More than "
+                "ten means the repair reached further than the defect; fewer "
+                "means it did not reach the defect. Either is a finding and "
+                "is published as one. Frozen in prereg amendment 3 before "
+                "this recording ran."
+            ),
+            "turns_whose_answer_digest_changed": len(changed),
+            "distinct_lines_changed": lines_changed,
+            "expectation_met": (
+                len(changed) == 10 and lines_changed == ["retract a999"]
+            ),
+            "changed_turns": changed,
+            "header_pins_that_moved": pin_moves,
+            "finding": _delta_finding(len(changed), lines_changed, pin_moves),
+            "counts_unchanged": (
+                prior_seal is not None
+                and prior_seal["counts"]["sessions_admitted"]
+                == counts["sessions_admitted"]
+                and prior_seal["counts"]["turns_admitted"]
+                == counts["turns_admitted"]
+                and prior_seal["counts"]["binding_dependent_turns_admitted"]
+                == counts["binding_dependent_turns_admitted"]
+                and prior_seal["counts"]["by_half"] == counts["by_half"]
+            ),
+            "prior_counts": prior_seal["counts"] if prior_seal else None,
+        }
+
     return {
         "schema": SEAL_SCHEMA,
         "prerequisite": "P3",
+        **({"repair_delta": delta} if delta else {}),
         "design": "docs/DESIGN-session-ledger.md",
         "design_clause": "§6 P3 step (3) — the seal",
         "prereg": PREREG,

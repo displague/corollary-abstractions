@@ -1,0 +1,1091 @@
+{
+  "blind_control": {
+    "arms_scored_blind": true,
+    "cases_total": 160,
+    "mixer": "one sealed mixer, three arms, cases shuffled and carrying an opaque case_id and no arm field; the arm key is a separate object and the join is the last step of the run",
+    "voided": false,
+    "voiding_sentence": "If mutating assumptions the answer does not cite changes the served answer at any nonzero rate, the replayer is keying on transcript bytes rather than assumption semantics, and the multi-turn-assumption capability is void for this cycle; no session-replay claim is made.",
+    "why": "no B5 or B6 flip; the voiding sentence does not fire"
+  },
+  "capability_blind_baseline": {
+    "b2_on_assumption_free_sessions": {
+      "assumption_free_sessions": 10,
+      "rows": [
+        {
+          "session_id": "v021-s01",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s07",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s13",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s19",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s25",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s31",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s37",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s43",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s49",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        },
+        {
+          "session_id": "v021-s55",
+          "turns_reproduced": 6,
+          "turns_total": 6
+        }
+      ],
+      "verdict": "GREEN"
+    },
+    "b4_cases_checked": 58,
+    "b4_must_be_zero_because": "B4's mutation touches only the Assumption record and never the declaring line's input_bytes, which is all this arm reads. A score above zero means the mutation harness is leaking into input_bytes and the HARNESS is red, before anything is scored.",
+    "b4_response_rows": [],
+    "b4_responses": 0,
+    "b4_score": 0,
+    "comparison": "stateless replay WITH the mutation against stateless replay WITHOUT it, at the watched turn — not against the recorded digest, which is what the first execution compared and why that arm never executed as designed",
+    "verdict": "GREEN",
+    "what_it_is": "§8's capability-blind baseline: a replayer that re-serves each line statelessly, ignoring Assumption records entirely"
+  },
+  "construction_gate": {
+    "B1": {
+      "clause_1_seal_before_replayer": {
+        "does_it_void_the_run": "no, and the reason is registered rather than chosen now: B1 is not in R1 (§9) and not among §11's stop conditions. The miss is adjudicated and published, which is what the release gate asks of B1-B13, and no clause is claimed green that is not.",
+        "mitigations_that_are_not_substitutes": [
+          "the authoring script is committed and its six shapes are declared in its docstring",
+          "shapes are assigned by counter, so the authoring consulted nothing about which half a session would land in",
+          "the replayer's bytes have not changed since before the corpus existed, and git can confirm it"
+        ],
+        "replayer_first_committed": "9a9cb45c198a6d390168e62f7c11939f4231aefe 2026-08-25T23:20:49-04:00",
+        "seal_first_committed": "a91e39dfdc1da9e0515394fee0c4463522508661 2026-08-25T23:25:42-04:00",
+        "verdict": "MISSED",
+        "what_happened": "the replayer was committed before the seal existed, because this slice's ordered work put the machinery before the recording",
+        "what_it_protects_and_what_it_gave_up": "B1's order guards against a replayer fitted to a frozen corpus; the order taken gives that in a stronger form (the replayer could not be fitted to journals that did not exist) and gives up the mirror guard, that a corpus not be authored to suit an existing replayer. The corpus WAS authored after the replayer by the same hand. That exposure is real and is published rather than argued away."
+      },
+      "clause_2_no_sealed_file_was_edited": {
+        "edits_found": [],
+        "files_checked": 120,
+        "verdict": "GREEN"
+      }
+    },
+    "B10": {
+      "misses": [],
+      "uncited_turns": 260,
+      "verdict": "GREEN"
+    },
+    "B11": {
+      "check_regeneration_exit": 0,
+      "check_regeneration_tail": [
+        "coherence OK: 25 seeds regenerate committed data byte-identically across data/, data_holdout/"
+      ],
+      "journals_left_data_untouched": true,
+      "seal_digests_revalidate": "GREEN",
+      "verdict": "GREEN"
+    },
+    "B12": {
+      "how_the_two_sides_are_independent": "the journal's citation list is a per-turn snapshot taken by session_ledger.write_journal's caller at turn close; the read log is written by session_ledger.write_read_log from the barrier's raw event list. Different functions, different files.",
+      "turns_checked": 410,
+      "uncorroborated": [],
+      "verdict": "GREEN"
+    },
+    "B13": {
+      "and_the_limitation_of_an_easy_audit": "The audit was easy, and an easy audit is weak evidence. All twenty drawn cases are the same shape: an arithmetic line whose free names are bound entirely by the cited assumption. That is what the corpus contains, because the corpus was authored by the same hand that built the binding mechanism, and a corpus of one shape is the condition under which B13 has the LEAST power to find the thing it exists to find. 20/20 therefore does not MEASURE §11's cited-but-inert residual; it fails to find it in a corpus where it was unlikely to occur. The residual stays NAMED, and this sentence is the reason it is not upgraded to measured by a perfect score.",
+      "auditor": "the maintainer, who is also this slice's implementer",
+      "auditor_independence": "NOT independent, and the prereg registered that before the draw. A seeded blind draw does not make a self-audit independent; it makes it unsteerable turn by turn, which is less. The draw is reproducible from the frozen seed, the twenty cases were published before any was marked, and the marks are committed as their own artifact so a later reader can disagree case by case.",
+      "floor": 16,
+      "marked_yes": 20,
+      "of": 20,
+      "table": [
+        {
+          "audit_case": "c00",
+          "auditor_note": "the line 'n + t' contains only the name(s) the cited assumption(s) bind — n = 6 (polarity True), t = 5 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001",
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "n = 6",
+              true
+            ],
+            [
+              "t = 5",
+              true
+            ]
+          ],
+          "input_bytes": "n + t",
+          "meaning_depends": true,
+          "session_id": "v021-s33",
+          "turn_index": 4
+        },
+        {
+          "audit_case": "c01",
+          "auditor_note": "the line 'k + 1' contains only the name(s) the cited assumption(s) bind — k = 11 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "k = 11",
+              true
+            ]
+          ],
+          "input_bytes": "k + 1",
+          "meaning_depends": true,
+          "session_id": "v021-s34",
+          "turn_index": 5
+        },
+        {
+          "audit_case": "c02",
+          "auditor_note": "the line 'y ^ 2' contains only the name(s) the cited assumption(s) bind — y = 8 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "y = 8",
+              true
+            ]
+          ],
+          "input_bytes": "y ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s56",
+          "turn_index": 2
+        },
+        {
+          "audit_case": "c03",
+          "auditor_note": "the line 'k ^ 2' contains only the name(s) the cited assumption(s) bind — k = 7 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "k = 7",
+              true
+            ]
+          ],
+          "input_bytes": "k ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s34",
+          "turn_index": 1
+        },
+        {
+          "audit_case": "c04",
+          "auditor_note": "the line 'y + 5' contains only the name(s) the cited assumption(s) bind — y = 4 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "y = 4",
+              true
+            ]
+          ],
+          "input_bytes": "y + 5",
+          "meaning_depends": true,
+          "session_id": "v021-s38",
+          "turn_index": 3
+        },
+        {
+          "audit_case": "c05",
+          "auditor_note": "the line 'y + 7' contains only the name(s) the cited assumption(s) bind — y = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "y = 2",
+              true
+            ]
+          ],
+          "input_bytes": "y + 7",
+          "meaning_depends": true,
+          "session_id": "v021-s50",
+          "turn_index": 3
+        },
+        {
+          "audit_case": "c06",
+          "auditor_note": "the line 'k + 1' contains only the name(s) the cited assumption(s) bind — k = 7 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "k = 7",
+              true
+            ]
+          ],
+          "input_bytes": "k + 1",
+          "meaning_depends": true,
+          "session_id": "v021-s16",
+          "turn_index": 5
+        },
+        {
+          "audit_case": "c07",
+          "auditor_note": "the line 'y ^ 2' contains only the name(s) the cited assumption(s) bind — y = 4 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "y = 4",
+              true
+            ]
+          ],
+          "input_bytes": "y ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s38",
+          "turn_index": 2
+        },
+        {
+          "audit_case": "c08",
+          "auditor_note": "the line 'k ^ 2' contains only the name(s) the cited assumption(s) bind — k = 9 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "k = 9",
+              true
+            ]
+          ],
+          "input_bytes": "k ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s04",
+          "turn_index": 4
+        },
+        {
+          "audit_case": "c09",
+          "auditor_note": "the line 'y * y' contains only the name(s) the cited assumption(s) bind — y = 8 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "y = 8",
+              true
+            ]
+          ],
+          "input_bytes": "y * y",
+          "meaning_depends": true,
+          "session_id": "v021-s14",
+          "turn_index": 4
+        },
+        {
+          "audit_case": "c10",
+          "auditor_note": "the line 'n + t' contains only the name(s) the cited assumption(s) bind — n = 2 (polarity True), t = 4 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001",
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "n = 2",
+              true
+            ],
+            [
+              "t = 4",
+              true
+            ]
+          ],
+          "input_bytes": "n + t",
+          "meaning_depends": true,
+          "session_id": "v021-s57",
+          "turn_index": 4
+        },
+        {
+          "audit_case": "c11",
+          "auditor_note": "the line 'n ^ 2' contains only the name(s) the cited assumption(s) bind — n = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "n = 2",
+              true
+            ]
+          ],
+          "input_bytes": "n ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s15",
+          "turn_index": 2
+        },
+        {
+          "audit_case": "c12",
+          "auditor_note": "the line 't ^ 2' contains only the name(s) the cited assumption(s) bind — t = 5 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "t = 5",
+              true
+            ]
+          ],
+          "input_bytes": "t ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s03",
+          "turn_index": 3
+        },
+        {
+          "audit_case": "c13",
+          "auditor_note": "the line 'n + 6' contains only the name(s) the cited assumption(s) bind — n = 6 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "n = 6",
+              true
+            ]
+          ],
+          "input_bytes": "n + 6",
+          "meaning_depends": true,
+          "session_id": "v021-s24",
+          "turn_index": 4
+        },
+        {
+          "audit_case": "c14",
+          "auditor_note": "the line 'k + 1' contains only the name(s) the cited assumption(s) bind — k = 9 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "k = 9",
+              true
+            ]
+          ],
+          "input_bytes": "k + 1",
+          "meaning_depends": true,
+          "session_id": "v021-s04",
+          "turn_index": 5
+        },
+        {
+          "audit_case": "c15",
+          "auditor_note": "the line 'k ^ 2' contains only the name(s) the cited assumption(s) bind — k = 3 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "k = 3",
+              true
+            ]
+          ],
+          "input_bytes": "k ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s16",
+          "turn_index": 1
+        },
+        {
+          "audit_case": "c16",
+          "auditor_note": "the line 'y * y' contains only the name(s) the cited assumption(s) bind — y = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "y = 2",
+              true
+            ]
+          ],
+          "input_bytes": "y * y",
+          "meaning_depends": true,
+          "session_id": "v021-s50",
+          "turn_index": 4
+        },
+        {
+          "audit_case": "c17",
+          "auditor_note": "the line 'n ^ 2' contains only the name(s) the cited assumption(s) bind — n = 6 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "n = 6",
+              true
+            ]
+          ],
+          "input_bytes": "n ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s33",
+          "turn_index": 2
+        },
+        {
+          "audit_case": "c18",
+          "auditor_note": "the line 'y + 5' contains only the name(s) the cited assumption(s) bind — y = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a001"
+          ],
+          "cited_normal_forms": [
+            [
+              "y = 2",
+              true
+            ]
+          ],
+          "input_bytes": "y + 5",
+          "meaning_depends": true,
+          "session_id": "v021-s08",
+          "turn_index": 3
+        },
+        {
+          "audit_case": "c19",
+          "auditor_note": "the line 't ^ 2' contains only the name(s) the cited assumption(s) bind — t = 3 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence.",
+          "cited": [
+            "a002"
+          ],
+          "cited_normal_forms": [
+            [
+              "t = 3",
+              true
+            ]
+          ],
+          "input_bytes": "t ^ 2",
+          "meaning_depends": true,
+          "session_id": "v021-s51",
+          "turn_index": 3
+        }
+      ],
+      "verdict": "GREEN",
+      "what_below_the_floor_would_mean": "§11's cited-but-inert residual is promoted from named to measured against the claim, and the served line carries it"
+    },
+    "B2": {
+      "budget_seconds": 1800,
+      "by_half": {
+        "A": {
+          "turns_reproduced": 239,
+          "turns_total": 239
+        },
+        "B": {
+          "turns_reproduced": 171,
+          "turns_total": 171
+        }
+      },
+      "denominator": 410,
+      "denominator_source": "the seal's own turn count, not a round number",
+      "elapsed_seconds": 19.4,
+      "misses_published_individually": [],
+      "overrun": false,
+      "turns_reproduced": 410,
+      "verdict": "GREEN"
+    },
+    "B3": {
+      "failures": [],
+      "perturbations": 300,
+      "pins": [
+        "corpora_digest",
+        "line_grammar_digest",
+        "rendering_module_digests",
+        "checker_toolchain_digest",
+        "capability_sheet_digest"
+      ],
+      "sampling": "none — every pin field on every sealed journal",
+      "verdict": "GREEN"
+    },
+    "B4": {
+      "denominator": 58,
+      "denominator_source": "every binding-dependent turn in half B — a turn with non-empty citations whose resolution.kind is `exact` (prereg amendment 1)",
+      "misses_published_individually": [],
+      "responded": 58,
+      "responded_by_a_typed_conflict_refusal": 30,
+      "standard": "100% or red, no tolerance, misses published individually",
+      "verdict": "GREEN"
+    },
+    "B5": {
+      "cases": 60,
+      "denominator_met": true,
+      "flip_rows": [],
+      "flips": 0,
+      "registered_denominator": 60,
+      "verdict": "GREEN"
+    },
+    "B6": {
+      "cases": 42,
+      "denominator_met": true,
+      "flip_rows": [],
+      "flips": 0,
+      "registered_denominator": 30,
+      "verdict": "GREEN"
+    },
+    "B7": {
+      "empty_is_allowed_null_is_red": true,
+      "misses": [],
+      "refusal_turns": 70,
+      "verdict": "GREEN"
+    },
+    "B8": {
+      "denominator_met": true,
+      "registered_denominator": 20,
+      "repaired_chain_arm": {
+        "cases": 20,
+        "detected": 20,
+        "detected_by_keyed_mac": 20,
+        "rows": [
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s22",
+            "turn_index": 5
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s04",
+            "turn_index": 1
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s45",
+            "turn_index": 0
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s08",
+            "turn_index": 3
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s24",
+            "turn_index": 6
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s38",
+            "turn_index": 0
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s59",
+            "turn_index": 5
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3,
+              4,
+              5
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s43",
+            "turn_index": 3
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s30",
+            "turn_index": 4
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s51",
+            "turn_index": 5
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s16",
+            "turn_index": 3
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s36",
+            "turn_index": 2
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s19",
+            "turn_index": 1
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s50",
+            "turn_index": 0
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s14",
+            "turn_index": 6
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s56",
+            "turn_index": 4
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s03",
+            "turn_index": 3
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s25",
+            "turn_index": 1
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s15",
+            "turn_index": 2
+          },
+          {
+            "chain_is_internally_consistent": true,
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5,
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s42",
+            "turn_index": 5
+          }
+        ]
+      },
+      "threat_model": "the tamper script rewrites one turn's bytes AND recomputes every downstream prev_turn_digest consistently — the naive-chain repair a file-holding adversary would perform. Detection comes from the keyed MACs (the tamperer holds no key) or the out-of-band seal digest, never from chain arithmetic, and the detector does not read the chain at all.",
+      "unrepaired_chain_arm": {
+        "cases": 20,
+        "detected": 20,
+        "note": "run and reported, but passing only this arm is not passing B8 — the design says so and this run does not treat it as a substitute",
+        "rows": [
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s22",
+            "turn_index": 5
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              1
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s04",
+            "turn_index": 1
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              0
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s45",
+            "turn_index": 0
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s08",
+            "turn_index": 3
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s24",
+            "turn_index": 6
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              0
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s38",
+            "turn_index": 0
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s59",
+            "turn_index": 5
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s43",
+            "turn_index": 3
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              4
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s30",
+            "turn_index": 4
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s51",
+            "turn_index": 5
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s16",
+            "turn_index": 3
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              2
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s36",
+            "turn_index": 2
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              1
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s19",
+            "turn_index": 1
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              0
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s50",
+            "turn_index": 0
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              6
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s14",
+            "turn_index": 6
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              4
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s56",
+            "turn_index": 4
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              3
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s03",
+            "turn_index": 3
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              1
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s25",
+            "turn_index": 1
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              2
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s15",
+            "turn_index": 2
+          },
+          {
+            "detected": true,
+            "keyed_mac_detected": true,
+            "mac_failures": [
+              5
+            ],
+            "out_of_band_seal_detected": true,
+            "session_id": "v021-s42",
+            "turn_index": 5
+          }
+        ]
+      },
+      "verdict": "GREEN"
+    },
+    "B9": {
+      "verdict": "NEVER",
+      "why": "B9 is slice 2's clause. Slice 2 — DESIGN-plain-input's proposer — is explicitly out of this commission's scope, so B9 is registered here and scored NEVER, not scored zero and not quietly omitted. Its absence is recorded rather than inferred, which the release gate requires in writing (ROADMAP-v0.21 Release gate, fourth bullet)."
+    }
+  },
+  "design": "docs/DESIGN-session-ledger.md",
+  "determinism": "artifact committed from a deterministic runner; reproductions welcome and recorded",
+  "elapsed_seconds": 123.9,
+  "negative_honesty": "sessions are reproducible, not correct. A wrong answer replays as faithfully as a right one, and nothing in this run is evidence that any answer is true.",
+  "non_claims": "Non-claims: no completeness over readings (the unreceiptable claim series 1 refused); no correctness claim (reproducibility only); no cross-session or cross-person memory; no portability beyond the one workstation; no human-satisfaction claim; no stranger-usability claim (P3's sessions are maintainer-authored — STRANGER's park is cited, not re-encountered); supposition-conditional answers stay out of throughput; nothing here claims the incumbent's proposer works (slice 2 carries DESIGN-plain-input's own gates unchanged); the machine blind reader belongs to DESIGN-voice-completion's run and makes no appearance here.",
+  "prereg": "experiments/session_ledger_prereg.json",
+  "recorder_code_digest": "e3070dd3b118aee7681b8091b5db6a434ba6c54551081794228e9eb91d087c43",
+  "registered_run": "half B's first execution. Half A is scored beside it wherever a clause is corpus-wide, and no verdict below rests on half A.",
+  "repair_run": {
+    "authority": "maintainer adjudication, recorded in experiments/session_ledger_prereg.json amendment 3, dated before the repair was written: B10's red was a CONSTRUCTION DEFECT IN THE OBJECT, not an unfavourable control reading. The §8 controls — B4, B5, B6 and the voiding sentence — all held in runs 1 and 2, so there was no voided control for the no-chase rule to protect. The governing precedent is the suite gate itself (v0.20's gate runs 1 and 2): red, fix the defect, fresh run at the fixed tree, every receipt retained.",
+    "is_the_repair_run": true,
+    "one_repair_only": "registered in amendment 3: if this run shows ANY new red it is committed and reported and no second repair is attempted.",
+    "supersedes_nothing": "experiments/session_ledger_run.json and experiments/session_ledger_run2.json are retained unedited. This is a third artifact, not a replacement for either.",
+    "the_delta_and_its_missed_expectation": "amendment 3 registered, before the recording, that EXACTLY ten turn digests would move — B10's ten. ZERO moved, and the seal's repair_delta says why: a recorded session always has a ledger, so `retract a999` always took the unknown-id arm and always rendered the string fix (a) chose to KEEP. What moved was the stateless side of B10's comparison, which is not in any journal. The expectation missed, the miss is published rather than absorbed, and what it cost is nothing: the two sides agree, which is what B10 asks.",
+    "what_did_not_move": "the sealed corpus. The same 60 authored sessions, lines, ids, protocol, caps and A/B split; the same counts and the same floors. The journals were recorded again ONLY because harness.py is a rendering module, so the rendering_module_digests pin moved and a journal carrying the old pin would be refused `stale-environment` by B3's own machinery. The pre-repair seal is retained at experiments/session_corpus_seal_pre_repair.json and the new seal publishes the delta.",
+    "what_was_repaired": "harness._route_retract's unknown-id arm rendered one detail string with a ledger attached and another without, on a turn that cites nothing — the ledger's EXISTENCE reaching the bytes of an answer that consumed no assumption. Fix (a) of amendment 3: the arm stops decorating itself with ledger state and renders the same true and sufficient sentence either way. Fix (b) — have the refusal cite what it read — was declined in writing because §3 fixes a citation as a read barrier on normal_form access, and this arm reads the id index."
+  },
+  "result_gate": {
+    "clauses": {
+      "b10_green": true,
+      "b12_corroborated": true,
+      "b13_at_or_above_16_of_20": true,
+      "b2_replays": true,
+      "b4_green": true,
+      "b5_green": true,
+      "b6_green": true
+    },
+    "nothing_more": "§9's own words. The claim is byte-dependence and replay. It is not correctness, not cross-session memory, not portability beyond this workstation, and not a claim about anyone's sessions but the maintainer's.",
+    "served": true,
+    "served_claim_if_it_holds": "recorded sessions replay, and conditional answers name the assumptions they consumed.",
+    "the_suspended_habit_ends_here": "§12 suspended the stateless one-line-in-one-answer-out rule for this cycle and said the suspension ends at the v0.21 gate by that gate's own verdicts. It holds: state is a shipped property of the harness session, and B10 is the fence that makes the answer honest — 260 uncited turns render byte-identically to stateless service. B10's scope is the LEDGER's state and not the resolver ASK subloop's, which the sweep in prereg amendment 3 names and no recorded session exercises.",
+    "verdict": "HOLDS",
+    "where_the_claim_lives": "in this artifact and in tests/test_session_ledger.py, and nowhere else. DESIGN-session-ledger names NO served surface for slice 1 — no capability-sheet row, no route, no status. The sheet's registered-run rows exist for realization, conformance and the foreign voice because those designs named them; this one did not, and inventing a surface the design did not ask for would be shipping more than the gate licensed. §13 routes the numbers to ANALYSIS, which is where they go."
+  },
+  "run_date": "2026-08-25",
+  "runner_digest": "6c913505d477b0ca4eb1eaf2a3615fbd81df2ad1f73c519b41abf8a5e786ba71",
+  "schema": "corollary.session-ledger-run/1",
+  "seal": "experiments/session_corpus_seal.json",
+  "seeds": {
+    "audit_draw_seed": "session-ledger-v021-b13",
+    "mutation_mixer_seed": "session-ledger-v021-mixer",
+    "seed_derivation": "random.Random(int(hashlib.sha256(seed_string.encode('utf-8')).hexdigest()[:16], 16))",
+    "why_string_seeds": "a string seed is readable, quotable in a commit message, and cannot be confused with a count. The derivation is written out here so a reproduction does not have to guess it."
+  },
+  "slice": 1
+}

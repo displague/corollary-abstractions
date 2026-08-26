@@ -5712,3 +5712,218 @@ and per-answer citations of the assumptions each answer consumed**.
 `scripts/supposition.py:96-107` builds a fresh executor per typed line and
 discards the state; the served supposition receipt is one key,
 `{"derivation": "session"}`.
+
+# The session ledger: slice 1's prerequisites and its three runs (2026-08-26)
+
+DESIGN-session-ledger slice 1, preregistered in
+`experiments/session_ledger_prereg.json` — B1–B13 and R1 frozen verbatim
+from the design, with a meetability argument on every floor per
+ROADMAP-v0.21 §4.0(3). **Three runs on one sealed corpus. R1 HOLDS on
+run 3.** Every run artifact is committed and none is edited after the fact.
+
+## The three new prerequisite artifacts
+
+| artifact | what it is | the number |
+|---|---|---|
+| `experiments/session_p1_command_bound.json` | P1 — admitted commands per template class of `LINE_GRAMMAR` | **5 closed classes admit 44,915; 9 classes are open; 1 is environment-gated** |
+| `experiments/session_p2_prompt_seal.json` + `experiments/session_p2_separator_probe.json` | P2 — separator expressibility over ten hand-sealed ambiguous prompts | **9 of 10 separate (8 of 10 at the act level)** |
+| `experiments/session_corpus_seal.json` (+ `..._pre_repair.json`) | P3 — the sealed corpus and its A/B split | **60 sessions, 410 turns, 130 binding-dependent; half B: 25 / 171 / 58** |
+
+## P1's finding: the registered grammar is NOT finite
+
+Series 1's FORK folded into the promise that *"the grammar is finite, so
+enumeration cost stops being an argument and becomes a number"*
+(ROADMAP-v0.21 §1.1). **Half of that is true and the artifact says which
+half.** Five classes are closed by a committed vocabulary — the empty line
+(1), `narrow` (32,253 = 29 corpora + 37 disciplines + 17,356 resolver words
++ 14,830 statement ids + `cancel`), `twin` (12,589 ledger members),
+`reachable` (8 manifest pairs), and `retract`, whose 64-command ceiling is
+the turn cap and is the **only session-scoped vocabulary in the grammar**.
+Nine classes admit countably infinite languages, and they are exactly where
+plain prose lands: the resolver row and the complement row.
+
+**So the number enumeration buys is the ANSWERING vocabulary, not the
+admitted language.** `owns` can be asked 38,759 distinct queries, because
+that is how many compound subterm skeletons committed statements host with
+every slot in class V — 99 more carry a parameter-class slot and are
+unreachable from any typed query. The resolver can bind one of 14,830
+statements however much prose it accepts. The dispatcher's is **0**: it
+abstains by construction, not merely rarely. An enumerating proposer has a
+finite target only because the committed material is finite, never because
+the grammar is. **Slice 2 inherits that correction.**
+
+Three things the builder refused to do, each recorded in the artifact: sum
+the open classes into a total (a number that absorbs an infinite class is
+not a bound, so `open_total` is `null` with its reason); count row 10's
+closed half (its vocabulary IS the working tree, which every commit changes
+including the one carrying the artifact); and add the answering
+vocabularies, which overlap.
+
+## P2's finding: it did NOT decide the question it was asked to
+
+§6 P2's decision rule is the design's own: *"If no separator exists for
+most, the clarifying-question arm has nothing to ask and the
+conditional-answer arm wins by measurement."* A separator exists for **9 of
+10**, so the stop condition is not met, the clarifying-question arm is
+expressible, and **DESIGN-plain-input's conditional-versus-clarify question
+stays open for slice 2 to settle on other grounds.** §13 routes P2's answer
+to DISCOVERIES only *"if it decides the question"*; it did not, so
+DISCOVERIES gets nothing from P2.
+
+And the separation is cheap, which the artifact says in its own answer: a
+reading IS an admitted command, so serving it is already the distinguishing
+evaluation. **Expressibility is not answerability** — whether a person could
+ANSWER the clarifying question a separator licenses is not measured here.
+
+Two collapses are worth keeping. **p02 collapsed completely**: the offline
+boot forces `retrieve.wordnet` OFF, so the dictionary reading and the corpus
+reading serve identical bytes. The reading is kept and marked
+`row_served_on_this_boot: false` rather than dropped, because a seal that
+avoided the gated row would be a seal chosen to read well. **p03's two
+`twin` readings collapsed**: de Morgan in the logic corpus and in the
+set-theory corpus land in the same twin group, so those two readings are one
+answer.
+
+### The live defect P2 found on the served surface
+
+Handed the raw prose, today's system **silently bound 2 of 10 prompts** —
+p04 (*"cosine of a double angle"*) and p10 (*"the quadratic formula with
+a=1 b=-3 c=2"*) — to one reading, status `found`, **without saying it had
+chosen**. Eight exhausted or waited, honestly. Those two are a
+served-surface honesty defect on the resolver row, not a hypothetical: the
+person is handed an answer to a question they did not unambiguously ask,
+with nothing in the receipt saying a choice was made. **Filed in BACKLOG
+with both prompt ids as the repair's fixtures.** It is slice-2 territory —
+the supposition machinery is the intended repair — and it is filed, not
+fixed, in this commission.
+
+## The three runs, and why there are three
+
+| | B10 | baseline | B6 | R1 |
+|---|---|---|---|---|
+| run 1 `session_ledger_run.json` | **RED**, 10/260 | RED (broken comparator) | 21 cases vs floor 30 | **FAILS** |
+| run 2 `session_ledger_run2.json` | **RED**, the same 10 | GREEN, 0/58 | 42 cases | **FAILS** |
+| run 3 `session_ledger_run3.json` | **GREEN**, 0/260 | GREEN, 0/58 | 42 cases | **HOLDS** |
+
+**Run 1** was half B's first execution. B10 read red on ten uncited turns,
+all the line `retract a999`: the refusal for an id the session does not hold
+rendered one way with a ledger attached and another without, which is the
+ledger's *existence* reaching the bytes of an answer that consumed no
+assumption. §11's stop condition applied and the slice stopped before
+serving.
+
+**Run 2** was a supplementary run under §4.0(1)'s instrument-gap half,
+registered by prereg amendment 2 and dated before it. Reading run 1 had
+exposed three defects in the *runner*: the capability-blind baseline
+compared the stateless replay against the **recorded** digest instead of
+against the stateless replay of the unmutated journal, so it measured
+statelessness rather than mutation-response and would have reported the same
+58 with a no-op mutation; B6's generator took at most one case per half-B
+session against 25 sessions, giving it a **ceiling of 25 below its own floor
+of 30** — §4.0(3)'s unmeetable-floor defect appearing inside the instrument;
+and every zero-flip verdict checked its numerator and never its denominator,
+which is this cycle's recurring catch, found inside the run meant to be
+watching for it. All three repaired. B10 read red again, as a reading
+should.
+
+**Run 3** is the repair run, registered by prereg amendment 3. The
+maintainer adjudicated B10's red a **construction defect in the object**
+rather than an unfavourable control reading — the §8 controls all held, so
+there was no voided control for the no-chase rule to protect — and the
+governing precedent is the suite gate itself: red, fix the defect, fresh run
+at the fixed tree, every receipt retained. Two candidate fixes were written
+down before either was coded, and **(a) was chosen**: §3 fixes a citation as
+a read barrier on `normal_form` access and the unknown-id arm reads the id
+index, so **(b) — have the refusal cite what it read — would have widened
+the citation contract mid-cycle**, and a citation would no longer have meant
+the answer consumed a premise.
+
+### The sweep, and the limit it published
+
+Before re-running, an AST walk over every `_route_*` function collected
+reads of session-mutable `CoreSession` fields. Four hits, all adjudicated in
+amendment 3: `_route_retract` (the defect, repaired); `_route_suppose`'s
+`assumption_budget` refusal (already disarmed by construction — the protocol
+caps live assumptions at 8, so a recorded session never declares a ninth);
+`_route_dispatch`'s `session_id` read (**checked and clean**, verified by
+serving one line into two sessions with different ids and comparing); and
+the resolver ASK subloop, which is **pre-existing session state, not ledger
+state, and is NOT repaired**. A `narrow` or `cancel` line renders
+differently depending on whether a candidate set is pending — exactly what
+§12 suspends for this cycle. No recorded session contains such a turn, so
+**B10's denominator never meets one**, and B10's green covers the ledger's
+state and not the resolver ASK's. That is a real limit on what B10 proves,
+published rather than left to be discovered.
+
+### The repair delta, and a registered expectation that missed
+
+Amendment 3 registered, before the re-recording, that **exactly ten turn
+digests would move**. **Zero did**, and the miss is the interesting part: a
+recorded session always has a ledger attached, so `retract a999` always took
+the unknown-id arm and always rendered the string fix (a) chose to *keep*.
+What moved was the **stateless side** of B10's comparison, which is in no
+journal. The corpus was recorded again anyway, and had to be: `harness.py`
+is in `RENDERING_MODULES`, so `rendering_module_digests` moved on all 60
+headers, and a journal carrying the old pin would be refused
+`stale-environment` by B3's own machinery on every replay. The pre-repair
+seal is retained at `experiments/session_corpus_seal_pre_repair.json`; the
+counts, sessions, floors and A/B split are unchanged and checked.
+
+## Run 3's readout in full
+
+| clause | verdict | evidence |
+|---|---|---|
+| B1 cl.2 | GREEN | 120 sealed files, 0 edits |
+| B1 cl.1 | **MISSED** | the replayer was committed before the seal; both git hashes published. B1's order guards against a replayer fitted to a frozen corpus; the order taken gives that in a *stronger* form while giving up the mirror guard — that a corpus not be authored to suit an existing replayer. **The corpus was authored after the replayer, by the same hand.** Not reinterpreted by a green run, and R1-exempt by the prereg's own text |
+| B2 | GREEN | 410/410 turns, 19.4 s against a 30-minute budget |
+| B3 | GREEN | 300 perturbations — every pin field on every journal, no sampling |
+| B4 | GREEN | 58/58 binding-dependent turns responded; **30 by typed conflict refusal** |
+| B5 | GREEN | 60 sham assumptions, 0 flips, denominator met |
+| B6 | GREEN | 42 cases against a floor of 30, 0 flips, denominator met |
+| B7 | GREEN | 70 refusal turns, every one receipted with an explicit citation list |
+| B8 | GREEN | 20/20 against a chain-repairing adversary; all 20 caught by the keyed MAC **and** all 20 by the out-of-band seal. The unrepaired arm also caught 20 and is reported as not a substitute |
+| B9 | **NEVER** | slice 2 does not exist; its absence is recorded, not inferred |
+| B10 | GREEN | 0 misses of the same 260 uncited turns run 1 asked about |
+| B11 | GREEN | `check_regeneration` exit 0; the seal's digests revalidate |
+| B12 | GREEN | 410 turns, 0 uncorroborated citations |
+| B13 | 20/20 | floor 16 |
+| baseline | GREEN | 58 B4 cases, **0 responses** — §8's *"cannot respond, by construction, not by hope"* |
+| voiding sentence | **DID NOT FIRE** | no B5 or B6 flip, in any of the three runs |
+| **R1** | **HOLDS** | all seven clauses |
+
+**B13 is 20/20 and the artifact says why that is weak.** All twenty drawn
+cases are the same shape — an arithmetic line whose free names are bound
+entirely by the cited assumption — because that is what the corpus contains,
+and a corpus of one shape is the condition under which B13 has the **least**
+power to find what it exists to find. 20/20 does not *measure* §11's
+cited-but-inert residual; it fails to find it where it was unlikely to
+occur. **The residual ships NAMED, not measured.** The auditor is the
+implementer, and the marks file says so before it says anything else: a
+seeded blind draw does not make a self-audit independent, it makes it
+unsteerable turn by turn, which is less.
+
+## What is served, and where it lives
+
+§9's sentence exactly, and nothing more: **recorded sessions replay, and
+conditional answers name the assumptions they consumed.**
+
+**No surface was invented.** DESIGN-session-ledger names no capability-sheet
+row, no route and no status for slice 1 — the sheet's registered-run rows
+exist for realization, conformance and the foreign voice because *those*
+designs asked for them. This claim lives in `session_ledger_run3.json` and
+in `tests/test_session_ledger.py`, and §13 routes the numbers here. The one
+surface that did change is the `retract <assumption-id>` grammar row the
+Assumption status alphabet required, and on the chat skin it always refuses:
+¶DEV-1 replays every request into a fresh session and attaches no assumption
+set.
+
+**§12's suspension ends by this gate's own verdict.** State is a shipped
+property of the harness session, and B10 is the fence that makes the answer
+honest — with its scope the ledger's state and not the resolver ASK's.
+
+**Not claimed:** correctness (sessions are *reproducible* — a wrong answer
+replays as faithfully as a right one), cross-session or cross-person memory,
+portability beyond this workstation, and any stranger-usability claim. P3's
+sessions are maintainer-authored, which is precisely what makes the floor
+meetable by construction — and the prereg puts that non-claim beside the
+meetability argument rather than at the end of a list.

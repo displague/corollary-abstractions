@@ -785,7 +785,64 @@ SUPPLEMENTARY = {
 }
 
 
-def run(repo_root: Path, *, supplementary: bool = False) -> dict:
+REPAIR_RUN = {
+    "is_the_repair_run": True,
+    "authority": (
+        "maintainer adjudication, recorded in "
+        "experiments/session_ledger_prereg.json amendment 3, dated before the "
+        "repair was written: B10's red was a CONSTRUCTION DEFECT IN THE "
+        "OBJECT, not an unfavourable control reading. The §8 controls — B4, "
+        "B5, B6 and the voiding sentence — all held in runs 1 and 2, so there "
+        "was no voided control for the no-chase rule to protect. The "
+        "governing precedent is the suite gate itself (v0.20's gate runs 1 "
+        "and 2): red, fix the defect, fresh run at the fixed tree, every "
+        "receipt retained."
+    ),
+    "supersedes_nothing": (
+        "experiments/session_ledger_run.json and "
+        "experiments/session_ledger_run2.json are retained unedited. This is "
+        "a third artifact, not a replacement for either."
+    ),
+    "what_was_repaired": (
+        "harness._route_retract's unknown-id arm rendered one detail string "
+        "with a ledger attached and another without, on a turn that cites "
+        "nothing — the ledger's EXISTENCE reaching the bytes of an answer "
+        "that consumed no assumption. Fix (a) of amendment 3: the arm stops "
+        "decorating itself with ledger state and renders the same true and "
+        "sufficient sentence either way. Fix (b) — have the refusal cite what "
+        "it read — was declined in writing because §3 fixes a citation as a "
+        "read barrier on normal_form access, and this arm reads the id index."
+    ),
+    "what_did_not_move": (
+        "the sealed corpus. The same 60 authored sessions, lines, ids, "
+        "protocol, caps and A/B split; the same counts and the same floors. "
+        "The journals were recorded again ONLY because harness.py is a "
+        "rendering module, so the rendering_module_digests pin moved and a "
+        "journal carrying the old pin would be refused `stale-environment` "
+        "by B3's own machinery. The pre-repair seal is retained at "
+        "experiments/session_corpus_seal_pre_repair.json and the new seal "
+        "publishes the delta."
+    ),
+    "the_delta_and_its_missed_expectation": (
+        "amendment 3 registered, before the recording, that EXACTLY ten turn "
+        "digests would move — B10's ten. ZERO moved, and the seal's "
+        "repair_delta says why: a recorded session always has a ledger, so "
+        "`retract a999` always took the unknown-id arm and always rendered "
+        "the string fix (a) chose to KEEP. What moved was the stateless side "
+        "of B10's comparison, which is not in any journal. The expectation "
+        "missed, the miss is published rather than absorbed, and what it "
+        "cost is nothing: the two sides agree, which is what B10 asks."
+    ),
+    "one_repair_only": (
+        "registered in amendment 3: if this run shows ANY new red it is "
+        "committed and reported and no second repair is attempted."
+    ),
+}
+
+
+def run(
+    repo_root: Path, *, supplementary: bool = False, repair: bool = False
+) -> dict:
     from resolver import default_index  # noqa: PLC0415
     from session_keys import SessionKeyRing  # noqa: PLC0415
 
@@ -874,12 +931,46 @@ def run(repo_root: Path, *, supplementary: bool = False) -> dict:
         "b12_corroborated": b12["verdict"] == "GREEN",
         "b13_at_or_above_16_of_20": b13["marked_yes"] >= 16,
     }
+    holds = all(r1_clauses.values())
     r1 = {
         "clauses": r1_clauses,
-        "verdict": "HOLDS" if all(r1_clauses.values()) else "FAILS",
+        "verdict": "HOLDS" if holds else "FAILS",
         "served_claim_if_it_holds": prereg["result_gate"][
             "served_claim_if_R1_holds_verbatim"
         ],
+        "served": holds,
+        "where_the_claim_lives": (
+            "in this artifact and in tests/test_session_ledger.py, and "
+            "nowhere else. DESIGN-session-ledger names NO served surface for "
+            "slice 1 — no capability-sheet row, no route, no status. The "
+            "sheet's registered-run rows exist for realization, conformance "
+            "and the foreign voice because those designs named them; this one "
+            "did not, and inventing a surface the design did not ask for "
+            "would be shipping more than the gate licensed. §13 routes the "
+            "numbers to ANALYSIS, which is where they go."
+            if holds
+            else "nowhere. R1 failed and §9 is explicit: R1 failing on any "
+            "clause serves nothing and publishes the readout."
+        ),
+        "nothing_more": (
+            "§9's own words. The claim is byte-dependence and replay. It is "
+            "not correctness, not cross-session memory, not portability "
+            "beyond this workstation, and not a claim about anyone's sessions "
+            "but the maintainer's."
+        ),
+        "the_suspended_habit_ends_here": (
+            "§12 suspended the stateless one-line-in-one-answer-out rule for "
+            "this cycle and said the suspension ends at the v0.21 gate by "
+            "that gate's own verdicts. It holds: state is a shipped property "
+            "of the harness session, and B10 is the fence that makes the "
+            "answer honest — 260 uncited turns render byte-identically to "
+            "stateless service. B10's scope is the LEDGER's state and not the "
+            "resolver ASK subloop's, which the sweep in prereg amendment 3 "
+            "names and no recorded session exercises."
+            if holds
+            else "§12's suspension does not end in a shipped property: the "
+            "gate's own verdicts withheld it."
+        ),
     }
 
     return {
@@ -899,6 +990,7 @@ def run(repo_root: Path, *, supplementary: bool = False) -> dict:
         "seeds": seeds,
         "elapsed_seconds": round(time.time() - started, 1),
         **({"supplementary": SUPPLEMENTARY} if supplementary else {}),
+        **({"repair_run": REPAIR_RUN} if repair else {}),
         "construction_gate": {
             "B1": b1,
             "B2": b2,
@@ -1151,6 +1243,14 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     ap.add_argument(
+        "--repair-run",
+        action="store_true",
+        help=(
+            "mark the artifact as the repair run registered by prereg "
+            "amendment 3, and name what was repaired and what did not move"
+        ),
+    )
+    ap.add_argument(
         "--draw-only",
         action="store_true",
         help="publish B13's draw and stop, so the auditor marks a sealed sheet",
@@ -1166,7 +1266,9 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(draw, indent=2, sort_keys=True))
         return 0
 
-    payload = run(REPO, supplementary=args.supplementary)
+    payload = run(
+        REPO, supplementary=args.supplementary, repair=args.repair_run
+    )
     out = REPO / args.out
     out.write_text(
         json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
