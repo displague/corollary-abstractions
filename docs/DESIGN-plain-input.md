@@ -676,3 +676,69 @@ is primed — so naming it is itself an act the voice design must ratify.
 - **No claim on v0.20's scope.** This seed waits for the v0.21 course by
   design, and §2's census of the committed tree is its entire evidence
   budget until then.
+
+## 8. Notes added after the seed — append-only
+
+Nothing above this line is edited. A seed whose prose is repaired after it
+is measured teaches the reader nothing about what it originally claimed,
+and this document's own §3d complains about exactly that class of quiet
+rewrite. So corrections arrive here, dated, quoting the sentence they
+correct.
+
+### 8.1 §4's Phase-2 argument was measured false, and the build exceeded it (2026-08-26)
+
+**The sentence corrected.** §4's first question offers this defence of the
+Phase-2 claim: *"Either argue the boundary holds (the bound is on the
+**output** alphabet, not the input) or concede the design is Phase 6
+arriving early and price it accordingly."* §3's item 1 states the same
+argument positively: *"Its entire output alphabet is the registered line
+grammar … A candidate is a **string that route_line already accepts**."*
+
+**What measured it false.** Slice 1's construction prerequisite P1
+(`experiments/session_p1_command_bound.json`) enumerated the registered
+grammar class by class. Of **fifteen** template classes, **five are closed**
+(34,863 admitted commands between them), **one is gated**, and **nine admit
+countably infinite languages** — and two of those nine, the resolver row and
+the complement row, are exactly where plain prose lands. P1's own finding
+says it: *"an enumerating proposer has a finite target only because the
+committed material is finite, never because the grammar is."* So *"route_line
+accepts it"* is a **parse check**, not membership in a finite set, and a
+proposer free to emit any accepted string has an **unbounded** output
+alphabet. On the design's own argument, the Phase-2 claim would be false.
+
+**What the implementation did instead, which is stronger.** The proposer
+**never emits a query string at all.** Exact code
+(`scripts/candidate_enumerator.py`) enumerates a finite candidate list from
+committed material under `data/` only, and the model's entire output
+alphabet is an **index into that list**, plus the token `NONE`
+(`scripts/plain_proposer.py`). The list is capped at 8 and totally ordered,
+both frozen in `experiments/plain_input_prereg.json` amendment 1. Selection
+cannot reach a string that was not enumerated, so Phase 2 holds **by
+construction** rather than by argument — and it is this repository's own
+doctrine read literally: the residual *"ranks labels of candidates, it does
+not invent candidates from ℝ^d prose space"*
+(`docs/DESIGN-language-as-structure.md:465-466`).
+
+**Why this note exists rather than an edit.** The design was right about the
+disposition (Phase 2) and wrong about the reason. A reader who only met the
+repaired reason would never learn that the repository's grammar is not
+finite, which is the more useful fact and the one that constrains every
+later proposer. Registered in full at
+`experiments/plain_input_prereg.json` → `section_4_questions_answered.q1_phase_2_or_phase_6`.
+
+### 8.2 §5's G9 was adjudicated NOT MET, and the defect it named is one row upstream (2026-08-26)
+
+G9 is not a clause of this document — it was added by the slice-2
+preregistration — but the **limit it exposes belongs to this design**, and a
+reader of §2.2's placement rule should meet it here. §2.2 confines the
+proposer to *"a pre-router for row 12 only, and nothing else"*. Row 12 is
+the row where **nothing binds**. The silent binding P2 measured happens at
+the **resolver**, an earlier row that §5's G4 protects by name. Measured on
+the sealed thirty questions: **13 of 30 return `found` from the resolver
+before the proposer is consulted at all**.
+
+So this design can convert exhaustions into conditionals — §3b's whole safe
+move — and it **cannot** touch a reading the resolver already took silently.
+The adjudication, its reasons, and the ruling that fixed it are in
+`experiments/plain_input_prereg.json` amendments 3 and 4; the defect is
+filed in `docs/BACKLOG.md` with the thirteen question ids as its fixtures.

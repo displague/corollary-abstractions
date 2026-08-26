@@ -291,6 +291,58 @@
       },
       "and_the_finding_that_comes_with_it": "13 of 30 maintainer-authored plain questions are ALREADY bound by the resolver at `found`. That is a larger number than P2's 2-of-10 suggested, measured on a bigger set, and it says the silent-binding surface is wider than the fixtures. It is published here rather than left inside the run.",
       "what_it_changes": "no gate text, no floor, no voiding sentence. G9's verdict is adjudicated in advance of the run as NOT MET, with the reason, so the run reports it rather than discovering it."
+    },
+    {
+      "amendment": 4,
+      "dated": "2026-08-26",
+      "made_before": "the slice-2 corpus is recorded and before any gate of the registered run is scored. Amendment 3 adjudicated G9 from inside the lane; this amendment records the ORCHESTRATOR'S RULING on that adjudication, which is an authority the lane does not hold over itself.",
+      "subject": "G9's disposition, the defect's custody, and one requirement placed on R2's licensing text.",
+      "the_ruling_verbatim": "G9 is adjudicated NOT MET for this slice by orchestrator ruling. The slice's proposer path makes its own choosing explicit; the resolver's pre-emptive binding (13 of 30, measured, upgrading P2's 2-of-10) is the standing defect, published with its mechanism, and its repair is a designed successor requiring its own prereg + control + K re-measurement — filed in BACKLOG with the 13 question ids as fixtures, superseding the p04/p10 entry (dated supersession note there, not deletion).",
+      "why_it_is_quoted_rather_than_summarized": "house style: the direction is quoted so the authority is visible (ROADMAP-v0.21 §4.0's own convention when it quoted the maintainer's 'some of these are too restrictive and block progress'). A ruling paraphrased by the lane it rules on is a ruling the lane could soften without anyone noticing.",
+      "what_it_settles_that_amendment_3_could_not": {
+        "amendment_3_reached": "G9 NOT MET, and not repaired inside this slice — an adjudication the implementing lane made about a gate the implementing lane's own preregistration had added.",
+        "the_ruling_adds": "that the disposition stands as a RULING rather than as a self-assessment, that the defect's custody moves to BACKLOG with thirteen fixtures rather than two, and that the successor's shape is named in advance: its own prereg, its own capability-blind control, and a throughput re-measurement.",
+        "why_a_K_re_measurement_is_named": "the resolver row is inside the serving path the throughput book scores. `conditional` provably cannot move K — G7b is the line of code — but a changed BIND RULE at the resolver row can, and a successor that does not re-measure would be moving a sealed denominator quietly. Named here so the successor inherits the obligation rather than discovering it."
+      },
+      "the_thirteen_fixtures": {
+        "measured_how": "every question in the sealed experiments/plain_question_set.json served through a fresh offline CoreSession with the proposer attached; the route and status of each verdict recorded.",
+        "question_ids": [
+          "g1-03",
+          "g1-05",
+          "g1-06",
+          "g1-07",
+          "g1-10",
+          "g1-12",
+          "g1-14",
+          "g1-15",
+          "g1-17",
+          "g1-18",
+          "g1-19",
+          "g1-20",
+          "g1-22"
+        ],
+        "count": 13,
+        "and_five_more_that_are_pre_empted_but_not_silently": {
+          "question_ids": [
+            "g1-01",
+            "g1-11",
+            "g1-16",
+            "g1-21",
+            "g1-27"
+          ],
+          "why_they_are_reported_separately": "the resolver returned `waiting`, not `found`. Its ASK subloop names its alternatives, so those five are pre-empted from the proposer WITHOUT being silently bound. Folding them into the thirteen would inflate the defect; leaving them out of the artifact entirely would hide that the proposer's reachable share is twelve and not seventeen.",
+          "count": 5
+        },
+        "reaching_the_proposer": 12,
+        "and_these_three_numbers_are_never_summed": "13 + 5 + 12 = 30 is arithmetic, not a finding. Each subset is a different denominator for a different gate and the seal publishes them separately for that reason."
+      },
+      "the_requirement_placed_on_R2": {
+        "clause": "R2's licensing text must carry the G9 limit IN THE SAME SENTENCE that claims the capability.",
+        "the_pattern_it_reuses": "slice 1's B10 scope limit, which reads 'B10's scope is the LEDGER's state and not the resolver ASK subloop's, which the sweep in prereg amendment 3 names and no recorded session exercises' (experiments/session_ledger_run4.json result_gate). A limit in an adjacent field is a limit a quoter drops; a limit inside the sentence travels with the claim.",
+        "why_this_is_registered_rather_than_left_to_the_writer": "the claim will be quoted in a release note by someone who did not run the gate. The sentence is the unit that gets copied."
+      },
+      "what_it_changes": "no gate text, no floor, no voiding sentence, no standard, and no served behaviour. It fixes G9's verdict as a ruling, moves the defect's custody with thirteen fixtures instead of two, and constrains one sentence of R2's licensing text.",
+      "and_what_it_explicitly_does_not_license": "any claim that slice 2 repairs the silent binding. It does not, and DESIGN-plain-input §8.2 says so inside the design itself."
     }
   ]
 }

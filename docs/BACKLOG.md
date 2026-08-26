@@ -59,6 +59,66 @@ or commit history. Each item names the evidence that motivated it.
   alternatives. **Re-running the probe re-measures it**: the number to move
   is `aggregate.raw_prompts_silently_bound_today`, currently **2**.
 
+  > **SUPERSEDED 2026-08-26 by the entry below, and not deleted.** Slice 2
+  > was built, wired and served, and it **cannot reach this defect**: its
+  > proposer is confined by DESIGN-plain-input §2.2 to row 12 — the row
+  > where nothing binds — and the silent binding happens at the resolver,
+  > an earlier row that G4's quarantine protects by name. Serving all
+  > thirty of the sealed plain questions measured the surface wider than
+  > this entry's two fixtures suggested: **13 of 30 come back `found` from
+  > the resolver before the proposer is consulted at all**, and p04's and
+  > p10's own utterances are among the thirteen. The two fixtures stay
+  > valid and stay sealed; the entry that carries the work forward is the
+  > next one, with thirteen. Deleting this one would erase the smaller
+  > measurement that found the defect first, and a superseded record that
+  > is removed teaches nothing about how the estimate moved.
+  > Evidence: `experiments/plain_input_prereg.json` amendments 3 and 4.
+
+- **The resolver's pre-emptive binding is the standing defect, and its repair
+  is a designed successor (2026-08-26, superseding the entry above).** Filed
+  with thirteen committed fixtures and the mechanism published, per the
+  orchestrator's ruling recorded verbatim in
+  `experiments/plain_input_prereg.json` amendment 4.
+
+  **The measurement.** Every question in the sealed
+  `experiments/plain_question_set.json` served through a fresh offline
+  `CoreSession`, proposer attached. Thirteen returned `found` from the
+  **resolver**, before `_route_proposed` was consulted:
+  `g1-03`, `g1-05`, `g1-06`, `g1-07`, `g1-10`, `g1-12`, `g1-14`, `g1-15`,
+  `g1-17`, `g1-18`, `g1-19`, `g1-20`, `g1-22`. Five more (`g1-01`, `g1-11`,
+  `g1-16`, `g1-21`, `g1-27`) were pre-empted at `waiting` by the resolver's
+  own ASK subloop, which at least names its alternatives. Twelve reached the
+  proposer. **The thirteen are the fixtures**; they are committed, in order,
+  in a file whose commit is an ancestor of every proposer commit on this
+  branch.
+
+  **Why the obvious repairs are refused rather than untried.** Moving the
+  proposer ahead of the resolver breaches G4 — *"a single differing verdict
+  voids the whole reading"* — which is the gate that makes the rest of
+  DESIGN-plain-input believable. Giving the resolver's BIND verdict a
+  receipt naming its choice is technically safe (checked, not assumed:
+  `harness.render_verdict` does not render `receipt`, the chat skin's
+  `_resolution_receipt` builds its own from the answer lines, and the
+  throughput book holds zero resolver-route tasks) but a receipt is neither
+  a supposition label nor a clarification, so accepting it would be meeting
+  a gate by re-reading it after seeing what was reachable.
+
+  **What a successor owes, stated so it is scheduled rather than wished
+  for.** A design that may touch the resolver row needs (1) its **own
+  preregistration**, (2) its **own capability-blind control**, because G5's
+  control is scoped to selection among enumerated candidates and says
+  nothing about a changed bind rule, and (3) a **K re-measurement**: the
+  resolver row is inside the serving path the throughput book scores, so a
+  changed bind rule can move a sealed denominator that slice 2's
+  `conditional` status provably cannot. Slice 2's own G4 does not transfer;
+  the successor needs a new one written against whatever rows it moves.
+
+  **What is NOT claimed, anywhere, because of this.** That slice 2 repairs
+  the silent binding. It does not. Any release note quoting P2's defect
+  beside slice 2 must say the defect is unrepaired, and slice 2's own R2
+  licensing sentence carries the limit in the same sentence that claims the
+  capability.
+
 ## Filed at the v0.20 rotation (the voice completed, the course, the drift audit)
 
 - **`leanworkbook.skel.lean_workbook_50397` needs a seed regeneration, and no

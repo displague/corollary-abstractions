@@ -797,6 +797,163 @@ class TheWiring(unittest.TestCase):
         )
 
 
+class TheOrchestratorsRulingOnG9(unittest.TestCase):
+    """Amendment 4 — the ruling, its fixtures, and where they were filed.
+
+    Amendment 3 adjudicated G9 from inside the lane. This class holds the
+    RULING that fixed that adjudication from outside it, and it holds the
+    three places the ruling sends the consequences: the prereg, the design's
+    append-only notes, and BACKLOG's custody of the defect.
+    """
+
+    #: The thirteen, in the order the sealed question set lists them. Typed
+    #: here as well as in the artifacts so a re-measurement that MOVED the
+    #: number cannot pass quietly: this list is what the ruling was made on.
+    THIRTEEN = (
+        "g1-03", "g1-05", "g1-06", "g1-07", "g1-10", "g1-12", "g1-14",
+        "g1-15", "g1-17", "g1-18", "g1-19", "g1-20", "g1-22",
+    )
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        cls.amendment = next(
+            a for a in cls.prereg["amendments"] if a["amendment"] == 4
+        )
+        cls.backlog = _flat(
+            (REPO / "docs" / "BACKLOG.md").read_text(encoding="utf-8")
+        )
+        cls.plain = _flat(PLAIN.read_text(encoding="utf-8"))
+
+    def test_the_ruling_is_recorded_verbatim(self) -> None:
+        """Quoted, because a ruling the ruled lane paraphrases is a ruling
+        the lane could soften."""
+
+        ruling = self.amendment["the_ruling_verbatim"]
+        self.assertIn("G9 is adjudicated NOT MET for this slice by "
+                      "orchestrator ruling.", ruling)
+        self.assertIn("13 of 30, measured, upgrading P2's 2-of-10", ruling)
+        self.assertIn(
+            "its own prereg + control + K re-measurement", ruling
+        )
+        self.assertIn(
+            "dated supersession note there, not deletion", ruling
+        )
+
+    def test_the_thirteen_fixtures_are_the_measured_thirteen(self) -> None:
+        block = self.amendment["the_thirteen_fixtures"]
+        self.assertEqual(tuple(block["question_ids"]), self.THIRTEEN)
+        self.assertEqual(block["count"], 13)
+        self.assertEqual(block["reaching_the_proposer"], 12)
+        self.assertEqual(
+            len(block["and_five_more_that_are_pre_empted_but_not_silently"]
+                ["question_ids"]),
+            5,
+        )
+
+    def test_the_thirteen_are_what_the_committed_tree_actually_does(
+        self,
+    ) -> None:
+        """The clause that CAN go red — and would, the day a resolver
+        change moved the surface this ruling was made against.
+
+        ROADMAP-v0.21 §4.0's standing review question is *'a green
+        assertion that could not have gone red is not evidence'*. Comparing
+        the amendment's list against a list typed beside it would be that
+        assertion. This one re-serves the sealed questions and compares.
+        """
+
+        from harness import CoreSession, route_line  # noqa: PLC0415
+        from resolver import default_index  # noqa: PLC0415
+
+        questions = json.loads(
+            (REPO / "experiments" / "plain_question_set.json").read_text(
+                encoding="utf-8"
+            )
+        )["questions"]
+        index = default_index()
+        found = []
+        for item in questions:
+            session = CoreSession.boot(REPO, offline=True)
+            session.resolver_index = index
+            verdict = route_line(REPO, session, item["question"])
+            if verdict.get("status") == "found":
+                found.append(item["question_id"])
+        self.assertEqual(tuple(found), self.THIRTEEN)
+
+    def test_the_backlog_supersedes_rather_than_deletes(self) -> None:
+        """Both entries stand: the two-fixture one, marked, and the
+        thirteen-fixture one that carries the work."""
+
+        self.assertIn("SUPERSEDED 2026-08-26", self.backlog)
+        self.assertIn(
+            "aggregate.raw_prompts_silently_bound_today", self.backlog,
+            "the superseded entry was deleted rather than marked",
+        )
+        self.assertIn("`p04`", self.backlog)
+        for question_id in self.THIRTEEN:
+            self.assertIn(
+                f"`{question_id}`", self.backlog,
+                f"{question_id} is a filed fixture and is not in BACKLOG",
+            )
+
+    def test_the_successor_s_three_obligations_are_filed(self) -> None:
+        self.assertIn("its **own\npreregistration**".replace("\n", " "),
+                      self.backlog)
+        self.assertIn("own capability-blind control", self.backlog)
+        self.assertIn("K re-measurement", self.backlog)
+
+    def test_r2_must_carry_the_limit_in_the_claiming_sentence(self) -> None:
+        clause = self.amendment["the_requirement_placed_on_R2"]
+        self.assertIn("IN THE SAME SENTENCE", clause["clause"])
+        self.assertIn("B10", clause["the_pattern_it_reuses"])
+
+
+class TheDesignsAppendOnlyNotes(unittest.TestCase):
+    """§8 — added after the seed, never editing what it corrects."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.raw = PLAIN.read_text(encoding="utf-8")
+        cls.flat = _flat(cls.raw)
+
+    def test_section_4s_phase_2_argument_is_marked_measured_false(
+        self,
+    ) -> None:
+        self.assertIn("8.1", self.flat)
+        self.assertIn(
+            "nine admit countably infinite languages", self.flat
+        )
+        self.assertIn("index into that list", self.flat)
+
+    def test_the_original_prose_is_untouched(self) -> None:
+        """The sentence §8.1 corrects must still be in §4, unedited.
+
+        An append-only note whose subject quietly moved is a note about
+        nothing.
+        """
+
+        self.assertIn(
+            "Either argue the boundary holds (the bound is on the "
+            "**output** alphabet, not the input) or concede the design is "
+            "Phase 6 arriving early and price it accordingly.",
+            self.flat,
+        )
+        self.assertIn(
+            "A candidate is a **string that route_line already accepts**",
+            self.flat,
+        )
+
+    def test_the_note_appears_after_the_prose_it_corrects(self) -> None:
+        self.assertLess(
+            self.raw.index("## 4. Questions the course must answer"),
+            self.raw.index("## 8. Notes added after the seed"),
+        )
+
+    def test_the_g9_limit_is_stated_inside_the_design(self) -> None:
+        self.assertIn("13 of 30 return `found` from the resolver", self.flat)
+
+
 class _StubVerified:
     """A Verified stand-in, so the shape tests need no model."""
 
