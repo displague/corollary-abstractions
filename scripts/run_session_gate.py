@@ -219,13 +219,33 @@ def score_b2(seal: dict, pins: dict, index) -> dict:
                 "turns_total": report.turns_total,
                 "turns_reproduced": report.turns_reproduced,
                 "first_divergence_turn": report.first_divergence_turn,
+                "refusal": report.refusal,
+                "pin_mismatch": list(report.pin_mismatch),
                 "divergences": report.divergences,
             }
         )
     elapsed = round(time.time() - started, 1)
     misses = [row for row in per_session if row["first_divergence_turn"] is not None]
+    refused = [row for row in per_session if row["refusal"]]
+    # B2's verdict watches the VALUE of its numerator, not only the shape of
+    # its miss list. Found 2026-08-26 by accident, and it is the cycle's own
+    # recurring catch a third time: a citation edit to harness.py moved the
+    # `rendering_module_digests` pin, every replay refused
+    # `stale-environment`, and B2 reported **GREEN having reproduced 0 of
+    # 410 turns** — because a refusal produces no per-turn divergence and
+    # the verdict only counted divergences. "Every turn the seal records"
+    # means every turn, and zero is not every.
+    complete = total > 0 and reproduced == total
     return {
-        "verdict": "GREEN" if not misses else "RED",
+        "verdict": "GREEN" if (complete and not misses and not refused) else "RED",
+        "sessions_that_refused": refused,
+        "why_a_refusal_is_red_here": (
+            "B2 asks that unmutated replay reproduce `answer_bytes_digest` "
+            "for EVERY turn the seal records. A stale-environment refusal "
+            "reproduces none of them. It is an honest refusal and a correct "
+            "one — B3 exists to make it happen — but it is not B2 passing, "
+            "and until 2026-08-26 this scorer said it was."
+        ),
         "denominator": total,
         "denominator_source": "the seal's own turn count, not a round number",
         "turns_reproduced": reproduced,
@@ -584,11 +604,26 @@ def score_b12(seal: dict) -> dict:
         "verdict": "GREEN" if not misses else "RED",
         "turns_checked": total,
         "uncorroborated": misses,
-        "how_the_two_sides_are_independent": (
-            "the journal's citation list is a per-turn snapshot taken by "
-            "session_ledger.write_journal's caller at turn close; the read "
-            "log is written by session_ledger.write_read_log from the "
-            "barrier's raw event list. Different functions, different files."
+        "how_the_two_sides_are_written": (
+            "the journal's citation list is a per-turn snapshot taken at turn "
+            "close by the recorder; the read log is written by "
+            "session_ledger.write_read_log from the barrier's raw event "
+            "list. Different functions, different files."
+        ),
+        "the_boundary_of_this_corroboration": (
+            "**Both sides descend from the same in-memory ReadBarrier**, and "
+            "this field said 'independent' until independent review "
+            "corrected it (2026-08-26). What B12 corroborates is that the "
+            "JOURNAL WRITER neither dropped nor invented a citation relative "
+            "to what the barrier recorded — a real and checkable property, "
+            "and the one the design asks for when it says the read log is "
+            "'recorded independently of the journal writer'. What B12 does "
+            "NOT corroborate is the barrier itself: if the barrier recorded "
+            "the wrong thing, both sides would carry the same wrong thing and "
+            "agree. That is why the barrier is TRUSTED code under §4 rather "
+            "than a measured component, and why B4 (does the answer move when "
+            "the cited assumption moves?) is the clause that tests the "
+            "consumption the barrier claims to have seen."
         ),
     }
 
@@ -606,6 +641,32 @@ def _repair_chain(journal: dict) -> dict:
     return journal
 
 
+def _mac_ok(verify, record: dict, session_id: str, keyring) -> bool:
+    """A MAC check that answers rather than raises.
+
+    **Added 2026-08-26, from independent review.** `session_keys.derive`
+    raises `KeyRingRefusal` for an unknown, missing or revoked `key_id`
+    (`session_keys.py:406-410`), so the first version of this detector
+    CRASHED on the most obvious forgery there is: an adversary who re-signs
+    the whole journal under their own ring. The scorer died instead of
+    scoring, which is a control that cannot report the case it exists for.
+
+    A refusal to verify IS a detection, and that is the house grammar
+    rather than a convenience: `session_keys.RefusalReason` names
+    `unknown-key-id` and `revoked-key-id` alongside `signature-mismatch`,
+    and `conversation.restore` already treats all three as grounds to refuse
+    a record rather than admit it. So an unverifiable record scores as
+    detected-by-MAC, and the reason it could not be verified travels with
+    the row.
+    """
+
+    try:
+        return bool(verify(record, session_id, keyring))
+    except Exception as exc:  # noqa: BLE001 - the reason is recorded below
+        record["_mac_refusal"] = f"{type(exc).__name__}: {exc}"
+        return False
+
+
 def _detect(journal: dict, sealed_digest: str, keyring) -> dict:
     """Detection from MACs and the out-of-band seal ONLY.
 
@@ -615,19 +676,29 @@ def _detect(journal: dict, sealed_digest: str, keyring) -> dict:
     """
 
     session_id = journal["header"]["session_id"]
+    refusals: list[str] = []
+
+    def _check(verify, record, name_key):
+        ok = _mac_ok(verify, record, session_id, keyring)
+        reason = record.pop("_mac_refusal", None)
+        if reason:
+            refusals.append(f"{record.get(name_key)}: {reason}")
+        return ok
+
     mac_failures = [
         turn["turn_index"]
         for turn in journal["turns"]
-        if not ledger.verify_turn_mac(turn, session_id, keyring)
+        if not _check(ledger.verify_turn_mac, turn, "turn_index")
     ] + [
         record["assumption_id"]
         for record in journal["assumptions"]
-        if not ledger.verify_assumption_mac(record, session_id, keyring)
+        if not _check(ledger.verify_assumption_mac, record, "assumption_id")
     ]
     file_digest = ledger.text_digest(ledger.serialize(journal))
     return {
         "keyed_mac_detected": bool(mac_failures),
         "mac_failures": mac_failures,
+        "mac_refusals": refusals,
         "out_of_band_seal_detected": file_digest != sealed_digest,
         "detected": bool(mac_failures) or file_digest != sealed_digest,
     }
@@ -666,6 +737,62 @@ def score_b8(seal: dict, keyring, seed_string: str) -> dict:
             }
         )
 
+    # --- the two shapes independent review added, 2026-08-26 -------------
+    #
+    # The first B8 ran ONE tamper shape in two arms: rewrite a turn's bytes,
+    # with and without repairing the chain. Both leave the original MACs in
+    # place, so both are caught by a signature that no longer matches. The
+    # obvious forgery — an adversary who holds the FILE and re-signs the
+    # whole thing under their own ring — was never run, and when the
+    # reviewer ran it the scorer CRASHED (`KeyRingRefusal` out of
+    # `derive`). A control that dies on a case is not a control that passed
+    # it. Both shapes are added here and scored beside the registered arms.
+    from session_keys import SessionKeyRing  # noqa: PLC0415
+
+    foreign, blanked = [], []
+    foreign_ring = SessionKeyRing.ephemeral()
+    for entry in chosen:
+        original = _journal(entry)
+
+        # Shape 3 — foreign-ring re-sign. Rewrite a turn, then re-sign every
+        # record under a ring the tamperer minted. The chain is repaired too,
+        # so the file is internally perfect and self-consistent; what it is
+        # not is signed by the key the owner holds.
+        forged = copy.deepcopy(original)
+        target = rng.randrange(len(forged["turns"]))
+        forged["turns"][target]["input_bytes"] = "1 + 1"
+        _resign(forged, foreign_ring)
+        result = _detect(forged, entry["journal_digest"], keyring)
+        foreign.append(
+            {
+                "session_id": entry["session_id"],
+                "turn_index": target,
+                "shape": "foreign-ring re-sign",
+                "chain_is_internally_consistent": _chain_consistent(forged),
+                **result,
+            }
+        )
+
+        # Shape 4 — blanked MAC. Rewrite a turn and simply empty its `mac`,
+        # the laziest forgery: no key needed, and it tests that an ABSENT
+        # signature is refused rather than treated as vacuously fine.
+        stripped = copy.deepcopy(original)
+        blank_target = rng.randrange(len(stripped["turns"]))
+        stripped["turns"][blank_target]["input_bytes"] = "1 + 1"
+        stripped["turns"][blank_target]["mac"] = ""
+        stripped["turns"][blank_target]["key_id"] = ""
+        stripped = _repair_chain(stripped)
+        result = _detect(stripped, entry["journal_digest"], keyring)
+        blanked.append(
+            {
+                "session_id": entry["session_id"],
+                "turn_index": blank_target,
+                "shape": "blanked MAC and key_id",
+                "chain_is_internally_consistent": _chain_consistent(stripped),
+                **result,
+            }
+        )
+
     caught = sum(1 for row in repaired if row["detected"])
     by_mac = sum(1 for row in repaired if row["keyed_mac_detected"])
     floor = REGISTERED_DENOMINATORS["B8"]
@@ -701,7 +828,121 @@ def score_b8(seal: dict, keyring, seed_string: str) -> dict:
                 "substitute"
             ),
         },
+        "added_arms_2026_08_26": {
+            "why": (
+                "independent review found the registered arms ran ONE tamper "
+                "shape twice — rewrite a turn, with and without repairing the "
+                "chain — and that both leave the original MACs in place. The "
+                "obvious forgery, an adversary who holds the file and "
+                "re-signs it under their own ring, was never run; when the "
+                "reviewer ran it the scorer CRASHED out of "
+                "session_keys.derive rather than scoring. A control that dies "
+                "on a case has not passed that case."
+            ),
+            "authority": (
+                "ROADMAP-v0.21 §4.0(1)'s instrument-gap half. These arms are "
+                "additions to a supplementary run; runs 1-3 are untouched and "
+                "their B8 verdicts stand as they were scored."
+            ),
+            "foreign_ring_resign": {
+                "shape": (
+                    "rewrite one turn, repair the chain, then re-sign EVERY "
+                    "record under a ring the tamperer minted. The file is "
+                    "internally perfect; it is simply not signed by the "
+                    "owner's key."
+                ),
+                "cases": len(foreign),
+                "detected": sum(1 for row in foreign if row["detected"]),
+                "detected_by_keyed_mac": sum(
+                    1 for row in foreign if row["keyed_mac_detected"]
+                ),
+                "rows": foreign,
+            },
+            "blanked_mac": {
+                "shape": (
+                    "rewrite one turn and empty its `mac` and `key_id` — the "
+                    "laziest forgery, needing no key at all. It tests that an "
+                    "ABSENT signature is refused rather than treated as "
+                    "vacuously fine."
+                ),
+                "cases": len(blanked),
+                "detected": sum(1 for row in blanked if row["detected"]),
+                "detected_by_keyed_mac": sum(
+                    1 for row in blanked if row["keyed_mac_detected"]
+                ),
+                "rows": blanked,
+            },
+            "a_refusal_to_verify_is_a_detection": (
+                "session_keys.RefusalReason names `unknown-key-id` and "
+                "`revoked-key-id` beside `signature-mismatch`, and "
+                "conversation.restore already treats all three as grounds to "
+                "refuse a record rather than admit it. So an unverifiable "
+                "record scores as detected-by-MAC and the reason it could not "
+                "be verified travels with the row, in `mac_refusals`."
+            ),
+        },
     }
+
+
+def _resign(journal: dict, ring) -> None:
+    """Re-sign every record under `ring` — the tamperer's own key.
+
+    Used only by B8's foreign-ring arm. It builds the strongest forgery a
+    file-holder can build: consistent chain, valid-looking MACs, and every
+    `key_id` naming a generation the owner's ring has never heard of.
+    """
+
+    import hashlib as _h  # noqa: PLC0415
+    import hmac as _hm  # noqa: PLC0415
+
+    from session_keys import session_scope  # noqa: PLC0415
+
+    session_id = journal["header"]["session_id"]
+    key_id = ring.signing_key_id()
+    # Chain and signature are interleaved in ONE forward pass, because
+    # `prev_turn_digest` covers the previous record INCLUDING its `mac`.
+    # Repairing the chain and then re-signing leaves the chain broken again,
+    # and a forgery that is visibly broken is a forgery the arm gets credit
+    # for catching too cheaply. This builds the perfect one.
+    for record in journal["assumptions"]:
+        item = ledger.Assumption(
+            assumption_id=record["assumption_id"],
+            declared_at_turn=record["declared_at_turn"],
+            text_bytes=record["text_bytes"],
+            normal_form=tuple(record["normal_form"]),
+            status=record["status"],
+            superseded_by=record["superseded_by"],
+            key_id=key_id,
+            mac="",
+        )
+        key = ring.derive(
+            key_id, session_scope(session_id), ledger.DOMAIN_ASSUMPTION
+        )
+        record["key_id"] = key_id
+        record["mac"] = _hm.new(
+            key,
+            ledger.canonical(item.mac_payload(session_id)).encode("utf-8"),
+            _h.sha256,
+        ).hexdigest()
+    previous = ledger.header_digest(journal["header"])
+    for record in journal["turns"]:
+        record["prev_turn_digest"] = previous
+        turn = ledger.Turn(
+            turn_index=record["turn_index"],
+            input_bytes=record["input_bytes"],
+            resolution=record["resolution"],
+            assumptions_declared=tuple(record["assumptions_declared"]),
+            assumptions_cited=tuple(record["assumptions_cited"]),
+            live_set_digest=record["live_set_digest"],
+            result=record["result"],
+            receipt_digest=record["receipt_digest"],
+            prev_turn_digest=previous,
+            session_events=tuple(record["session_events"]),
+        )
+        signed = ledger.sign_turn(turn, session_id, ring, key_id)
+        record["key_id"] = signed.key_id
+        record["mac"] = signed.mac
+        previous = ledger.digest(record)
 
 
 def _chain_consistent(journal: dict) -> bool:
@@ -840,8 +1081,47 @@ REPAIR_RUN = {
 }
 
 
+def _registered_run_sentence(repo_root: Path, out_path: str) -> str:
+    """Which execution this is, DERIVED rather than asserted.
+
+    **Corrected 2026-08-26, from independent review.** This field was a
+    constant reading *"half B's first execution"*, so runs 2 and 3 both
+    published a sentence that was true only of run 1. Half B has one first
+    execution and it has already happened; a re-execution that keeps calling
+    itself the first is the kind of sentence that cannot go red.
+
+    The index is counted from the run artifacts already on disk, so the
+    sentence follows the record instead of describing an intention.
+    """
+
+    existing = sorted(
+        path.name
+        for path in (repo_root / "experiments").glob("session_ledger_run*.json")
+        if path.name != Path(out_path).name
+    )
+    index = len(existing) + 1
+    if index == 1:
+        return (
+            "half B's first execution — the registered run. Half A is scored "
+            "beside it wherever a clause is corpus-wide, and no verdict here "
+            "rests on half A."
+        )
+    return (
+        f"execution {index} on the sealed corpus. **Half B's first execution "
+        "was run 1** (experiments/session_ledger_run.json) and that artifact "
+        "is retained unedited; this one does not inherit its title. Half A is "
+        "scored beside half B wherever a clause is corpus-wide, and no "
+        "verdict here rests on half A. Prior runs on disk when this one was "
+        "written: " + ", ".join(existing) + "."
+    )
+
+
 def run(
-    repo_root: Path, *, supplementary: bool = False, repair: bool = False
+    repo_root: Path,
+    *,
+    supplementary: bool = False,
+    repair: bool = False,
+    out_path: str = ARTIFACT,
 ) -> dict:
     from resolver import default_index  # noqa: PLC0415
     from session_keys import SessionKeyRing  # noqa: PLC0415
@@ -980,10 +1260,7 @@ def run(
         "seal": SEAL,
         "slice": 1,
         "run_date": "2026-08-25",
-        "registered_run": (
-            "half B's first execution. Half A is scored beside it wherever a "
-            "clause is corpus-wide, and no verdict below rests on half A."
-        ),
+        "registered_run": _registered_run_sentence(repo_root, out_path),
         "determinism": prereg["determinism_clause"]["registered_as"],
         "runner_digest": _self_digest(),
         "recorder_code_digest": seal["recorder_code_digest"],
@@ -1267,7 +1544,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     payload = run(
-        REPO, supplementary=args.supplementary, repair=args.repair_run
+        REPO,
+        supplementary=args.supplementary,
+        repair=args.repair_run,
+        out_path=args.out,
     )
     out = REPO / args.out
     out.write_text(

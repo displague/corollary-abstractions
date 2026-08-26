@@ -333,6 +333,49 @@
         "what_stays_published": "BOTH readings' numbers stay in experiments/session_corpus_seal.json. Half B holds 25 sessions, and under the roadmap's compressed reading this cycle would have STOPPED and published 'multi-turn binding is rare in practice'. That number is not removed by the ruling; a ruling that deleted the number the other reading would have produced would make itself uncheckable."
       },
       "also_corrected_outside_this_file": "docs/ROADMAP-v0.21.md §1.1 carries a dated one-line correction, because the transcription artifact lives there and a roadmap that keeps saying the wrong thing is a roadmap the next cycle inherits."
+    },
+    {
+      "amendment": 5,
+      "dated": "2026-08-26",
+      "made_after": "runs 1, 2 and 3, on independent review of the merge candidate.",
+      "subject": "amendment 3's sweep was published with a false count. It is corrected here, and the original is not edited.",
+      "the_false_claim": {
+        "where": "amendment 3's the_sweep_before_the_rerun.findings, and the test that backed it, which asserted the set of ledger-reading routes was exactly {_route_suppose, _route_retract}.",
+        "what_it_said": "that two `_route_*` functions read the assumption ledger.",
+        "what_is_true": "THREE routes reach the ledger. `_route_evaluate` reaches it through the helper `_live_bindings`, one call away (harness.py's `_route_evaluate` calls `_live_bindings`, which reads `getattr(session, 'assumptions', None)`).",
+        "why_the_sweep_missed_it": "the AST walk was scoped to functions whose OWN name begins with `_route`, and to `getattr` calls only. `_live_bindings` is a module-level helper with a different name prefix, so nothing in the walk could see it. The sweep's own PROSE described what it was supposed to cover — reads of session-mutable state by the serving path — and the implementation covered less than the prose did.",
+        "the_honest_restatement": "Three routes read the ledger. All three read it, at least on one path, WITHOUT firing the read barrier: `_route_evaluate` calls `bound_names()` to decide whether any live assumption is relevant; `_route_suppose` calls `declare()`, which deliberately does not fire the barrier because a declaring turn must not cite; `_route_retract`'s unknown-id arm checks presence only. Of those three non-barrier reads, only two can vary a RENDERING and so carry B10 exposure — `_route_suppose`'s budget refusal (disarmed by the protocol's cap of 8) and `_route_retract`'s unknown-id arm (the defect B10 caught, repaired by fix (a))."
+      },
+      "does_it_change_any_verdict": {
+        "b10": "no. `_route_evaluate`'s non-barrier read decides only WHETHER to consult the ledger; if it consults, the barrier fires and the turn cites, so the turn is outside B10's quantifier. There is no B10 exposure on that path and runs 1-3's B10 verdicts are unaffected.",
+        "b12": "no. The barrier is still the only path from an assumption's normal_form into an answer, which is what B12 corroborates.",
+        "what_it_does_change": "the CONFIDENCE a reader may place in the sweep. A sweep that missed a call hop once had to be widened before its conclusion could be trusted, and it was."
+      },
+      "the_fix": {
+        "the_test_is_widened_to_what_the_prose_already_described": "tests/test_session_ledger.py's `ledger_reading_routes` now follows call hops through module-level functions (bounded at three) and counts plain attribute access as well as `getattr`. It asserts the set is exactly the three named above, and asserts specifically that the `_route_evaluate -> _live_bindings` hop is being followed.",
+        "the_reviewer_s_bypass_is_a_fixture": "a synthetic `_route_hypothetical` that reaches the ledger through a helper named `_sneaky` must be reported by name, and a second fixture checks plain attribute access. A sweep that cannot see through one call hop is a sweep that already missed one."
+      },
+      "what_it_changes_in_this_file": "no clause, floor, seed, cap, denominator or verdict. Amendment 3's text is not edited; this amendment replaces the sentence it got wrong."
+    },
+    {
+      "amendment": 6,
+      "dated": "2026-08-26",
+      "subject": "two things the review's own fixes discovered, recorded because both are about instruments rather than results.",
+      "the_recorder_is_pinned_and_therefore_uneditable": {
+        "what_happened": "a low-priority review item asked for stale `harness.py:NNNN` line citations to be refreshed across the cycle's new files. Two of them live in scripts/session_recorder.py — which the recording protocol PINS by digest (amendment 1). Refreshing them changed the recorder's bytes, and scripts/record_session_corpus.py refused to record: 'the recorder's bytes do not match the digest the protocol froze'.",
+        "the_guard_was_right": "the C3 fix pins the recorder so that a sealed corpus is known to have been recorded by a known instrument. It pins BYTES, and a comment is bytes. There is no cosmetic edit to a pinned module; there is only an edit.",
+        "what_was_done": "the citation refresh was REVERTED in scripts/session_recorder.py and scripts/session_ledger.py, and the two modules are byte-identical to their pin. A second attempt to add a note INSIDE the module explaining that it is unpinnable was also reverted, for the same reason it was needed — the note would have broken the pin it described. The note lives here instead.",
+        "the_rule_this_states": "the two recorder modules do not accept edits, cosmetic or otherwise, for as long as the corpus they recorded is sealed. Anything that must be said about them is said in this file. Line citations elsewhere in the cycle were refreshed normally; these two keep theirs stale on purpose, and that is cheaper than re-pinning an instrument after it has been used.",
+        "why_it_is_recorded_rather_than_quietly_handled": "a later reader will notice two stale citations in the recorder and try to fix them, and will hit the same wall. This is the sign on the wall."
+      },
+      "b2s_verdict_watched_the_wrong_thing": {
+        "what_happened": "while re-running the gate after a rendering module moved, B2 reported **GREEN having reproduced 0 of 410 turns**. Every replay had refused `stale-environment` — correctly, because the pin had moved — and B2's verdict counted only per-turn DIVERGENCES. A refusal produces none, so an empty miss list read as a pass.",
+        "why_it_is_the_same_defect_a_third_time": "this cycle's recurring catch is assertions written so they cannot go red. Amendment 2 already fixed it once for B5/B6/B8, whose verdicts checked flips and never their denominators. B2 had the same shape in a different dress: it watched the SHAPE of its miss list and never the VALUE of its numerator. Three instances now, in three different clauses, all found by reading a run rather than by a test.",
+        "the_fix": "B2 is GREEN only when `turns_reproduced == denominator` AND no session refused. Refusing sessions are published in `sessions_that_refused` with their `pin_mismatch`, and the artifact carries the sentence: a stale-environment refusal is an honest refusal and a correct one — B3 exists to make it happen — but it is not B2 passing.",
+        "does_it_change_a_published_verdict": "no. Runs 1, 2 and 3 each replayed 410 of 410 with no refusals, so B2's verdict is the same under either rule in every committed run. What changed is that the clause can now go red for the reason it could not before.",
+        "authority": "ROADMAP-v0.21 §4.0(1)'s instrument-gap half, the same clause amendment 2 used. Runs 1-3 are untouched."
+      },
+      "what_it_changes_in_this_file": "no clause, floor, seed, cap, denominator or verdict."
     }
   ]
 }

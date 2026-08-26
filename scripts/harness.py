@@ -1559,7 +1559,7 @@ def _with_bindings(text: str, bindings: dict) -> str:
 
     Composed rather than injected into `evaluate`'s internals so a session
     binding and a same-line binding are the SAME thing to the evaluator —
-    `harness.py:2083-2091` already routes `suppose x = 5, x ^ 2` this way,
+    `harness.py:2312-2320` already routes `suppose x = 5, x ^ 2` this way,
     and the ledger is that behaviour extended from one line to a session
     rather than a second mechanism beside it. The rendered answer therefore
     carries its `given` line exactly as a typed binding would, which is what

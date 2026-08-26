@@ -57,7 +57,7 @@ this workstation happens to hold. One sealed reading (p02's gloss row) needs
 ``retrieve.wordnet``, which an offline boot forces OFF; the artifact records
 that per reading as ``row_served_on_this_boot: false`` rather than dropping
 the reading, which is the capability sheet's own discipline
-(`serve_chat.py:339-342`).
+(`serve_chat.py:355-358`).
 
 Per ROADMAP-v0.21 §4.0(2): artifact committed from a deterministic runner;
 reproductions welcome and recorded.
@@ -132,7 +132,7 @@ def _serve(repo_root: Path, line: str) -> dict:
     The resolver's graph index is the one object shared across those fresh
     sessions, and sharing it is a cost decision with no semantic content:
     ``CoreSession`` already builds exactly this object lazily and caches it
-    for the session's whole life (`harness.py:1152-1159`), it is immutable
+    for the session's whole life (`harness.py:1166-1173`), it is immutable
     committed-graph data, and building it costs ~6 s against a ~0.4 s boot —
     so rebuilding it thirty-five times would have made this probe a
     two-minute run for no change in any digest. Every piece of *session*
@@ -175,6 +175,41 @@ def _row_requires(route: str) -> tuple[str, ...]:
         if row["route"] == route:
             return tuple(row["requires"])
     raise KeyError(f"no LINE_GRAMMAR row serves route {route!r}")
+
+
+def _silently_bound(verdict: dict) -> bool:
+    """Did the raw prose get an ANSWER with nothing recording a choice?
+
+    **Defined here and measured as defined, 2026-08-26, after independent
+    review.** The first version tested route and status only — `route` not
+    in {dispatcher, none} and `status` not in {exhausted, waiting} — and
+    called the result "silently bound". That named a conclusion its
+    predicate did not check: it established that an answer was served, and
+    inferred the silence.
+
+    The silence is now measured. A verdict is silently bound when:
+
+    1. the route ANSWERED — a status outside {exhausted, waiting, refused}
+       and a route outside {dispatcher, none}; **and**
+    2. the verdict carries **no `receipt`** — nothing in what the person is
+       handed records that a reading was selected from among rivals.
+
+    Clause 2 is the whole point and it is empirically the discriminating
+    one: the resolver's `found` verdicts carry no `receipt` key at all
+    (`harness._route_resolver` returns route/status/detail/answer), whereas
+    `owns` does carry one (`harness.py:1136-1145`). So a route that CAN say
+    what it consumed is distinguished here from one that cannot.
+
+    What the flag does NOT claim: that the prompt was truly ambiguous — the
+    seal claims that, by hand, in advance — or that the served answer is
+    wrong. It claims that an answer was served and the receipt is silent
+    about a choice the seal says was available.
+    """
+
+    answered = verdict.get("route") not in {"dispatcher", "none"} and (
+        verdict.get("status") not in {"exhausted", "waiting", "refused"}
+    )
+    return answered and not verdict.get("receipt")
 
 
 def _first_difference(left: dict, right: dict) -> list[str]:
@@ -220,8 +255,22 @@ def probe(repo_root: Path) -> dict:
                     "row_served_on_this_boot": all(
                         need in registered for need in requires
                     ),
-                    "routed_where_it_was_sealed": (
-                        served.get("route") == reading["route"]
+                    # The seal names a reading's route, and for two readings
+                    # it ALSO names, in prose the seal amendment made
+                    # machine-readable, the route it expects the line to fall
+                    # through to. A reading the seal predicted correctly is a
+                    # reading that routed where the seal said; counting it as
+                    # a surprise would measure the seal's field layout rather
+                    # than its foresight. (Corrected 2026-08-26 from
+                    # independent review: this read 19 of 25 and is 21.)
+                    "routed_where_it_was_sealed": served.get("route")
+                    in {
+                        reading["route"],
+                        reading.get("predicted_fallthrough_route"),
+                    },
+                    "sealed_route": reading["route"],
+                    "predicted_fallthrough_route": reading.get(
+                        "predicted_fallthrough_route"
                     ),
                 }
             )
@@ -280,11 +329,8 @@ def probe(repo_root: Path) -> dict:
                     "route": raw.get("route"),
                     "status": raw.get("status"),
                     "detail": raw.get("detail"),
-                    "silently_bound": raw.get("route") not in {
-                        "dispatcher",
-                        "none",
-                    }
-                    and raw.get("status") not in {"exhausted", "waiting"},
+                    "silently_bound": _silently_bound(raw),
+                    "receipt_present": bool(raw.get("receipt")),
                 },
             }
         )
@@ -321,6 +367,20 @@ def _aggregate(verdicts: list[dict]) -> dict:
         "prompts_whose_readings_all_collapsed": fully_collapsed,
         "readings_total": readings,
         "readings_that_routed_where_the_seal_said": routed_as_sealed,
+        "readings_that_surprised_the_seal": readings - routed_as_sealed,
+        "readings_whose_fallthrough_the_seal_predicted": sum(
+            1
+            for v in verdicts
+            for r in v["reading_results"]
+            if r["predicted_fallthrough_route"]
+        ),
+        "what_routed_where_the_seal_said_counts": (
+            "a served route matching either the reading's sealed `route` or "
+            "the `predicted_fallthrough_route` the seal's own prose named. "
+            "Corrected 2026-08-26 from independent review: counting only the "
+            "first read 19 of 25 and treated two readings the seal predicted "
+            "CORRECTLY as readings that surprised it."
+        ),
         "raw_prompts_that_exhaust_or_wait_today": raw_exhausts,
         "raw_prompts_silently_bound_today": raw_silently_bound,
     }
@@ -340,10 +400,24 @@ def _answer(aggregate: dict, verdicts: list[dict]) -> str:
     act = aggregate["prompts_with_a_separator_at_the_act_level"]
     silent = aggregate["raw_prompts_silently_bound_today"]
     majority = separated * 2 > total
+    collapsed_pairs = [
+        f"{verdict['prompt_id']} ({'; '.join('+'.join(group) for group in verdict['collapsed_readings'])})"
+        for verdict in verdicts
+        if verdict["collapsed_readings"]
+    ]
     lead = (
-        f"A separator exists for {separated} of {total} sealed prompts "
-        f"({act} of {total} separate at the act level — a different route or "
-        "status, not merely different words)."
+        f"A separator exists for {separated} of {total} sealed prompts on the "
+        f"served bytes, and for only {act} of {total} at the ACT level — a "
+        "different route or status rather than merely different words. Both "
+        "numbers belong in the headline: two readings that separate on words "
+        "while performing the same act are separated more weakly than the "
+        "first number alone suggests, and "
+        f"{aggregate['prompts_with_at_least_one_collapsed_pair']} of {total} "
+        "prompts carry a pair that collapses outright — "
+        + "; ".join(collapsed_pairs)
+        + ". p03's two `twin` readings are the sharpest of those: de Morgan "
+        "in the logic corpus and in the set-theory corpus land in the SAME "
+        "twin group, so what the seal wrote as two readings is one answer."
     )
     if majority:
         verdict = (
@@ -410,11 +484,22 @@ def build(repo_root: Path) -> dict:
             "reading_count": sum(
                 len(prompt["candidate_readings"]) for prompt in seal["prompts"]
             ),
-            "sealed_before_the_probe_existed": True,
-            "how_a_reader_checks_that": (
-                "the seal is its own commit, earlier than this artifact's; "
-                "tests/test_session_prereqs.py recomputes file_digest over "
-                "the committed seal and compares"
+            "how_a_reader_checks_the_ordering": (
+                "the seal file was ADDED to the repository in a commit "
+                "earlier than the one that added this artifact, and "
+                "tests/test_session_prereqs.py asks git whether that is so. "
+                "Scope of that check, stated because it is narrower than it "
+                "looks: it compares FILE CREATION commits, so it proves the "
+                "question was committed before the answer was, and it does "
+                "not prove the seal's CONTENT was never touched afterwards. "
+                "The content check is separate and is the digest: this "
+                "artifact carries `file_digest` over the seal's bytes and the "
+                "suite recomputes it, so a seal edited after the probe ran "
+                "makes this artifact fail to reproduce. Corrected 2026-08-26 "
+                "from independent review, which found a literal "
+                "`sealed_before_the_probe_existed: true` asserting more than "
+                "any check established — it is removed rather than reworded, "
+                "because a flag nothing computes is not evidence."
             ),
             "prompts": seal["prompts"],
         },
@@ -439,6 +524,24 @@ def build(repo_root: Path) -> dict:
                 "a reading whose grammar row needs an unregistered subsystem "
                 "is served anyway and marked row_served_on_this_boot: false, "
                 "rather than dropped"
+            ),
+            "silently_bound": (
+                "the raw prose was ANSWERED — a status outside {exhausted, "
+                "waiting, refused} on a route outside {dispatcher, none} — "
+                "AND the verdict carries no `receipt` key, so nothing the "
+                "person is handed records that a reading was chosen from "
+                "among the rivals the seal names. Clause 2 is the "
+                "discriminating one and is measured rather than inferred: "
+                "the resolver's `found` verdicts carry no receipt at all, "
+                "while `owns` does, so a route that CAN say what it consumed "
+                "is distinguished from one that cannot. Corrected 2026-08-26 "
+                "from independent review — the first version tested route and "
+                "status only and called the result 'silent', which named a "
+                "conclusion its predicate had not checked."
+            ),
+            "silently_bound_does_not_claim": (
+                "that the prompt was truly ambiguous (the SEAL claims that, "
+                "by hand, in advance) or that the served answer is wrong."
             ),
         },
         "boot_registered_subsystems": result["registered"],

@@ -46,7 +46,7 @@
     {
       "prompt_id": "p02",
       "prompt": "what is a lemma",
-      "why_ambiguous": "a dictionary sense and a corpus statement are different answers to the same six words, and the routing chain puts the corpus first (harness.py:2109-2113).",
+      "why_ambiguous": "a dictionary sense and a corpus statement are different answers to the same six words, and the routing chain puts the corpus first (harness.py:2338-2342).",
       "candidate_readings": [
         {
           "reading_id": "p02.gloss",
@@ -130,7 +130,9 @@
           "command": "x ^ 2",
           "grammar_row": 10,
           "route": "evaluate",
-          "gloss": "compute it — which needs a binding the prompt never gave"
+          "gloss": "compute it — which needs a binding the prompt never gave",
+          "predicted_fallthrough_route": "resolver",
+          "predicted_fallthrough_why": "the seal's own gloss reads 'compute it — which needs a binding the prompt never gave', so the seal predicted this reading would NOT compute and would fall through the chain."
         },
         {
           "reading_id": "p05.resolver",
@@ -144,14 +146,16 @@
     {
       "prompt_id": "p06",
       "prompt": "suppose x is 5; what is x squared",
-      "why_ambiguous": "one line carries a premise and a question. The person may want the premise HELD (a conjecture to converse under) or SPENT (a binding for one computation). route_line already decides this silently: a suppose line that binds and computes is routed to evaluate first (harness.py:2083-2091).",
+      "why_ambiguous": "one line carries a premise and a question. The person may want the premise HELD (a conjecture to converse under) or SPENT (a binding for one computation). route_line already decides this silently: a suppose line that binds and computes is routed to evaluate first (harness.py:2312-2320).",
       "candidate_readings": [
         {
           "reading_id": "p06.spend",
           "command": "suppose x = 5, x ^ 2",
           "grammar_row": 3,
           "route": "supposition",
-          "gloss": "spend the premise on this computation"
+          "gloss": "spend the premise on this computation",
+          "predicted_fallthrough_route": "evaluate",
+          "predicted_fallthrough_why": "the seal's own why_ambiguous reads 'route_line already decides this silently: a suppose line that binds and computes is routed to evaluate first', so the seal predicted this exact fall-through and named it as the ambiguity."
         },
         {
           "reading_id": "p06.hold",
@@ -376,6 +380,38 @@
           "was": 4,
           "now": 5
         }
+      ]
+    },
+    {
+      "amendment": 2,
+      "dated": "2026-08-26",
+      "what_changed": "two `harness.py:NNNN` line citations inside `why_ambiguous` prose, refreshed to the lines they were always about.",
+      "what_did_not_change": "nothing else. No prompt, no reading `command`, no `route`, no `gloss`, no `grammar_row`.",
+      "why": "v0.21's own work added lines to scripts/harness.py, so `harness.py:2109-2113` (the routing chain putting the corpus before the dictionary) and `harness.py:2083-2091` (the suppose line that binds and computes being routed to evaluate first) both pointed past their targets. A citation that points at the wrong lines is a false sentence, and this repository's rule is that a false sentence in a canonical artifact cannot be repaired by a note a reader may never open.",
+      "citations_corrected": [
+        {
+          "was": "harness.py:2109-2113",
+          "now": "harness.py:2338-2342",
+          "about": "route_line reaching the resolver before the gloss route"
+        },
+        {
+          "was": "harness.py:2083-2091",
+          "now": "harness.py:2312-2320",
+          "about": "a suppose line that binds and computes routed to evaluate first"
+        }
+      ],
+      "note_on_line_citations_generally": "they rot whenever the cited file grows, which is why this repository's reviews keep finding them. Nothing here depends on them: the seal's meaning is carried by its prompts, commands and route names, and the citations are courtesy pointers."
+    },
+    {
+      "amendment": 3,
+      "dated": "2026-08-26",
+      "what_changed": "two readings gain a `predicted_fallthrough_route` field, making machine-readable a prediction the seal's own prose already carried.",
+      "what_did_not_change": "no prompt, no reading `command`, no `route`, no `gloss`, no `why_ambiguous`, no `grammar_row`. Nothing about the sealed QUESTION.",
+      "why": "the probe counted a reading as 'routed where the seal said' only when the served route equalled the reading's `route` field, and reported 19 of 25. Independent review found that wrong by two: for p05.evaluate and p06.spend the seal had ALREADY PREDICTED IN WRITING that they would fall through, and p06's prediction is the very ambiguity the prompt was sealed to exhibit. Counting a reading the seal predicted correctly as a reading that surprised it makes the metric measure the seal's field layout rather than its foresight.",
+      "consequence": "readings_that_routed_where_the_seal_said reads 21 of 25 rather than 19, and the probe now publishes readings_that_surprised_the_seal beside it so both are visible. The four genuine surprises remain: p02.gloss (the offline boot forces its subsystem OFF), p07.belief and p07.resolver (both fall to the dispatcher), p08.resolver.",
+      "readings_annotated": [
+        "p05.evaluate",
+        "p06.spend"
       ]
     }
   ]

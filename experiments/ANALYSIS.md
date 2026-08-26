@@ -5816,11 +5816,12 @@ fixed, in this commission.
 
 ## The three runs, and why there are three
 
-| | B10 | baseline | B6 | R1 |
-|---|---|---|---|---|
-| run 1 `session_ledger_run.json` | **RED**, 10/260 | RED (broken comparator) | 21 cases vs floor 30 | **FAILS** |
-| run 2 `session_ledger_run2.json` | **RED**, the same 10 | GREEN, 0/58 | 42 cases | **FAILS** |
-| run 3 `session_ledger_run3.json` | **GREEN**, 0/260 | GREEN, 0/58 | 42 cases | **HOLDS** |
+| | B10 | baseline | B6 | B8 arms | R1 |
+|---|---|---|---|---|---|
+| run 1 `session_ledger_run.json` | **RED**, 10/260 | RED (broken comparator) | 21 cases vs floor 30 | 2 | **FAILS** |
+| run 2 `session_ledger_run2.json` | **RED**, the same 10 | GREEN, 0/58 | 42 cases | 2 | **FAILS** |
+| run 3 `session_ledger_run3.json` | **GREEN**, 0/260 | GREEN, 0/58 | 42 cases | 2 | **HOLDS** |
+| run 4 `session_ledger_run4.json` | **GREEN**, 0/260 | GREEN, 0/58 | 42 cases | **4** | **HOLDS** |
 
 **Run 1** was half B's first execution. B10 read red on ten uncited turns,
 all the line `retract a999`: the refusal for an id the session does not hold
@@ -5855,10 +5856,66 @@ index, so **(b) — have the refusal cite what it read — would have widened
 the citation contract mid-cycle**, and a citation would no longer have meant
 the answer consumed a premise.
 
+**Run 4** is a second supplementary run, registered by prereg amendments 5
+and 6 after independent review of the merge candidate. It repairs two more
+instrument defects and adds two tamper shapes:
+
+- **B8 ran one shape twice.** Rewrite a turn, with and without repairing the
+  chain — and *both* leave the original MACs in place, so both are caught by
+  a signature that no longer matches. The obvious forgery, an adversary who
+  holds the file and **re-signs it under their own ring**, was never run;
+  when the reviewer ran it the scorer **crashed** out of
+  `session_keys.derive` with `KeyRingRefusal` rather than scoring. A control
+  that dies on a case has not passed that case. A refusal to verify is now a
+  detection — which is the house grammar, not a convenience:
+  `RefusalReason` names `unknown-key-id` and `revoked-key-id` beside
+  `signature-mismatch`, and `conversation.restore` already refuses on all
+  three. Two arms added: **foreign-ring re-sign** (chain and signatures
+  interleaved in one forward pass, so the forgery is internally *perfect* —
+  20/20 of them are chain-consistent and all 20 are caught) and **blanked
+  MAC** (the laziest forgery, needing no key at all, testing that an absent
+  signature is refused rather than treated as vacuously fine). Both 20/20 by
+  keyed MAC.
+- **B2's verdict watched the wrong thing, and this is the cycle's recurring
+  catch a third time.** Mid-review a citation edit to `harness.py` moved the
+  `rendering_module_digests` pin, every replay refused `stale-environment` —
+  correctly, B3 exists to make that happen — and **B2 reported GREEN having
+  reproduced 0 of 410 turns**, because its verdict counted per-turn
+  divergences and a refusal produces none. "Every turn the seal records"
+  means every turn, and zero is not every. B2 is now green only when
+  `turns_reproduced == denominator` and no session refused. No committed
+  verdict moves: runs 1–3 each replayed 410/410 with no refusals, so B2 reads
+  the same under either rule. What changed is that the clause can now go red
+  for the reason it could not before.
+
+And one thing the review's own fixes discovered about the instrument's
+discipline: **the recorder cannot be edited at all.** A low-priority request
+to refresh stale line citations touched `scripts/session_recorder.py`, which
+the recording protocol pins by digest — and `record_session_corpus.py`
+refused to record. The guard was right; there is no cosmetic edit to a
+pinned module, only an edit. A second attempt to add a note *inside* the
+module explaining that it is unpinnable was reverted for the same reason it
+was needed. Both recorder modules keep their stale citations on purpose, and
+the sign on that wall is prereg amendment 6.
+
 ### The sweep, and the limit it published
 
 Before re-running, an AST walk over every `_route_*` function collected
-reads of session-mutable `CoreSession` fields. Four hits, all adjudicated in
+reads of session-mutable `CoreSession` fields.
+
+> **Corrected 2026-08-26 (prereg amendment 5).** That sweep — and the
+> sentence it produced, *"exactly two routes may read the ledger"* — was
+> **false**. It walked only functions whose own name began with `_route`,
+> and only `getattr`, so it could not see `_route_evaluate`, which reads the
+> ledger through the helper `_live_bindings` one call away. **Three** routes
+> read it. No verdict moves: that path fires the read barrier, so it has no
+> B10 exposure. What moved is the confidence a reader may place in a sweep
+> that missed a call hop once. It now follows call hops and counts plain
+> attribute access — what its own prose had described all along — and the
+> reviewer's bypass (`_route_hypothetical` reaching the ledger through a
+> helper) is a fixture that must go red.
+
+Four hits, all adjudicated in
 amendment 3: `_route_retract` (the defect, repaired); `_route_suppose`'s
 `assumption_budget` refusal (already disarmed by construction — the protocol
 caps live assumptions at 8, so a recorded session never declares a ninth);
@@ -5944,3 +6001,26 @@ portability beyond this workstation, and any stranger-usability claim. P3's
 sessions are maintainer-authored, which is precisely what makes the floor
 meetable by construction — and the prereg puts that non-claim beside the
 meetability argument rather than at the end of a list.
+
+## NOTES: four claims in this slice's commit messages are wrong (2026-08-26)
+
+Commit messages are immutable, so the corrections live here. All four were
+found by independent review of the merge candidate, and each is recorded
+with the commit that carries it so a reader following the history knows
+which sentences not to trust.
+
+| commit | the claim as written | the correction |
+|---|---|---|
+| `6c2feac` [P1-V21] | *"`twin` (12,589 ledger members)"* | **2,537** ids across 2,015 groups. The walker matched two diagnostic lists rather than the five group lists; 10,111 of the 12,589 route to `exhausted` and 59 real members were missed. Corrected in `fe56aeb`, which repeats the wrong number in the course of correcting it — correctly, since it is quoting what it repairs. |
+| `9a9cb45` [LEDGER-V21] | *"5 closed classes now admit 44,915 commands"* | **34,863**, for the same reason. |
+| `62d701e` [P2-V21] | *"19 of 25 readings routed where the seal said"* | **21 of 25**. Two readings — `p05.evaluate` and `p06.spend` — had their fall-through PREDICTED IN WRITING by the seal's own prose, and `p06`'s prediction is the very ambiguity the prompt was sealed to exhibit. Counting a reading the seal got right as one that surprised it measured the seal's field layout rather than its foresight. The prediction is now a machine-readable field (seal amendment 3) and the probe publishes `readings_that_surprised_the_seal: 4` beside it. |
+| `204aa4c` [PREREG-V21], `ca27558` [REPAIR-V21] | *"exactly two `_route_*` functions may read the assumption ledger"* | **three routes read it.** `_route_evaluate` reaches it through the helper `_live_bindings`, one call away, and the sweep that backed the claim walked only functions whose own name began with `_route`, and only `getattr`. No verdict moves — that path fires the read barrier, so it has no B10 exposure — but the sentence was false. Corrected in prereg amendment 5; the sweep now follows call hops and counts plain attribute access, with the reviewer's bypass as a fixture. |
+| four commits | *"test_session_prereqs (24)"* | the suite had **22** tests when those messages were written (23 now, after C2's number-level twin check). Off by two, four times, because the number was typed rather than read. |
+
+The pattern behind three of the five rows is one thing: **a number or a set
+was asserted in prose beside code that could have produced it.** P1's twin
+count, P2's routed-as-sealed count and the sweep's route count were all
+derivable, and all three were derived wrongly or not at all. Where a
+sentence in this cycle now carries a number, the number is assembled from
+the data — P1's finding, P2's answer, the seal's delta — and that habit
+started because of misses like these rather than in spite of them.

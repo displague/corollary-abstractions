@@ -7,10 +7,13 @@
     "prompts_with_at_least_one_collapsed_pair": 2,
     "raw_prompts_silently_bound_today": 2,
     "raw_prompts_that_exhaust_or_wait_today": 8,
-    "readings_that_routed_where_the_seal_said": 19,
-    "readings_total": 25
+    "readings_that_routed_where_the_seal_said": 21,
+    "readings_that_surprised_the_seal": 4,
+    "readings_total": 25,
+    "readings_whose_fallthrough_the_seal_predicted": 2,
+    "what_routed_where_the_seal_said_counts": "a served route matching either the reading's sealed `route` or the `predicted_fallthrough_route` the seal's own prose named. Corrected 2026-08-26 from independent review: counting only the first read 19 of 25 and treated two readings the seal predicted CORRECTLY as readings that surprised it."
   },
-  "answer_to_the_incumbents_question": "A separator exists for 9 of 10 sealed prompts (8 of 10 separate at the act level \u2014 a different route or status, not merely different words). So the design's stop condition \u2014 'if no separator exists for most' \u2014 is NOT met, and the clarifying-question arm is expressible: for most of these prompts there is an admitted command whose exact evaluation is about the difference, which is what a clarifying question would have to be about. P2 therefore does NOT decide the conditional-versus-clarify question by measurement, and DESIGN-plain-input's open question stays open for slice 2 to settle on other grounds. The separation that exists is cheap, and the artifact says so: a reading is an admitted command, so serving it IS the distinguishing evaluation, and separation mostly reports that two different commands do two different things. The expensive question \u2014 whether a person could ANSWER the clarifying question the separator licenses \u2014 is not measured here and is not claimed. Second reading, from the same run: handed the raw prose, today's system silently bound 2 of 10 prompts to one reading without saying it had chosen. Those are the prompts where a named supposition would change what the person is told, whichever arm wins.",
+  "answer_to_the_incumbents_question": "A separator exists for 9 of 10 sealed prompts on the served bytes, and for only 8 of 10 at the ACT level \u2014 a different route or status rather than merely different words. Both numbers belong in the headline: two readings that separate on words while performing the same act are separated more weakly than the first number alone suggests, and 2 of 10 prompts carry a pair that collapses outright \u2014 p02 (p02.gloss+p02.resolver); p03 (p03.twin_logic+p03.twin_settheory). p03's two `twin` readings are the sharpest of those: de Morgan in the logic corpus and in the set-theory corpus land in the SAME twin group, so what the seal wrote as two readings is one answer. So the design's stop condition \u2014 'if no separator exists for most' \u2014 is NOT met, and the clarifying-question arm is expressible: for most of these prompts there is an admitted command whose exact evaluation is about the difference, which is what a clarifying question would have to be about. P2 therefore does NOT decide the conditional-versus-clarify question by measurement, and DESIGN-plain-input's open question stays open for slice 2 to settle on other grounds. The separation that exists is cheap, and the artifact says so: a reading is an admitted command, so serving it IS the distinguishing evaluation, and separation mostly reports that two different commands do two different things. The expensive question \u2014 whether a person could ANSWER the clarifying question the separator licenses \u2014 is not measured here and is not claimed. Second reading, from the same run: handed the raw prose, today's system silently bound 2 of 10 prompts to one reading without saying it had chosen. Those are the prompts where a named supposition would change what the person is told, whichever arm wins.",
   "boot_registered_subsystems": [
     "belief.ownership",
     "closure.worlds",
@@ -18,7 +21,7 @@
     "narrative.story",
     "tool.conform"
   ],
-  "builder_digest": "2ab995c35f9141dc06a84e8e61d7faa7bddbb4109dc1fe084677acb617b659ed",
+  "builder_digest": "ec1fc8786ee79638402e259bb555047ad87aaf3a32228ed1f337a5e75101d08b",
   "built_by": "scripts/probe_separator_expressibility.py",
   "design": "docs/DESIGN-session-ledger.md",
   "design_clause": "\u00a76 P2 \u2014 separator expressibility. For ten hand-sealed ambiguous prompts: does any single admitted command distinguish the rival readings under exact evaluation? If no separator exists for most, the clarifying-question arm has nothing to ask and the conditional-answer arm wins by measurement. Committed either way.",
@@ -27,16 +30,18 @@
     "act_digest": "sha256 over route and status only: whether the system did a different thing, as opposed to said different words",
     "boot": "one fresh CoreSession per line, offline=True (P-IH1's forced-absent boot), so no optional archive on this workstation can move a number",
     "gated_rows_are_kept": "a reading whose grammar row needs an unregistered subsystem is served anyway and marked row_served_on_this_boot: false, rather than dropped",
-    "served_digest": "sha256 over the served verdict's route, status, detail, evidence, answer, missing_capability, receipt, reading, materialized \u2014 the echoed input `line` is EXCLUDED, because every reading is a different string by construction and digesting the echo would separate everything and measure nothing"
+    "served_digest": "sha256 over the served verdict's route, status, detail, evidence, answer, missing_capability, receipt, reading, materialized \u2014 the echoed input `line` is EXCLUDED, because every reading is a different string by construction and digesting the echo would separate everything and measure nothing",
+    "silently_bound": "the raw prose was ANSWERED \u2014 a status outside {exhausted, waiting, refused} on a route outside {dispatcher, none} \u2014 AND the verdict carries no `receipt` key, so nothing the person is handed records that a reading was chosen from among the rivals the seal names. Clause 2 is the discriminating one and is measured rather than inferred: the resolver's `found` verdicts carry no receipt at all, while `owns` does, so a route that CAN say what it consumed is distinguished from one that cannot. Corrected 2026-08-26 from independent review \u2014 the first version tested route and status only and called the result 'silent', which named a conclusion its predicate had not checked.",
+    "silently_bound_does_not_claim": "that the prompt was truly ambiguous (the SEAL claims that, by hand, in advance) or that the served answer is wrong."
   },
   "not_a_gate": "P2 is a measurement with no floor and no failing side. Both answers were publishable before the first line ran, and the artifact is committed either way (DESIGN-session-ledger \u00a76 P2).",
   "prerequisite": "P2",
   "schema": "corollary.session-p2-separator-probe/1",
   "seal": {
     "digest_algorithm": "sha256 over the file's bytes with CRLF normalised to LF",
-    "file_digest": "c38ff2241bc3ccb173ce029e6d5e270a9aba90647281635e5060fdd78a8e7e83",
+    "file_digest": "84cdfff30bd03bf8a8c15c204330cd2e8ca9537474b191205328f46d8672df25",
     "frozen_at": "2026-08-25",
-    "how_a_reader_checks_that": "the seal is its own commit, earlier than this artifact's; tests/test_session_prereqs.py recomputes file_digest over the committed seal and compares",
+    "how_a_reader_checks_the_ordering": "the seal file was ADDED to the repository in a commit earlier than the one that added this artifact, and tests/test_session_prereqs.py asks git whether that is so. Scope of that check, stated because it is narrower than it looks: it compares FILE CREATION commits, so it proves the question was committed before the answer was, and it does not prove the seal's CONTENT was never touched afterwards. The content check is separate and is the digest: this artifact carries `file_digest` over the seal's bytes and the suite recomputes it, so a seal edited after the probe ran makes this artifact fail to reproduce. Corrected 2026-08-26 from independent review, which found a literal `sealed_before_the_probe_existed: true` asserting more than any check established \u2014 it is removed rather than reworded, because a flag nothing computes is not evidence.",
     "prompt_count": 10,
     "prompts": [
       {
@@ -86,7 +91,7 @@
         ],
         "prompt": "what is a lemma",
         "prompt_id": "p02",
-        "why_ambiguous": "a dictionary sense and a corpus statement are different answers to the same six words, and the routing chain puts the corpus first (harness.py:2109-2113)."
+        "why_ambiguous": "a dictionary sense and a corpus statement are different answers to the same six words, and the routing chain puts the corpus first (harness.py:2338-2342)."
       },
       {
         "candidate_readings": [
@@ -150,6 +155,8 @@
             "command": "x ^ 2",
             "gloss": "compute it \u2014 which needs a binding the prompt never gave",
             "grammar_row": 10,
+            "predicted_fallthrough_route": "resolver",
+            "predicted_fallthrough_why": "the seal's own gloss reads 'compute it \u2014 which needs a binding the prompt never gave', so the seal predicted this reading would NOT compute and would fall through the chain.",
             "reading_id": "p05.evaluate",
             "route": "evaluate"
           },
@@ -171,6 +178,8 @@
             "command": "suppose x = 5, x ^ 2",
             "gloss": "spend the premise on this computation",
             "grammar_row": 3,
+            "predicted_fallthrough_route": "evaluate",
+            "predicted_fallthrough_why": "the seal's own why_ambiguous reads 'route_line already decides this silently: a suppose line that binds and computes is routed to evaluate first', so the seal predicted this exact fall-through and named it as the ambiguity.",
             "reading_id": "p06.spend",
             "route": "supposition"
           },
@@ -184,7 +193,7 @@
         ],
         "prompt": "suppose x is 5; what is x squared",
         "prompt_id": "p06",
-        "why_ambiguous": "one line carries a premise and a question. The person may want the premise HELD (a conjecture to converse under) or SPENT (a binding for one computation). route_line already decides this silently: a suppose line that binds and computes is routed to evaluate first (harness.py:2083-2091)."
+        "why_ambiguous": "one line carries a premise and a question. The person may want the premise HELD (a conjecture to converse under) or SPENT (a binding for one computation). route_line already decides this silently: a suppose line that binds and computes is routed to evaluate first (harness.py:2312-2320)."
       },
       {
         "candidate_readings": [
@@ -286,7 +295,6 @@
       }
     ],
     "reading_count": 25,
-    "sealed_before_the_probe_existed": true,
     "source_file": "experiments/session_p2_prompt_seal.json"
   },
   "verdicts": [
@@ -306,6 +314,7 @@
       "prompt_id": "p01",
       "raw_prompt_today": {
         "detail": "words: 3 statements match ['common', 'divisor', 'greatest', 'numbers', 'two'] (score 4, via ['keywords', 'lexicon', 'prose'])",
+        "receipt_present": false,
         "route": "resolver",
         "silently_bound": false,
         "status": "waiting"
@@ -317,6 +326,7 @@
           "command": "twin programming.euclid.recursive",
           "detail": "typed twin group 262: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
           "grammar_row": 5,
+          "predicted_fallthrough_route": null,
           "reading_id": "p01.twin",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -325,6 +335,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "twin",
           "served_digest": "1df4b573d77427086e869dd50d7c37cf5094cbe4f91bdddd300cfda53a9e2bf5",
           "status": "found"
         },
@@ -334,6 +345,7 @@
           "command": "greatest common divisor euclid",
           "detail": "words: 2 statements match ['common', 'divisor', 'euclid', 'greatest'] (score 5, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p01.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -342,6 +354,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "26e30eb91199b1e051cb389f043fa2c1c231b24fb089ac4d7559a0be38aae73d",
           "status": "waiting"
         },
@@ -351,6 +364,7 @@
           "command": "gcd euclid recursive",
           "detail": "words: 1 statements match ['euclid', 'gcd', 'recursive'] (score 7, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p01.resolver_corpus_spelling",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -359,6 +373,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "ef73b1d08e37bb1fdc38638cf378f1b500bb6130a075008f0bc0d9d962cd8dc6",
           "status": "found"
         }
@@ -396,6 +411,7 @@
       "prompt_id": "p02",
       "raw_prompt_today": {
         "detail": "words: 2 statements match ['lemma'] (score 2, via ['keywords', 'lexicon', 'prose'])",
+        "receipt_present": false,
         "route": "resolver",
         "silently_bound": false,
         "status": "waiting"
@@ -407,6 +423,7 @@
           "command": "what is a lemma",
           "detail": "words: 2 statements match ['lemma'] (score 2, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 13,
+          "predicted_fallthrough_route": null,
           "reading_id": "p02.gloss",
           "route_sealed": "gloss",
           "route_taken": "resolver",
@@ -415,6 +432,7 @@
             "retrieve.wordnet"
           ],
           "row_served_on_this_boot": false,
+          "sealed_route": "gloss",
           "served_digest": "713b24ba1408eda672aaf7df0e546875932cb4502bcc998c76116b0ab407b863",
           "status": "waiting"
         },
@@ -424,6 +442,7 @@
           "command": "lemma",
           "detail": "words: 2 statements match ['lemma'] (score 2, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p02.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -432,6 +451,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "713b24ba1408eda672aaf7df0e546875932cb4502bcc998c76116b0ab407b863",
           "status": "waiting"
         }
@@ -473,6 +493,7 @@
       "prompt_id": "p03",
       "raw_prompt_today": {
         "detail": "words: 2 statements match ['de', 'laws', 'morgan', 's'] (score 6, via ['keywords', 'lexicon', 'prose'])",
+        "receipt_present": false,
         "route": "resolver",
         "silently_bound": false,
         "status": "waiting"
@@ -484,6 +505,7 @@
           "command": "de morgan laws",
           "detail": "words: 2 statements match ['de', 'laws', 'morgan'] (score 5, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p03.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -492,6 +514,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "117444a01725ee04adabfd5983acc08630e2db778d5a8dc3fffd1b7bfb7f182e",
           "status": "waiting"
         },
@@ -501,6 +524,7 @@
           "command": "twin logic.boolean_laws.de_morgan_laws",
           "detail": "typed twin group 913: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
           "grammar_row": 5,
+          "predicted_fallthrough_route": null,
           "reading_id": "p03.twin_logic",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -509,6 +533,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "twin",
           "served_digest": "3d2c5cd3f6725d41e71b70d70b2d9e63ea41463d3af4a989adb049badcbb4ce3",
           "status": "found"
         },
@@ -518,6 +543,7 @@
           "command": "twin settheory.boolean_laws.de_morgan_laws",
           "detail": "typed twin group 913: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
           "grammar_row": 5,
+          "predicted_fallthrough_route": null,
           "reading_id": "p03.twin_settheory",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -526,6 +552,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "twin",
           "served_digest": "3d2c5cd3f6725d41e71b70d70b2d9e63ea41463d3af4a989adb049badcbb4ce3",
           "status": "found"
         }
@@ -558,6 +585,7 @@
       "prompt_id": "p04",
       "raw_prompt_today": {
         "detail": "words: 1 statements match ['angle', 'cosine', 'double'] (score 8, via ['keywords', 'lexicon', 'prose'])",
+        "receipt_present": false,
         "route": "resolver",
         "silently_bound": true,
         "status": "found"
@@ -569,6 +597,7 @@
           "command": "twin trigonometry.identities.double_angle_cosine",
           "detail": "typed twin group 210: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
           "grammar_row": 5,
+          "predicted_fallthrough_route": null,
           "reading_id": "p04.twin",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -577,6 +606,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "twin",
           "served_digest": "8d2088d6736dad3e3a5ffdbc93d474751645c103ee4e583af0922a248cbc8ce3",
           "status": "found"
         },
@@ -586,6 +616,7 @@
           "command": "double angle cosine identity",
           "detail": "words: 1 statements match ['angle', 'cosine', 'double', 'identity'] (score 8, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p04.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -594,6 +625,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "86a4d45210fc790af0191bccda1c48ac2af2db101f56a9e61170c255bd78d9f3",
           "status": "found"
         }
@@ -631,6 +663,7 @@
       "prompt_id": "p05",
       "raw_prompt_today": {
         "detail": "words: 2 statements match ['squared', 'x'] (score 2, via ['lexicon', 'prose'])",
+        "receipt_present": false,
         "route": "resolver",
         "silently_bound": false,
         "status": "waiting"
@@ -642,6 +675,7 @@
           "command": "owns x ^ 2",
           "detail": "6884 of 12777 statements host 'x ^ 2'",
           "grammar_row": 2,
+          "predicted_fallthrough_route": null,
           "reading_id": "p05.owns",
           "route_sealed": "ownership",
           "route_taken": "ownership",
@@ -650,6 +684,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "ownership",
           "served_digest": "470a81894f3a7c45d86383cfe6f8a23435df33ffcc0c31f0643c9ed3339759a5",
           "status": "solved"
         },
@@ -659,12 +694,14 @@
           "command": "x ^ 2",
           "detail": "expression: 7341 statements host ^(?0:V, 2)",
           "grammar_row": 10,
+          "predicted_fallthrough_route": "resolver",
           "reading_id": "p05.evaluate",
           "route_sealed": "evaluate",
           "route_taken": "resolver",
-          "routed_where_it_was_sealed": false,
+          "routed_where_it_was_sealed": true,
           "row_requires": [],
           "row_served_on_this_boot": true,
+          "sealed_route": "evaluate",
           "served_digest": "61da349eeb4201febb220bcf80a16101a864e96b07bf1096e18c9e6d1b4f9cdb",
           "status": "waiting"
         },
@@ -674,6 +711,7 @@
           "command": "x squared",
           "detail": "words: 2 statements match ['squared', 'x'] (score 2, via ['lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p05.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -682,6 +720,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "460fc667c0ea42bdbfba9aaf1d38a95fdbfb2e840a1c107d62284bf805f71aa8",
           "status": "waiting"
         }
@@ -714,6 +753,7 @@
       "prompt_id": "p06",
       "raw_prompt_today": {
         "detail": "held as conjectured in a frame you own",
+        "receipt_present": false,
         "route": "supposition",
         "silently_bound": false,
         "status": "waiting"
@@ -725,12 +765,14 @@
           "command": "suppose x = 5, x ^ 2",
           "detail": "x ^ 2 = 25",
           "grammar_row": 3,
+          "predicted_fallthrough_route": "evaluate",
           "reading_id": "p06.spend",
           "route_sealed": "supposition",
           "route_taken": "evaluate",
-          "routed_where_it_was_sealed": false,
+          "routed_where_it_was_sealed": true,
           "row_requires": [],
           "row_served_on_this_boot": true,
+          "sealed_route": "supposition",
           "served_digest": "ac77d30c2d74fcee5c36fc5c81b141b17fd8d75d9de35ac199e4a7631c4d7940",
           "status": "solved"
         },
@@ -740,12 +782,14 @@
           "command": "suppose x is 5",
           "detail": "held as conjectured in a frame you own",
           "grammar_row": 3,
+          "predicted_fallthrough_route": null,
           "reading_id": "p06.hold",
           "route_sealed": "supposition",
           "route_taken": "supposition",
           "routed_where_it_was_sealed": true,
           "row_requires": [],
           "row_served_on_this_boot": true,
+          "sealed_route": "supposition",
           "served_digest": "d90c73ec806d0cfb09781dae80a541c6c02ead38e61ad02f7c58b60dd59845dc",
           "status": "waiting"
         }
@@ -779,6 +823,7 @@
       "prompt_id": "p07",
       "raw_prompt_today": {
         "detail": "words: 2 statements match ['marble'] (score 2, via ['lexicon', 'prose'])",
+        "receipt_present": false,
         "route": "resolver",
         "silently_bound": false,
         "status": "waiting"
@@ -790,6 +835,7 @@
           "command": "where does the observer think the marble is",
           "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
           "grammar_row": 9,
+          "predicted_fallthrough_route": null,
           "reading_id": "p07.belief",
           "route_sealed": "belief",
           "route_taken": "dispatcher",
@@ -798,6 +844,7 @@
             "belief.ownership"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "belief",
           "served_digest": "a08f3667d4ca78af2c910c33bf62ff05ebe2917a4b7b39e22db82979da1d0ba8",
           "status": "exhausted"
         },
@@ -807,6 +854,7 @@
           "command": "marble located in",
           "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p07.resolver",
           "route_sealed": "resolver",
           "route_taken": "dispatcher",
@@ -815,6 +863,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "1087672eb864883474a56cd1f75d8a8b23759782e90519f5bc41390eafd7345f",
           "status": "exhausted"
         }
@@ -848,6 +897,7 @@
       "prompt_id": "p08",
       "raw_prompt_today": {
         "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
+        "receipt_present": false,
         "route": "dispatcher",
         "silently_bound": false,
         "status": "exhausted"
@@ -859,12 +909,14 @@
           "command": "suppose the corpus is complete",
           "detail": "held as conjectured in a frame you own",
           "grammar_row": 3,
+          "predicted_fallthrough_route": null,
           "reading_id": "p08.suppose",
           "route_sealed": "supposition",
           "route_taken": "supposition",
           "routed_where_it_was_sealed": true,
           "row_requires": [],
           "row_served_on_this_boot": true,
+          "sealed_route": "supposition",
           "served_digest": "45c6444c25f3b0b1bd910cbe86516432499ae00693d434222c8974c1baa61eec",
           "status": "waiting"
         },
@@ -874,6 +926,7 @@
           "command": "corpus completeness",
           "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p08.resolver",
           "route_sealed": "resolver",
           "route_taken": "dispatcher",
@@ -882,6 +935,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "fde8b5c1c435697e51b7e82879e1f891d69f9311d53b2716239d54312be99406",
           "status": "exhausted"
         }
@@ -913,6 +967,7 @@
       "prompt_id": "p09",
       "raw_prompt_today": {
         "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
+        "receipt_present": false,
         "route": "dispatcher",
         "silently_bound": false,
         "status": "exhausted"
@@ -924,12 +979,14 @@
           "command": "2 ^ 10",
           "detail": "2 ^ 10 = 1024",
           "grammar_row": 10,
+          "predicted_fallthrough_route": null,
           "reading_id": "p09.evaluate",
           "route_sealed": "evaluate",
           "route_taken": "evaluate",
           "routed_where_it_was_sealed": true,
           "row_requires": [],
           "row_served_on_this_boot": true,
+          "sealed_route": "evaluate",
           "served_digest": "ca805411fbe6d0051c93c940e9162e1e2a2a0ca49c7e106993438bb38c876c81",
           "status": "solved"
         },
@@ -939,6 +996,7 @@
           "command": "binary exponentiation",
           "detail": "words: 2 statements match ['binary', 'exponentiation'] (score 5, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p09.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -947,6 +1005,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "1c566d7e71fbf6e8a1cc080cafb7d2918b2fc8bf4fe3f020312308e93bd94a08",
           "status": "waiting"
         },
@@ -956,6 +1015,7 @@
           "command": "twin programming.binexp.recursive",
           "detail": "typed twin group 206: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
           "grammar_row": 5,
+          "predicted_fallthrough_route": null,
           "reading_id": "p09.twin",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -964,6 +1024,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "twin",
           "served_digest": "2e242d17d8e69885ea62e9ae070c326c1a751089f70b2acef1c38284641b027d",
           "status": "found"
         }
@@ -997,6 +1058,7 @@
       "prompt_id": "p10",
       "raw_prompt_today": {
         "detail": "words: 1 statements match ['b', 'c', 'formula', 'quadratic'] (score 5, via ['keywords', 'lexicon', 'prose'])",
+        "receipt_present": false,
         "route": "resolver",
         "silently_bound": true,
         "status": "found"
@@ -1008,6 +1070,7 @@
           "command": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
           "detail": "does_not_parse: nothing was computed, and the named construct says why. A refusal is not a negative result about the statement",
           "grammar_row": 7,
+          "predicted_fallthrough_route": null,
           "reading_id": "p10.conform",
           "route_sealed": "conform",
           "route_taken": "conform",
@@ -1016,6 +1079,7 @@
             "tool.conform"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "conform",
           "served_digest": "e040de8b8b5d842dcafa61dbeda8161a5bf013e636cfc4f98cb4a1377db30497",
           "status": "refused"
         },
@@ -1025,6 +1089,7 @@
           "command": "quadratic formula",
           "detail": "words: 1 statements match ['formula', 'quadratic'] (score 4, via ['keywords', 'lexicon', 'prose'])",
           "grammar_row": 12,
+          "predicted_fallthrough_route": null,
           "reading_id": "p10.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -1033,6 +1098,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "resolver",
           "served_digest": "b799850d8f0db5ce141585e05a6ed7319cdce131da14aa6302738b2327135cfa",
           "status": "found"
         },
@@ -1042,6 +1108,7 @@
           "command": "twin algebra.polynomial_equations.quadratic_formula",
           "detail": "no group in reports/signature_matches.json lists 'algebra.polynomial_equations.quadratic_formula' as a member; that is a statement about this committed ledger and says nothing about statements it does not cover",
           "grammar_row": 5,
+          "predicted_fallthrough_route": null,
           "reading_id": "p10.twin",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -1050,6 +1117,7 @@
             "corpus.nodes"
           ],
           "row_served_on_this_boot": true,
+          "sealed_route": "twin",
           "served_digest": "795dd039aa5e2a9a9901ffc02428c7265e92221e5e15e1d81c904f938b28d5af",
           "status": "exhausted"
         }

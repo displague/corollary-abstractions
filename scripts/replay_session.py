@@ -23,6 +23,24 @@ because the second run meets a different world"*
 recorded turn may reach the write gate (§6 P3's no-write-gate-turn rule),
 and every environment fact that moved bytes since v0.10 is digest-pinned.
 
+## This tool verifies NO MACs, and that is a division of labour
+
+Stated here because a reader meeting a journal full of `mac` fields will
+reasonably assume the thing that reads journals checks them. **It does
+not.** `replay_session` compares pins and re-serves lines; it never derives
+a key and never calls `verify_turn_mac` or `verify_assumption_mac`. A
+journal whose every signature is forged replays exactly as well as an
+authentic one, because replay is asking a different question — *do these
+recorded lines still produce these recorded answers?* — and that question
+has no key in it.
+
+Integrity lives in two other places, both outside this file: **§7 B8**,
+which scores tamper detection from the keyed MACs against an adversary who
+repairs the digest chain, and the **out-of-band seal**
+(`experiments/session_corpus_seal.json`), whose whole-file digests a
+stranger can check with no key at all. Replay plus the seal is what a
+stranger gets; replay plus the seal plus B8 is what the maintainer gets.
+
 ## Stale environment is a refusal, not a lower score
 
 Every pin is compared before a single line is replayed, and any mismatch

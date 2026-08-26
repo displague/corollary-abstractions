@@ -196,11 +196,13 @@ def session_lines(index: int) -> tuple[str, ...]:
 def _delta_finding(
     changed: int, lines: list[str], pin_moves: dict[str, int]
 ) -> str:
-    """What the re-recording actually moved, written from the numbers.
+    """What THIS recording moved, written from the numbers.
 
-    Assembled rather than asserted for the same reason P1's finding is: the
-    registered expectation for this delta was TEN changed turns, and a
-    hand-typed sentence saying so would still have said so at zero.
+    Assembled rather than asserted for the reason P1's finding is: the
+    expectation registered for the B10 repair's recording was TEN changed
+    turns, a hand-typed sentence saying so would still have said so at zero,
+    and zero is what it was. That historical delta lives in its own block;
+    this sentence describes only the transition this run made.
     """
 
     pins = ", ".join(f"{name} ({count} headers)" for name, count in sorted(pin_moves.items()))
@@ -214,29 +216,30 @@ def _delta_finding(
             " This is the registered expectation exactly: the repair reached "
             "the defect and nothing else."
         )
+    if changed == 0 and pin_moves:
+        return head + (
+            " No SERVED BYTE moved; only the pin did. Re-recording was "
+            "mandatory anyway: a journal carrying the old pin would be "
+            "refused `stale-environment` by B3's own machinery on every "
+            "replay, so any edit to a module in RENDERING_MODULES — however "
+            "cosmetic — obliges a re-recording. That is the pin working, not "
+            "a failure. Which transition this was is named exactly by "
+            "`pin_values_that_moved`; the B10 repair's own delta, and the "
+            "registered expectation it missed, are in "
+            "`the_b10_repair_delta` beside this block."
+        )
     if changed == 0:
         return head + (
-            " THE REGISTERED EXPECTATION MISSED, and the miss is the "
-            "interesting part. Amendment 3 predicted ten changed turns on the "
-            "assumption that the repair would move the RECORDED side of B10's "
-            "comparison. It did not, and could not: a recorded session always "
-            "has a ledger attached, so `retract a999` always took the "
-            "unknown-id arm and always rendered 'no live assumption ... in "
-            "this session' — which is precisely the string fix (a) chose to "
-            "keep. What moved was the STATELESS side, the fresh ledgerless "
-            "session B10 compares against, which used to say 'this session "
-            "keeps no assumption ledger'. The two sides now agree because the "
-            "un-recorded one came to the recorded one. The corpus is recorded "
-            "again anyway, and had to be: harness.py is a rendering module, so "
-            "rendering_module_digests moved and every journal's pin with it. "
-            "A journal carrying the old pin would have been refused "
-            "`stale-environment` by B3's own machinery on every replay."
+            " Nothing moved at all — same journals, same pins. This "
+            "recording is a reproduction of the one before it, which is what "
+            "ROADMAP-v0.21 §4.0(2)'s determinism-plus-commit clause asks a "
+            "re-run to be. The B10 repair's delta is in "
+            "`the_b10_repair_delta` beside this block; it is not this one."
         )
     return head + (
-        " THE REGISTERED EXPECTATION MISSED. Amendment 3 froze it at ten "
-        "turns on the line `retract a999`; this is neither, and it is "
-        "published as a finding rather than absorbed. More than the defect's "
-        "own turns means the repair reached further than the defect."
+        " Turn answer-digests moved. Every one is listed in `changed_turns` "
+        "and the distinct lines in `distinct_lines_changed`, so a reader can "
+        "check whether the change reached only what it was meant to reach."
     )
 
 
@@ -427,17 +430,42 @@ def record(repo_root: Path) -> dict:
 
     prior_seal_path = repo_root / PRIOR_SEAL
     delta = None
+    # Two blocks, deliberately separate. `recording_delta` always describes
+    # THIS recording's transition and may be empty. `the_b10_repair_delta` is
+    # a fixed historical record of one particular transition and never
+    # changes. An earlier version had one block trying to be both, kept
+    # alive by carrying itself forward whenever a re-recording had nothing
+    # to say — and the result was a block that described the B10 repair
+    # while measuring an unrelated citation edit. A record that could
+    # describe either transition and names neither is a record a reader
+    # cannot use.
     if prior_digests:
         changed = []
         pin_moves: dict[str, int] = {}
+        pin_values: dict[str, dict] = {}
         for entry in sessions:
             old = prior_digests.get(entry["session_id"], {})
             journal = json.loads(
                 (repo_root / entry["journal"]).read_text(encoding="utf-8")
             )
             for name, value in journal["header"]["pins"].items():
-                if old.get("pins", {}).get(name) != value:
+                was = old.get("pins", {}).get(name)
+                if was != value:
                     pin_moves[name] = pin_moves.get(name, 0) + 1
+                    # WHICH values moved, not only that some did. A delta
+                    # that says "rendering_module_digests moved on 60
+                    # headers" is true of every re-recording after any
+                    # rendering module changes, so it cannot tell a reader
+                    # WHICH transition it measured.
+                    if isinstance(value, dict) and isinstance(was, dict):
+                        for leaf in sorted(set(value) | set(was)):
+                            if value.get(leaf) != was.get(leaf):
+                                pin_values.setdefault(
+                                    f"{name}.{leaf}",
+                                    {"was": was.get(leaf), "now": value.get(leaf)},
+                                )
+                    else:
+                        pin_values.setdefault(name, {"was": was, "now": value})
             for turn in journal["turns"]:
                 was = old.get("turns", {}).get(turn["turn_index"])
                 now = turn["result"]["answer_bytes_digest"]
@@ -497,6 +525,17 @@ def record(repo_root: Path) -> dict:
             ),
             "changed_turns": changed,
             "header_pins_that_moved": pin_moves,
+            "pin_values_that_moved": pin_values,
+            "which_transition_this_measures": (
+                "the transition from the journals that were on disk when this "
+                "recording ran to the ones it wrote — named exactly by "
+                "`pin_values_that_moved` above. It is NOT necessarily the B10 "
+                "repair transition: any change to a rendering module moves "
+                "the same pin on all 60 headers and produces a "
+                "same-shaped delta. `the_b10_repair_delta` below records that "
+                "one separately, because a block that could describe either "
+                "and names neither is a block a reader cannot use."
+            ),
             "finding": _delta_finding(len(changed), lines_changed, pin_moves),
             "counts_unchanged": (
                 prior_seal is not None
@@ -514,7 +553,30 @@ def record(repo_root: Path) -> dict:
     return {
         "schema": SEAL_SCHEMA,
         "prerequisite": "P3",
-        **({"repair_delta": delta} if delta else {}),
+        **({"recording_delta": delta} if delta else {}),
+        "the_b10_repair_delta": {
+            "what_it_was": (
+            "the recording made at the tree repaired by prereg "
+            "amendment 3's fix (a), committed as [GATE3-V21]."
+            ),
+            "registered_expectation": (
+            "EXACTLY the ten turns B10 named would change."
+            ),
+            "what_it_measured": (
+            "ZERO turn answer-digests changed; "
+            "rendering_module_digests moved on all 60 headers."
+            ),
+            "expectation_met": False,
+            "why_it_missed": (
+            "a recorded session always has a ledger attached, so "
+            "`retract a999` always took the unknown-id arm and always "
+            "rendered the string fix (a) chose to KEEP. What moved was "
+            "the STATELESS side of B10's comparison — the fresh "
+            "ledgerless session B10 compares against — which appears "
+            "in no journal. Wrong about which side would move, right "
+            "that the sides would meet."
+            ),
+            },
         "design": "docs/DESIGN-session-ledger.md",
         "design_clause": "§6 P3 step (3) — the seal",
         "prereg": PREREG,
@@ -540,6 +602,19 @@ def record(repo_root: Path) -> dict:
             "threat model is that the tamperer holds no key — and the price "
             "of that is that a reader who is not the maintainer holds no key "
             "either. Said here rather than discovered later."
+        ),
+        "and_note_that_replay_verifies_no_macs_at_all": (
+            "scripts/replay_session.py compares pins and re-serves lines. It "
+            "never derives a key and never calls verify_turn_mac or "
+            "verify_assumption_mac, so a journal whose every signature was "
+            "forged would replay exactly as well as an authentic one. That is "
+            "a division of labour rather than a gap: replay asks whether "
+            "recorded lines still produce recorded answers, a question with "
+            "no key in it. Integrity lives in §7 B8 (keyed-MAC tamper "
+            "detection against an adversary who repairs the digest chain) and "
+            "in the out-of-band whole-file digests below. Replay plus these "
+            "digests is what a stranger gets; replay plus these digests plus "
+            "B8 is what the maintainer gets."
         ),
         "half_b_discipline": (
             "implementation and debugging may exercise half A only; half B's "

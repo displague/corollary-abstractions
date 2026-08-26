@@ -290,7 +290,22 @@ class P2SeparatorProbe(unittest.TestCase):
         self.assertEqual(self.artifact["seal"]["prompts"], sealed["prompts"])
 
     def test_the_seal_commit_precedes_the_probe_commit(self) -> None:
-        """Order, checked against git rather than asserted in prose."""
+        """Order, checked against git — and this is a FILE-CREATION check.
+
+        Scope, stated because it is narrower than the name suggests: this
+        compares the commits that ADDED each file, so it establishes that
+        the question was committed before the answer was. It does NOT
+        establish that the seal's content was never touched afterwards — it
+        has been, twice, by dated amendments.
+
+        The content check is the digest, and it is a separate test: the
+        probe artifact carries `file_digest` over the seal's bytes, so a
+        seal edited after the probe ran makes the artifact fail to
+        reproduce. Together the two say what one literal
+        `sealed_before_the_probe_existed: true` used to assert on its own —
+        and that literal is gone, because a flag nothing computes is not
+        evidence (independent review, 2026-08-26).
+        """
 
         def _first_commit(path: Path) -> str:
             out = subprocess.run(

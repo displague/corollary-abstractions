@@ -20,7 +20,7 @@ another's row would produce a plausible wrong artifact rather than an error.
 
 A line is **admitted by a class** when two things hold:
 
-1. ``harness.route_line``'s first-match-wins chain (`harness.py:2062-2115`)
+1. ``harness.route_line``'s first-match-wins chain (`harness.py:2291-2354`)
    dispatches it to that class's route; and
 2. every slot in the class's form carries a value drawn from that class's
    **registered vocabulary** — the finite set the route can act on, rather
@@ -74,7 +74,7 @@ one environment-gated number is the gloss class's WordNet lemma count: the
 archive is not a committed artifact, so when its probe does not register the
 class reports ``size: null`` with ``gated_on`` naming the subsystem, exactly
 as the capability sheet publishes that row off rather than hiding it
-(`serve_chat.py:339-342`). Per ROADMAP-v0.21 §4.0(2) the artifact is
+(`serve_chat.py:355-358`). Per ROADMAP-v0.21 §4.0(2) the artifact is
 committed from a deterministic runner; reproductions are welcome and
 recorded.
 """
@@ -138,7 +138,7 @@ def _owns_vocabulary(repo_root: Path) -> dict:
 
     `ownership.lookup` compares ``skeleton(sub, node_classes)`` against a
     query skeleton built with every slot in class ``V``
-    (`ownership.py:88-110`). So the answerable set is exactly the distinct
+    (`ownership.py:88-109`). So the answerable set is exactly the distinct
     skeletons of compound (`op`/`call`) subterms whose slots all print as
     ``V`` — a skeleton carrying a parameter-class slot is unreachable from
     any typed query, and the count says so separately rather than rolling
@@ -296,7 +296,7 @@ def _conform_vocabulary(repo_root: Path) -> dict:
 def _write_gate_vocabulary() -> dict:
     """Row 10's closed half exists and is deliberately NOT given a number.
 
-    `_existing_file` (`harness.py:961-968`) admits every regular file under
+    `_existing_file` (`harness.py:975-982`) admits every regular file under
     the root, so the closed half of this row is the working tree itself. That
     set changes with **every commit, including the commit that would carry
     this artifact** — counting it would make the number stale the moment it
@@ -307,7 +307,7 @@ def _write_gate_vocabulary() -> dict:
     The open half is `_looks_like_path`, which admits any whitespace-free
     string ending `.json` or carrying a separator whether or not it exists —
     deliberately, so the gate's own named refusal is what the person sees
-    (`harness.py:947-958`).
+    (`harness.py:961-972`).
     """
 
     return {
@@ -377,7 +377,11 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
     vocabularies = {
         "statement_ids": {
             "size": words["statement_ids"],
-            "producer": "resolver.default_index().corpus_of",
+            "producer": (
+                "resolver.default_index().corpus_of — built over BOTH data/ "
+                "and data_holdout/ (resolver.py:821-822), so this vocabulary "
+                "spans the holdout"
+            ),
         },
         "corpus_names": {
             "size": words["corpora"],
@@ -403,18 +407,37 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         "write_gate_existing_files": gate,
         "denominators_that_differ_and_why": {
             "statement_ids": words["statement_ids"],
-            "statements_with_a_template_tree": owns["statements_searched"],
+            "statements_owns_searches": owns["statements_searched"],
             "difference": (
                 words["statement_ids"] - owns["statements_searched"]
             ),
             "why": (
-                "the resolver index covers every committed statement node; "
-                "`decompose.load_trees` covers only the nodes carrying a "
-                "template tree. The gap is the goedelpset skeleton corpus, "
-                "which the resolver can name and the ownership matcher has no "
-                "tree to search. Two classes therefore report two different "
-                "corpus sizes on purpose, and neither is wrong for its own "
-                "route."
+                "**the two routes read different DIRECTORIES.** "
+                "`resolver.default_index` builds over BOTH `data/` and "
+                "`data_holdout/` (`resolver.py:821-822`); "
+                "`harness._route_ownership` calls `ownership.lookup(query, "
+                "repo_root / 'data')`, so the matcher never sees the holdout "
+                "at all. `decompose.load_trees` over `data/` yields 12,777 "
+                "nodes and over `data_holdout/` yields 2,053 — and 2,053 is "
+                "the whole difference, exactly."
+            ),
+            "corrected": (
+                "2026-08-26, from independent review. This field previously "
+                "blamed the gap on nodes lacking a template tree and named "
+                "the goedelpset skeleton corpus as the cause. That was wrong "
+                "about the mechanism: goedelpset IS the holdout corpus, and "
+                "the reason `owns` cannot reach it is the directory it is in, "
+                "not the shape of its nodes. A plausible explanation for a "
+                "correct number is still a wrong sentence."
+            ),
+            "and_the_consequence_worth_stating": (
+                "the `narrow id` and resolver answering vocabularies "
+                "therefore SPAN THE HOLDOUT and the `owns` one does not. That "
+                "is a fact about what these routes can name, published here "
+                "rather than inferred from a subtraction; "
+                "docs/DESIGN-holdout-quarantine.md governs what may be "
+                "CLAIMED from holdout material, and nothing in this artifact "
+                "claims anything from it."
             ),
         },
         "wordnet_lemmas": gloss,
@@ -460,7 +483,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         bound_kind="closed",
         slots=[],
         admitted_commands=1,
-        counting="the empty line, and nothing else (harness.py:2065-2076)",
+        counting="the empty line, and nothing else (harness.py:2294-2305)",
         answering_vocabulary=None,
     )
     _fill(
@@ -477,6 +500,25 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
                 "name": "value",
                 "kind": "closed",
                 "size": None,
+                "size_is_null_because": (
+                    "this slot has no ONE size. Its vocabulary is selected by "
+                    "the `kind` slot, so the class's admitted count is a SUM "
+                    "over four disjoint vocabularies rather than a product of "
+                    "two slot sizes, and a single number here would be a "
+                    "number for none of them. The four sizes are listed in "
+                    "`per_kind_sizes` and the sum is the class's "
+                    "`admitted_commands`. `null` here means 'see the four', "
+                    "never 'unbounded' — the class is `closed` and the "
+                    "artifact means it. (Clarified 2026-08-26, from "
+                    "independent review: a null beside a `closed` label reads "
+                    "as an unbounded slot unless it says otherwise.)"
+                ),
+                "per_kind_sizes": {
+                    "corpus": words["corpora"],
+                    "discipline": words["disciplines"],
+                    "word": words["words"],
+                    "id": words["statement_ids"],
+                },
                 "vocabulary": "per-kind: corpus_names | disciplines | "
                 "resolver_words | statement_ids",
                 "note": (
@@ -496,7 +538,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         ),
         precondition=(
             "reachable only while a resolver candidate set is pending "
-            "(harness.py:2078-2079); the precondition gates *when* the class "
+            "(harness.py:2307-2308); the precondition gates *when* the class "
             "is reachable, not *how many* lines it admits"
         ),
         answering_vocabulary=words["statement_ids"],
@@ -556,7 +598,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=None,
         answering_note=(
             "a suppose line that binds a variable and computes is routed to "
-            "evaluate first (harness.py:2083-2091), so this class's *answering* "
+            "evaluate first (harness.py:2312-2320), so this class's *answering* "
             "half is evaluate's and is counted there"
         ),
     )
@@ -758,7 +800,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         admitted_commands=None,
         unbounded_reason=(
             "`_looks_like_path` is a syntactic test over free strings "
-            "(harness.py:947-958); a path that does not exist routes here on "
+            "(harness.py:961-972); a path that does not exist routes here on "
             "purpose so the gate's own refusal is what the person reads"
         ),
         answering_vocabulary=None,

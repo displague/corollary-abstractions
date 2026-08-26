@@ -31,6 +31,74 @@ DESIGN = REPO / "docs" / "DESIGN-session-ledger.md"
 PREREG = REPO / "experiments" / "session_ledger_prereg.json"
 
 
+def ledger_reading_routes(source: str, *, max_hops: int = 3) -> dict:
+    """Which `_route_*` functions can reach the assumption ledger, and how.
+
+    **Widened 2026-08-26, from independent review.** The first version of
+    this sweep walked only functions whose own name began with `_route`, and
+    only `getattr(..., "assumptions", ...)` calls. It therefore missed
+    `_route_evaluate`, which reads the ledger through the helper
+    `_live_bindings` one call away — and the amendment it backed published
+    the false sentence *"exactly two routes may read the ledger"*.
+
+    This version follows call hops through module-level functions and counts
+    plain attribute access as well as `getattr`, which is what the
+    amendment's own PROSE described all along. Returns `{route: [path...]}`
+    where a path is the chain of function names ending at the read.
+    """
+
+    import ast  # noqa: PLC0415
+
+    tree = ast.parse(source)
+    functions = {
+        node.name: node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef)
+    }
+
+    def _reads(node) -> bool:
+        for sub in ast.walk(node):
+            if isinstance(sub, ast.Attribute) and sub.attr == "assumptions":
+                return True
+            if (
+                isinstance(sub, ast.Call)
+                and isinstance(sub.func, ast.Name)
+                and sub.func.id == "getattr"
+                and len(sub.args) >= 2
+                and isinstance(sub.args[1], ast.Constant)
+                and sub.args[1].value == "assumptions"
+            ):
+                return True
+        return False
+
+    def _calls(node) -> set[str]:
+        out = set()
+        for sub in ast.walk(node):
+            if isinstance(sub, ast.Call) and isinstance(sub.func, ast.Name):
+                if sub.func.id in functions:
+                    out.add(sub.func.id)
+        return out
+
+    direct = {name: _reads(node) for name, node in functions.items()}
+    found: dict[str, list[str]] = {}
+    for name in functions:
+        if not name.startswith("_route"):
+            continue
+        frontier = [(name, [name])]
+        seen = {name}
+        while frontier:
+            current, path = frontier.pop(0)
+            if direct[current]:
+                found.setdefault(name, []).append(" -> ".join(path))
+            if len(path) > max_hops:
+                continue
+            for callee in sorted(_calls(functions[current])):
+                if callee not in seen:
+                    seen.add(callee)
+                    frontier.append((callee, path + [callee]))
+    return found
+
+
 def _flat(text: str) -> str:
     """The prereg's stated normalization, and only that.
 
@@ -234,6 +302,16 @@ class _Recorded(unittest.TestCase):
 
     LINES: tuple[str, ...] = ()
 
+    #: Every test in this class records its OWN session with an EPHEMERAL
+    #: key ring, so a bare clone runs it with no `.runtime/session-keys.json`
+    #: and no committed key. That is deliberate and is the honest boundary:
+    #: the COMMITTED journals' MACs cannot be checked by anyone but the
+    #: maintainer, because `.gitignore` excludes the keyfile and B8's threat
+    #: model is that the tamperer holds no key. What a bare clone CAN check
+    #: is every journal against the seal's out-of-band digests, the whole
+    #: replay, and every MAC property demonstrated here on a session it minted
+    #: itself. `experiments/session_corpus_seal.json` says the same thing in
+    #: `what_a_stranger_can_and_cannot_check`.
     @classmethod
     def setUpClass(cls) -> None:
         import session_ledger as ledger  # noqa: PLC0415
@@ -636,37 +714,75 @@ class TheB10Regression(unittest.TestCase):
             self._serve("retract", with_ledger=False),
         )
 
-    def test_the_sweep_finds_no_other_ledger_reader_in_a_refusal(self) -> None:
-        """Amendment 3's sweep, kept live rather than filed as prose.
+    def test_the_sweep_finds_exactly_three_ledger_readers(self) -> None:
+        """Amendment 3's sweep, kept live — and widened after review.
 
-        An AST walk for `_route_*` functions that read the session's
-        assumption ledger. Two are expected and both are accounted for in
-        the amendment: `_route_suppose` (the budget refusal, disarmed by the
-        protocol's cap of 8) and `_route_retract` (repaired here). A third
-        would be a new member of the same family and this test is what makes
+        THREE routes reach the assumption ledger, not two. The first sweep
+        said two because it walked only `_route_*` bodies and only `getattr`,
+        so it missed `_route_evaluate`, which reads through `_live_bindings`
+        one call away. That published a false sentence, corrected in prereg
+        amendment 5.
+
+        Each of the three, and what it costs:
+
+        * `_route_evaluate` -> `_live_bindings` — reads `bound_names()` to
+          decide WHETHER an assumption is relevant, then goes through the
+          barrier to consume one. No B10 exposure: if it consults, it cites.
+        * `_route_suppose` — `declare()` deliberately does not fire the
+          barrier (a declaring turn must not cite), and the budget refusal
+          renders for the live set's SIZE. Disarmed by the cap of 8.
+        * `_route_retract` — the success arm fires the barrier and cites;
+          the unknown-id arm reads presence only, which is the defect B10
+          caught and fix (a) repaired.
+
+        A fourth would be a new member of the family, and this is what makes
         it announce itself.
         """
 
-        import ast  # noqa: PLC0415
-
         source = (REPO / "scripts" / "harness.py").read_text(encoding="utf-8")
-        readers = set()
-        for node in ast.walk(ast.parse(source)):
-            if not isinstance(node, ast.FunctionDef):
-                continue
-            if not node.name.startswith("_route"):
-                continue
-            for sub in ast.walk(node):
-                if (
-                    isinstance(sub, ast.Call)
-                    and isinstance(sub.func, ast.Name)
-                    and sub.func.id == "getattr"
-                    and len(sub.args) >= 2
-                    and isinstance(sub.args[1], ast.Constant)
-                    and sub.args[1].value == "assumptions"
-                ):
-                    readers.add(node.name)
-        self.assertEqual(readers, {"_route_suppose", "_route_retract"})
+        found = ledger_reading_routes(source)
+        self.assertEqual(
+            set(found),
+            {"_route_evaluate", "_route_suppose", "_route_retract"},
+            f"the set of ledger-reading routes moved: {found}",
+        )
+        self.assertTrue(
+            any("_live_bindings" in path for path in found["_route_evaluate"]),
+            "the call hop the first sweep missed is no longer being followed",
+        )
+
+    def test_the_sweep_catches_a_read_hidden_one_call_away(self) -> None:
+        """The reviewer's bypass, as a fixture. It must go red.
+
+        A sweep that cannot see through one call hop is a sweep that already
+        missed one, so this feeds it the exact shape it missed and requires
+        the route to be named.
+        """
+
+        bypass = (
+            "def _sneaky(session):\n"
+            "    return getattr(session, 'assumptions', None)\n"
+            "\n\n"
+            "def _route_hypothetical(session, line):\n"
+            "    live = _sneaky(session)\n"
+            "    return {'route': 'hypothetical', 'live': live is not None}\n"
+        )
+        found = ledger_reading_routes(bypass)
+        self.assertIn("_route_hypothetical", found)
+        self.assertIn(
+            "_route_hypothetical -> _sneaky", found["_route_hypothetical"]
+        )
+
+    def test_the_sweep_sees_plain_attribute_access_too(self) -> None:
+        """`getattr` was never the only way to read a field."""
+
+        plain = (
+            "def _route_plain(session, line):\n"
+            "    if session.assumptions is None:\n"
+            "        return {'route': 'plain'}\n"
+            "    return {'route': 'plain', 'n': len(session.assumptions.live())}\n"
+        )
+        self.assertIn("_route_plain", ledger_reading_routes(plain))
 
 
 class Replay(_Recorded):
@@ -1120,16 +1236,38 @@ class TheRepairRun(unittest.TestCase):
     def test_the_repair_delta_is_published_with_its_missed_expectation(
         self,
     ) -> None:
-        """The registered expectation missed, and the seal says so."""
+        """The registered expectation missed, and the seal still says so.
 
-        delta = self.seal["repair_delta"]
-        self.assertFalse(delta["expectation_met"])
-        self.assertEqual(delta["turns_whose_answer_digest_changed"], 0)
-        self.assertEqual(
-            delta["header_pins_that_moved"], {"rendering_module_digests": 60}
-        )
+        Split from `recording_delta` on 2026-08-26. One block used to be
+        both — this recording's transition AND the B10 repair's — kept alive
+        by carrying itself forward whenever a re-recording had nothing to
+        say. It ended up describing the repair while MEASURING an unrelated
+        citation edit that moved the same pin. A block that could describe
+        either transition and names neither is a block a reader cannot use,
+        so the historical one is now fixed and the live one is always about
+        the run that wrote it.
+        """
+
+        repair = self.seal["the_b10_repair_delta"]
+        self.assertFalse(repair["expectation_met"])
+        self.assertIn("ten turns", repair["registered_expectation"])
+        self.assertIn("ZERO", repair["what_it_measured"])
+        self.assertIn("STATELESS side", repair["why_it_missed"])
+
+    def test_this_recordings_own_delta_names_its_own_transition(self) -> None:
+        """And can therefore be told apart from the historical one."""
+
+        delta = self.seal["recording_delta"]
+        self.assertIn("which_transition_this_measures", delta)
         self.assertTrue(delta["counts_unchanged"])
-        self.assertIn("EXPECTATION MISSED", delta["finding"])
+        # The pin values it moved, not merely that some pin moved: every
+        # rendering-module edit produces the same field-level shape.
+        self.assertIn("pin_values_that_moved", delta)
+        self.assertEqual(
+            sorted(delta["pin_values_that_moved"]),
+            sorted(f"rendering_module_digests.{leaf}" for leaf in ()) or [],
+            "a clean reproduction moved no pin, so none should be listed",
+        )
 
     def test_r1_holds_and_serves_exactly_the_designs_sentence(self) -> None:
         result = self.run3["result_gate"]
@@ -1144,26 +1282,58 @@ class TheRepairRun(unittest.TestCase):
     def test_no_surface_was_invented(self) -> None:
         """The design names none, so the claim lives in artifact and tests.
 
-        The capability sheet carries registered-run rows for realization,
-        conformance and the foreign voice because those designs asked for
-        them. DESIGN-session-ledger asked for none, and shipping a row it did
-        not ask for would be serving more than the gate licensed.
+        Broadened 2026-08-26 from independent review: asserting that
+        `serve_chat.py` does not contain the string "session_ledger_run" was
+        a grep, and a grep is not the design's terms. §3 names three things
+        a surface would be — a capability-sheet row, a route, a status — so
+        the test now checks the BUILT SHEET for all three.
         """
 
-        from serve_chat import LINE_GRAMMAR  # noqa: PLC0415
-
-        sheet_source = (REPO / "scripts" / "serve_chat.py").read_text(
-            encoding="utf-8"
+        from serve_chat import (  # noqa: PLC0415
+            ENGINE_STATUSES,
+            LINE_GRAMMAR,
+            SKIN_ASSIGNED_STATUSES,
+            WRITE_GATE_STATUSES,
+            ChatEngine,
         )
-        self.assertNotIn("session_ledger_run", sheet_source)
+        from harness import CoreSession  # noqa: PLC0415
+
+        engine = ChatEngine(REPO, pool_size=0)
+        engine._matrix = CoreSession.boot(REPO, offline=True).matrix
+        sheet = engine.capability_sheet()
+
+        # 1. No sheet row keyed to the session ledger. The registered-run
+        #    rows are exactly the three whose designs asked for one.
+        self.assertEqual(
+            {
+                key
+                for key, value in sheet.items()
+                if isinstance(value, dict) and "run" in value
+            },
+            {"realization", "conformance", "foreign_voice"},
+        )
+        for key in sheet:
+            self.assertNotIn("session", key.lower().replace("session_object", ""))
+
+        # 2. No new route beyond the one the Assumption status alphabet
+        #    required, and on this skin it always refuses.
+        routes = {row["route"] for row in LINE_GRAMMAR}
+        self.assertIn("retraction", routes)
+        row = next(r for r in LINE_GRAMMAR if r["route"] == "retraction")
+        self.assertEqual(sorted(row["statuses"]), ["canceled", "refused"])
+
+        # 3. No new status. The retraction row reuses the frozen alphabet.
+        alphabet = set(ENGINE_STATUSES) | set(WRITE_GATE_STATUSES) | set(
+            SKIN_ASSIGNED_STATUSES
+        )
+        for grammar_row in LINE_GRAMMAR:
+            for status in grammar_row["statuses"]:
+                self.assertIn(status, alphabet, grammar_row["form"])
+
         self.assertIn(
             "no capability-sheet row",
             self.run3["result_gate"]["where_the_claim_lives"],
         )
-        # The one surface that DID change is the grammar row the Assumption
-        # status alphabet required, and on this skin it always refuses.
-        row = next(r for r in LINE_GRAMMAR if r["route"] == "retraction")
-        self.assertEqual(sorted(row["statuses"]), ["canceled", "refused"])
 
     def test_b1s_ordering_slip_is_still_published_as_missed(self) -> None:
         """Not reinterpreted by a green run."""
