@@ -447,9 +447,13 @@ class TheAmendmentIsDatedRetrospectiveAndAppendOnly(unittest.TestCase):
         """APPEND-ONLY, checked mechanically rather than promised.
 
         The house rule for an in-place edit to a canonical artifact is that a
-        reader can undo it and get the original back. Here that is literally
-        true: the amendment is one contiguous block, and removing it restores
-        the blob sealed at `BASE_COMMIT`.
+        reader can undo it and get the original back. Re-aimed 2026-08-26:
+        the retirement-chain mechanics add exactly two structures — entries
+        in the `amendments` array, and `retired_for_future_comparisons`
+        markers on frozen rows (the evaluator row gained one when the v0.21
+        gate's first run caught its undeclared move). Removing BOTH restores
+        the blob sealed at `BASE_COMMIT`; anything else that moved still
+        fails.
         """
         try:
             original = subprocess.run(
@@ -458,14 +462,22 @@ class TheAmendmentIsDatedRetrospectiveAndAppendOnly(unittest.TestCase):
         except (OSError, subprocess.CalledProcessError) as exc:
             self.skipTest(f"git could not read the sealed blob: {exc}")
 
+        import re
         current = PREREG.read_bytes().replace(b"\r\n", b"\n")
         start = current.index(b'  "amendments": [')
         end = current.index(b'  "census": {')
         reconstructed = current[:start] + current[end:]
+        # Strip retirement markers: a contiguous object under the key,
+        # including its leading newline and trailing comma, exactly the
+        # shape the dated amendments splice in.
+        reconstructed = re.sub(
+            rb'\n\s*"retired_for_future_comparisons": \{[^}]*\},',
+            b"", reconstructed)
         self.assertEqual(
             reconstructed, original.replace(b"\r\n", b"\n"),
-            "the amendment is not append-only: removing the block does not "
-            "restore the preregistration as it was sealed")
+            "the amendment chain is not append-only: removing the "
+            "amendments array and the retirement markers does not restore "
+            "the preregistration as it was sealed")
 
 
 @unittest.skipUnless((ROOT / "experiments" / "conformance_e5_late.json").exists(),
