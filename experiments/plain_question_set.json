@@ -213,5 +213,17 @@
     "best_honest_verified_candidate_count": 21,
     "of": 30,
     "why": "the exhaust-prior questions have no committed material to verify against, so a candidate that verified for one of them would be the proposer inventing rather than selecting."
+  },
+  "counts_note_correction": {
+    "dated": "2026-08-26",
+    "found_by": "adversarial review of the slice-2 merge candidate",
+    "the_sentence_corrected": "`counts_note` reads \"The first version of this file typed 16/6/8 against an actual 17/5/8\". The actual is **16/5/9** — conditional 16, ask 5, exhaust 9 — which is what the `counts` block beside it has always carried and what the suite has always checked.",
+    "why_the_original_sentence_is_left_where_it_is": "the file is a SEALED input set whose commit is an ancestor of every proposer commit, and the `counts` block is computed from the questions rather than typed. Rewriting the prose would edit a sealed artifact to fix a sentence about a defect; adding the correction beside it leaves the seal checkable and the mistake legible.",
+    "and_the_irony_is_the_point": "`counts_note` is the field that congratulates the suite for catching a typed count, and it typed a count. No number this set is used for moves: every denominator in the run is read from `counts` or recomputed from `questions`, and a test now asserts the corrected triple against both.",
+    "the_corrected_triple": [
+      16,
+      5,
+      9
+    ]
   }
 }

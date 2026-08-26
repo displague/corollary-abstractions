@@ -113,6 +113,47 @@
       ]
     },
     "the_overlap_is_real_and_is_not_hidden": {
+      "addendum_dated_2026_08_26": {
+        "and_the_cannot_be_added_sentence_is_narrowed": "the original sentence said the sizes cannot be added. That is too broad as written: the four subsets are drawn on TWO independent axes, and the ROUTING axis alone does partition the thirty exactly (13 found + 5 waiting + 12 reachable = 30, with no overlap). What cannot be added is the DISPOSITION label across the routing partition: `exhaust_authored` cuts across all three routing subsets and its size is not a fourth part of the same whole.",
+        "count": 8,
+        "exhaust_authored_that_reach_the_proposer": [
+          "g1-08",
+          "g1-23",
+          "g1-24",
+          "g1-25",
+          "g1-26",
+          "g1-28",
+          "g1-29",
+          "g1-30"
+        ],
+        "found_by": "adversarial review of the slice-2 merge candidate",
+        "the_disposition_axis_does_not": {
+          "exhaust_authored": 9,
+          "of_which_proposer_reachable": [
+            "g1-08",
+            "g1-23",
+            "g1-24",
+            "g1-25",
+            "g1-26",
+            "g1-28",
+            "g1-29",
+            "g1-30"
+          ],
+          "of_which_resolver_found": [],
+          "of_which_resolver_waiting": [
+            "g1-27"
+          ]
+        },
+        "the_routing_axis_partitions_exactly": {
+          "pairwise_disjoint": true,
+          "proposer_reachable": 12,
+          "resolver_found": 13,
+          "resolver_waiting": 5,
+          "sum": 30
+        },
+        "what_was_missing": "this field named the exhaust-authored questions the resolver pre-empted and stopped there, so the LARGER cross-cutting set — the exhaust-authored questions that reach the proposer — was countable from the artifact but never named in it.",
+        "why_it_is_the_one_that_matters": "these are the questions on which slice 2 can change behaviour AND on which the honest output was a refusal. Two of the eight came back as clarifications — the run's finding F1, and DESIGN-plain-input §8.3."
+      },
       "exhaust_authored_that_the_resolver_pre_empted": [
         "g1-27"
       ],

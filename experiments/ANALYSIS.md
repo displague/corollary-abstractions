@@ -6031,12 +6031,21 @@ sessions are maintainer-authored, which is precisely what makes the floor
 meetable by construction — and the prereg puts that non-claim beside the
 meetability argument rather than at the end of a list.
 
-## NOTES: four claims in this slice's commit messages are wrong (2026-08-26)
+## NOTES: five claims in this slice's commit messages are wrong (2026-08-26)
 
-Commit messages are immutable, so the corrections live here. All four were
+Commit messages are immutable, so the corrections live here. All five were
 found by independent review of the merge candidate, and each is recorded
 with the commit that carries it so a reader following the history knows
 which sentences not to trust.
+
+> **Corrected in place 2026-08-26.** This heading and the sentence above
+> it both read **four** while the table below listed **five** rows, and
+> the section's own closing paragraph says *"three of the five"*. The
+> count was typed rather than read — which is the exact defect the
+> section exists to catalogue, committed inside the catalogue. Corrected
+> in place rather than by a note beneath, because a false count in a
+> heading is read by everyone and a note beneath it is read by nobody;
+> removing this blockquote restores the file byte for byte.
 
 | commit | the claim as written | the correction |
 |---|---|---|

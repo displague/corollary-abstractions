@@ -1880,6 +1880,149 @@ class TheSuccessorAppendix(unittest.TestCase):
         self.assertIn("20.62/30", plain)
 
 
+class TheSmallCorrectionsReviewFound(unittest.TestCase):
+    """L8-L13: a miscounted note, a stale citation, an unnamed overlap, a
+    filter looser than its key, and a digest promise CRLF would have broken."""
+
+    def test_L8_the_question_sets_counts_note_is_corrected_beside_its_data(
+        self,
+    ) -> None:
+        question_set = json.loads(
+            (REPO / "experiments" / "plain_question_set.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        counts = question_set["counts"]
+        correction = question_set["counts_note_correction"]
+        self.assertEqual(
+            correction["the_corrected_triple"],
+            [
+                counts["authors_prior_conditional"],
+                counts["authors_prior_ask"],
+                counts["authors_prior_exhaust"],
+            ],
+        )
+        # And the corrected triple is what the QUESTIONS say, not what the
+        # counts block says — the same derivation the note congratulates.
+        from collections import Counter  # noqa: PLC0415
+
+        tally = Counter(
+            item["authors_prior"] for item in question_set["questions"]
+        )
+        self.assertEqual(
+            correction["the_corrected_triple"],
+            [tally["conditional"], tally["ask"], tally["exhaust"]],
+        )
+        self.assertIn("16/6/8", question_set["counts_note"],
+                      "the original sentence was edited rather than corrected")
+
+    def test_L9_the_analysis_heading_counts_its_own_table(self) -> None:
+        text = (REPO / "experiments" / "ANALYSIS.md").read_text(
+            encoding="utf-8"
+        )
+        start = text.index("## NOTES: five claims in this slice's commit")
+        section = text[start : start + 6000]
+        rows = [
+            line for line in section.splitlines()
+            if line.startswith("| `") or line.startswith("| four commits")
+        ]
+        self.assertEqual(len(rows), 5)
+        self.assertIn("Corrected in place 2026-08-26", section)
+
+    def test_L10_the_spec_cites_route_line_where_it_now_lives(self) -> None:
+        spec = (REPO / "docs" / "SPEC-chat-completions-skin.md").read_text(
+            encoding="utf-8"
+        )
+        source = (REPO / "scripts" / "harness.py").read_text(
+            encoding="utf-8"
+        ).splitlines()
+        start = next(
+            index for index, line in enumerate(source, 1)
+            if line.startswith("def route_line(")
+        )
+        end = next(
+            index for index, line in enumerate(source, 1)
+            if index > start and "**_route_dispatch(session, line)}" in line
+        )
+        self.assertIn(f"`scripts/harness.py:{start}-{end}`", spec)
+        self.assertIn(f"`scripts/harness.py:{start}`", spec)
+        main_line = next(
+            index for index, line in enumerate(source, 1)
+            if line.startswith("def main(")
+        )
+        self.assertIn(f"`scripts/harness.py:{main_line}`", spec)
+
+    def test_L11_the_overlap_names_its_members_and_narrows_its_claim(
+        self,
+    ) -> None:
+        seal = json.loads(
+            (REPO / "experiments" / "plain_input_corpus_seal.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        block = seal["denominators"]
+        addendum = block["the_overlap_is_real_and_is_not_hidden"][
+            "addendum_dated_2026_08_26"
+        ]
+        exhaust = set(block["exhaust_authored"]["question_ids"])
+        reachable = set(
+            block["proposer_reachable_remainder"]["question_ids"]
+        )
+        self.assertEqual(
+            addendum["exhaust_authored_that_reach_the_proposer"],
+            sorted(exhaust & reachable),
+        )
+        self.assertEqual(addendum["count"], 8)
+        routing = addendum["the_routing_axis_partitions_exactly"]
+        self.assertEqual(routing["sum"], 30)
+        self.assertTrue(routing["pairwise_disjoint"])
+
+    def test_L12_the_resolver_found_filter_checks_the_route_it_names(
+        self,
+    ) -> None:
+        source = (REPO / "scripts" / "record_plain_corpus.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('row["status"] == "found" and row["route"] == "resolver"',
+                      source)
+
+    def test_L13_every_pinned_journal_hashes_from_its_RAW_bytes(self) -> None:
+        """The seal promises a stranger can check offline with no key.
+
+        `read_text` hides the problem: it translates CRLF on the way in, so a
+        digest test that reads text passes on a checkout where the raw bytes
+        would not. This one reads bytes, which is what a stranger does.
+        """
+
+        import hashlib  # noqa: PLC0415
+
+        seal_path = REPO / "experiments" / "plain_input_corpus_seal.json"
+        seal = json.loads(seal_path.read_text(encoding="utf-8"))
+        for entry in seal["sessions"]:
+            for path, key in (
+                (entry["journal"], "journal_digest"),
+                (entry["read_log"], "read_log_digest"),
+            ):
+                raw = (REPO / path).read_bytes()
+                self.assertEqual(
+                    hashlib.sha256(raw).hexdigest(), entry[key], path
+                )
+                self.assertNotIn(b"\r\n", raw, path)
+        prompts = (REPO / "experiments" / "plain_input_prompts.json").read_bytes()
+        self.assertEqual(
+            hashlib.sha256(prompts).hexdigest(),
+            seal["prompts_artifact_digest"],
+        )
+
+    def test_L13_the_paths_are_pinned_in_gitattributes(self) -> None:
+        attrs = (REPO / ".gitattributes").read_text(encoding="utf-8")
+        for path in (
+            "experiments/sessions/**",
+            "experiments/plain_input_prompts.json",
+        ):
+            self.assertIn(f"{path} text eol=lf", attrs)
+
+
 class _StubVerified:
     """A Verified stand-in, so the shape tests need no model."""
 

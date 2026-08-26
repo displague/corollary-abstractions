@@ -22,10 +22,13 @@ this spec serves both rather than pretending they are one:
 - **`CoreSession`** (`scripts/harness.py:533`) — boots the capability
   matrix and routes the **registered line grammar** through
   `route_line(repo_root, session, line) -> dict`
-  (`scripts/harness.py:2272`). No save/restore. Since v0.21 it also
-  carries an optional `assumptions` field — `None` on every session this
-  skin serves, and attached only by the session ledger's recorder and
-  replayer (`docs/DESIGN-session-ledger.md` §3).
+  (`scripts/harness.py:2305`). No save/restore. Since v0.21 it also
+  carries two optional fields — `assumptions` and, since slice 2,
+  `proposer` — **`None` on every session this skin serves**, and
+  attached only by the session ledger's recorder and replayer or by a
+  gate runner (`docs/DESIGN-session-ledger.md` §3,
+  `docs/DESIGN-plain-input.md` §2.2). ¶AMD-1 records the wire-schema
+  debt that falls due the day either is attached here.
 - **`ConversationSession`** (`scripts/conversation.py:126`) — the
   key-signed, owner-private slot-filling session:
   `say(utterance) -> Turn` (`scripts/conversation.py:253`) over the
@@ -35,7 +38,7 @@ Both drive the same `Controller`/verifier machinery
 (`scripts/controller.py`); the skin adds **no third path**. A chat
 conversation selects which object serves it via the request's `model`
 field (§3). The TTY is today the interactive skin over `CoreSession`
-(`harness.main()`, `scripts/harness.py:2351`); `ConversationSession` has
+(`harness.main()`, `scripts/harness.py:2411`); `ConversationSession` has
 so far been driven by tests and a scripted demo printer, so HTTP is the
 **first interactive skin** over that object — which is why its mapping
 (§6.2) carries the P-IH6 adjudication.
@@ -157,10 +160,11 @@ UTF-8.
 ## 5. The registered line grammar is the request surface (kernel profile)
 
 The kernel profile routes exactly `route_line`'s chain
-(`scripts/harness.py:2272-2335`; this citation read `:1393-1437` until
+(`scripts/harness.py:2305-2368`; this citation read `:1393-1437` until
 v0.21, which DESIGN-plain-input §2.2 had already recorded as stale with
 the instruction to correct it whenever a design next touched that file —
-the session ledger did) — first match wins, statuses verbatim:
+the session ledger did, and slice 2's row-12 pre-router moved it again,
+from `:2272-2335` on 2026-08-26) — first match wins, statuses verbatim:
 
 | # | line form | route | statuses |
 |---|---|---|---|

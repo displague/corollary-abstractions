@@ -491,8 +491,17 @@ def denominators(repo_root: Path) -> dict:
             "authors_prior": item["authors_prior"],
         }
 
+    # The key says `resolver_found`, so the filter checks the ROUTE as well
+    # as the status — a correction dated 2026-08-26 after review. It read
+    # `status == "found"` alone, which would have counted a `found` served by
+    # `twin`, `closure` or `conform` as a resolver bind. It changes nothing
+    # here (all thirteen are route `resolver`, measured before and after) and
+    # a key that asserts more than its filter checks is the defect class this
+    # cycle's review found four times.
     resolver_found = sorted(
-        qid for qid, row in routed.items() if row["status"] == "found"
+        qid
+        for qid, row in routed.items()
+        if row["status"] == "found" and row["route"] == "resolver"
     )
     resolver_waiting = sorted(
         qid for qid, row in routed.items()
