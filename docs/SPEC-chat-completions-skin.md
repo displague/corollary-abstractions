@@ -191,6 +191,15 @@ so `retract` finds no ledger and returns `refused` with
 hidden for the same reason the gloss row is — a capability that is off is
 a fact the sheet should carry.
 
+**And the refusal is byte-identical with a ledger and without one.** An id
+no live assumption carries refuses with one sentence in both cases. That is
+not cosmetic: the first version rendered the two cases differently, the
+session ledger's B10 caught it on ten turns of the sealed corpus, and it
+stopped the slice before serving. A refusal that names whether a ledger
+exists is session state reaching the bytes of an answer that consumed no
+assumption (`docs/DESIGN-session-ledger.md` §7 B10; the repair is
+registered in `experiments/session_ledger_prereg.json` amendment 3).
+
 The rows for `conform` and the `evaluate` route's registered-bound
 `refused` (E0e) were already served and already in `LINE_GRAMMAR`; they
 are written into this table for the first time here, because a served

@@ -1728,6 +1728,12 @@ def _route_suppose(claim: str, session: "CoreSession | None" = None) -> dict:
 #: when a person re-supposes the same subject, and retraction needs a word.
 RETRACT_COMMAND = "retract"
 
+#: The typed refusal for an id no live assumption carries. Named here rather
+#: than imported from `session_ledger` so the route keeps its own vocabulary
+#: when no ledger is attached — which, after the B10 repair, is the case it
+#: must render identically to.
+UNKNOWN_ASSUMPTION = "unknown_assumption"
+
 
 def _route_retract(session: "CoreSession | None", assumption_id: str) -> dict:
     """`retract <assumption-id>` — withdraw a live assumption, by name.
@@ -1750,18 +1756,31 @@ def _route_retract(session: "CoreSession | None", assumption_id: str) -> dict:
             "refusal_type": "unknown_assumption",
             "detail": f"{RETRACT_COMMAND!r} needs one assumption id after it",
         }
-    if live is None:
-        return {
-            "route": "retraction",
-            "status": "refused",
-            "refusal_type": "unknown_assumption",
-            "detail": (
-                "this session keeps no assumption ledger, so there is "
-                "nothing to retract; nothing was changed"
-            ),
-        }
-    outcome = live.retract(assumption_id)
+    outcome = (
+        live.retract(assumption_id)
+        if live is not None
+        else UNKNOWN_ASSUMPTION
+    )
     if isinstance(outcome, str):
+        # ONE string for both arms, and this is the v0.21 B10 repair
+        # (prereg amendment 3, fix (a)). Before it, a session with a ledger
+        # said "no live assumption 'a999' in this session" and a session
+        # without one said "this session keeps no assumption ledger" — two
+        # renderings of one refusal, on a turn that cites nothing, which is
+        # the ledger's EXISTENCE reaching the bytes of an answer that
+        # consumed no assumption. B10 caught it on ten turns of the sealed
+        # corpus and stopped the slice before serving.
+        #
+        # Fix (a) rather than (b): §3 fixes what a citation is — a read
+        # barrier on `normal_form` access — and this arm reads the ID INDEX,
+        # never any normal form. Making it CITE what it read would widen the
+        # citation contract mid-cycle so that a citation no longer meant the
+        # answer consumed a premise. So the arm stops decorating itself with
+        # ledger state instead. The person is told the true and sufficient
+        # thing, in the same words either way.
+        #
+        # B7 is untouched: still a refusal, still typed, still receipted,
+        # and its citation list is still explicitly empty.
         return {
             "route": "retraction",
             "status": "refused",

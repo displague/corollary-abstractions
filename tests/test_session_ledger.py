@@ -521,6 +521,118 @@ class BoundsAndRefusals(unittest.TestCase):
             self.recorder.turn("2 + 2")
 
 
+class TheB10Regression(unittest.TestCase):
+    """The ten misses that stopped the slice, as fixtures.
+
+    Run 1 and run 2 both found `retract a999` rendering one way with a
+    ledger attached and another way without, on a turn that cites nothing —
+    the ledger's EXISTENCE reaching an unconditional answer's bytes. Prereg
+    amendment 3 adjudicated it a construction defect and chose fix (a): the
+    unknown-id arm stops decorating itself with ledger state. These are the
+    regression fixtures, written from the ten misses the gate published.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import session_ledger as ledger  # noqa: PLC0415
+        from resolver import default_index  # noqa: PLC0415
+
+        cls.ledger = ledger
+        cls.index = default_index()
+
+    def _serve(self, line: str, *, with_ledger: bool) -> str:
+        from harness import CoreSession, route_line  # noqa: PLC0415
+
+        session = CoreSession.boot(REPO, offline=True, session_id="b10-fixture")
+        session.resolver_index = self.index
+        if with_ledger:
+            barrier = self.ledger.ReadBarrier()
+            session.assumptions = self.ledger.AssumptionSet(
+                "b10-fixture", barrier
+            )
+            barrier.open_turn(0)
+            session.assumptions.declare("x = 5", 0)
+            session.assumptions.declare("y = 3", 0)
+        return self.ledger.answer_bytes(route_line(REPO, session, line))
+
+    def test_the_exact_line_that_stopped_the_slice(self) -> None:
+        self.assertEqual(
+            self._serve("retract a999", with_ledger=True),
+            self._serve("retract a999", with_ledger=False),
+        )
+
+    def test_no_rendering_of_this_arm_names_the_ledger(self) -> None:
+        """The specific decoration that leaked, gone by name."""
+
+        rendered = self._serve("retract a999", with_ledger=True)
+        self.assertNotIn("keeps no assumption ledger", rendered)
+        self.assertIn("no live assumption 'a999' in this session", rendered)
+
+    def test_the_arm_is_still_a_typed_receipted_refusal(self) -> None:
+        """Fix (a) removes nothing B7 asks for."""
+
+        from harness import CoreSession, route_line  # noqa: PLC0415
+
+        session = CoreSession.boot(REPO, offline=True, session_id="b10-fixture")
+        session.resolver_index = self.index
+        verdict = route_line(REPO, session, "retract a999")
+        self.assertEqual(verdict["status"], "refused")
+        self.assertEqual(verdict["refusal_type"], "unknown_assumption")
+
+    def test_an_id_the_ledger_does_hold_still_retracts_and_cites(self) -> None:
+        """The repair narrows the refusal arm and touches nothing else."""
+
+        from harness import CoreSession, route_line  # noqa: PLC0415
+
+        session = CoreSession.boot(REPO, offline=True, session_id="b10-fixture")
+        session.resolver_index = self.index
+        barrier = self.ledger.ReadBarrier()
+        session.assumptions = self.ledger.AssumptionSet("b10-fixture", barrier)
+        barrier.open_turn(0)
+        session.assumptions.declare("x = 5", 0)
+        verdict = route_line(REPO, session, "retract a001")
+        self.assertEqual(verdict["status"], "canceled")
+        self.assertEqual(barrier.close_turn(), ("a001",))
+
+    def test_the_empty_argument_arm_never_read_session_state(self) -> None:
+        self.assertEqual(
+            self._serve("retract", with_ledger=True),
+            self._serve("retract", with_ledger=False),
+        )
+
+    def test_the_sweep_finds_no_other_ledger_reader_in_a_refusal(self) -> None:
+        """Amendment 3's sweep, kept live rather than filed as prose.
+
+        An AST walk for `_route_*` functions that read the session's
+        assumption ledger. Two are expected and both are accounted for in
+        the amendment: `_route_suppose` (the budget refusal, disarmed by the
+        protocol's cap of 8) and `_route_retract` (repaired here). A third
+        would be a new member of the same family and this test is what makes
+        it announce itself.
+        """
+
+        import ast  # noqa: PLC0415
+
+        source = (REPO / "scripts" / "harness.py").read_text(encoding="utf-8")
+        readers = set()
+        for node in ast.walk(ast.parse(source)):
+            if not isinstance(node, ast.FunctionDef):
+                continue
+            if not node.name.startswith("_route"):
+                continue
+            for sub in ast.walk(node):
+                if (
+                    isinstance(sub, ast.Call)
+                    and isinstance(sub.func, ast.Name)
+                    and sub.func.id == "getattr"
+                    and len(sub.args) >= 2
+                    and isinstance(sub.args[1], ast.Constant)
+                    and sub.args[1].value == "assumptions"
+                ):
+                    readers.add(node.name)
+        self.assertEqual(readers, {"_route_suppose", "_route_retract"})
+
+
 class Replay(_Recorded):
     """Replay re-verifies the record, and refuses a moved world."""
 
@@ -767,6 +879,7 @@ class TheSealedCorpus(unittest.TestCase):
 
 RUN = REPO / "experiments" / "session_ledger_run.json"
 RUN2 = REPO / "experiments" / "session_ledger_run2.json"
+RUN3 = REPO / "experiments" / "session_ledger_run3.json"
 
 
 class TheRegisteredRun(unittest.TestCase):
@@ -908,6 +1021,128 @@ class TheRegisteredRun(unittest.TestCase):
     def test_no_correctness_claim_appears_anywhere(self) -> None:
         for artifact in filter(None, (self.first, self.second)):
             self.assertIn("reproducible, not correct", artifact["negative_honesty"])
+
+
+class TheRepairRun(unittest.TestCase):
+    """Run 3 — the fresh run at the fixed tree, and what it licenses."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        if not RUN3.exists():  # pragma: no cover - ordering guard
+            raise unittest.SkipTest("the repair run has not happened yet")
+        cls.run3 = json.loads(RUN3.read_text(encoding="utf-8"))
+        cls.seal = json.loads(SEAL.read_text(encoding="utf-8"))
+
+    def test_the_prior_runs_are_retained_unedited(self) -> None:
+        """A repair that erased what it superseded would be uncheckable."""
+
+        self.assertTrue(RUN.exists())
+        self.assertTrue(RUN2.exists())
+        self.assertEqual(
+            json.loads(RUN.read_text(encoding="utf-8"))["construction_gate"][
+                "B10"
+            ]["verdict"],
+            "RED",
+            "run 1 must still carry the red that stopped the slice",
+        )
+
+    def test_b10_is_green_and_its_denominator_did_not_shrink(self) -> None:
+        """Green by repair, not by a smaller question."""
+
+        before = json.loads(RUN.read_text(encoding="utf-8"))
+        b10_then = before["construction_gate"]["B10"]
+        b10_now = self.run3["construction_gate"]["B10"]
+        self.assertEqual(b10_now["verdict"], "GREEN")
+        self.assertEqual(b10_now["misses"], [])
+        self.assertEqual(
+            b10_now["uncited_turns"],
+            b10_then["uncited_turns"],
+            "the same 260 uncited turns were asked the same question",
+        )
+
+    def test_the_corpus_did_not_move(self) -> None:
+        prior = json.loads(
+            (REPO / "experiments" / "session_corpus_seal_pre_repair.json")
+            .read_text(encoding="utf-8")
+        )
+        for key in (
+            "sessions_admitted",
+            "turns_admitted",
+            "binding_dependent_turns_admitted",
+            "refusal_turns_admitted",
+            "by_half",
+        ):
+            self.assertEqual(
+                self.seal["counts"][key], prior["counts"][key], key
+            )
+        self.assertEqual(
+            [entry["session_id"] for entry in self.seal["sessions"]],
+            [entry["session_id"] for entry in prior["sessions"]],
+        )
+        self.assertEqual(self.seal["floor"]["all_met"], True)
+
+    def test_the_repair_delta_is_published_with_its_missed_expectation(
+        self,
+    ) -> None:
+        """The registered expectation missed, and the seal says so."""
+
+        delta = self.seal["repair_delta"]
+        self.assertFalse(delta["expectation_met"])
+        self.assertEqual(delta["turns_whose_answer_digest_changed"], 0)
+        self.assertEqual(
+            delta["header_pins_that_moved"], {"rendering_module_digests": 60}
+        )
+        self.assertTrue(delta["counts_unchanged"])
+        self.assertIn("EXPECTATION MISSED", delta["finding"])
+
+    def test_r1_holds_and_serves_exactly_the_designs_sentence(self) -> None:
+        result = self.run3["result_gate"]
+        self.assertEqual(result["verdict"], "HOLDS")
+        self.assertTrue(result["served"])
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        self.assertEqual(
+            result["served_claim_if_it_holds"],
+            prereg["result_gate"]["served_claim_if_R1_holds_verbatim"],
+        )
+
+    def test_no_surface_was_invented(self) -> None:
+        """The design names none, so the claim lives in artifact and tests.
+
+        The capability sheet carries registered-run rows for realization,
+        conformance and the foreign voice because those designs asked for
+        them. DESIGN-session-ledger asked for none, and shipping a row it did
+        not ask for would be serving more than the gate licensed.
+        """
+
+        from serve_chat import LINE_GRAMMAR  # noqa: PLC0415
+
+        sheet_source = (REPO / "scripts" / "serve_chat.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn("session_ledger_run", sheet_source)
+        self.assertIn(
+            "no capability-sheet row",
+            self.run3["result_gate"]["where_the_claim_lives"],
+        )
+        # The one surface that DID change is the grammar row the Assumption
+        # status alphabet required, and on this skin it always refuses.
+        row = next(r for r in LINE_GRAMMAR if r["route"] == "retraction")
+        self.assertEqual(sorted(row["statuses"]), ["canceled", "refused"])
+
+    def test_b1s_ordering_slip_is_still_published_as_missed(self) -> None:
+        """Not reinterpreted by a green run."""
+
+        b1 = self.run3["construction_gate"]["B1"]
+        self.assertEqual(
+            b1["clause_1_seal_before_replayer"]["verdict"], "MISSED"
+        )
+
+    def test_the_suspended_habit_ends_by_the_gates_own_verdict(self) -> None:
+        """§12, and it names B10's scope rather than overclaiming it."""
+
+        text = self.run3["result_gate"]["the_suspended_habit_ends_here"]
+        self.assertIn("shipped property", text)
+        self.assertIn("resolver ASK", text)
 
 
 if __name__ == "__main__":

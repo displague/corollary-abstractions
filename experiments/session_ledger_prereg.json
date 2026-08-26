@@ -251,6 +251,68 @@
       },
       "what_the_supplementary_run_may_not_do": "un-fail R1. B10 read RED in the original run, B10 executed correctly, and it is therefore a reading that stands. The supplementary run re-scores B10 and must get the same answer; if it did not, that would itself be the finding.",
       "what_it_changes_in_this_file": "nothing. No clause, floor, seed, cap, denominator or verdict is edited. The registered denominators it names were already registered — in §7, verbatim, in this file's construction_gate block."
+    },
+    {
+      "amendment": 3,
+      "dated": "2026-08-25",
+      "made_after": "runs 1 and 2 executed and were committed unedited. Made BEFORE the repair is written, before the corpus is re-recorded, and before run 3.",
+      "adjudication_this_amendment_records": {
+        "by": "the maintainer, in writing, on the run-1/run-2 readout",
+        "finding": "B10's red is a CONSTRUCTION DEFECT IN THE OBJECT, not an unfavourable control reading. The §8 controls — B4, B5, B6 and the voiding sentence — all held, so the no-chase rule does not bind: there is no voided control here to leave alone. The governing precedent is the suite gate itself (v0.20's gate runs 1 and 2, reports/test_gate_v020/runs.md): red, fix the defect, fresh run at the fixed tree, both receipts retained.",
+        "what_this_does_not_license": "reinterpreting B10, moving its denominator, or re-authoring the corpus. The defect is repaired in the SERVING PATH; the sealed corpus's sessions, lines, counts, floors and A/B split do not move."
+      },
+      "the_defect": {
+        "where": "harness._route_retract, the arm that refuses an assumption id the session does not hold",
+        "what_it_did": "rendered one detail string when a ledger was attached ('no live assumption 'a999' in this session') and a different one when none was ('this session keeps no assumption ledger, so there is nothing to retract'). The turn cites nothing, so §7 B10 quantifies over it, and the two renderings are not byte-identical.",
+        "why_it_is_a_defect_and_not_a_reading": "B10 states the property the object is supposed to have — 'session state may never leak into unconditional answers'. The ledger's EXISTENCE reached the bytes of an answer that consumed no assumption. Nothing about the measurement was wrong; the object was.",
+        "measured": "10 of 260 uncited turns in the sealed corpus, all the same line, in the ten shape-2 sessions. Identical in run 1 and run 2."
+      },
+      "the_two_candidate_fixes_and_the_choice": {
+        "a_render_statelessly": "drop the attached ledger from the unknown-id arm, so the refusal renders byte-identically to its stateless form. The ledger's content was doing no work for an id that is not in it.",
+        "b_cite_what_was_read": "have the refusal cite what it read, bringing the turn under the citation regime.",
+        "chosen": "a",
+        "why_a_and_not_b": "§3 fixes what a citation IS: 'assumptions_cited is emitted by a read barrier on normal_form access inside the resolver: a citation exists iff a read event exists'. The unknown-id check reads the ID INDEX — whether a key is present in the live set — and never touches any assumption's normal_form. Under (b) the turn would have to cite something it did not read, which means widening the citation contract mid-cycle from normal_form access to any ledger access. That would weaken B12 (a citation would no longer mean the answer consumed an assumption's content) and dilute B4's denominator with turns whose byte-dependence is on the ledger's shape rather than on any premise. (a) leaves the contract exactly where §3 put it.",
+        "does_a_break_B7": "no. B7 requires every refusal turn to carry a receipt_digest with an explicit (possibly empty, never null) citation list. The refusal is still a refusal, still typed `unknown_assumption`, still receipted, and its citation list is still explicitly empty. (a) stops the arm DECORATING itself with ledger state; it removes nothing B7 asks for.",
+        "what_a_costs": "the person typing `retract a999` in a session that holds assumptions is no longer told, in those words, that a ledger exists. They are told that no live assumption of that id is in this session and that nothing was changed, which is the true and sufficient thing and is the same sentence either way."
+      },
+      "the_sweep_before_the_rerun": {
+        "why": "one defect of a family is a reason to look for the family, not a reason to fix one member and rerun.",
+        "method": "an AST walk over every `_route_*` function in scripts/harness.py, collecting attribute and getattr reads of CoreSession's session-mutable fields (pending_candidates, pending_query, pending_resolver, context_hops, context_seen, state, active_slot, assumptions, events, story, resolver_index, session_id). Mechanical, not a reading of the code by eye.",
+        "findings": [
+          {
+            "route": "_route_retract",
+            "reads": "assumptions",
+            "disposition": "THE DEFECT. Repaired by (a) in this cycle."
+          },
+          {
+            "route": "_route_suppose",
+            "reads": "assumptions",
+            "disposition": "the typed `assumption_budget` refusal reads the live set's SIZE and renders for it. Already disarmed by construction in amendment 1: the protocol caps live assumptions at 8, so a recorded session never declares a ninth and B10's denominator never contains one. The refusal is exercised in tests/test_session_ledger.py, outside the sealed corpus."
+          },
+          {
+            "route": "_route_resolver and _route_pending_context",
+            "reads": "pending_candidates, pending_query, pending_resolver, context_hops, context_seen",
+            "disposition": "PRE-EXISTING, NOT LEDGER STATE, AND NOT REPAIRED. The resolver ASK subloop (P-LS6) is session state that predates this design: a `narrow` or `cancel` line routes and renders differently depending on whether a candidate set is pending, and `route_line`'s own dispatch consults it. This is exactly what §12 suspends for this cycle — 'the rule that the served surface is stateless one-line-in, one-answer-out'. No recorded session contains a `narrow` or `cancel` turn, so B10's denominator never meets one. That is a REAL LIMIT ON WHAT B10 PROVES and it is published here rather than left to be discovered: B10's green, when it comes, covers the ledger's state and not the resolver ASK's."
+          },
+          {
+            "route": "_route_dispatch",
+            "reads": "session_id",
+            "disposition": "checked and clean. The id is passed to the dispatcher but does not reach the rendered bytes — verified by serving the same line into two sessions with different ids and comparing: identical. Recorded because a reader running the same sweep will see the hit and deserve the answer."
+          }
+        ]
+      },
+      "run_3_protocol": {
+        "the_corpus_does_not_move": "the same 60 authored sessions, the same lines, the same ids by the same counter rule, the same protocol, the same caps, the same A/B split. scripts/record_session_corpus.py is not edited.",
+        "but_the_journals_are_re_recorded_and_here_is_why": "the repair touches scripts/harness.py, which is in build_throughput_tasks.RENDERING_MODULES, so the `rendering_module_digests` pin moves. That is the pin working correctly: a journal recorded before the serving path changed MUST NOT replay against the code after it, and every replay would otherwise refuse `stale-environment` — which is B3's mechanism doing its job, not a failure. So the corpus is recorded again at the fixed tree, exactly as a suite gate re-runs at the fixed tree.",
+        "the_old_seal_is_retained_unedited": "experiments/session_corpus_seal_pre_repair.json keeps the pre-repair seal byte for byte. The new seal carries the old one's whole-file digest and supersedes it in writing.",
+        "the_delta_is_published_and_is_the_checkable_claim": "the new seal carries a `repair_delta` block naming every turn whose `answer_bytes_digest` changed between the pre-repair recording and the post-repair one. The registered expectation, frozen HERE before the re-recording: EXACTLY the ten turns B10 named, and no others. More than ten means the repair reached further than the defect; fewer means it did not reach the defect; either is a finding and is published as one.",
+        "counts_must_not_move": "sessions, turns, binding-dependent turns, refusal turns and the A/B split are re-derived and compared against the pre-repair seal. Any movement is a finding.",
+        "both_prior_run_artifacts_are_retained_unedited": "experiments/session_ledger_run.json and experiments/session_ledger_run2.json are neither edited nor deleted. Run 3 is a third artifact.",
+        "all_clauses_are_re_adjudicated": "B1-B8 and B10-B13, and R1 on run 3.",
+        "one_repair_only": "if run 3 shows ANY new red, the run is committed and reported and no second repair is attempted inside this commission."
+      },
+      "b1_clause_1_stays_missed": "the ordering slip — the replayer committed before the seal — is not touched by any of this. It stays published as MISSED, it is R1-exempt by this file's own text, and it is not reinterpreted.",
+      "what_it_changes_in_this_file": "no clause, floor, seed, cap, denominator or verdict. It records an adjudication, a repair design, a mechanical sweep and a re-run protocol, all dated before the repair exists."
     }
   ]
 }
