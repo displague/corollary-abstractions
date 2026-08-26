@@ -214,5 +214,24 @@
     "no completeness over readings: the candidate list is what exact code could enumerate, and DESIGN-session-ledger §11 forbids the completeness claim outright",
     "HOSTILE DICTATION is not unparked and is not needed: this design opens no untrusted stream to the write gate, because suppositions never reach it"
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "amendment": 1,
+      "dated": "2026-08-26",
+      "made_after": "the candidate enumerator and the proposer were written; made BEFORE any gate is scored and before the slice-2 corpus is recorded.",
+      "adds": {
+        "candidate_limit": 8,
+        "why_it_must_be_frozen_and_not_left_as_an_implementation_detail": "the blind arm of G5 selects UNIFORMLY AT RANDOM from the same list, so its chance rate is 1/N. N is therefore load-bearing for the control's own baseline: a longer list makes the blind arm look worse and the model look better, without either of them changing. A parameter that moves a control's baseline has to be frozen before either arm runs.",
+        "chance_rate_at_this_n": 0.125,
+        "candidate_ordering_is_total_and_why": "candidates are ordered by (descending word overlap, ascending title length, statement id). A total order means the list is the same list on every run and every machine — a list whose ORDER moved would move the blind arm's baseline without moving the model's."
+      },
+      "records_an_honest_weakness_in_G1_found_while_building": {
+        "what_was_found": "enumeration is generous and `word_match` verification is nearly free. A statement candidate is offered whenever the utterance shares a content word with a statement's title or keywords, and it VERIFIES whenever the statement's own title resolves back to that statement — which is almost always, because a real title is a real title.",
+        "so_what_G1_actually_measures": "G1 asks what fraction of utterances yield AT LEAST ONE VERIFIED CANDIDATE. On this enumerator that number is close to 'how many utterances contain a content word the corpus also uses', and it is NOT a measure of whether the reading is right.",
+        "what_is_reported_beside_it_so_the_headline_cannot_inflate": "the fraction where the MODEL SELECTED a candidate AND that candidate verified — selection plus verification, which is the number the served behaviour actually rests on. Both are published, and G1's own rate is labelled as the weaker one in the artifact rather than in a footnote.",
+        "why_this_is_recorded_here_rather_than_quietly_fixed": "it is a property of the instrument that changes what its headline means, found before the run and disclosed before the run. Tightening the enumerator to make G1 read better would be tuning a denominator after seeing how it behaves."
+      },
+      "what_it_changes": "no gate, no floor, no voiding sentence, no standard. It freezes one parameter that a control's baseline depends on, and discloses one weakness in what G1's rate means."
+    }
+  ]
 }

@@ -1,0 +1,445 @@
+{
+  "design": "docs/DESIGN-plain-input.md",
+  "differing": [],
+  "measured": "2026-08-26",
+  "model": {
+    "max_tokens": 6,
+    "provider_tag": "ollama:qwen3:4b-instruct",
+    "temperature": 0,
+    "weights_blob_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+    "weights_verified_before_any_question": true
+  },
+  "pass_one": [
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-01",
+      "raw": "2",
+      "selected_index": 1
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-02",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-03",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-04",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-05",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-06",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 3,
+      "discarded_reason": null,
+      "question_id": "g1-07",
+      "raw": "2",
+      "selected_index": 1
+    },
+    {
+      "candidates": 1,
+      "discarded_reason": null,
+      "question_id": "g1-08",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-09",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-10",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-11",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-12",
+      "raw": "2",
+      "selected_index": 1
+    },
+    {
+      "candidates": 4,
+      "discarded_reason": null,
+      "question_id": "g1-13",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-14",
+      "raw": "4",
+      "selected_index": 3
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-15",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-16",
+      "raw": "8",
+      "selected_index": 7
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-17",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 2,
+      "discarded_reason": null,
+      "question_id": "g1-18",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-19",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 1,
+      "discarded_reason": null,
+      "question_id": "g1-20",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 6,
+      "discarded_reason": null,
+      "question_id": "g1-21",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-22",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-23",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-24",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-25",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 4,
+      "discarded_reason": null,
+      "question_id": "g1-26",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-27",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-28",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 2,
+      "discarded_reason": null,
+      "question_id": "g1-29",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 1,
+      "discarded_reason": null,
+      "question_id": "g1-30",
+      "raw": "NONE",
+      "selected_index": null
+    }
+  ],
+  "pass_two": [
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-01",
+      "raw": "2",
+      "selected_index": 1
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-02",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-03",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-04",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-05",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-06",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 3,
+      "discarded_reason": null,
+      "question_id": "g1-07",
+      "raw": "2",
+      "selected_index": 1
+    },
+    {
+      "candidates": 1,
+      "discarded_reason": null,
+      "question_id": "g1-08",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-09",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-10",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-11",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-12",
+      "raw": "2",
+      "selected_index": 1
+    },
+    {
+      "candidates": 4,
+      "discarded_reason": null,
+      "question_id": "g1-13",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-14",
+      "raw": "4",
+      "selected_index": 3
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-15",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-16",
+      "raw": "8",
+      "selected_index": 7
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-17",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 2,
+      "discarded_reason": null,
+      "question_id": "g1-18",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-19",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 1,
+      "discarded_reason": null,
+      "question_id": "g1-20",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 6,
+      "discarded_reason": null,
+      "question_id": "g1-21",
+      "raw": "1",
+      "selected_index": 0
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-22",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-23",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-24",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-25",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 4,
+      "discarded_reason": null,
+      "question_id": "g1-26",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 8,
+      "discarded_reason": null,
+      "question_id": "g1-27",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 0,
+      "discarded_reason": "no candidates to select from",
+      "question_id": "g1-28",
+      "raw": "",
+      "selected_index": null
+    },
+    {
+      "candidates": 2,
+      "discarded_reason": null,
+      "question_id": "g1-29",
+      "raw": "NONE",
+      "selected_index": null
+    },
+    {
+      "candidates": 1,
+      "discarded_reason": null,
+      "question_id": "g1-30",
+      "raw": "NONE",
+      "selected_index": null
+    }
+  ],
+  "prereg": "experiments/plain_input_prereg.json",
+  "prerequisite": "P4",
+  "prompts": 30,
+  "sampling_requested_not_settings_that_took_effect": "ollama's /v1 layer ignores some sampling fields, so this block records what was REQUESTED and never claims what took effect — the wording measure_throughput and machine_reader both use",
+  "schema": "corollary.plain-proposer-determinism/1",
+  "the_honest_limit": "byte-identity across two passes on one machine on one day is not a proof of determinism. It is the strongest check this repository has ever run on a model call, and it is reported as that and nothing more.",
+  "two_passes_byte_identical": true,
+  "what_this_licenses": "the proposer arm registers as determinism-plus-commit (ROADMAP-v0.21 §4.0(2)); reproductions are welcome and recorded",
+  "why_c_v3_primes_result_was_not_inherited": "experiments/c_v3_prime_pilot.json got byte-identical output from this same model at temperature 0 — with different prompts, a different max_tokens and a different system line. ollama guarantees nothing and no seed field exists anywhere in this tree, so a determinism result belongs to the prompt set that produced it."
+}

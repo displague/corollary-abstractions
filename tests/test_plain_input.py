@@ -422,5 +422,252 @@ class G7bConditionalScoresZero(unittest.TestCase):
         self.assertIsNone(getattr(session, "assumptions", None))
 
 
+class TheCandidateEnumerator(unittest.TestCase):
+    """Exact code, finite list, `data/` only."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import candidate_enumerator as ce  # noqa: PLC0415
+
+        cls.ce = ce
+        cls.holdout = ce.holdout_ids(REPO)
+        cls.questions = json.loads(
+            QUESTIONS.read_text(encoding="utf-8")
+        )["questions"]
+        cls.pairs = json.loads(DISTRACTORS.read_text(encoding="utf-8"))["pairs"]
+
+    def test_g8_no_holdout_id_is_ever_enumerated(self) -> None:
+        """The gate that exists because slice 1 MEASURED the exposure.
+
+        Every utterance in both frozen sets is enumerated and every
+        candidate checked against the holdout id set. One occurrence is red.
+        """
+
+        self.assertEqual(len(self.holdout), 2053)
+        utterances = [q["question"] for q in self.questions]
+        for pair in self.pairs:
+            utterances.extend([pair["a"], pair["b"]])
+        leaked = []
+        for utterance in utterances:
+            for candidate in self.ce.enumerate_candidates(utterance, REPO):
+                if candidate.statement_id in self.holdout:
+                    leaked.append((utterance, candidate.statement_id))
+        self.assertEqual(leaked, [], "holdout material reached a candidate list")
+
+    def test_the_enumerator_reads_one_directory_and_the_index_it_builds_too(
+        self,
+    ) -> None:
+        """Not a filter over two directories — a glob over one.
+
+        `resolver.default_index` spans data/ AND data_holdout/. The
+        enumerator must not use it, for verification either: a candidate
+        confirmed by holdout material would be confirmed by material the
+        model is forbidden to see.
+        """
+
+        import ast  # noqa: PLC0415
+
+        source = (REPO / "scripts" / "candidate_enumerator.py").read_text(
+            encoding="utf-8"
+        )
+        # AST, not a grep: the module's docstring NAMES `default_index` in
+        # the paragraph explaining why it must not be used, and a string
+        # search cannot tell an explanation from a call. Slice 1 hit the
+        # same wall with a `.normal_form` grep and solved it by renaming a
+        # field; here the honest instrument is to look for the call.
+        tree = ast.parse(source)
+        called = {
+            node.func.id
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        }
+        imported = {
+            alias.name
+            for node in ast.walk(tree)
+            if isinstance(node, ast.ImportFrom)
+            for alias in node.names
+        }
+        self.assertNotIn("default_index", called)
+        self.assertNotIn("default_index", imported)
+        self.assertIn("build_index", imported)
+
+        index = self.ce._data_only_index(str(REPO))
+        self.assertEqual(set(index.corpus_of) & self.holdout, set())
+
+    def test_the_list_is_finite_and_frozen_at_the_registered_limit(self) -> None:
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        registered = prereg["amendments"][0]["adds"]["candidate_limit"]
+        self.assertEqual(self.ce.CANDIDATE_LIMIT, registered)
+        for question in self.questions:
+            candidates = self.ce.enumerate_candidates(question["question"], REPO)
+            self.assertLessEqual(len(candidates), registered)
+            self.assertEqual(
+                [c.index for c in candidates], list(range(len(candidates)))
+            )
+
+    def test_the_order_is_total_so_the_list_does_not_move(self) -> None:
+        """A list whose order moved would move the blind arm's baseline."""
+
+        for question in self.questions[:8]:
+            first = self.ce.enumerate_candidates(question["question"], REPO)
+            second = self.ce.enumerate_candidates(question["question"], REPO)
+            self.assertEqual(
+                [c.line for c in first], [c.line for c in second]
+            )
+
+    def test_a_candidate_that_binds_elsewhere_is_not_verified(self) -> None:
+        """Accepting whatever came back would verify the verifier."""
+
+        forged = self.ce.Candidate(
+            index=0,
+            line="Pythagorean Identity",
+            route_expect="resolver",
+            source="committed_statement",
+            statement_id="trigonometry.definitions.tangent",
+        )
+        self.assertIsNone(self.ce.verify(forged, REPO))
+
+    def test_verification_strength_is_from_the_frozen_vocabulary(self) -> None:
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        vocabulary = set(
+            prereg["section_4_questions_answered"]["q4_who_verifies_exactly"][
+                "vocabulary"
+            ]
+        )
+        seen = set()
+        for question in self.questions:
+            _c, verified = self.ce.verified_candidates(question["question"], REPO)
+            for item in verified:
+                self.assertIn(item.verification_strength, vocabulary)
+                seen.add(item.verification_strength)
+        # Both strengths must actually occur, or the field is decorative.
+        self.assertIn("exact_computation", seen)
+        self.assertIn("word_match", seen)
+
+
+class TheProposer(unittest.TestCase):
+    """It returns an integer. That is the whole of what it may do."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import candidate_enumerator as ce  # noqa: PLC0415
+        import plain_proposer as pp  # noqa: PLC0415
+
+        cls.ce, cls.pp = ce, pp
+
+    def test_b9_the_prompt_carries_no_history_at_all(self) -> None:
+        """B9 by construction: there is no history parameter to pass.
+
+        The design permits assumption `normal_form`s as the one exception.
+        This proposer does not use even that, so the prompt is the utterance
+        and the candidate lines and nothing else — checked by building one
+        and asserting every line of it is accounted for.
+        """
+
+        utterance = "what is the cosine of a double angle"
+        candidates = self.ce.enumerate_candidates(utterance, REPO)
+        prompt = self.pp.build_prompt(utterance, candidates)
+        accounted = {utterance, "Question:", "Candidate readings:"}
+        for candidate in candidates:
+            accounted.add(candidate.line)
+        for line in prompt.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            body = line.split(". ", 1)[-1] if line[0].isdigit() else line
+            body = body.replace("Question: ", "")
+            self.assertTrue(
+                body in accounted or body in {"Candidate readings:"},
+                f"prompt line not accounted for by utterance or candidates: {line!r}",
+            )
+
+    def test_the_signature_takes_no_history(self) -> None:
+        """A leak needs a channel; this is the check that there is none."""
+
+        import inspect  # noqa: PLC0415
+
+        parameters = set(inspect.signature(self.pp.propose).parameters)
+        self.assertEqual(parameters, {"utterance", "candidates", "timeout"})
+
+    def test_g6_an_unreachable_model_refuses_rather_than_crashing(self) -> None:
+        """Bar clause 3: missing checkpoint -> OFF, not crash."""
+
+        original = self.pp.ENDPOINT
+        self.pp.ENDPOINT = "http://127.0.0.1:9/none"
+        try:
+            with self.assertRaises(self.pp.ProposerUnavailable):
+                self.pp.propose("anything", [
+                    self.ce.Candidate(0, "2 + 2", "evaluate", "arithmetic")
+                ])
+        finally:
+            self.pp.ENDPOINT = original
+
+    def test_an_unreadable_reply_is_discarded_and_never_repaired(self) -> None:
+        """DESIGN-plain-input §3.1: discarded before verification, not repaired."""
+
+        source = (REPO / "scripts" / "plain_proposer.py").read_text(
+            encoding="utf-8"
+        )
+        # No retry, no second prompt, no repair pass.
+        self.assertNotIn("retry", source.lower())
+        self.assertIn("discarded_reason", source)
+
+    def test_the_weights_pin_is_one_copy_of_the_digest(self) -> None:
+        import machine_reader as mr  # noqa: PLC0415
+
+        source = (REPO / "scripts" / "plain_proposer.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn(
+            mr.MANIFEST["model"]["weights_blob_sha256"], source,
+            "the digest is copied rather than read from machine_reader",
+        )
+
+    def test_the_blind_arm_draws_from_the_same_list(self) -> None:
+        """G5's control isolates selection, so it must share the alphabet."""
+
+        import random  # noqa: PLC0415
+
+        candidates = self.ce.enumerate_candidates(
+            "what is the cosine of a double angle", REPO
+        )
+        proposal = self.pp.blind_select(candidates, random.Random(0))
+        self.assertIsNotNone(proposal.selected_index)
+        self.assertLess(proposal.selected_index, len(candidates))
+
+
+class P4Determinism(unittest.TestCase):
+    """What temperature 0 earned, and what it therefore licenses."""
+
+    ARTIFACT = REPO / "experiments" / "plain_proposer_determinism.json"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        if not cls.ARTIFACT.exists():  # pragma: no cover - ordering guard
+            raise unittest.SkipTest("P4 has not run yet")
+        cls.p4 = json.loads(cls.ARTIFACT.read_text(encoding="utf-8"))
+
+    def test_the_licence_follows_the_measurement(self) -> None:
+        licence = self.p4["what_this_licenses"]
+        if self.p4["two_passes_byte_identical"]:
+            self.assertIn("determinism-plus-commit", licence)
+            self.assertEqual(self.p4["differing"], [])
+        else:
+            self.assertIn("execute-once", licence)
+            self.assertTrue(self.p4["differing"])
+
+    def test_the_pin_was_verified_before_any_question(self) -> None:
+        self.assertTrue(self.p4["model"]["weights_verified_before_any_question"])
+
+    def test_it_did_not_inherit_c_v3_primes_result(self) -> None:
+        self.assertIn(
+            "belongs to the prompt set that produced it",
+            self.p4["why_c_v3_primes_result_was_not_inherited"],
+        )
+
+    def test_the_limit_is_stated_whichever_way_it_read(self) -> None:
+        self.assertIn("not a proof of determinism", self.p4["the_honest_limit"])
+
+
 if __name__ == "__main__":
     unittest.main()
