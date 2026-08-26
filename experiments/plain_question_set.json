@@ -1,0 +1,217 @@
+{
+  "schema": "corollary.plain-question-set/1",
+  "gate": "G1",
+  "design": "docs/DESIGN-plain-input.md",
+  "design_clause": "G1 — proposal coverage. On a preregistered plain-question set committed before the proposer exists: what fraction of utterances yield at least one verified candidate?",
+  "frozen_at": "2026-08-26",
+  "committed_before": "the proposer, the candidate enumerator, and any model call from this lane. This file's commit is an ancestor of theirs and a test asks git.",
+  "the_population_this_set_names": "thirty plain-English questions written BY THE MAINTAINER, ABOUT THIS CORPUS, in one sitting, before the proposer existed. That is the whole population and no larger one is claimed.",
+  "the_warning_inherited_verbatim": "Questions a maintainer wrote about this corpus are not questions a stranger asks; **STRANGER**'s park (`docs/ROADMAP-v0.20.md:394`) is the same fresh-half problem and should be cited, not re-encountered.",
+  "so_the_denominator_says": "a rate measured here is a rate over maintainer-authored questions about a corpus the author knows. It is not a coverage claim about plain English, about strangers, or about questions nobody wrote down.",
+  "the_set_is_not_stacked_and_here_is_the_proof": "9 of the 30 are authored to EXHAUST — they are outside the corpus, or not questions with an exact answer at all, and the honest reply to them is a refusal. A question set on which everything is supposed to work is a set chosen to read well, and this one cannot read better than 21/30 without the proposer inventing something.",
+  "authors_prior_is_published_but_is_not_ground_truth": "each question carries `authors_prior`, the disposition the author expected before anything ran. It is preregistered so the run can DISAGREE with it visibly. It is NOT a correctness key: G1 measures the verified-candidate fraction, and agreement with the prior is reported beside it as a second number with this caveat attached.",
+  "dispositions": {
+    "conditional": "the author expects exactly one candidate to verify with a framing variable left unresolved",
+    "ask": "the author expects two or more candidates to verify",
+    "exhaust": "the author expects no candidate to verify, and a refusal is the honest answer"
+  },
+  "questions": [
+    {
+      "question_id": "g1-01",
+      "question": "what does the corpus say about de morgan's laws",
+      "authors_prior": "ask",
+      "why": "two committed corpora state them, so the author expects rival verified candidates"
+    },
+    {
+      "question_id": "g1-02",
+      "question": "how do you compute the greatest common divisor recursively",
+      "authors_prior": "conditional",
+      "why": "the gcd residual DESIGN-text-resolution:80-81 records; the corpus writes gcd and the question does not"
+    },
+    {
+      "question_id": "g1-03",
+      "question": "what is the cosine of a double angle",
+      "authors_prior": "conditional",
+      "why": "P2 measured this one silently bound today"
+    },
+    {
+      "question_id": "g1-04",
+      "question": "what is two to the tenth",
+      "authors_prior": "conditional",
+      "why": "an exact computation the words name but the grammar does not"
+    },
+    {
+      "question_id": "g1-05",
+      "question": "tell me the pythagorean identity",
+      "authors_prior": "conditional",
+      "why": "one committed statement matches"
+    },
+    {
+      "question_id": "g1-06",
+      "question": "how many edges does a complete graph have",
+      "authors_prior": "conditional",
+      "why": "graphtheory.enumeration.complete_graph_edge_count"
+    },
+    {
+      "question_id": "g1-07",
+      "question": "what is the handshake lemma",
+      "authors_prior": "conditional",
+      "why": "one committed statement"
+    },
+    {
+      "question_id": "g1-08",
+      "question": "is x squared bigger than x",
+      "authors_prior": "exhaust",
+      "why": "underdetermined in the variable AND unanswerable without a binding; the author expects nothing to verify"
+    },
+    {
+      "question_id": "g1-09",
+      "question": "what does the corpus say about factorials",
+      "authors_prior": "ask",
+      "why": "recursive and iterative are both committed"
+    },
+    {
+      "question_id": "g1-10",
+      "question": "what is the quadratic formula",
+      "authors_prior": "conditional",
+      "why": "P2 measured this one silently bound today"
+    },
+    {
+      "question_id": "g1-11",
+      "question": "what is three plus four",
+      "authors_prior": "conditional",
+      "why": "exact arithmetic behind plain words"
+    },
+    {
+      "question_id": "g1-12",
+      "question": "what does absorption mean in boolean algebra",
+      "authors_prior": "ask",
+      "why": "logic and set theory both state it"
+    },
+    {
+      "question_id": "g1-13",
+      "question": "how do you compute a factorial iteratively",
+      "authors_prior": "conditional",
+      "why": "programming.factorial.iterative"
+    },
+    {
+      "question_id": "g1-14",
+      "question": "what is the tangent of an angle defined as",
+      "authors_prior": "conditional",
+      "why": "trigonometry.definitions.tangent"
+    },
+    {
+      "question_id": "g1-15",
+      "question": "what is cayley's formula",
+      "authors_prior": "conditional",
+      "why": "graphtheory.enumeration.cayley_formula"
+    },
+    {
+      "question_id": "g1-16",
+      "question": "what happens when you double an even number",
+      "authors_prior": "conditional",
+      "why": "numbertheory.parity.even_double, in words the corpus does not use"
+    },
+    {
+      "question_id": "g1-17",
+      "question": "what is the sine of a sum of two angles",
+      "authors_prior": "conditional",
+      "why": "trigonometry.identities.sine_angle_sum"
+    },
+    {
+      "question_id": "g1-18",
+      "question": "how many edges does a tree have",
+      "authors_prior": "conditional",
+      "why": "graphtheory.trees.tree_edge_count"
+    },
+    {
+      "question_id": "g1-19",
+      "question": "what is double negation",
+      "authors_prior": "ask",
+      "why": "logic and set theory both state it"
+    },
+    {
+      "question_id": "g1-20",
+      "question": "what is five times six",
+      "authors_prior": "conditional",
+      "why": "exact arithmetic behind plain words"
+    },
+    {
+      "question_id": "g1-21",
+      "question": "what is the binary method for exponentiation",
+      "authors_prior": "conditional",
+      "why": "programming.binexp.recursive"
+    },
+    {
+      "question_id": "g1-22",
+      "question": "what does the corpus say about the distributive law",
+      "authors_prior": "ask",
+      "why": "logic and set theory both state it"
+    },
+    {
+      "question_id": "g1-23",
+      "question": "what will the weather be tomorrow",
+      "authors_prior": "exhaust",
+      "why": "outside the corpus entirely"
+    },
+    {
+      "question_id": "g1-24",
+      "question": "who wrote the iliad",
+      "authors_prior": "exhaust",
+      "why": "outside the corpus entirely"
+    },
+    {
+      "question_id": "g1-25",
+      "question": "what is the capital city of australia",
+      "authors_prior": "exhaust",
+      "why": "outside the corpus; the gloss route's own committed counterexample"
+    },
+    {
+      "question_id": "g1-26",
+      "question": "how do i change a tyre",
+      "authors_prior": "exhaust",
+      "why": "outside the corpus entirely"
+    },
+    {
+      "question_id": "g1-27",
+      "question": "what is the best programming language",
+      "authors_prior": "exhaust",
+      "why": "not a question with an exact answer at all"
+    },
+    {
+      "question_id": "g1-28",
+      "question": "should i buy this stock",
+      "authors_prior": "exhaust",
+      "why": "not a question with an exact answer at all"
+    },
+    {
+      "question_id": "g1-29",
+      "question": "what did i ask you before",
+      "authors_prior": "exhaust",
+      "why": "asks about session history, which the exact layer does not answer and the proposer must never be handed"
+    },
+    {
+      "question_id": "g1-30",
+      "question": "prove the riemann hypothesis",
+      "authors_prior": "exhaust",
+      "why": "outside the corpus and outside the system's claims"
+    }
+  ],
+  "counts": {
+    "total": 30,
+    "authors_prior_conditional": 16,
+    "authors_prior_ask": 5,
+    "authors_prior_exhaust": 9
+  },
+  "non_claims": [
+    "no stranger-usability claim: these are maintainer-authored",
+    "no coverage claim about plain English: the denominator is these thirty questions",
+    "the authors_prior is a published expectation, not a correctness key"
+  ],
+  "counts_note": "computed from the questions themselves, not typed beside them. The first version of this file typed 16/6/8 against an actual 17/5/8 — the same class of defect slice 1's review found five times, caught here by the suite before the artifact was committed.",
+  "ceiling": {
+    "best_honest_verified_candidate_count": 21,
+    "of": 30,
+    "why": "the exhaust-prior questions have no committed material to verify against, so a candidate that verified for one of them would be the proposer inventing rather than selecting."
+  }
+}

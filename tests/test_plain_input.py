@@ -201,5 +201,136 @@ class PreregIsVerbatim(unittest.TestCase):
         self.assertIn("must not appear in any sentence containing a K number", text)
 
 
+QUESTIONS = REPO / "experiments" / "plain_question_set.json"
+DISTRACTORS = REPO / "experiments" / "plain_distractor_set.json"
+
+
+class TheFrozenInputSets(unittest.TestCase):
+    """G1's questions and G3's pairs — frozen before the proposer exists."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
+        cls.pairs = json.loads(DISTRACTORS.read_text(encoding="utf-8"))
+
+    def test_the_question_sets_counts_are_its_own_contents(self) -> None:
+        rows = self.questions["questions"]
+        counts = self.questions["counts"]
+        self.assertEqual(counts["total"], len(rows))
+        for disposition in ("conditional", "ask", "exhaust"):
+            self.assertEqual(
+                counts[f"authors_prior_{disposition}"],
+                sum(1 for row in rows if row["authors_prior"] == disposition),
+                disposition,
+            )
+
+    def test_the_set_cannot_read_better_than_its_own_ceiling(self) -> None:
+        """A set on which everything works is a set chosen to read well.
+
+        And the SENTENCE saying so must follow the counts. The first draft
+        typed "eight of the thirty … 22/30" against an actual nine and
+        21/30 — the same defect as the counts themselves, one field over.
+        """
+
+        counts = self.questions["counts"]
+        ceiling = self.questions["ceiling"]
+        self.assertGreaterEqual(counts["authors_prior_exhaust"], 8)
+        self.assertEqual(
+            ceiling["best_honest_verified_candidate_count"],
+            counts["total"] - counts["authors_prior_exhaust"],
+        )
+        prose = self.questions["the_set_is_not_stacked_and_here_is_the_proof"]
+        self.assertIn(
+            f"{ceiling['best_honest_verified_candidate_count']}/{counts['total']}",
+            prose,
+        )
+        self.assertIn(f"{counts['authors_prior_exhaust']} of the", prose)
+
+    def test_every_question_is_unique_and_carries_its_prior(self) -> None:
+        rows = self.questions["questions"]
+        self.assertEqual(len({r["question_id"] for r in rows}), len(rows))
+        self.assertEqual(len({r["question"] for r in rows}), len(rows))
+        for row in rows:
+            self.assertIn(row["authors_prior"], {"conditional", "ask", "exhaust"})
+            self.assertTrue(row["why"].strip())
+
+    def test_the_stranger_warning_is_carried_verbatim(self) -> None:
+        design = _flat(PLAIN.read_text(encoding="utf-8"))
+        self.assertIn(
+            _flat(self.questions["the_warning_inherited_verbatim"]), design
+        )
+
+    def test_the_distractor_floor_is_zero_and_the_voiding_sentence_verbatim(
+        self,
+    ) -> None:
+        design = _flat(PLAIN.read_text(encoding="utf-8"))
+        self.assertEqual(self.pairs["registered_floor"], 0)
+        self.assertIn(_flat(self.pairs["voiding_sentence_verbatim"]), design)
+
+    def test_every_pair_names_two_different_expected_queries(self) -> None:
+        """The clause C-V4 dropped, checked on the SET before any run."""
+
+        for pair in self.pairs["pairs"]:
+            self.assertNotEqual(pair["a"], pair["b"], pair["pair_id"])
+            self.assertNotEqual(
+                pair["expected_a"], pair["expected_b"], pair["pair_id"]
+            )
+            self.assertTrue(pair["why_they_differ"].strip())
+
+    def test_the_hardest_pair_is_left_in_deliberately(self) -> None:
+        """d03 may fail its own pre-check, and is kept anyway.
+
+        P2 measured de Morgan's two corpora landing in the same twin group.
+        A set that dropped its hardest pair before running would be a set
+        chosen to read well; an exclusion the pre-check makes is one a
+        reader can see.
+        """
+
+        d03 = next(p for p in self.pairs["pairs"] if p["pair_id"] == "d03")
+        self.assertIn("EXCLUDED", d03["note"])
+        self.assertIn(
+            "chosen to read well",
+            self.pairs["the_clause_C_V4_dropped_and_this_set_carries"][
+                "and_one_pair_is_expected_to_be_excluded"
+            ],
+        )
+
+    def test_no_mention_of_0_030_is_a_live_comparator(self) -> None:
+        """It may be NAMED, but only to say it is not inherited.
+
+        DESIGN-plain-input §2.3 records that the 0.030 false-positive
+        denominator cannot be regenerated — the 1,000 sampled sentences were
+        never committed — and forbids any gate from inheriting it as a live
+        comparator. Scrubbing the string would be the wrong test: the
+        artifacts SHOULD name it, in the sentence that disowns it.
+        """
+
+        def _leaves(node):
+            if isinstance(node, dict):
+                for value in node.values():
+                    yield from _leaves(value)
+            elif isinstance(node, list):
+                for value in node:
+                    yield from _leaves(value)
+            elif isinstance(node, str):
+                yield node
+
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        seen = 0
+        for artifact in (self.questions, self.pairs, prereg):
+            for leaf in _leaves(artifact):
+                if "0.030" not in leaf:
+                    continue
+                seen += 1
+                self.assertTrue(
+                    "unregenerable" in leaf
+                    or "cannot be regenerated" in leaf
+                    or "no gate" in leaf.lower()
+                    or "0.030-era" in leaf,
+                    f"0.030 appears without its disclaimer: {leaf[:180]}",
+                )
+        self.assertGreater(seen, 0, "the caveat is not carried anywhere")
+
+
 if __name__ == "__main__":
     unittest.main()

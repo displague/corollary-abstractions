@@ -1,0 +1,65 @@
+{
+  "schema": "corollary.plain-distractor-set/1",
+  "gate": "G3",
+  "design": "docs/DESIGN-plain-input.md",
+  "design_clause": "G3 — the distractor set (the C-V4 lesson). A preregistered set of sentence pairs that differ in meaning and must not collapse to one interpretation.",
+  "voiding_sentence_verbatim": "if the proposer maps a distractor pair to the same query above the registered floor, the design is measuring the verifier's tolerance and not the proposal, and the reading is void.",
+  "registered_floor": 0,
+  "floor_meaning": "ZERO pairs may collapse. A rate would invite a budget; a collapsed pair is the design measuring the wrong thing, and one is enough to mean it.",
+  "frozen_at": "2026-08-26",
+  "committed_before": "the proposer, the candidate enumerator, and any model call from this lane.",
+
+  "the_clause_C_V4_dropped_and_this_set_carries": {
+    "what_went_wrong_last_time": "ROADMAP-v0.20:102-110 records that C-V4′ exists because C-V4 'never establishes that the mutation should have moved' what it measured. A control that only checks that two things came out the same has not established that they should have come out different.",
+    "so_before_any_scoring": "every pair is checked BY EXACT CODE to resolve to two DIFFERENT verified queries. A pair that does not is EXCLUDED from the denominator, and the exclusion is counted and published.",
+    "why_that_matters_here": "if a pair's two sentences do not actually denote different registered queries, then a proposer mapping them to one query is CORRECT, and scoring it as a collapse would be scoring the set's own defect as the model's.",
+    "and_one_pair_is_expected_to_be_excluded": "pair d03 names de Morgan in the logic corpus and in the set-theory corpus. P2 measured that those two land in the SAME twin group, so they may well fail the pre-check. It is left in the set deliberately: a set that quietly dropped its hardest pair before running would be a set chosen to read well, and an exclusion the pre-check makes is an exclusion a reader can see."
+  },
+
+  "pairs": [
+    {"pair_id": "d01", "a": "what is the cosine of a double angle", "b": "what is the sine of a double angle",
+     "why_they_differ": "two different committed identities, one word apart — the nearest near-miss the trigonometry corpus offers",
+     "expected_a": "trigonometry.identities.double_angle_cosine", "expected_b": "trigonometry.identities.double_angle_sine"},
+    {"pair_id": "d02", "a": "how do you compute the greatest common divisor recursively", "b": "how do you compute the greatest common divisor iteratively",
+     "why_they_differ": "the same algorithm, two committed implementations; the distinguishing word is the last one",
+     "expected_a": "programming.euclid.recursive", "expected_b": "programming.euclid.iterative"},
+    {"pair_id": "d03", "a": "de morgan's laws in logic", "b": "de morgan's laws in set theory",
+     "why_they_differ": "two committed corpora state them and the statements are not the same record",
+     "expected_a": "logic.boolean_laws.de_morgan_laws", "expected_b": "settheory.boolean_laws.de_morgan_laws",
+     "note": "P2 measured these two landing in the same twin group; if the pre-check finds they do not denote different verified queries, this pair is EXCLUDED and the exclusion is published"},
+    {"pair_id": "d04", "a": "how do you compute a factorial recursively", "b": "how do you compute a factorial iteratively",
+     "why_they_differ": "two committed implementations of one function",
+     "expected_a": "programming.factorial.recursive", "expected_b": "programming.factorial.iterative"},
+    {"pair_id": "d05", "a": "what is two to the tenth", "b": "what is ten to the second",
+     "why_they_differ": "1024 and 100 — the same two numerals, the opposite exponentiation",
+     "expected_a": "2 ^ 10", "expected_b": "10 ^ 2"},
+    {"pair_id": "d06", "a": "what is two plus three", "b": "what is two times three",
+     "why_they_differ": "5 and 6 — the same two numerals, a different operator",
+     "expected_a": "2 + 3", "expected_b": "2 * 3"},
+    {"pair_id": "d07", "a": "what is the handshake lemma", "b": "what is cayley's formula",
+     "why_they_differ": "two different committed graph-theory statements",
+     "expected_a": "graphtheory.degree.handshake_lemma", "expected_b": "graphtheory.enumeration.cayley_formula"},
+    {"pair_id": "d08", "a": "what is the pythagorean identity", "b": "what is the tangent of an angle defined as",
+     "why_they_differ": "an identity and a definition, both committed, in one corpus",
+     "expected_a": "trigonometry.identities.pythagorean", "expected_b": "trigonometry.definitions.tangent"},
+    {"pair_id": "d09", "a": "what is double negation in logic", "b": "what is absorption in logic",
+     "why_they_differ": "two different committed boolean laws in the same corpus",
+     "expected_a": "logic.boolean_laws.double_negation", "expected_b": "logic.boolean_laws.absorption"},
+    {"pair_id": "d10", "a": "what is the quadratic formula", "b": "how many edges does a complete graph have",
+     "why_they_differ": "two unrelated committed statements — the easy pair, included so a total collapse is visible as a total collapse",
+     "expected_a": "algebra.polynomial_equations.quadratic_formula", "expected_b": "graphtheory.enumeration.complete_graph_edge_count"},
+    {"pair_id": "d11", "a": "what is the sine of a sum of two angles", "b": "what is the cosine of a sum of two angles",
+     "why_they_differ": "two committed angle-sum identities, one word apart",
+     "expected_a": "trigonometry.identities.sine_angle_sum", "expected_b": "trigonometry.identities.cosine_angle_sum"},
+    {"pair_id": "d12", "a": "what happens when you double an even number", "b": "what happens when you add one to an odd number",
+     "why_they_differ": "two different committed parity statements, neither using the corpus's own words",
+     "expected_a": "numbertheory.parity.even_double", "expected_b": "numbertheory.parity.odd_successor"}
+  ],
+
+  "counts": {"pairs": 12, "near_miss_pairs": 8, "unrelated_pairs": 1, "arithmetic_pairs": 2, "cross_corpus_pairs": 1},
+
+  "non_claims": [
+    "no false-positive rate is compared against 0.030: experiments/address_space_probe.json:31 records that denominator as unregenerable, and any FP statement this slice makes is against this committed set",
+    "twelve maintainer-authored pairs are twelve maintainer-authored pairs; no claim is made about pairs nobody wrote down"
+  ]
+}
