@@ -16,7 +16,9 @@ gone the other way:
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -128,6 +130,46 @@ class B4RejectsASelfComparisonByOrdinaryMeans(unittest.TestCase):
         # that recognises the trap; the tree comparison does all the work.
         self.assertTrue(
             wo.build(program, self_comparison=True)["trivial_by_construction"])
+
+
+class AnUnboundSlotIsARefusalNotAnImplicitBinder(unittest.TestCase):
+    """C-1, the defect this slice shipped once and the review caught.
+
+    `Program.variables` is `sampled_variables`. A guard conjunct can name a
+    slot that is not among them — `lean_workbook_10679`'s guard reads `b < c`
+    while the sampler binds only `a` and `b`. Rendered without a binder for
+    `c`, the obligation is not the statement it names: Lean's `autoImplicit`
+    prepends an implicit binder and accepts a STRICTLY STRONGER proposition,
+    with exit 0 and no diagnostic. Both halves of the fix are pinned here.
+    """
+
+    def _guarded(self, guard_text: str, variables):
+        program = _program("(a + b) >= 1", variables)
+        program.guard_conjuncts = (census.parse(guard_text),)
+        return program
+
+    def test_a_guard_naming_an_unbound_slot_refuses(self) -> None:
+        with self.assertRaises(wo.Unbuildable) as caught:
+            wo.build(self._guarded("b < c", ["a", "b"]))
+        message = str(caught.exception)
+        self.assertIn("'c'", message)
+        self.assertIn("would not be the statement it names", message)
+
+    def test_a_guard_naming_only_bound_slots_builds(self) -> None:
+        obligation = wo.build(self._guarded("b < a", ["a", "b"]))
+        self.assertIn("∀ (a b : Nat)", obligation["obligation"])
+
+    def test_a_conclusion_slot_outside_the_binder_refuses(self) -> None:
+        with self.assertRaises(wo.Unbuildable):
+            wo.build(_program("(a + z) >= 1", ["a"]))
+
+    def test_every_probe_carries_the_autoimplicit_guard(self) -> None:
+        self.assertIn("autoImplicit false", wp.PREAMBLE)
+
+    def test_the_builder_is_what_stops_it_not_the_checker(self) -> None:
+        """The refusal happens before any Lean process starts."""
+        with self.assertRaises(wo.Unbuildable):
+            wo.build(self._guarded("b < c", ["a", "b"]))
 
 
 class TheFragmentPredicateIsExecutable(unittest.TestCase):
@@ -308,6 +350,57 @@ class ThePilotStoppedAndShowedTheStopWasAReading(unittest.TestCase):
                          wp.PILOT_SIZE,
                          "an instrument without B4 would have published every "
                          "one of these as a discharged lemma")
+
+    def test_every_recorded_receipt_was_taken_with_autoimplicit_off(
+            self) -> None:
+        """C-1(c), checked WITHOUT invoking Lean.
+
+        The probe source is a pure function of the obligation, so the
+        recorded digest proves which bytes the checker actually saw. If the
+        preamble were ever dropped, every one of these would move.
+        """
+        for row in self.doc["rows"]:
+            with self.subTest(statement=row["statement_id"]):
+                source = (wp.PREAMBLE + "example : " + row["obligation"]
+                          + " := by omega\n")
+                expected = hashlib.sha256(source.encode("utf-8")).hexdigest()
+                receipt = row.get("proof_receipt") or row[
+                    "counterfactual_without_B4"]
+                self.assertEqual(receipt["source_sha256"], expected)
+
+    def test_no_obligation_carries_a_slot_the_binder_does_not_bind(
+            self) -> None:
+        for row in self.doc["rows"]:
+            with self.subTest(statement=row["statement_id"]):
+                binder = f"∀ ({' '.join(row['variables'])} : Nat),"
+                self.assertTrue(row["obligation"].startswith(binder))
+                body = row["obligation"][len(binder):]
+                for name in re.findall(r"(?<![A-Za-z0-9_])[a-z][a-z0-9_]*",
+                                       body):
+                    if name in {"omega", "example", "by"}:
+                        continue
+                    self.assertIn(
+                        name, row["variables"],
+                        f"{name} appears in the obligation but is not bound; "
+                        f"autoImplicit would have invented a binder for it")
+
+    def test_the_divergence_mechanism_is_computed_and_could_go_red(
+            self) -> None:
+        """H-1: the published mechanism was FALSE once. It is counted now."""
+        block = self.doc["divergence_reachability"]
+        self.assertEqual(
+            block["n_ary_nodes"], 0,
+            "the parser started emitting n-ary nodes; the whole triviality "
+            "argument changes and this artifact is stale")
+        self.assertGreater(
+            block["statements_with_a_leading_neg_plus"], 0,
+            "the divergent class IS reachable from the parser — saying "
+            "otherwise is the error this assertion exists to prevent")
+        self.assertEqual(
+            block["of_those_inside_the_w0_fragment"], 0,
+            "a leading-neg statement inside the fragment would make a "
+            "non-trivial obligation available and the stop would be wrong")
+        self.assertGreater(block["of_those_that_compile"], 0)
 
     def test_the_stop_fired_and_no_floor_was_frozen(self) -> None:
         self.assertEqual(self.doc["reading"]["discharged"], 0)

@@ -6,7 +6,7 @@
     "target": "leanworkbook.skel.lean_workbook_1478",
     "verdict": "rejected_trivial"
   },
-  "census_predicate_hash": "692e082efb75a4cc1529e2d72723a846dec6165576ad888ab81d73891d9c1465",
+  "census_predicate_hash": "515c0b583089be9d8f54294c86ef7440a55e6d7f39d21adae7e5736049d6b451",
   "checker": {
     "binary": "~/.elan/toolchains/leanprover--lean4---v4.32.2/bin/lean.exe",
     "binary_sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
@@ -14,7 +14,7 @@
     "tactic": "omega",
     "toolchain": "leanprover/lean4:v4.32.2"
   },
-  "commit": "022e54cb77b352e5b16ccf34f99d267957d10973",
+  "commit": "4ff972a814c85863bd4153621550f22314f486f9",
   "controls": {
     "negative_control": {
       "met": true,
@@ -22,10 +22,10 @@
       "obligation": "∀ (a b c : Nat), ((((a + c) - b) >= 8) ↔ (((a - b) + c) >= 8))",
       "receipt": {
         "accepted": false,
-        "checker_output_head": "<obligation>.lean:1:79: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  e ≥ 0\n  e - f ≤ -1\n  d ≥ 8\n  0 ≤ d + e - f ≤ 7\nwhere\n d := ↑c\n e := ↑a\n f := ↑b",
+        "checker_output_head": "<obligation>.lean:2:79: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  e ≥ 0\n  e - f ≤ -1\n  d ≥ 8\n  0 ≤ d + e - f ≤ 7\nwhere\n d := ↑c\n e := ↑a\n f := ↑b",
         "returncode": 1,
-        "seconds": 0.378,
-        "source_sha256": "085d8a0fc59e248d7d18e956abca4695be659cb884ba31a6702f2e1851c412b3"
+        "seconds": 0.392,
+        "source_sha256": "dbbd853362f86b7d34129cfb7ffdb0e10c61e5ac6f6ab7af1df09aeceddf8b51"
       }
     },
     "pipeline_is_not_broken": true,
@@ -37,20 +37,35 @@
         "accepted": true,
         "checker_output_head": "",
         "returncode": 0,
-        "seconds": 0.381,
-        "source_sha256": "3272055f74a5426dfaaa713ae8a69050ca8b93c7e42a14564fde69a5a780c46d"
+        "seconds": 0.395,
+        "source_sha256": "dfb3630286817b2779aa997ebb5368e7e8b8297b3df6059575c4bde386aa7a9b"
       }
     },
     "why_these_exist": "A pilot that reads zero must show the zero is a READING and not a pipeline that never worked. The positive control is the exact regrouping shape this instrument was built to test, it is non-trivial, and it discharges; the negative control is the same shape unguarded and false, and the checker refuses it. So the builder builds, the renderer renders, `omega` decides, and the zero below is about the corpus and the parser rather than about the machinery."
   },
   "design": "docs/DESIGN-witnessed-conformance.md §5 (W1)",
+  "divergence_reachability": {
+    "example_statement_id": "leanworkbook.ground.lean_workbook_27370",
+    "leading_inv_times_nodes": 0,
+    "leading_neg_plus_nodes": 28,
+    "n_ary_nodes": 0,
+    "n_ary_nodes_note": "A node with more than two operands is where the evaluator's hoisting would visibly regroup. The parser emits none: `+` and `*` are left-nested binary throughout.",
+    "of_those_inside_the_w0_fragment": 0,
+    "of_those_that_compile": 18,
+    "plus_and_times_nodes_walked": 86547,
+    "statements_parsed": 8586,
+    "statements_with_a_leading_inv_times": 0,
+    "statements_with_a_leading_neg_plus": 25,
+    "the_accurate_mechanism": "TWO shapes make the readings differ. (1) A node with more than two operands — the parser emits ZERO of these, so the evaluator's hoisting never has anything to hoist. (2) A BINARY node whose FIRST operand is a `neg` (or, for `*`, an `inv`): the evaluator groups it as `b - a` and the written reading as `(0 - a) + b`, and over Nat those differ. The parser DOES emit shape (2) — the counts above say how often — and it is excluded from this slice by the FRAGMENT'S LINEARITY PREDICATE rather than by the parser. Saying `the divergent class is unreachable` was wrong, and wrong in the direction that made the instrument look less repairable than it is.",
+    "what_it_means_for_the_next_cycle": "The divergent class EXISTS and is non-linear. Growing the fragment to reach it would give the drafted obligation content — but that content would still be one front-end's parse compared to itself under two grouping rules, which is a narrower question than whether the compiler read the statement correctly. A second front-end is needed BEFORE fragment growth, not instead of it."
+  },
   "draw_rule": "For each of six shape classes in the fixed order unguarded/guarded × 1/2/3 variables, take the FIRST candidate by statement id; then fill any unmet class with the first unused candidate by id. Deterministic and recomputable from the census artifact alone.",
   "drawn": [
     "leanworkbook.skel.lean_workbook_1478",
     "leanworkbook.skel.lean_workbook_11467",
     "leanworkbook.skel.lean_workbook_43903",
     "leanworkbook.skel.lean_workbook_18936",
-    "leanworkbook.skel.lean_workbook_10679",
+    "leanworkbook.skel.lean_workbook_16746",
     "leanworkbook.skel.lean_workbook_35725"
   ],
   "non_claims": [
@@ -60,7 +75,7 @@
     "`rejected_trivial` is not a criticism of the statements. It is a verdict about the OBLIGATION this design built for them.",
     "The stop is not a failure of the pinned checker: both controls read as specified, so `omega` proved what is true and refused what is false."
   ],
-  "obligation_builder_hash": "4b11e87ec191c875fdb7912d6266ac1892751dcddbd9063f8e05c57807c4548f",
+  "obligation_builder_hash": "a91b1c9c5e0831723bf618ac99b86f93c6ff4036ff5984b31e4b9d809805cc00",
   "pilot_id": "witness.pilot.v1",
   "reading": {
     "discharged": 0,
@@ -83,8 +98,8 @@
         "accepted": true,
         "checker_output_head": "",
         "returncode": 0,
-        "seconds": 0.414,
-        "source_sha256": "0a7beefd1ddfe0bf4c8d2dab526ccfa444437e714ec3f5ac19d86d80746aa816"
+        "seconds": 0.392,
+        "source_sha256": "e01f02e9ed00c5ba3f4ebd6ae3099b39f61266395cf4ace75ff9941cb87badcb"
       },
       "evaluated_reading": "((a * 0) = 0)",
       "guard_kind": "none",
@@ -106,8 +121,8 @@
         "accepted": true,
         "checker_output_head": "",
         "returncode": 0,
-        "seconds": 0.378,
-        "source_sha256": "47fee5f2399a15b50ef5ed71fdb53a688b1c28910a5a71ffdbe9ea82bed1b19f"
+        "seconds": 0.385,
+        "source_sha256": "4ac256683dacca516e00929e667ad9cd5b394b485664ef8d8f64691b30ff04d8"
       },
       "evaluated_reading": "((((6 * a) + (2 * b)) - (2 * b)) = (6 * a))",
       "guard_kind": "none",
@@ -130,8 +145,8 @@
         "accepted": true,
         "checker_output_head": "",
         "returncode": 0,
-        "seconds": 0.365,
-        "source_sha256": "50d83bcc27f5f7edb1c06e331a54d98286c3ac17487bdbc8323334571782a310"
+        "seconds": 0.385,
+        "source_sha256": "31f4ef820144684024d34df4c1f983961b70de6ceec13fc10063feac86efebcf"
       },
       "evaluated_reading": "((a + ((b + c) / 2)) = (((a + b) / 2) + ((a + c) / 2)))",
       "guard_kind": "none",
@@ -155,8 +170,8 @@
         "accepted": true,
         "checker_output_head": "",
         "returncode": 0,
-        "seconds": 0.372,
-        "source_sha256": "01df38ca89a559bd3c570cbaf3db60ec8a87220693021702321b6a0f8ce0e206"
+        "seconds": 0.382,
+        "source_sha256": "f627c9b6d90b50c1306f8ac8a3333f33850c04da9fb435775115fc4c11f03b11"
       },
       "evaluated_reading": "(((3 * x) - 1) > (x + 1))",
       "guard_kind": "box",
@@ -171,26 +186,26 @@
       "verdict": "rejected_trivial"
     },
     {
-      "as_written_reading": "(b < a)",
-      "canonical_ascii": "b < a",
+      "as_written_reading": "(x >= (y + 1))",
+      "canonical_ascii": "x ≥ y + 1",
       "class_was_filled": true,
       "counterfactual_without_B4": {
         "accepted": true,
         "checker_output_head": "",
         "returncode": 0,
-        "seconds": 0.38,
-        "source_sha256": "a13681ce6ebba04032345fb0dd9c47a9023002f22a78cf022f4875b2ac75a8e0"
+        "seconds": 0.364,
+        "source_sha256": "823f624176217170ce780c84bc12dbc1fd0eaef9b49a259f7c3e42ca733ab710"
       },
-      "evaluated_reading": "(b < a)",
+      "evaluated_reading": "(x >= (y + 1))",
       "guard_kind": "coupling",
-      "obligation": "∀ (a b : Nat), (b < c) ∧ ((b + c) < (a + 1)) ∧ (a > 1) → ((b < a) ↔ (b < a))",
+      "obligation": "∀ (x y : Nat), (x >= (y + 1)) → ((x >= (y + 1)) ↔ (x >= (y + 1)))",
       "shape_class": "guarded/2var",
-      "statement_id": "leanworkbook.skel.lean_workbook_10679",
+      "statement_id": "leanworkbook.skel.lean_workbook_16746",
       "trivial_by_construction": true,
       "trivial_reason": "the evaluator's grouping is a no-op on this term: the two readings are the SAME TREE, so the obligation is `P ↔ P` and discharging it would measure nothing",
       "variables": [
-        "a",
-        "b"
+        "x",
+        "y"
       ],
       "verdict": "rejected_trivial"
     },
@@ -202,8 +217,8 @@
         "accepted": true,
         "checker_output_head": "",
         "returncode": 0,
-        "seconds": 0.381,
-        "source_sha256": "3a3b1cad8dbda6692b0fbc028de0317660599a13906cbeb7b08a96dce0c5f6df"
+        "seconds": 0.345,
+        "source_sha256": "f21512803631d411470f0771e836ef559f24c820dbbb2e6561444541a9357c1c"
       },
       "evaluated_reading": "(c < (a + b))",
       "guard_kind": "coupling",
@@ -229,9 +244,9 @@
     "obligations_the_checker_accepted": 6,
     "of": 6,
     "statement_ids": [
-      "leanworkbook.skel.lean_workbook_10679",
       "leanworkbook.skel.lean_workbook_11467",
       "leanworkbook.skel.lean_workbook_1478",
+      "leanworkbook.skel.lean_workbook_16746",
       "leanworkbook.skel.lean_workbook_18936",
       "leanworkbook.skel.lean_workbook_35725",
       "leanworkbook.skel.lean_workbook_43903"
@@ -239,9 +254,9 @@
     "what_it_means": "Every pilot obligation was handed to `omega` anyway, with the triviality test switched off. The checker ACCEPTED them — of course it did: they are `P ↔ P`. An instrument without B4 would have published these as discharged agreement lemmas, cleared its gate, and reported a capability. That is not a hypothetical about some other design; it is this design's own output with one clause removed, and it is the most direct evidence available that B4 is load-bearing rather than ceremonial."
   },
   "why_the_zero_is_structural": {
-    "finding": "The committed parser emits LEFT-NESTED BINARY `+` and `*` nodes — `a - b + c` parses as `+(+(a, neg(b)), c)`, not as a flat three-operand node. `conform.eval_under_domain`'s regrouping (hoist the positives, subtract the sum of the negatives; multiply the numerators, divide once by the product of the denominators) has NOTHING TO REGROUP at a two-operand node. So the evaluator's reading and the written reading are the same tree, for every one of the 38 fragment candidates and for every term this parser can produce in this fragment.",
+    "finding": "The committed parser emits LEFT-NESTED BINARY `+` and `*` nodes — `a - b + c` parses as `+(+(a, neg(b)), c)`, not as a flat three-operand node — so the evaluator's hoisting has nothing to hoist. That accounts for MOST of the triviality but not all of it, and the difference was got wrong once: a binary node whose FIRST operand is a `neg` still diverges, and the parser emits that shape. It is the FRAGMENT'S LINEARITY PREDICATE that keeps those out. Within this fragment, and only within it, the evaluator's reading and the written reading are the same tree for every census candidate. The counts are in `divergence_reachability`, walked rather than argued.",
     "so_what_the_pilot_actually_measured": "Not that the corpus is easy, and not that the checker is weak. That the OBLIGATION SHAPE, built from a single front-end, has no content: both sides descend from one parse tree, and the only difference the construction could express — the evaluator's regrouping — is a no-op on that tree's shape. The draft's own residual_risk named this and priced it as a survivable residual: *'the obligation is built from the compiler's own front-end reading of S -- a uniform front-end misreading survives every clause.'* The pilot's reading is stronger than that: it is not that a misreading SURVIVES the clauses, it is that there is NOTHING ELSE IN THE OBLIGATION. B4 is not narrowing a residual here; B4 is the whole verdict.",
-    "the_divergent_class_is_not_empty_it_is_unreachable": "Two shapes would diverge if the parser produced them: a multi-operand `+` with a negative before a positive, and a multi-operand `*` with a denominator before a numerator. The positive control above is built by hand in exactly the first shape and the machinery handles it correctly. The parser does not emit it.",
+    "the_divergent_class_is_reachable_but_non_linear": "CORRECTED 2026-08-25, after delta review falsified the previous wording. The earlier text said the divergent class was unreachable from the parser. It is not. A BINARY `+` whose first operand is a `neg` diverges, and the parser emits it — see the computed `divergence_reachability` block for how often and for the example statement id. What keeps it out of this slice is the FRAGMENT'S LINEARITY PREDICATE, not the parser. The correction strengthens the recommendation rather than weakening the stop: the divergent class exists and is non-linear, so a second front-end is needed even before fragment growth.",
     "what_it_would_take": "A genuinely independent second reading of S — a second front-end, or the human transcription W2 registered as a narrowing audit. The draft put that explicitly OUT of the slice. It is therefore not a residual to be priced later but a CONSTRUCTION PREREQUISITE, and that is this pilot's recommendation to the next cycle."
   },
   "writer": "scripts/witness_pilot.py"

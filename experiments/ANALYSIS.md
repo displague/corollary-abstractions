@@ -1,3 +1,32 @@
+# WITNESS: the slice stopped before it opened (2026-08-25)
+
+**`experiments/witness_pilot.json` — 0 of 6 obligations discharged, every one
+`rejected_trivial`, and the stop is the result.** The drafted agreement lemma
+`forall x in D: eval(S)(x) <-> S(x)` compares the conformance evaluator's
+grouping of a statement with the statement as written — and both sides
+descend from **one front-end's parse**. Inside W0's linear fragment the two
+are the same tree, so every obligation is `P ↔ P`. No floor was frozen, no
+manifest was sealed, no capability is claimed.
+
+**The counterfactual is why the stop is worth reading.** Handed to `omega`
+with the triviality test switched off, the same six obligations were
+**accepted 6 of 6**. An instrument without B4's self-comparison clause would
+have published six discharged lemmas and reported a capability.
+
+| artifact | what it holds |
+|---|---|
+| `witness_fragment_census.json` | W0. **37 candidates** of 12,777 walked, all carrier `Nat`; the 60-name manifest withdrawn under the design's <70 rule; the executable predicate's digest, and the three corrections it took before sealing |
+| `witness_pilot.json` | W1. The six drawn by a recomputable rule, the two controls, B4's trap, the counterfactual, and the computed `divergence_reachability` block |
+| `conformance_ce3_supplement.json` | The C-E3 rider. **25 of 25 sampled counterexamples confirmed** by the pinned checker on closed ground propositions — and all 25 **hold over exact rationals**, so the agreement prices arithmetic-implementation risk, not domain risk |
+| `conformance_e5_late.json` | E5 run late under §4.0(2): two fresh runs byte-identical; a third reproduces the registered artifact but for `commit` and the hand-added corrections block |
+
+**Recommendation on file:** an independent second reading of `S` is a
+**construction prerequisite** of any WITNESS slice, not a residual to price
+later. Filed in `docs/BACKLOG.md`; WITNESS parks behind it (ROADMAP-v0.21
+§2's dated disposition).
+
+---
+
 # Conformance: the registered run reads out (2026-08-25)
 
 `experiments/conformance_run.json`, executed once at commit `c428cfb`.

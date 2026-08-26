@@ -322,9 +322,22 @@ class TheArtifactSaysWhatItIsAndWhatItCannotDo(unittest.TestCase):
         run = json.loads((ROOT / sup.RUN).read_text(encoding="utf-8"))
         entries = sup.sampled_rows(run)
         nodes = sup.corpus_nodes({e["e2_row"]["statement_id"] for e in entries})
+        # THE ARTIFACT'S DENOMINATOR IS `confirmed_rows`, not every sampled
+        # row, and this test used to walk all of them. The two coincide only
+        # because every row confirmed; a test whose denominator agrees with
+        # the artifact's by luck is a test that stops agreeing the first time
+        # a row reads differently.
+        confirmed = {
+            row["statement_id"] for row in self.doc["rows"]
+            if row["decide_verdict"] == sup.CONFIRMED
+        }
+        self.assertEqual(len(confirmed),
+                         self.doc["aggregate"]["of_confirmed_rows"])
         holds = 0
         for entry in entries:
             e2_row = entry["e2_row"]
+            if e2_row["statement_id"] not in confirmed:
+                continue
             node = nodes[e2_row["statement_id"]]
             closed = sup.substitute(
                 census.parse(

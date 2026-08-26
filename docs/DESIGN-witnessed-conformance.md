@@ -144,6 +144,36 @@ exists to catch.
 > otherwise be quoted: **45 is a thin denominator**, every target is published
 > by name, and no percentage of it is presented as a property of the corpus.
 
+> **Second amendment (2026-08-25), correcting the first. Never an edit of
+> it.** Delta review found the amendment above stale in seven places. The
+> committed census (`experiments/witness_fragment_census.json`) reads **37
+> candidates, not 45**; the decoy pool is **4,250, not 4,242**; and **no
+> manifest of any size was sealed**, so the sentence *"the manifest is set to
+> the whole population, 45 targets"* is **RETRACTED** — the slice stopped at
+> W1 before any seal, and a manifest sentence in the present tense described
+> something that never happened. What survives unchanged: the 60-name
+> manifest is withdrawn, the fragment is `Nat` and not Z or Q, B2's 40/60 is
+> void, and the denominator is thin enough that no percentage of it is ever
+> quoted.
+>
+> **The whole chain, in prose, because four numbers appeared across two
+> documents and only the last one is current.** **66** was §4's *indicative*
+> walk, and it checked only the conclusion. The committed predicate holds
+> **guards to the same linearity standard** — a linear conclusion under a
+> quadratic guard is not a statement of linear arithmetic — and that is the
+> single largest drop: **21 statements**, taking 66 to **45**. Then the
+> predicate was executed against the obligation builder three times and lost
+> three more groups: **3** carrying a literal that is not a `Nat` (45 → 42),
+> **4** carrying a unary negation outside a `+` node (42 → 38), and **1**
+> whose guard names a slot the binder does not bind (38 → **37**). Every one
+> of those was found by *running the builder*, never by reading the
+> predicate, which is why the predicate's last clause is now a call into it.
+>
+> **§8's non-claim is corrected by this amendment too.** It read *"Nothing
+> outside the 60-name manifest"*; the 60-name manifest does not exist. The
+> non-claim is now: **nothing outside the 37-name census population**, and in
+> fact nothing at all, since nothing was discharged.
+
 ## 5. Meetable floors — ROADMAP-v0.21 §4.0(3)
 
 > *Every frozen floor now ships with a meetability argument — a pilot, a
@@ -178,7 +208,10 @@ never confirm."*
 > OPEN.** `experiments/witness_pilot.json`. Six statements drawn by the
 > committed rule, all six shape classes filled, one box guard and two
 > coupling guards among them. **Every one came back `rejected_trivial`**, and
-> so did all 38 candidates when the builder was run over the population.
+> so did all census candidates when the builder was run over the population.
+> *(That population read 38 when this amendment was written and reads **37**
+> after the C-1 builder fix below; the verdict is unchanged and the number is
+> corrected rather than left to be inferred.)*
 >
 > **No floor is frozen**, because a floor is a fraction a correct instrument
 > can reach and this one reached none. **No manifest is sealed.** No
@@ -188,10 +221,23 @@ never confirm."*
 > **Why the zero is structural, and therefore a finding rather than a
 > shortfall.** The committed parser emits **left-nested binary** `+` and `*`
 > nodes — `a - b + c` parses as `+(+(a, neg(b)), c)`, never as a flat
-> three-operand node — and `eval_under_domain`'s regrouping has nothing to
-> regroup at a two-operand node. So *"what the evaluator computes"* and
-> *"the statement as written"* are the **same tree**, and the obligation is
-> `P ↔ P` for every term this parser can produce in this fragment.
+> three-operand node — so `eval_under_domain`'s hoisting has nothing to
+> hoist. Within this fragment *"what the evaluator computes"* and *"the
+> statement as written"* are the **same tree**, and the obligation is
+> `P ↔ P` for every census candidate.
+>
+> > **Correction (2026-08-25, delta review).** The sentence above originally
+> > ended *"for every term this parser can produce"*, and that was **false**.
+> > A **binary** `+` whose FIRST operand is a `neg` still diverges: the
+> > evaluator groups `+(neg(a), b)` as `b - a` and the written reading is
+> > `(0 - a) + b`, which differ over `Nat`. The parser **does** emit that
+> > shape — the pilot's computed `divergence_reachability` block counts
+> > **0 n-ary nodes in 86,547 walked over 8,586 parsed statements, 0 leading
+> > `inv` products, and 25 statements carrying a leading-`neg` sum, 18 of
+> > which compile**. What keeps them out is the **fragment's linearity
+> > predicate**, not the parser: **0 of the 25 are inside the census
+> > population**. The claim is now computed in the artifact rather than
+> > argued in prose, and a test goes red if either half flips.
 >
 > **The pilot's controls say the zero is a reading, not a broken pipeline.**
 > A hand-built non-trivial obligation in exactly the divergent shape
@@ -214,7 +260,12 @@ never confirm."*
 > obligation**. An independent second reading of `S` is therefore a
 > **construction prerequisite of any WITNESS slice**, not a residual to be
 > narrowed later, and §6's W2 transcription audit is the cheapest form of it.
-> That is this pilot's recommendation to the next cycle.
+> That is this pilot's recommendation to the next cycle — and the correction
+> above **strengthens** it rather than softening the stop. The divergent
+> class exists and is **non-linear**, so growing the fragment to reach it
+> would give the drafted obligation content, but that content would still be
+> one front-end's parse compared with itself under two grouping rules. **A
+> second front-end is needed BEFORE fragment growth, not instead of it.**
 
 **B3's 50/50 has a construction argument, a different kind of claim.** B2 is
 empirical; B3 asks whether a mutated statement still agrees with its parent's
@@ -313,9 +364,11 @@ is then unmeetable and is withdrawn before it is frozen, not left to void).
   void; a discharged lemma about a statement that once read
   `NO_COUNTEREXAMPLE_FOUND` does not un-void that verdict, restore that run's
   controls, or license any sentence about the 3,298.
-- **Nothing outside the 60-name manifest** — not about the corpus, about
+- **Nothing outside the census population** — not about the corpus, about
   `lean_workbook`, about statements the predicate did not admit, or about the
-  fragment as a whole.
+  fragment as a whole. *(Corrected 2026-08-25: this read "the 60-name
+  manifest", which §4's first amendment had already withdrawn and which was
+  never sealed at any size. See §4's second amendment.)*
 - **The domain is still this repository's declaration.** A discharged lemma
   says evaluator and statement agree *under the domain the schema declared*,
   not that the schema read the source statement correctly — §6's residual,
@@ -344,7 +397,21 @@ B6's sandbox and behind any `Nat` obligation at all. (2) The **substitution
 discipline** is committed and tested: bindings land structurally at the
 parsed tree's `slot` nodes, never textually, so WITNESS's *"obligations are
 closed terms by construction"* clause inherits an implementation rather than
-a promise. (3) It shows **a declared domain's rendering into the checker's
+a promise.
+
+> **Correction (2026-08-25, delta review): the sentence above was itself a
+> promise, and W1 produced its counter-instance.** The C-E3 supplement does
+> close its terms; the WITNESS obligation builder did **not**. It rendered
+> guard conjuncts without checking that their slots are bound by the binder,
+> and `lean_workbook_10679`'s guard names `c` while the sampler binds only
+> `a` and `b`. Lean's `autoImplicit` quietly prepended `∀ {c : Nat}` and the
+> checker returned **exit 0 on a strictly stronger proposition than the row
+> it was filed under**, with no diagnostic. Inheriting a discipline from a
+> sibling script is not the same as implementing it, and the gap was invisible
+> precisely because the receipt looked clean. The builder now **refuses** an
+> unbound slot as a typed refusal, every probe runs under
+> `set_option autoImplicit false`, and the census lost one candidate to the
+> new clause (38 → 37). (3) It shows **a declared domain's rendering into the checker's
 carrier can be checked rather than argued** —
 `tests/test_conform_ce3_supplement.py` drives the same decision path over
 fixtures that must come back refuted, which is B4's question in concrete form

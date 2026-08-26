@@ -222,6 +222,30 @@ on the convention ROADMAP-v0.19 and ROADMAP-v0.20 both used, and this
 roadmap quotes the reviewed gate clauses once they exist rather than
 inventing them in advance.
 
+> **Disposition, added 2026-08-25, for an outcome §2 did not have a slot
+> for.** This item planned for WITNESS shipping its registered run **or**
+> publishing its stop. What happened is a third thing: the design landed, W0
+> and W1 ran, and **the slice stopped before it opened** — 0 of 6 obligations
+> discharged at the pilot, every one `rejected_trivial`, because the drafted
+> obligation compares one front-end's parse with itself. So there is a
+> reviewed design, two committed artifacts and a published reading, and
+> **no instrument**. Disposition: **WITNESS PARKS**, behind a named
+> prerequisite rather than a trigger — *a second, independent reading of `S`*
+> (a second front-end, or W2's human transcription promoted from audit to
+> input). Fragment growth alone does not unpark it: the divergent class is
+> non-linear, so reaching it would give the obligation content while leaving
+> it a comparison of one parse with itself.
+>
+> **EXHIBIT's revival condition is unmet, and its wording did not anticipate
+> this branch.** It reads: *"it revives only if a non-void conformance
+> instrument ships first."* No instrument shipped, so the condition is not
+> met — but neither did one **void**, and §2's next sentence (*"if WITNESS
+> voids, EXHIBIT stays declined with a second reason"*) does not describe
+> what occurred either. **EXHIBIT stays declined, and the second reason is
+> recorded as the accurate one**: not that the successor voided, but that the
+> successor **never became an instrument**, for a cause — single-front-end
+> construction — that EXHIBIT would inherit whole.
+
 **And it carries a revival condition for a declined direction.** EXHIBIT
 (meaning by discriminating instance) was declined **in writing by its own
 series** because it builds on the layer whose conformance run voided. Its

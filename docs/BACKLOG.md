@@ -294,10 +294,21 @@ cycle inherits the disposition and not a rumour.
   (2026-08-26, from W1's pilot — `experiments/witness_pilot.json`).** The
   slice stopped at W1 with **0 of 6 discharged**, and the reason is
   structural: the committed parser emits left-nested **binary** `+` and `*`
-  nodes, so `eval_under_domain`'s regrouping is a no-op and *"what the
-  evaluator computes"* and *"the statement as written"* are the same tree.
-  Every obligation of the drafted shape is `P ↔ P` — all 6 drawn, and all 38
-  fragment candidates. The draft priced the single-front-end problem as a
+  nodes, so `eval_under_domain`'s hoisting is a no-op and *"what the
+  evaluator computes"* and *"the statement as written"* are the same tree
+  **for every statement inside the fragment**. Every obligation of the
+  drafted shape is `P ↔ P` — all 6 drawn, and all 37 census candidates.
+
+  > **Correction (2026-08-25, delta review).** This entry first said the
+  > divergent class was *unreachable from the parser*. **It is reachable.** A
+  > binary `+` whose first operand is a `neg` diverges (`b - a` for the
+  > evaluator, `(0 - a) + b` as written), and the corpus carries **25 such
+  > statements, 18 of them compiling** — against **0 n-ary nodes in 86,547**
+  > and **0 leading-`inv` products**. What excludes them is the **fragment's
+  > linearity predicate**, not the parser, and **0 of the 25 are inside the
+  > census population**. The correction makes the entry stronger: the
+  > divergent class exists and is non-linear, so a second front-end is needed
+  > **before** fragment growth, not merely instead of it. The draft priced the single-front-end problem as a
   **residual risk** (*"a uniform front-end misreading survives every
   clause"*) and put the independent re-reading outside the slice; the pilot
   says that is backwards. **It is a construction prerequisite.** Unpark when
@@ -308,6 +319,22 @@ cycle inherits the disposition and not a rumour.
   evidence**: handed to `omega` with B4 switched off, the same six
   obligations were **accepted 6 of 6**, which is what an instrument without a
   self-comparison trap would have published as a capability.
+
+- **W0's fragment predicate never asks whether a candidate RUNS
+  (2026-08-25, from delta review).** Membership is: compiles, is quantified,
+  is linear, and the obligation builder renders both readings. **Nothing
+  asks whether the committed compiler admits a single point for it.** One of
+  the 37 census candidates — `leanworkbook.skel.lean_workbook_plus_72430` —
+  has **zero admitted points** at M = 1,000 and comes back `REFUSED`
+  (`guard_measure_zero`), so its obligation would have been **vacuously**
+  discharged had the slice opened: B5's nontriviality witness is the clause
+  that would have caught it, and B5 is downstream of a manifest that was
+  never sealed. Review found **two** such candidates; the C-1 fix removed one
+  of them from the population for an unrelated reason, which is luck rather
+  than design. **Filed for any reopening, not fixed here**: W0 would need a
+  runnability clause, or B5 would need to run at census time rather than at
+  discharge time. Fixing it now would be re-scoring a census the pilot has
+  already read.
 
 - **A deterministic runner whose artifact does not record its own invocation
   (2026-08-26, found while running E5 late).**

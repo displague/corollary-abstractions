@@ -75,9 +75,20 @@ def pinned_binary() -> Path:
     return binary
 
 
-def check(source: str, binary: Path, timeout: int = 120) -> dict:
-    """One `lean` invocation. Returns a receipt, never raises."""
+#: PREPENDED TO EVERY PROBE, and the reason is a defect this slice shipped
+#: once. Lean's `autoImplicit` silently binds an unknown lowercase identifier
+#: as an implicit argument, so an obligation that accidentally carried a free
+#: `c` elaborated as an extra implicit binder — a DIFFERENT and strictly
+#: stronger proposition than the row it was filed under, accepted with exit 0
+#: and no diagnostic. A checker receipt is only evidence about the term you
+#: think you sent it.
+PREAMBLE = "set_option autoImplicit false" + chr(10)
 
+
+def check(source: str, binary: Path, timeout: int = 120) -> dict:
+    """One `lean` invocation, with autoImplicit off. Never raises."""
+
+    source = PREAMBLE + source
     started = time.time()
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "Obligation.lean"
@@ -192,6 +203,112 @@ POSITIVE_CONTROL = (
 NEGATIVE_CONTROL = (
     "∀ (a b c : Nat), ((((a + c) - b) >= 8) ↔ (((a - b) + c) >= 8))"
 )
+
+
+def divergence_reachability() -> dict:
+    """COUNT the shapes on which the two readings can differ. Not asserted.
+
+    The first version of this pilot published a mechanism that was FALSE as
+    worded — it said the divergent class was unreachable from the parser.
+    Delta review falsified it: a binary `+` whose FIRST operand is a `neg`
+    diverges (the evaluator groups `b - a`, as-written groups `(0 - a) + b`),
+    and the parser emits that shape. It is excluded from this slice by the
+    FRAGMENT'S LINEARITY PREDICATE, not by the parser, and the difference
+    matters to what the next cycle should build. So the numbers are walked
+    out of the corpus here rather than reasoned about in prose.
+    """
+
+    census_doc = json.loads((REPO / CENSUS).read_text(encoding="utf-8"))
+    in_fragment = set(census_doc["candidates"])
+    schema = conform_domain.load()
+    relations = census.evaluator_relations()
+
+    counts = {"parsed": 0, "op_nodes": 0, "n_ary": 0,
+              "leading_neg": 0, "leading_inv": 0}
+    with_leading_neg: set = set()
+    with_leading_inv: set = set()
+    compiled_leading_neg: set = set()
+    fragment_leading_neg: set = set()
+
+    def walk(node, statement_id):
+        if node[0] in {"num", "slot"}:
+            return
+        if node[0] == "op" and node[1] in {"+", "*"}:
+            counts["op_nodes"] += 1
+            if len(node[2]) > 2:
+                counts["n_ary"] += 1
+            first = node[2][0]
+            if node[1] == "+" and first[0] == "op" and first[1] == "neg":
+                counts["leading_neg"] += 1
+                with_leading_neg.add(statement_id)
+            if node[1] == "*" and first[0] == "op" and first[1] == "inv":
+                counts["leading_inv"] += 1
+                with_leading_inv.add(statement_id)
+        for arg in node[2]:
+            walk(arg, statement_id)
+
+    for path in census.corpora():
+        document = json.loads(path.read_text(encoding="utf-8"))
+        corpus = document.get("corpus_id", path.parent.name)
+        for node in document.get("statement_nodes", []):
+            statement_id = node.get("statement_id", "")
+            tree = census.parse(
+                (node.get("formal_statement") or {}).get("canonical_ascii", ""))
+            if tree is None:
+                continue
+            counts["parsed"] += 1
+            walk(tree, statement_id)
+            if statement_id in with_leading_neg:
+                row = census.classify(
+                    node, corpus, relations, schema.output_roles)
+                try:
+                    conform.compile_statement(node, row, schema)
+                except conform.Refusal:
+                    continue
+                compiled_leading_neg.add(statement_id)
+                if statement_id in in_fragment:
+                    fragment_leading_neg.add(statement_id)
+
+    return {
+        "statements_parsed": counts["parsed"],
+        "plus_and_times_nodes_walked": counts["op_nodes"],
+        "n_ary_nodes": counts["n_ary"],
+        "n_ary_nodes_note": (
+            "A node with more than two operands is where the evaluator's "
+            "hoisting would visibly regroup. The parser emits none: `+` and "
+            "`*` are left-nested binary throughout."
+        ),
+        "leading_neg_plus_nodes": counts["leading_neg"],
+        "statements_with_a_leading_neg_plus": len(with_leading_neg),
+        "of_those_that_compile": len(compiled_leading_neg),
+        "of_those_inside_the_w0_fragment": len(fragment_leading_neg),
+        "example_statement_id": (
+            sorted(compiled_leading_neg)[0] if compiled_leading_neg else None),
+        "leading_inv_times_nodes": counts["leading_inv"],
+        "statements_with_a_leading_inv_times": len(with_leading_inv),
+        "the_accurate_mechanism": (
+            "TWO shapes make the readings differ. (1) A node with more than "
+            "two operands — the parser emits ZERO of these, so the "
+            "evaluator's hoisting never has anything to hoist. (2) A BINARY "
+            "node whose FIRST operand is a `neg` (or, for `*`, an `inv`): "
+            "the evaluator groups it as `b - a` and the written reading as "
+            "`(0 - a) + b`, and over Nat those differ. The parser DOES emit "
+            "shape (2) — the counts above say how often — and it is excluded "
+            "from this slice by the FRAGMENT'S LINEARITY PREDICATE rather "
+            "than by the parser. Saying `the divergent class is unreachable` "
+            "was wrong, and wrong in the direction that made the instrument "
+            "look less repairable than it is."
+        ),
+        "what_it_means_for_the_next_cycle": (
+            "The divergent class EXISTS and is non-linear. Growing the "
+            "fragment to reach it would give the drafted obligation content "
+            "— but that content would still be one front-end's parse "
+            "compared to itself under two grouping rules, which is a "
+            "narrower question than whether the compiler read the statement "
+            "correctly. A second front-end is needed BEFORE fragment growth, "
+            "not instead of it."
+        ),
+    }
 
 
 def _sha256_lf(path: Path) -> str:
@@ -387,18 +504,21 @@ def build(timeout: int) -> dict:
                 if stop else "not fired"
             ),
         },
+        "divergence_reachability": divergence_reachability(),
         "why_the_zero_is_structural": {
             "finding": (
                 "The committed parser emits LEFT-NESTED BINARY `+` and `*` "
                 "nodes — `a - b + c` parses as `+(+(a, neg(b)), c)`, not as a "
-                "flat three-operand node. `conform.eval_under_domain`'s "
-                "regrouping (hoist the positives, subtract the sum of the "
-                "negatives; multiply the numerators, divide once by the "
-                "product of the denominators) has NOTHING TO REGROUP at a "
-                "two-operand node. So the evaluator's reading and the written "
-                "reading are the same tree, for every one of the 38 fragment "
-                "candidates and for every term this parser can produce in "
-                "this fragment."
+                "flat three-operand node — so the evaluator's hoisting has "
+                "nothing to hoist. That accounts for MOST of the triviality "
+                "but not all of it, and the difference was got wrong once: a "
+                "binary node whose FIRST operand is a `neg` still diverges, "
+                "and the parser emits that shape. It is the FRAGMENT'S "
+                "LINEARITY PREDICATE that keeps those out. Within this "
+                "fragment, and only within it, the evaluator's reading and "
+                "the written reading are the same tree for every census "
+                "candidate. The counts are in `divergence_reachability`, "
+                "walked rather than argued."
             ),
             "so_what_the_pilot_actually_measured": (
                 "Not that the corpus is easy, and not that the checker is "
@@ -423,13 +543,18 @@ def build(timeout: int) -> dict:
                 "a CONSTRUCTION PREREQUISITE, and that is this pilot's "
                 "recommendation to the next cycle."
             ),
-            "the_divergent_class_is_not_empty_it_is_unreachable": (
-                "Two shapes would diverge if the parser produced them: a "
-                "multi-operand `+` with a negative before a positive, and a "
-                "multi-operand `*` with a denominator before a numerator. The "
-                "positive control above is built by hand in exactly the first "
-                "shape and the machinery handles it correctly. The parser "
-                "does not emit it."
+            "the_divergent_class_is_reachable_but_non_linear": (
+                "CORRECTED 2026-08-25, after delta review falsified the "
+                "previous wording. The earlier text said the divergent class "
+                "was unreachable from the parser. It is not. A BINARY `+` "
+                "whose first operand is a `neg` diverges, and the parser "
+                "emits it — see the computed `divergence_reachability` block "
+                "for how often and for the example statement id. What keeps "
+                "it out of this slice is the FRAGMENT'S LINEARITY PREDICATE, "
+                "not the parser. The correction strengthens the "
+                "recommendation rather than weakening the stop: the "
+                "divergent class exists and is non-linear, so a second "
+                "front-end is needed even before fragment growth."
             ),
         },
         "non_claims": [

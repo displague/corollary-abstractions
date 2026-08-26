@@ -27,6 +27,19 @@ it. The obligation asks whether the 775 counterexamples v0.20 published were
 counterexamples to the statements or to the evaluator's regrouping of them.
 That question can be answered `no`, which is what makes it worth asking.
 
+**Correction (2026-08-25, from delta review): the two examples above are
+NOT what makes the readings diverge here, and one of them cannot arise.**
+Both are drawn as flat three-operand nodes, and the committed parser emits
+**binary** `+` and `*` nodes — `a - b + c` is `+(+(a, neg(b)), c)`. They are
+kept because they are the clearest picture of what the evaluator's regrouping
+IS, and corrected because a reader would otherwise take them for reachable
+inputs. The shape that actually diverges on this parser is a **leading**
+`neg` or `inv`: `+(neg(a), b)` groups as `b - a` for the evaluator and as
+`(0 - a) + b` as written, and over `Nat` those differ. That shape IS emitted
+by the parser; it is excluded from this slice by the fragment's linearity
+predicate, not by the parser. `experiments/witness_pilot.json`'s
+`divergence_reachability` block counts both.
+
 **Trivial by construction is detected on TREES, not on strings.** A first
 version compared rendered strings and called `((6*a) + (2*b)) - (2*b)`
 different from `(((6*a) + (2*b))) - ((2*b))` — the same term with different
@@ -164,6 +177,19 @@ def surface_tree(node):
     raise Unbuildable(f"operator {op!r} has no reading")
 
 
+def _slots(node) -> set:
+    """Every `slot` name in a parse-tree node."""
+
+    if node[0] == "slot":
+        return {node[1]}
+    if node[0] == "num":
+        return set()
+    out: set[str] = set()
+    for arg in node[2]:
+        out |= _slots(arg)
+    return out
+
+
 def _fold(operator: str, pieces: list, empty):
     if not pieces:
         return empty
@@ -239,12 +265,39 @@ def build(program, self_comparison: bool = False) -> dict:
 
     trivial = (left_eval, right_eval) == (left_surface, right_surface)
 
+    # EVERY SLOT THE OBLIGATION MENTIONS MUST BE BOUND BY THE BINDER.
+    # `program.variables` is `sampled_variables`, and a guard conjunct can
+    # name a slot that is not among them — `lean_workbook_10679`'s guard
+    # reads `b < c` while the sampler binds only `a` and `b`. Rendered
+    # without a binder for `c`, the obligation is not the statement it
+    # names: Lean's `autoImplicit` silently prepends `∀ {c : Nat}` and the
+    # checker's receipt is then about a DIFFERENT and strictly stronger
+    # proposition. Refusing is the house grammar — a typed refusal, like
+    # `conform.Refusal`'s constructs — and it is the honest one: a variable
+    # the sampler never bound is a variable this slice cannot quantify over
+    # on the statement's behalf.
     guards = []
+    guard_slots: set[str] = set()
     for conjunct in program.guard_conjuncts:
+        for side in conjunct[2]:
+            guard_slots |= _slots(side)
         guards.append(
             f"({render(eval_tree(conjunct[2][0]))} "
             f"{_relation(conjunct[1])} "
             f"{render(eval_tree(conjunct[2][1]))})")
+    unbound = guard_slots - set(program.variables)
+    if unbound:
+        raise Unbuildable(
+            f"guard names {sorted(unbound)}, which the binder does not bind; "
+            f"the obligation would not be the statement it names"
+        )
+    conclusion_slots = _slots(program.conclusion[2][0]) | _slots(
+        program.conclusion[2][1])
+    stray = conclusion_slots - set(program.variables)
+    if stray:
+        raise Unbuildable(
+            f"conclusion names {sorted(stray)}, which the binder does not bind"
+        )
 
     binder = " ".join(program.variables)
     evaluated = (f"({render(left_eval)} {relation} {render(right_eval)})")
