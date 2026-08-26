@@ -1,6 +1,11 @@
 # The session ledger
 
-**Status: design only.** Nothing here is implemented. This document is the
+**Status: slice 1 implemented and measured (2026-08-26).** R1 HOLDS on
+gate run 4 (`experiments/session_ledger_run4.json`; four runs, all
+retained; the repair chain in the prereg's dated amendments). The served
+claim is §9's sentence within §10-§11's stated scope. Slice 2 (plain
+input inside the object) remains design-only. Originally: this document
+is the
 v0.21 course's selected direction (receipt:
 `reports/design-direction-v0.21.json`), written as the **completion of
 [DESIGN-plain-input](DESIGN-plain-input.md)** — the maintainer-seeded
