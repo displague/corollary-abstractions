@@ -171,8 +171,39 @@ def _owns_vocabulary(repo_root: Path) -> dict:
     }
 
 
+#: The twin ledger's group-bearing fields, NAMED. `_route_twin` answers
+#: `found` for a statement listed in one of these and `exhausted` otherwise
+#: (`retrieval.py:583` builds its material from them), so these five lists
+#: are the admission set and nothing else in the file is.
+TWIN_GROUP_FIELDS = (
+    "typed_twin_groups",
+    "family_twin_groups_beyond_typed",
+    "aliased_twin_groups_beyond_typed",
+    "mirror_twin_groups",
+    "shape_twin_groups",
+)
+
+
 def _twin_vocabulary(repo_root: Path) -> dict:
-    """Statement ids the committed twin ledger actually lists."""
+    """Statement ids the committed twin ledger actually lists.
+
+    **Corrected 2026-08-26, after independent review.** The first version
+    walked the whole document for any dict carrying a `members` list of
+    STRINGS. Real twin groups carry members as lists of DICTS
+    (`{"statement_id", "discipline", "template"}`), so that walk matched
+    neither of them — it matched the two DIAGNOSTIC lists that happen to
+    hold bare id strings, `archetype_label_drift` and
+    `skeletons_with_split_archetypes`, and reported 12,589 ids of which
+    10,111 route to `exhausted`. It also missed 59 ids that are real
+    members. Two wrongs in one number, and it inflated the closed total by
+    10,052.
+
+    The fix is to stop pattern-matching the document's shape and name the
+    five fields that hold groups. Members are read by their `statement_id`
+    key and a member that is not a dict with one RAISES: the whole defect
+    was a walker that quietly accepted a shape it did not understand, and
+    the repair has to be loud where the original was accommodating.
+    """
 
     from harness import TWIN_LEDGER_PATH, TWIN_LEVEL_ORDER  # noqa: PLC0415
 
@@ -183,28 +214,39 @@ def _twin_vocabulary(repo_root: Path) -> dict:
         return {"members": None, "reason": f"{type(exc).__name__}: {exc}"}
     members: set[str] = set()
     groups = 0
-
-    def _walk(node) -> None:
-        nonlocal groups
-        if isinstance(node, dict):
-            listed = node.get("statements") or node.get("members")
-            if isinstance(listed, list) and all(
-                isinstance(item, str) for item in listed
-            ):
-                groups += 1
-                members.update(listed)
-            for value in node.values():
-                _walk(value)
-        elif isinstance(node, list):
-            for value in node:
-                _walk(value)
-
-    _walk(ledger)
+    per_field: dict[str, int] = {}
+    for field in TWIN_GROUP_FIELDS:
+        listed = ledger.get(field)
+        if listed is None:
+            raise RuntimeError(
+                f"{TWIN_LEDGER_PATH} carries no {field!r}; the twin ledger's "
+                "shape moved and this count would be about something else"
+            )
+        per_field[field] = len(listed)
+        for group in listed:
+            groups += 1
+            for member in group["members"]:
+                if not isinstance(member, dict) or "statement_id" not in member:
+                    raise RuntimeError(
+                        f"{field} holds a member this reader does not "
+                        f"understand: {member!r}. The v0.21 review found this "
+                        "count wrong precisely because an earlier version "
+                        "accepted a shape it had not checked."
+                    )
+                members.add(member["statement_id"])
     return {
         "members": len(members),
         "groups": groups,
+        "groups_by_field": per_field,
         "levels": list(TWIN_LEVEL_ORDER),
         "producer": TWIN_LEDGER_PATH,
+        "producer_fields": list(TWIN_GROUP_FIELDS),
+        "corrected": (
+            "2026-08-26. The first reading walked for members-as-strings and "
+            "found the two diagnostic lists instead of the five group lists: "
+            "12,589 ids reported, 10,111 of them routing to `exhausted`, and "
+            "59 real members missed."
+        ),
     }
 
 

@@ -1,5 +1,5 @@
 {
-  "builder_digest": "4527f73250dec0d049076cccdadb7ad82ab7110b060afb4a6faffc6f9957141d",
+  "builder_digest": "8dda6d4095ee7a3d96fb90b250c7d8e396220a7fb702c7572bdd812c970446f9",
   "built_by": "scripts/measure_command_bound.py",
   "classes": [
     {
@@ -98,8 +98,8 @@
       ]
     },
     {
-      "admitted_commands": 12589,
-      "answering_vocabulary": 12589,
+      "admitted_commands": 2537,
+      "answering_vocabulary": 2537,
       "bound_kind": "closed",
       "class_index": 5,
       "counting": "one line per statement id the committed twin ledger lists; an id outside the ledger reaches the route and is answered `exhausted`, which is a refusal to name a group and is not counted",
@@ -110,7 +110,7 @@
         {
           "kind": "closed",
           "name": "statement-id",
-          "size": 12589,
+          "size": 2537,
           "vocabulary": "twin_ledger"
         }
       ]
@@ -316,7 +316,7 @@
   "design": "docs/DESIGN-session-ledger.md",
   "design_clause": "\u00a76 P1 \u2014 compute and commit the bound on admitted commands per template class of the registered grammar",
   "determinism": "artifact committed from a deterministic runner; reproductions welcome and recorded (ROADMAP-v0.21 \u00a74.0(2))",
-  "finding": "The registered grammar is NOT finite. Of 15 template classes, 5 are closed and together admit 44915 commands; 9 admit countably infinite languages (row 2 (owns <template-expr>), row 3 (suppose <claim>), row 7 (conform <statement-id> <bindings>), row 8 (<story request>), row 9 (<belief narration> / where does A think B is), row 10 (<computable relation or expression>), row 11 (<repo-relative path>), row 12 (<free text the graph claims>), row 14 (<everything else>)); 1 is closed in principle but unreadable on this boot. Series 1's fold \u2014 'the grammar is finite, so enumeration cost stops being an argument and becomes a number' \u2014 holds for the closed classes and FAILS for the open ones, and the open ones are exactly where plain prose lands (the resolver row and the complement row). So the number enumeration buys is the ANSWERING vocabulary, not the admitted language: an enumerating proposer has a finite target only because the committed material is finite, never because the grammar is. That is the correction P1 makes to the fold it was folded out of.",
+  "finding": "The registered grammar is NOT finite. Of 15 template classes, 5 are closed and together admit 34863 commands; 9 admit countably infinite languages (row 2 (owns <template-expr>), row 3 (suppose <claim>), row 7 (conform <statement-id> <bindings>), row 8 (<story request>), row 9 (<belief narration> / where does A think B is), row 10 (<computable relation or expression>), row 11 (<repo-relative path>), row 12 (<free text the graph claims>), row 14 (<everything else>)); 1 is closed in principle but unreadable on this boot. Series 1's fold \u2014 'the grammar is finite, so enumeration cost stops being an argument and becomes a number' \u2014 holds for the closed classes and FAILS for the open ones, and the open ones are exactly where plain prose lands (the resolver row and the complement row). So the number enumeration buys is the ANSWERING vocabulary, not the admitted language: an enumerating proposer has a finite target only because the committed material is finite, never because the grammar is. That is the correction P1 makes to the fold it was folded out of.",
   "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
   "line_grammar_source": "scripts/serve_chat.py LINE_GRAMMAR",
   "measured_against": "the grammar whose digest this artifact carries, and only that one. P1 was first computed against a 14-row grammar and committed; v0.21's session ledger then added the `retract <assumption-id>` row its own \u00a73 status alphabet required, which moved the grammar this measurement is OF. The artifact is recomputed rather than annotated: P1 is a computation over a committed input, not a control that ran and read unfavourably, so the record-over-rerun rule does not reach it, and a bound measured against a grammar that no longer exists would be a false sentence in a canonical artifact. The first reading and this one are both in the history, and `line_grammar_digest` dates each of them exactly.",
@@ -332,7 +332,7 @@
       6
     ],
     "closed_classes": 5,
-    "closed_total": 44915,
+    "closed_total": 34863,
     "gated_class_indices": [
       13
     ],
@@ -472,7 +472,15 @@
       "size": 14830
     },
     "twin_ledger": {
-      "groups": 31,
+      "corrected": "2026-08-26. The first reading walked for members-as-strings and found the two diagnostic lists instead of the five group lists: 12,589 ids reported, 10,111 of them routing to `exhausted`, and 59 real members missed.",
+      "groups": 2015,
+      "groups_by_field": {
+        "aliased_twin_groups_beyond_typed": 1,
+        "family_twin_groups_beyond_typed": 4,
+        "mirror_twin_groups": 5,
+        "shape_twin_groups": 1030,
+        "typed_twin_groups": 975
+      },
       "levels": [
         "typed",
         "family",
@@ -480,8 +488,15 @@
         "mirror",
         "shape"
       ],
-      "members": 12589,
-      "producer": "reports/signature_matches.json"
+      "members": 2537,
+      "producer": "reports/signature_matches.json",
+      "producer_fields": [
+        "typed_twin_groups",
+        "family_twin_groups_beyond_typed",
+        "aliased_twin_groups_beyond_typed",
+        "mirror_twin_groups",
+        "shape_twin_groups"
+      ]
     },
     "wordnet_lemmas": {
       "gated_on": "retrieve.wordnet",

@@ -5725,7 +5725,7 @@ run 3.** Every run artifact is committed and none is edited after the fact.
 
 | artifact | what it is | the number |
 |---|---|---|
-| `experiments/session_p1_command_bound.json` | P1 — admitted commands per template class of `LINE_GRAMMAR` | **5 closed classes admit 44,915; 9 classes are open; 1 is environment-gated** |
+| `experiments/session_p1_command_bound.json` | P1 — admitted commands per template class of `LINE_GRAMMAR` | **5 closed classes admit 34,863; 9 classes are open; 1 is environment-gated** |
 | `experiments/session_p2_prompt_seal.json` + `experiments/session_p2_separator_probe.json` | P2 — separator expressibility over ten hand-sealed ambiguous prompts | **9 of 10 separate (8 of 10 at the act level)** |
 | `experiments/session_corpus_seal.json` (+ `..._pre_repair.json`) | P3 — the sealed corpus and its A/B split | **60 sessions, 410 turns, 130 binding-dependent; half B: 25 / 171 / 58** |
 
@@ -5736,9 +5736,26 @@ enumeration cost stops being an argument and becomes a number"*
 (ROADMAP-v0.21 §1.1). **Half of that is true and the artifact says which
 half.** Five classes are closed by a committed vocabulary — the empty line
 (1), `narrow` (32,253 = 29 corpora + 37 disciplines + 17,356 resolver words
-+ 14,830 statement ids + `cancel`), `twin` (12,589 ledger members),
-`reachable` (8 manifest pairs), and `retract`, whose 64-command ceiling is
-the turn cap and is the **only session-scoped vocabulary in the grammar**.
++ 14,830 statement ids + `cancel`), `twin` (**2,537** ids across 2,015
+groups), `reachable` (8 manifest pairs), and `retract`, whose 64-command
+ceiling is the turn cap and is the **only session-scoped vocabulary in the
+grammar**.
+
+> **Corrected 2026-08-26, after independent review.** `twin` first read
+> **12,589** and the closed total first read **44,915**. The walker matched
+> any `members` list of STRINGS; real twin groups carry members as lists of
+> DICTS, so it found the two *diagnostic* lists —
+> `archetype_label_drift` and `skeletons_with_split_archetypes` — instead of
+> the five group lists, counted 12,589 ids of which **10,111 route to
+> `exhausted`**, and missed 59 real members. Two errors in one number, and
+> it inflated the closed total by 10,052. The reader now names the five
+> group fields and **raises** on a member shape it does not understand,
+> because the defect was a walker that quietly accepted one. Every green
+> test around it stayed green while the number was wrong, so
+> `tests/test_session_prereqs.py` gained a **number-level** check: it routes
+> a sample of the counted ids through `harness._route_twin` and requires
+> them admitted, requires real members to be counted, and requires the ids
+> the old walker over-counted to route `exhausted` and be absent.
 Nine classes admit countably infinite languages, and they are exactly where
 plain prose lands: the resolver row and the complement row.
 

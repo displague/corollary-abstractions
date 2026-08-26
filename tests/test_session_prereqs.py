@@ -164,6 +164,81 @@ class P1CommandBound(unittest.TestCase):
             builder._twin_vocabulary = original
         self.assertIn("closed", str(caught.exception))
 
+    def test_the_twin_count_is_the_admission_count(self) -> None:
+        """C2: route the ids the artifact COUNTED and check they are admitted.
+
+        This is a number-level test, not a guard-level one, and it exists
+        because the guard-level tests were all green while the number was
+        wrong by 10,052. The first `_twin_vocabulary` walked the ledger for
+        any `members` list of STRINGS; real twin groups carry members as
+        lists of DICTS, so it matched the two DIAGNOSTIC lists instead and
+        reported 12,589 ids of which 10,111 route to `exhausted`.
+
+        Three directions, because two of them would each have passed alone:
+
+        1. counted ⇒ not exhausted — the direction the old number failed.
+        2. a real member ⇒ counted — the direction that catches a walker
+           which under-counts by naming too few fields.
+        3. the specific defect: ids the OLD walker counted and the group
+           fields do not list must route `exhausted` AND be absent from the
+           counted set. A regression that re-broadened the walker would go
+           red here by name.
+        """
+
+        import measure_command_bound as builder  # noqa: PLC0415
+        from harness import CoreSession, route_line  # noqa: PLC0415
+
+        ledger = json.loads(
+            (REPO / "reports" / "signature_matches.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        counted = set()
+        for field in builder.TWIN_GROUP_FIELDS:
+            for group in ledger[field]:
+                for member in group["members"]:
+                    counted.add(member["statement_id"])
+        self.assertEqual(
+            len(counted),
+            self.artifact["vocabularies"]["twin_ledger"]["members"],
+            "the artifact's count is not the count of the ids it names",
+        )
+
+        diagnostic = set()
+        for field in ("archetype_label_drift", "skeletons_with_split_archetypes"):
+            for row in ledger[field]:
+                diagnostic.update(row["members"])
+        stale_only = sorted(diagnostic - counted)
+        self.assertTrue(
+            stale_only, "the old walker's over-count is no longer reproducible"
+        )
+
+        session = CoreSession.boot(REPO, offline=True)
+        ordered = sorted(counted)
+        stride = max(1, len(ordered) // 25)
+
+        for statement_id in ordered[::stride][:25]:
+            verdict = route_line(REPO, session, f"twin {statement_id}")
+            self.assertEqual(verdict["route"], "twin", statement_id)
+            self.assertNotEqual(
+                verdict["status"], "exhausted",
+                f"{statement_id} is counted as admitted and is not",
+            )
+
+        first_group = ledger[builder.TWIN_GROUP_FIELDS[0]][0]
+        for member in first_group["members"][:5]:
+            self.assertIn(member["statement_id"], counted)
+
+        stale_stride = max(1, len(stale_only) // 10)
+        for statement_id in stale_only[::stale_stride][:10]:
+            verdict = route_line(REPO, session, f"twin {statement_id}")
+            self.assertEqual(
+                verdict["status"], "exhausted",
+                f"{statement_id} was counted by the old walker and is not "
+                "admitted; if it is admitted the count rule moved",
+            )
+            self.assertNotIn(statement_id, counted)
+
     def test_the_non_claims_are_carried_and_specific(self) -> None:
         claims = self.artifact["what_this_does_not_claim"]
         self.assertGreaterEqual(len(claims), 3)
