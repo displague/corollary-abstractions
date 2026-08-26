@@ -1,0 +1,218 @@
+{
+  "schema": "corollary.plain-input-prereg/1",
+  "design": "docs/DESIGN-plain-input.md",
+  "completed_by": "docs/DESIGN-session-ledger.md §5 slice 2",
+  "slice": 2,
+  "frozen_at": "2026-08-26",
+  "frozen_before": "the proposer exists, the candidate enumerator exists, the plain-question set exists, the distractor set exists, and any model call is made from this lane. Slice 1 is merged (b388e6b) and its seal is CLOSED; slice 2 records a new corpus under the same protocol rules.",
+  "what_this_freezes": "the answers to DESIGN-plain-input §4's questions (which the design says a course must answer before this becomes a preregistration), the trust shape of the proposer, gates G1-G7 with their numbers and voiding sentences, B9 as a SCORED clause, the model pin and the determinism protocol, and the conditional-versus-clarify adjudication that P2 did not settle.",
+  "section_4_questions_answered": {
+    "preamble": "DESIGN-plain-input §4: 'Questions the course must answer before this becomes a preregistration'. Seven are listed there. All seven are answered here, in writing, with the evidence each answer rests on.",
+    "q1_phase_2_or_phase_6": {
+      "the_question_verbatim": "The design claims Phase 2 — bounded filling of already-open slots — because every proposal is a registered query. But the *proposer* is unbounded English on the input side, which is the thing Phase 6 names. Either argue the boundary holds (the bound is on the **output** alphabet, not the input) or concede the design is Phase 6 arriving early and price it accordingly.",
+      "answer": "PHASE 2, but NOT by the argument the design offers, because slice 1 measured that argument false.",
+      "why_the_designs_own_argument_fails": "the design rests the Phase-2 claim on the output alphabet being bounded — 'A candidate is a string that route_line already accepts'. P1 measured the registered grammar and it is NOT finite: of fifteen template classes, nine admit countably infinite languages, and two of those nine (the resolver row and the complement row) are exactly where plain prose lands (experiments/session_p1_command_bound.json). 'route_line accepts it' is a PARSE CHECK, not membership in a finite set. A proposer free to emit any string route_line accepts is a proposer with an unbounded output alphabet, and the Phase-2 claim would be false.",
+      "what_is_registered_instead": "the proposer NEVER EMITS A QUERY STRING. Exact code enumerates a finite candidate list from committed material and the model's entire output alphabet is an INDEX INTO THAT LIST, plus the token NONE. It selects; it does not generate.",
+      "why_that_is_the_designs_own_doctrine_rather_than_a_new_one": "DESIGN-language-as-structure:465-466 — the residual 'ranks labels of candidates, it does not invent candidates from ℝ^d prose space' — and :422, 'Residual proposers may suggest candidates into C; they never mark VERIFIED'. The admission bar's 'closed outputs … or proposals only' is read literally: the outputs are closed because the list is.",
+      "and_it_answers_a_standing_park": "ROADMAP-v0.19:224 records that 'A ranker is not blocked by the admission bar — it is blocked by the absence of anything to rank', because the realization grammar emits one surface per term. On the INPUT side that is false: a plain utterance licenses several candidate queries by construction. This is the first place in the repository where the ranker seat has a denominator, and it is why the seat can be filled here without re-opening the argument that kept it empty."
+    },
+    "q2_held_or_a_new_status": {
+      "answer": "MINT `conditional`. Non-answering for scoring, receipt-carrying.",
+      "why_not_held": "scripts/serve_chat.py's ANSWERING_STATUSES already contains `held`, so reusing it would make every conditional answer score as an answer in the throughput metric — 'precisely the accounting this design must not have' (§3b). Re-opening ANSWERING_STATUSES to remove `held` would edit a frozen set from the other end and change the existing `suppose` route's behaviour, which is worse.",
+      "the_cost_paid_in_full": "the status alphabet is frozen as a closed set (SPEC-chat-completions-skin §5), so this is a spec amendment with a version bump and a capability-sheet change. All three are done in this slice and none is done quietly.",
+      "the_precedent_that_makes_it_workable": "the `closure` route already has a status that is non-answering for scoring yet carries its receipt verbatim, because the negative is certified (SPEC §6.1). A conditional answer is that shape: it carries evidence and is not scored as an answer.",
+      "mechanical_not_rhetorical": "`conditional` is added to measure_throughput.NON_ANSWERING_STATUSES and the useful-token computation gains an explicit non-answering guard, so a conditional turn contributes ZERO useful tokens whatever its content length. Tested from the scoring path itself, not from a docstring (G7b below)."
+    },
+    "q3_what_bounds_the_supposition_count": {
+      "answer": "TWO bounds, both reusing committed ceilings rather than minting new ones.",
+      "per_answer": 1,
+      "per_answer_rule": "at most ONE proposed supposition per served answer. The design says 'One supposition per answer is defensible'; it is frozen at one. An utterance whose residue needs two named framing variables is not served conditionally — it falls to the clarifying-question arm.",
+      "per_session": 8,
+      "per_session_rule": "the session ledger's frozen live-assumption cap (DESIGN-session-ledger §3), unchanged. A proposed supposition is an Assumption record like any other and spends the same budget; a ninth refuses with the same typed `assumption_budget` refusal.",
+      "why_not_a_new_ceiling": "the design asks the count to 'reuse `hop_ceiling` rather than mint a second ceiling'. The ledger's cap of 8 is the ceiling this object already has, and it is the one the proposed suppositions live under."
+    },
+    "q4_who_verifies_exactly": {
+      "the_question_verbatim": "\"Exact code verifies each candidate\" covers thirteen routes of very different strength: `evaluate` computes; `owns` looks up; `resolver` matches words at a 0.030-era floor. **A candidate verified by the resolver is weaker evidence than one verified by evaluation**, and the receipt must say which — otherwise the design launders a weak match through a strong-sounding word.",
+      "answer": "the receipt carries `verification_strength`, a closed vocabulary, on every conditional answer and every proposed resolution.",
+      "vocabulary": {
+        "exact_computation": "the candidate was decided by exact arithmetic or exact lookup — routes `evaluate`, `ownership`, `closure`, `conform`. The strongest kind: something was computed or looked up, not matched.",
+        "committed_record": "the candidate named a committed record and the record was returned verbatim — routes `twin`, `retraction`. Strong, and not a computation.",
+        "word_match": "the candidate bound through the resolver, which matches which words appear where (DESIGN-text-resolution:162-164). WEAKEST, and the receipt says so in the field itself rather than in a footnote."
+      },
+      "the_caveat_that_binds_any_false_positive_comparison": "experiments/address_space_probe.json:31 records that the 0.030 false-positive denominator CANNOT BE REGENERATED — the 1,000 sampled sentences were never committed. No gate in this slice inherits 0.030 as a live comparator. G3's distractor set is this slice's own committed sample and any FP statement is made against it."
+    },
+    "q5_does_the_proposer_see_the_corpus_and_does_that_leak_a_holdout": {
+      "answer": "the proposer sees a candidate list, and the enumerator that builds it READS `data/` ONLY, never `data_holdout/`.",
+      "why_this_question_is_live_and_not_theoretical": "slice 1's review found the mechanism (its M9 correction): `resolver.default_index` builds over BOTH `data/` and `data_holdout/` (resolver.py:821-822), so **2,053 holdout statement ids sit inside the resolver's index** — measured, not supposed. A candidate list built the obvious way, from the resolver's own index, would put holdout ids in front of a learned model. That is exactly what docs/DESIGN-holdout-quarantine.md exists to prevent, and it would have happened silently.",
+      "the_rule_frozen_here": "the candidate enumerator constructs its vocabulary from `data/` alone. No holdout id, holdout statement text, or holdout-derived skeleton may appear in any prompt sent to the model, in any candidate list, or in any served answer.",
+      "and_it_is_a_scored_clause": "G8 below. Every prompt byte of the registered run is scanned against the holdout id set; one occurrence is red and voids the run."
+    },
+    "q6_what_is_the_baseline": {
+      "answer": "BOTH, because they answer different questions, and the design says so.",
+      "capability_blind_control": "G5's random/frequency generator over the SAME candidate list — it picks an index uniformly at random from the same enumeration the model picks from. This is the blind control proper: same path, same alphabet, no capability.",
+      "the_incumbent": "the resolver plus the clarification loop — today's row-12 behaviour with the proposer OFF. Named as the INCUMBENT rather than mislabelled blind, per DESIGN-sans-template-rendering:334-337.",
+      "why_the_blind_control_is_strong_here": "because the model and the blind arm draw from the same finite list, the comparison isolates SELECTION and nothing else. A blind arm that generated its own strings would be a weaker control, since its failures could be blamed on generation."
+    },
+    "q7_does_a_conditional_answer_score_as_an_answer": {
+      "answer": "NO, and the metric that already exists is what makes it safe.",
+      "the_design_s_own_reasoning_adopted": "refusal and clarification turns contribute zero useful tokens whatever their content length (SPEC §6.1). With `conditional` non-answering, this slice CANNOT inflate K by converting exhaustions into conditionals — the incentive that would corrupt it is removed by the metric rather than by intent.",
+      "the_sentence_this_slice_must_never_appear_in": "any sentence containing a K number. DESIGN-plain-input §7: 'Not a throughput claim.' No throughput number is recomputed, quoted or moved by this slice."
+    }
+  },
+  "the_conditional_versus_clarify_adjudication": {
+    "why_it_falls_to_this_prereg": "DESIGN-session-ledger §6 P2 set a decision rule and P2 ran it. The rule did not fire, so the design leaves the question open and it is adjudicated here in writing, with the evidence quoted.",
+    "p2_evidence_quoted": {
+      "artifact": "experiments/session_p2_separator_probe.json",
+      "the_rule": "If no separator exists for most, the clarifying-question arm has nothing to ask and the conditional-answer arm wins by measurement.",
+      "what_p2_measured": "a separator exists for 9 of 10 sealed prompts on served bytes, and for 8 of 10 at the ACT level — a different route or status rather than merely different words.",
+      "therefore": "the stop condition did NOT fire. The clarifying-question arm is expressible for most prompts and cannot be dismissed by measurement.",
+      "and_p2_s_own_caveat_carried": "'the separation that exists is cheap … a reading IS an admitted command, so serving it is already the distinguishing evaluation'. Expressibility is not answerability, and P2 did not measure whether a person could ANSWER the question a separator licenses."
+    },
+    "the_adjudication": "BOTH ARMS SHIP, and which one runs is decided by exact code on a stated rule, never by the model.",
+    "the_rule_frozen_now": {
+      "serve_conditional_when": "exactly ONE candidate verifies, AND the utterance leaves a framing variable the verifier could not resolve. The residue is named as a supposition and the answer is served under it, status `conditional`.",
+      "ask_when": "TWO OR MORE candidates verify. The clarifying question names them — which P2 showed is expressible for 8 of 10 at the act level — and no reading is chosen on the person's behalf.",
+      "exhaust_when": "NO candidate verifies. Row 12 exhausts exactly as it does today, and G6 requires this to be byte-identical with the proposer OFF.",
+      "who_decides": "exact code, from the count of VERIFIED candidates. The model's selection is an input to verification, never to this branch. So the learned component is never the difference between refusing and answering — it may only be the difference between `exhausted` and `conditional`, which is §3b's operative form of the standing invariant."
+    },
+    "what_this_repairs": "P2's live finding: today's system SILENTLY BOUND 2 of 10 raw prose prompts (p04, p10) to one reading, status `found`, with no receipt recording that a choice was made. Under the rule above those two prompts cannot be silently bound: either one candidate verifies and the choosing is published as a supposition, or several do and the person is asked. p04 and p10 are G9's named fixtures below."
+  },
+  "the_trust_shape": {
+    "the_model_selects_it_does_not_generate": "the model's entire output alphabet is an index into an exact-code-built candidate list, plus NONE. It cannot emit a query string, so it cannot emit one that was not enumerated.",
+    "everything_is_verified_anyway": "a selected candidate is run through committed code before anything is served. Selection narrows; verification decides.",
+    "nothing_learned_reaches_a_verdict": "the model's output is an integer. It is not read as content, not quoted, not rendered, and never marks anything VERIFIED.",
+    "history_reaches_the_model_only_through_the_exact_layer": "B9, below, is the scored clause."
+  },
+  "the_model_and_its_determinism": {
+    "provider_tag": "ollama:qwen3:4b-instruct",
+    "name": "Qwen3-4B-Instruct-2507",
+    "quantization": "Q4_K_M",
+    "weights_blob_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+    "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+    "loopback_only": true,
+    "temperature": 0,
+    "the_refusal_discipline_reused_not_reinvented": "scripts/machine_reader.py's `verify_weights`: the blob's BYTES are hashed before any question is asked, and absence or mismatch REFUSES. It never downloads. The filename ollama gives a blob is its digest, so trusting the name would be checking the copy against itself.",
+    "determinism_status": "OPEN AT FREEZE TIME, and settled by a construction prerequisite before any gate runs.",
+    "what_is_already_known": "the C-V3′ pilot (experiments/c_v3_prime_pilot.json) put this exact model at temperature 0 through two passes and got BYTE-IDENTICAL output. That is evidence and it is not sufficient: it was a different prompt set, a different max_tokens, and ollama guarantees nothing — there is no seed field anywhere in this tree.",
+    "P4_the_determinism_prerequisite": "before any gate is scored, this slice runs its OWN two-pass byte-identity check over its OWN prompt set and commits the result. If the two passes differ, the proposer arm is NON-DETERMINISTIC and is executed ONCE with the run pre-announced (ROADMAP-v0.21 §4.0(2)'s KEPT clause: anything touching a model remains execute-once). If they are identical, the arm registers as determinism-plus-commit and reproductions are welcome and recorded — and the artifact SAYS which of the two it earned rather than assuming.",
+    "the_honest_limit_either_way": "byte-identity across two passes on one machine on one day is not a proof of determinism. It is the strongest check this repository has ever run on a model call, and it is reported as what it is."
+  },
+  "gates": {
+    "preamble": "DESIGN-plain-input §5 sketches G1-G7 and says 'A course freezes these with numbers, a preregistration commit, and its own digests.' This is that commit. G8 and G9 are added by this preregistration and are marked as such.",
+    "G1": {
+      "name": "proposal coverage",
+      "clause_verbatim": "On a **preregistered plain-question set** committed before the proposer exists: what fraction of utterances yield at least one verified candidate?",
+      "kind": "MEASUREMENT — no floor, published either way",
+      "why_no_floor": "the design names none, and a floor invented here would be a number chosen after the mechanism was understood and before any pilot could inform it. §4.0(3) forbids a floor without a meetability argument; the honest alternative to a bad floor is a published rate with a named denominator, which is what P2 did.",
+      "denominator_discipline": "the set names its population explicitly. These are MAINTAINER-AUTHORED questions about this corpus, and the design's own warning is inherited verbatim: 'Questions a maintainer wrote about this corpus are not questions a stranger asks; STRANGER's park is the same fresh-half problem and should be cited, not re-encountered.' No stranger-usability claim is made.",
+      "committed_before_the_proposer": "experiments/plain_question_set.json, its own commit, earlier than any proposer code."
+    },
+    "G2": {
+      "name": "zero silent binds",
+      "clause_verbatim": "Every served interpretation is either verifier-confirmed **or** supposition-labelled. Not a rate: **any counterexample fails**",
+      "standard": "ANY COUNTEREXAMPLE FAILS",
+      "the_standard_it_inherits": "DESIGN-text-resolution:53-56 — 'any counterexample is a failure, because it would mean the renderer authored a claim'."
+    },
+    "G3": {
+      "name": "the distractor set (the C-V4 lesson)",
+      "clause_verbatim": "A preregistered set of **sentence pairs that differ in meaning and must not collapse to one interpretation**",
+      "voiding_sentence_verbatim": "if the proposer maps a distractor pair to the same query above the registered floor, the design is measuring the verifier's tolerance and not the proposal, and the reading is void.",
+      "registered_floor": 0.0,
+      "floor_meaning": "ZERO pairs may collapse. The floor is zero rather than a rate because a collapsed pair is the design measuring the wrong thing, and one is enough to mean it.",
+      "the_clause_C_V4_dropped_and_this_one_carries": "G3 must VERIFY THAT ITS DISTRACTORS REALLY DENOTE DIFFERENT REGISTERED QUERIES BEFORE SCORING. ROADMAP-v0.20:102-110 records that C-V4′ exists because C-V4 'never establishes that the mutation should have moved' what it measured. Every pair in the distractor set is checked, by exact code, to resolve to two DIFFERENT verified queries — and a pair that does not is excluded from the denominator and the exclusion is counted and published.",
+      "committed_before_the_proposer": "experiments/plain_distractor_set.json, its own commit, earlier than any proposer code."
+    },
+    "G4": {
+      "name": "the quarantine invariant",
+      "clause_verbatim": "Unconditional answers **never change**: over a preregistered corpus of lines exercising rows 0–11 (`docs/SPEC-chat-completions-skin.md:159-173`), every verdict dict is **byte-identical** with the proposer ON and OFF.",
+      "voiding_sentence_verbatim": "a single differing verdict voids the whole reading",
+      "standard": "BYTE-IDENTICAL, one difference voids",
+      "note_on_row_numbering": "the design says 'rows 0-11' against a 13-row table. The registered grammar now has fifteen rows (slice 1 added `retract`, and the spec's table gained `conform` and evaluate's E0e refusal, which were served and unwritten). The clause is applied to EVERY ROW THE PROPOSER DOES NOT OWN — that is, all of them except the complement row the proposer pre-routes. Stated here so the widening is a decision and not a drift."
+    },
+    "G4b": {
+      "name": "the supposition never grounds another answer",
+      "clause_verbatim": "A conditional answer's supposition must not be readable by any later turn as a premise.",
+      "how_it_is_checked_here": "a PROPOSED supposition is an Assumption record whose `source` is `proposed`. The read barrier is unchanged, so a later turn that consumes it CITES it — and G4b's requirement is therefore not 'it can never be read' but 'it can never be read UNMARKED'. Frozen reading: a later turn may consume a proposed supposition only by citing it, and no answer may quote a proposed supposition as a corpus fact. The frames invariant behind it is untouched (frames.py:8, 'Frame truths never leak')."
+    },
+    "G5": {
+      "name": "the blind control",
+      "clause_verbatim": "Replace the proposer with a **random/frequency candidate generator** over the same grammar and vocabulary; the conditional-answer rate must **collapse**.",
+      "registered_collapse_rule": "the blind arm's verified-selection rate must be at most HALF the proposer's on the same question set.",
+      "why_a_half": "it is the same ratio C-V3′ inherited for its own skeleton arm ('marked determinate at >= half the served arm's rate'), reused rather than invented, so the number has a precedent in this repository instead of being chosen here.",
+      "if_it_does_not_collapse": "the recorded lesson applies — 'frequency can beat a weak learner' (DESIGN-interactive-harness:393-395) — and THE SEAT SHIPS EMPTY WITH THE NUMBER. The proposer is withdrawn, the candidate enumerator and the conditional status survive as the exact-layer half, and no learned component is served.",
+      "why_this_control_is_strong": "the blind arm draws from the SAME enumerated candidate list, so the comparison isolates selection. A blind arm that generated its own strings could blame its failures on generation."
+    },
+    "G6": {
+      "name": "OFF, not crash",
+      "clause_verbatim": "With no model reachable, row 12 exhausts exactly as today.",
+      "standard": "byte-identical to the proposer-OFF verdict, and the absent-model path must REFUSE-BY-DESIGN rather than raise",
+      "bar_clause": "DESIGN-interactive-harness:712"
+    },
+    "G7": {
+      "name": "the supposition never becomes knowledge",
+      "clause_verbatim": "After a session of conditional answers, `data/*/nodes.json` is unchanged and `check_regeneration` is green.",
+      "standard": "unchanged and green"
+    },
+    "G7b": {
+      "name": "conditional scores zero, mechanically",
+      "added_by": "this preregistration",
+      "clause": "a turn served with status `conditional` contributes ZERO useful tokens to the throughput scoring path, whatever its content length, and the check is made from that path rather than from a docstring.",
+      "standard": "zero, and the test drives measure_throughput's own useful-token computation with a synthetic conditional record of non-zero token length",
+      "why_it_is_a_gate_and_not_a_note": "§3b's whole honesty argument rests on it. An argument that a metric cannot be inflated is worth exactly as much as the test that the metric cannot be inflated."
+    },
+    "G8": {
+      "name": "the holdout never reaches the model",
+      "added_by": "this preregistration, from slice 1's M9 finding",
+      "clause": "no holdout statement id, holdout statement text, or holdout-derived material appears in any prompt sent to the model, in any candidate list, or in any served answer.",
+      "standard": "ZERO occurrences. One is red and voids the run.",
+      "why_it_is_needed": "resolver.default_index spans data/ AND data_holdout/, so 2,053 holdout ids sit in the index a candidate list would obviously be built from. Measured in slice 1, not supposed.",
+      "how_it_is_checked": "every prompt byte of the registered run is scanned against the holdout id set built from data_holdout/, and the candidate enumerator is separately asserted to read data/ only."
+    },
+    "G9": {
+      "name": "the silent-binding repair, on its committed fixtures",
+      "added_by": "this preregistration",
+      "clause": "the two prompts P2 measured as silently bound — p04 and p10 — must no longer be served as a bare `found` with no receipt recording a choice. Each must come back either supposition-labelled (naming the reading taken) or as a clarification naming the sealed alternatives.",
+      "standard": "both fixtures repaired, and `raw_prompts_silently_bound_today` re-measured on the SAME sealed P2 prompt set must fall to 0",
+      "the_fixtures_are_already_committed": "experiments/session_p2_prompt_seal.json carries both prompts with their candidate-reading sets, sealed before any of this existed, and BACKLOG names the number to move."
+    },
+    "B9": {
+      "name": "the proposer's input carries no history but normal forms",
+      "source": "DESIGN-session-ledger §7 B9, registered in slice 1 and scored NEVER there",
+      "clause_verbatim": "The proposer's input at turn *j* contains no bytes from earlier turns other than assumption `normal_form`s. Any leak is red — history reaches the model only through the exact layer.",
+      "scored_in_this_commission": true,
+      "standard": "ANY LEAK IS RED",
+      "how_it_is_checked": "every prompt sent during the registered run is retained and scanned against the byte content of every earlier turn in its session. The only earlier-turn bytes permitted are the `normal_form` atoms of live assumptions."
+    },
+    "B10_and_B12_re_run": {
+      "why": "slice 2 adds a learned component to the serving path, and slice 1's fences are what keep it quarantined. They are re-run unchanged on the slice-2 corpus.",
+      "B10": "every turn with empty `assumptions_cited` renders byte-identical to the same line served statelessly",
+      "B12": "the citation set equals the read-event set from the read barrier",
+      "standard": "unchanged from slice 1: B10 or B12 failure stops the slice before serving"
+    }
+  },
+  "the_result_gate": {
+    "R2": "the served claim is licensed only if: G2 has no counterexample, G3 has no collapsed pair, G4 is byte-identical, G4b holds, G5 collapses at or below half, G6 is byte-identical with the model absent, G7 is unchanged-and-green, G7b is zero, G8 is zero, G9 repairs both fixtures, B9 has no leak, and B10 and B12 are green.",
+    "the_claim_if_R2_holds": "plain prose that the exact layer cannot ground is served either as an answer conditional on a named supposition, or as a question naming the readings — and never as an unmarked answer.",
+    "nothing_more": "no coverage claim, no correctness claim, no fluency claim, no throughput claim, and no claim that the model is good at this. G1's rate is a measurement of one maintainer-authored set.",
+    "if_R2_fails_on_any_clause": "nothing is served, the readout is published, and the exact-layer half (the candidate enumerator, the conditional status, the clarify branch) is adjudicated separately on its own evidence."
+  },
+  "stop_conditions": [
+    "G3's voiding sentence fires — the reading is void, the run is committed, and the slice reports",
+    "G4's voiding sentence fires — a single differing unconditional verdict voids the whole reading",
+    "G8 finds one holdout occurrence — the run voids",
+    "B9 finds one leak — red",
+    "B10 or B12 fails — stops the slice before serving",
+    "the determinism prerequisite P4 fails — the arm becomes execute-once with the run pre-announced, which is not a stop but changes what may be claimed"
+  ],
+  "non_claims": [
+    "not fluency: the output side is unchanged and every served sentence is still authored by the realizer and the corpus quotation rule. A conditional answer is a LABEL WRAPPED AROUND AN EXISTING ANSWER, not a generated one",
+    "not open-domain: outside the corpus the honest output is still a refusal",
+    "the supposition is not knowledge: it never reaches the graph, the flat prohibition on runtime writes stands, and it expires with the session unless a human promotes it through the write gate",
+    "the model never authors structure: its output alphabet is an index into an exact-code-built list",
+    "not a throughput claim: this slice must not appear in any sentence containing a K number",
+    "no stranger-usability claim: G1's question set and the slice-2 corpus are maintainer-authored, and STRANGER's park is cited rather than re-encountered",
+    "no completeness over readings: the candidate list is what exact code could enumerate, and DESIGN-session-ledger §11 forbids the completeness claim outright",
+    "HOSTILE DICTATION is not unparked and is not needed: this design opens no untrusted stream to the write gate, because suppositions never reach it"
+  ],
+  "amendments": []
+}
