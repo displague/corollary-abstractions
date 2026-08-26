@@ -1,3 +1,159 @@
+> **CLOSED at v0.21.0.** Three registered outcomes, three different verdicts,
+> every one published with its mechanism. Where each item went:
+>
+> **Item 1, §1.1 (P1 / P2 / P3 — the construction prerequisites)** —
+> **ALL THREE SHIPPED, IN ORDER, BEFORE SLICE 1.** **P1**
+> (`experiments/session_p1_command_bound.json`) falsified the design's own
+> finiteness argument: of **fifteen** template classes **five are closed**
+> (34,863 admitted commands), **one is gated**, and **nine admit countably
+> infinite languages** — including the two rows where plain prose lands.
+> **P2** (`session_p2_prompt_seal.json` + `session_p2_separator_probe.json`)
+> read **9 of 10 separating (8 of 10 at the act level)** and therefore did
+> **NOT** decide the conditional-versus-clarify question it was asked to;
+> published as not-decided. **P3** (`session_corpus_seal.json`) sealed **60
+> sessions, 410 turns, 130 binding-dependent, A/B 35/25**, **0 excluded** by
+> the no-write-gate rule, floor met with margin — **and the roadmap's
+> compressed all-three-in-half-B reading published beside it** (half B holds
+> 25 sessions, so under that reading the cycle would have STOPPED). The
+> §1.1 floor sentence's grammar was adjudicated by ruling and the prereg's
+> **wrong justification retracted**, not deleted.
+>
+> **Item 1, §1.2 slice 1 (the session ledger)** — **SHIPPED AND SERVED.**
+> `experiments/session_ledger_run4.json`: **R1 HOLDS**. B2 **410/410**
+> replayed in 29.9 s; B3 **300 perturbations**, no sampling; B4 **58/58**,
+> 30 of them by typed conflict refusal; B5 **0 flips of 60**; B6 **0 of 42**;
+> B7 70 refusal turns; B8 **20/20 on each of four tamper arms**, all by keyed
+> MAC; B10 **0 misses of 260**; B11 exit 0; B12 **410 turns, 0
+> uncorroborated**; B13 **20/20 against a floor of 16**. **B9 scored NEVER**,
+> its absence recorded rather than inferred. **B1 clause 1 MISSED** — the
+> replayer was committed before the seal — and is published unreinterpreted
+> through all four runs. **Four runs, all retained**: run 1 was half B's
+> first execution and B10 read **RED on ten `retract a999` turns**, real
+> leakage the stateless fence caught; repaired under the **suite-gate
+> precedent** with the §8 controls green throughout; runs 2 and 4 were
+> supplementary under §4.0(1)'s instrument-gap half. The served claim is
+> exactly *"recorded sessions replay, and conditional answers name the
+> assumptions they consumed"* — **nothing more**, and **no surface was
+> invented**. §12's statelessness suspension **ends here by this gate's own
+> verdict**, with B10's scope named as the ledger's state and not the
+> resolver ASK subloop's.
+>
+> **Item 1, §1.2 slice 2 (plain input)** — **SHIPPED AS A NEGATIVE. R2
+> FAILS** (`experiments/plain_input_run.json`), on two clauses. **G5 RED**:
+> the capability-blind arm made **22** verified selections against the
+> proposer's **17**, on a rule requiring **≤ 8.5** — and the draw was
+> typical, not lucky (analytic expectation **20.62**). **The mechanism is
+> the finding**: the frozen metric counts verified selections and
+> **structurally cannot reward a correct refusal**; **all six** of the
+> model's `NONE` answers were verified correct refusals, on questions that
+> all had verified candidates the blind arm — which has no `NONE` — took;
+> on the **nine questions authored to exhaust the model selected for zero**
+> and the blind arm for five. The frozen chance rate (`1/8 = 0.125`) was
+> **mis-derived** — the measured expectation is **0.687** — making the floor
+> unmeetable by an honest instrument, which is **§4.0(3)'s second incident,
+> inside the cycle that wrote the rule**. **G9 NOT MET by orchestrator
+> ruling**: the silent binding lives in the **RESOLVER**, one row upstream —
+> **13 of 30** sealed questions bind at `found` before the proposer is
+> consulted, upgrading P2's 2-of-10 — and its repair is a **designed
+> successor** owing its own prereg, control and K re-measurement, filed with
+> **13 committed fixtures**. **Nothing serves**: the proposer defaults to
+> `None`, `conditional` sits outside `ANSWERING_STATUSES`, and G7b proves the
+> zero-scoring mechanically (160 useful tokens as `solved`, **0** as
+> `conditional`). The **trust shape came out stronger than designed** — the
+> proposer emits an index into an exactly-enumerated list, never free text —
+> while the design's own §4 argument for that disposition was **measured
+> false by P1** and is marked false where it stands. Findings **F1–F3** and
+> §8.5 published; the red **survives excluding all nine exhaust-authored
+> questions** (17 vs 17, still ≥ 8.5).
+>
+> **Item 2 (WITNESS)** — **STOPPED ITSELF, AND PARKS.** **0 of 6** pilot
+> obligations discharged, every one `rejected_trivial`
+> (`experiments/witness_pilot.json`), because one shared front-end makes the
+> obligation `P ↔ P`. **The counterfactual is the evidence**: handed to
+> `omega` with B4's trap removed, the same six were **accepted 6 of 6** —
+> what an instrument without the trap would have published as a capability.
+> Census **66 → 45 → 42 → 38 → 37** with the chain in prose
+> (`witness_fragment_census.json`); the 60-name manifest **withdrawn** under
+> the design's own <70 rule. **WITNESS PARKS behind an INDEPENDENT SECOND
+> READING** of `S` as a **construction prerequisite**, not a residual — and
+> fragment growth alone does not unpark it, because the divergent class is
+> non-linear. **EXHIBIT stays declined**, with the accurate second reason
+> recorded: the successor never became an instrument. Review found one
+> Critical — a clean checker receipt about a **stronger proposition than the
+> row it was filed under**, because `autoImplicit` bound a free guard slot —
+> fixed as a typed refusal with `autoImplicit false`; **all six verdicts
+> unchanged**.
+>
+> **Item 2's named early rider (the C-E3 supplementary run)** — **PAID OUT.**
+> `experiments/conformance_ce3_supplement.json`: the **25** counterexamples
+> v0.20's instrument gap withheld are adjudicated **25/25
+> `confirmed_counterexample`** on closed ground propositions — **and all 25
+> hold over exact rationals**, so the agreement prices
+> **arithmetic-implementation risk, not domain risk**.
+> `measure_conformance.py` **not edited**; the dead code stays as the
+> evidence. The **late determinism checks rode the same lane**:
+> `conformance_e5_late.json` reads **E5 HOLDS byte-identical** with its dated
+> lateness disclosure, and says what the lateness does not buy back — a stop
+> condition checked after the fact is a check, not a gate.
+>
+> **Item 3 (carried, with dependants named)** — processed row by row into
+> ROADMAP-v0.22 §4: seven lanes **closed by shipping**, three re-ordered as
+> **prerequisites** with named dependants, the rest **parked with triggers**.
+> §3.5's rider stop rule **came due and fired**: the HOLES counting table and
+> the delete-K ground-truth table, unrun for a third cycle, **park**.
+>
+> **Item 4 (governance)** — the course gate was **INVOKED strictly for the
+> fourth consecutive cycle** (`reports/design-direction-v0.22.json`: nine
+> rounds, fifteen directions, $2.80, brief on file and hash-verified).
+> **Five adversarial reviews, every one catching real defects**, and the
+> recurring find for a second cycle running is **assertions that cannot go
+> red** — a needle appended to its own haystack, a B2 verdict green on zero
+> reproductions, B8 arms that were one shape run twice. **The discipline
+> applied upward**: the orchestrator's own v0.22 design was **falsified twice
+> by review before it landed**.
+>
+> **§4.0's three relaxations — first exercise, audited honest, all three
+> kept.** **(1) Bug-not-result** was used twice and the line held both
+> times: the C-E3 supplement adjudicated a control that **provably never
+> executed**, and session-ledger runs 2 and 4 repaired **instrument** defects
+> while every **reading** stood (B10 read red under the repaired instrument
+> exactly as under the broken one). Not once was a control that ran and read
+> unfavourably repaired and re-run. **(2) Determinism-plus-commit** carried
+> E5, run late and dated late, byte-identical — and the artifact itself
+> states the cost the relaxation does not cover. **(3) The meetable-floor
+> rule got its second incident inside the cycle that wrote it**: G5's
+> mis-derived chance rate. A rule that has to catch the same defect twice in
+> two cycles is not yet a habit, which is why every ROADMAP-v0.22 floor
+> carries an explicit meetability argument — including the one that argues
+> deliberately that meetability **cannot** be argued.
+>
+> **Release-gate obligations, clause by clause:** P1/P2/P3 committed in order
+> before slice 1, P3's protocol frozen before recording and its seal before
+> the replayer *(met)*; the session ledger shipped its registered run with
+> B1–B8 and B10–B13 adjudicated and R1 read out *(met; B1 clause 1 MISSED and
+> published)*; B13's table published beside the gate *(met, 20/20)*; slice
+> 2's B9 scored only because slice 2 exists *(met)*; WITNESS's reviewed
+> design landed before its slice and the slice **published its stop**
+> *(met)*; the C-E3 successor **substituted its bindings before handing the
+> term to a checker** *(met)*; no session-replay claim without B12's
+> corroboration and no correctness claim at all *(met)*; the statelessness
+> suspension ended by this gate's own verdicts *(met)*; the outside inquiry
+> invoked for v0.22 with the receipt named and the brief carrying this
+> cycle's readouts including the stop *(met)*. The refresh clause
+> (`check_report_regeneration.py`), the full-suite clause and the
+> ships-or-parks clause are open at `[SUITE-GATE-V21]` in
+> [RELEASE-v0.21.0](RELEASE-v0.21.0.md) until the gate runs on the frozen
+> tip.
+>
+> **Drift audit** (v0.19 and v0.20 re-read in full): a **product surface**
+> found advertising a behaviour it does not have — the `conformance` sheet
+> row's *"the asker's own numbers"* against a route that discards them, with
+> a published example that refuses — plus two v0.20 gate obligations shipped
+> undischarged, a contradiction between v0.20's two records on 4d, three more
+> clause deletions inside rows that said *unchanged*, and one v0.20 recovery
+> undone by the catch-all it was undoing. All recovered in ROADMAP-v0.22 §4.3.
+> See [RELEASE-v0.21.0](RELEASE-v0.21.0.md) and ANALYSIS.
+
 # Roadmap v0.21 — the thing a conversation happens inside of
 
 v0.20 ran two registered experiments and they came back pointing in

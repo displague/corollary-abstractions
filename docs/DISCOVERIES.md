@@ -13,6 +13,166 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## A metric that counts successes cannot see a correct refusal (2026-08-26)
+
+**Claim.** A capability-blind control that scores *accepted answers given*
+will beat any instrument whose competence includes **declining**, because
+declining scores zero and the blind arm cannot decline. The gap it reports is
+not a measurement of the instrument; it is a measurement of the metric's
+alphabet.
+
+**Evidence.** `experiments/plain_input_run.json` `gates.G5`. A pinned small
+model, selecting by index from exactly-enumerated candidate lists, made **17**
+verified selections over thirty sealed questions. A seeded uniform draw over
+the identical lists made **22**. The registered collapse rule required the
+blind arm to score at most **half** the proposer's — **≤ 8.5** — so G5 reads
+**RED** and the seat ships empty.
+
+**And the draw was typical, not lucky**: the run publishes the blind arm's own
+analytic expectation, **Σ verified/candidates per question = 20.62**, beside
+the observed 22.
+
+**The mechanism.** The model answered `NONE` on **six** questions — `g1-08`,
+`g1-22`, `g1-26`, `g1-27`, `g1-29`, `g1-30` — and **every one of the six was a
+correct refusal**, independently confirmed by review. Every one of those six
+questions had verified candidates available, and the blind arm, whose output
+alphabet contains no `NONE`, took them. On the **nine questions authored to
+exhaust**, the model selected for **zero** and the blind arm selected a
+verified candidate for **five**. *The control rewards, in its blind arm,
+exactly the behaviour the design calls inventing.*
+
+**A second defect in the same number, and it is the transferable one.** The
+frozen chance rate was `1/8 = 0.125`, the reciprocal of the candidate limit.
+The measured expectation is **0.687**. A floor of 8.5 against an honest
+baseline near 20.6 is **unmeetable by a correct instrument** — which is the
+same disease as C-E1's 0.99 flip floor one cycle earlier, and therefore the
+**second incident** of the rule written to prevent it.
+
+**Nothing was rewritten.** The rule was frozen before the proposer existed and
+was scored as frozen: *"A rule rewritten because its instrument surprised its
+author is not a preregistration."* And the red survives excluding all nine
+exhaust-authored questions — **17 against 17**, still far above 8.5.
+
+**The transferable rule: score the branch outcome against the question's
+disposition, not the count of accepted answers.** Then declining an
+unanswerable question counts as success for both arms, and the blind arm's
+inability to decline shows up as the incapacity it is. Status: **measured**.
+Evidence: `experiments/plain_input_run.json`,
+`experiments/plain_input_corpus_seal.json` (`denominators.exhaust_authored`).
+
+## An obligation built from one reading compares that reading with itself (2026-08-26)
+
+**Claim.** A verification obligation of the form *"what the machinery computes
+agrees with what the statement says"* has **no content** when both halves are
+produced by the same front-end. It is `P ↔ P`, and a checker will discharge it
+every time — cleanly, with a real receipt, about nothing.
+
+**Evidence.** `experiments/witness_pilot.json`. Six obligations drawn by a
+recomputable rule from a 37-candidate census; **0 discharged**, all six
+`rejected_trivial` by the design's own self-comparison clause. The committed
+parser emits left-nested **binary** `+` and `*` nodes, so the evaluator's
+regrouping has nothing to regroup, and inside the linear fragment the two
+readings are the identical tree.
+
+**The counterfactual is the finding, not the zero.** The same six obligations
+were handed to the pinned checker with the triviality test **switched off**:
+**accepted 6 of 6**. An instrument built without that one clause would have
+published six discharged agreement lemmas and reported a capability.
+
+**And a related receipt was clean about the wrong statement.** Review found
+one obligation carrying a free variable the sampler never bound; Lean's
+`autoImplicit` silently prepended a binder, and `omega` returned exit 0 with
+no diagnostic **on a strictly stronger proposition than the row it was filed
+under**. Under `set_option autoImplicit false` the same source errors with
+*unknown identifier*. Fixed as a typed refusal, `autoImplicit false` in every
+preamble; **all six verdicts unchanged**.
+
+**The transferable rule: an independent second reading is a construction
+prerequisite, not a residual risk to price later.** The draft priced
+single-front-end construction as a residual and put the second reading outside
+the slice; the pilot says that is backwards. And fragment growth does not
+substitute — the divergent class exists and is reachable (25 statements, 18 of
+them compiling, against **0 n-ary nodes in 86,547 walked**) but is
+**non-linear**, so reaching it would give the obligation content while leaving
+it a comparison of one parse with itself. Status: **measured, and the lane
+stopped**. Evidence: `experiments/witness_pilot.json`,
+`experiments/witness_fragment_census.json`.
+
+## A conversation can carry its own premises, and the fence is what proves it (2026-08-26)
+
+**Claim.** *Citing* the assumptions an answer consumed is only evidence if the
+citation is **read-derived** and if uncited assumptions provably **cannot**
+move the answer. Without the second half, a per-turn citation list is a hash
+of the transcript wearing the word "because".
+
+**Evidence.** `experiments/session_ledger_run4.json`, over a sealed corpus of
+**60 sessions, 410 turns, 130 binding-dependent**. Mutating a **cited**
+assumption changed the answer digest or produced a typed refusal on **58 of
+58** binding-dependent turns in half B — **30 of them by refusing outright**.
+Mutating a **live but uncited** assumption moved nothing: **0 flips of 42**.
+Sixty **sham** assumptions, injected to see whether mere presence nudges
+anything: **0 flips of 60**. A single flip in either of the last two would
+have fired the frozen voiding sentence and declared the capability void for
+the cycle.
+
+**And the fence went red first, for a real reason.** On half B's first
+execution, B10 — *a turn citing nothing must render byte-identically to the
+same line served statelessly* — read **RED on ten turns**, all of them
+`retract a999`: the refusal for an unheld id rendered differently depending on
+whether a ledger was attached, which is the ledger's *existence* reaching an
+answer that consumed nothing. Repaired under the suite-gate precedent, with
+all four runs retained and the red published.
+
+**What it does not claim, said where the claim is made.** Sessions are
+**reproducible, not correct** — a wrong answer replays as faithfully as a
+right one. B12's two sides descend from the same in-memory read barrier, so
+"corroborated" is not "two independent instruments". B13's auditor is the
+implementer, and all twenty drawn cases are the same easy shape. B1's ordering
+clause **MISSED** and is published unreinterpreted. Status: **measured and
+served**. Evidence: `experiments/session_ledger_run4.json`,
+`experiments/session_corpus_seal.json`.
+
+## A control that dies on a case has not passed that case (2026-08-26)
+
+**Claim.** Two consecutive cycles of adversarial review, across four
+independent lanes, found **zero wrong digests** and a recurring class of
+defect underneath: **green checks incapable of failing.** v0.20 catalogued
+four. v0.21, having written the lesson down, produced three more — one of them
+inside a test file added to catch exactly this.
+
+**Evidence.**
+
+- **A needle appended to its own haystack.** A test read
+  `assertIn("byte-frozen", field.lower() + " byte-frozen")` and therefore
+  passed on any field content, including empty. Removing the append made it
+  fail, because the field does not contain that phrase. It was in the suite
+  written for the C-E3 rider — the branch that quotes the standing review
+  question.
+- **A verdict green on zero.** B2 requires unmutated replay to reproduce
+  `answer_bytes_digest` for **every** turn the seal records. Its verdict
+  counted per-turn divergences, and a `stale-environment` refusal produces
+  none — so when a mid-review edit moved a pinned digest and every replay
+  refused, **B2 reported GREEN having reproduced 0 of 410 turns**. *"Every
+  turn" means every turn, and zero is not every.*
+- **A tamper control with one arm run twice.** B8's two registered arms —
+  rewrite a turn, with and without repairing the digest chain — **both leave
+  the original MACs in place**, so both are caught by the same signature
+  mismatch. The obvious forgery, an adversary who holds the file and re-signs
+  every record under a ring they minted, had never been run; when a reviewer
+  ran it the scorer **crashed** out of `session_keys.derive`. Two arms added,
+  both **20/20**, both caught by a key the tamperer does not hold — a refusal
+  to verify now scores as a detection, which is the house grammar rather than
+  a convenience.
+
+**And the discipline applied upward.** The orchestrator's own forward design
+was **falsified twice by review before it landed** — once for claiming ground
+the repository already occupies, once for citing producers that do not exist.
+Status: **standing review question**, now written into gates rather than
+restated as an anecdote. Evidence:
+`experiments/conformance_ce3_supplement.json`,
+`experiments/session_ledger_run4.json` (`construction_gate.B8`),
+`reports/design-direction-v0.22.json` (`selection.selected`).
+
 ## A restored clause moved the denominator, not the numerator (2026-08-25)
 
 **Claim.** When a control that scores "did the gate notice this break?"

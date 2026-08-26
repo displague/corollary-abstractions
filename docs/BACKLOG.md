@@ -3,6 +3,210 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.21 rotation (the drift audit, and the v0.22 course's parks)
+
+- **The `conform` capability sheet advertises the asker's numbers; the route
+  discards them; and the sheet's own example refuses (2026-08-26, from the
+  rotation's drift audit).** A **product surface** claiming a behaviour it does
+  not have, which is the one shape the drift-audit rule exists to catch on a
+  live route rather than an absent one.
+
+  **Three parts, each measured.**
+  1. `scripts/serve_chat.py:635-637` publishes the `conformance` row's
+     description as *"a committed statement compiled to an exact evaluator over
+     the **asker's own numbers**, answering with a conformance record."*
+     `scripts/harness.py:2192` parses the bindings with `find_bindings` and
+     `:2229` calls `run(program, schema.digest)` **without them**. Typing
+     `conform <id> a=2 b=2` produces byte-identical output to the bare line;
+     the bindings are used only to name the ones the statement does not carry.
+  2. `scripts/serve_chat.py:332` publishes the worked example
+     `conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2`.
+     Typed today it returns `status: refused`, `detail: does_not_parse`. **A
+     published example is a product surface**, and an attaching orchestrator
+     configures itself from this sheet — that is the sheet's stated purpose.
+  3. `scripts/harness.py:2133-2155`'s docstring still reads *"registered, and
+     refusing for now. A stub…"* and *"What it will do when `scripts/conform.py`
+     lands is NOT sketched here"*, in a tree where `conform.py` landed and the
+     route is live.
+  4. **The README carried the same sentence** — *"statements that compile into
+     something you can run against your own numbers"* — and is **corrected in
+     place at this rotation**, with a dated parenthetical. It is the one
+     document of the four that can be repaired without destroying evidence:
+     a shipped release and a closed roadmap are records of what was written,
+     and the code is the subject of the finding.
+
+  **Why it was invisible for a cycle.** RELEASE-v0.20.0 named the underlying
+  gap in its own honest limits — *"The route tests the sampler's points, not
+  the asker's numbers"* — and then filed it **nowhere**: no BACKLOG entry, no
+  ROADMAP-v0.21 row. A named honest limit with no owner is the same drift shape
+  the v0.20 audit caught for *load-bearing / premise-necessity*.
+
+  **Not patched at the rotation.** Widening or narrowing a served route is a
+  behaviour change owing its own evidence and its own quarantine gate.
+  **Two admissible discharges**, and the second is the honest minimum: either
+  the route consumes the bindings, with a served diff and a control; **or** the
+  description, the example and the docstring are corrected to say what the
+  route does. Named in ROADMAP-v0.22 §4.3.
+
+- **The v0.19 course's two riders are unrun for a third cycle, so the stop rule
+  fires and both park (2026-08-26).** ROADMAP-v0.21 §3.5: *"If either is still
+  unrun at the v0.22 rotation, it stops being a rider and either becomes an
+  item or parks."* Neither the **HOLES counting table**
+  (machine-enumerated skeleton gaps, counted, to *"revive-or-close FOUNDRY with
+  a number"* — an afternoon's work by its own estimate) nor the **delete-K
+  ground-truth table** (survived from ONE HOP, which *"surrendered to the prior
+  course's excluded substitution chains"* — the direction went, the table
+  stayed) has produced an artifact. **Both park.** Unpark condition, identical
+  for each: a cycle that wants the answer schedules it **as an item**, with a
+  number. Neither is listed as an available rider again, and delete-K is **not**
+  unparked by TOLL, which measures cost rather than K. Both lineage sentences
+  are restored here, because ROADMAP-v0.21 carried the two riders forward with
+  the descriptions stripped and *"delete-K ground-truth table — carry forward
+  unchanged"* is not a description of anything.
+
+- **DESIGN-block-vocabulary's one untested property fell into a catch-all
+  (2026-08-26, from the rotation's drift audit).** RELEASE-v0.19.0 named it
+  deliberately: *"**What survives for any future unpark**, named so it is not
+  lost: the design's **append-only, path-independent growth** property, which
+  **no baseline in this probe tested**."* ROADMAP-v0.20 §5 kept it in the row;
+  **ROADMAP-v0.21 folded the design into a catch-all and the property stopped
+  being quoted anywhere in the carried record** — the exact pattern
+  RELEASE-v0.20.0 condemned for *realization parameters as data* one page
+  earlier. **Recovered**: quoted again in ROADMAP-v0.22 §4.3. Unpark needs a
+  design saying what append-only path-independent growth buys that two indexes
+  with one tag bit do not; the rest of the lane stays **parked by numbers**
+  (0.9981 against that baseline).
+
+- **Three clause deletions inside rows that said "unchanged", beyond the
+  article v0.20 caught (2026-08-26).** Recorded so the next rotation greps for
+  the restored wording rather than for the shortened one.
+  - **Ledger-first claims**: the dependant went from *"none this cycle"* to
+    *"none"*, the verb from *"It **became** a headline candidate"* (a fired
+    event) to *"it **becomes**"* (a standing conditional), and the receipt path
+    `reports/design-direction-v0.17.json` was compressed to *"receipt"*. All
+    three restored in ROADMAP-v0.22 §4.3, beside the article v0.21 restored.
+  - **Licensed variant generation**: the trigger lost **"for the same term"**,
+    the qualifier that made it checkable, and the row lost its evidence
+    sentence — *"A ranker is not blocked by the admission bar — it is blocked
+    by the absence of anything to rank."* Both restored.
+  - **Open-English input**: the worked example (**`gcd` vs "greatest common
+    divisor"**) and the fired-trigger clause (**"and R1 firing is what made it
+    askable"**) were both deleted at v0.20 and not restored at v0.21. Both
+    restored — and the example is no longer hypothetical, because v0.21's run
+    measured it at **zero enumerated candidates**.
+
+- **A recovery undone by the vehicle it was undoing (2026-08-26).**
+  ROADMAP-v0.21 recovered *realization parameters as data* into its own row
+  with the trigger quoted — **and left it inside the catch-all row as well**,
+  the catch-all whose *"unchanged"* was the thing the recovery was fixing. A
+  lane in two rows with two dispositions has no readable disposition. It
+  appears exactly once in ROADMAP-v0.22 §4.3. **Filed as a rule, not an
+  incident**: when a lane is recovered out of a catch-all, delete it from the
+  catch-all in the same edit.
+
+- **`[SUITE-GATE-V20]` was never resolved, and v0.20's refresh clause never
+  landed (2026-08-26).** The token appears exactly twice in the tree — in
+  RELEASE-v0.20.0 and in ROADMAP-v0.20's closed banner — and is a
+  cross-reference to a section nobody wrote. So ROADMAP-v0.20's banner still
+  declares **three** gate clauses open (refresh, full-suite, ships-or-parks)
+  while RELEASE-v0.20.0 does report two suite runs; and
+  `check_report_regeneration.py`'s three verdicts, which
+  RELEASE-v0.20.0 said would *"land in this section then"*, never landed.
+  **Neither document is edited** — a closed roadmap and a shipped release are
+  the record of what was written. Filed so the pattern is visible:
+  `[SUITE-GATE-V21]` is a promise somebody has to come back for, and a
+  placeholder that is never resolved is a gate clause that quietly did not run.
+
+- **ROADMAP-v0.20's banner and RELEASE-v0.20.0's drift audit contradict each
+  other on 4d (2026-08-26).** The banner says the then-present served diff
+  *"was never produced"*; the notes say it was *"discharged at this rotation"*;
+  the committed `experiments/foreign_voice_wiring_served_diff.json` agrees with
+  the notes (`sides.before.armed` and `sides.after.armed` both `true`,
+  `answer_lines_moved` 0 of 14,830). The banner is wrong. Recorded rather than
+  edited, for the same reason as the entry above.
+
+- **Three stale citations in the previous two documents (2026-08-26).** Named,
+  not edited, because correcting a line number inside a shipped release would
+  make this audit's own evidence unreproducible.
+  `RELEASE-v0.20.0` cites `serve_chat.py:515-537` for the `"claims": null`
+  emission; that line is now **581**. Its 4d transition command reads
+  `--before 8e1a3d1` while the artifact's own `regenerate_with` field reads
+  `--before main`. And `ROADMAP-v0.20`'s pre-fix citations
+  (`match_signatures.py:412`, `evaluate.py:182`) both land on different code
+  now, because the fixes moved the files.
+
+- **`retract <assumption-id>` is a published normative surface that never
+  serves on the chat skin (2026-08-26, said on the day it ships).**
+  `docs/SPEC-chat-completions-skin.md:175` registers the row; ¶DEV-1 replays
+  every request into a fresh session with no assumption set, so the route
+  always returns `refused`. That is correct behaviour and the spec says so.
+  Filed anyway, because a published surface that never serves is exactly the
+  fact that becomes a drift finding three rotations later if nobody names it
+  on the day. Unpark condition: a chat skin that carries session state, which
+  is a design and not a patch.
+
+### Parked from the v0.22 course, with their probes and triggers
+
+Quoted from `reports/design-direction-v0.22.json` rather than summarised away,
+so a later cycle inherits the disposition and not a rumour.
+
+- **CANARY-CURVE — declared scaling classes frozen before growth, plus the
+  architecture-versus-smallness split (2026-08-26).** Series 3's lead, parked as
+  a **named v0.23 incumbent-candidate**, and **the ordering reason is its own
+  residual risk answered**: its 10× measurement-only shadow tier prices
+  *statement count*, while the dimensions that actually bite intake —
+  title-collision density, enumeration fan-out — may be sparser in the tail. So
+  growth is measured **after** the enumeration layer exists, when density is
+  measurable instead of missed. Its gate is worth keeping intact for whoever
+  unparks it: **B4's deliberately-O(n²) canary declared O(n) must go RED at 10×
+  with ≥3× margin or the whole run voids**, and **B3 makes zero RED among
+  non-canary rows void the run as UNDER-DECLARED** — too clean is a failure.
+
+- **TOLL — production cost against stranger-path re-check cost on a named floor
+  machine (2026-08-26).** The fold of LEDGER and PAUPER, parked as a **v0.23
+  incumbent-candidate beside CANARY-CURVE**, and **it is the first named unpark
+  candidate the cost ledger has had in six rotations.** Its denominator waits
+  on COLD RECEIPT's harness, and the receipt claims that composition
+  **explicitly**: *"refusing it would mean the affordability claim marking its
+  own homework."* **CEILING is TOLL's named successor** and routes with it —
+  *no budget freezes before the cost distribution exists*, which is v0.21's
+  mis-derived-floor lesson one lane over, and *a budget blown at 10× is a curve
+  row, not a failure*.
+
+- **TWO WITNESSES — checked independence of two readings (2026-08-26,
+  DEMOTED).** Series 1's runner-up, first accepted as rider R2, then **demoted
+  by the design review (H9) from rider to parked item-candidate**: its
+  160-obligation mutation battery is a **WITNESS-slice-sized cost** — the whole
+  v0.21 WITNESS slice budgeted 50 mutants — and a slice-sized cost is not a
+  rider. **It parks with the conformance successor it serves**, because they are
+  one problem: WITNESS cannot open without a second independent reading of `S`,
+  and TWO WITNESSES' kernel-then-overlap probe is what would price one.
+
+- **CROSSING — execution-licensed boundary crossings, both ways (2026-08-26).**
+  The fold of REBUTTAL and EXIT SIGN. Parked **with its 20-real-corrections
+  probe and its preregistered predicted split, 2 / 6 / 12** — committed now so
+  the probe cannot be read after the fact.
+
+- **LONG CON — sequence-level adversarial search over conversations
+  (2026-08-26).** Retired to a **day-probe**: ten hand-written sequences, frozen
+  budget, **mandatory plant**, and a committed near-miss taxonomy **even on a
+  null**. The **write-gate prohibition is inherited** — HOSTILE DICTATION
+  unparks first if any untrusted stream is ever opened.
+
+- **BITROT — fault-injection scope for exactness on unfaithful hardware
+  (2026-08-26).** Parked as a **day-probe**, and its **stop rule is recorded
+  here** because the receipt carries only its controls: **any undetected
+  changed-answer count > 0 stops the probe and publishes the narrowed scope; a
+  clean 1,000 publishes the integrity-scope map and closes the probe.** Its
+  never-read-bytes control is the point — *a detector catching unread flips is
+  comparing the store to itself.*
+
+- **NOTARY did not park — it became a schema field (2026-08-26).** Composable
+  receipts and void propagation distilled into **one mandatory receipt column**,
+  `route_voids[]`, machine-checked: *a receipt that traverses a published void
+  and renders clean is a red result.* Recorded here so a later cycle looking for
+  NOTARY finds where it went.
+
 ## Filed at the v0.21 session-ledger slice (P2's probe)
 
 - **The resolver silently binds an ambiguous prose line and the receipt does
@@ -320,23 +524,6 @@ or commit history. Each item names the evidence that motivated it.
   its place, so §4b repaired three served nodes but **not the three its own
   entry had listed**.
 
-- **4d's served diff is half-produced, and the then-present half is owed
-  before the tag (2026-08-25, from the rotation's drift audit).**
-  ROADMAP-v0.20 §4d and the release gate both require the
-  **absent/absent-then-present** diff. The absent/absent half is committed and
-  correct. `experiments/foreign_voice_wiring_served_diff.json` was written at
-  **batch time** and still reads `sides.after.armed: false` with the reason
-  *"no registered run at experiments/foreign_voice_rate2.json"* — stale
-  against its own tree, because the registered run landed afterwards at
-  `2f882f0` and the surface is armed at HEAD. The present side of the release
-  is therefore witnessed by a **live arming read** and by
-  `tests/test_answers.py`'s consistency assertion, **not** by a committed
-  before/after artifact. Closes when regenerated:
-  `python scripts/foreign_voice_wiring_served_diff.py --before main`. Recorded
-  here rather than left implied, because the entry that closed 4d cited the
-  absent/absent file as *"the proof the design asks for"* without noting the
-  second half was outstanding.
-
 - **Load-bearing / premise-necessity — recovered after two cycles missing
   (2026-08-25, from the rotation's drift audit).** A named row in
   ROADMAP-v0.17 §3 and ROADMAP-v0.18 §3 (*"parked, travels with it"*), it is
@@ -488,13 +675,24 @@ cycle inherits the disposition and not a rumour.
 
 ## Filed at the v0.20 conformance run (2026-08-25)
 
-> **Reviewed 2026-08-25.** The four entries below were filed off the
-> registered run and three of them quoted the run's prose rather than its
-> rows. Corrections are inline and dated; the run artifact's
-> `post_run_corrections` block is the record of authority and
-> `tests/test_conform.py` recomputes it. Two further entries — the C-E3
-> adjudicator and the unexecuted determinism arms — are new debt the review
-> surfaced.
+> **Reviewed 2026-08-25.** The entries below were filed off the registered run
+> and three of them quoted the run's prose rather than its rows. Corrections
+> are inline and dated; the run artifact's `post_run_corrections` block is the
+> record of authority and `tests/test_conform.py` recomputes it.
+>
+> **Pruned 2026-08-26 at the v0.21 rotation.** Three entries that this section
+> carried are gone because their work shipped, and their record now lives in
+> [RELEASE-v0.21.0](RELEASE-v0.21.0.md): the **C-E3 open-term gap** and the
+> **C-E3-reached-none-of-the-775** entry, both discharged by
+> `experiments/conformance_ce3_supplement.json` (25 of 25 confirmed, and all
+> 25 holding over exact rationals — so the agreement prices
+> arithmetic-implementation risk, not domain risk, and **discharges no
+> correlated-interpretation label**); and **E5 / C-E1's second arm**,
+> discharged by `experiments/conformance_e5_late.json` (E5 HOLDS
+> byte-identical, dated late). What each entry *asked for* was delivered
+> exactly as it specified — own registration, new writer, new artifact,
+> `measure_conformance.py` unedited — which is why they close rather than
+> carry.
 
 - **C-E1's floor cannot be met by a correct sampler *on some mutation
   classes*, and the control needs two clauses rather than one (2026-08-25,
@@ -534,61 +732,6 @@ cycle inherits the disposition and not a rumour.
   admitted point falsified the statement, which is the sampler's best case
   rather than its worst. The finding stands on the pilot's split alone, which
   is all it ever needed.
-
-- **C-E3 hands Lean an OPEN TERM, so the sampled class was never adjudicated
-  (2026-08-25, from review).** `measure_conformance.py:709-717` builds the
-  adjudication list out of each record's raw `canonical_ascii` and `:464`
-  passes it to `_lean_decide` unchanged; the record's own
-  `counterexample.bindings` are never substituted, so every sampled
-  proposition still carries free variables and fails at elaboration. **The
-  repair is the missing substitution step**, and the dropped code is still in
-  the file to start from: `_lean_expression` at `:434-438` (dead, behind a
-  literal `if False else`) and the discarded `typed` at `:463`. Until it
-  lands, **Correction 7's carrier boundary on the sampled class is
-  unmeasured** — the 25 attempted rows record an instrument gap, not a
-  boundary. Belongs to its own registration; running a control again after
-  its cycle's numbers were read is the chase §8 forbids.
-
-  > **DISCHARGED (2026-08-26).** ROADMAP-v0.21 §4.0(1) narrowed the no-chase
-  > rule to controls that RAN, and this one provably did not, so the repair
-  > got its own registration exactly as this entry said it must:
-  > `experiments/conformance_prereg.json` `amendments[]` (dated, labelled
-  > RETROSPECTIVE), a NEW writer at
-  > `scripts/conformance_ce3_supplement.py`, and a NEW artifact at
-  > `experiments/conformance_ce3_supplement.json`.
-  > `measure_conformance.py` was **not** edited — the dead code stays as the
-  > evidence. **The reading: 25 of 25 `confirmed_counterexample`**, so
-  > Correction 7's carrier boundary on the sampled class is now measured
-  > (`decide` reaches closed `Nat` terms of this size) and no corpus error is
-  > filed. What did **not** change: the domain is still this repository's
-  > declaration, and the correlated-interpretation label stands on every
-  > NONCONFORMANT verdict.
-
-- **E5 and C-E1's second arm were registered and never executed
-  (2026-08-25, from review).** §6's E5 (*two full runs on one tree produce
-  byte-identical artifacts*) and §7's C-E1 false-alarm half (*0 of N unmutated
-  statements may change verdict across two runs*) have no results, in either
-  direction. **`experiments/conformance_run.json` therefore has no
-  byte-reproduction proof** and no sentence may call it reproduced;
-  `tests/test_conform.py::TheRunIsDeterministic` pins two runs of **one
-  statement**, which is a much smaller claim. Both arms are owed by the next
-  registration of this lane, and executing them now — after the cycle's
-  numbers are public — would not be the control they were specified as.
-
-  > **RUN LATE (2026-08-26), under ROADMAP-v0.21 §4.0(2), which says a
-  > byte-identity check cannot be gamed by when it runs and asks for the
-  > lateness to be dated instead.** `experiments/conformance_e5_late.json`.
-  > **E5 HOLDS**: two fresh runs on the tree at `a98fa3c` are byte-identical
-  > (`f55ba4a9…`), zero differing fields. C-E1's second arm **rides that same
-  > evidence** — an identical artifact is a superset of *0 of N unmutated
-  > statements changed verdict* — and needs no separate measurement. The
-  > sentence above about `conformance_run.json` having no byte-reproduction
-  > proof is now **superseded**: a third run at the registered limits
-  > (`--ce1-limit 300 --ce2-limit 600`) reproduces it with exactly two
-  > differing fields, `commit` and the hand-added `post_run_corrections`.
-  > What the lateness still costs, and the artifact says so: E5 was a **stop
-  > condition**, and a stop condition checked after the cycle it could have
-  > stopped is a check, not a gate.
 
 - **WITNESS needs a second front-end BEFORE it needs anything else
   (2026-08-26, from W1's pilot — `experiments/witness_pilot.json`).** The
@@ -700,32 +843,6 @@ cycle inherits the disposition and not a rumour.
   sizes the reachable subset at 1,117 by a single additive rearrangement. It
   is a solver, it changes what the sampler is, and it belongs to its own
   registration.
-
-- **C-E3 reached none of the 775 (2026-08-25; cause corrected the same day).**
-  **25** attempted adjudications of sampled counterexamples all returned
-  *"decide did not reduce"* — not 27; two of the ground `DECIDED_FALSE` ids
-  carry a `skel.` prefix and a prefix-based count sorted them onto the sampled
-  side. **12 of 15** ground `DECIDED_FALSE` verdicts were confirmed, not 12 of
-  13, for the same reason. And the cause is **not** Correction 7's predicted
-  carrier boundary: the writer passed open terms, per the entry above. So
-  every NONCONFORMANT verdict in the cycle carries the standing
-  correlated-interpretation label, for want of an independent domain rather
-  than for want of a decidable carrier. **An adjudicator that reaches the
-  sampled class is what would discharge them** — and the first thing it needs
-  is the substitution step, not Mathlib, which remains outside the hermetic
-  budget as design law.
-
-  > **LANDED (2026-08-26).** The adjudicator this entry asked for is
-  > `scripts/conformance_ce3_supplement.py`, and the entry was right about
-  > what it needed: the substitution step and no Mathlib. It substitutes the
-  > record's bindings **structurally, at the parsed tree's `slot` nodes**
-  > rather than textually, and reaches all 25 rows over `Nat`. The **25
-  > adjudications agree with the evaluator**, which strengthens those rows'
-  > provisional labels — and **discharges none of them**, because this entry's
-  > own diagnosis holds: the label is there *for want of an independent
-  > domain*, and the checker was handed this repository's domain. Discharging
-  > it needs an independent reading of the source statement, which is
-  > `docs/DESIGN-witnessed-conformance.md` §6's residual and not this rider.
 
 ## Filed at the v0.19 rotation (the foreign voice, and the probes)
 

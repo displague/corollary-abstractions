@@ -6,20 +6,38 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.20.0](docs/RELEASE-v0.20.0.md) — **two
+interface. Latest release: [v0.21.0](docs/RELEASE-v0.21.0.md) — **three
+registered outcomes, three different verdicts, every one published with its
+mechanism.** A conversation is now a **journal**: `suppose n = 4` persists,
+answers name **which suppositions they consumed**, and a committed journal
+replays offline to identical bytes or refuses by type — 58 of 58 cited-mutation
+responses, **0 flips of 60** sham suppositions, **0 of 42** uncited ones,
+tamper detection **20/20 on each of four arms**. In the same cycle, plain
+English input **failed its own control**: a capability-blind coin flip beat the
+model **22 to 17** on a rule requiring ≤ 8.5, because the frozen metric counts
+verified selections and **cannot see a correct refusal** — all six of the
+model's `NONE` answers were correct refusals. Nothing from that lane is served.
+And a proof-backed conformance instrument **stopped itself at its pilot**, 0 of
+6, because its obligation compared one parser's reading with itself; with the
+trap switched off the checker accepted all six. See [the answer that was right
+and scored wrong](docs/blog/the-answer-that-was-right-and-scored-wrong.md).
+[v0.20.0](docs/RELEASE-v0.20.0.md) is the floor under it — **two
 registered runs, opposite verdicts, both published.** The foreign-dialect
 renderer that v0.19 withheld now **clears and is served**: the grammar emits
 a **canonical bracketing**, so the blind spot that voided last cycle is gone
 rather than bounded — **5,228 of 5,228** grouping-pair deletions detected with
 **zero blind**, and the control that had read 0.80 reads **42 of 42 on a floor
 raised to 0.95**. In the same cycle a brand-new capability — statements that
-compile into something you can **run** against your own numbers, 8,017 of
-them — **voided on its own controls** and ships with the void published on
-every answer it gives. **No conformance rate exists anywhere**, because a
+compile into something a sampler can **run**, 8,017 of them — **voided on its
+own controls** and ships with the void published on every answer it gives.
+(*Corrected at the v0.21 rotation:* this read *"run against your own numbers"*,
+and the drift audit measured that false — the route tests the sampler's
+admitted points, not bindings a person types. Filed in
+[BACKLOG](docs/BACKLOG.md) with the capability sheet's matching overclaim.) **No conformance rate exists anywhere**, because a
 control whose floor no correct instrument could meet took it away. See [the
 floor no instrument could
 meet](docs/blog/the-floor-no-instrument-could-meet.md).
-[v0.19.0](docs/RELEASE-v0.19.0.md) is the floor under it: two glyph
+[v0.19.0](docs/RELEASE-v0.19.0.md) is the floor under *that*: two glyph
 equivalences took the **native voice from 17.0% to 67.2% of the corpus**
 (2,172 → **8,586 of 12,777** parseable, additive-only: 0 changed, 0 lost),
 and the **register** — a frozen, counted inventory of the 1,878 statements
@@ -152,6 +170,48 @@ read off the artifact on every call. A ground statement decides outright —
 with the two sides printed. **There is no conformance rate**, here or
 anywhere: the control that would have licensed one voided, and the reason is
 worth reading, because it is a floor no correct instrument could have met.
+
+**And since v0.21 the conversation remembers, and says what it used.** A
+`suppose` line is now a durable **Assumption** record rather than state thrown
+away at the end of the line, every turn is written to a chained, MAC-signed
+journal, and each answer records which assumptions it consumed — at the moment
+the machinery reads one, not afterwards:
+
+```
+$ printf 'suppose n = 4\nsuppose t = 5\nn + t\n' | PYTHONIOENCODING=utf-8 python scripts/harness.py
+line    : suppose n = 4
+route   : supposition
+status  : waiting
+detail  : held as conjectured in a frame you own
+  this is conjecture held inside a frame you own; it is not a corpus fact and
+  nothing later will quote it as one
+
+$ printf 'suppose x = 1\nretract a999\n' | PYTHONIOENCODING=utf-8 python scripts/harness.py
+line    : retract a999
+route   : retraction
+status  : refused
+detail  : no live assumption 'a999' in this session; nothing was changed
+```
+
+Hand a stranger a committed journal and they can replay it offline — with no
+key, no network, and no access to this machine — and get identical bytes back,
+or a **typed refusal** saying the software moved underneath it:
+
+```
+$ PYTHONIOENCODING=utf-8 python scripts/replay_session.py experiments/sessions/v021-p08.json
+{ "divergences": [], "pin_mismatch": [], "refusal": null,
+  "turns_reproduced": 9, "turns_total": 9 }
+
+$ PYTHONIOENCODING=utf-8 python scripts/replay_session.py experiments/sessions/v021-s03.json
+REFUSED: stale-environment — rendering_module_digests, capability_sheet_digest;
+nothing was replayed and nothing is claimed
+```
+
+That second refusal is the honest state of this tree, not a bug: v0.21's own
+later work moved a pinned module digest, and the sixty slice-1 journals refuse
+rather than replaying against software they were not recorded on. **Sessions
+are reproducible, not correct** — a wrong answer replays as faithfully as a
+right one — and nothing here claims otherwise.
 
 Ask it something the corpus does not contain and it says so: on 1,000
 sentences sampled from a dictionary the shipping resolver wrongly claims 3.0%
@@ -331,6 +391,9 @@ the graded residual.
 | A blind spot can be removed from the grammar rather than bounded | canonical bracketing means a rendered bracket the mathematics does not need is never emitted, so deleting one must change the term: **5,228 of 5,228** grouping-pair deletions detected across every canonical surface, zero blind. The control that read 0.80 last cycle reads **42 of 42 on a floor raised to 0.95**, the foreign `in words` line is served, and the price is published too — the share of the skeleton control's misses that exercise the gate fell 42.5% → 22.4% |
 | A restored clause moves the denominator, not the numerator | the re-specified control verified each mutation changed the term *before* rendering it, and discarded five: `drop_ascription` reads **45 detected of 45 scored**, falsifying its own pre-registered 45-of-50 prediction. Last cycle's 0.90 was not five missed near-misses — it was five mutations that were never mutations |
 | A control's floor can be unmeetable by a correct instrument | the conformance run's perturbation control froze a 99% flip floor and measured **0.650**, voiding every `NO_COUNTEREXAMPLE_FOUND` in the run. Part is the floor — mutations that cannot be made false over the declared `Nat` carrier — and part is a real sampler miss in the same published list, and **the run has no instrument that partitions them**. 8,017 statements compile and the route serves with the void on every answer; no conformance rate exists anywhere |
+| A conversation can carry its own premises, and the fence is what proves it | a per-turn journal records which suppositions each answer consumed. Mutate a **cited** one and the answer must move or refuse: **58 of 58**, 30 of them by typed conflict refusal. Mutate an **uncited** one, or inject a sham, and the answer must not move **at all**: **0 flips of 42** and **0 of 60**. One flip would have meant the replayer was hashing the transcript, and the capability was pre-declared void. Replay reproduces **410 of 410** sealed turns, and tamper detection is **20/20 on each of four arms** — including an adversary who re-signs the whole file under their own key ring. Not claimed: correctness. A wrong answer replays as faithfully as a right one |
+| A metric that counts successes cannot see a correct refusal | a capability-blind coin flip beat a small model **22 verified selections to 17** on a rule requiring **≤ 8.5**, and the draw was typical rather than lucky (analytic expectation **20.62**). All six of the model's `NONE` answers were **verified correct refusals** on questions with acceptable candidates available — which the blind arm, having no `NONE`, took. On nine questions written to have no answer the model selected for **zero** and the blind arm for **five**. The floor was also unmeetable: the frozen chance rate was `1/8`, the measured expectation **0.687**. The rule was scored exactly as frozen and nothing shipped |
+| An obligation built from one reading compares that reading with itself | a proof-backed conformance instrument discharged **0 of 6** pilot obligations, every one rejected as trivial, because both sides of *"the evaluator agrees with the statement"* descend from **one parser's** parse tree. Handed to the checker with the triviality clause switched off, the same six were **accepted 6 of 6** — what an instrument without the clause would have published as a capability. The lane stopped before it opened, and parks behind an independent second reading as a **construction prerequisite** |
 | A reader that scores half as well on nonsense is not reading | a pinned local model read served sentences blind and reconstructed the term at 0.8417 — and scored 0.5000 on scrambled surfaces, ratio 0.594 against a 0.5 voiding threshold frozen in advance. The machine-reader claim is not made; the human-reader claim has never been attempted, because a one-maintainer repository has no non-maintainer to mark a sheet blind |
 
 Two retractions are part of the record (a too-easy test caught by external
@@ -462,10 +525,24 @@ python scripts/realize_term.py --census     # 8,586 of 12,777 parseable (67.2%)
 PYTHONIOENCODING=utf-8 python scripts/realize_term.py --term "x >= 1"
                                             # "variable zero is at least one";
                                             # newly reachable since v0.19
-python -c "import json; v=json.load(open('experiments/foreign_voice_rate.json',encoding='utf-8'))['verdicts']; print(v['overall'], v['voided'])"
-                                            # VOID ['C-V4'] -- the foreign line
-                                            # is certified by nothing, so it is
-                                            # not served
+python -c "import json; v=json.load(open('experiments/foreign_voice_rate2.json',encoding='utf-8'))['verdicts']; print(v['overall'], v['voided'])"
+                                            # prints: FIRES ['C-V3<U+2032>']
+                                            # (set PYTHONIOENCODING=utf-8 on
+                                            # Windows or the prime glyph raises)
+                                            # v0.20's successor run; the line is
+                                            # served because this reads FIRES.
+                                            # v0.19's foreign_voice_rate.json is
+                                            # retained exactly as it read (VOID
+                                            # ['C-V4']) and the two are never
+                                            # blended
+printf 'suppose n = 4\nsuppose t = 5\nn + t\n' | python scripts/harness.py
+                                            # the supposition persists and the
+                                            # answer cites what it consumed
+python scripts/replay_session.py experiments/sessions/v021-p08.json
+                                            # 9 of 9 turns reproduced offline,
+                                            # no key needed; v021-s03.json
+                                            # instead refuses stale-environment,
+                                            # which is the pin fence working
 PYTHONIOENCODING=utf-8 python scripts/realize_term.py --term "1 + 1 = 2"
                                             # one sentence and its receipt
 python scripts/measure_realization.py --out realization_rate.repro.json
@@ -509,10 +586,19 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # the analogy serializer floating the 76-digit exact literal -- fixed
 # with the suite test as its regression test. Both runs' receipts:
 # reports/test_gate_v020/ (runs.md, run1-red.log, run2-green.log).
-# This cycle adds seven new modules (test_conform, test_conform_prereg,
+# v0.20 adds seven new modules (test_conform, test_conform_prereg,
 # test_conform_register, test_cv4_replay, test_grouping_agreement,
 # test_grouping_canonical, test_machine_reader) and grows thirteen
 # existing ones.
+# [SUITE-GATE-V21] -- v0.21.0's full-gate line lands here: tests run,
+# failures, skips, wall-clock and tip, with receipts in
+# reports/test_gate_v021/. The tag waits on it. This cycle adds five
+# wholly new modules -- test_conform_ce3_supplement, test_plain_input,
+# test_session_ledger, test_session_prereqs, test_witness -- and grows
+# several existing ones. Per-slice suites were green at each landing;
+# a targeted suite proves the surfaces you listed and the full gate
+# proves the ones you forgot, which is why this is a placeholder and
+# not a number.
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset
@@ -602,13 +688,44 @@ On Windows consoles set `PYTHONIOENCODING=utf-8` for the matcher scripts
   single-maintainer repository has no non-maintainer. The human-reader claim
   stays not-made. If the fresh run voids again, the voice stays withheld and
   v0.21 inherits it
-- `docs/DESIGN-plain-input.md` — **maintainer-seeded candidate for v0.21**
-  (2026-08-24), pre-course: plain text enters, a small model proposes
+- `docs/DESIGN-session-ledger.md` — **measured at v0.21, and SERVED**: the
+  session as a first-class object, a committed replayable per-turn journal
+  whose answers cite the assumptions they consumed. **R1 HOLDS** — B2 410/410,
+  B4 58/58, B5 0/60, B6 0/42, B8 20/20 on four tamper arms, B12 410/0, B13
+  20/20 against a floor of 16. **B1's first clause MISSED** (the replayer was
+  committed before the seal) and is published unreinterpreted. The claim is
+  exactly *"recorded sessions replay, and conditional answers name the
+  assumptions they consumed"* — reproducibility, never correctness — and §12's
+  statelessness suspension ended at that gate by its own verdicts
+- `docs/DESIGN-plain-input.md` — **maintainer-seeded, adopted, built, and
+  FAILED at v0.21 as slice 2**: plain text enters, a small model proposes
   candidate interpretations, the kernel verifies them, and the **hidden
-  variable** — the assumption an answer is predicated on — is named rather
-  than silently assumed. The v0.21 course must adjudicate it explicitly;
-  **silence is not a disposition**. Its §6 carries the cross-design machine
-  blind reader definition and hands it to the voice design's run
+  variable** — the assumption an answer is predicated on — is named rather than
+  silently assumed. **R2 FAILS.** The capability-blind arm made 22 verified
+  selections to the proposer's 17 on a rule requiring ≤ 8.5, because the frozen
+  metric **cannot see a correct refusal**; and G9 is NOT MET, because the
+  silent binding it aimed at lives one row upstream in the resolver (13 of 30).
+  Nothing is served. Its §8 carries four append-only notes recording which of
+  the design's own sentences the run measured false — including §4's finiteness
+  argument, killed by P1
+- `docs/DESIGN-witnessed-conformance.md` — **written, reviewed, piloted and
+  STOPPED at v0.21**: replace sampling with a discharged obligation — a
+  checker-signed lemma that the compiled evaluator and the statement agree over
+  a declared domain. **0 of 6 pilot obligations discharged**, every one
+  rejected as trivial, because both readings descend from one front-end's
+  parse. The counterfactual is the evidence: with the trap removed the checker
+  accepted 6 of 6. Census 66 → 45 → 42 → 38 → **37**, the 60-name manifest
+  withdrawn under its own rule. **Parks behind an independent second reading of
+  the statement as a construction prerequisite**, not a residual
+- `docs/DESIGN-handles.md` — **design only, the v0.22 course's selection**
+  (2026-08-26): reachability as a property of what a statement *says* and how
+  mathematicians name its parts, not of the string above it in a file. Rebuilt
+  twice under adversarial review — the premise corrected (two committed
+  non-title indices already exist and resolve the motivating phrase), the
+  sources cut to the three with committed producers. Its honest expected
+  headline is the **census**: indicative specific-handle coverage is near
+  **~2%**, and the stop clause makes *"the ingested library is effectively
+  nameless; the naming layer must be built, not indexed"* a first-class result
 - `docs/DESIGN-block-vocabulary.md` — **adopted, built, measured, and
   parked BY NUMBERS at v0.19** (§3e), which is the full lifecycle a
   maintainer's no-silent-disposal instruction is owed. Scoped to one

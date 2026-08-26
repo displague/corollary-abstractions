@@ -1,3 +1,219 @@
+# Plain input, slice 2: R2 FAILS, and the metric is the finding (2026-08-26)
+
+`experiments/plain_input_run.json`, runner `scripts/run_plain_gate.py`,
+preregistered in `experiments/plain_input_prereg.json`, over the sealed
+thirty of `experiments/plain_question_set.json` and the eight-session,
+48-turn corpus of `experiments/plain_input_corpus_seal.json`.
+**R2 FAILS on two clauses: `G5 collapses at or below half` and `G9 repairs
+both fixtures`.** Nothing is served.
+
+## The reading
+
+| gate | verdict | number |
+|---|---|---|
+| **G1** — questions yielding ≥1 verified candidate | MEASUREMENT, no floor | **24 of 30 = 0.80**; sealed ceiling **21/30**, because nine questions were authored to exhaust |
+| **G2** — every served interpretation verifier-confirmed or supposition-labelled | GREEN | 0 counterexamples over the **12 proposer-reachable** questions |
+| **G4b** — a conditional's supposition is not readable as a later premise | GREEN | stricter than the frozen mechanism: a proposed supposition is a field of the served receipt and never enters the AssumptionSet. Ceiling control refused the ninth at a cap of 8 |
+| **G5** — the capability-blind collapse rule | **RED** | blind **22** vs proposer **17**, required **≤ 8.5** |
+| **G7b** — a `conditional` turn scores zero useful tokens | GREEN | same 160-token content: **160 useful as `solved`, 0 as `conditional`**, driven through `measure_throughput.build_records`, with the `solved` arm as the control that makes the zero evidence |
+| **G8** — no holdout material in prompts, candidate lists or served answers | GREEN | 16 prompts, 0 occurrences; enumerator's channel checked by AST; **the third limb was added after review** (below) |
+| **G9** — the silent binding is repaired | **NOT MET** | by orchestrator ruling, in advance |
+| **R2** | **FAILS** | |
+
+## G5: a control that cannot see a correct refusal
+
+The rule was frozen before the proposer existed: *the blind arm's
+verified-selection rate must be at most HALF the proposer's on the same
+question set.* The blind arm is a seeded uniform draw over the identical
+candidate lists, seeded from the sealed question file's digest so the draw is
+a fact about a committed set rather than about this run's clock.
+
+**And the draw was typical, not lucky.** The run publishes the blind arm's
+analytic expectation beside its observation: **Σ verified/candidates per
+question = 20.62**, observed **22**.
+
+**The mechanism, and it is a defect in the metric rather than in the result.**
+The rule counts a *verified selection*. It has no column for a *correct
+refusal*. The model answered `NONE` on six questions — `g1-08`, `g1-22`,
+`g1-26`, `g1-27`, `g1-29`, `g1-30` — **every one of which had verified
+candidates available**, and the blind arm, whose alphabet contains no `NONE`,
+took them on all six. On the **nine exhaust-authored** questions the model
+selected for **zero** and the blind arm selected a verified candidate for
+**five**. The control rewards, in its blind arm, exactly the behaviour
+DESIGN-plain-input calls **inventing**.
+
+**And the floor was mis-derived.** The prereg froze the chance rate at
+`1/8 = 0.125`, the reciprocal of the candidate limit. The measured
+expectation is **20.62/30 ≈ 0.687**. A bar of 8.5 against an honest baseline
+of ~20.6 is **unmeetable by any correct proposer** — ROADMAP-v0.21 §4.0(3)'s
+**second incident**, in the cycle that wrote the rule.
+
+**Nothing was rewritten.** The artifact's own sentence: *"A rule rewritten
+because its instrument surprised its author is not a preregistration."*
+
+**The red survives the obvious objection.** Excluding all nine
+exhaust-authored questions, the proposer reads **17** (all of its verified
+selections were on non-exhaust questions) and the blind arm reads **17** —
+still far above 8.5.
+
+## G9: the defect is one row upstream, and NOT MET by ruling
+
+`DESIGN-plain-input` §2.2 confines the proposer to **row 12**, the row where
+nothing binds. The silent binding happens at the **resolver**. Serving all
+thirty questions through a fresh offline session with the proposer attached:
+**13 return `found` from the resolver before `_route_proposed` is consulted**
+(`g1-03, 05, 06, 07, 10, 12, 14, 15, 17, 18, 19, 20, 22`), upgrading P2's
+2-of-10; five more are pre-empted at `waiting` by the resolver's own ASK
+subloop; **twelve reach the proposer**.
+
+Adjudicated **in advance, by orchestrator ruling** (prereg amendments 3 and
+4) rather than scored out of this run's numbers, *"because a gate
+adjudicated before the run is a gate the run REPORTS."* The repair is a
+designed successor owing three things it cannot borrow: its own
+preregistration, its own capability-blind control, and a **K
+re-measurement** — the resolver row sits inside the serving path the
+throughput book scores. The thirteen ids are BACKLOG fixtures.
+
+## The trust shape is stronger than the design's own argument for it
+
+P1 measured §4's Phase-2 defence **false**: nine of fifteen grammar classes
+admit countably infinite languages, including the two rows where plain prose
+lands, so *"route_line accepts it"* is a parse check and not membership in a
+finite set. What shipped is stronger — the proposer emits an **index into an
+exactly-enumerated candidate list** plus `NONE`, so Phase 2 holds by
+construction. Recorded as design §8.1 rather than by editing §4, because a
+reader who met only the repaired reason would never learn the grammar is not
+finite.
+
+## Three findings the run published about itself, and one review found later
+
+- **F1** — two exhaust-authored questions came back as **clarifications naming
+  corpus readings**, contradicting §7's *"not open-domain"* non-claim. The
+  proposer answered `NONE` on both; the **branch rule** fires on the count of
+  verified candidates and never consults it. Frozen in amendment 2 before it
+  had run, so it is published and filed rather than adjusted.
+- **F2** — the design's own motivating question (*gcd*, recursively)
+  enumerated **zero candidates**. **You cannot select what was never
+  enumerated.** Five more sealed questions enumerate nothing.
+- **F3** — `word_match` verification **discarded a correct selection**
+  (`g1-13`): the enumerator offered the right reading first, the model picked
+  it, it did not verify, and the two that did verify were about the *double*
+  factorial. The discard happens before any receipt exists.
+- **§8.5, from review** — on `g1-22` the corpus holds two correct readings
+  that both verify, enumerated at **ranks 21 and 23** behind a
+  *(overlap, ascending title length, id)* tiebreak
+  (`candidate_enumerator.py:261`), so `Ohm's Law` outranked *Distributivity of
+  Intersection over Union*. **The `NONE` was a correct refusal against a
+  mis-ranked list.** G1's published rate is an underestimate by an amount the
+  run did not measure and the artifact cannot recover. Not repaired: the order
+  and the limit were frozen together **because they move the blind arm's
+  baseline**.
+
+## Determinism, and what the run does not claim
+
+P4 (`experiments/plain_proposer_determinism.json`) measured two passes
+byte-identical at temperature 0, so the proposer arm registers as
+**determinism-plus-commit** under §4.0(2) rather than execute-once. The
+artifact states the limit itself: *"byte-identity across two passes on one
+machine on one day is not a proof of determinism. It is the strongest check
+this repository has ever run on a model call, and it is reported as that and
+nothing more."* The model is pinned by weights-blob sha256 and **refuses
+rather than downloading** on absence or mismatch, verified before any
+question was asked.
+
+**Non-claims:** no coverage claim, no correctness claim, no fluency claim, no
+throughput claim, no claim that the model is good at this, and **no
+stranger-usability claim** — G1's rate is a measurement of one
+maintainer-authored set about a corpus its author knows.
+
+## Four corrections added by hand after the reading, and why by hand
+
+`post_run_corrections`, dated 2026-08-26, hand-added because re-running the
+runner would overwrite them — the same shape `conformance_e5_late.json`
+records for its own block. **No scored number moves and no verdict moves.**
+
+- **H1** — **G8 was reported GREEN having executed two limbs of three.** Its
+  clause covers prompts, candidate lists **and any served answer**; the third
+  was never run. The channel is real: `PlainRouter._reserve` boots a fresh
+  session and copies the **caller's** `resolver_index`, and a recorder's index
+  is `resolver.default_index()`, which spans `data/` **and** `data_holdout/` —
+  the same 2,053-id span slice 1's M9 finding measured. The reviewer executed
+  the limb by hand before ruling (**108 lines re-served, 0 holdout ids, 0
+  divergent statuses**); the runner now carries it and reads **0 over 120
+  lines, 78 distinct**. Both denominators are published and **neither is the
+  other's correction** — they are two scopes over the same material.
+  `_reserve` is **not** patched: narrowing its index after the run would
+  change served behaviour the run measured.
+- **M2** — the ranking finding above.
+- **M4** — the reply parser was **lenient where the doctrine says discard**.
+  Anchored to `^\s*(\d{1,2}|NONE)\s*\.?\s*$` with `.match()`, with five
+  adversarial replies as fixtures. Checked rather than assumed: every retained
+  reply and every `raw` in G1's rows is a bare `1`, `2`, `4`, `8`, `NONE` or
+  empty, and the anchored parser reads all of them identically.
+- **L14** — the prereg **glosses a governance clause** and the gloss is
+  marked: it wrote §4.0(2)'s kept clause as *"anything touching a model
+  remains execute-once"*, dropping *a clock*, *the network* and *"with the run
+  pre-announced"*. The prereg is frozen and not edited; the exact clause is
+  quoted in the artifact so a reader meets the rule rather than the paraphrase.
+
+---
+
+# The v0.22 design course — three series, a lead falsified twice, and a census that survives it
+
+`reports/design-direction-v0.22.json`, brief at
+`reports/design-direction-v0.22-brief.txt` and hash-verified. **Fourth
+consecutive strict invocation.** Three isolated series, three rounds each —
+**nine rounds, fifteen round-one directions, $2.7994** — run headless from an
+empty non-git directory outside the repository under a strict tool denylist,
+isolation mode inherited unchanged from the v0.21 receipt. `series_1.r1`
+equals the brief hash **by construction**, because round one of series one
+*is* the brief. **No incumbent design existed this cycle**; the ground
+disclosed at each round two was the v0.21 outcome set and the standing parks.
+
+| series | lead | runner-up | folds |
+|---|---|---|---|
+| 1 — inference and index machinery | **HANDLES** | TWO WITNESSES | CHAIN+BRIDGE → ONE STEP (rider R1); NOTARY → a mandatory `route_voids[]` receipt column |
+| 2 — the person and time | **COLD RECEIPT** | ERRATUM (→ rider R3) | REBUTTAL+EXIT SIGN → CROSSING; LONG CON → day-probe |
+| 3 — the substrate | CANARY-CURVE | TOLL | LEDGER+PAUPER → TOLL; CEILING → TOLL's successor; BITROT → day-probe |
+
+**Selected: `docs/DESIGN-handles.md`**, and it was **rebuilt twice under
+adversarial review before landing**.
+
+1. **The premise was falsified.** The first version claimed no non-title index
+   exists. Two do, over all 12,777 statements: `resolver.by_lexicon`
+   (`scripts/resolver.py:264-277`) and `resolver.inventory` (`:284-288`). Run
+   live, `resolve('greatest common divisor')` — the *phrase* — reaches
+   `programming.euclid.{iterative,recursive}` today. **The real defect is
+   narrower and worse**: `scripts/candidate_enumerator.py:166-168` builds its
+   haystack from `title` + `keywords` only, so v0.21's proposer path was wired
+   to the weakest index on the tree while the stronger ones sat unused one
+   route earlier on the same serving path.
+2. **The rebuild was falsified too.** Sources without committed producers were
+   deleted — **S4 notation records** (the only structured notation is 389
+   hand-authored rows on 186 statements) and **S5 defeq alias buckets** (no
+   defeq machinery exists anywhere) — and **S3 elaborated-term unfoldings** was
+   demoted to a priced question, because only digests are persisted and its
+   coverage numbers (2,319 oracle-eligible, 2,313 covered) are **subset, never
+   summed**.
+
+**And the coverage claim was cut to what a census will find.** The review
+measured indicative specific-handle yield at K=128: **~263 via S-LEX and ~306
+via S-INV**, essentially the same curated **~2%**, because 12,514
+`lean_workbook` nodes share three boilerplate name pairs that K excludes as
+overbroad and S-INV's head distribution is dominated by universal heads
+(`IMPLIES` 9,403, `MEET` 8,160). So §9 carries an **H-P0 stop clause** making
+the census a first-class result: *the ingested library is effectively
+nameless; the naming layer must be built, not indexed.*
+
+**This is the second consecutive cycle in which a course's selected design
+failed its first review on the same class of defect** — claiming ground the
+repository already occupies. The v0.21 design's first draft claimed no
+committed object for continuity existed, in a tree holding three. The
+discipline this repository applies to its measurements applies to the
+orchestrator that plans them, and the defence is the same one every run gets.
+
+---
+
 # WITNESS: the slice stopped before it opened (2026-08-25)
 
 **`experiments/witness_pilot.json` — 0 of 6 obligations discharged, every one
@@ -5742,13 +5958,27 @@ and per-answer citations of the assumptions each answer consumed**.
 discards the state; the served supposition receipt is one key,
 `{"derivation": "session"}`.
 
-# The session ledger: slice 1's prerequisites and its three runs (2026-08-26)
+# The session ledger: slice 1's prerequisites and its four runs (2026-08-26)
 
 DESIGN-session-ledger slice 1, preregistered in
 `experiments/session_ledger_prereg.json` — B1–B13 and R1 frozen verbatim
 from the design, with a meetability argument on every floor per
-ROADMAP-v0.21 §4.0(3). **Three runs on one sealed corpus. R1 HOLDS on
-run 3.** Every run artifact is committed and none is edited after the fact.
+ROADMAP-v0.21 §4.0(3). **Four runs on one sealed corpus. R1 HOLDS on
+run 4.** Every run artifact is committed and none is edited after the fact.
+
+> **Corrected in place 2026-08-26 at the v0.21 rotation.** This heading and
+> the paragraph above it read *"three runs"* and *"R1 HOLDS on run 3"* while
+> the table below already carried a fourth row and the sections beneath it
+> already described run 4. Run 4 — the second supplementary run, registered
+> by prereg amendments 5 and 6 after independent review — is the
+> **registered run of record**: it adds B8's two missing tamper shapes and
+> repairs B2's could-not-go-red verdict. Corrected in the heading rather
+> than by a note beneath it, on the v0.20 doctrine that a false count in a
+> heading is read by everyone and a note beneath it is read by nobody;
+> removing this blockquote and restoring the two phrases returns the file
+> byte for byte. Three further phrases in this section still say "three
+> runs" or name run 3, and each carries its own dated correction where it
+> stands.
 
 ## The three new prerequisite artifacts
 
@@ -5972,7 +6202,16 @@ headers, and a journal carrying the old pin would be refused
 seal is retained at `experiments/session_corpus_seal_pre_repair.json`; the
 counts, sessions, floors and A/B split are unchanged and checked.
 
-## Run 3's readout in full
+## Run 3's readout in full — and where run 4 differs
+
+> **Dated 2026-08-26.** The table below is run 3's, left as it read. **Run 4
+> is the registered run**, and it differs in exactly three cells, none of
+> which moves a verdict: **B2** reads 410/410 in **29.9 s** rather than 19.4 s
+> (wall-clock) *and is scored under the repaired rule — green only when
+> `turns_reproduced == denominator` and no session refused*; **B8** runs
+> **four** arms at 20/20 rather than two; and the voiding-sentence row reads
+> *"in any of the four runs"*. Everything else is identical, which is what a
+> re-score of a reading should look like.
 
 | clause | verdict | evidence |
 |---|---|---|
@@ -6013,8 +6252,10 @@ conditional answers name the assumptions they consumed.**
 **No surface was invented.** DESIGN-session-ledger names no capability-sheet
 row, no route and no status for slice 1 — the sheet's registered-run rows
 exist for realization, conformance and the foreign voice because *those*
-designs asked for them. This claim lives in `session_ledger_run3.json` and
-in `tests/test_session_ledger.py`, and §13 routes the numbers here. The one
+designs asked for them. This claim lives in `session_ledger_run4.json` — the
+registered run; `run3.json` is retained as it read and `run.json`/`run2.json`
+with it — and in `tests/test_session_ledger.py`, and §13 routes the numbers
+here. The one
 surface that did change is the `retract <assumption-id>` grammar row the
 Assumption status alphabet required, and on the chat skin it always refuses:
 ¶DEV-1 replays every request into a fresh session and attaches no assumption
