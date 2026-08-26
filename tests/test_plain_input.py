@@ -909,6 +909,179 @@ class TheOrchestratorsRulingOnG9(unittest.TestCase):
         self.assertIn("B10", clause["the_pattern_it_reuses"])
 
 
+class _AlwaysFirst:
+    """A blind arm that always picks candidate 0. Deterministic on purpose.
+
+    G5's real blind arm is a uniform draw; this one is a fixture, so a test
+    about the CEILING does not fail on a day the draw missed.
+    """
+
+    def randrange(self, count: int) -> int:  # noqa: ARG002
+        return 0
+
+
+class TheSharedSuppositionCeiling(unittest.TestCase):
+    """Prereg amendment 5 — the frozen 8, spent from outside the ledger.
+
+    The bound exists in the preregistration as a number and an outcome: at
+    most eight live in a session, and *"a ninth refuses with the same typed
+    `assumption_budget` refusal"*. These drive it until it fires, because a
+    bound nobody has seen fire is a bound nobody has checked.
+    """
+
+    LINE = "what is two plus three"
+
+    def _session(self, session_id: str = "ceiling-test"):
+        from harness import CoreSession  # noqa: PLC0415
+
+        return CoreSession.boot(REPO, offline=True, session_id=session_id)
+
+    def test_the_ceiling_is_the_ledgers_own_number_not_a_second_copy(
+        self,
+    ) -> None:
+        import plain_router  # noqa: PLC0415
+        import session_ledger  # noqa: PLC0415
+
+        self.assertEqual(
+            plain_router.SUPPOSITION_CEILING,
+            session_ledger.LIVE_ASSUMPTION_CAP,
+        )
+        self.assertEqual(plain_router.SUPPOSITION_CEILING, 8)
+        self.assertEqual(plain_router.SUPPOSITION_BUDGET, 1)
+
+    def test_the_ninth_proposed_supposition_refuses_by_type(self) -> None:
+        import plain_router  # noqa: PLC0415
+
+        router = plain_router.PlainRouter(blind_rng=_AlwaysFirst())
+        session = self._session()
+        for turn in range(plain_router.SUPPOSITION_CEILING):
+            verdict = router.route(REPO, session, self.LINE)
+            self.assertIsNotNone(verdict, f"turn {turn} served nothing")
+            self.assertEqual(
+                verdict["status"], "conditional", f"turn {turn}"
+            )
+        ninth = router.route(REPO, session, self.LINE)
+        self.assertEqual(ninth["status"], "refused")
+        self.assertEqual(ninth["refusal_type"], "assumption_budget")
+        self.assertNotIn("answer", ninth)
+
+    def test_the_refusal_type_is_the_one_the_suppose_route_uses(self) -> None:
+        """Same ceiling, same word — imported, not spelled again."""
+
+        import plain_router  # noqa: PLC0415
+        import session_ledger  # noqa: PLC0415
+
+        self.assertEqual(
+            plain_router.REFUSAL_ASSUMPTION_BUDGET,
+            session_ledger.REFUSAL_ASSUMPTION_BUDGET,
+        )
+
+    def test_typed_assumptions_and_proposed_ones_share_the_ceiling(
+        self,
+    ) -> None:
+        """The half of q3 that survived: they spend ONE budget, not two."""
+
+        import plain_router  # noqa: PLC0415
+        import session_ledger as sl  # noqa: PLC0415
+
+        barrier = sl.ReadBarrier()
+        assumptions = sl.AssumptionSet("ceiling-shared", barrier)
+        barrier.open_turn(0)
+        for name in "abcdefgh":
+            declared = assumptions.declare(f"{name} = 1", 0)
+            self.assertNotIsInstance(declared, str, f"declaring {name}")
+        self.assertEqual(len(assumptions.live()), 8)
+
+        session = self._session("ceiling-shared")
+        session.assumptions = assumptions
+        router = plain_router.PlainRouter(blind_rng=_AlwaysFirst())
+        verdict = router.route(REPO, session, self.LINE)
+        self.assertEqual(verdict["status"], "refused")
+        self.assertEqual(verdict["refusal_type"], "assumption_budget")
+
+    def test_the_counter_is_per_session(self) -> None:
+        """A router reused across sessions must not carry a budget across."""
+
+        import plain_router  # noqa: PLC0415
+
+        router = plain_router.PlainRouter(blind_rng=_AlwaysFirst())
+        for turn in range(plain_router.SUPPOSITION_CEILING):
+            router.route(REPO, self._session("one"), self.LINE)
+            del turn
+        fresh = router.route(REPO, self._session("two"), self.LINE)
+        self.assertEqual(fresh["status"], "conditional")
+
+    def test_a_proposed_supposition_never_enters_the_assumption_set(
+        self,
+    ) -> None:
+        """G4b, satisfied more strictly than its frozen mechanism asked."""
+
+        import plain_router  # noqa: PLC0415
+        import session_ledger as sl  # noqa: PLC0415
+
+        barrier = sl.ReadBarrier()
+        assumptions = sl.AssumptionSet("g4b", barrier)
+        barrier.open_turn(0)
+        session = self._session("g4b")
+        session.assumptions = assumptions
+        router = plain_router.PlainRouter(blind_rng=_AlwaysFirst())
+        verdict = router.route(REPO, session, self.LINE)
+        self.assertEqual(verdict["status"], "conditional")
+        self.assertEqual(verdict["receipt"]["suppositions"][0]["source"],
+                         "proposed")
+        self.assertEqual(assumptions.all_records(), [])
+        self.assertEqual(barrier.close_turn(), ())
+
+
+class AmendmentFiveStatesBothHalves(unittest.TestCase):
+    """A divergence disclosed in one direction only is a defence."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        cls.amendment = next(
+            a for a in prereg["amendments"] if a["amendment"] == 5
+        )
+        cls.plain = _flat(PLAIN.read_text(encoding="utf-8"))
+
+    def test_it_quotes_the_two_sentences_it_diverges_from(self) -> None:
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        frozen = self.amendment["the_two_sentences_as_frozen"]
+        self.assertIn(
+            frozen["from_G4b_how_it_is_checked_here"],
+            prereg["gates"]["G4b"]["how_it_is_checked_here"],
+        )
+        self.assertIn(
+            frozen["from_q3_per_session_rule"],
+            prereg["section_4_questions_answered"]
+            ["q3_what_bounds_the_supposition_count"]["per_session_rule"],
+        )
+
+    def test_g4bs_clause_is_still_verbatim_from_the_design(self) -> None:
+        self.assertIn(
+            _flat(self.amendment
+                  ["consequence_one_it_is_STRICTER_on_the_clause_G4b_names"]
+                  ["the_clause_verbatim"]),
+            self.plain,
+        )
+
+    def test_the_cost_is_stated_and_not_only_the_gain(self) -> None:
+        cost = self.amendment["consequence_two_what_it_COSTS_a_reader"]
+        self.assertIn("will not see", cost)
+        kept = self.amendment[
+            "consequence_three_the_frozen_NUMBER_is_preserved_by_a_"
+            "different_counter"
+        ]
+        self.assertIn("what_is_not_kept", kept)
+        self.assertIn("two counters that can disagree",
+                      kept["what_is_not_kept"].lower())
+
+    def test_the_refused_alternative_is_named_with_its_reason(self) -> None:
+        refused = self.amendment["why_the_ledgers_record_shape_was_not_widened_instead"]
+        self.assertIn("MAC payload", refused["why_it_was_refused"])
+        self.assertTrue(refused["both_were_checked_rather_than_assumed"])
+
+
 class TheDesignsAppendOnlyNotes(unittest.TestCase):
     """§8 — added after the seed, never editing what it corrects."""
 

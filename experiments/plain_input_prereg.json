@@ -343,6 +343,43 @@
       },
       "what_it_changes": "no gate text, no floor, no voiding sentence, no standard, and no served behaviour. It fixes G9's verdict as a ruling, moves the defect's custody with thirteen fixtures instead of two, and constrains one sentence of R2's licensing text.",
       "and_what_it_explicitly_does_not_license": "any claim that slice 2 repairs the silent binding. It does not, and DESIGN-plain-input §8.2 says so inside the design itself."
+    },
+    {
+      "amendment": 5,
+      "dated": "2026-08-26",
+      "made_before": "the slice-2 corpus is recorded and before any gate of the registered run is scored. Found while reading the inherited implementation against the clauses it has to satisfy, not while reading a result.",
+      "subject": "the implementation DIVERGES from two sentences this preregistration froze about where a proposed supposition lives. The divergence is stricter on G4b's clause and different on q3's bound, and both halves are stated rather than resolved quietly in whichever direction reads better.",
+      "the_two_sentences_as_frozen": {
+        "from_G4b_how_it_is_checked_here": "a PROPOSED supposition is an Assumption record whose `source` is `proposed`.",
+        "from_q3_per_session_rule": "A proposed supposition is an Assumption record like any other and spends the same budget; a ninth refuses with the same typed `assumption_budget` refusal."
+      },
+      "what_the_implementation_actually_does": "a proposed supposition is a field of the SERVED RECEIPT — `{variable, value, source: 'proposed', why}` — and is never written into the session's AssumptionSet. No Assumption record is created, so none carries a `source` field, so the ledger's record shape is untouched.",
+      "consequence_one_it_is_STRICTER_on_the_clause_G4b_names": {
+        "the_clause_verbatim": "A conditional answer's supposition must not be readable by any later turn as a premise.",
+        "what_the_frozen_reading_permitted": "reading, provided the later turn CITED it — 'a later turn may consume a proposed supposition only by citing it'.",
+        "what_the_implementation_permits": "no reading at all. There is no record to cite: `AssumptionSet.binding_for` is the only door to an assumption's value and a proposed supposition never passes through the door because it never enters the room.",
+        "so_the_gate_is_satisfied_more_than_it_asked": "and the artifact scores it that way, naming the stricter property rather than pretending the weaker mechanism was built."
+      },
+      "consequence_two_what_it_COSTS_a_reader": "a reader inspecting `journal.assumptions` will not see that a proposed supposition existed. The evidence lives instead in the served receipt, in the turn's `receipt_digest`, and in the run artifact's per-turn trace. That is a real loss of one inspection path and it is named here rather than discovered by someone grepping a journal for a supposition that is not in it.",
+      "consequence_three_the_frozen_NUMBER_is_preserved_by_a_different_counter": {
+        "what_is_kept": "the ceiling of 8, spent as a SHARED ceiling: live typed assumptions plus proposed suppositions already served this session. A ninth refuses with `refusal_type: assumption_budget`, the same typed refusal `harness._route_suppose` returns, because it is the same ceiling.",
+        "where_the_counter_lives": "scripts/plain_router.py's `proposed_by_session`, and the number itself is IMPORTED from session_ledger.LIVE_ASSUMPTION_CAP rather than retyped — 'unchanged' is only checkable if there is one copy.",
+        "what_is_not_kept": "the counter is not the ledger's own. The ledger's cap counts records it holds; this one adds a quantity the ledger does not know about. Two counters that can disagree is exactly the shape session_ledger's `pending_turn_index` docstring warns against, and the warning applies to this too."
+      },
+      "why_the_ledgers_record_shape_was_not_widened_instead": {
+        "the_obvious_alternative": "add a `source` field to session_ledger.Assumption, defaulting to `typed`, and declare proposed suppositions through AssumptionSet.declare.",
+        "why_it_was_refused": "Assumption.record() IS the MAC payload. Adding a field changes the shape of every record the machinery writes, including any re-recording of slice 1's corpus — which is CLOSED and merged. Editing a closed corpus's record shape to make a later slice's field convenient is the move the seal exists to prevent.",
+        "and_a_second_mechanism_that_would_have_broken": "scripts/replay_session.py reconstructs Assumption objects from journal dicts by naming their fields. A field defaulted during that reconstruction would make record() emit a key the journal never contained, so a replayed record would authenticate against a payload the journal does not carry.",
+        "both_were_checked_rather_than_assumed": true
+      },
+      "how_G4b_is_therefore_SCORED_in_the_registered_run": [
+        "no journal in the slice-2 corpus contains an Assumption record whose text_bytes is a proposed supposition — checked against the served receipts of every conditional turn",
+        "no turn cites one, corroborated from the read log by B12's own machinery rather than by a second reading of the journal",
+        "every supposition a conditional answer serves carries `source: proposed`, so the served object says what it is",
+        "the ceiling refuses the ninth: a positive control drives the router past the ceiling and requires the typed `assumption_budget` refusal, because a bound nobody has seen fire is a bound nobody has checked"
+      ],
+      "why_this_is_not_tuning_after_watching_it_behave": "the divergence is between a frozen sentence and a committed implementation, both of which existed before this amendment and neither of which has produced a gate number yet. It is resolved in the direction the CODE already went, which is the direction that gives the gate less room rather than more, and the half that gives a reader less is published beside it.",
+      "what_it_changes": "no gate text, no floor, no voiding sentence, no standard. It records where a proposed supposition lives, adds a positive control for the ceiling, and states one thing the design lost by living there."
     }
   ]
 }

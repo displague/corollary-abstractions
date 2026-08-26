@@ -39,6 +39,23 @@ candidate's line through `route_line` on a fresh session and passes the
 result through. DESIGN-plain-input §7: *"A conditional answer is a LABEL
 WRAPPED AROUND AN EXISTING ANSWER, not a generated one."*
 
+## The two bounds, and where the second one's counter lives
+
+One proposed supposition per served answer (frozen), and at most
+:data:`SUPPOSITION_CEILING` live in a session — the ledger's own cap of 8,
+imported rather than retyped, spent as a SHARED ceiling over live typed
+assumptions plus proposed suppositions. A ninth refuses with the same typed
+`assumption_budget` refusal a ninth `suppose` line gets.
+
+What differs from the preregistration, and it is registered rather than
+quiet: a proposed supposition is **not** written into the session's
+`AssumptionSet`. It lives in the served receipt and nowhere else. That makes
+G4b's clause — *"must not be readable by any later turn as a premise"* —
+hold absolutely rather than conditionally, and it costs a reader the ability
+to see the supposition in `journal.assumptions`. Prereg amendment 5 states
+both halves and why the ledger's record shape was not widened to carry a
+`source` field.
+
 ## Zero useful tokens
 
 Status `conditional` is non-answering (SPEC ¶AMD-1), so this branch cannot
@@ -59,9 +76,31 @@ if str(REPO / "scripts") not in sys.path:
 
 import candidate_enumerator as ce  # noqa: E402
 import plain_proposer as pp  # noqa: E402
+from session_ledger import LIVE_ASSUMPTION_CAP  # noqa: E402
+from session_ledger import REFUSAL_ASSUMPTION_BUDGET  # noqa: E402
 
 #: The frozen bound: one proposed supposition per served answer.
 SUPPOSITION_BUDGET = 1
+
+#: The frozen per-session ceiling, IMPORTED rather than retyped. The
+#: preregistration's q3 answers "what bounds the supposition count?" with two
+#: numbers and says of the second: *"the session ledger's frozen
+#: live-assumption cap (DESIGN-session-ledger §3), unchanged"*. Importing it
+#: is what makes "unchanged" checkable — a second copy of 8 is a second thing
+#: to rot.
+#:
+#: It is spent as a SHARED ceiling: live typed assumptions plus proposed
+#: suppositions already served this session. The prereg said a proposed
+#: supposition *"spends the same budget"*, and this is that sentence with the
+#: counter outside the ledger rather than inside it — prereg amendment 5
+#: records why, and what the difference costs a reader.
+SUPPOSITION_CEILING = LIVE_ASSUMPTION_CAP
+
+
+def _session_id(session) -> str:
+    """The key the per-session counter lives under. Never a fallback guess."""
+
+    return str(getattr(session, "session_id", "") or "<no-session-id>")
 
 
 @dataclass
@@ -91,6 +130,11 @@ class PlainRouter:
         self.blind_rng = blind_rng
         self.repo_root = repo_root or REPO
         self.traces: list[RouterTrace] = []
+        #: Proposed suppositions already served, per session id. Kept here
+        #: rather than on the session because a proposed supposition is NOT
+        #: an Assumption record and must not look like one — the divergence
+        #: prereg amendment 5 registers, with its cost stated.
+        self.proposed_by_session: dict[str, int] = {}
 
     # -- the branch -------------------------------------------------------
 
@@ -130,12 +174,60 @@ class PlainRouter:
                     break
 
         if chosen is not None:
+            if self._budget_spent(session):
+                trace.branch = "assumption_budget"
+                return self._budget_refusal(session)
             trace.branch = "conditional"
+            self.proposed_by_session[_session_id(session)] = (
+                self.proposed_by_session.get(_session_id(session), 0) + 1
+            )
             return self._conditional(repo_root, session, line, chosen, verified)
         if len(verified) >= 2:
             trace.branch = "ask"
             return self._ask(line, verified)
         return None
+
+    # -- the shared ceiling ----------------------------------------------
+
+    def _live_typed(self, session) -> int:
+        """How many typed assumptions are live, without reading any of them.
+
+        `AssumptionSet.live()` returns the records; taking their COUNT is not
+        a barrier bypass, for the reason `bound_names` already gives —
+        *"knowing that somebody supposed something about `x` is not knowing
+        what they supposed"*. Nothing here touches `normal_form`, so no
+        citation follows and `tests/test_session_ledger.py`'s grep over the
+        serving path stays quiet.
+        """
+
+        live = getattr(session, "assumptions", None)
+        return 0 if live is None else len(live.live())
+
+    def _budget_spent(self, session) -> bool:
+        spent = self._live_typed(session) + self.proposed_by_session.get(
+            _session_id(session), 0
+        )
+        return spent >= SUPPOSITION_CEILING
+
+    def _budget_refusal(self, session) -> dict:
+        """The ninth refuses, typed, exactly as a ninth `suppose` line does.
+
+        Same `refusal_type` as `harness._route_suppose`'s budget arm, because
+        it is the same ceiling being spent — the prereg's *"a ninth refuses
+        with the same typed `assumption_budget` refusal"*, taken literally
+        rather than approximated with a route-local word.
+        """
+
+        return {
+            "route": "plain_input",
+            "status": "refused",
+            "refusal_type": REFUSAL_ASSUMPTION_BUDGET,
+            "detail": (
+                f"{SUPPOSITION_CEILING} suppositions are already live in "
+                "this session; retract one before another reading is "
+                "proposed. Nothing was served and nothing is claimed"
+            ),
+        }
 
     # -- the two served shapes -------------------------------------------
 
