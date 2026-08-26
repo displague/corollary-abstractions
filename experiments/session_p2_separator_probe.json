@@ -18,7 +18,7 @@
     "narrative.story",
     "tool.conform"
   ],
-  "builder_digest": "2a775b6394c744a8af96066f4a3a74697f0879436c26673462980e895848798c",
+  "builder_digest": "2ab995c35f9141dc06a84e8e61d7faa7bddbb4109dc1fe084677acb617b659ed",
   "built_by": "scripts/probe_separator_expressibility.py",
   "design": "docs/DESIGN-session-ledger.md",
   "design_clause": "\u00a76 P2 \u2014 separator expressibility. For ten hand-sealed ambiguous prompts: does any single admitted command distinguish the rival readings under exact evaluation? If no separator exists for most, the clarifying-question arm has nothing to ask and the conditional-answer arm wins by measurement. Committed either way.",
@@ -34,7 +34,7 @@
   "schema": "corollary.session-p2-separator-probe/1",
   "seal": {
     "digest_algorithm": "sha256 over the file's bytes with CRLF normalised to LF",
-    "file_digest": "d38395e8dc412816e2032a7f3e89a41609c6be8948c828659152e1d59b4054c2",
+    "file_digest": "c38ff2241bc3ccb173ce029e6d5e270a9aba90647281635e5060fdd78a8e7e83",
     "frozen_at": "2026-08-25",
     "how_a_reader_checks_that": "the seal is its own commit, earlier than this artifact's; tests/test_session_prereqs.py recomputes file_digest over the committed seal and compares",
     "prompt_count": 10,
@@ -44,21 +44,21 @@
           {
             "command": "twin programming.euclid.recursive",
             "gloss": "show me the twin group this algorithm belongs to",
-            "grammar_row": 4,
+            "grammar_row": 5,
             "reading_id": "p01.twin",
             "route": "twin"
           },
           {
             "command": "greatest common divisor euclid",
             "gloss": "find me the statement whose words these are",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p01.resolver",
             "route": "resolver"
           },
           {
             "command": "gcd euclid recursive",
             "gloss": "the same request in the corpus's own spelling",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p01.resolver_corpus_spelling",
             "route": "resolver"
           }
@@ -72,14 +72,14 @@
           {
             "command": "what is a lemma",
             "gloss": "give me the dictionary sense",
-            "grammar_row": 12,
+            "grammar_row": 13,
             "reading_id": "p02.gloss",
             "route": "gloss"
           },
           {
             "command": "lemma",
             "gloss": "give me what the corpus holds about lemmas",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p02.resolver",
             "route": "resolver"
           }
@@ -93,21 +93,21 @@
           {
             "command": "de morgan laws",
             "gloss": "resolve the words to a statement",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p03.resolver",
             "route": "resolver"
           },
           {
             "command": "twin logic.boolean_laws.de_morgan_laws",
             "gloss": "the twin group of the logic corpus's statement",
-            "grammar_row": 4,
+            "grammar_row": 5,
             "reading_id": "p03.twin_logic",
             "route": "twin"
           },
           {
             "command": "twin settheory.boolean_laws.de_morgan_laws",
             "gloss": "the twin group of the set-theory corpus's statement",
-            "grammar_row": 4,
+            "grammar_row": 5,
             "reading_id": "p03.twin_settheory",
             "route": "twin"
           }
@@ -121,14 +121,14 @@
           {
             "command": "twin trigonometry.identities.double_angle_cosine",
             "gloss": "the group of identities shaped like this one",
-            "grammar_row": 4,
+            "grammar_row": 5,
             "reading_id": "p04.twin",
             "route": "twin"
           },
           {
             "command": "double angle cosine identity",
             "gloss": "the statement whose words these are",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p04.resolver",
             "route": "resolver"
           }
@@ -149,14 +149,14 @@
           {
             "command": "x ^ 2",
             "gloss": "compute it \u2014 which needs a binding the prompt never gave",
-            "grammar_row": 9,
+            "grammar_row": 10,
             "reading_id": "p05.evaluate",
             "route": "evaluate"
           },
           {
             "command": "x squared",
             "gloss": "resolve the words against the graph",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p05.resolver",
             "route": "resolver"
           }
@@ -191,14 +191,14 @@
           {
             "command": "where does the observer think the marble is",
             "gloss": "answer from the agent's frame",
-            "grammar_row": 8,
+            "grammar_row": 9,
             "reading_id": "p07.belief",
             "route": "belief"
           },
           {
             "command": "marble located in",
             "gloss": "answer from what the graph states",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p07.resolver",
             "route": "resolver"
           }
@@ -219,7 +219,7 @@
           {
             "command": "corpus completeness",
             "gloss": "find what the graph states about completeness",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p08.resolver",
             "route": "resolver"
           }
@@ -233,21 +233,21 @@
           {
             "command": "2 ^ 10",
             "gloss": "compute the value",
-            "grammar_row": 9,
+            "grammar_row": 10,
             "reading_id": "p09.evaluate",
             "route": "evaluate"
           },
           {
             "command": "binary exponentiation",
             "gloss": "the committed algorithm for powers",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p09.resolver",
             "route": "resolver"
           },
           {
             "command": "twin programming.binexp.recursive",
             "gloss": "the twin group that algorithm belongs to",
-            "grammar_row": 4,
+            "grammar_row": 5,
             "reading_id": "p09.twin",
             "route": "twin"
           }
@@ -261,21 +261,21 @@
           {
             "command": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
             "gloss": "run the statement on these bindings",
-            "grammar_row": 6,
+            "grammar_row": 7,
             "reading_id": "p10.conform",
             "route": "conform"
           },
           {
             "command": "quadratic formula",
             "gloss": "show me the statement",
-            "grammar_row": 11,
+            "grammar_row": 12,
             "reading_id": "p10.resolver",
             "route": "resolver"
           },
           {
             "command": "twin algebra.polynomial_equations.quadratic_formula",
             "gloss": "show me the family it belongs to",
-            "grammar_row": 4,
+            "grammar_row": 5,
             "reading_id": "p10.twin",
             "route": "twin"
           }
@@ -316,7 +316,7 @@
           "answer_lines": 4,
           "command": "twin programming.euclid.recursive",
           "detail": "typed twin group 262: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "reading_id": "p01.twin",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -333,7 +333,7 @@
           "answer_lines": 6,
           "command": "greatest common divisor euclid",
           "detail": "words: 2 statements match ['common', 'divisor', 'euclid', 'greatest'] (score 5, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p01.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -350,7 +350,7 @@
           "answer_lines": 12,
           "command": "gcd euclid recursive",
           "detail": "words: 1 statements match ['euclid', 'gcd', 'recursive'] (score 7, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p01.resolver_corpus_spelling",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -406,7 +406,7 @@
           "answer_lines": 6,
           "command": "what is a lemma",
           "detail": "words: 2 statements match ['lemma'] (score 2, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 12,
+          "grammar_row": 13,
           "reading_id": "p02.gloss",
           "route_sealed": "gloss",
           "route_taken": "resolver",
@@ -423,7 +423,7 @@
           "answer_lines": 6,
           "command": "lemma",
           "detail": "words: 2 statements match ['lemma'] (score 2, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p02.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -483,7 +483,7 @@
           "answer_lines": 6,
           "command": "de morgan laws",
           "detail": "words: 2 statements match ['de', 'laws', 'morgan'] (score 5, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p03.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -500,7 +500,7 @@
           "answer_lines": 4,
           "command": "twin logic.boolean_laws.de_morgan_laws",
           "detail": "typed twin group 913: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "reading_id": "p03.twin_logic",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -517,7 +517,7 @@
           "answer_lines": 4,
           "command": "twin settheory.boolean_laws.de_morgan_laws",
           "detail": "typed twin group 913: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "reading_id": "p03.twin_settheory",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -568,7 +568,7 @@
           "answer_lines": 4,
           "command": "twin trigonometry.identities.double_angle_cosine",
           "detail": "typed twin group 210: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "reading_id": "p04.twin",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -585,7 +585,7 @@
           "answer_lines": 12,
           "command": "double angle cosine identity",
           "detail": "words: 1 statements match ['angle', 'cosine', 'double', 'identity'] (score 8, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p04.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -658,7 +658,7 @@
           "answer_lines": 11,
           "command": "x ^ 2",
           "detail": "expression: 7341 statements host ^(?0:V, 2)",
-          "grammar_row": 9,
+          "grammar_row": 10,
           "reading_id": "p05.evaluate",
           "route_sealed": "evaluate",
           "route_taken": "resolver",
@@ -673,7 +673,7 @@
           "answer_lines": 6,
           "command": "x squared",
           "detail": "words: 2 statements match ['squared', 'x'] (score 2, via ['lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p05.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -789,7 +789,7 @@
           "answer_lines": 2,
           "command": "where does the observer think the marble is",
           "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
-          "grammar_row": 8,
+          "grammar_row": 9,
           "reading_id": "p07.belief",
           "route_sealed": "belief",
           "route_taken": "dispatcher",
@@ -806,7 +806,7 @@
           "answer_lines": 2,
           "command": "marble located in",
           "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p07.resolver",
           "route_sealed": "resolver",
           "route_taken": "dispatcher",
@@ -873,7 +873,7 @@
           "answer_lines": 2,
           "command": "corpus completeness",
           "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register; abstaining rather than inventing a path (P-IH4: registered paths only)",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p08.resolver",
           "route_sealed": "resolver",
           "route_taken": "dispatcher",
@@ -923,7 +923,7 @@
           "answer_lines": 3,
           "command": "2 ^ 10",
           "detail": "2 ^ 10 = 1024",
-          "grammar_row": 9,
+          "grammar_row": 10,
           "reading_id": "p09.evaluate",
           "route_sealed": "evaluate",
           "route_taken": "evaluate",
@@ -938,7 +938,7 @@
           "answer_lines": 6,
           "command": "binary exponentiation",
           "detail": "words: 2 statements match ['binary', 'exponentiation'] (score 5, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p09.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -955,7 +955,7 @@
           "answer_lines": 4,
           "command": "twin programming.binexp.recursive",
           "detail": "typed twin group 206: 2 member statement(s); 2 groups list this statement and the strongest level is reported",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "reading_id": "p09.twin",
           "route_sealed": "twin",
           "route_taken": "twin",
@@ -1007,7 +1007,7 @@
           "answer_lines": 0,
           "command": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
           "detail": "does_not_parse: nothing was computed, and the named construct says why. A refusal is not a negative result about the statement",
-          "grammar_row": 6,
+          "grammar_row": 7,
           "reading_id": "p10.conform",
           "route_sealed": "conform",
           "route_taken": "conform",
@@ -1024,7 +1024,7 @@
           "answer_lines": 8,
           "command": "quadratic formula",
           "detail": "words: 1 statements match ['formula', 'quadratic'] (score 4, via ['keywords', 'lexicon', 'prose'])",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "reading_id": "p10.resolver",
           "route_sealed": "resolver",
           "route_taken": "resolver",
@@ -1041,7 +1041,7 @@
           "answer_lines": 0,
           "command": "twin algebra.polynomial_equations.quadratic_formula",
           "detail": "no group in reports/signature_matches.json lists 'algebra.polynomial_equations.quadratic_formula' as a member; that is a statement about this committed ledger and says nothing about statements it does not cover",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "reading_id": "p10.twin",
           "route_sealed": "twin",
           "route_taken": "twin",

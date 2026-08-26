@@ -569,6 +569,20 @@ class CoreSession:
         default_factory=set
     )
     resolver_index: object | None = None
+    #: The session ledger's live assumption set, or None.
+    #:
+    #: `None` is the shipped default and it is what makes B10 checkable at
+    #: all: with no set attached every route below behaves exactly as it did
+    #: before the ledger existed, byte for byte, because the code that could
+    #: behave differently is guarded on this field being present. A
+    #: `session_ledger.AssumptionSet` is attached only by a recorder or a
+    #: replayer, never by `main()` and never by the chat skin — ¶DEV-1's rule
+    #: that requests replay into fresh sessions is untouched.
+    #:
+    #: Deliberately duck-typed rather than imported: `session_ledger` imports
+    #: this module for its rendering, and a type annotation here would be a
+    #: cycle bought for nothing.
+    assumptions: object | None = None
 
     # -- boot -------------------------------------------------------------
 
@@ -1481,12 +1495,91 @@ def _route_belief(session: "CoreSession", text: str) -> dict | None:
     }
 
 
-def _route_evaluate(text: str) -> dict | None:
+def _live_bindings(
+    session: "CoreSession | None", text: str
+) -> tuple[dict | None, dict | None]:
+    """Bindings a live assumption supplies for this line, or a conflict.
+
+    Returns ``(bindings, conflict_verdict)`` and at most one is not None.
+    The rules, in the order they matter:
+
+    1. **No ledger, no change.** With no assumption set attached this
+       returns ``(None, None)`` before doing any work, so every line the
+       harness has ever served is served by the same code path it always
+       was. That is B10's fence at its cheapest point.
+    2. **Only names the line actually leaves free.** `evaluate.free_names`
+       says which names the expression uses and does not bind. A name the
+       line never mentions is never asked for, so a live assumption about
+       something else is never read and never cited.
+    3. **All or nothing.** If the live set cannot cover every free name, the
+       line still cannot be computed, so nothing is read — a citation for an
+       assumption that did not produce an answer would be a citation the
+       answer did not earn.
+    4. **The read is the citation.** `AssumptionSet.binding_for` fires the
+       read barrier, and it is the only door. A `Conflict` back from it
+       means the person supposed the binding does NOT hold, and the honest
+       reply is a typed refusal naming the assumption rather than a number
+       computed under a premise they withdrew.
+    """
+
+    live = getattr(session, "assumptions", None) if session else None
+    if live is None:
+        return None, None
+    from evaluate import free_names  # noqa: PLC0415
+
+    free = free_names(text)
+    if not free:
+        return None, None
+    available = live.bound_names()
+    if not set(free).issubset(available):
+        return None, None
+    bindings: dict[str, object] = {}
+    for name in free:
+        value = live.binding_for(name)
+        if value is None:
+            return None, None
+        if type(value).__name__ == "Conflict":
+            return None, {
+                "route": "evaluate",
+                "status": "refused",
+                "refusal_type": "assumption_conflict",
+                "detail": (
+                    f"a live assumption says {value.atom!r}, so "
+                    f"{name!r} is not bound to a value here; nothing was "
+                    "computed and nothing is claimed"
+                ),
+                "evidence": [f"assumption {value.assumption_id}"],
+            }
+        bindings[name] = value
+    return bindings, None
+
+
+def _with_bindings(text: str, bindings: dict) -> str:
+    """`x ^ 2` under `x = 5` becomes `x = 5, x ^ 2`.
+
+    Composed rather than injected into `evaluate`'s internals so a session
+    binding and a same-line binding are the SAME thing to the evaluator —
+    `harness.py:2083-2091` already routes `suppose x = 5, x ^ 2` this way,
+    and the ledger is that behaviour extended from one line to a session
+    rather than a second mechanism beside it. The rendered answer therefore
+    carries its `given` line exactly as a typed binding would, which is what
+    makes the dependence visible to the person and not only to the journal.
+    """
+
+    prefix = ", ".join(f"{name} = {bindings[name]}" for name in sorted(bindings))
+    return f"{prefix}, {text}"
+
+
+def _route_evaluate(text: str, session: "CoreSession | None" = None) -> dict | None:
     """Compute, if the line contains something computable. Else `None`.
 
     Only wins when it can actually produce a value: an expression with an
     unbound variable, or no expression at all, falls through to the rest of
     the chain rather than refusing on everyone else's behalf.
+
+    With a session ledger attached, an expression whose free names are all
+    supplied by live assumptions is computed under them and the assumptions
+    are cited. Without one, this function is exactly what it was.
 
     **A registered bound is the one exception (E0e, ROADMAP-v0.20 §4c).**
     `ResourceBound` means this route READ the line, understood it, and
@@ -1495,6 +1588,28 @@ def _route_evaluate(text: str) -> dict | None:
     end in a generic abstention, which tells the person the corpus does not
     ground their line when the truth is that this evaluator declines to
     render a number that wide.
+    """
+
+    plain = _evaluate_text(text)
+    if plain is not None:
+        # Includes E0e's `refused`: a line this route READ and declined is
+        # answered, and a live assumption has no business overriding it.
+        return plain
+    bindings, conflict = _live_bindings(session, text)
+    if conflict is not None:
+        return conflict
+    if not bindings:
+        return None
+    return _evaluate_text(_with_bindings(text, bindings))
+
+
+def _evaluate_text(text: str) -> dict | None:
+    """The evaluation itself, unchanged from what it always was.
+
+    Split out of `_route_evaluate` so the ledger's arm can call it a second
+    time on a line composed with the live bindings, without the ledger being
+    able to change how a line evaluates. Every byte of this function
+    predates the ledger.
     """
 
     from evaluate import EvalError, ResourceBound, evaluate, verify  # noqa: PLC0415
@@ -1555,8 +1670,23 @@ def _route_evaluate(text: str) -> dict | None:
     }
 
 
-def _route_suppose(claim: str) -> dict:
-    """Hold a typed claim inside a frame the person owns."""
+def _route_suppose(claim: str, session: "CoreSession | None" = None) -> dict:
+    """Hold a typed claim inside a frame the person owns.
+
+    With a session ledger attached the claim ALSO becomes an Assumption
+    record that outlives this line — which is the whole behavioural change
+    of DESIGN-session-ledger slice 1, and the reason a supposition stops
+    being something the next turn silently forgets.
+
+    **The rendered bytes do not change.** A declaring turn cites nothing
+    (§3: `assumptions_declared` and `assumptions_cited` are disjoint on that
+    turn by construction), so B10 requires it to render byte-identically to
+    the same line served statelessly, and it does: the declaration is
+    recorded beside the render, never inside it. The one exception is the
+    budget refusal below, which cannot exist without a ledger — the
+    recording protocol's cap of 8 live assumptions is why a recorded session
+    never contains one.
+    """
 
     from supposition import render as render_supposition  # noqa: PLC0415
     from supposition import suppose  # noqa: PLC0415
@@ -1567,6 +1697,20 @@ def _route_suppose(claim: str) -> dict:
             "status": "refused",
             "detail": f"{SUPPOSE_COMMAND!r} needs a claim after it",
         }
+    live = getattr(session, "assumptions", None) if session else None
+    if live is not None:
+        declared = live.declare(claim, live.pending_turn_index)
+        if isinstance(declared, str):
+            return {
+                "route": "supposition",
+                "status": "refused",
+                "refusal_type": declared,
+                "detail": (
+                    f"{live.cap} assumptions are already live in this "
+                    "session; retract one before declaring another. Nothing "
+                    "was held and nothing is claimed"
+                ),
+            }
     held = suppose(claim)
     return {
         "route": "supposition",
@@ -1576,6 +1720,72 @@ def _route_suppose(claim: str) -> dict:
         "status": "held" if held.accepted else "waiting",
         "detail": f"held as {held.status} in a frame you own",
         "answer": render_supposition(held),
+    }
+
+
+#: The lifecycle half of the Assumption record's `status` alphabet. §3
+#: registers {live, superseded, retracted}; supersession happens on its own
+#: when a person re-supposes the same subject, and retraction needs a word.
+RETRACT_COMMAND = "retract"
+
+
+def _route_retract(session: "CoreSession | None", assumption_id: str) -> dict:
+    """`retract <assumption-id>` — withdraw a live assumption, by name.
+
+    This turn READS the assumption's normal form, to name what was
+    withdrawn, so it cites it. That is not incidental: a retraction that
+    could not say what it retracted would be a receipt for nothing, and a
+    turn that reads through the barrier is a turn B12 can corroborate.
+
+    A retract turn is a LIFECYCLE turn, not an answer: its
+    `resolution.kind` is `supposition`, so it is outside the
+    binding-dependence denominator for the same reason a declaring turn is.
+    """
+
+    live = getattr(session, "assumptions", None) if session else None
+    if not assumption_id:
+        return {
+            "route": "retraction",
+            "status": "refused",
+            "refusal_type": "unknown_assumption",
+            "detail": f"{RETRACT_COMMAND!r} needs one assumption id after it",
+        }
+    if live is None:
+        return {
+            "route": "retraction",
+            "status": "refused",
+            "refusal_type": "unknown_assumption",
+            "detail": (
+                "this session keeps no assumption ledger, so there is "
+                "nothing to retract; nothing was changed"
+            ),
+        }
+    outcome = live.retract(assumption_id)
+    if isinstance(outcome, str):
+        return {
+            "route": "retraction",
+            "status": "refused",
+            "refusal_type": outcome,
+            "detail": (
+                f"no live assumption {assumption_id!r} in this session; "
+                "nothing was changed"
+            ),
+        }
+    return {
+        "route": "retraction",
+        # `canceled` is the frozen alphabet's own word for a person
+        # withdrawing something they opened. Not `solved`: nothing was
+        # computed, and not `refused`: the withdrawal succeeded.
+        "status": "canceled",
+        "detail": f"{outcome.assumption_id} retracted",
+        "answer": [
+            f"assumption : {outcome.assumption_id}",
+            f"retracted  : {'not ' if not outcome.polarity else ''}"
+            f"{outcome.atom}",
+            "",
+            "no later answer in this session will consult it; answers "
+            "already given that cited it are unchanged and still say so",
+        ],
     }
 
 
@@ -2085,10 +2295,12 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
         # computation under a frame, not a claim to hold. `suppose x=5, what
         # is x^2` should answer 25, because the frame supplies the binding
         # and arithmetic is exact.
-        computed = _route_evaluate(rest.strip())
+        computed = _route_evaluate(rest.strip(), session)
         if computed is not None:
             return {"line": line, **computed}
-        return {"line": line, **_route_suppose(rest.strip())}
+        return {"line": line, **_route_suppose(rest.strip(), session)}
+    if head.lower() == RETRACT_COMMAND:
+        return {"line": line, **_route_retract(session, rest.strip())}
     if head.lower() == TWIN_COMMAND:
         return {"line": line, **_route_twin(session, rest.strip())}
     if head.lower() == REACHABLE_COMMAND:
@@ -2101,7 +2313,7 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
     believed = _route_belief(session, line)
     if believed is not None:
         return {"line": line, **believed}
-    computed = _route_evaluate(line)
+    computed = _route_evaluate(line, session)
     if computed is not None:
         return {"line": line, **computed}
     if _existing_file(repo_root, line) or _looks_like_path(line):

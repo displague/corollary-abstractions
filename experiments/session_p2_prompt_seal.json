@@ -23,21 +23,21 @@
         {
           "reading_id": "p01.twin",
           "command": "twin programming.euclid.recursive",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "route": "twin",
           "gloss": "show me the twin group this algorithm belongs to"
         },
         {
           "reading_id": "p01.resolver",
           "command": "greatest common divisor euclid",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "find me the statement whose words these are"
         },
         {
           "reading_id": "p01.resolver_corpus_spelling",
           "command": "gcd euclid recursive",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "the same request in the corpus's own spelling"
         }
@@ -51,14 +51,14 @@
         {
           "reading_id": "p02.gloss",
           "command": "what is a lemma",
-          "grammar_row": 12,
+          "grammar_row": 13,
           "route": "gloss",
           "gloss": "give me the dictionary sense"
         },
         {
           "reading_id": "p02.resolver",
           "command": "lemma",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "give me what the corpus holds about lemmas"
         }
@@ -72,21 +72,21 @@
         {
           "reading_id": "p03.resolver",
           "command": "de morgan laws",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "resolve the words to a statement"
         },
         {
           "reading_id": "p03.twin_logic",
           "command": "twin logic.boolean_laws.de_morgan_laws",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "route": "twin",
           "gloss": "the twin group of the logic corpus's statement"
         },
         {
           "reading_id": "p03.twin_settheory",
           "command": "twin settheory.boolean_laws.de_morgan_laws",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "route": "twin",
           "gloss": "the twin group of the set-theory corpus's statement"
         }
@@ -100,14 +100,14 @@
         {
           "reading_id": "p04.twin",
           "command": "twin trigonometry.identities.double_angle_cosine",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "route": "twin",
           "gloss": "the group of identities shaped like this one"
         },
         {
           "reading_id": "p04.resolver",
           "command": "double angle cosine identity",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "the statement whose words these are"
         }
@@ -128,14 +128,14 @@
         {
           "reading_id": "p05.evaluate",
           "command": "x ^ 2",
-          "grammar_row": 9,
+          "grammar_row": 10,
           "route": "evaluate",
           "gloss": "compute it — which needs a binding the prompt never gave"
         },
         {
           "reading_id": "p05.resolver",
           "command": "x squared",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "resolve the words against the graph"
         }
@@ -170,14 +170,14 @@
         {
           "reading_id": "p07.belief",
           "command": "where does the observer think the marble is",
-          "grammar_row": 8,
+          "grammar_row": 9,
           "route": "belief",
           "gloss": "answer from the agent's frame"
         },
         {
           "reading_id": "p07.resolver",
           "command": "marble located in",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "answer from what the graph states"
         }
@@ -198,7 +198,7 @@
         {
           "reading_id": "p08.resolver",
           "command": "corpus completeness",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "find what the graph states about completeness"
         }
@@ -212,21 +212,21 @@
         {
           "reading_id": "p09.evaluate",
           "command": "2 ^ 10",
-          "grammar_row": 9,
+          "grammar_row": 10,
           "route": "evaluate",
           "gloss": "compute the value"
         },
         {
           "reading_id": "p09.resolver",
           "command": "binary exponentiation",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "the committed algorithm for powers"
         },
         {
           "reading_id": "p09.twin",
           "command": "twin programming.binexp.recursive",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "route": "twin",
           "gloss": "the twin group that algorithm belongs to"
         }
@@ -240,23 +240,141 @@
         {
           "reading_id": "p10.conform",
           "command": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
-          "grammar_row": 6,
+          "grammar_row": 7,
           "route": "conform",
           "gloss": "run the statement on these bindings"
         },
         {
           "reading_id": "p10.resolver",
           "command": "quadratic formula",
-          "grammar_row": 11,
+          "grammar_row": 12,
           "route": "resolver",
           "gloss": "show me the statement"
         },
         {
           "reading_id": "p10.twin",
           "command": "twin algebra.polynomial_equations.quadratic_formula",
-          "grammar_row": 4,
+          "grammar_row": 5,
           "route": "twin",
           "gloss": "show me the family it belongs to"
+        }
+      ]
+    }
+  ],
+  "amendments": [
+    {
+      "amendment": 1,
+      "dated": "2026-08-25",
+      "what_changed": "the `grammar_row` integer on 19 of the 25 readings, from the index the row held when this seal was written to the index it holds now.",
+      "what_did_not_change": "the sealed QUESTION. Not one prompt, `why_ambiguous`, reading `command`, reading `route` or reading `gloss` is touched. The route names are what identify a reading's grammar row; the integers were derived pointers to them.",
+      "why": "v0.21's session ledger added a `retract <assumption-id>` row to serve_chat.LINE_GRAMMAR — required by DESIGN-session-ledger §3's Assumption status alphabet, which registers `retracted` and had no word for it. Inserting it shifted every row after `suppose` by one, so every integer at or above 4 in this file became wrong.",
+      "why_corrected_in_place_rather_than_annotated": "the deciding question this repository asks about a repair is what it costs the reader's ability to check. This seal is hand-authored, so its bytes are not a reproduction proof that a note would destroy; and a wrong integer in a canonical artifact is a false sentence that a note a reader may never open cannot repair. The precedent is the v0.20 conformance review's in-place correction, not the voice review's untouched byte-reproduced artifact.",
+      "consequence": "scripts/probe_separator_expressibility.py now resolves a reading's row by ROUTE NAME rather than by index, so the same shift cannot silently mis-read this file again, and the probe artifact was recomputed against the current grammar.",
+      "readings_corrected": [
+        {
+          "reading_id": "p01.twin",
+          "was": 4,
+          "now": 5
+        },
+        {
+          "reading_id": "p01.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p01.resolver_corpus_spelling",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p02.gloss",
+          "was": 12,
+          "now": 13
+        },
+        {
+          "reading_id": "p02.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p03.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p03.twin_logic",
+          "was": 4,
+          "now": 5
+        },
+        {
+          "reading_id": "p03.twin_settheory",
+          "was": 4,
+          "now": 5
+        },
+        {
+          "reading_id": "p04.twin",
+          "was": 4,
+          "now": 5
+        },
+        {
+          "reading_id": "p04.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p05.evaluate",
+          "was": 9,
+          "now": 10
+        },
+        {
+          "reading_id": "p05.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p07.belief",
+          "was": 8,
+          "now": 9
+        },
+        {
+          "reading_id": "p07.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p08.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p09.evaluate",
+          "was": 9,
+          "now": 10
+        },
+        {
+          "reading_id": "p09.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p09.twin",
+          "was": 4,
+          "now": 5
+        },
+        {
+          "reading_id": "p10.conform",
+          "was": 6,
+          "now": 7
+        },
+        {
+          "reading_id": "p10.resolver",
+          "was": 11,
+          "now": 12
+        },
+        {
+          "reading_id": "p10.twin",
+          "was": 4,
+          "now": 5
         }
       ]
     }

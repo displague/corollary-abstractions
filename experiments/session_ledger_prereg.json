@@ -192,5 +192,39 @@
     "residual_risk_verbatim": "**Residual risk, named and priced only partway:** cited-but-inert assumptions. `assumptions_cited` is emitted by the serving path — the same party B4 scores — and an assumption mechanically threaded into answer bytes flips B4 without the answer *meaning* depending on it. B12 (read-derived citations) and B13 (the registered arm-blind hand audit) narrow it; B13's floor decides whether the claim ships with the risk named or measured. The gate proves byte-dependence; byte-dependence is the claim served — nothing stronger."
   },
 
-  "amendments": []
+  "amendments": [
+    {
+      "amendment": 1,
+      "dated": "2026-08-25",
+      "made_before": "any journal was recorded. The recorder exists; experiments/sessions/ does not.",
+      "why": "DESIGN-session-ledger §6 P3 step (1) requires the recorder's code digest in the recording protocol, and the C3 fix is that it must be there BEFORE recording begins. The recorder could not be digested before it was written, and the clauses had to freeze before the recorder so they could not be written around it — so the protocol froze first with the field null and a written status, and this amendment fills it in the gap between the two.",
+      "adds": {
+        "recorder_code_digest": "e3070dd3b118aee7681b8091b5db6a434ba6c54551081794228e9eb91d087c43",
+        "recorder_code_digest_derivation": "sha256 over the canonical-JSON list of [path, canonical_lf_sha256(path)] pairs for scripts/session_ledger.py and scripts/session_recorder.py, in that order, via session_recorder.recorder_code_digest",
+        "recorder_modules": [
+          "scripts/session_ledger.py",
+          "scripts/session_recorder.py"
+        ],
+        "why_two_modules": "'the recorder' is not one file. The journal object and the thing that drives it are one instrument, and pinning half of it would leave the other half free to move under a frozen protocol."
+      },
+      "also_records_three_construction_decisions_the_protocol_did_not_anticipate": {
+        "binding_dependent_turn": {
+          "operative_definition": "a turn whose `assumptions_cited` is non-empty AND whose `resolution.kind` is `exact`.",
+          "why_this_and_not_just_non_empty_citations": "§3 excludes DECLARING turns from the binding-dependence denominator because a declaring turn cites nothing. The same reasoning excludes every LIFECYCLE turn. A `retract` turn does cite — it reads the retracted assumption's normal form to name what was withdrawn, which is what makes it corroborable under B12 — but what it produces is a lifecycle acknowledgement, not an answer whose value depends on the assumption. Counting it as binding-dependent would put a turn in B4's denominator that is byte-dependent for a trivial reason, which is exactly the cited-but-inert dilution §11 names as the residual risk. So the denominator is citations plus `kind == exact`, and this is recorded here rather than decided inside the scorer.",
+          "implemented_by": "session_ledger.is_binding_dependent"
+        },
+        "the_retract_surface": {
+          "what": "one new LINE_GRAMMAR row, `retract <assumption-id>` -> route `retraction`, statuses `canceled` / `refused`.",
+          "why_it_was_needed": "§3 registers the Assumption status alphabet {live, superseded, retracted}. Supersession happens on its own when a person re-supposes the same subject, so withdrawal was the one transition with no word for it, and a status the surface cannot reach is a status the record cannot honestly carry.",
+          "consequences_recorded_rather_than_absorbed": "adding a row moves `line_grammar_digest` and `capability_sheet_digest`, which is correct — a journal recorded before the surface changed must not replay against the surface after. docs/SPEC-chat-completions-skin.md §7's normative table is amended in the same commit, including two rows (`conform`, and the `evaluate` route's registered-bound `refused`) that were already served and had never been written into it. On the chat skin the row always refuses: ¶DEV-1 replays requests into fresh sessions and attaches no assumption set."
+        },
+        "the_budget_refusal_and_B10": {
+          "tension": "§3 requires a typed `assumption_budget` refusal on a ninth live assumption. That refusal cannot exist without a ledger, so it does NOT render byte-identically to stateless service — and it cites nothing, which is the condition B10 quantifies over.",
+          "resolution": "by construction, not by exemption. The recording protocol caps live assumptions at 8, so a RECORDED session never declares a ninth and B10's denominator never contains a budget refusal. The refusal still has to work, and it is exercised in tests/test_session_ledger.py, outside the sealed corpus.",
+          "stated_here_because": "an exclusion nobody decided is an exclusion by accident (ROADMAP-v0.21 §1.1's own placement rule), and this one is decided in advance and in writing."
+        }
+      },
+      "what_this_amendment_does_not_do": "it changes no clause, no floor, no seed, no cap and no verdict. Every number in this file was frozen before the recorder existed and none of them moved."
+    }
+  ]
 }

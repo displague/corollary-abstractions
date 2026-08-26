@@ -159,10 +159,22 @@ def _registered(repo_root: Path) -> tuple[str, ...]:
     return tuple(sorted(session.matrix.registered_ids()))
 
 
-def _row_requires(grammar_row: int) -> tuple[str, ...]:
+def _row_requires(route: str) -> tuple[str, ...]:
+    """A reading's grammar row, resolved by ROUTE NAME rather than index.
+
+    The seal carries both. It carried only the index at first, and v0.21's
+    session ledger then inserted a `retract` row and shifted twenty-one of
+    the twenty-five readings' indices — silently, because an index that is
+    wrong is still an index. Route names are stable where positions are not,
+    and the KeyError below is the loud version of the same event.
+    """
+
     from serve_chat import LINE_GRAMMAR  # noqa: PLC0415
 
-    return tuple(LINE_GRAMMAR[grammar_row]["requires"])
+    for row in LINE_GRAMMAR:
+        if row["route"] == route:
+            return tuple(row["requires"])
+    raise KeyError(f"no LINE_GRAMMAR row serves route {route!r}")
 
 
 def _first_difference(left: dict, right: dict) -> list[str]:
@@ -191,7 +203,7 @@ def probe(repo_root: Path) -> dict:
             act_text = _canonical(served, ACT_KEYS)
             served_digest = _digest(served_text)
             act_digest = _digest(act_text)
-            requires = _row_requires(reading["grammar_row"])
+            requires = _row_requires(reading["route"])
             results.append(
                 {
                     "reading_id": reading["reading_id"],

@@ -60,9 +60,13 @@ class P1CommandBound(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_builder_digest_is_the_builders_bytes(self) -> None:
+        """Canonical-LF, so a checkout that rewrites line endings does not
+        make the artifact disagree with its own builder."""
+
+        payload = P1_BUILDER.read_bytes().replace(b"\r\n", b"\n")
         self.assertEqual(
             self.artifact["builder_digest"],
-            hashlib.sha256(P1_BUILDER.read_bytes()).hexdigest(),
+            hashlib.sha256(payload).hexdigest(),
         )
 
     def test_line_grammar_digest_matches_the_live_grammar(self) -> None:

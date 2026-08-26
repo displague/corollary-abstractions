@@ -11,9 +11,12 @@ artifact does not carry.
 
 ## The counting rule, stated before any number
 
-The template classes are the fourteen rows of ``serve_chat.LINE_GRAMMAR``,
-in their committed order — that tuple *is* the registered grammar, and the
-capability sheet publishes it row by row (`serve_chat.py:1752-1773`).
+The template classes are the rows of ``serve_chat.LINE_GRAMMAR``, in their
+committed order — that tuple *is* the registered grammar, and the capability
+sheet publishes it row by row. Classes are filled by ROUTE NAME, never by
+row index: v0.21's own session ledger inserted a row and shifted everything
+after it, and a builder that quietly attached one class's analysis to
+another's row would produce a plausible wrong artifact rather than an error.
 
 A line is **admitted by a class** when two things hold:
 
@@ -319,6 +322,7 @@ def _gloss_vocabulary() -> dict:
 def _classes(repo_root: Path) -> tuple[list[dict], dict]:
     from serve_chat import LINE_GRAMMAR  # noqa: PLC0415
     from harness import CONTEXT_KINDS  # noqa: PLC0415
+    from session_ledger import LIVE_ASSUMPTION_CAP, TURN_CAP  # noqa: PLC0415
 
     words = _statement_vocabulary(repo_root)
     owns = _owns_vocabulary(repo_root)
@@ -394,11 +398,23 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         }
         rows.append(entry)
 
-    def _fill(position: int, **fields) -> None:
-        rows[position].update(fields)
+    by_route = {row["route"]: row for row in rows}
+
+    def _fill(route: str, **fields) -> None:
+        """Fill a class by ROUTE NAME, never by row index.
+
+        The first version of this script filled by index, and v0.21's own
+        session ledger then inserted a row into `LINE_GRAMMAR` and shifted
+        every class after it. Route names are stable where positions are
+        not, and a builder that silently attaches the `owns` analysis to the
+        `twin` row is a builder that produces a plausible wrong artifact.
+        The KeyError below is the loud version of the same event.
+        """
+
+        by_route[route].update(fields)
 
     _fill(
-        0,
+        "none",
         bound_kind="closed",
         slots=[],
         admitted_commands=1,
@@ -406,7 +422,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=None,
     )
     _fill(
-        1,
+        "resolver_context",
         bound_kind="closed",
         slots=[
             {
@@ -444,7 +460,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=words["statement_ids"],
     )
     _fill(
-        2,
+        "ownership",
         bound_kind="open",
         slots=[
             {
@@ -474,7 +490,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         ),
     )
     _fill(
-        3,
+        "supposition",
         bound_kind="open",
         slots=[
             {
@@ -503,7 +519,43 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         ),
     )
     _fill(
-        4,
+        "retraction",
+        bound_kind="closed",
+        slots=[
+            {
+                "name": "assumption-id",
+                "kind": "closed",
+                "size": TURN_CAP,
+                "vocabulary": "session_assumption_ids",
+                "note": (
+                    "ids are minted `aNNN` in declaration order within one "
+                    "session, and a session is capped at "
+                    f"{TURN_CAP} turns, so at most {TURN_CAP} assumptions "
+                    "can ever be declared in one — the ceiling is the turn "
+                    "cap, not the live-assumption cap of "
+                    f"{LIVE_ASSUMPTION_CAP}, because a retracted or "
+                    "superseded id stays a real id"
+                ),
+            }
+        ],
+        admitted_commands=TURN_CAP,
+        counting=(
+            "one line per assumption id a session can hold. This is the only "
+            "class in the grammar whose vocabulary is SESSION-scoped rather "
+            "than corpus-scoped: `a001` names different claims in different "
+            "sessions, so the number is a per-session ceiling and the "
+            "artifact says so rather than multiplying it by anything"
+        ),
+        answering_vocabulary=LIVE_ASSUMPTION_CAP,
+        answering_note=(
+            "only a LIVE assumption can be retracted, and §3 caps live "
+            "assumptions at "
+            f"{LIVE_ASSUMPTION_CAP}; the rest refuse with "
+            "`unknown_assumption`"
+        ),
+    )
+    _fill(
+        "twin",
         bound_kind="closed",
         slots=[
             {
@@ -522,7 +574,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=twin.get("members"),
     )
     _fill(
-        5,
+        "closure",
         bound_kind="closed",
         slots=[
             {
@@ -547,7 +599,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=reach.get("pairs"),
     )
     _fill(
-        6,
+        "conform",
         bound_kind="open",
         slots=[
             {
@@ -576,7 +628,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=conform.get("entries"),
     )
     _fill(
-        7,
+        "story",
         bound_kind="open",
         slots=[
             {
@@ -600,7 +652,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_note="one committed story, verified rather than invented",
     )
     _fill(
-        8,
+        "belief",
         bound_kind="open",
         slots=[
             {
@@ -625,7 +677,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=None,
     )
     _fill(
-        9,
+        "evaluate",
         bound_kind="open",
         slots=[
             {
@@ -645,7 +697,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=None,
     )
     _fill(
-        10,
+        "write_gate",
         bound_kind="open",
         slots=[
             {
@@ -671,7 +723,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_note=gate["reason"],
     )
     _fill(
-        11,
+        "resolver",
         bound_kind="open",
         slots=[
             {
@@ -691,7 +743,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         ),
     )
     _fill(
-        12,
+        "gloss",
         bound_kind="gated",
         slots=[
             {
@@ -717,7 +769,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=gloss.get("lemmas"),
     )
     _fill(
-        13,
+        "dispatcher",
         bound_kind="open",
         slots=[
             {
@@ -835,7 +887,17 @@ def _finding(totals: dict, rows: list[dict]) -> str:
 
 
 def _self_digest() -> str:
-    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    """This builder's own bytes, CRLF folded to LF.
+
+    The committed convention (`experiments/conformance_prereg.json`'s
+    `digest_algorithm`), and not a stylistic choice: git rewrites line
+    endings on checkout on this workstation, so a raw-bytes self-digest
+    would make the artifact disagree with its own builder on the next
+    checkout — a red test with no defect behind it.
+    """
+
+    payload = Path(__file__).read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def build(repo_root: Path) -> dict:
@@ -887,6 +949,20 @@ def build(repo_root: Path) -> dict:
                 "times"
             ),
         },
+        "measured_against": (
+            "the grammar whose digest this artifact carries, and only that "
+            "one. P1 was first computed against a 14-row grammar and "
+            "committed; v0.21's session ledger then added the `retract "
+            "<assumption-id>` row its own §3 status alphabet required, which "
+            "moved the grammar this measurement is OF. The artifact is "
+            "recomputed rather than annotated: P1 is a computation over a "
+            "committed input, not a control that ran and read unfavourably, "
+            "so the record-over-rerun rule does not reach it, and a bound "
+            "measured against a grammar that no longer exists would be a "
+            "false sentence in a canonical artifact. The first reading and "
+            "this one are both in the history, and `line_grammar_digest` "
+            "dates each of them exactly."
+        ),
         "classes": rows,
         **extra,
         "finding": _finding(extra["totals"], rows),

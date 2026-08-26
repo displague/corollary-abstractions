@@ -1,5 +1,5 @@
 {
-  "builder_digest": "9438031cadd139df1c4c5064a5cac0877c0b67c73bc21ea658dac181b10df6e2",
+  "builder_digest": "4527f73250dec0d049076cccdadb7ad82ab7110b060afb4a6faffc6f9957141d",
   "built_by": "scripts/measure_command_bound.py",
   "classes": [
     {
@@ -78,10 +78,30 @@
       "unbounded_reason": "claim is free text; the supposition route refuses no claim for being outside a vocabulary, because holding a claim is not checking it"
     },
     {
+      "admitted_commands": 64,
+      "answering_note": "only a LIVE assumption can be retracted, and \u00a73 caps live assumptions at 8; the rest refuse with `unknown_assumption`",
+      "answering_vocabulary": 8,
+      "bound_kind": "closed",
+      "class_index": 4,
+      "counting": "one line per assumption id a session can hold. This is the only class in the grammar whose vocabulary is SESSION-scoped rather than corpus-scoped: `a001` names different claims in different sessions, so the number is a per-session ceiling and the artifact says so rather than multiplying it by anything",
+      "example": "retract a001",
+      "form": "retract <assumption-id>",
+      "route": "retraction",
+      "slots": [
+        {
+          "kind": "closed",
+          "name": "assumption-id",
+          "note": "ids are minted `aNNN` in declaration order within one session, and a session is capped at 64 turns, so at most 64 assumptions can ever be declared in one \u2014 the ceiling is the turn cap, not the live-assumption cap of 8, because a retracted or superseded id stays a real id",
+          "size": 64,
+          "vocabulary": "session_assumption_ids"
+        }
+      ]
+    },
+    {
       "admitted_commands": 12589,
       "answering_vocabulary": 12589,
       "bound_kind": "closed",
-      "class_index": 4,
+      "class_index": 5,
       "counting": "one line per statement id the committed twin ledger lists; an id outside the ledger reaches the route and is answered `exhausted`, which is a refusal to name a group and is not counted",
       "example": "twin programming.dfactorial.recursive",
       "form": "twin <statement-id>",
@@ -99,7 +119,7 @@
       "admitted_commands": 8,
       "answering_vocabulary": 8,
       "bound_kind": "closed",
-      "class_index": 5,
+      "class_index": 6,
       "counting": "the manifest's (world_id, path) pairs, counted as pairs rather than as a product: an unlisted path is refused by name",
       "example": "reachable visual.rt0000 data/closure_targets/visual.rt0000.reachable.0.state.json",
       "form": "reachable <world-id> <target-path>",
@@ -124,7 +144,7 @@
       "admitted_commands": null,
       "answering_vocabulary": 19,
       "bound_kind": "open",
-      "class_index": 6,
+      "class_index": 7,
       "example": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
       "form": "conform <statement-id> <bindings>",
       "route": "conform",
@@ -149,7 +169,7 @@
       "answering_note": "one committed story, verified rather than invented",
       "answering_vocabulary": 1,
       "bound_kind": "open",
-      "class_index": 7,
+      "class_index": 8,
       "example": "tell me a story",
       "form": "<story request>",
       "route": "story",
@@ -167,7 +187,7 @@
       "admitted_commands": null,
       "answering_vocabulary": null,
       "bound_kind": "open",
-      "class_index": 8,
+      "class_index": 9,
       "example": "where does the observer think the marble is",
       "form": "<belief narration> / where does A think B is",
       "route": "belief",
@@ -191,7 +211,7 @@
       "admitted_commands": null,
       "answering_vocabulary": null,
       "bound_kind": "open",
-      "class_index": 9,
+      "class_index": 10,
       "example": "x = 5, x ^ 2",
       "form": "<computable relation or expression>",
       "route": "evaluate",
@@ -210,7 +230,7 @@
       "answering_note": "the vocabulary is the working tree, which changes with every commit including the one carrying this artifact; a count that cannot be frozen is not a bound, and a self-referential count would make the reproduction check red for reasons unrelated to the grammar",
       "answering_vocabulary": null,
       "bound_kind": "open",
-      "class_index": 10,
+      "class_index": 11,
       "example": "staging/proposal.json",
       "form": "<repo-relative path>",
       "route": "write_gate",
@@ -229,7 +249,7 @@
       "answering_note": "the resolver can BIND or ASK about committed statements and nothing else, so its answering vocabulary is the statement set even though its input language is not",
       "answering_vocabulary": 14830,
       "bound_kind": "open",
-      "class_index": 11,
+      "class_index": 12,
       "example": "de morgan laws",
       "form": "<free text the graph claims>",
       "route": "resolver",
@@ -247,7 +267,7 @@
       "admitted_commands": null,
       "answering_vocabulary": null,
       "bound_kind": "gated",
-      "class_index": 12,
+      "class_index": 13,
       "counting": "two carrier forms (`what is X`, `define X` and the inverted form) over the WordNet lemma set; the count above is the lemma set itself, and it is null when the archive did not register",
       "example": "what is a lemma",
       "form": "what is X | define X",
@@ -269,7 +289,7 @@
       "answering_note": "the dispatcher abstains by construction \u2014 it materializes nothing and can reach no verdict (P-LS2), so its answering vocabulary is empty, not merely small",
       "answering_vocabulary": 0,
       "bound_kind": "open",
-      "class_index": 13,
+      "class_index": 14,
       "example": "tell me about tomorrow's weather",
       "form": "<everything else>",
       "route": "dispatcher",
@@ -296,9 +316,10 @@
   "design": "docs/DESIGN-session-ledger.md",
   "design_clause": "\u00a76 P1 \u2014 compute and commit the bound on admitted commands per template class of the registered grammar",
   "determinism": "artifact committed from a deterministic runner; reproductions welcome and recorded (ROADMAP-v0.21 \u00a74.0(2))",
-  "finding": "The registered grammar is NOT finite. Of 14 template classes, 4 are closed and together admit 44851 commands; 9 admit countably infinite languages (row 2 (owns <template-expr>), row 3 (suppose <claim>), row 6 (conform <statement-id> <bindings>), row 7 (<story request>), row 8 (<belief narration> / where does A think B is), row 9 (<computable relation or expression>), row 10 (<repo-relative path>), row 11 (<free text the graph claims>), row 13 (<everything else>)); 1 is closed in principle but unreadable on this boot. Series 1's fold \u2014 'the grammar is finite, so enumeration cost stops being an argument and becomes a number' \u2014 holds for the closed classes and FAILS for the open ones, and the open ones are exactly where plain prose lands (the resolver row and the complement row). So the number enumeration buys is the ANSWERING vocabulary, not the admitted language: an enumerating proposer has a finite target only because the committed material is finite, never because the grammar is. That is the correction P1 makes to the fold it was folded out of.",
-  "line_grammar_digest": "39b0c182258485e7841f11eadd6908bb642ea26b75ae622cb3f275719518f097",
+  "finding": "The registered grammar is NOT finite. Of 15 template classes, 5 are closed and together admit 44915 commands; 9 admit countably infinite languages (row 2 (owns <template-expr>), row 3 (suppose <claim>), row 7 (conform <statement-id> <bindings>), row 8 (<story request>), row 9 (<belief narration> / where does A think B is), row 10 (<computable relation or expression>), row 11 (<repo-relative path>), row 12 (<free text the graph claims>), row 14 (<everything else>)); 1 is closed in principle but unreadable on this boot. Series 1's fold \u2014 'the grammar is finite, so enumeration cost stops being an argument and becomes a number' \u2014 holds for the closed classes and FAILS for the open ones, and the open ones are exactly where plain prose lands (the resolver row and the complement row). So the number enumeration buys is the ANSWERING vocabulary, not the admitted language: an enumerating proposer has a finite target only because the committed material is finite, never because the grammar is. That is the correction P1 makes to the fold it was folded out of.",
+  "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
   "line_grammar_source": "scripts/serve_chat.py LINE_GRAMMAR",
+  "measured_against": "the grammar whose digest this artifact carries, and only that one. P1 was first computed against a 14-row grammar and committed; v0.21's session ledger then added the `retract <assumption-id>` row its own \u00a73 status alphabet required, which moved the grammar this measurement is OF. The artifact is recomputed rather than annotated: P1 is a computation over a committed input, not a control that ran and read unfavourably, so the record-over-rerun rule does not reach it, and a bound measured against a grammar that no longer exists would be a false sentence in a canonical artifact. The first reading and this one are both in the history, and `line_grammar_digest` dates each of them exactly.",
   "prerequisite": "P1",
   "schema": "corollary.session-p1-command-bound/1",
   "totals": {
@@ -307,30 +328,31 @@
       0,
       1,
       4,
-      5
+      5,
+      6
     ],
-    "closed_classes": 4,
-    "closed_total": 44851,
+    "closed_classes": 5,
+    "closed_total": 44915,
     "gated_class_indices": [
-      12
+      13
     ],
     "gated_classes": 1,
     "open_class_indices": [
       2,
       3,
-      6,
       7,
       8,
       9,
       10,
       11,
-      13
+      12,
+      14
     ],
     "open_classes": 9,
     "open_total": null,
-    "template_classes": 14,
+    "template_classes": 15,
     "why_gated_is_its_own_kind": "a gated class is closed in principle and unreadable on this boot. Folding it into `open` would claim the grammar is more open than it is; folding it into `closed` would put a null in a sum. It gets its own bucket and its own reason.",
-    "why_open_total_is_null": "9 of the 14 classes admit a countably infinite language. Summing them into a total would publish a number that is not a bound, so the total is reported over the closed classes only and the open classes are listed by index."
+    "why_open_total_is_null": "9 of the 15 classes admit a countably infinite language. Summing them into a total would publish a number that is not a bound, so the total is reported over the closed classes only and the open classes are listed by index."
   },
   "vocabularies": {
     "closure_targets": {

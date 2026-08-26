@@ -163,6 +163,26 @@ class PreregIsVerbatim(unittest.TestCase):
                 self.assertTrue(pin["producer"].strip(), name)
                 self.assertIn("why_this_one", pin, name)
 
+    def test_the_recorder_digest_amendment_matches_the_recorder(self) -> None:
+        """The C3 fix: a digest in the protocol, of the recorder as it is."""
+
+        from session_recorder import recorder_code_digest  # noqa: PLC0415
+
+        amendment = self.prereg["amendments"][0]
+        self.assertEqual(amendment["dated"], "2026-08-25")
+        self.assertEqual(
+            amendment["adds"]["recorder_code_digest"],
+            recorder_code_digest(REPO),
+            "the recorder moved after its digest was frozen",
+        )
+
+    def test_the_amendment_changed_no_number(self) -> None:
+        """An amendment that moved a floor would be a re-registration."""
+
+        amendment = self.prereg["amendments"][0]
+        self.assertIn("changes no clause", amendment["what_this_amendment_does_not_do"])
+        self.assertIsNone(self.prereg["recording_protocol"]["recorder_code_digest"])
+
     def test_determinism_replaces_execute_once(self) -> None:
         clause = self.prereg["determinism_clause"]
         self.assertEqual(
@@ -171,6 +191,444 @@ class PreregIsVerbatim(unittest.TestCase):
             "welcome and recorded",
         )
         self.assertEqual(clause["replaces"], "executed once")
+
+
+class _Recorded(unittest.TestCase):
+    """One recorded session, shared by the behavioural tests below."""
+
+    LINES: tuple[str, ...] = ()
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import session_ledger as ledger  # noqa: PLC0415
+        from resolver import default_index  # noqa: PLC0415
+        from session_keys import SessionKeyRing  # noqa: PLC0415
+        from session_recorder import SessionRecorder  # noqa: PLC0415
+
+        cls.ledger = ledger
+        cls.index = default_index()
+        cls.ring = SessionKeyRing.ephemeral()
+        cls.recorder = SessionRecorder(
+            REPO,
+            "v021-suite",
+            "2026-08-25T00:00:00Z",
+            cls.ring,
+            shared_index=cls.index,
+        )
+        for line in cls.LINES:
+            cls.recorder.turn(line)
+        cls.document = cls.recorder.document()
+        cls.pins = cls.recorder.pin_table
+
+
+class RecordTypes(_Recorded):
+    """§3's field names are the contract, checked against §3."""
+
+    LINES = (
+        "2 + 2",
+        "suppose x = 5",
+        "x ^ 2",
+        "suppose y = 3",
+        "x + y",
+        "suppose not z = 4",
+        "z ^ 2",
+        "retract a001",
+        "x ^ 2",
+        "twin no.such.statement",
+        "suppose y = 11",
+        "y ^ 2",
+    )
+
+    def test_header_carries_the_five_pins_and_omits_the_sixth(self) -> None:
+        pins = self.document["header"]["pins"]
+        self.assertEqual(sorted(pins), sorted(self.ledger.PIN_FIELDS))
+        self.assertNotIn("proposer_model_digest", pins)
+
+    def test_header_carries_session_id_and_created_utc(self) -> None:
+        header = self.document["header"]
+        self.assertEqual(header["session_id"], "v021-suite")
+        self.assertEqual(header["created_utc"], "2026-08-25T00:00:00Z")
+
+    def test_assumption_records_carry_exactly_the_design_fields(self) -> None:
+        required = {
+            "assumption_id",
+            "declared_at_turn",
+            "text_bytes",
+            "normal_form",
+            "status",
+            "superseded_by",
+        }
+        for record in self.document["assumptions"]:
+            self.assertTrue(required.issubset(record), record["assumption_id"])
+            self.assertIn(record["status"], self.ledger.ASSUMPTION_STATUSES)
+
+    def test_turn_records_carry_exactly_the_design_fields(self) -> None:
+        required = {
+            "turn_index",
+            "input_bytes",
+            "resolution",
+            "assumptions_declared",
+            "assumptions_cited",
+            "live_set_digest",
+            "result",
+            "receipt_digest",
+            "prev_turn_digest",
+            "mac",
+        }
+        for record in self.document["turns"]:
+            self.assertTrue(required.issubset(record), record["turn_index"])
+            self.assertIn(
+                record["resolution"]["kind"], self.ledger.RESOLUTION_KINDS
+            )
+
+    def test_normal_form_is_the_atoms_own_pair(self) -> None:
+        """`supposition._atom`'s return value, not a rendering of it.
+
+        B4 mutates `normal_form` and nothing else, and requires the polarity
+        flip to be one of the mutations it can make. So polarity has to live
+        INSIDE the field the gate names.
+        """
+
+        from supposition import _atom  # noqa: PLC0415
+
+        for record in self.document["assumptions"]:
+            atom, polarity = _atom(record["text_bytes"])
+            self.assertEqual(record["normal_form"], [atom, polarity])
+
+    def test_the_live_set_is_never_in_the_journal(self) -> None:
+        """§3: the digest, not the set — the journal stays linear."""
+
+        for record in self.document["turns"]:
+            self.assertIsInstance(record["live_set_digest"], str)
+            self.assertEqual(len(record["live_set_digest"]), 64)
+            self.assertNotIn("live_set", record)
+
+    def test_the_chain_covers_every_turn(self) -> None:
+        expected = self.ledger.header_digest(self.document["header"])
+        for record in self.document["turns"]:
+            self.assertEqual(record["prev_turn_digest"], expected)
+            expected = self.ledger.digest(record)
+
+    def test_every_record_authenticates(self) -> None:
+        for record in self.document["assumptions"]:
+            self.assertTrue(
+                self.ledger.verify_assumption_mac(
+                    record, "v021-suite", self.ring
+                ),
+                record["assumption_id"],
+            )
+        for record in self.document["turns"]:
+            self.assertTrue(
+                self.ledger.verify_turn_mac(record, "v021-suite", self.ring),
+                record["turn_index"],
+            )
+
+    def test_the_extension_is_inside_the_mac(self) -> None:
+        """An extension a tamperer could edit freely is B8's hole."""
+
+        record = dict(self.document["turns"][0])
+        record["session_events"] = [{"subsystem_id": "forged"}]
+        self.assertFalse(
+            self.ledger.verify_turn_mac(record, "v021-suite", self.ring)
+        )
+
+    def test_declared_and_cited_are_disjoint_on_every_turn(self) -> None:
+        for record in self.document["turns"]:
+            self.assertFalse(
+                set(record["assumptions_declared"])
+                & set(record["assumptions_cited"]),
+                record["turn_index"],
+            )
+
+    def test_supersession_and_retraction_both_happened(self) -> None:
+        """The lifecycle is exercised, not merely representable."""
+
+        statuses = {
+            record["assumption_id"]: record["status"]
+            for record in self.document["assumptions"]
+        }
+        self.assertIn("retracted", statuses.values())
+        self.assertIn("superseded", statuses.values())
+        superseded = [
+            record
+            for record in self.document["assumptions"]
+            if record["status"] == "superseded"
+        ]
+        for record in superseded:
+            self.assertIsNotNone(record["superseded_by"], record["assumption_id"])
+
+    def test_refusal_turns_carry_a_receipt_and_an_explicit_citation_list(
+        self,
+    ) -> None:
+        """B7's shape, on the same corpus B7 will score."""
+
+        refusals = [
+            record
+            for record in self.document["turns"]
+            if record["result"]["kind"] in self.ledger.REFUSAL_STATUSES
+        ]
+        self.assertTrue(refusals, "no refusal turn in the fixture")
+        for record in refusals:
+            self.assertTrue(record["receipt_digest"])
+            self.assertIsNotNone(record["assumptions_cited"])
+            self.assertIsNotNone(record["result"]["refusal_type"])
+
+
+class TheBehaviourTheSliceIsFor(_Recorded):
+    """A supposition that persists, and an answer that says it consumed one."""
+
+    LINES = RecordTypes.LINES
+
+    def test_a_later_turn_answers_under_an_earlier_supposition(self) -> None:
+        turn = self.document["turns"][2]
+        self.assertEqual(turn["input_bytes"], "x ^ 2")
+        self.assertEqual(turn["assumptions_cited"], ["a001"])
+        self.assertEqual(turn["result"]["kind"], "solved")
+        self.assertIn("25", self.recorder.outcomes[2].rendered)
+
+    def test_the_declaring_turn_cites_nothing(self) -> None:
+        turn = self.document["turns"][1]
+        self.assertEqual(turn["assumptions_declared"], ["a001"])
+        self.assertEqual(turn["assumptions_cited"], [])
+
+    def test_two_assumptions_are_both_cited_when_both_are_consumed(
+        self,
+    ) -> None:
+        turn = self.document["turns"][4]
+        self.assertEqual(turn["input_bytes"], "x + y")
+        self.assertEqual(turn["assumptions_cited"], ["a001", "a002"])
+
+    def test_a_negated_assumption_refuses_by_type_instead_of_computing(
+        self,
+    ) -> None:
+        turn = self.document["turns"][6]
+        self.assertEqual(turn["input_bytes"], "z ^ 2")
+        self.assertEqual(turn["result"]["kind"], "refused")
+        self.assertEqual(
+            turn["result"]["refusal_type"],
+            self.ledger.REFUSAL_ASSUMPTION_CONFLICT,
+        )
+        self.assertEqual(turn["assumptions_cited"], ["a003"])
+
+    def test_a_retracted_assumption_stops_being_consulted(self) -> None:
+        before, after = self.document["turns"][2], self.document["turns"][8]
+        self.assertEqual(before["input_bytes"], after["input_bytes"])
+        self.assertEqual(after["assumptions_cited"], [])
+        self.assertNotEqual(
+            before["result"]["answer_bytes_digest"],
+            after["result"]["answer_bytes_digest"],
+        )
+
+    def test_a_retract_turn_is_a_lifecycle_turn_not_an_answer(self) -> None:
+        turn = self.document["turns"][7]
+        self.assertEqual(turn["resolution"]["kind"], "supposition")
+        self.assertEqual(turn["assumptions_cited"], ["a001"])
+        self.assertFalse(self.ledger.is_binding_dependent(turn))
+
+    def test_b10_every_uncited_turn_renders_byte_identically_stateless(
+        self,
+    ) -> None:
+        """The fence, tested rather than promised."""
+
+        from harness import CoreSession, route_line  # noqa: PLC0415
+
+        for outcome in self.recorder.outcomes:
+            record = self.document["turns"][outcome.turn_index]
+            if record["assumptions_cited"]:
+                continue
+            fresh = CoreSession.boot(
+                REPO, offline=True, session_id="v021-suite"
+            )
+            fresh.resolver_index = self.index
+            verdict = route_line(REPO, fresh, record["input_bytes"])
+            self.assertEqual(
+                self.ledger.answer_bytes(verdict),
+                outcome.rendered,
+                f"turn {outcome.turn_index} ({record['input_bytes']!r}) "
+                "cites nothing and does not render statelessly",
+            )
+
+    def test_the_read_log_is_written_apart_and_agrees(self) -> None:
+        """B12's shape: two writers, one comparison."""
+
+        citations = self.recorder.barrier.citations_by_turn()
+        for record in self.document["turns"]:
+            self.assertEqual(
+                tuple(record["assumptions_cited"]),
+                citations.get(record["turn_index"], ()),
+                record["turn_index"],
+            )
+
+    def test_the_serving_path_never_bypasses_the_barrier(self) -> None:
+        """`_binding` is private by name, and nothing in harness reads it."""
+
+        source = (REPO / "scripts" / "harness.py").read_text(encoding="utf-8")
+        self.assertNotIn("._binding", source)
+        self.assertNotIn(".normal_form", source)
+
+
+class BoundsAndRefusals(unittest.TestCase):
+    """The §3 bounds, exercised outside the sealed corpus.
+
+    The recording protocol caps live assumptions at 8, so a RECORDED
+    session never declares a ninth and B10's denominator never contains a
+    budget refusal — which is how the tension between §3's typed
+    `assumption_budget` refusal and §7 B10 is resolved. The refusal still
+    has to work, so it is exercised here.
+    """
+
+    def setUp(self) -> None:
+        import session_ledger as ledger  # noqa: PLC0415
+        from session_keys import SessionKeyRing  # noqa: PLC0415
+        from session_recorder import SessionRecorder  # noqa: PLC0415
+
+        self.ledger = ledger
+        self.recorder = SessionRecorder(
+            REPO, "v021-bounds", "2026-08-25T00:00:00Z",
+            SessionKeyRing.ephemeral(),
+        )
+
+    def test_a_ninth_live_assumption_refuses_by_type(self) -> None:
+        for index in range(self.ledger.LIVE_ASSUMPTION_CAP):
+            outcome = self.recorder.turn(f"suppose v{index} = {index}")
+            self.assertEqual(outcome.verdict["status"], "waiting")
+        outcome = self.recorder.turn("suppose v99 = 99")
+        self.assertEqual(outcome.verdict["status"], "refused")
+        self.assertEqual(
+            outcome.verdict["refusal_type"],
+            self.ledger.REFUSAL_ASSUMPTION_BUDGET,
+        )
+
+    def test_re_supposing_a_live_subject_is_not_a_ninth(self) -> None:
+        """Supersession replaces; it does not spend budget."""
+
+        for index in range(self.ledger.LIVE_ASSUMPTION_CAP):
+            self.recorder.turn(f"suppose v{index} = {index}")
+        outcome = self.recorder.turn("suppose v0 = 100")
+        self.assertEqual(outcome.verdict["status"], "waiting")
+
+    def test_retracting_an_unknown_id_refuses_by_type(self) -> None:
+        outcome = self.recorder.turn("retract a999")
+        self.assertEqual(outcome.verdict["status"], "refused")
+        self.assertEqual(
+            outcome.verdict["refusal_type"],
+            self.ledger.REFUSAL_UNKNOWN_ASSUMPTION,
+        )
+
+    def test_the_turn_cap_stops_recording(self) -> None:
+        self.recorder.turns = ["stub"] * self.ledger.TURN_CAP
+        with self.assertRaises(RuntimeError):
+            self.recorder.turn("2 + 2")
+
+
+class Replay(_Recorded):
+    """Replay re-verifies the record, and refuses a moved world."""
+
+    LINES = RecordTypes.LINES
+
+    def test_unmutated_replay_reproduces_every_turn(self) -> None:
+        from replay_session import replay  # noqa: PLC0415
+
+        report = replay(
+            REPO, self.document, shared_index=self.index, live_pins=self.pins
+        )
+        self.assertIsNone(report.refusal)
+        self.assertEqual(report.turns_reproduced, report.turns_total)
+        self.assertIsNone(report.first_divergence_turn)
+
+    def test_every_pin_perturbed_individually_refuses(self) -> None:
+        """B3's shape: every pin, no sampling."""
+
+        from replay_session import STALE, replay  # noqa: PLC0415
+
+        for name in self.ledger.PIN_FIELDS:
+            perturbed = dict(self.pins)
+            perturbed[name] = "perturbed"
+            report = replay(
+                REPO,
+                self.document,
+                shared_index=self.index,
+                live_pins=perturbed,
+            )
+            self.assertEqual(report.refusal, STALE, name)
+            self.assertEqual(report.pin_mismatch, [name])
+            self.assertEqual(report.turns_reproduced, 0, name)
+
+    def test_the_replay_report_carries_the_designs_field_names(self) -> None:
+        from replay_session import replay  # noqa: PLC0415
+
+        report = replay(
+            REPO, self.document, shared_index=self.index, live_pins=self.pins
+        ).as_dict()
+        for name in (
+            "turns_total",
+            "turns_reproduced",
+            "first_divergence_turn",
+            "pin_mismatch",
+        ):
+            self.assertIn(name, report)
+
+    def test_the_stateless_baseline_cannot_follow_a_citing_turn(self) -> None:
+        """§8's vacuity control, by construction rather than by hope."""
+
+        from replay_session import replay  # noqa: PLC0415
+
+        report = replay(
+            REPO,
+            self.document,
+            stateless=True,
+            shared_index=self.index,
+            live_pins=self.pins,
+        )
+        self.assertLess(report.turns_reproduced, report.turns_total)
+        citing = [
+            record["turn_index"]
+            for record in self.document["turns"]
+            if record["assumptions_cited"]
+        ]
+        self.assertEqual(report.first_divergence_turn, min(citing))
+
+    def test_a_mutated_cited_assumption_moves_the_replayed_answer(self) -> None:
+        """B4's mechanism, on a fixture that never becomes a journal."""
+
+        import copy  # noqa: PLC0415
+        from replay_session import replay  # noqa: PLC0415
+
+        mutated = copy.deepcopy(self.document)
+        for record in mutated["assumptions"]:
+            if record["assumption_id"] == "a002":
+                record["text_bytes"] = "y = 8"
+                record["normal_form"] = ["y = 8", True]
+        report = replay(
+            REPO, mutated, shared_index=self.index, live_pins=self.pins
+        )
+        self.assertIsNotNone(report.first_divergence_turn)
+        # The declaring turn's own bytes are untouched, so it still replays.
+        declaring = next(
+            record["turn_index"]
+            for record in self.document["turns"]
+            if "a002" in record["assumptions_declared"]
+        )
+        self.assertGreater(report.first_divergence_turn, declaring)
+
+    def test_a_polarity_flip_turns_an_answer_into_a_typed_refusal(self) -> None:
+        import copy  # noqa: PLC0415
+        from replay_session import replay  # noqa: PLC0415
+
+        mutated = copy.deepcopy(self.document)
+        for record in mutated["assumptions"]:
+            if record["assumption_id"] == "a002":
+                record["text_bytes"] = "not y = 3"
+                record["normal_form"] = ["y = 3", False]
+        report = replay(
+            REPO, mutated, shared_index=self.index, live_pins=self.pins
+        )
+        self.assertIsNotNone(report.first_divergence_turn)
+        statuses = {
+            item["turn_index"]: item["replayed_status"]
+            for item in report.divergences
+        }
+        self.assertIn("refused", statuses.values())
 
 
 if __name__ == "__main__":

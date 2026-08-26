@@ -19,10 +19,13 @@ repository exists to catch.
 The repository ships one session engine with **two session objects**, and
 this spec serves both rather than pretending they are one:
 
-- **`CoreSession`** (`scripts/harness.py:435`) — boots the capability
+- **`CoreSession`** (`scripts/harness.py:533`) — boots the capability
   matrix and routes the **registered line grammar** through
   `route_line(repo_root, session, line) -> dict`
-  (`scripts/harness.py:1390`). No save/restore.
+  (`scripts/harness.py:2272`). No save/restore. Since v0.21 it also
+  carries an optional `assumptions` field — `None` on every session this
+  skin serves, and attached only by the session ledger's recorder and
+  replayer (`docs/DESIGN-session-ledger.md` §3).
 - **`ConversationSession`** (`scripts/conversation.py:126`) — the
   key-signed, owner-private slot-filling session:
   `say(utterance) -> Turn` (`scripts/conversation.py:253`) over the
@@ -32,7 +35,7 @@ Both drive the same `Controller`/verifier machinery
 (`scripts/controller.py`); the skin adds **no third path**. A chat
 conversation selects which object serves it via the request's `model`
 field (§3). The TTY is today the interactive skin over `CoreSession`
-(`harness.main()`, `scripts/harness.py:1461`); `ConversationSession` has
+(`harness.main()`, `scripts/harness.py:2351`); `ConversationSession` has
 so far been driven by tests and a scripted demo printer, so HTTP is the
 **first interactive skin** over that object — which is why its mapping
 (§6.2) carries the P-IH6 adjudication.
@@ -154,7 +157,10 @@ UTF-8.
 ## 5. The registered line grammar is the request surface (kernel profile)
 
 The kernel profile routes exactly `route_line`'s chain
-(`scripts/harness.py:1393-1437`) — first match wins, statuses verbatim:
+(`scripts/harness.py:2272-2335`; this citation read `:1393-1437` until
+v0.21, which DESIGN-plain-input §2.2 had already recorded as stale with
+the instruction to correct it whenever a design next touched that file —
+the session ledger did) — first match wins, statuses verbatim:
 
 | # | line form | route | statuses |
 |---|---|---|---|
@@ -162,15 +168,34 @@ The kernel profile routes exactly `route_line`'s chain
 | 1 | `narrow <corpus\|discipline\|word\|id> <value>` / `cancel` (only while candidates pend) | `resolver_context` | `found`, `waiting`, `canceled`, `cycle`, `hop_ceiling` |
 | 2 | `owns <template-expr>` | `ownership` | `solved`, `exhausted`, `refused` |
 | 3 | `suppose <claim>` | `evaluate` or `supposition` | `solved`, `held`, `waiting`, `refused` |
-| 4 | `twin <statement-id>` — **wiring step W1, §9** | `twin` | `found`, `exhausted`, `refused` |
-| 5 | `reachable <world-id> <target-path>` — **wiring step W2, §9** | `closure` | `found`, `exhausted`, `refused` |
-| 6 | story request (`story.is_story_request`) | `story` | `found`, `waiting`, `exhausted` |
-| 7 | belief narration + `where does A think B is` | `belief` | `found`, `waiting`, `exhausted` |
-| 8 | computable relation/expression | `evaluate` | `solved` |
-| 9 | repo-relative path | `write_gate` | `PROVEN`, `VERIFIED`, `REFUSED` (uppercase `Verdict` pass-through) |
-| 10 | free text the graph claims | `resolver` | `found`, `waiting` |
-| 11 | `what is X` / `define X` (dictionary word) | `gloss` | `found` — **unreachable on this profile**: the offline boot forces `retrieve.wordnet` OFF and `_route_gloss` then declines (`scripts/harness.py:850-867`); the sheet lists the row as off rather than hiding it |
-| 12 | everything else | `dispatcher` | `exhausted` |
+| 4 | `retract <assumption-id>` — **session ledger, v0.21** | `retraction` | `canceled`, `refused` |
+| 5 | `twin <statement-id>` — **wiring step W1, §9** | `twin` | `found`, `exhausted`, `refused` |
+| 6 | `reachable <world-id> <target-path>` — **wiring step W2, §9** | `closure` | `found`, `exhausted`, `refused` |
+| 7 | `conform <statement-id> <bindings>` | `conform` | `found`, `refused` |
+| 8 | story request (`story.is_story_request`) | `story` | `found`, `waiting`, `exhausted` |
+| 9 | belief narration + `where does A think B is` | `belief` | `found`, `waiting`, `exhausted` |
+| 10 | computable relation/expression | `evaluate` | `solved`, `refused` |
+| 11 | repo-relative path | `write_gate` | `PROVEN`, `VERIFIED`, `REFUSED` (uppercase `Verdict` pass-through) |
+| 12 | free text the graph claims | `resolver` | `found`, `waiting` |
+| 13 | `what is X` / `define X` (dictionary word) | `gloss` | `found` — **unreachable on this profile**: the offline boot forces `retrieve.wordnet` OFF and `_route_gloss` then declines; the sheet lists the row as off rather than hiding it |
+| 14 | everything else | `dispatcher` | `exhausted` |
+
+**Row 4 is new in v0.21** and is the session ledger's lifecycle surface
+(`docs/DESIGN-session-ledger.md` §3). The Assumption record's status
+alphabet registers `retracted`, and supersession happens on its own when a
+person re-supposes the same subject, so withdrawal is the one transition
+that needed a word. **On this skin the row always refuses**: ¶DEV-1
+replays every request into a fresh session and attaches no assumption set,
+so `retract` finds no ledger and returns `refused` with
+`refusal_type: unknown_assumption`. The row is published rather than
+hidden for the same reason the gloss row is — a capability that is off is
+a fact the sheet should carry.
+
+The rows for `conform` and the `evaluate` route's registered-bound
+`refused` (E0e) were already served and already in `LINE_GRAMMAR`; they
+are written into this table for the first time here, because a served
+route missing from the normative table is the drift this document exists
+to catch.
 
 The **status alphabet is frozen as a closed set**, inconsistencies
 included: lowercase `waiting, solved, refused, exhausted, found, held,

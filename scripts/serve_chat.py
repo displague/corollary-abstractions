@@ -257,6 +257,22 @@ LINE_GRAMMAR: tuple[dict, ...] = (
         ),
     },
     {
+        "form": "retract <assumption-id>",
+        "route": "retraction",
+        "example": "retract a001",
+        "statuses": ["canceled", "refused"],
+        "requires": (),
+        "note": (
+            "DESIGN-session-ledger §3's lifecycle surface: the Assumption "
+            "record's status alphabet registers `retracted`, and supersession "
+            "happens on its own when a person re-supposes the same subject, "
+            "so withdrawal is the one transition that needed a word. Refuses "
+            "with `unknown_assumption` in a session that keeps no ledger, "
+            "which is every session this skin serves — ¶DEV-1 replays "
+            "requests into fresh sessions and attaches no assumption set"
+        ),
+    },
+    {
         "form": "twin <statement-id>",
         "route": "twin",
         "example": "twin programming.dfactorial.recursive",
