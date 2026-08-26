@@ -3,6 +3,62 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.21 session-ledger slice (P2's probe)
+
+- **The resolver silently binds an ambiguous prose line and the receipt does
+  not say a choice was made (2026-08-26, measured by P2).** Filed, not fixed:
+  this is DESIGN-plain-input's territory and belongs to slice 2, which this
+  commission did not build.
+
+  **The measurement.** `experiments/session_p2_separator_probe.json` served
+  ten hand-sealed ambiguous prompts as raw prose, on a fresh offline session
+  each. Eight exhausted or waited, honestly. **Two came back `found`** — a
+  grounded answer to a question the prose underdetermined, with nothing in
+  the verdict recording that a reading had been selected. The seal's own
+  `why_ambiguous` field for each of the two names the alternatives the
+  system silently passed over.
+
+  **The two fixtures, already committed, already sealed.**
+  `experiments/session_p2_prompt_seal.json`:
+  - **`p04`** — *"cosine of a double angle"*. Sealed readings: the identity
+    itself (`twin trigonometry.identities.double_angle_cosine`) or the
+    statement whose words these are (`double angle cosine identity`, the
+    resolver row). Served: resolver, `found`.
+  - **`p10`** — *"the quadratic formula with a=1 b=-3 c=2"*. Sealed
+    readings: RUN the statement on those bindings
+    (`conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2`),
+    show me the statement (`quadratic formula`), or show me the family
+    (`twin algebra.polynomial_equations.quadratic_formula`). The person
+    supplied bindings, which most naturally reads as RUN; the served answer
+    was the resolver's, `found`. All three routes are live, so this is a
+    real three-way and not a hypothetical.
+
+  **Why it is a defect and not a preference.** The repository's standing
+  rule is `docs/DESIGN-text-resolution.md:53-56` — *"any counterexample is a
+  failure, because it would mean the renderer authored a claim"* — and
+  DESIGN-plain-input §5's G2 restates it as *every served interpretation is
+  either verifier-confirmed or supposition-labelled.* A resolver `found` on
+  an underdetermined line is neither: the graph confirmed that a statement
+  matches those words, not that it is the statement the person meant.
+
+  **The repair this is filed against.** DESIGN-session-ledger's Assumption
+  record now exists and persists (slice 1, R1 HOLDS), so slice 2 can serve
+  the residue as a named supposition — *assuming you meant X, the answer is
+  Y* — rather than as an unmarked `found`. P1 constrains how: the resolver
+  row is one of the nine OPEN classes, so an enumerating proposer has no
+  finite target there and must propose-then-verify. And P2's own aggregate
+  says the clarifying-question arm is expressible for 9 of 10, so slice 2
+  cannot claim the conditional arm won by measurement.
+
+  **How a repair proves itself.** Both prompt ids are the fixtures, their
+  candidate-reading sets are already sealed and committed, and the seal's
+  commit is an ancestor of the probe's (checked by
+  `tests/test_session_prereqs.py`). A repair passes when p04 and p10 stop
+  returning a bare `found` and start returning either a supposition-labelled
+  answer naming the reading taken, or a clarification naming the sealed
+  alternatives. **Re-running the probe re-measures it**: the number to move
+  is `aggregate.raw_prompts_silently_bound_today`, currently **2**.
+
 ## Filed at the v0.20 rotation (the voice completed, the course, the drift audit)
 
 - **`leanworkbook.skel.lean_workbook_50397` needs a seed regeneration, and no

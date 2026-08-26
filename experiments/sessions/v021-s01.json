@@ -1,0 +1,177 @@
+{
+  "assumptions": [],
+  "header": {
+    "created_utc": "2026-08-25T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "4f8b2150bd96e8dbc8df0f0a413dfbd04bca712bc07f09b9c0684c3ac1179911",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "09eda754405b5f9281d6a0fabb8667d89811c60e445757ad0b1d88b32d55714c",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-s01"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "2 + 3",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "4b87213542aef3ef95784c274935365a227d84e1bfe413135842fc1369d0abe6",
+      "prev_turn_digest": "8cb668754e573f8cb41a9baf1b9aa736b16f08b4d66fd270f8d438e8c5d1dd03",
+      "receipt_digest": "8c471ae9d4bbe57515f8e67af2c51034eb7832b7dd1ac4fb4283f812610310ab",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "ab0d740b954222d066da2a71bae98eda3ec520c330bd358c1d3b1dce5bbc9700",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "2 ^ 3",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "b261caafdd5f8886d37c47ffe1810818f128809be134f6195130915ddec7f3e1",
+      "prev_turn_digest": "ece1b7854932035cf49fd81d18fb8c9e90009ac089f249b79a6a10f47de31c8b",
+      "receipt_digest": "2c2871af0c7e734677c3aa3c37ea1949726644f6b49a9076b33a6f056780ac58",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "79584d9d9ac398fd0f282b1d0dcce9e94e459daf71d542711fa618c16e6ee458",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "twin programming.euclid.recursive",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "f265d5753693fcbed50a5d34432de6b9c49a762dffd3d47ced24a432faf5100b",
+      "prev_turn_digest": "06f570cda862a699f96759d4e2867cb33524af577d1bdb19dcef5c3d5f9da12f",
+      "receipt_digest": "8cabef5c8c351871e0a231e3eabc594550a5352a3725de4dcb0c1dd817b4e104",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "twin <statement-id>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [
+        {
+          "detail_digest": "e74027c6ed1e4e486aa0e63d799fef0320d88c23495a251338028ed2cde23587",
+          "kind": "retrieve",
+          "stop_reason": "solved",
+          "subsystem_id": "retrieve.five_store",
+          "verdict": "VERIFIED"
+        }
+      ],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "de morgan laws",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "97a4067762b4ff4a08e6bd5bb2bfe9c7111850a6c6561de4c8690cf3e697461e",
+      "prev_turn_digest": "62d30c233835bf9c0919bf1a777f3405018300e4878381bf2a17cc37cbdb93a4",
+      "receipt_digest": "2734108a11adedd68a8bdd5b0ff21863daab5d3c74cb59719baf19803e53ea5d",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<free text the graph claims>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "22dd8a015b4dfd3e971fa6fb96e537ab4be0a28c65a013af261068c834e9b5f7",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "2 * 3 = 6",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "d2432e9b21ce65e31b3690c9e3979812f760611f0bfea0201c0123e3a392219b",
+      "prev_turn_digest": "700096bdae9388365d1dd5227d835c672784c4221f476b1038ab4973c07b5931",
+      "receipt_digest": "d70e30b6139f3d14ad3a36d2413e6a719c9a9d5bf9d9e6552a217f3bf12c495d",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "ed5f0bd2c54bdb359877ca918c23b55087a7461b8dba9aef7260ec697077f192",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 4
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "twin no.such.statement.at.all",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mac": "2578ab840bc81af7e529de95bd0cb37bad9735d5252962c825a9f3696c1e7bd8",
+      "prev_turn_digest": "ccadf95023df12a063b0e1b63d7281c79255becef577804ad971b77da9f15aee",
+      "receipt_digest": "665c47afd3eb9f988d8aadb3348aa333ef20a1a9c064a425293cccfc04967b9a",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "twin <statement-id>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "4a47f0a90db1e9b4e389dbd3c4baad9c7b8814dcd5cba8cf70f294b7a5174098",
+        "kind": "exhausted",
+        "refusal_type": "twin_exhausted"
+      },
+      "session_events": [
+        {
+          "detail_digest": "c6002f813a554f7c21f0f7e7904fe91578c7eb94f89f5a72900af6b58883c51a",
+          "kind": "retrieve",
+          "stop_reason": "exhausted",
+          "subsystem_id": "retrieve.five_store",
+          "verdict": "REFUSED"
+        }
+      ],
+      "turn_index": 5
+    }
+  ]
+}

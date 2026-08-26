@@ -168,6 +168,22 @@ assumption it declares (`assumptions_declared` and `assumptions_cited`
 are disjoint on that turn by construction), and declaring turns are
 excluded from the binding-dependence denominator.
 
+> **Note added 2026-08-26, after the slice-1 runs and their independent
+> review.** B12's phrase *"recorded independently of the journal writer"*
+> is worth pinning down, because the implementation's first run artifact
+> overstated it. What is independent is the **writing**: two functions,
+> two files, and the read log derived from the barrier's raw event list
+> rather than from anything the journal writer computed. What is **not**
+> independent is the source — both sides descend from the same in-memory
+> `ReadBarrier`. So B12 corroborates that the journal writer neither
+> dropped nor invented a citation, which is real and checkable and is what
+> this clause is for. It does not corroborate the barrier itself: if the
+> barrier recorded the wrong thing, both sides would carry it and agree.
+> That is why §4 lists the read-barrier instrumentation as **trusted**
+> code rather than measured, and why B4 — does the answer move when the
+> cited assumption moves? — is the clause that tests the consumption the
+> barrier claims to have seen.
+
 **Bounds** (answering DESIGN-plain-input §4's question rather than
 re-dropping it): live assumptions per session are capped by the same
 ceiling family the incumbent recommends reusing (`hop_ceiling`'s

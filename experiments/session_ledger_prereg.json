@@ -1,0 +1,381 @@
+{
+  "schema": "corollary.session-ledger-prereg/1",
+  "design": "docs/DESIGN-session-ledger.md",
+  "roadmap": "docs/ROADMAP-v0.21.md",
+  "slice": 1,
+  "frozen_at": "2026-08-25",
+  "frozen_before": "any journal record, any recorder, any replayer, and any seal. P1 and P2 are committed; P3's recording has not begun.",
+  "what_this_freezes": "the construction gate B1-B13 and the result gate R1 verbatim from the design, the §8 blind control and its voiding sentence verbatim, the recording protocol, the pin table with a named producer per pin, and the meetability argument every floor now ships with (ROADMAP-v0.21 §4.0(3)).",
+  "verbatim_normalization": "clause texts are the design's own, with line wrapping collapsed to single spaces and a hyphen sitting at a line break rejoined to the word it split — the design wraps `byte-dependence` across two lines, and treating that as two words would make a quotation depend on the file's column width rather than on the sentence. Nothing else is changed: markdown emphasis and backticks are kept because removing them would be an edit. tests/test_session_ledger.py checks each frozen clause still appears in the design under exactly this normalization; if the design moves, the test goes red and a person decides, which is the point of freezing.",
+
+  "determinism_clause": {
+    "registered_as": "artifact committed from a deterministic runner; reproductions welcome and recorded",
+    "replaces": "executed once",
+    "authority": "ROADMAP-v0.21 §4.0(2), maintainer-directed relaxation dated 2026-08-26, applied here by direction",
+    "why_it_applies_to_this_run": "every component of the registered run is deterministic: the recorder rides committed code over committed corpora, the replayer re-serves recorded lines with no clock, no network and no model, the mutation mixer is seeded from a frozen string, and the B13 draw is seeded from another. Nothing in slice 1 touches a model, a clock or the network — slice 2's proposer would, and slice 2 is not in this commission.",
+    "what_is_kept": "non-deterministic measurements remain execute-once with the run pre-announced. Slice 1 has none.",
+    "reproduction_protocol": "the run artifact records the runner's code digest and the tip it ran on; any reproduction that re-executes the runner and gets the same bytes is appended to the artifact's `reproductions` list with its date and the digest it matched. A reproduction that does NOT match is a finding and is recorded as one rather than discarded."
+  },
+
+  "construction_gate": {
+    "source": "docs/DESIGN-session-ledger.md §7",
+    "numbers_frozen_by": "the design, before this file existed; nothing here sets a number the design did not",
+    "clauses": {
+      "B1": {
+        "verbatim": "P3's seal exists before the replayer is written; any edit to a sealed journal or the seal voids the run (the seal's digests are what B1 compares against).",
+        "scored_in_this_commission": true
+      },
+      "B2": {
+        "verbatim": "Unmutated replay reproduces `answer_bytes_digest` for **every turn the seal records** — the denominator is the seal's own count, not a round number. One mismatch is red. No tolerance. (P5's scope rule makes this askable: no recorded turn mutates the corpus.) Budgeted from measured costs: pooled session boot is ~7.5 ms and a typed line serves in milliseconds, so full-corpus replay is minutes, not hours; if a replay run exceeds **30 minutes** the overrun is itself published as a finding before any verdict is read.",
+        "scored_in_this_commission": true
+      },
+      "B3": {
+        "verbatim": "Each pin field perturbed individually must yield `stale-environment`, never an answer — every pin, no sampling.",
+        "scored_in_this_commission": true
+      },
+      "B4": {
+        "verbatim": "Mutating one *cited* assumption (`text_bytes` + `normal_form` in the Assumption record **only**; the declaring turn's `input_bytes` untouched; the mutated journal is a fixture outside `experiments/sessions/`, never a valid journal) on each binding-dependent turn in half B → different `answer_bytes_digest`, or a typed conflict-refusal where the mutation flips `_atom` polarity (the only conflict `_atom` can see). **Every** turn must respond; each non-response is red, published individually with cause. 100% or red — the miss-budget the course draft allowed is dropped in favor of the house standard (no tolerance, misses published).",
+        "scored_in_this_commission": true
+      },
+      "B5": {
+        "verbatim": "60 sham assumptions (well-formed, never cited): **0/60** flips.",
+        "scored_in_this_commission": true
+      },
+      "B6": {
+        "verbatim": "≥30 mutations of *live but uncited* assumptions: **0** flips.",
+        "scored_in_this_commission": true
+      },
+      "B7": {
+        "verbatim": "100% of refusal turns carry `receipt_digest` with explicit `assumptions_cited` (empty allowed; null red).",
+        "scored_in_this_commission": true
+      },
+      "B8": {
+        "verbatim": "Tamper control, threat model stated: the tamper script rewrites one turn's bytes **and recomputes every downstream `prev_turn_digest` consistently** — the naive-chain repair a file-holding adversary would perform. Detection must come from the keyed MACs (the tamperer holds no key) or the out-of-band seal digest, not from chain arithmetic. 20/20 or red. An arm where the tamperer does *not* repair the chain is run too, and reported, but passing only that arm is not passing B8.",
+        "scored_in_this_commission": true
+      },
+      "B9": {
+        "verbatim": "The proposer's input at turn *j* contains no bytes from earlier turns other than assumption `normal_form`s. Any leak is red — history reaches the model only through the exact layer.",
+        "scored_in_this_commission": false,
+        "scored_verdict": "NEVER",
+        "why_never": "B9 is slice 2's clause. Slice 2 — DESIGN-plain-input's proposer — is explicitly out of this commission's scope, so B9 is registered here and scored NEVER, not scored zero and not quietly omitted. Its absence is recorded rather than inferred, which the release gate requires in writing (ROADMAP-v0.21 Release gate, fourth bullet)."
+      },
+      "B10": {
+        "verbatim": "Every turn with empty `assumptions_cited` must render byte-identical to the same line served statelessly. The quarantine made mechanical: session state may never leak into unconditional answers.",
+        "scored_in_this_commission": true
+      },
+      "B11": {
+        "verbatim": "`scripts/check_regeneration.py` green after recording (journals under `experiments/` leave `data/` untouched — the v0.10 artifact's `tree_unchanged_by_refusals` ancestor, extended to the whole corpus), and the seal's digests revalidate against the committed journals.",
+        "scored_in_this_commission": true
+      },
+      "B12": {
+        "verbatim": "For every turn in half B, the citation set equals the read-event set from the resolver's read barrier (recorded independently of the journal writer). One uncorroborated citation is red.",
+        "scored_in_this_commission": true
+      },
+      "B13": {
+        "verbatim": "20 turns drawn by seeded rule from half B's binding-dependent set, arm-blind (drawn and ordered by the same sealed mixer as §8), hand-checked: does the answer's *meaning* depend on the cited assumption? Published as a table beside the gate; below **16/20** the residual risk in §11 is promoted from \"named\" to \"measured against the claim\" and the served line carries it.",
+        "scored_in_this_commission": true
+      }
+    }
+  },
+
+  "blind_control": {
+    "source": "docs/DESIGN-session-ledger.md §8",
+    "mixing_rule_verbatim": "Mutations for B4/B5/B6 are generated by one sealed script mixing the three arms; the scorer sees no arm labels until after scoring.",
+    "voiding_sentence_verbatim": "If mutating assumptions the answer does not cite changes the served answer at any nonzero rate, the replayer is keying on transcript bytes rather than assumption semantics, and the multi-turn-assumption capability is void for this cycle; no session-replay claim is made.",
+    "voiding_sentence_second_half_verbatim": "A perfect B4 score beside any B5/B6 flip is not sensitivity — it is a hash of the transcript, and it voids.",
+    "vacuity_control_verbatim": "Cheapest capability-blind baseline: a replayer that re-serves each line statelessly, ignoring Assumption records entirely. Because B4's mutation touches only the Assumption record and never the declaring line's `input_bytes`, the stateless baseline **cannot** respond to any B4 mutation — by construction, not by hope. It must pass B2 on assumption-free sessions and must score 0 on B4. If it scores above 0 on B4, the mutation harness is leaking mutations into `input_bytes` and the harness itself is red — fixed before anything is scored.",
+    "seeds_frozen_now": {
+      "mutation_mixer_seed": "session-ledger-v021-mixer",
+      "audit_draw_seed": "session-ledger-v021-b13",
+      "seed_derivation": "random.Random(int(hashlib.sha256(seed_string.encode('utf-8')).hexdigest()[:16], 16))",
+      "why_string_seeds": "a string seed is readable, quotable in a commit message, and cannot be confused with a count. The derivation is written out here so a reproduction does not have to guess it."
+    },
+    "arm_blindness_mechanics": "the mixer emits mutation cases in shuffled order carrying an opaque `case_id` and no arm label. The scorer serves each case and records only (case_id, flipped?). Arm labels are joined in afterwards, from the mixer's separately written key, and the join is the last step of the run. The scorer never reads the key."
+  },
+
+  "result_gate": {
+    "source": "docs/DESIGN-session-ledger.md §9",
+    "R1_verbatim": "on half B's first execution (the registered run), every binding-dependent turn's served answer carries its citations (B12-corroborated) and replays (B2), with B4–B6 and B10 green and B13 ≥16/20. If R1 holds, the served claim is: *recorded sessions replay, and conditional answers name the assumptions they consumed.* Nothing more. R1 failing on any clause serves nothing and publishes the readout.",
+    "served_claim_if_R1_holds_verbatim": "recorded sessions replay, and conditional answers name the assumptions they consumed."
+  },
+
+  "recording_protocol": {
+    "source": "docs/DESIGN-session-ledger.md §6 P3 step (1), frozen before recording begins",
+    "session_count_cap": 60,
+    "turn_cap_per_session": 64,
+    "live_assumption_cap": 8,
+    "live_assumption_cap_source": "§3 Bounds — the cap is frozen at 8 live assumptions; declaring a ninth refuses with a typed `assumption_budget` refusal",
+    "no_write_gate_turn_rule": "a recorded session contains no corpus-mutating line. A session that acquires one is excluded WHOLE, and the exclusion is counted and published in the seal. This is what makes B2 askable at all: P5 was adjudicated MISSED IN KIND because a session that mutates the corpus meets a different world on its second run.",
+    "write_gate_detection": "a turn whose served route is `write_gate`, or whose status is any of PROVEN / VERIFIED / REFUSED, marks its session excluded. Detection is on the served verdict, not on the typed line, so a line that reaches the gate by `_looks_like_path` rather than by existing is caught too.",
+    "authorship": "maintainer-authored sessions. The STRANGER caveat from DESIGN-plain-input §5 G1 is inherited verbatim in spirit and named in the non-claims: these are the maintainer's own sessions and no stranger-usability claim is made anywhere in this cycle.",
+    "no_record_until_the_counter_is_met": "recording is capped by this protocol and stops at the cap. If the floor is not reached inside the cap, the cycle STOPS and publishes 'multi-turn binding is rare in practice' as its finding. Recording more sessions until a counter is met is exactly the move the cap exists to forbid.",
+    "ab_split_rule": "half = 'B' if int(sha256(session_id)[:2], 16) % 2 else 'A'",
+    "ab_split_rule_provenance": "reused verbatim from experiments/throughput_tasks.json's seal, where the same device froze a conversation-shaped denominator before the scored party could move it",
+    "ab_split_discipline": "implementation and debugging may exercise half A only; half B's first execution is the registered run",
+    "session_id_rule": "session ids are assigned before recording by the frozen rule `v021-s{NN}` for NN in 01..60, in order. The ids are therefore fixed by this file, not chosen after seeing which half they land in — the split is a consequence of the ids, and the ids are a consequence of a counter.",
+    "recorder_code_digest": null,
+    "recorder_code_digest_status": "TO BE ADDED BY DATED AMENDMENT, before any recording. The design's C3 fix requires the recorder's code digest in the protocol, and the recorder does not exist yet: this file is frozen first so the clauses cannot be written around the implementation, and the digest is appended in a dated amendment the moment the recorder is written and before the first journal is recorded."
+  },
+
+  "pins": {
+    "source": "docs/DESIGN-session-ledger.md §3 SessionHeader — each pin with its named producer, and perturbing any one must refuse (B3)",
+    "corpora_digest": {
+      "producer": "write_stage.durable_digest(repo_root / 'data')",
+      "why_this_one": "the design names 'the write-gate's working-tree digest machinery, scoped to data/'. `durable_digest` is exactly that narrow reading and write_stage.py:422-434 says so in its own docstring; `working_tree_digest` is the WIDE reading the gate enforces and would make every unrelated commit a stale-environment refusal."
+    },
+    "line_grammar_digest": {
+      "producer": "sha256 over json.dumps(serve_chat.LINE_GRAMMAR, sort_keys=True, default=list)",
+      "why_this_one": "the design says 'sha256 of `LINE_GRAMMAR` as rendered by the harness'. The rendering is fixed here so the pin is reproducible; experiments/session_p1_command_bound.json already carries the same derivation, and the two must agree."
+    },
+    "rendering_module_digests": {
+      "producer": "build_throughput_tasks.canonical_lf_sha256 over build_throughput_tasks.RENDERING_MODULES",
+      "why_this_one": "the design calls this 'the committed name' and requires the same derivation as experiments/throughput_tasks.json's field. Reading the module list and the digest function from that builder rather than re-listing them here is what keeps 'the same derivation' true rather than asserted.",
+      "note": "scripts/harness.py is in that list, so wiring the ledger into the harness moves this pin. That is correct: a journal recorded before the wiring must not replay against the code after it."
+    },
+    "checker_toolchain_digest": {
+      "producer": "sha256 over prover/lean/normalizer/lean-toolchain, the file external_verifier pins via _pin_inputs (external_verifier.py:240-244)",
+      "why_this_one": "the design says 'the pinned `lean-toolchain` derivation `external_verifier` already uses'. No recorded turn in slice 1 calls the checker, so this pin is inert for replay and is carried anyway — a pin table with a hole is a pin table that grows one."
+    },
+    "capability_sheet_digest": {
+      "producer": "sha256 over the served capability sheet's bytes, built from the live objects by serve_chat's own sheet builder under an offline boot",
+      "why_this_one": "the design says 'sha256 of the served sheet bytes'. The sheet is generated from live artifacts, never hand-maintained, so this pin moves when what the system can do moves."
+    },
+    "proposer_model_digest": {
+      "producer": null,
+      "status": "OMITTED",
+      "why_omitted": "slice 2 only. The design fixes the meaning of the omission: 'key omitted until then, omission meaning \"no proposer served\"'. It is absent from every header this commission writes, and its absence is a statement, not a gap."
+    }
+  },
+
+  "floors_and_their_meetability": {
+    "rule": "ROADMAP-v0.21 §4.0(3): every frozen floor ships with a meetability argument — a pilot, a construction argument, or a bounded-class analysis showing a CORRECT instrument can reach it. A floor without one is a construction defect discovered at registration time, not a gate waiting to void. The floors themselves are unchanged; the argument is part of the freeze.",
+    "P3_corpus_floor": {
+      "floor_verbatim": "Floor: ≥**30** sessions, ≥**120** turns, ≥**36** binding-dependent turns in half B's share alone.",
+      "reading_frozen_here": "30 sessions and 120 turns over the RECORDED CORPUS; 36 binding-dependent turns in HALF B's share alone.",
+      "why_this_reading_and_the_discrepancy_it_resolves": "ROADMAP-v0.21 §1.1 compresses the same floor to 'Floor in half B's share alone: ≥30 sessions, ≥120 turns, ≥36 binding-dependent turns', attaching the half-B qualifier to all three. The design's own sentence attaches it to the last clause, and the design is the governing document (§7-§9 all scope the GATE to half B while §6 P3 describes the CORPUS). Recorded here rather than left to be discovered: under the roadmap's reading, 30 sessions in half B against a 60-session cap would be a coin flip on a hash-derived split — an unmeetable-by-construction floor of exactly the shape §4.0(3) was written after C-E1 to forbid. The design's reading is both the grammatical one and the meetable one, and the choice is stated instead of made silently.",
+      "meetability_argument": "By construction, and the construction is the whole argument: the sessions are maintainer-authored, so their count, length and assumption structure are chosen before recording rather than sampled from a population that might not contain them. 60 sessions at the cap clears 30. Sixty sessions averaging six turns clears 120 with a wide margin and stays far under the 64-turn-per-session cap. For the 36: a binding-dependent turn is one whose served evaluation READ a live assumption's normal_form, so authoring a session with a `suppose x = 5` declaration followed by three turns that compute with x produces three binding-dependent turns deterministically. Authoring roughly forty assumption-bearing sessions with three or more such turns each puts well over a hundred binding-dependent turns in the corpus; a hash-derived split sends approximately half to B, so B's share is expected near sixty against a floor of thirty-six. The margin is deliberate: the floor must survive an unlucky split, not an average one.",
+      "and_the_honest_half": "meetability by construction is exactly what makes the STRANGER non-claim binding. These sessions can reach the floor because their author knows what a binding-dependent turn is. Nothing here says a stranger's sessions would, and no stranger-usability claim is made — DESIGN-plain-input §5 G1's park is cited, not re-encountered.",
+      "if_unreachable": "STOP. Publish 'multi-turn binding is rare in practice' as the cycle's finding and build nothing further. A published stop is a result; a quiet descope is not."
+    },
+    "B2_replay_budget": {
+      "budget_verbatim": "if a replay run exceeds **30 minutes** the overrun is itself published as a finding before any verdict is read",
+      "meetability_argument": "measured on this workstation: an offline CoreSession boot is ~0.41 s cold and ~0.01 s once the store is warm in-process, a `twin` line serves in ~0.32 s, and the resolver's graph index costs ~6 s ONCE per process rather than per session. The replayer is one process, so the index is built once. At the corpus ceiling — 60 sessions of 64 turns, 3,840 turns — a 0.3 s mean turn is under twenty minutes; at the corpus this commission will actually author, a few hundred turns, it is under two. The budget is met with margin and the margin is measured, not assumed.",
+      "note": "the design's ~7.5 ms figure is serve_chat's POOLED boot. The replayer does not use the pool, so the argument above is re-measured against what the replayer actually does rather than inheriting a number from a different program."
+    },
+    "B4_hundred_percent": {
+      "floor_verbatim": "100% or red",
+      "meetability_argument": "bounded-class analysis over the mutation alphabet. A cited assumption is cited BECAUSE the evaluator read its normal_form to obtain a binding. The mutation generator has exactly two moves on such a record: change the bound value, or flip `_atom` polarity. Changing the value changes the computed result and therefore `answer_bytes_digest` (5 → 7 turns 25 into 49). Flipping polarity means the person supposed the binding does NOT hold, and the evaluator refuses with a typed conflict rather than computing under a premise the person withdrew. Both moves are responses, both are the design's two permitted responses, and the alphabet has no third move — so a correct instrument reaches 100% and a miss is a real defect rather than a sampling accident. This is the analysis C-E1's 0.99 flip floor never had."
+    },
+    "B5_B6_zero": {
+      "floor_verbatim": "**0/60** flips (B5); **0** flips (B6)",
+      "meetability_argument": "a sham or uncited assumption is one no turn read. The read barrier is the only path from an Assumption record into an answer: the evaluator obtains a binding by asking the live set for a name the expression actually contains, and that ask is the read event. An assumption whose subject appears in no turn's expression is therefore unreachable from any served byte, so mutating it cannot move one. Zero is reachable because zero is what a correct implementation produces; any nonzero rate means the answer depends on the transcript rather than the semantics, which is precisely what §8's voiding sentence is for."
+    },
+    "B8_twenty_of_twenty": {
+      "floor_verbatim": "20/20 or red",
+      "meetability_argument": "the tamperer holds no key, by construction: the MAC key descends from a root secret in `.runtime/session-keys.json`, which `.gitignore` excludes and which never appears in a journal, a seal, or any committed artifact (session_keys.py:5-18). Any rewrite of a MACed field invalidates that record's MAC, and repairing the digest chain does not repair a MAC. 20/20 is therefore reachable by any correct verifier, and the arm where the chain is NOT repaired is run and reported but cannot substitute — the design says so, because passing only the easy arm would measure chain arithmetic."
+    },
+    "B13_sixteen_of_twenty": {
+      "floor_verbatim": "below **16/20** the residual risk in §11 is promoted from \"named\" to \"measured against the claim\" and the served line carries it",
+      "meetability_argument": "citations are read-derived, so a cited assumption is one the evaluator consumed to produce the answer's value. Where the mechanism is a binding, meaning-dependence follows from value-dependence: the answer to `x ^ 2` under `suppose x = 5` MEANS twenty-five because x is five. A correct instrument can therefore reach 20/20 on binding-bearing citations. The floor is set below that on purpose: §11's named residual is cited-but-inert assumptions, and B13 exists to find them, so a floor at 20/20 would make the audit incapable of reporting the very thing it is for.",
+      "auditor_disclosure": "the auditor is the implementer. That is a real independence weakness and it is stated here rather than after the reading: the mitigation is that the draw is seeded from a frozen string, the twenty turns are ordered by the same sealed mixer as §8, and the arm labels are joined only after every mark is recorded. A blind draw does not make a self-audit independent; it makes it unable to be steered turn by turn, which is less, and the artifact will say so beside the table."
+    }
+  },
+
+  "stop_conditions": {
+    "source": "docs/DESIGN-session-ledger.md §11",
+    "verbatim": "Stop conditions: P3's floor (stop, publish the finding); any B5/B6 flip (void, capability withheld, the journal survives as an instrument); B10 or B12 failure stops the slice before serving."
+  },
+
+  "non_claims": {
+    "source": "docs/DESIGN-session-ledger.md §11, carried unchanged",
+    "verbatim": "Non-claims: no completeness over readings (the unreceiptable claim series 1 refused); no correctness claim (reproducibility only); no cross-session or cross-person memory; no portability beyond the one workstation; no human-satisfaction claim; no stranger-usability claim (P3's sessions are maintainer-authored — STRANGER's park is cited, not re-encountered); supposition-conditional answers stay out of throughput; nothing here claims the incumbent's proposer works (slice 2 carries DESIGN-plain-input's own gates unchanged); the machine blind reader belongs to DESIGN-voice-completion's run and makes no appearance here.",
+    "residual_risk_verbatim": "**Residual risk, named and priced only partway:** cited-but-inert assumptions. `assumptions_cited` is emitted by the serving path — the same party B4 scores — and an assumption mechanically threaded into answer bytes flips B4 without the answer *meaning* depending on it. B12 (read-derived citations) and B13 (the registered arm-blind hand audit) narrow it; B13's floor decides whether the claim ships with the risk named or measured. The gate proves byte-dependence; byte-dependence is the claim served — nothing stronger."
+  },
+
+  "amendments": [
+    {
+      "amendment": 1,
+      "dated": "2026-08-25",
+      "made_before": "any journal was recorded. The recorder exists; experiments/sessions/ does not.",
+      "why": "DESIGN-session-ledger §6 P3 step (1) requires the recorder's code digest in the recording protocol, and the C3 fix is that it must be there BEFORE recording begins. The recorder could not be digested before it was written, and the clauses had to freeze before the recorder so they could not be written around it — so the protocol froze first with the field null and a written status, and this amendment fills it in the gap between the two.",
+      "adds": {
+        "recorder_code_digest": "e3070dd3b118aee7681b8091b5db6a434ba6c54551081794228e9eb91d087c43",
+        "recorder_code_digest_derivation": "sha256 over the canonical-JSON list of [path, canonical_lf_sha256(path)] pairs for scripts/session_ledger.py and scripts/session_recorder.py, in that order, via session_recorder.recorder_code_digest",
+        "recorder_modules": [
+          "scripts/session_ledger.py",
+          "scripts/session_recorder.py"
+        ],
+        "why_two_modules": "'the recorder' is not one file. The journal object and the thing that drives it are one instrument, and pinning half of it would leave the other half free to move under a frozen protocol."
+      },
+      "also_records_three_construction_decisions_the_protocol_did_not_anticipate": {
+        "binding_dependent_turn": {
+          "operative_definition": "a turn whose `assumptions_cited` is non-empty AND whose `resolution.kind` is `exact`.",
+          "why_this_and_not_just_non_empty_citations": "§3 excludes DECLARING turns from the binding-dependence denominator because a declaring turn cites nothing. The same reasoning excludes every LIFECYCLE turn. A `retract` turn does cite — it reads the retracted assumption's normal form to name what was withdrawn, which is what makes it corroborable under B12 — but what it produces is a lifecycle acknowledgement, not an answer whose value depends on the assumption. Counting it as binding-dependent would put a turn in B4's denominator that is byte-dependent for a trivial reason, which is exactly the cited-but-inert dilution §11 names as the residual risk. So the denominator is citations plus `kind == exact`, and this is recorded here rather than decided inside the scorer.",
+          "implemented_by": "session_ledger.is_binding_dependent"
+        },
+        "the_retract_surface": {
+          "what": "one new LINE_GRAMMAR row, `retract <assumption-id>` -> route `retraction`, statuses `canceled` / `refused`.",
+          "why_it_was_needed": "§3 registers the Assumption status alphabet {live, superseded, retracted}. Supersession happens on its own when a person re-supposes the same subject, so withdrawal was the one transition with no word for it, and a status the surface cannot reach is a status the record cannot honestly carry.",
+          "consequences_recorded_rather_than_absorbed": "adding a row moves `line_grammar_digest` and `capability_sheet_digest`, which is correct — a journal recorded before the surface changed must not replay against the surface after. docs/SPEC-chat-completions-skin.md §7's normative table is amended in the same commit, including two rows (`conform`, and the `evaluate` route's registered-bound `refused`) that were already served and had never been written into it. On the chat skin the row always refuses: ¶DEV-1 replays requests into fresh sessions and attaches no assumption set."
+        },
+        "the_budget_refusal_and_B10": {
+          "tension": "§3 requires a typed `assumption_budget` refusal on a ninth live assumption. That refusal cannot exist without a ledger, so it does NOT render byte-identically to stateless service — and it cites nothing, which is the condition B10 quantifies over.",
+          "resolution": "by construction, not by exemption. The recording protocol caps live assumptions at 8, so a RECORDED session never declares a ninth and B10's denominator never contains a budget refusal. The refusal still has to work, and it is exercised in tests/test_session_ledger.py, outside the sealed corpus.",
+          "stated_here_because": "an exclusion nobody decided is an exclusion by accident (ROADMAP-v0.21 §1.1's own placement rule), and this one is decided in advance and in writing."
+        }
+      },
+      "what_this_amendment_does_not_do": "it changes no clause, no floor, no seed, no cap and no verdict. Every number in this file was frozen before the recorder existed and none of them moved."
+    },
+    {
+      "amendment": 2,
+      "dated": "2026-08-25",
+      "made_after": "the registered run executed and was committed unedited as experiments/session_ledger_run.json.",
+      "why": "reading the committed run turned up two defects in the RUNNER — not in the system it scores — and ROADMAP-v0.21 §4.0(1) draws exactly that line: the no-chase rule applies to controls that RAN and read unfavourably; it does not apply to a control that provably NEVER EXECUTED, because an instrument gap is a bug and not a reading. Both gaps below are mechanical and demonstrable, which is the condition §4.0(1) attaches. This amendment registers the fix and a supplementary run under that clause's own terms: a NEW artifact, the original never edited or re-scored, and no power to un-void or un-fail anything.",
+      "gap_1_the_capability_blind_baselines_b4_arm": {
+        "what_section_8_asks": "whether the stateless replayer can RESPOND TO a B4 mutation — its output with the mutation against its output without it. §8: 'the stateless baseline cannot respond to any B4 mutation — by construction, not by hope'.",
+        "what_the_runner_did": "compared the stateless replay against the RECORDED digest.",
+        "why_that_is_a_gap_and_not_a_reading": "a binding-dependent turn ALWAYS diverges from its record under a stateless replayer, because the record's answer consumed an assumption the stateless arm ignores — whether or not anything was mutated. The arm's output is therefore a function of statelessness alone and carries no information about the mutation. It never executed as designed, and the demonstration is that it would report the same 58 with a no-op mutation.",
+        "consequence_in_the_committed_artifact": "session_ledger_run.json records `b4_score: 58` beside the sentence 'a score above zero means the mutation harness is leaking into input_bytes'. That diagnosis is wrong and it is LEFT STANDING, unedited, because the artifact is the record of what executed. This amendment is where it is corrected.",
+        "fix": "score_baseline_b4 replays the unmutated journal statelessly and the mutated journal statelessly and compares the watched turn between those two."
+      },
+      "gap_2_b6s_generator_ceiling": {
+        "registered_floor": "B6: ≥30 mutations of live but uncited assumptions.",
+        "what_the_generator_could_produce": "at most one case per half-B session. Half B holds 25 sessions, so the ceiling was 25 before any session was examined; four sessions offered no qualifying turn and it produced 21.",
+        "why_that_is_a_gap_and_not_a_reading": "a generator whose ceiling sits below the floor it feeds is ROADMAP-v0.21 §4.0(3)'s unmeetable-floor construction defect, appearing inside the instrument rather than inside the gate. The floor was meetable — the corpus holds far more than 30 live-but-uncited (turn, assumption) pairs — and only the generator could not reach it.",
+        "fix": "up to two cases per half-B session (B6_PER_SESSION = 2), which raises the ceiling to 50 against a floor of 30."
+      },
+      "gap_3_verdicts_that_watched_only_their_numerator": {
+        "what_happened": "the runner reported B6 GREEN on 21 cases against a registered floor of ≥30, because the verdict checked only that flips were zero.",
+        "why_it_matters_beyond_b6": "this cycle's recurring catch is assertions written so they cannot go red (ROADMAP-v0.21 §4), and this one was found inside the run that was meant to be watching for it. A clause that cannot go red for having too few cases is a clause whose denominator nobody is watching.",
+        "fix": "REGISTERED_DENOMINATORS names B5's 60, B6's 30 and B8's 20, and every zero-flip clause now reports SHORT OF DENOMINATOR rather than GREEN when its case count is below the registered floor."
+      },
+      "what_the_supplementary_run_may_not_do": "un-fail R1. B10 read RED in the original run, B10 executed correctly, and it is therefore a reading that stands. The supplementary run re-scores B10 and must get the same answer; if it did not, that would itself be the finding.",
+      "what_it_changes_in_this_file": "nothing. No clause, floor, seed, cap, denominator or verdict is edited. The registered denominators it names were already registered — in §7, verbatim, in this file's construction_gate block."
+    },
+    {
+      "amendment": 3,
+      "dated": "2026-08-25",
+      "made_after": "runs 1 and 2 executed and were committed unedited. Made BEFORE the repair is written, before the corpus is re-recorded, and before run 3.",
+      "adjudication_this_amendment_records": {
+        "by": "the maintainer, in writing, on the run-1/run-2 readout",
+        "finding": "B10's red is a CONSTRUCTION DEFECT IN THE OBJECT, not an unfavourable control reading. The §8 controls — B4, B5, B6 and the voiding sentence — all held, so the no-chase rule does not bind: there is no voided control here to leave alone. The governing precedent is the suite gate itself (v0.20's gate runs 1 and 2, reports/test_gate_v020/runs.md): red, fix the defect, fresh run at the fixed tree, both receipts retained.",
+        "what_this_does_not_license": "reinterpreting B10, moving its denominator, or re-authoring the corpus. The defect is repaired in the SERVING PATH; the sealed corpus's sessions, lines, counts, floors and A/B split do not move."
+      },
+      "the_defect": {
+        "where": "harness._route_retract, the arm that refuses an assumption id the session does not hold",
+        "what_it_did": "rendered one detail string when a ledger was attached ('no live assumption 'a999' in this session') and a different one when none was ('this session keeps no assumption ledger, so there is nothing to retract'). The turn cites nothing, so §7 B10 quantifies over it, and the two renderings are not byte-identical.",
+        "why_it_is_a_defect_and_not_a_reading": "B10 states the property the object is supposed to have — 'session state may never leak into unconditional answers'. The ledger's EXISTENCE reached the bytes of an answer that consumed no assumption. Nothing about the measurement was wrong; the object was.",
+        "measured": "10 of 260 uncited turns in the sealed corpus, all the same line, in the ten shape-2 sessions. Identical in run 1 and run 2."
+      },
+      "the_two_candidate_fixes_and_the_choice": {
+        "a_render_statelessly": "drop the attached ledger from the unknown-id arm, so the refusal renders byte-identically to its stateless form. The ledger's content was doing no work for an id that is not in it.",
+        "b_cite_what_was_read": "have the refusal cite what it read, bringing the turn under the citation regime.",
+        "chosen": "a",
+        "why_a_and_not_b": "§3 fixes what a citation IS: 'assumptions_cited is emitted by a read barrier on normal_form access inside the resolver: a citation exists iff a read event exists'. The unknown-id check reads the ID INDEX — whether a key is present in the live set — and never touches any assumption's normal_form. Under (b) the turn would have to cite something it did not read, which means widening the citation contract mid-cycle from normal_form access to any ledger access. That would weaken B12 (a citation would no longer mean the answer consumed an assumption's content) and dilute B4's denominator with turns whose byte-dependence is on the ledger's shape rather than on any premise. (a) leaves the contract exactly where §3 put it.",
+        "does_a_break_B7": "no. B7 requires every refusal turn to carry a receipt_digest with an explicit (possibly empty, never null) citation list. The refusal is still a refusal, still typed `unknown_assumption`, still receipted, and its citation list is still explicitly empty. (a) stops the arm DECORATING itself with ledger state; it removes nothing B7 asks for.",
+        "what_a_costs": "the person typing `retract a999` in a session that holds assumptions is no longer told, in those words, that a ledger exists. They are told that no live assumption of that id is in this session and that nothing was changed, which is the true and sufficient thing and is the same sentence either way."
+      },
+      "the_sweep_before_the_rerun": {
+        "why": "one defect of a family is a reason to look for the family, not a reason to fix one member and rerun.",
+        "method": "an AST walk over every `_route_*` function in scripts/harness.py, collecting attribute and getattr reads of CoreSession's session-mutable fields (pending_candidates, pending_query, pending_resolver, context_hops, context_seen, state, active_slot, assumptions, events, story, resolver_index, session_id). Mechanical, not a reading of the code by eye.",
+        "findings": [
+          {
+            "route": "_route_retract",
+            "reads": "assumptions",
+            "disposition": "THE DEFECT. Repaired by (a) in this cycle."
+          },
+          {
+            "route": "_route_suppose",
+            "reads": "assumptions",
+            "disposition": "the typed `assumption_budget` refusal reads the live set's SIZE and renders for it. Already disarmed by construction in amendment 1: the protocol caps live assumptions at 8, so a recorded session never declares a ninth and B10's denominator never contains one. The refusal is exercised in tests/test_session_ledger.py, outside the sealed corpus."
+          },
+          {
+            "route": "_route_resolver and _route_pending_context",
+            "reads": "pending_candidates, pending_query, pending_resolver, context_hops, context_seen",
+            "disposition": "PRE-EXISTING, NOT LEDGER STATE, AND NOT REPAIRED. The resolver ASK subloop (P-LS6) is session state that predates this design: a `narrow` or `cancel` line routes and renders differently depending on whether a candidate set is pending, and `route_line`'s own dispatch consults it. This is exactly what §12 suspends for this cycle — 'the rule that the served surface is stateless one-line-in, one-answer-out'. No recorded session contains a `narrow` or `cancel` turn, so B10's denominator never meets one. That is a REAL LIMIT ON WHAT B10 PROVES and it is published here rather than left to be discovered: B10's green, when it comes, covers the ledger's state and not the resolver ASK's."
+          },
+          {
+            "route": "_route_dispatch",
+            "reads": "session_id",
+            "disposition": "checked and clean. The id is passed to the dispatcher but does not reach the rendered bytes — verified by serving the same line into two sessions with different ids and comparing: identical. Recorded because a reader running the same sweep will see the hit and deserve the answer."
+          }
+        ]
+      },
+      "run_3_protocol": {
+        "the_corpus_does_not_move": "the same 60 authored sessions, the same lines, the same ids by the same counter rule, the same protocol, the same caps, the same A/B split. scripts/record_session_corpus.py is not edited.",
+        "but_the_journals_are_re_recorded_and_here_is_why": "the repair touches scripts/harness.py, which is in build_throughput_tasks.RENDERING_MODULES, so the `rendering_module_digests` pin moves. That is the pin working correctly: a journal recorded before the serving path changed MUST NOT replay against the code after it, and every replay would otherwise refuse `stale-environment` — which is B3's mechanism doing its job, not a failure. So the corpus is recorded again at the fixed tree, exactly as a suite gate re-runs at the fixed tree.",
+        "the_old_seal_is_retained_unedited": "experiments/session_corpus_seal_pre_repair.json keeps the pre-repair seal byte for byte. The new seal carries the old one's whole-file digest and supersedes it in writing.",
+        "the_delta_is_published_and_is_the_checkable_claim": "the new seal carries a `repair_delta` block naming every turn whose `answer_bytes_digest` changed between the pre-repair recording and the post-repair one. The registered expectation, frozen HERE before the re-recording: EXACTLY the ten turns B10 named, and no others. More than ten means the repair reached further than the defect; fewer means it did not reach the defect; either is a finding and is published as one.",
+        "counts_must_not_move": "sessions, turns, binding-dependent turns, refusal turns and the A/B split are re-derived and compared against the pre-repair seal. Any movement is a finding.",
+        "both_prior_run_artifacts_are_retained_unedited": "experiments/session_ledger_run.json and experiments/session_ledger_run2.json are neither edited nor deleted. Run 3 is a third artifact.",
+        "all_clauses_are_re_adjudicated": "B1-B8 and B10-B13, and R1 on run 3.",
+        "one_repair_only": "if run 3 shows ANY new red, the run is committed and reported and no second repair is attempted inside this commission."
+      },
+      "b1_clause_1_stays_missed": "the ordering slip — the replayer committed before the seal — is not touched by any of this. It stays published as MISSED, it is R1-exempt by this file's own text, and it is not reinterpreted.",
+      "what_it_changes_in_this_file": "no clause, floor, seed, cap, denominator or verdict. It records an adjudication, a repair design, a mechanical sweep and a re-run protocol, all dated before the repair exists."
+    },
+    {
+      "amendment": 4,
+      "dated": "2026-08-26",
+      "made_after": "runs 1, 2 and 3, on independent review of the merge candidate.",
+      "subject": "the floor sentence's grammar, and the RETRACTION of the justification amendment 1 gave for reading it as it did.",
+      "orchestrator_ruling_verbatim": "The design author adjudicates the floor sentence's grammar: 'in half B's share alone' modifies the final clause (binding-dependent turns ≥36) only; the sessions (≥30) and turns (≥120) floors are corpus-wide, which is how the prereg read it and how the design's own meetability argument was authored. The roadmap's compressed all-three-in-half-B reading was a transcription artifact, corrected here rather than inherited. The prereg's original justification ('a coin flip on a hash-derived split') is RETRACTED as factually wrong — the split was deterministic and knowable when the ids froze; the correct justification is authorial intent plus the meetability argument's own text. Both readings' numbers stay published in the seal (25 in half B; the roadmap reading would have stopped).",
+      "what_this_replaces": {
+        "where": "this file's floors_and_their_meetability.P3_corpus_floor.why_this_reading_and_the_discrepancy_it_resolves",
+        "the_retracted_sentence": "under the roadmap's reading, 30 sessions in half B against a 60-session cap would be a coin flip on a hash-derived split — an unmeetable-by-construction floor of exactly the shape §4.0(3) was written after C-E1 to forbid.",
+        "why_it_was_wrong": "the split is `half = 'B' if int(sha256(session_id)[:2],16) % 2 else 'A'` over ids fixed by a counter in this very file. It is DETERMINISTIC and was knowable the moment the ids froze — before any recording. Calling it a coin flip described a randomness that does not exist, and dressed an authorial reading in a governance argument it did not need.",
+        "the_correct_justification": "authorial intent, adjudicated by the design's author above, plus the design's own meetability argument, which was written for a corpus-wide reading and does not parse under the other one.",
+        "the_original_is_not_edited": "the retracted sentence stays where it was written. This amendment replaces it; it does not erase it. A justification that was wrong and is quietly deleted teaches nothing, and a reader who wants to know whether the reading was chosen for a good reason needs to see the bad reason it was first given."
+      },
+      "what_does_not_change": {
+        "the_reading": "unchanged — 30 sessions and 120 turns corpus-wide, 36 binding-dependent in half B. Amendment 1's reading was right; only its reason was wrong.",
+        "the_numbers": "unchanged. 60 sessions, 410 turns, 58 binding-dependent in half B. Floor met.",
+        "what_stays_published": "BOTH readings' numbers stay in experiments/session_corpus_seal.json. Half B holds 25 sessions, and under the roadmap's compressed reading this cycle would have STOPPED and published 'multi-turn binding is rare in practice'. That number is not removed by the ruling; a ruling that deleted the number the other reading would have produced would make itself uncheckable."
+      },
+      "also_corrected_outside_this_file": "docs/ROADMAP-v0.21.md §1.1 carries a dated one-line correction, because the transcription artifact lives there and a roadmap that keeps saying the wrong thing is a roadmap the next cycle inherits."
+    },
+    {
+      "amendment": 5,
+      "dated": "2026-08-26",
+      "made_after": "runs 1, 2 and 3, on independent review of the merge candidate.",
+      "subject": "amendment 3's sweep was published with a false count. It is corrected here, and the original is not edited.",
+      "the_false_claim": {
+        "where": "amendment 3's the_sweep_before_the_rerun.findings, and the test that backed it, which asserted the set of ledger-reading routes was exactly {_route_suppose, _route_retract}.",
+        "what_it_said": "that two `_route_*` functions read the assumption ledger.",
+        "what_is_true": "THREE routes reach the ledger. `_route_evaluate` reaches it through the helper `_live_bindings`, one call away (harness.py's `_route_evaluate` calls `_live_bindings`, which reads `getattr(session, 'assumptions', None)`).",
+        "why_the_sweep_missed_it": "the AST walk was scoped to functions whose OWN name begins with `_route`, and to `getattr` calls only. `_live_bindings` is a module-level helper with a different name prefix, so nothing in the walk could see it. The sweep's own PROSE described what it was supposed to cover — reads of session-mutable state by the serving path — and the implementation covered less than the prose did.",
+        "the_honest_restatement": "Three routes read the ledger. All three read it, at least on one path, WITHOUT firing the read barrier: `_route_evaluate` calls `bound_names()` to decide whether any live assumption is relevant; `_route_suppose` calls `declare()`, which deliberately does not fire the barrier because a declaring turn must not cite; `_route_retract`'s unknown-id arm checks presence only. Of those three non-barrier reads, only two can vary a RENDERING and so carry B10 exposure — `_route_suppose`'s budget refusal (disarmed by the protocol's cap of 8) and `_route_retract`'s unknown-id arm (the defect B10 caught, repaired by fix (a))."
+      },
+      "does_it_change_any_verdict": {
+        "b10": "no. `_route_evaluate`'s non-barrier read decides only WHETHER to consult the ledger; if it consults, the barrier fires and the turn cites, so the turn is outside B10's quantifier. There is no B10 exposure on that path and runs 1-3's B10 verdicts are unaffected.",
+        "b12": "no. The barrier is still the only path from an assumption's normal_form into an answer, which is what B12 corroborates.",
+        "what_it_does_change": "the CONFIDENCE a reader may place in the sweep. A sweep that missed a call hop once had to be widened before its conclusion could be trusted, and it was."
+      },
+      "the_fix": {
+        "the_test_is_widened_to_what_the_prose_already_described": "tests/test_session_ledger.py's `ledger_reading_routes` now follows call hops through module-level functions (bounded at three) and counts plain attribute access as well as `getattr`. It asserts the set is exactly the three named above, and asserts specifically that the `_route_evaluate -> _live_bindings` hop is being followed.",
+        "the_reviewer_s_bypass_is_a_fixture": "a synthetic `_route_hypothetical` that reaches the ledger through a helper named `_sneaky` must be reported by name, and a second fixture checks plain attribute access. A sweep that cannot see through one call hop is a sweep that already missed one."
+      },
+      "what_it_changes_in_this_file": "no clause, floor, seed, cap, denominator or verdict. Amendment 3's text is not edited; this amendment replaces the sentence it got wrong."
+    },
+    {
+      "amendment": 6,
+      "dated": "2026-08-26",
+      "subject": "two things the review's own fixes discovered, recorded because both are about instruments rather than results.",
+      "the_recorder_is_pinned_and_therefore_uneditable": {
+        "what_happened": "a low-priority review item asked for stale `harness.py:NNNN` line citations to be refreshed across the cycle's new files. Two of them live in scripts/session_recorder.py — which the recording protocol PINS by digest (amendment 1). Refreshing them changed the recorder's bytes, and scripts/record_session_corpus.py refused to record: 'the recorder's bytes do not match the digest the protocol froze'.",
+        "the_guard_was_right": "the C3 fix pins the recorder so that a sealed corpus is known to have been recorded by a known instrument. It pins BYTES, and a comment is bytes. There is no cosmetic edit to a pinned module; there is only an edit.",
+        "what_was_done": "the citation refresh was REVERTED in scripts/session_recorder.py and scripts/session_ledger.py, and the two modules are byte-identical to their pin. A second attempt to add a note INSIDE the module explaining that it is unpinnable was also reverted, for the same reason it was needed — the note would have broken the pin it described. The note lives here instead.",
+        "the_rule_this_states": "the two recorder modules do not accept edits, cosmetic or otherwise, for as long as the corpus they recorded is sealed. Anything that must be said about them is said in this file. Line citations elsewhere in the cycle were refreshed normally; these two keep theirs stale on purpose, and that is cheaper than re-pinning an instrument after it has been used.",
+        "why_it_is_recorded_rather_than_quietly_handled": "a later reader will notice two stale citations in the recorder and try to fix them, and will hit the same wall. This is the sign on the wall."
+      },
+      "b2s_verdict_watched_the_wrong_thing": {
+        "what_happened": "while re-running the gate after a rendering module moved, B2 reported **GREEN having reproduced 0 of 410 turns**. Every replay had refused `stale-environment` — correctly, because the pin had moved — and B2's verdict counted only per-turn DIVERGENCES. A refusal produces none, so an empty miss list read as a pass.",
+        "why_it_is_the_same_defect_a_third_time": "this cycle's recurring catch is assertions written so they cannot go red. Amendment 2 already fixed it once for B5/B6/B8, whose verdicts checked flips and never their denominators. B2 had the same shape in a different dress: it watched the SHAPE of its miss list and never the VALUE of its numerator. Three instances now, in three different clauses, all found by reading a run rather than by a test.",
+        "the_fix": "B2 is GREEN only when `turns_reproduced == denominator` AND no session refused. Refusing sessions are published in `sessions_that_refused` with their `pin_mismatch`, and the artifact carries the sentence: a stale-environment refusal is an honest refusal and a correct one — B3 exists to make it happen — but it is not B2 passing.",
+        "does_it_change_a_published_verdict": "no. Runs 1, 2 and 3 each replayed 410 of 410 with no refusals, so B2's verdict is the same under either rule in every committed run. What changed is that the clause can now go red for the reason it could not before.",
+        "authority": "ROADMAP-v0.21 §4.0(1)'s instrument-gap half, the same clause amendment 2 used. Runs 1-3 are untouched."
+      },
+      "what_it_changes_in_this_file": "no clause, floor, seed, cap, denominator or verdict."
+    }
+  ]
+}

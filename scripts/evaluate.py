@@ -407,6 +407,48 @@ def evaluate(text: str) -> Evaluation:
     return Evaluation(expression, bindings, value)
 
 
+def free_names(text: str) -> tuple[str, ...]:
+    """The names `text` uses and does not bind, sorted. `()` when it computes.
+
+    Added for the session ledger (DESIGN-session-ledger §3): a live
+    assumption may supply a binding for a name the line leaves free, and the
+    caller has to know WHICH names before it can decide whether any live
+    assumption is even relevant. Reading them off the `EvalError` message
+    would be a parser for an English sentence, which is the one thing this
+    file exists not to be — so the names come from the same walk `evaluate`
+    already does, through the same `_eval_tree`.
+
+    `()` covers three different situations on purpose — nothing to parse, a
+    parse failure, and a complete evaluation — because in all three the
+    answer to "which free names could an assumption fill?" is none of them.
+    A caller that needs to tell those apart calls `evaluate` and reads the
+    exception, exactly as before.
+    """
+
+    expression = find_expression(text)
+    if expression is None:
+        return ()
+    try:
+        tree = Parser(tokenize(expression)).parse()
+    except (TemplateParseError, ValueError, IndexError):
+        return ()
+    bindings = find_bindings(text)
+    free: set[str] = set()
+    # A relation's two sides are the trees `verify` walks; `_eval_tree` has
+    # no `rel` case, so walking the relation itself would raise on exactly
+    # the lines the ledger most wants to answer (`x > 4` under `x = 5`).
+    branches = tree[2] if tree[0] == "rel" else (tree,)
+    for branch in branches:
+        try:
+            _eval_tree(branch, bindings, free)
+        except EvalError:
+            # A bound or a bad operator stops THIS branch; the names already
+            # collected still stand, and a caller asking which names are
+            # free is not asking whether the line computes.
+            continue
+    return tuple(sorted(free))
+
+
 def render(result: Evaluation) -> list[str]:
     out = [f"expression : {result.expression}"]
     if result.bindings:

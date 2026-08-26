@@ -1,0 +1,527 @@
+{
+  "builder_digest": "4e730562bd790b3261ddda98e7540abb30f23827fd72dfa9a8cf57d871acc71a",
+  "built_by": "scripts/measure_command_bound.py",
+  "classes": [
+    {
+      "admitted_commands": 1,
+      "answering_vocabulary": null,
+      "bound_kind": "closed",
+      "class_index": 0,
+      "counting": "the empty line, and nothing else (harness.py:2294-2305)",
+      "example": "",
+      "form": "(empty line)",
+      "route": "none",
+      "slots": []
+    },
+    {
+      "admitted_commands": 32253,
+      "answering_vocabulary": 14830,
+      "bound_kind": "closed",
+      "class_index": 1,
+      "counting": "corpus 29 + discipline 37 + word 17356 + id 14830 + cancel 1 = 32253",
+      "example": "narrow corpus logic",
+      "form": "narrow <corpus|discipline|word|id> <value> | cancel",
+      "precondition": "reachable only while a resolver candidate set is pending (harness.py:2307-2308); the precondition gates *when* the class is reachable, not *how many* lines it admits",
+      "route": "resolver_context",
+      "slots": [
+        {
+          "kind": "closed",
+          "name": "kind",
+          "size": 4,
+          "vocabulary": "context_kinds"
+        },
+        {
+          "kind": "closed",
+          "name": "value",
+          "note": "`narrow id V` narrows to V only when V is already in the pending candidate set, so the id arm's live vocabulary is a subset of statement_ids bounded by the pending set; the count below uses the full id vocabulary, which is the ceiling",
+          "per_kind_sizes": {
+            "corpus": 29,
+            "discipline": 37,
+            "id": 14830,
+            "word": 17356
+          },
+          "size": null,
+          "size_is_null_because": "this slot has no ONE size. Its vocabulary is selected by the `kind` slot, so the class's admitted count is a SUM over four disjoint vocabularies rather than a product of two slot sizes, and a single number here would be a number for none of them. The four sizes are listed in `per_kind_sizes` and the sum is the class's `admitted_commands`. `null` here means 'see the four', never 'unbounded' \u2014 the class is `closed` and the artifact means it. (Clarified 2026-08-26, from independent review: a null beside a `closed` label reads as an unbounded slot unless it says otherwise.)",
+          "vocabulary": "per-kind: corpus_names | disciplines | resolver_words | statement_ids"
+        }
+      ]
+    },
+    {
+      "admitted_commands": null,
+      "answering_note": "the distinct compound subterm skeletons committed statements host with every slot in class V \u2014 the exact set of queries this route can answer `solved` for; 99 further compound skeletons carry a parameter-class slot and are unreachable from any typed query (ownership.py:104-108)",
+      "answering_vocabulary": 38759,
+      "bound_kind": "open",
+      "class_index": 2,
+      "example": "owns x ^ 2",
+      "form": "owns <template-expr>",
+      "route": "ownership",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "template-expr",
+          "size": null,
+          "why": "the matcher's expression grammar is recursive: `x ^ 2`, `x ^ 2 + 1`, `f(x ^ 2 + 1)` \u2026 are all parses, so the admitted input language is countably infinite"
+        }
+      ],
+      "unbounded_reason": "template-expr is a recursively generated expression language; nothing bounds its size but the line the person can type"
+    },
+    {
+      "admitted_commands": null,
+      "answering_note": "a suppose line that binds a variable and computes is routed to evaluate first (harness.py:2312-2320), so this class's *answering* half is evaluate's and is counted there",
+      "answering_vocabulary": null,
+      "bound_kind": "open",
+      "class_index": 3,
+      "example": "suppose the corpus is complete",
+      "form": "suppose <claim>",
+      "route": "supposition",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "claim",
+          "size": null,
+          "why": "`_route_suppose` holds whatever text follows the command word; `_atom` lowercases, collapses whitespace and strips one of three leading negation markers, and admits everything else (supposition.py:77-86)"
+        }
+      ],
+      "unbounded_reason": "claim is free text; the supposition route refuses no claim for being outside a vocabulary, because holding a claim is not checking it"
+    },
+    {
+      "admitted_commands": 64,
+      "answering_note": "only a LIVE assumption can be retracted, and \u00a73 caps live assumptions at 8; the rest refuse with `unknown_assumption`",
+      "answering_vocabulary": 8,
+      "bound_kind": "closed",
+      "class_index": 4,
+      "counting": "one line per assumption id a session can hold. This is the only class in the grammar whose vocabulary is SESSION-scoped rather than corpus-scoped: `a001` names different claims in different sessions, so the number is a per-session ceiling and the artifact says so rather than multiplying it by anything",
+      "example": "retract a001",
+      "form": "retract <assumption-id>",
+      "route": "retraction",
+      "slots": [
+        {
+          "kind": "closed",
+          "name": "assumption-id",
+          "note": "ids are minted `aNNN` in declaration order within one session, and a session is capped at 64 turns, so at most 64 assumptions can ever be declared in one \u2014 the ceiling is the turn cap, not the live-assumption cap of 8, because a retracted or superseded id stays a real id",
+          "size": 64,
+          "vocabulary": "session_assumption_ids"
+        }
+      ]
+    },
+    {
+      "admitted_commands": 2537,
+      "answering_vocabulary": 2537,
+      "bound_kind": "closed",
+      "class_index": 5,
+      "counting": "one line per statement id the committed twin ledger lists; an id outside the ledger reaches the route and is answered `exhausted`, which is a refusal to name a group and is not counted",
+      "example": "twin programming.dfactorial.recursive",
+      "form": "twin <statement-id>",
+      "route": "twin",
+      "slots": [
+        {
+          "kind": "closed",
+          "name": "statement-id",
+          "size": 2537,
+          "vocabulary": "twin_ledger"
+        }
+      ]
+    },
+    {
+      "admitted_commands": 8,
+      "answering_vocabulary": 8,
+      "bound_kind": "closed",
+      "class_index": 6,
+      "counting": "the manifest's (world_id, path) pairs, counted as pairs rather than as a product: an unlisted path is refused by name",
+      "example": "reachable visual.rt0000 data/closure_targets/visual.rt0000.reachable.0.state.json",
+      "form": "reachable <world-id> <target-path>",
+      "route": "closure",
+      "slots": [
+        {
+          "kind": "closed",
+          "name": "world-id",
+          "size": 2,
+          "vocabulary": "closure_targets"
+        },
+        {
+          "kind": "closed",
+          "name": "target-path",
+          "note": "targets must be listed in the committed manifest",
+          "size": 8,
+          "vocabulary": "closure_targets"
+        }
+      ]
+    },
+    {
+      "admitted_commands": null,
+      "answering_vocabulary": 19,
+      "bound_kind": "open",
+      "class_index": 7,
+      "example": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
+      "form": "conform <statement-id> <bindings>",
+      "route": "conform",
+      "slots": [
+        {
+          "kind": "closed",
+          "name": "statement-id",
+          "size": 19,
+          "vocabulary": "conformance_register"
+        },
+        {
+          "kind": "open",
+          "name": "bindings",
+          "size": null,
+          "why": "a binding is `name=value` over exact numerals; the value alphabet is the integers and rationals the evaluator parses, which is countably infinite"
+        }
+      ],
+      "unbounded_reason": "the statement-id factor is closed at 19 register entries, but the bindings factor is an open numeral language, so the product is unbounded"
+    },
+    {
+      "admitted_commands": null,
+      "answering_note": "one committed story, verified rather than invented",
+      "answering_vocabulary": 1,
+      "bound_kind": "open",
+      "class_index": 8,
+      "example": "tell me a story",
+      "form": "<story request>",
+      "route": "story",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "story request",
+          "size": null,
+          "why": "`story.STORY_REQUEST` is a `search`, not a `fullmatch`: any line containing one of five trigger phrases is admitted, so the admitted language is infinite while the material behind it is one story"
+        }
+      ],
+      "unbounded_reason": "the trigger is a substring search over free text (story.py:65-73)"
+    },
+    {
+      "admitted_commands": null,
+      "answering_vocabulary": null,
+      "bound_kind": "open",
+      "class_index": 9,
+      "example": "where does the observer think the marble is",
+      "form": "<belief narration> / where does A think B is",
+      "route": "belief",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "agent",
+          "size": null,
+          "why": "`belief.QUERY`'s WORD group matches any word"
+        },
+        {
+          "kind": "open",
+          "name": "subject",
+          "size": null,
+          "why": "same group; the narration that binds them is the line"
+        }
+      ],
+      "unbounded_reason": "the belief route reads its world out of the narration in the same line (belief.py:175-201), so it has no external vocabulary to be closed over"
+    },
+    {
+      "admitted_commands": null,
+      "answering_vocabulary": null,
+      "bound_kind": "open",
+      "class_index": 10,
+      "example": "x = 5, x ^ 2",
+      "form": "<computable relation or expression>",
+      "route": "evaluate",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "expression",
+          "size": null,
+          "why": "arbitrary numerals and a recursive operator grammar"
+        }
+      ],
+      "unbounded_reason": "exact arithmetic over unbounded numerals; the one registered bound is on the RESULT (`evaluate.MAX_RESULT_DIGITS`, E0e), not on the input vocabulary \u2014 a bound on what may be rendered is not a bound on what may be typed"
+    },
+    {
+      "admitted_commands": null,
+      "answering_note": "the vocabulary is the working tree, which changes with every commit including the one carrying this artifact; a count that cannot be frozen is not a bound, and a self-referential count would make the reproduction check red for reasons unrelated to the grammar",
+      "answering_vocabulary": null,
+      "bound_kind": "open",
+      "class_index": 11,
+      "example": "staging/proposal.json",
+      "form": "<repo-relative path>",
+      "route": "write_gate",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "repo-relative path",
+          "size": null,
+          "why": "`_existing_file` admits every regular file under the root \u2014 a closed set \u2014 but `_looks_like_path` also admits any whitespace-free string ending `.json` or carrying a separator, existing or not, so the class as a whole is open"
+        }
+      ],
+      "unbounded_reason": "`_looks_like_path` is a syntactic test over free strings (harness.py:961-972); a path that does not exist routes here on purpose so the gate's own refusal is what the person reads"
+    },
+    {
+      "admitted_commands": null,
+      "answering_note": "the resolver can BIND or ASK about committed statements and nothing else, so its answering vocabulary is the statement set even though its input language is not",
+      "answering_vocabulary": 14830,
+      "bound_kind": "open",
+      "class_index": 12,
+      "example": "de morgan laws",
+      "form": "<free text the graph claims>",
+      "route": "resolver",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "free text",
+          "size": null,
+          "why": "the resolver takes any line the earlier rows declined"
+        }
+      ],
+      "unbounded_reason": "free text"
+    },
+    {
+      "admitted_commands": null,
+      "answering_vocabulary": null,
+      "bound_kind": "gated",
+      "class_index": 13,
+      "counting": "two carrier forms (`what is X`, `define X` and the inverted form) over the WordNet lemma set; the count above is the lemma set itself, and it is null when the archive did not register",
+      "example": "what is a lemma",
+      "form": "what is X | define X",
+      "gate_reason": "the WordNet archive is not a committed artifact and did not register on this boot: no archive (fetch_sources.py --fetch wordnet-2025-json, or set COROLLARY_WORDNET=...)",
+      "gated_on": "retrieve.wordnet",
+      "route": "gloss",
+      "slots": [
+        {
+          "kind": "closed",
+          "name": "X",
+          "note": "`definitional_target` additionally requires the question to END at X in the forward form (gloss.py:95-120), so the carrier phrase is fixed and X is the only free slot",
+          "size": null,
+          "vocabulary": "wordnet_lemmas"
+        }
+      ]
+    },
+    {
+      "admitted_commands": null,
+      "answering_note": "the dispatcher abstains by construction \u2014 it materializes nothing and can reach no verdict (P-LS2), so its answering vocabulary is empty, not merely small",
+      "answering_vocabulary": 0,
+      "bound_kind": "open",
+      "class_index": 14,
+      "example": "tell me about tomorrow's weather",
+      "form": "<everything else>",
+      "route": "dispatcher",
+      "slots": [
+        {
+          "kind": "open",
+          "name": "everything else",
+          "size": null,
+          "why": "the complement of the thirteen rows above"
+        }
+      ],
+      "unbounded_reason": "row 13 is defined as a complement; a complement of finite and infinite languages inside an infinite alphabet is infinite"
+    }
+  ],
+  "counting_rule": {
+    "admitted": "a line is admitted by a class when route_line's first-match-wins chain dispatches it to that class's route AND every slot carries a value from that class's registered vocabulary \u2014 a value the route can act on rather than refuse by name",
+    "open_classes_are_never_folded_into_the_total": true,
+    "refusals_are_not_counted": "every class refuses an unbounded set of lines by name; counting refusals would count the same infinity fourteen times",
+    "slot_kinds": {
+      "closed": "a finite set fixed by a named committed producer; the builder enumerates the producer and reports its size",
+      "open": "a recursively generated or free-text language; the class's admitted count is null and unbounded_reason names the slot"
+    }
+  },
+  "design": "docs/DESIGN-session-ledger.md",
+  "design_clause": "\u00a76 P1 \u2014 compute and commit the bound on admitted commands per template class of the registered grammar",
+  "determinism": "artifact committed from a deterministic runner; reproductions welcome and recorded (ROADMAP-v0.21 \u00a74.0(2))",
+  "finding": "The registered grammar is NOT finite. Of 15 template classes, 5 are closed and together admit 34863 commands; 9 admit countably infinite languages (row 2 (owns <template-expr>), row 3 (suppose <claim>), row 7 (conform <statement-id> <bindings>), row 8 (<story request>), row 9 (<belief narration> / where does A think B is), row 10 (<computable relation or expression>), row 11 (<repo-relative path>), row 12 (<free text the graph claims>), row 14 (<everything else>)); 1 is closed in principle but unreadable on this boot. Series 1's fold \u2014 'the grammar is finite, so enumeration cost stops being an argument and becomes a number' \u2014 holds for the closed classes and FAILS for the open ones, and the open ones are exactly where plain prose lands (the resolver row and the complement row). So the number enumeration buys is the ANSWERING vocabulary, not the admitted language: an enumerating proposer has a finite target only because the committed material is finite, never because the grammar is. That is the correction P1 makes to the fold it was folded out of.",
+  "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+  "line_grammar_source": "scripts/serve_chat.py LINE_GRAMMAR",
+  "measured_against": "the grammar whose digest this artifact carries, and only that one. P1 was first computed against a 14-row grammar and committed; v0.21's session ledger then added the `retract <assumption-id>` row its own \u00a73 status alphabet required, which moved the grammar this measurement is OF. The artifact is recomputed rather than annotated: P1 is a computation over a committed input, not a control that ran and read unfavourably, so the record-over-rerun rule does not reach it, and a bound measured against a grammar that no longer exists would be a false sentence in a canonical artifact. The first reading and this one are both in the history, and `line_grammar_digest` dates each of them exactly.",
+  "prerequisite": "P1",
+  "schema": "corollary.session-p1-command-bound/1",
+  "totals": {
+    "answering_vocabulary_union_is_not_summed": "answering vocabularies are per-class sets over overlapping material (statement ids appear in the resolver's, the twin ledger's and `narrow`'s), so they are published per class and never added.",
+    "closed_class_indices": [
+      0,
+      1,
+      4,
+      5,
+      6
+    ],
+    "closed_classes": 5,
+    "closed_total": 34863,
+    "gated_class_indices": [
+      13
+    ],
+    "gated_classes": 1,
+    "open_class_indices": [
+      2,
+      3,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14
+    ],
+    "open_classes": 9,
+    "open_total": null,
+    "template_classes": 15,
+    "why_gated_is_its_own_kind": "a gated class is closed in principle and unreadable on this boot. Folding it into `open` would claim the grammar is more open than it is; folding it into `closed` would put a null in a sum. It gets its own bucket and its own reason.",
+    "why_open_total_is_null": "9 of the 15 classes admit a countably infinite language. Summing them into a total would publish a number that is not a bound, so the total is reported over the closed classes only and the open classes are listed by index."
+  },
+  "vocabularies": {
+    "closure_targets": {
+      "pairs": 8,
+      "producer": "data/closure_targets/manifest.json",
+      "worlds": 2
+    },
+    "conformance_register": {
+      "entries": 19,
+      "producer": "experiments/conformance_register.json"
+    },
+    "context_kinds": {
+      "producer": "harness.CONTEXT_KINDS",
+      "size": 4,
+      "values": [
+        "corpus",
+        "discipline",
+        "id",
+        "word"
+      ]
+    },
+    "corpus_names": {
+      "producer": "resolver.default_index().corpus_of values",
+      "size": 29,
+      "values": [
+        "algebra.foundations.v1",
+        "algebraic_topology.invariants.v1",
+        "calculus.foundations.v1",
+        "chemistry.foundations.v1",
+        "differential_geometry.curves_surfaces_forms.v1",
+        "differential_topology.degree_index_morse.v1",
+        "economics.foundations.v1",
+        "geometric_modeling.curves_and_transforms.v1",
+        "geometry.foundations.v1",
+        "geospatial_topology.point_set_relations.v1",
+        "goedel_pset.skel.v1",
+        "graph_theory.counting_and_structure.v1",
+        "information_theory.foundations.v1",
+        "ingested_arithmetic.session.v1",
+        "lean_workbook.ground.v1",
+        "logic.boolean_foundations.v1",
+        "machine_learning.training_and_architecture.v1",
+        "minif2f.skel.v1",
+        "morphology.concatenative.v1",
+        "narrative.story_grammar.v1",
+        "number_theory.core.v1",
+        "numerical_analysis.computation_and_error.v1",
+        "physics.foundations.v1",
+        "probstat.statistics_foundations.v1",
+        "programming.core.v1",
+        "provability.goedel_loeb.v1",
+        "set_theory.boolean_foundations.v1",
+        "temporal_logic.linear_time.v1",
+        "trigonometry.core.v1"
+      ]
+    },
+    "denominators_that_differ_and_why": {
+      "and_the_consequence_worth_stating": "the `narrow id` and resolver answering vocabularies therefore SPAN THE HOLDOUT and the `owns` one does not. That is a fact about what these routes can name, published here rather than inferred from a subtraction; docs/DESIGN-holdout-quarantine.md governs what may be CLAIMED from holdout material, and nothing in this artifact claims anything from it.",
+      "corrected": "2026-08-26, from independent review. This field previously blamed the gap on nodes lacking a template tree and named the goedelpset skeleton corpus as the cause. That was wrong about the mechanism: goedelpset IS the holdout corpus, and the reason `owns` cannot reach it is the directory it is in, not the shape of its nodes. A plausible explanation for a correct number is still a wrong sentence.",
+      "difference": 2053,
+      "statement_ids": 14830,
+      "statements_owns_searches": 12777,
+      "why": "**the two routes read different DIRECTORIES.** `resolver.default_index` builds over BOTH `data/` and `data_holdout/` (`resolver.py:821-822`); `harness._route_ownership` calls `ownership.lookup(query, repo_root / 'data')`, so the matcher never sees the holdout at all. `decompose.load_trees` over `data/` yields 12,777 nodes and over `data_holdout/` yields 2,053 \u2014 and 2,053 is the whole difference, exactly."
+    },
+    "disciplines": {
+      "producer": "answer.compose(statement_id).disciplines, casefolded",
+      "size": 37,
+      "values": [
+        "algebra",
+        "algebraic_topology",
+        "calculus",
+        "chemistry",
+        "cognitive_science",
+        "combinatorics",
+        "computer_graphics",
+        "computer_science",
+        "differential_geometry",
+        "differential_topology",
+        "economics",
+        "finance",
+        "geometric_modeling",
+        "geometry",
+        "geospatial_topology",
+        "graph_theory",
+        "information_theory",
+        "linear_algebra",
+        "logic",
+        "machine_learning",
+        "mathematics",
+        "morphology",
+        "narrative",
+        "number_theory",
+        "numerical_analysis",
+        "physics",
+        "probability",
+        "probability_theory",
+        "programming",
+        "provability",
+        "robotics",
+        "set_theory",
+        "statistics",
+        "syntax",
+        "temporal_logic",
+        "topology",
+        "trigonometry"
+      ]
+    },
+    "owns_query_skeletons": {
+      "query_reachable_skeletons": 38759,
+      "query_unreachable_skeletons": 99,
+      "statements_searched": 12777
+    },
+    "resolver_words": {
+      "producer": "resolver.default_index() by_keyword | by_lexicon | by_prose posting keys",
+      "size": 17356
+    },
+    "statement_ids": {
+      "producer": "resolver.default_index().corpus_of \u2014 built over BOTH data/ and data_holdout/ (resolver.py:821-822), so this vocabulary spans the holdout",
+      "size": 14830
+    },
+    "twin_ledger": {
+      "corrected": "2026-08-26. The first reading walked for members-as-strings and found the two diagnostic lists instead of the five group lists: 12,589 ids reported, 10,111 of them routing to `exhausted`, and 59 real members missed.",
+      "groups": 2015,
+      "groups_by_field": {
+        "aliased_twin_groups_beyond_typed": 1,
+        "family_twin_groups_beyond_typed": 4,
+        "mirror_twin_groups": 5,
+        "shape_twin_groups": 1030,
+        "typed_twin_groups": 975
+      },
+      "levels": [
+        "typed",
+        "family",
+        "aliased",
+        "mirror",
+        "shape"
+      ],
+      "members": 2537,
+      "producer": "reports/signature_matches.json",
+      "producer_fields": [
+        "typed_twin_groups",
+        "family_twin_groups_beyond_typed",
+        "aliased_twin_groups_beyond_typed",
+        "mirror_twin_groups",
+        "shape_twin_groups"
+      ]
+    },
+    "wordnet_lemmas": {
+      "gated_on": "retrieve.wordnet",
+      "lemmas": null,
+      "reason": "the WordNet archive is not a committed artifact and did not register on this boot: no archive (fetch_sources.py --fetch wordnet-2025-json, or set COROLLARY_WORDNET=...)"
+    },
+    "write_gate_existing_files": {
+      "existing_files": null,
+      "producer": "harness._existing_file over the working tree",
+      "reason": "the vocabulary is the working tree, which changes with every commit including the one carrying this artifact; a count that cannot be frozen is not a bound, and a self-referential count would make the reproduction check red for reasons unrelated to the grammar"
+    }
+  },
+  "what_this_does_not_claim": [
+    "no claim that the closed total is a bound on anything a person would type \u2014 it is a bound on what the closed classes can act on",
+    "no completeness claim over readings of prose (the unreceiptable claim series 1 refused; DESIGN-session-ledger \u00a711)",
+    "no claim about slice 2's proposer, which does not exist",
+    "the gloss row's lemma count is environment-gated and null here unless the WordNet archive registered on the measuring boot"
+  ]
+}

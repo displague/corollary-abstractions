@@ -1,0 +1,228 @@
+{
+  "assumptions": [
+    {
+      "assumption_id": "a001",
+      "declared_at_turn": 0,
+      "key_id": "k-a808d9dc20354deb",
+      "mac": "3580be3ff7080c5422980ce242338fdf3e5b0dc2ddf6ae7b02f13d5b326e16b9",
+      "normal_form": [
+        "k = 8",
+        true
+      ],
+      "status": "superseded",
+      "superseded_by": "a002",
+      "text_bytes": "k = 8"
+    },
+    {
+      "assumption_id": "a002",
+      "declared_at_turn": 3,
+      "key_id": "k-a808d9dc20354deb",
+      "mac": "55b8084a42a7c57f4cd10b8991725a4191e1004ba68c29282ad6726b4abc2a30",
+      "normal_form": [
+        "k = 12",
+        true
+      ],
+      "status": "live",
+      "superseded_by": null,
+      "text_bytes": "k = 12"
+    }
+  ],
+  "header": {
+    "created_utc": "2026-08-25T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "4f8b2150bd96e8dbc8df0f0a413dfbd04bca712bc07f09b9c0684c3ac1179911",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "09eda754405b5f9281d6a0fabb8667d89811c60e445757ad0b1d88b32d55714c",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v021-s28"
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [
+        "a001"
+      ],
+      "input_bytes": "suppose k = 8",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "0c592fc195b009505f43611df938b818712a3f0cc5ade49a1f4beedcf2a5dede",
+      "mac": "0ceba385230fbe0918f63d7fbc6f92aa7da66925ee3c2feaeb6e0e95f79871f5",
+      "prev_turn_digest": "01f82d68eabb79c8e102237a1d3bf3492fed0224af0dfa9d28f3240558877e5e",
+      "receipt_digest": "0a80c3e34c9a883b6e52b7c80699ba8efd3dc907ccd1ce467498bd4f9fc0d460",
+      "resolution": {
+        "assumption_id": "a001",
+        "grammar_query": "suppose <claim>",
+        "kind": "supposition"
+      },
+      "result": {
+        "answer_bytes_digest": "5028468531170114dba62d18983a1a5cadca5e313337d2e17a7beb08673908ea",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 0
+    },
+    {
+      "assumptions_cited": [
+        "a001"
+      ],
+      "assumptions_declared": [],
+      "input_bytes": "k ^ 2",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "0c592fc195b009505f43611df938b818712a3f0cc5ade49a1f4beedcf2a5dede",
+      "mac": "fcd66a4f54b2252cc909490b00d1a6002642fbb616e20a48108b140be8ac08df",
+      "prev_turn_digest": "ebcf16c106aba41f4b15646e4a67075c73822f2a1dc3d0ffbb788cf0fbf4dea8",
+      "receipt_digest": "0e7f6fd08d9548dd5cb1851677f42e32a164bcde5a920822be59bd58f21a8a5a",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "267b6d0558c09cffba2ee688a703e4a5e8a9be71156ac2948cd7780227b0bb0c",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 1
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "twin programming.factorial.recursive",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "0c592fc195b009505f43611df938b818712a3f0cc5ade49a1f4beedcf2a5dede",
+      "mac": "3988c69cc1e0216b2d3960a737d9ab057fac19b4c2ff385909f2252e9bb090fa",
+      "prev_turn_digest": "a2b9844131ecf72ee0e2c892703d73eb113141c02d7ef179069b33b5a45e2d44",
+      "receipt_digest": "ece79870261babb344691c0581906c7512cf34078978793ae20cc4c1952b8236",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "twin <statement-id>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+        "kind": "found",
+        "refusal_type": null
+      },
+      "session_events": [
+        {
+          "detail_digest": "c9fc2a7c90a99490c5e17ac0f7e61f7270f11c8f903dda4827d3ae2b5409e551",
+          "kind": "retrieve",
+          "stop_reason": "solved",
+          "subsystem_id": "retrieve.five_store",
+          "verdict": "VERIFIED"
+        }
+      ],
+      "turn_index": 2
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [
+        "a002"
+      ],
+      "input_bytes": "suppose k = 12",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "d6dc388a049d5bed664d7a12a63ba9aa39f9666cf3593bf6a99b4ec86662a430",
+      "mac": "0a308479931ef0caf7c4abb8fe474fca00b3d312e351d4badec070fde05bbe48",
+      "prev_turn_digest": "a405807f8136235eaee36d8fb91066e1d4bd346529f92e7835c01c4cce284ef4",
+      "receipt_digest": "6a99cecf41dd886fef9ac922ec3318ffdf78b086db6f3803a2b476f735a1f6bd",
+      "resolution": {
+        "assumption_id": "a002",
+        "grammar_query": "suppose <claim>",
+        "kind": "supposition"
+      },
+      "result": {
+        "answer_bytes_digest": "246434943ac212865f8a4a7f18c01304ebfe36a625ce0a58d54830f41af47917",
+        "kind": "waiting",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 3
+    },
+    {
+      "assumptions_cited": [
+        "a002"
+      ],
+      "assumptions_declared": [],
+      "input_bytes": "k ^ 2",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "d6dc388a049d5bed664d7a12a63ba9aa39f9666cf3593bf6a99b4ec86662a430",
+      "mac": "4f99665c7c05d24da779229d3c1a71034e65ca6f4523fb9646ddc731f4e991a8",
+      "prev_turn_digest": "e486350f822ddb71abe12633e323e6cdc00a3fae2b68e0fb9b49716bca6fba05",
+      "receipt_digest": "e52443060bc4ecc61a6e89061b598affbd1bf27c376a326331c5f69b553d24d4",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "7ad991b1d46b1f91f595b01de8a7e0f2cb71d1d68a08ffc9265319cd7b4ac76e",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 4
+    },
+    {
+      "assumptions_cited": [
+        "a002"
+      ],
+      "assumptions_declared": [],
+      "input_bytes": "k + 1",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "d6dc388a049d5bed664d7a12a63ba9aa39f9666cf3593bf6a99b4ec86662a430",
+      "mac": "83e989d16afe7e38d0420392d539dd07228cad2ed141eb23df91c4b32b490bde",
+      "prev_turn_digest": "da6da00c2a9669b7752cce648353c6677e01a8055e64423c6b690dd87263878d",
+      "receipt_digest": "8183de2786a6b990229d3fe67afd62ec6689338ca451d75980a3ce9a2f6c9c3a",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "<computable relation or expression>",
+        "kind": "exact"
+      },
+      "result": {
+        "answer_bytes_digest": "621dcc899274a39b7ef4ab1f6b841aa055800b2533e11f6d0c937ca84e9fb1d4",
+        "kind": "solved",
+        "refusal_type": null
+      },
+      "session_events": [],
+      "turn_index": 5
+    },
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "suppose",
+      "key_id": "k-a808d9dc20354deb",
+      "live_set_digest": "d6dc388a049d5bed664d7a12a63ba9aa39f9666cf3593bf6a99b4ec86662a430",
+      "mac": "46ecb9ff04829c5142f0c1e2bcae3795c0814ae2930ca4188c66e02954a59837",
+      "prev_turn_digest": "581c800ff70c8ad0ba39660782b58bf4b63a59582bc821347033b2da1bcc9e1d",
+      "receipt_digest": "828c6dc4a0f3617a8aa2372300d9a618492c8739bd030716b766627c3243f8ff",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "suppose <claim>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "2757129602f09ca2bd621df05d733aa3fe0666c7fcce9939cc7d3516d5e89b77",
+        "kind": "refused",
+        "refusal_type": "supposition_refused"
+      },
+      "session_events": [],
+      "turn_index": 6
+    }
+  ]
+}
