@@ -1,0 +1,264 @@
+{
+  "schema": "corollary.session-p2-prompt-seal/1",
+  "prerequisite": "P2",
+  "design": "docs/DESIGN-session-ledger.md",
+  "design_clause": "§6 P2 — separator expressibility. For ten hand-sealed ambiguous prompts: does any single admitted command distinguish the rival readings under exact evaluation? If no separator exists for most, the clarifying-question arm has nothing to ask and the conditional-answer arm wins by measurement. Committed either way.",
+  "frozen_at": "2026-08-25",
+  "authored_by": "maintainer, by hand, before any probe was written or run",
+  "what_a_prompt_is": "prose a person might plausibly type at the harness prompt, whose reading is ambiguous between two or more ADMITTED COMMANDS of the registered line grammar. The prompt itself is not required to route anywhere; the readings are.",
+  "what_a_reading_is": "one line of the registered grammar (serve_chat.LINE_GRAMMAR row named per reading) that the prompt could plausibly have meant. A reading is not a paraphrase of the prompt — it is a command the system already admits.",
+  "sealing_rule": "the prompts and their candidate-reading sets are frozen in THIS file before the probe exists. The probe reads this file and may not add, drop, or reword a reading; scripts/probe_separator_expressibility.py digests these bytes and carries the digest into its own artifact so a reader can check that the question was written before the answer.",
+  "authoring_constraint": "no reading was executed while this file was being written. Rows whose reading depends on an optional subsystem are sealed anyway and the probe records whether that subsystem registered on the measuring boot, rather than the seal quietly avoiding them.",
+  "non_claims": [
+    "no claim that these ten are representative of what any person types — they are maintainer-authored, and STRANGER's park (docs/ROADMAP-v0.20.md:394) is cited rather than re-encountered",
+    "no completeness claim over readings: a prompt's candidate set is what one author could see, and DESIGN-session-ledger §11 forbids the completeness claim outright",
+    "no claim that a separated pair is a pair a person would want distinguished"
+  ],
+  "prompts": [
+    {
+      "prompt_id": "p01",
+      "prompt": "the greatest common divisor of two numbers, recursively",
+      "why_ambiguous": "the person may be after the committed recursive algorithm statement, the twin group it belongs to, or any corpus statement whose words match. The corpus writes `gcd` and the person wrote it out, which is the resolver residual DESIGN-text-resolution.md:80-81 already records.",
+      "candidate_readings": [
+        {
+          "reading_id": "p01.twin",
+          "command": "twin programming.euclid.recursive",
+          "grammar_row": 4,
+          "route": "twin",
+          "gloss": "show me the twin group this algorithm belongs to"
+        },
+        {
+          "reading_id": "p01.resolver",
+          "command": "greatest common divisor euclid",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "find me the statement whose words these are"
+        },
+        {
+          "reading_id": "p01.resolver_corpus_spelling",
+          "command": "gcd euclid recursive",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "the same request in the corpus's own spelling"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p02",
+      "prompt": "what is a lemma",
+      "why_ambiguous": "a dictionary sense and a corpus statement are different answers to the same six words, and the routing chain puts the corpus first (harness.py:2109-2113).",
+      "candidate_readings": [
+        {
+          "reading_id": "p02.gloss",
+          "command": "what is a lemma",
+          "grammar_row": 12,
+          "route": "gloss",
+          "gloss": "give me the dictionary sense"
+        },
+        {
+          "reading_id": "p02.resolver",
+          "command": "lemma",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "give me what the corpus holds about lemmas"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p03",
+      "prompt": "de morgan's laws",
+      "why_ambiguous": "two committed corpora state them — logic.boolean_laws and settheory.boolean_laws — so the prompt underdetermines which one, and it also underdetermines whether the person wants the statement or the group of statements like it.",
+      "candidate_readings": [
+        {
+          "reading_id": "p03.resolver",
+          "command": "de morgan laws",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "resolve the words to a statement"
+        },
+        {
+          "reading_id": "p03.twin_logic",
+          "command": "twin logic.boolean_laws.de_morgan_laws",
+          "grammar_row": 4,
+          "route": "twin",
+          "gloss": "the twin group of the logic corpus's statement"
+        },
+        {
+          "reading_id": "p03.twin_settheory",
+          "command": "twin settheory.boolean_laws.de_morgan_laws",
+          "grammar_row": 4,
+          "route": "twin",
+          "gloss": "the twin group of the set-theory corpus's statement"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p04",
+      "prompt": "cosine of a double angle",
+      "why_ambiguous": "the identity itself, or the family of identities it sits in. This is the near-miss shape DESIGN-plain-input §3c names (double angle versus half angle) with the confusion moved one step earlier, to which ROUTE rather than which identity.",
+      "candidate_readings": [
+        {
+          "reading_id": "p04.twin",
+          "command": "twin trigonometry.identities.double_angle_cosine",
+          "grammar_row": 4,
+          "route": "twin",
+          "gloss": "the group of identities shaped like this one"
+        },
+        {
+          "reading_id": "p04.resolver",
+          "command": "double angle cosine identity",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "the statement whose words these are"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p05",
+      "prompt": "x squared",
+      "why_ambiguous": "three admitted commands claim these two words: which statements HOST the term, what the term EVALUATES to, and which statement the WORDS resolve to. They are three different questions and the prose picks none of them.",
+      "candidate_readings": [
+        {
+          "reading_id": "p05.owns",
+          "command": "owns x ^ 2",
+          "grammar_row": 2,
+          "route": "ownership",
+          "gloss": "which committed statements host this term"
+        },
+        {
+          "reading_id": "p05.evaluate",
+          "command": "x ^ 2",
+          "grammar_row": 9,
+          "route": "evaluate",
+          "gloss": "compute it — which needs a binding the prompt never gave"
+        },
+        {
+          "reading_id": "p05.resolver",
+          "command": "x squared",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "resolve the words against the graph"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p06",
+      "prompt": "suppose x is 5; what is x squared",
+      "why_ambiguous": "one line carries a premise and a question. The person may want the premise HELD (a conjecture to converse under) or SPENT (a binding for one computation). route_line already decides this silently: a suppose line that binds and computes is routed to evaluate first (harness.py:2083-2091).",
+      "candidate_readings": [
+        {
+          "reading_id": "p06.spend",
+          "command": "suppose x = 5, x ^ 2",
+          "grammar_row": 3,
+          "route": "supposition",
+          "gloss": "spend the premise on this computation"
+        },
+        {
+          "reading_id": "p06.hold",
+          "command": "suppose x is 5",
+          "grammar_row": 3,
+          "route": "supposition",
+          "gloss": "hold the premise; the question comes next"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p07",
+      "prompt": "where is the marble",
+      "why_ambiguous": "the world's answer and an agent's answer are different facts, and the false-belief corpus exists precisely because they come apart.",
+      "candidate_readings": [
+        {
+          "reading_id": "p07.belief",
+          "command": "where does the observer think the marble is",
+          "grammar_row": 8,
+          "route": "belief",
+          "gloss": "answer from the agent's frame"
+        },
+        {
+          "reading_id": "p07.resolver",
+          "command": "marble located in",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "answer from what the graph states"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p08",
+      "prompt": "is the corpus complete",
+      "why_ambiguous": "a yes/no question the system cannot answer, whose two honest treatments are opposite speech acts: hold it as a premise, or look for statements about it.",
+      "candidate_readings": [
+        {
+          "reading_id": "p08.suppose",
+          "command": "suppose the corpus is complete",
+          "grammar_row": 3,
+          "route": "supposition",
+          "gloss": "hold it as conjecture and converse under it"
+        },
+        {
+          "reading_id": "p08.resolver",
+          "command": "corpus completeness",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "find what the graph states about completeness"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p09",
+      "prompt": "two to the tenth",
+      "why_ambiguous": "a number, or the algorithm that computes numbers of that shape. Exact arithmetic and the programming corpus are both live and both plausible.",
+      "candidate_readings": [
+        {
+          "reading_id": "p09.evaluate",
+          "command": "2 ^ 10",
+          "grammar_row": 9,
+          "route": "evaluate",
+          "gloss": "compute the value"
+        },
+        {
+          "reading_id": "p09.resolver",
+          "command": "binary exponentiation",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "the committed algorithm for powers"
+        },
+        {
+          "reading_id": "p09.twin",
+          "command": "twin programming.binexp.recursive",
+          "grammar_row": 4,
+          "route": "twin",
+          "gloss": "the twin group that algorithm belongs to"
+        }
+      ]
+    },
+    {
+      "prompt_id": "p10",
+      "prompt": "the quadratic formula with a=1 b=-3 c=2",
+      "why_ambiguous": "the person supplied bindings, which reads as a request to RUN the statement; but the same words also read as a request to be shown it, or the family it belongs to. The conformance route exists and is live, so this is a live three-way, not a hypothetical one.",
+      "candidate_readings": [
+        {
+          "reading_id": "p10.conform",
+          "command": "conform algebra.polynomial_equations.quadratic_formula a=1 b=-3 c=2",
+          "grammar_row": 6,
+          "route": "conform",
+          "gloss": "run the statement on these bindings"
+        },
+        {
+          "reading_id": "p10.resolver",
+          "command": "quadratic formula",
+          "grammar_row": 11,
+          "route": "resolver",
+          "gloss": "show me the statement"
+        },
+        {
+          "reading_id": "p10.twin",
+          "command": "twin algebra.polynomial_equations.quadratic_formula",
+          "grammar_row": 4,
+          "route": "twin",
+          "gloss": "show me the family it belongs to"
+        }
+      ]
+    }
+  ]
+}
