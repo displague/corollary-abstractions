@@ -229,7 +229,18 @@ def _check_domain(carrier: str, division: str, subtraction: str) -> None:
 
 
 def _literal(value) -> str:
-    number = Fraction(str(value))
+    try:
+        number = Fraction(str(value))
+    except (TypeError, ValueError, ZeroDivisionError):
+        # A binding that is not a number is OUTSIDE this writer's contract,
+        # and the contract is that a row it cannot present comes back as a
+        # `not_presented` ROW with a printed reason. Letting `ValueError` out
+        # of here would turn a refusal into a crash in `adjudicate`, which
+        # catches `Unpresentable` and nothing else — the same shape of bug
+        # `rational_root_test` was fixed for in conform.py.
+        raise Unpresentable(
+            f"binding value {value!r} is not a number; nothing was presented"
+        ) from None
     if number.denominator != 1:
         raise Unpresentable(f"literal {number} is not in the carrier")
     if number < 0:

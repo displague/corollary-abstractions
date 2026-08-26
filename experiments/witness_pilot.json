@@ -1,0 +1,248 @@
+{
+  "b4_self_comparison_trap": {
+    "met": true,
+    "obligation": "∀ (a : Nat), ((a * 0) = 0) ↔ ((a * 0) = 0)",
+    "rejected_structurally_not_by_special_case": "`build(self_comparison=True)` puts the SAME reading on both sides and the ordinary tree comparison rejects it. There is no branch in the builder that recognises the trap, which is the difference between an instrument the trap can catch and one that recognises being tested.",
+    "target": "leanworkbook.skel.lean_workbook_1478",
+    "verdict": "rejected_trivial"
+  },
+  "census_predicate_hash": "692e082efb75a4cc1529e2d72723a846dec6165576ad888ab81d73891d9c1465",
+  "checker": {
+    "binary": "~/.elan/toolchains/leanprover--lean4---v4.32.2/bin/lean.exe",
+    "binary_sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+    "invocation": "the pinned binary by absolute path; no elan proxy, no lake, no Mathlib, no network, never a download",
+    "tactic": "omega",
+    "toolchain": "leanprover/lean4:v4.32.2"
+  },
+  "commit": "022e54cb77b352e5b16ccf34f99d267957d10973",
+  "controls": {
+    "negative_control": {
+      "met": true,
+      "must": "NOT discharge — it is non-trivial and false over Nat at a=1, b=4, c=10",
+      "obligation": "∀ (a b c : Nat), ((((a + c) - b) >= 8) ↔ (((a - b) + c) >= 8))",
+      "receipt": {
+        "accepted": false,
+        "checker_output_head": "<obligation>.lean:1:79: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  e ≥ 0\n  e - f ≤ -1\n  d ≥ 8\n  0 ≤ d + e - f ≤ 7\nwhere\n d := ↑c\n e := ↑a\n f := ↑b",
+        "returncode": 1,
+        "seconds": 0.378,
+        "source_sha256": "085d8a0fc59e248d7d18e956abca4695be659cb884ba31a6702f2e1851c412b3"
+      }
+    },
+    "pipeline_is_not_broken": true,
+    "positive_control": {
+      "met": true,
+      "must": "discharge — it is non-trivial and true",
+      "obligation": "∀ (a b c : Nat), (b <= a) → ((((a + c) - b) >= 1) ↔ (((a - b) + c) >= 1))",
+      "receipt": {
+        "accepted": true,
+        "checker_output_head": "",
+        "returncode": 0,
+        "seconds": 0.381,
+        "source_sha256": "3272055f74a5426dfaaa713ae8a69050ca8b93c7e42a14564fde69a5a780c46d"
+      }
+    },
+    "why_these_exist": "A pilot that reads zero must show the zero is a READING and not a pipeline that never worked. The positive control is the exact regrouping shape this instrument was built to test, it is non-trivial, and it discharges; the negative control is the same shape unguarded and false, and the checker refuses it. So the builder builds, the renderer renders, `omega` decides, and the zero below is about the corpus and the parser rather than about the machinery."
+  },
+  "design": "docs/DESIGN-witnessed-conformance.md §5 (W1)",
+  "draw_rule": "For each of six shape classes in the fixed order unguarded/guarded × 1/2/3 variables, take the FIRST candidate by statement id; then fill any unmet class with the first unused candidate by id. Deterministic and recomputable from the census artifact alone.",
+  "drawn": [
+    "leanworkbook.skel.lean_workbook_1478",
+    "leanworkbook.skel.lean_workbook_11467",
+    "leanworkbook.skel.lean_workbook_43903",
+    "leanworkbook.skel.lean_workbook_18936",
+    "leanworkbook.skel.lean_workbook_10679",
+    "leanworkbook.skel.lean_workbook_35725"
+  ],
+  "non_claims": [
+    "No capability is claimed. WITNESS discharged nothing.",
+    "No conformance rate, and nothing here touches experiments/conformance_run.json, which stays void.",
+    "This says nothing about whether the 38 fragment statements are true, and nothing about the 12,739 statements outside the fragment.",
+    "`rejected_trivial` is not a criticism of the statements. It is a verdict about the OBLIGATION this design built for them.",
+    "The stop is not a failure of the pinned checker: both controls read as specified, so `omega` proved what is true and refused what is false."
+  ],
+  "obligation_builder_hash": "4b11e87ec191c875fdb7912d6266ac1892751dcddbd9063f8e05c57807c4548f",
+  "pilot_id": "witness.pilot.v1",
+  "reading": {
+    "discharged": 0,
+    "drawn": 6,
+    "floor_frozen": null,
+    "not_discharged": 0,
+    "rejected_trivial": 6,
+    "the_floor_this_was_meant_to_freeze": "B2's ≥40/60, already void with the 60 (§4's amendment). This pilot was to set the number in its place.",
+    "why_no_floor_is_frozen": "A floor is a fraction of a population that a correct instrument can reach. This pilot reached zero, so there is no fraction to freeze and freezing one would be inventing a number the pilot exists to prevent."
+  },
+  "reads": "experiments/witness_fragment_census.json",
+  "registered": "2026-08-26",
+  "roadmap": "docs/ROADMAP-v0.21.md §2",
+  "rows": [
+    {
+      "as_written_reading": "((a * 0) = 0)",
+      "canonical_ascii": "a * 0 = 0",
+      "class_was_filled": true,
+      "counterfactual_without_B4": {
+        "accepted": true,
+        "checker_output_head": "",
+        "returncode": 0,
+        "seconds": 0.414,
+        "source_sha256": "0a7beefd1ddfe0bf4c8d2dab526ccfa444437e714ec3f5ac19d86d80746aa816"
+      },
+      "evaluated_reading": "((a * 0) = 0)",
+      "guard_kind": "none",
+      "obligation": "∀ (a : Nat), ((a * 0) = 0) ↔ ((a * 0) = 0)",
+      "shape_class": "unguarded/1var",
+      "statement_id": "leanworkbook.skel.lean_workbook_1478",
+      "trivial_by_construction": true,
+      "trivial_reason": "the evaluator's grouping is a no-op on this term: the two readings are the SAME TREE, so the obligation is `P ↔ P` and discharging it would measure nothing",
+      "variables": [
+        "a"
+      ],
+      "verdict": "rejected_trivial"
+    },
+    {
+      "as_written_reading": "((((6 * a) + (2 * b)) - (2 * b)) = (6 * a))",
+      "canonical_ascii": "(6 * a + 2 * b) - 2 * b = 6 * a",
+      "class_was_filled": true,
+      "counterfactual_without_B4": {
+        "accepted": true,
+        "checker_output_head": "",
+        "returncode": 0,
+        "seconds": 0.378,
+        "source_sha256": "47fee5f2399a15b50ef5ed71fdb53a688b1c28910a5a71ffdbe9ea82bed1b19f"
+      },
+      "evaluated_reading": "((((6 * a) + (2 * b)) - (2 * b)) = (6 * a))",
+      "guard_kind": "none",
+      "obligation": "∀ (a b : Nat), ((((6 * a) + (2 * b)) - (2 * b)) = (6 * a)) ↔ ((((6 * a) + (2 * b)) - (2 * b)) = (6 * a))",
+      "shape_class": "unguarded/2var",
+      "statement_id": "leanworkbook.skel.lean_workbook_11467",
+      "trivial_by_construction": true,
+      "trivial_reason": "the evaluator's grouping is a no-op on this term: the two readings are the SAME TREE, so the obligation is `P ↔ P` and discharging it would measure nothing",
+      "variables": [
+        "a",
+        "b"
+      ],
+      "verdict": "rejected_trivial"
+    },
+    {
+      "as_written_reading": "((a + ((b + c) / 2)) = (((a + b) / 2) + ((a + c) / 2)))",
+      "canonical_ascii": "a + (b + c) / 2 = (a + b) / 2 + (a + c) / 2",
+      "class_was_filled": true,
+      "counterfactual_without_B4": {
+        "accepted": true,
+        "checker_output_head": "",
+        "returncode": 0,
+        "seconds": 0.365,
+        "source_sha256": "50d83bcc27f5f7edb1c06e331a54d98286c3ac17487bdbc8323334571782a310"
+      },
+      "evaluated_reading": "((a + ((b + c) / 2)) = (((a + b) / 2) + ((a + c) / 2)))",
+      "guard_kind": "none",
+      "obligation": "∀ (a b c : Nat), ((a + ((b + c) / 2)) = (((a + b) / 2) + ((a + c) / 2))) ↔ ((a + ((b + c) / 2)) = (((a + b) / 2) + ((a + c) / 2)))",
+      "shape_class": "unguarded/3var",
+      "statement_id": "leanworkbook.skel.lean_workbook_43903",
+      "trivial_by_construction": true,
+      "trivial_reason": "the evaluator's grouping is a no-op on this term: the two readings are the SAME TREE, so the obligation is `P ↔ P` and discharging it would measure nothing",
+      "variables": [
+        "a",
+        "b",
+        "c"
+      ],
+      "verdict": "rejected_trivial"
+    },
+    {
+      "as_written_reading": "(((3 * x) - 1) > (x + 1))",
+      "canonical_ascii": "3 * x - 1 > x + 1",
+      "class_was_filled": true,
+      "counterfactual_without_B4": {
+        "accepted": true,
+        "checker_output_head": "",
+        "returncode": 0,
+        "seconds": 0.372,
+        "source_sha256": "01df38ca89a559bd3c570cbaf3db60ec8a87220693021702321b6a0f8ce0e206"
+      },
+      "evaluated_reading": "(((3 * x) - 1) > (x + 1))",
+      "guard_kind": "box",
+      "obligation": "∀ (x : Nat), (x > 1) → ((((3 * x) - 1) > (x + 1)) ↔ (((3 * x) - 1) > (x + 1)))",
+      "shape_class": "guarded/1var",
+      "statement_id": "leanworkbook.skel.lean_workbook_18936",
+      "trivial_by_construction": true,
+      "trivial_reason": "the evaluator's grouping is a no-op on this term: the two readings are the SAME TREE, so the obligation is `P ↔ P` and discharging it would measure nothing",
+      "variables": [
+        "x"
+      ],
+      "verdict": "rejected_trivial"
+    },
+    {
+      "as_written_reading": "(b < a)",
+      "canonical_ascii": "b < a",
+      "class_was_filled": true,
+      "counterfactual_without_B4": {
+        "accepted": true,
+        "checker_output_head": "",
+        "returncode": 0,
+        "seconds": 0.38,
+        "source_sha256": "a13681ce6ebba04032345fb0dd9c47a9023002f22a78cf022f4875b2ac75a8e0"
+      },
+      "evaluated_reading": "(b < a)",
+      "guard_kind": "coupling",
+      "obligation": "∀ (a b : Nat), (b < c) ∧ ((b + c) < (a + 1)) ∧ (a > 1) → ((b < a) ↔ (b < a))",
+      "shape_class": "guarded/2var",
+      "statement_id": "leanworkbook.skel.lean_workbook_10679",
+      "trivial_by_construction": true,
+      "trivial_reason": "the evaluator's grouping is a no-op on this term: the two readings are the SAME TREE, so the obligation is `P ↔ P` and discharging it would measure nothing",
+      "variables": [
+        "a",
+        "b"
+      ],
+      "verdict": "rejected_trivial"
+    },
+    {
+      "as_written_reading": "(c < (a + b))",
+      "canonical_ascii": "c < a + b",
+      "class_was_filled": true,
+      "counterfactual_without_B4": {
+        "accepted": true,
+        "checker_output_head": "",
+        "returncode": 0,
+        "seconds": 0.381,
+        "source_sha256": "3a3b1cad8dbda6692b0fbc028de0317660599a13906cbeb7b08a96dce0c5f6df"
+      },
+      "evaluated_reading": "(c < (a + b))",
+      "guard_kind": "coupling",
+      "obligation": "∀ (a b c : Nat), (a > 0) ∧ (b > 0) ∧ (c > 0) ∧ ((a + b) > c) → ((c < (a + b)) ↔ (c < (a + b)))",
+      "shape_class": "guarded/3var",
+      "statement_id": "leanworkbook.skel.lean_workbook_35725",
+      "trivial_by_construction": true,
+      "trivial_reason": "the evaluator's grouping is a no-op on this term: the two readings are the SAME TREE, so the obligation is `P ↔ P` and discharging it would measure nothing",
+      "variables": [
+        "a",
+        "b",
+        "c"
+      ],
+      "verdict": "rejected_trivial"
+    }
+  ],
+  "stop_condition": {
+    "clause": "docs/DESIGN-witnessed-conformance.md §5 and §8: *if it discharges 0 of 6, WITNESS publishes that as its result and the slice does not open*.",
+    "fired": true,
+    "verdict": "STOPPED — 0 of 6 discharged, and the reason is structural rather than incidental (see below). The manifest is NOT sealed, no floor is frozen, no obligation builder runs over the population, no mutant ledger is built, and no capability is claimed."
+  },
+  "the_counterfactual_that_makes_B4_concrete": {
+    "obligations_the_checker_accepted": 6,
+    "of": 6,
+    "statement_ids": [
+      "leanworkbook.skel.lean_workbook_10679",
+      "leanworkbook.skel.lean_workbook_11467",
+      "leanworkbook.skel.lean_workbook_1478",
+      "leanworkbook.skel.lean_workbook_18936",
+      "leanworkbook.skel.lean_workbook_35725",
+      "leanworkbook.skel.lean_workbook_43903"
+    ],
+    "what_it_means": "Every pilot obligation was handed to `omega` anyway, with the triviality test switched off. The checker ACCEPTED them — of course it did: they are `P ↔ P`. An instrument without B4 would have published these as discharged agreement lemmas, cleared its gate, and reported a capability. That is not a hypothetical about some other design; it is this design's own output with one clause removed, and it is the most direct evidence available that B4 is load-bearing rather than ceremonial."
+  },
+  "why_the_zero_is_structural": {
+    "finding": "The committed parser emits LEFT-NESTED BINARY `+` and `*` nodes — `a - b + c` parses as `+(+(a, neg(b)), c)`, not as a flat three-operand node. `conform.eval_under_domain`'s regrouping (hoist the positives, subtract the sum of the negatives; multiply the numerators, divide once by the product of the denominators) has NOTHING TO REGROUP at a two-operand node. So the evaluator's reading and the written reading are the same tree, for every one of the 38 fragment candidates and for every term this parser can produce in this fragment.",
+    "so_what_the_pilot_actually_measured": "Not that the corpus is easy, and not that the checker is weak. That the OBLIGATION SHAPE, built from a single front-end, has no content: both sides descend from one parse tree, and the only difference the construction could express — the evaluator's regrouping — is a no-op on that tree's shape. The draft's own residual_risk named this and priced it as a survivable residual: *'the obligation is built from the compiler's own front-end reading of S -- a uniform front-end misreading survives every clause.'* The pilot's reading is stronger than that: it is not that a misreading SURVIVES the clauses, it is that there is NOTHING ELSE IN THE OBLIGATION. B4 is not narrowing a residual here; B4 is the whole verdict.",
+    "the_divergent_class_is_not_empty_it_is_unreachable": "Two shapes would diverge if the parser produced them: a multi-operand `+` with a negative before a positive, and a multi-operand `*` with a denominator before a numerator. The positive control above is built by hand in exactly the first shape and the machinery handles it correctly. The parser does not emit it.",
+    "what_it_would_take": "A genuinely independent second reading of S — a second front-end, or the human transcription W2 registered as a narrowing audit. The draft put that explicitly OUT of the slice. It is therefore not a residual to be priced later but a CONSTRUCTION PREREQUISITE, and that is this pilot's recommendation to the next cycle."
+  },
+  "writer": "scripts/witness_pilot.py"
+}

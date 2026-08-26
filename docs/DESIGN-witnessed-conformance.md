@@ -117,6 +117,33 @@ the 60-name manifest is withdrawn and the number is set from the census.** A
 manifest that consumes its population is the construction defect §4.0(3)
 exists to catch.
 
+> **Amendment (2026-08-26), written after W0 ran and BEFORE anything is
+> sealed.** `experiments/witness_fragment_census.json`, predicate digest in
+> the artifact. **The census admits 45 candidates out of 12,777 statements
+> walked, and all 45 declare carrier `Nat`.** The rule above fires, and three
+> things follow, in writing rather than by reread:
+>
+> 1. **The 60-name manifest is WITHDRAWN.** The manifest is set to the
+>    **whole population, 45 targets, and there is no selection at all** —
+>    which is the honest form of the finding that 60 of 66 was never a
+>    selection. A predicate that admits 45 and takes 45 cannot have chosen
+>    favourably, and `target_manifest.candidate_population` equals
+>    `len(targets)` so a reader sees it immediately. Decoys stand at 10,
+>    drawn from the 4,242 compiled-and-quantified statements the predicate
+>    rejected, by a recomputable rule (sorted by id, first ten).
+> 2. **The fragment's WORDING is amended, not reread.** The draft said *"over
+>    Z and Q"*; the tree declares `Nat` with `truncating` division and
+>    `truncated-at-zero` subtraction for every admitted row, and those are not
+>    the integers' operations. WITNESS's fragment is hereby **quantified
+>    linear arithmetic over the declared `Nat` domain**. Nothing is claimed
+>    about Z or Q this cycle.
+> 3. **B2's floor is not yet a number**, and cannot be until W1 reads. The
+>    draft's ≥40/60 is void along with the 60.
+>
+> The population is small, and the design says so where a rate would
+> otherwise be quoted: **45 is a thin denominator**, every target is published
+> by name, and no percentage of it is presented as a property of the corpus.
+
 ## 5. Meetable floors — ROADMAP-v0.21 §4.0(3)
 
 > *Every frozen floor now ships with a meetability argument — a pilot, a
@@ -146,6 +173,48 @@ construction prerequisite, not a number picked now"* and whose pilot ran
 before the freeze (`docs/DESIGN-voice-completion.md:650-658`) — the document
 that also records *"an instrument that cannot repeat itself can only void,
 never confirm."*
+
+> **Amendment (2026-08-26): W1 RAN AND READ 0 OF 6. THE SLICE DOES NOT
+> OPEN.** `experiments/witness_pilot.json`. Six statements drawn by the
+> committed rule, all six shape classes filled, one box guard and two
+> coupling guards among them. **Every one came back `rejected_trivial`**, and
+> so did all 38 candidates when the builder was run over the population.
+>
+> **No floor is frozen**, because a floor is a fraction a correct instrument
+> can reach and this one reached none. **No manifest is sealed.** No
+> obligation builder runs over the population, no mutant ledger is built, no
+> sandbox executes, and **no capability is claimed**.
+>
+> **Why the zero is structural, and therefore a finding rather than a
+> shortfall.** The committed parser emits **left-nested binary** `+` and `*`
+> nodes — `a - b + c` parses as `+(+(a, neg(b)), c)`, never as a flat
+> three-operand node — and `eval_under_domain`'s regrouping has nothing to
+> regroup at a two-operand node. So *"what the evaluator computes"* and
+> *"the statement as written"* are the **same tree**, and the obligation is
+> `P ↔ P` for every term this parser can produce in this fragment.
+>
+> **The pilot's controls say the zero is a reading, not a broken pipeline.**
+> A hand-built non-trivial obligation in exactly the divergent shape
+> **discharges**; the same shape unguarded and false is **refused** by
+> `omega`; and B4's self-comparison trap returns `rejected_trivial` through
+> the ordinary tree comparison, with no branch that recognises being tested.
+>
+> **And the counterfactual is the whole point.** Every pilot obligation was
+> handed to the checker anyway with the triviality test switched off:
+> **`omega` accepted 6 of 6.** An instrument without B4 would have published
+> six discharged agreement lemmas, cleared its gate, and reported a
+> capability — from `P ↔ P`. That is not a hypothetical about some other
+> design; it is this design's own output with one clause removed.
+>
+> **What this changes for WITNESS.** The draft priced the single-front-end
+> problem as a *residual risk* — *"a uniform front-end misreading survives
+> every clause"* — and put the independent re-reading out of the slice. The
+> pilot's reading is stronger and less comfortable: it is not that a
+> misreading survives the clauses, it is that **there is nothing else in the
+> obligation**. An independent second reading of `S` is therefore a
+> **construction prerequisite of any WITNESS slice**, not a residual to be
+> narrowed later, and §6's W2 transcription audit is the cheapest form of it.
+> That is this pilot's recommendation to the next cycle.
 
 **B3's 50/50 has a construction argument, a different kind of claim.** B2 is
 empirical; B3 asks whether a mutated statement still agrees with its parent's

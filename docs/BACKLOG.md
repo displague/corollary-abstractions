@@ -290,6 +290,25 @@ cycle inherits the disposition and not a rumour.
   > condition**, and a stop condition checked after the cycle it could have
   > stopped is a check, not a gate.
 
+- **WITNESS needs a second front-end BEFORE it needs anything else
+  (2026-08-26, from W1's pilot — `experiments/witness_pilot.json`).** The
+  slice stopped at W1 with **0 of 6 discharged**, and the reason is
+  structural: the committed parser emits left-nested **binary** `+` and `*`
+  nodes, so `eval_under_domain`'s regrouping is a no-op and *"what the
+  evaluator computes"* and *"the statement as written"* are the same tree.
+  Every obligation of the drafted shape is `P ↔ P` — all 6 drawn, and all 38
+  fragment candidates. The draft priced the single-front-end problem as a
+  **residual risk** (*"a uniform front-end misreading survives every
+  clause"*) and put the independent re-reading outside the slice; the pilot
+  says that is backwards. **It is a construction prerequisite.** Unpark when
+  a design says where the second reading comes from — a second front-end, or
+  W2's human transcription promoted from audit to input. Until then WITNESS
+  has no obligation with content, and no amount of gate machinery changes
+  that. **Carry the counterfactual with the entry, because it is the
+  evidence**: handed to `omega` with B4 switched off, the same six
+  obligations were **accepted 6 of 6**, which is what an instrument without a
+  self-comparison trap would have published as a capability.
+
 - **A deterministic runner whose artifact does not record its own invocation
   (2026-08-26, found while running E5 late).**
   `scripts/measure_conformance.py` defaults to `--ce1-limit 200
