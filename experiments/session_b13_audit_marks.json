@@ -1,0 +1,112 @@
+{
+  "auditor": "the maintainer, who is also this slice's implementer",
+  "auditor_independence": "NOT independent, and the prereg registered that before the draw. A seeded blind draw does not make a self-audit independent; it makes it unsteerable turn by turn, which is less. The draw is reproducible from the frozen seed, the twenty cases were published before any was marked, and the marks are committed as their own artifact so a later reader can disagree case by case.",
+  "dated": "2026-08-25",
+  "design_clause": "§7 B13 — 20 turns drawn by seeded rule from half B's binding-dependent set, arm-blind, hand-checked: does the answer's *meaning* depend on the cited assumption?",
+  "draw_seed": "session-ledger-v021-b13",
+  "limitation": "The audit was easy, and an easy audit is weak evidence. All twenty drawn cases are the same shape: an arithmetic line whose free names are bound entirely by the cited assumption. That is what the corpus contains, because the corpus was authored by the same hand that built the binding mechanism, and a corpus of one shape is the condition under which B13 has the LEAST power to find the thing it exists to find. 20/20 therefore does not MEASURE §11's cited-but-inert residual; it fails to find it in a corpus where it was unlikely to occur. The residual stays NAMED, and this sentence is the reason it is not upgraded to measured by a perfect score.",
+  "marks": [
+    {
+      "audit_case": "c00",
+      "meaning_depends": true,
+      "note": "the line 'n + t' contains only the name(s) the cited assumption(s) bind — n = 6 (polarity True), t = 5 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c01",
+      "meaning_depends": true,
+      "note": "the line 'k + 1' contains only the name(s) the cited assumption(s) bind — k = 11 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c02",
+      "meaning_depends": true,
+      "note": "the line 'y ^ 2' contains only the name(s) the cited assumption(s) bind — y = 8 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c03",
+      "meaning_depends": true,
+      "note": "the line 'k ^ 2' contains only the name(s) the cited assumption(s) bind — k = 7 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c04",
+      "meaning_depends": true,
+      "note": "the line 'y + 5' contains only the name(s) the cited assumption(s) bind — y = 4 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c05",
+      "meaning_depends": true,
+      "note": "the line 'y + 7' contains only the name(s) the cited assumption(s) bind — y = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c06",
+      "meaning_depends": true,
+      "note": "the line 'k + 1' contains only the name(s) the cited assumption(s) bind — k = 7 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c07",
+      "meaning_depends": true,
+      "note": "the line 'y ^ 2' contains only the name(s) the cited assumption(s) bind — y = 4 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c08",
+      "meaning_depends": true,
+      "note": "the line 'k ^ 2' contains only the name(s) the cited assumption(s) bind — k = 9 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c09",
+      "meaning_depends": true,
+      "note": "the line 'y * y' contains only the name(s) the cited assumption(s) bind — y = 8 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c10",
+      "meaning_depends": true,
+      "note": "the line 'n + t' contains only the name(s) the cited assumption(s) bind — n = 2 (polarity True), t = 4 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c11",
+      "meaning_depends": true,
+      "note": "the line 'n ^ 2' contains only the name(s) the cited assumption(s) bind — n = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c12",
+      "meaning_depends": true,
+      "note": "the line 't ^ 2' contains only the name(s) the cited assumption(s) bind — t = 5 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c13",
+      "meaning_depends": true,
+      "note": "the line 'n + 6' contains only the name(s) the cited assumption(s) bind — n = 6 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c14",
+      "meaning_depends": true,
+      "note": "the line 'k + 1' contains only the name(s) the cited assumption(s) bind — k = 9 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c15",
+      "meaning_depends": true,
+      "note": "the line 'k ^ 2' contains only the name(s) the cited assumption(s) bind — k = 3 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c16",
+      "meaning_depends": true,
+      "note": "the line 'y * y' contains only the name(s) the cited assumption(s) bind — y = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c17",
+      "meaning_depends": true,
+      "note": "the line 'n ^ 2' contains only the name(s) the cited assumption(s) bind — n = 6 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c18",
+      "meaning_depends": true,
+      "note": "the line 'y + 5' contains only the name(s) the cited assumption(s) bind — y = 2 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    },
+    {
+      "audit_case": "c19",
+      "meaning_depends": true,
+      "note": "the line 't ^ 2' contains only the name(s) the cited assumption(s) bind — t = 3 (polarity True). Without them the expression has no value at all and the route falls through; with them the answer MEANS what it does because the name has that value. Meaning-dependence, not only byte-dependence."
+    }
+  ],
+  "question_as_marked": "Would the answer served at this turn MEAN something different if the cited assumption had said something else — as opposed to merely rendering different bytes?",
+  "schema": "corollary.session-b13-audit/1"
+}
