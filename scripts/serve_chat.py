@@ -107,7 +107,26 @@ HOST = "127.0.0.1"
 DEFAULT_PORT = 8377
 
 CHAT_SCHEMA = "corollary.chat/1"
-CAPABILITIES_SCHEMA = "corollary.capabilities/1"
+
+#: Bumped to /2 on 2026-08-26, when `conditional` entered the frozen status
+#: alphabet (DESIGN-plain-input §3b, slice 2). The SHEET is what publishes
+#: the alphabet, so widening the alphabet is a change to the sheet's
+#: contract and a client that enumerated it needs to know.
+#:
+#: `CHAT_SCHEMA` deliberately stays at /1, and the reason is not thrift.
+#: No status REACHABLE ON THAT WIRE changed: the proposer is attached to a
+#: CoreSession the way slice 1 attached `assumptions` — opt-in, `None` by
+#: default, set only by a recorder or a replayer — and ¶DEV-1 replays every
+#: HTTP request into a fresh session that has neither. So this skin cannot
+#: emit `conditional` today, and bumping the wire schema would rewrite 732
+#: references including slice 1's CLOSED corpus seal and all 119 task
+#: records in `experiments/throughput_tasks.json` — moving a sealed
+#: denominator for a status that cannot appear in it.
+#:
+#: The trigger is recorded so the debt cannot be forgotten: **the day the
+#: proposer is attached to a session this skin serves, `corollary.chat/2`
+#: is owed**, and the spec's §5 amendment says so too.
+CAPABILITIES_SCHEMA = "corollary.capabilities/2"
 
 KERNEL_MODEL = "corollary/kernel"
 CONVERSATION_MODEL = "corollary/conversation"
@@ -131,6 +150,15 @@ ENGINE_STATUSES = (
     "canceled",
     "cycle",
     "hop_ceiling",
+    # Added 2026-08-26 by DESIGN-plain-input §3b (slice 2). An answer served
+    # under a stated supposition is a DIFFERENT SPEECH ACT from an answer,
+    # and the design's whole honesty argument rests on it having its own
+    # status rather than borrowing one. `held` was the tempting reuse and is
+    # refused for a measured reason: `held` is already in
+    # ANSWERING_STATUSES below, so reusing it would make every conditional
+    # answer score as an answer in the throughput metric — "precisely the
+    # accounting this design must not have".
+    "conditional",
 )
 WRITE_GATE_STATUSES = ("PROVEN", "VERIFIED", "REFUSED")
 SKIN_ASSIGNED_STATUSES = ("abstained",)
@@ -138,6 +166,13 @@ SKIN_ASSIGNED_STATUSES = ("abstained",)
 #: §6.1's answered? axis. Every other status in the frozen alphabet is
 #: non-answering and carries no grounding claim — with the two named `closure`
 #: exceptions, which :func:`_receipt` handles before this set is consulted.
+#: `conditional` is deliberately ABSENT, and that absence is the whole
+#: mechanism DESIGN-plain-input §3b's honesty argument rests on: with it
+#: non-answering, this design "cannot inflate K by converting exhaustions
+#: into conditionals" — the incentive that would corrupt it is removed by
+#: the metric that already exists rather than by anyone's intent.
+#: `measure_throughput` carries the other half, and G7b tests it from the
+#: scoring path rather than from this comment.
 ANSWERING_STATUSES = frozenset({"solved", "found", "held", "PROVEN", "VERIFIED"})
 
 #: The pinned-baseline manifest the tokenizer digest is READ from (never

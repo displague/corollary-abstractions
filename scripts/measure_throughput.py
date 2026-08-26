@@ -111,8 +111,52 @@ NON_ANSWERING_STATUSES = frozenset(
         "hop_ceiling",
         "abstained",
         "REFUSED",
+        # DESIGN-plain-input §3b, added 2026-08-26 with slice 2's
+        # `conditional` status. An answer served under a stated supposition
+        # carries evidence and is NOT scored as an answer — the same shape
+        # the `closure` route's certified negative already has.
+        "conditional",
     }
 )
+
+
+#: Statuses that forfeit their tokens BY RULE, whatever the task book says.
+#:
+#: Deliberately NOT `NON_ANSWERING_STATUSES`, and the first draft of this
+#: guard made exactly that mistake — against the explicit warning in that
+#: set's own docstring, two screens up: *"whether a turn was correct is
+#: decided by the book's expected record, not by this set, because the
+#: book's `bounded_negative_is_an_answer` rule makes a closure `exhausted`
+#: a correct ANSWER."*
+#:
+#: Applying the wide set wholesale zeroed
+#: `closure_reachability/story.golden_chicken.unreachable.0`, a task whose
+#: `exhausted` IS its answer — a certified bounded negative carrying its
+#: closure receipt verbatim (SPEC §6.1). The suite caught it immediately,
+#: which is the only reason this comment is a description of a fixed bug
+#: rather than a silently deflated throughput number.
+#:
+#: So the rule-level forfeit is scoped to statuses with NO registered
+#: exception. `conditional` is one by construction: DESIGN-plain-input §3b
+#: mints it as never-answering and gives it no bounded-negative escape,
+#: because a conditional answer asserts nothing unconditionally.
+FORFEITING_STATUSES = frozenset({"conditional"})
+
+
+def useful_tokens_are_forfeited_by(status: str | None) -> bool:
+    """Does this status forfeit its tokens, whatever the content length?
+
+    A named function rather than an inline set test, because G7b drives it
+    directly: a gate that must show `conditional` scores zero should be able
+    to ASK the scoring path rather than re-implement its reasoning in a
+    test — the difference between checking the mechanism and checking a
+    copy of the mechanism.
+
+    `None` forfeits too: a turn whose status never arrived is not a turn
+    that answered.
+    """
+
+    return status is None or status in FORFEITING_STATUSES
 
 #: Never importable from here, for the reason the module docstring gives.
 #: Copied from `scripts/build_throughput_tasks.py:FORBIDDEN_MODULES` and
@@ -1365,13 +1409,25 @@ def build_records(
         # DESIGN §3: the numerator "counts only correctly-and-receipted
         # answers". On the B arm receipts are not asked for (see
         # B_SIDE_CORRECTNESS_RULE), so correctness alone carries it there.
+        status = (final.x_corollary or {}).get("status")
         useful = 0
         if answerable and scored.correct:
             useful = tokens if system in ("b-grounded", "b-ungrounded") else (
                 tokens if scored.receipted else 0
             )
-
-        status = (final.x_corollary or {}).get("status")
+        # DESIGN-plain-input §3b / G7b, 2026-08-26. A non-answering status
+        # contributes ZERO useful tokens whatever its content length, and
+        # this line is what makes that MECHANICAL rather than incidental.
+        #
+        # Without it, `conditional` would score zero only as a side effect
+        # of the task book containing no conditional expectations — true
+        # today, and an accident that a later book could undo silently. The
+        # design's honesty argument is that this metric CANNOT be inflated
+        # by converting exhaustions into conditionals; an argument that a
+        # metric cannot be inflated is worth exactly as much as the line
+        # that stops it, so here is the line.
+        if useful_tokens_are_forfeited_by(status):
+            useful = 0
         record = {
             "task_id": task["task_id"],
             "kind": task["kind"],

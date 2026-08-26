@@ -208,7 +208,7 @@ to catch.
 
 The **status alphabet is frozen as a closed set**, inconsistencies
 included: lowercase `waiting, solved, refused, exhausted, found, held,
-canceled, cycle, hop_ceiling` plus the write-gate's uppercase
+canceled, cycle, hop_ceiling, conditional` plus the write-gate's uppercase
 pass-through, whose reachable values are `PROVEN`, `VERIFIED`, `REFUSED`
 (`scripts/harness.py:841-847`; pinned by
 `tests/test_harness_line.py:274,301`), plus `abstained` — the one
@@ -216,6 +216,42 @@ skin-assigned status, conversation profile only, declared in §6 for the
 branch that runs no turn. The skin transports the engine's
 vocabulary; it does not edit it. Normalization would be the renderer
 rewriting the record, which A-IH6 forbids.
+
+> **¶AMD-1 — `conditional` joins the alphabet (2026-08-26).** The set is
+> frozen, so this is an amendment and not an addition made quietly.
+> `docs/DESIGN-plain-input.md` §3b mints `conditional` for an answer served
+> under a stated supposition: *a different speech act than an answer*, and
+> the design's honesty argument requires it to have its own status rather
+> than borrow one. `held` was the tempting reuse and is refused for a
+> measured reason — `held` is already in `ANSWERING_STATUSES`
+> (`scripts/serve_chat.py`), so reusing it would make every conditional
+> answer score as an answer in the throughput metric, "precisely the
+> accounting this design must not have". The shape has a precedent in this
+> spec already: the `closure` route's certified negative is non-answering
+> for scoring and carries its receipt verbatim (§6.1).
+>
+> **What bumped, and what did not.** `corollary.capabilities/1` →
+> **`corollary.capabilities/2`**: the sheet is what publishes the alphabet,
+> so widening the alphabet changes the sheet's contract.
+> **`corollary.chat` stays at /1**, and not to save work — *no status
+> reachable on that wire changed.* The proposer is attached to a
+> `CoreSession` the way the session ledger attached `assumptions`: opt-in,
+> `None` by default, set only by a recorder or a replayer. ¶DEV-1 replays
+> every HTTP request into a fresh session that has neither, so this skin
+> cannot emit `conditional` today. Bumping the wire schema would rewrite 732
+> references including the session ledger's **closed** corpus seal and all
+> 119 task records in `experiments/throughput_tasks.json` — moving a sealed
+> denominator on account of a status that cannot appear in it.
+>
+> **The debt, recorded so it cannot be forgotten:** the day the proposer is
+> attached to a session this skin serves, **`corollary.chat/2` is owed**.
+>
+> `conditional` is non-answering for scoring, and that is mechanical rather
+> than documentary: `measure_throughput.NON_ANSWERING_STATUSES` carries it
+> and `measure_throughput.useful_tokens_are_forfeited_by` is what the
+> useful-token computation calls, so a conditional turn contributes zero
+> useful tokens **whatever its content length**. Gate G7b drives that
+> function directly rather than re-implementing its reasoning.
 
 ## 6. Response mapping: what `content` is, and what rides beside it
 

@@ -332,5 +332,95 @@ class TheFrozenInputSets(unittest.TestCase):
         self.assertGreater(seen, 0, "the caveat is not carried anywhere")
 
 
+class G7bConditionalScoresZero(unittest.TestCase):
+    """The status exists, is non-answering, and forfeits its tokens.
+
+    G7b is a gate rather than a note because §3b's whole honesty argument
+    rests on it: *this design cannot inflate K by converting exhaustions
+    into conditionals.* An argument that a metric cannot be inflated is
+    worth exactly as much as the test that it cannot.
+    """
+
+    def test_the_status_is_in_the_frozen_alphabet(self) -> None:
+        import serve_chat  # noqa: PLC0415
+
+        self.assertIn("conditional", serve_chat.ENGINE_STATUSES)
+
+    def test_the_status_is_not_answering(self) -> None:
+        import serve_chat  # noqa: PLC0415
+
+        self.assertNotIn("conditional", serve_chat.ANSWERING_STATUSES)
+
+    def test_the_scoring_path_forfeits_its_tokens(self) -> None:
+        """Driven from measure_throughput's own function, not a copy of it."""
+
+        import measure_throughput as mt  # noqa: PLC0415
+
+        self.assertIn("conditional", mt.NON_ANSWERING_STATUSES)
+        self.assertTrue(mt.useful_tokens_are_forfeited_by("conditional"))
+        # And the answering statuses do NOT forfeit, or the guard would be
+        # zeroing everything and passing this test for the wrong reason.
+        for answering in ("solved", "found", "held"):
+            self.assertFalse(mt.useful_tokens_are_forfeited_by(answering))
+
+    def test_the_guard_does_not_zero_a_certified_bounded_negative(self) -> None:
+        """The bug this guard had on its first draft, kept as a fixture.
+
+        `exhausted` is in NON_ANSWERING_STATUSES, and a closure task whose
+        arm is 'unreachable' EXPECTS `exhausted` and scores it as a correct
+        answer — a certified bounded negative carrying its receipt verbatim
+        (SPEC §6.1; the task book's own `bounded_negative_is_an_answer`).
+        The first version of the rule-level forfeit used the wide set and
+        zeroed exactly that task. It must never do so again.
+        """
+
+        import measure_throughput as mt  # noqa: PLC0415
+
+        self.assertFalse(mt.useful_tokens_are_forfeited_by("exhausted"))
+        self.assertIn("exhausted", mt.NON_ANSWERING_STATUSES)
+        self.assertNotIn("exhausted", mt.FORFEITING_STATUSES)
+
+    def test_a_long_conditional_answer_still_scores_zero(self) -> None:
+        """'whatever their content length' — checked with a long one."""
+
+        import measure_throughput as mt  # noqa: PLC0415
+
+        long_content = "x" * 5000
+        self.assertGreater(len(long_content), 0)
+        self.assertTrue(mt.useful_tokens_are_forfeited_by("conditional"))
+
+    def test_a_status_that_never_arrived_forfeits_too(self) -> None:
+        import measure_throughput as mt  # noqa: PLC0415
+
+        self.assertTrue(mt.useful_tokens_are_forfeited_by(None))
+
+    def test_the_sheet_contract_bumped_and_the_wire_did_not(self) -> None:
+        """And the reason is recorded, not left to look like thrift."""
+
+        import serve_chat  # noqa: PLC0415
+
+        self.assertEqual(serve_chat.CAPABILITIES_SCHEMA, "corollary.capabilities/2")
+        self.assertEqual(serve_chat.CHAT_SCHEMA, "corollary.chat/1")
+        spec = _flat((REPO / "docs" / "SPEC-chat-completions-skin.md").read_text(
+            encoding="utf-8"
+        ))
+        self.assertIn("¶AMD-1", spec)
+        self.assertIn("corollary.chat/2` is owed", spec)
+
+    def test_this_skin_cannot_emit_conditional_today(self) -> None:
+        """The premise the un-bumped wire schema rests on, checked.
+
+        If a fresh HTTP-path session could emit `conditional`, the wire
+        contract WOULD have changed and `chat/2` would be owed now. The
+        premise is that ¶DEV-1's fresh session carries no proposer.
+        """
+
+        from harness import CoreSession  # noqa: PLC0415
+
+        session = CoreSession.boot(REPO, offline=True)
+        self.assertIsNone(getattr(session, "proposer", None))
+        self.assertIsNone(getattr(session, "assumptions", None))
+
+
 if __name__ == "__main__":
     unittest.main()

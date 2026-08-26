@@ -1251,7 +1251,7 @@ class CapabilitySheet(ServedSkin):
 
     def test_capability_sheet_served_flags_are_computed_from_the_live_matrix(self):
         sheet, _text = self.served_sheet()
-        self.assertEqual(sheet["schema"], "corollary.capabilities/1")
+        self.assertEqual(sheet["schema"], "corollary.capabilities/2")
         rows = {row["route"]: row for row in sheet["line_grammar"]}
         # §5 row 11: the offline boot forces retrieve.wordnet OFF, so the row
         # is published off rather than hidden.
@@ -1310,6 +1310,11 @@ class CapabilitySheet(ServedSkin):
                     "canceled",
                     "cycle",
                     "hop_ceiling",
+                    # SPEC ¶AMD-1 (2026-08-26): DESIGN-plain-input §3b
+                    # mints `conditional` for an answer served under a
+                    # stated supposition. Non-answering for scoring, so
+                    # conditional service cannot inflate throughput.
+                    "conditional",
                 ],
                 "write_gate": ["PROVEN", "VERIFIED", "REFUSED"],
                 "skin_assigned": ["abstained"],
