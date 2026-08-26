@@ -86,7 +86,25 @@ SYSTEM = (
     "NONE and nothing else."
 )
 
-_SELECTION = re.compile(r"\b(\d{1,2}|NONE)\b", re.IGNORECASE)
+#: The WHOLE reply must be a bare selection. Anchored, and the anchoring is a
+#: correction dated 2026-08-26 after adversarial review of the merge
+#: candidate.
+#:
+#: The first version searched with `\b(\d{1,2}|NONE)\b` and `.search()`, so it
+#: extracted the first one- or two-digit token from anywhere in a reply:
+#: `"suppose x = 5"` yielded index 4. The trust shape held — the model's
+#: output is still an integer or nothing, and committed code still verifies
+#: whatever it names — but the module's own docstring and
+#: DESIGN-plain-input §3.1 both say a reply outside the alphabet is
+#: *"discarded before verification, not repaired"*, and lifting a numeral out
+#: of a sentence is repair. The sentences were false as written, so the code
+#: is made true instead of the sentences softened.
+#:
+#: No verdict of the registered run moves: every retained reply in
+#: `experiments/plain_input_prompts.json` and every `raw` in the run's G1
+#: rows is a bare `1`, `2`, `4`, `8` or `NONE`. Checked before the change,
+#: and the run artifact's `post_run_corrections` block records it.
+_SELECTION = re.compile(r"^\s*(\d{1,2}|NONE)\s*\.?\s*$", re.IGNORECASE)
 
 
 class ProposerUnavailable(RuntimeError):
@@ -163,9 +181,13 @@ def propose(
     elapsed = time.time() - started
     raw = (payload["choices"][0]["message"]["content"] or "").strip()
 
-    found = _SELECTION.search(raw)
+    found = _SELECTION.match(raw)
     if not found:
-        return Proposal(None, raw, prompt, elapsed, "reply was not a number or NONE")
+        return Proposal(
+            None, raw, prompt, elapsed,
+            "reply was not a bare number or NONE, and a reply outside the "
+            "alphabet is discarded rather than mined for a numeral",
+        )
     token = found.group(1)
     if token.upper() == "NONE":
         return Proposal(None, raw, prompt, elapsed, None)

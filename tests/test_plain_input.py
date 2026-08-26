@@ -1666,6 +1666,220 @@ class TheRegisteredRun(unittest.TestCase):
         self.assertIn("does not repair the silent binding", joined)
 
 
+class ThePostRunCorrections(unittest.TestCase):
+    """What adversarial review found after the artifact was committed.
+
+    Three defects, none of which moves a verdict, and all three recorded in
+    the artifact's own terms rather than repaired out of sight.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.report = json.loads(
+            (REPO / "experiments" / "plain_input_run.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        cls.block = cls.report["post_run_corrections"]
+
+    def test_the_corrections_do_not_move_the_verdict(self) -> None:
+        gate = self.report["result_gate_R2"]
+        self.assertEqual(gate["verdict"], "FAILS")
+        self.assertEqual(
+            gate["failed_clauses"],
+            ["G5 collapses at or below half", "G9 repairs both fixtures"],
+        )
+
+    def test_H1_names_the_limb_that_was_not_executed(self) -> None:
+        h1 = self.block[
+            "H1_G8_was_reported_GREEN_without_executing_its_third_limb"
+        ]
+        self.assertIn("never executed", h1["what_the_runner_executed"])
+        own = h1["and_this_repository_executed_it_too_with_its_own_denominator"]
+        self.assertEqual(own["holdout_occurrences"], 0)
+        self.assertEqual(own["statuses_that_were_not_found_or_solved"], 0)
+        self.assertIn("108", h1["who_executed_the_missing_limb"])
+
+    def test_M4_records_that_no_verdict_moved_and_the_raws_agree(self) -> None:
+        """The claim is checkable, so it is checked rather than believed."""
+
+        import plain_proposer as pp  # noqa: PLC0415
+
+        prompts = json.loads(
+            (REPO / "experiments" / "plain_input_prompts.json").read_text(
+                encoding="utf-8"
+            )
+        )["prompts"]
+        raws = [record["raw"] for record in prompts]
+        raws += [row["raw"] for row in self.report["gates"]["G1"]["rows"]]
+        for raw in raws:
+            if not raw:
+                continue
+            self.assertIsNotNone(
+                pp._SELECTION.match(raw),
+                f"the anchored parser reads {raw!r} differently than the run "
+                "did, so a verdict WOULD move",
+            )
+
+    def test_M2_publishes_the_ranks_and_the_mechanism(self) -> None:
+        m2 = self.block["M2_the_enumerators_ranking_caps_G1s_ceiling_invisibly"]
+        self.assertTrue(m2["and_both_verify"])
+        self.assertIn("ascending TITLE", m2["the_mechanism"])
+        self.assertIn(
+            "all six NONEs verified correct refusals",
+            m2["so_the_NONE_was_a_correct_refusal_against_a_mis_ranked_list"],
+        )
+
+    def test_L14_quotes_the_governance_clause_exactly(self) -> None:
+        block = self.block[
+            "L14_the_prereg_glosses_a_governance_clause_and_the_gloss_is_marked"
+        ]
+        roadmap = _flat(
+            (REPO / "docs" / "ROADMAP-v0.21.md").read_text(encoding="utf-8")
+        )
+        self.assertIn(_flat(block["the_clause_verbatim"]), roadmap)
+
+
+class G8sServedAnswerLimb(unittest.TestCase):
+    """The limb the registered run did not execute, now executable.
+
+    The reviewer ran this by hand before ruling. A check whose only record is
+    a reviewer's message is a check the next run does not have.
+    """
+
+    def test_re_serving_every_verified_candidate_leaks_no_holdout_id(
+        self,
+    ) -> None:
+        import candidate_enumerator as ce  # noqa: PLC0415
+        import run_plain_gate  # noqa: PLC0415
+
+        result = run_plain_gate._g8_served_answers(ce.holdout_ids(REPO))
+        self.assertGreater(result["candidate_lines_reserved"], 100)
+        self.assertEqual(result["occurrences"], [])
+        self.assertEqual(result["statuses_that_were_not_found_or_solved"], [])
+
+    def test_the_scan_would_have_caught_a_holdout_id_if_one_appeared(
+        self,
+    ) -> None:
+        """The clause that can go red — otherwise zero proves nothing."""
+
+        import candidate_enumerator as ce  # noqa: PLC0415
+
+        holdout = ce.holdout_ids(REPO)
+        self.assertGreater(len(holdout), 2000)
+        planted = sorted(holdout)[0]
+        body = f"found : {planted}\nreceipt : {{}}"
+        self.assertTrue(
+            any(statement_id in body for statement_id in holdout),
+            "the scan's own rule does not detect a planted holdout id",
+        )
+
+    def test_the_reserve_index_asymmetry_is_filed_not_only_argued(
+        self,
+    ) -> None:
+        backlog = _flat((REPO / "docs" / "BACKLOG.md").read_text(
+            encoding="utf-8"
+        ))
+        self.assertIn("_reserve` re-serves a chosen candidate through the", backlog)
+        self.assertIn("2,053 holdout ids", backlog)
+
+
+class TheProposerParserDiscardsRatherThanRepairs(unittest.TestCase):
+    """DESIGN-plain-input §3.1, made true of the code rather than of prose.
+
+    The first parser searched for the first one- or two-digit token anywhere
+    in a reply, so `suppose x = 5` yielded index 4. The trust shape held —
+    an index is still all that acts — but the docstring and the design both
+    say a reply outside the alphabet is *"discarded before verification, not
+    repaired"*, and mining a numeral out of a sentence is repair.
+    """
+
+    #: The reviewer's adversarial replies. Every one must DISCARD.
+    ADVERSARIAL = (
+        "suppose x = 5",
+        "I think the answer is 3 because the corpus says so",
+        "Option 2 is best",
+        "1 or 2",
+        "none of these fit the question",
+    )
+
+    def _candidates(self):
+        import candidate_enumerator as ce  # noqa: PLC0415
+
+        return ce.enumerate_candidates("what is two plus three", REPO)
+
+    def test_every_adversarial_reply_is_discarded(self) -> None:
+        import plain_proposer as pp  # noqa: PLC0415
+
+        for reply in self.ADVERSARIAL:
+            self.assertIsNone(
+                pp._SELECTION.match(reply),
+                f"{reply!r} was read as a selection; the doctrine says "
+                "discard, not repair",
+            )
+
+    def test_the_old_lenient_pattern_would_have_accepted_them(self) -> None:
+        """Otherwise the fixture is asserting nothing about the fix."""
+
+        import re  # noqa: PLC0415
+
+        lenient = re.compile(r"\b(\d{1,2}|NONE)\b", re.IGNORECASE)
+        accepted = [
+            reply for reply in self.ADVERSARIAL if lenient.search(reply)
+        ]
+        self.assertEqual(len(accepted), len(self.ADVERSARIAL))
+
+    def test_a_bare_selection_still_reads(self) -> None:
+        import plain_proposer as pp  # noqa: PLC0415
+
+        for reply, expected in (
+            ("1", "1"), (" 7 ", "7"), ("12", "12"), ("3.", "3"),
+            ("NONE", "NONE"), ("none", "none"),
+        ):
+            found = pp._SELECTION.match(reply)
+            self.assertIsNotNone(found, reply)
+            self.assertEqual(found.group(1), expected)
+
+    def test_a_discarded_reply_selects_nothing_and_says_why(self) -> None:
+        import plain_proposer as pp  # noqa: PLC0415
+
+        original = pp.ENDPOINT
+        pp.ENDPOINT = "http://127.0.0.1:9/none"
+        try:
+            with self.assertRaises(pp.ProposerUnavailable):
+                pp.propose("anything", self._candidates())
+        finally:
+            pp.ENDPOINT = original
+
+    def test_the_design_sentence_the_fix_makes_true(self) -> None:
+        plain = _flat(PLAIN.read_text(encoding="utf-8"))
+        self.assertIn(
+            "anything else it emits is discarded before verification, not "
+            "repaired",
+            plain,
+        )
+
+
+class TheSuccessorAppendix(unittest.TestCase):
+    """§8.6 — the four process notes, where the next author will read them."""
+
+    def test_all_four_are_named(self) -> None:
+        plain = _flat(PLAIN.read_text(encoding="utf-8"))
+        self.assertIn("8.6", plain)
+        for phrase in (
+            "custodian outside the lane it rules on",
+            "denominator set after partial results",
+            "The runner lands before the reading",
+            "Derive the chance rate from the verification cost",
+        ):
+            self.assertIn(phrase, plain, phrase)
+
+    def test_the_chance_rate_note_carries_both_numbers(self) -> None:
+        plain = _flat(PLAIN.read_text(encoding="utf-8"))
+        self.assertIn("1/8 = 0.125", plain)
+        self.assertIn("20.62/30", plain)
+
+
 class _StubVerified:
     """A Verified stand-in, so the shape tests need no model."""
 

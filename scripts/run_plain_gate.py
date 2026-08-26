@@ -768,6 +768,80 @@ def _enumerator_reads_data_only() -> tuple[bool, dict]:
     }
 
 
+def _g8_served_answers(holdout: frozenset[str]) -> dict:
+    """G8's third limb: *"or in any served answer"*.
+
+    Added 2026-08-26 after adversarial review found this limb **had never
+    been executed**. The registered run scored G8 GREEN on two limbs — the
+    prompts and the enumerator's channel — and its clause covers three. The
+    reviewer executed the missing one by hand and read 0 of 108; the run's
+    `post_run_corrections` block records that, and this function is so the
+    next run does not need a reviewer to do it.
+
+    The channel is real and worth naming rather than dismissing.
+    `PlainRouter._reserve` boots a fresh session and then copies the
+    CALLER's `resolver_index` — and the recorder sets that index to
+    `resolver.default_index()`, which spans `data/` **and**
+    `data_holdout/`. So the enumerator's `data/`-only discipline does not
+    extend to the re-serve that produces a conditional answer's body: the
+    candidate is chosen from `data/`, and then re-served through an index
+    that can see both. Nothing leaked — this limb reads zero — but the
+    asymmetry is filed in `docs/BACKLOG.md` beside slice 1's M9 lineage,
+    because a negative that holds by luck of vocabulary is not the same
+    property as one that holds by construction.
+    """
+
+    from harness import CoreSession  # noqa: PLC0415
+    from resolver import default_index  # noqa: PLC0415
+
+    index = default_index()
+    carrier = CoreSession.boot(REPO, offline=True, session_id="g8-served")
+    carrier.resolver_index = index
+
+    lines: list[str] = []
+    for item in _load(QUESTIONS)["questions"]:
+        _candidates, verified = ce.verified_candidates(item["question"], REPO)
+        lines.extend(entry.candidate.line for entry in verified)
+
+    occurrences, divergent = [], []
+    for line in lines:
+        verdict = plain_router.PlainRouter._reserve(REPO, carrier, line)
+        body = "\n".join(
+            [
+                str(verdict.get("detail") or ""),
+                *[str(row) for row in (verdict.get("answer") or [])],
+                json.dumps(verdict.get("receipt") or {}, sort_keys=True),
+            ]
+        )
+        for statement_id in holdout:
+            if statement_id and statement_id in body:
+                occurrences.append(
+                    {"candidate_line": line, "statement_id": statement_id}
+                )
+        if verdict.get("status") not in ("found", "solved"):
+            divergent.append(
+                {"candidate_line": line, "status": verdict.get("status")}
+            )
+    return {
+        "clause_limb": "or in any served answer",
+        "candidate_lines_reserved": len(lines),
+        "occurrences": occurrences,
+        "statuses_that_were_not_found_or_solved": divergent,
+        "the_index_asymmetry_this_limb_exists_for": (
+            "`PlainRouter._reserve` copies the caller's `resolver_index`, and "
+            "a recorder's index is `resolver.default_index()`, which spans "
+            "`data/` AND `data_holdout/`. The enumerator's `data/`-only rule "
+            "does not reach the re-serve. Measured zero here; filed as a "
+            "construction gap rather than treated as closed."
+        ),
+        "not_executed_by_the_registered_run": (
+            "this limb was added after that run and its reading there came "
+            "from the reviewer's own execution (0 of 108). See "
+            "`post_run_corrections`."
+        ),
+    }
+
+
 def score_g8(prompts: dict) -> dict:
     holdout = ce.holdout_ids(REPO)
     hits = []
@@ -785,6 +859,8 @@ def score_g8(prompts: dict) -> dict:
                     }
                 )
     reads_data_only, channel_detail = _enumerator_reads_data_only()
+    served = _g8_served_answers(holdout)
+    hits.extend(served["occurrences"])
     return {
         "clause": (
             "no holdout statement id, holdout statement text, or "
@@ -797,6 +873,7 @@ def score_g8(prompts: dict) -> dict:
         "occurrences": hits,
         "the_enumerator_reads_data_only": reads_data_only,
         "how_that_second_check_is_made": channel_detail,
+        "the_served_answer_limb": served,
         "why_the_second_check_exists": (
             "resolver.default_index spans data/ AND data_holdout/ — 2,053 "
             "holdout ids sit in the index a candidate list would obviously be "

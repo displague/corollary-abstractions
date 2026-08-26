@@ -790,3 +790,84 @@ also what puts this residue out of reach: a selector's ceiling is its
 enumerator's recall. The parked synonym layer, *"a design and not a patch"*
 (`docs/DESIGN-text-resolution.md:95-96`), remains the blocker it was, and a
 successor aimed at this residue has to build it rather than route around it.
+
+### 8.5 The enumerator's ranking caps the ceiling invisibly (2026-08-26, from adversarial review)
+
+§8.4 recorded a residue the enumerator cannot reach because it offers **no**
+candidate. This is the same shape one step in: a residue it cannot reach
+because it offers the candidate **too late**.
+
+**The case.** `g1-22`, *"what does the corpus say about the distributive
+law"*. The corpus contains two correct readings and **both verify** —
+`settheory.boolean_laws.distributivity_meet_over_join` and
+`logic.boolean_laws.distributivity_meet_over_join`. They were enumerated at
+**ranks 21 and 23** (20 and 22 counting from zero, as the review reported
+them), outside the frozen candidate limit of **8**. The model never saw them
+and answered `NONE`.
+
+**The mechanism, and it is one line.** The total order is *(descending word
+overlap, ascending **title length**, statement id)*
+(`scripts/candidate_enumerator.py:261`). Every candidate here ties on overlap
+at the single word `law`, so the tiebreak is length — and `Ohm's Law` (9
+characters) outranks `Distributivity of Intersection over Union` (41). The
+eight the model was shown were Ohm, Hooke, Coulomb, Ideal Gas, Beer-Lambert,
+Power-Law Rate, Newton's Second and the Law of Large Numbers.
+
+**So the refusal was correct and the list was wrong.** That inverts how the
+run's own G1 rows read: a `NONE` there looks like a proposer failing to
+select, and here it is a proposer declining a list with no right answer in
+it. Independent review reached the same reading for every refusal in the run
+— *"all six NONEs verified correct refusals"*.
+
+**What it costs the numbers.** The sealed ceiling of 21/30 is not the
+operative ceiling: the **ranking** caps what can be selected before the limit
+of 8 ever applies, and it does so invisibly, because nothing in a run's rows
+shows that a correct reading sat at rank 21. G1's published rate is an
+underestimate of what selection could reach on a correctly ordered list, by
+an amount the run did not measure — and which cannot be recovered from the
+committed artifact.
+
+**Not repaired.** The ordering and the limit are frozen together in
+`experiments/plain_input_prereg.json` amendment 1, and they were frozen for a
+reason that still holds: both move the blind arm's chance baseline, so
+changing either after seeing the arms would move a control's baseline with
+the results in view. Filed in `docs/BACKLOG.md`. The successor's blocker is
+the same one §8.4 names — a ranking or synonym layer — and **not** a longer
+list: raising the limit to 24 would have surfaced these two by accident of
+where they happened to sort, which is not a mechanism.
+
+### 8.6 For the successor's preregistration — four process notes
+
+Not design content. These are the process lessons the slice-2 lane paid for,
+recorded where the next preregistration's author will be reading rather than
+in a commit message.
+
+1. **A ruling needs a custodian outside the lane it rules on.** G9 was first
+   adjudicated by the implementing lane about a gate the implementing lane's
+   own preregistration had added, and it took an orchestrator's ruling
+   (amendment 4) to make the disposition an authority rather than a
+   self-assessment. Name the custodian before the gate can go red, not after.
+
+2. **A denominator set after partial results deserves floor-grade
+   scrutiny.** The `denominators` block was written once the routing of the
+   thirty was already known. It is honest and it is checkable — every subset
+   is re-measured by a test rather than typed — but it was authored with the
+   partition in view, and ROADMAP-v0.21 §4.0(3) treats a number chosen after
+   its instrument is understood as a construction defect. A successor freezes
+   its subsets with its question set.
+
+3. **The runner lands before the reading.** Three instrument defects were
+   found by executing the runner once before reading it, and a fourth (G8's
+   third limb) survived that and was caught by review. A gate runner
+   committed before the corpus exists can be reviewed for what it *fails to
+   execute*, which is the class of defect a green verdict hides best.
+
+4. **Derive the chance rate from the verification cost, not from `1/N`.**
+   Amendment 1 froze the candidate limit at 8 and recorded the blind arm's
+   chance rate as `1/8 = 0.125`. The measured expectation was **20.62/30**,
+   because verification is generous and a uniform draw lands on *some*
+   verified candidate far more often than it lands on *the* right one. The
+   chance rate a control's baseline needs is the probability of a **verified**
+   draw, computed per question as `verified/candidates` — not the reciprocal
+   of the list length. Freezing `1/N` made the collapse rule look meetable
+   when it was not.

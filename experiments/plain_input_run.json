@@ -1406,6 +1406,53 @@
     "this slice does not repair the silent binding P2 measured; the defect is filed with thirteen fixtures and its repair is a designed successor's work",
     "no rate here is a rate over 'plain English'; every denominator is a named subset of one maintainer-authored set of thirty"
   ],
+  "post_run_corrections": {
+    "H1_G8_was_reported_GREEN_without_executing_its_third_limb": {
+      "and_this_repository_executed_it_too_with_its_own_denominator": {
+        "candidate_lines_reserved": 120,
+        "distinct_lines": 78,
+        "holdout_occurrences": 0,
+        "statuses_that_were_not_found_or_solved": 0,
+        "why_the_denominators_differ_and_are_both_published": "the reviewer read 108; the limb as now written re-serves every verified candidate of every sealed question WITH duplicates across questions, which is 120 over 78 distinct lines. Neither number is the other's correction — they are two scopes over the same material, and both read zero. Publishing one and calling it the reviewer's would misattribute a denominator."
+      },
+      "the_channel_is_real_and_is_named_rather_than_dismissed": "`PlainRouter._reserve` boots a fresh session and then copies the CALLER's `resolver_index`. A recorder's index is `resolver.default_index()`, which spans `data/` AND `data_holdout/` — the same 2,053-id span slice 1's M9 finding measured. So the candidate enumerator's `data/`-only discipline does NOT extend to the re-serve that produces a conditional answer's body: chosen from `data/`, re-served through an index that can see both.",
+      "the_clause_has_three_limbs": "no holdout statement id, holdout statement text, or holdout-derived material appears (1) in any prompt sent to the model, (2) in any candidate list, or (3) IN ANY SERVED ANSWER.",
+      "what_is_fixed_and_what_is_not": "the runner gains the limb (`_g8_served_answers`) so no future run needs a reviewer to execute it, and a test carries the reviewer's re-serve check. `_reserve` itself is NOT changed: narrowing its index after the run would alter served behaviour the run measured. The asymmetry is filed in docs/BACKLOG.md beside slice 1's M9 lineage.",
+      "what_the_runner_executed": "limbs 1 and 2 — the sixteen retained prompts with their candidate and verified lists, and the enumerator's channel by AST. Limb 3 was never executed, and G8 was nevertheless reported GREEN.",
+      "who_executed_the_missing_limb": "the reviewer, by hand, before ruling: 108 verified candidate lines re-served through `_reserve` — ZERO holdout ids, ZERO divergent statuses. Verdict unchanged.",
+      "why_that_matters_even_at_zero": "a negative that holds because no holdout title happened to share a content word is not the same property as one that holds by construction. G8's own second limb exists for exactly that distinction, and it did not cover this path."
+    },
+    "L14_the_prereg_glosses_a_governance_clause_and_the_gloss_is_marked": {
+      "and_it_does_not_change_what_this_slice_did": "P4 measured byte-identity across two passes, so the arm registered as determinism-plus-commit and the execute-once branch never applied.",
+      "the_clause_verbatim": "What is kept: non-deterministic measurements (anything touching a model, a clock, or the network) remain execute-once with the run pre-announced.",
+      "the_gloss_as_the_prereg_wrote_it": "ROADMAP-v0.21 §4.0(2)'s KEPT clause: anything touching a model remains execute-once",
+      "what_the_gloss_drops": "a clock and the network from the scope, and `with the run pre-announced` from the obligation. The prereg is frozen and is not edited; the exact clause is quoted here so a reader of this artifact meets the rule rather than the paraphrase."
+    },
+    "M2_the_enumerators_ranking_caps_G1s_ceiling_invisibly": {
+      "and_both_verify": true,
+      "not_repaired_here": "the ordering and the limit are both frozen — amendment 1 froze them precisely because they move the blind arm's baseline, and changing either after seeing the arms would move a control's baseline with the results in view. Filed as DESIGN-plain-input §8.5 and in docs/BACKLOG.md, same shape as F2: the blocker is a ranking or synonym layer, not a bigger list.",
+      "so_the_NONE_was_a_correct_refusal_against_a_mis_ranked_list": "not a failure of selection. The reviewer's own table reached the same reading for all of them — the ruling's words: \"all six NONEs verified correct refusals\".",
+      "the_mechanism": "the total order is (descending word overlap, ascending TITLE LENGTH, statement id) — `candidate_enumerator.py:261`. Every candidate here ties on overlap at the single word `law`, so the tiebreak is length, and nine-character physics titles (`Ohm's Law`, `Hooke's Law`, `Coulomb's Law`) outrank a 41-character `Distributivity of Intersection over Union`. The eight the model saw were Ohm, Hooke, Coulomb, Ideal Gas, Beer-Lambert, Power-Law Rate, Newton's Second and Law of Large Numbers.",
+      "what_it_does_to_G1": "the sealed ceiling of 21/30 is not the operative ceiling. The enumerator's RANKING caps what can be selected before the frozen limit of 8 ever applies, and it does so invisibly: nothing in the run's rows shows that a correct reading existed at rank 21. G1's published rate is therefore an underestimate of what selection could reach on a correctly ordered list, by an amount this run did not measure.",
+      "what_the_corpus_actually_contains": [
+        "settheory.boolean_laws.distributivity_meet_over_join",
+        "logic.boolean_laws.distributivity_meet_over_join"
+      ],
+      "where_it_shows": "g1-22, `what does the corpus say about the distributive law`. The model answered NONE and the run counted that as a failed selection.",
+      "where_they_were_ranked": "ranks 21 and 23 counting from one — the review reported them as 20 and 22, counting from zero. Either way they are far outside the frozen candidate limit of 8, so the model never saw them."
+    },
+    "M4_the_parser_was_lenient_where_the_doctrine_says_discard": {
+      "fixed": "anchored to `^\\s*(\\d{1,2}|NONE)\\s*\\.?\\s*$` with `.match()`, and a test carries five adversarial replies asserting DISCARD.",
+      "no_verdict_moves_and_it_was_checked_not_assumed": "every retained reply in experiments/plain_input_prompts.json and every `raw` in this artifact's G1 rows is a bare `1`, `2`, `4`, `8`, `NONE` or empty. The anchored parser reads all of them identically.",
+      "the_sentences_that_were_false": "the module's own docstring and DESIGN-plain-input §3.1 — a reply outside the alphabet is \"discarded before verification, not repaired\". Mining a numeral out of a sentence is repair.",
+      "the_trust_shape_did_NOT_break": "an index is still all that acts, and committed code still verifies whatever the index names. Nothing the model wrote could reach a verdict as content. The defect was that the code was more permissive than its own description, not that the description guarded something the code let through.",
+      "what_was_wrong": "`_SELECTION` searched with a word-boundary pattern and `.search()`, so it lifted the first one- or two-digit token out of anywhere in a reply. `suppose x = 5` yielded index 4."
+    },
+    "added_by": "hand, after adversarial review of the merge candidate",
+    "and_why_it_is_a_hand_added_block": "re-running the runner would overwrite it, exactly as `conformance_e5_late.json` records for its own corrections block — 'a third reproduces the registered artifact but for `commit` and the hand-added corrections block'. The runner's fixes below are for FUTURE runs; this block is the record of what this run did not do.",
+    "dated": "2026-08-26",
+    "what_this_block_is": "corrections to THIS artifact's record, made after its numbers were read and committed. No scored number below changes and no verdict moves: R2 still FAILS on `G5 collapses at or below half` and `G9 repairs both fixtures`, G5 is still 22 against 17 against a required 8.5, and the reading survived independent re-execution of both arms."
+  },
   "prereg": "experiments/plain_input_prereg.json",
   "prompts": "experiments/plain_input_prompts.json",
   "reproduction": {

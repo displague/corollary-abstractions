@@ -119,6 +119,57 @@ or commit history. Each item names the evidence that motivated it.
   licensing sentence carries the limit in the same sentence that claims the
   capability.
 
+- **`PlainRouter._reserve` re-serves a chosen candidate through the CALLER's
+  index, which spans `data_holdout/` (2026-08-26, from adversarial review of
+  the merge candidate).** Measured zero; filed because zero-by-vocabulary is
+  not zero-by-construction.
+
+  **The asymmetry.** `candidate_enumerator` builds its index explicitly over
+  `[repo_root / "data"]`, and slice 1's M9 finding is why: `default_index()`
+  spans `data/` **and** `data_holdout/`, and **2,053 holdout ids sit in it**.
+  But `plain_router.PlainRouter._reserve` copies `session.resolver_index`
+  from its caller, and a recorder's index *is* `default_index()`. So a
+  conditional answer's body — the verbatim engine answer §3b promises — is
+  produced through an index that can see the holdout, while the candidate
+  that named it was chosen from `data/` alone.
+
+  **What was measured.** G8's third limb (*"or in any served answer"*) was
+  **never executed by the registered run**, which reported G8 GREEN on two
+  limbs of three. The reviewer executed it: 108 verified candidate lines
+  re-served, **0** holdout ids, **0** divergent statuses. The runner now
+  carries the limb and reads **0** over its own denominator of 120 lines (78
+  distinct). Verdict unchanged either way.
+
+  **Why it is filed and not patched.** Narrowing `_reserve`'s index after the
+  run would change served behaviour the run measured. The repair belongs to
+  whichever slice next touches the router: either `_reserve` builds its own
+  `data/`-only index, or the recorder stops handing a holdout-spanning index
+  to a session the proposer is attached to. Both are behaviour changes and
+  both need their own G4.
+
+- **The candidate enumerator's tiebreak is title length, which caps G1's
+  ceiling invisibly (2026-08-26, from adversarial review).** On `g1-22`
+  (*"what does the corpus say about the distributive law"*) the corpus
+  contains **two correct readings that both verify** —
+  `settheory.boolean_laws.distributivity_meet_over_join` and
+  `logic.boolean_laws.distributivity_meet_over_join` — enumerated at ranks
+  **21 and 23**, outside the frozen limit of 8. The model never saw them and
+  its `NONE` was a **correct refusal against a mis-ranked list**.
+
+  **The mechanism is one line.** The total order is *(descending word
+  overlap, ascending title length, statement id)*
+  (`candidate_enumerator.py:261`). Everything ties on the single shared word
+  `law`, so the tiebreak is length and `Ohm's Law` outranks *Distributivity
+  of Intersection over Union*.
+
+  **Not repaired**: amendment 1 froze both the order and the limit precisely
+  because they move the blind arm's chance baseline, so changing either after
+  seeing the arms would move a control's baseline with the results in view.
+  And a **longer list is not the fix** — raising the limit to 24 would have
+  surfaced these two by accident of where they sorted, which is not a
+  mechanism. The blocker is the same ranking-or-synonym layer
+  `DESIGN-plain-input` §8.4 names. Recorded as design §8.5.
+
 - **G5's collapse rule cannot tell selecting-well from selecting-often, and
   it is why the seat ships empty (2026-08-26, measured by the registered
   run).** The rule was frozen before the proposer existed and was scored as
