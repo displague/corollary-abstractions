@@ -8,9 +8,10 @@ form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
 interface. Latest release: [v0.21.0](docs/RELEASE-v0.21.0.md) — **three
 registered outcomes, three different verdicts, every one published with its
-mechanism.** A conversation is now a **journal**: `suppose n = 4` persists,
-answers name **which suppositions they consumed**, and a committed journal
-replays offline to identical bytes or refuses by type — 58 of 58 cited-mutation
+mechanism.** A **recorded** conversation is now a **journal**: `suppose n = 4`
+persists as an Assumption record, answers name **which suppositions they
+consumed**, and a committed journal replays offline to identical bytes or
+refuses by type — 58 of 58 cited-mutation
 responses, **0 flips of 60** sham suppositions, **0 of 42** uncited ones,
 tamper detection **20/20 on each of four arms**. In the same cycle, plain
 English input **failed its own control**: a capability-blind coin flip beat the
@@ -33,7 +34,8 @@ own controls** and ships with the void published on every answer it gives.
 (*Corrected at the v0.21 rotation:* this read *"run against your own numbers"*,
 and the drift audit measured that false — the route tests the sampler's
 admitted points, not bindings a person types. Filed in
-[BACKLOG](docs/BACKLOG.md) with the capability sheet's matching overclaim.) **No conformance rate exists anywhere**, because a
+[BACKLOG](docs/BACKLOG.md) with the capability sheet's matching overclaim.)
+**No conformance rate exists anywhere**, because a
 control whose floor no correct instrument could meet took it away. See [the
 floor no instrument could
 meet](docs/blog/the-floor-no-instrument-could-meet.md).
@@ -171,14 +173,24 @@ with the two sides printed. **There is no conformance rate**, here or
 anywhere: the control that would have licensed one voided, and the reason is
 worth reading, because it is a floor no correct instrument could have met.
 
-**And since v0.21 the conversation remembers, and says what it used.** A
-`suppose` line is now a durable **Assumption** record rather than state thrown
-away at the end of the line, every turn is written to a chained, MAC-signed
-journal, and each answer records which assumptions it consumed — at the moment
-the machinery reads one, not afterwards:
+**And since v0.21 a recorded conversation remembers, and says what it used.**
+Under a session recorder a `suppose` line becomes a durable **Assumption**
+record rather than state thrown away at the end of the line, every turn is
+written to a chained, MAC-signed journal, and each answer records which
+assumptions it consumed — at the moment the machinery reads one, not
+afterwards.
+
+**Read this before the transcript.** The typed prompt below attaches **no**
+ledger: `harness.main()` boots a session without an `AssumptionSet`, and only
+`scripts/session_recorder.py` attaches one. So what you see here is the
+*rendering* — held, refused, by name — and **no answer at this prompt cites an
+assumption, because none is declared.** The citing behaviour lives in the
+committed journals under `experiments/sessions/` and in
+`tests/test_session_ledger.py`, which is what `DESIGN-session-ledger` asked for
+and is deliberately not a surface a newcomer can drive:
 
 ```
-$ printf 'suppose n = 4\nsuppose t = 5\nn + t\n' | PYTHONIOENCODING=utf-8 python scripts/harness.py
+$ printf 'suppose n = 4\n' | PYTHONIOENCODING=utf-8 python scripts/harness.py
 line    : suppose n = 4
 route   : supposition
 status  : waiting
@@ -391,7 +403,7 @@ the graded residual.
 | A blind spot can be removed from the grammar rather than bounded | canonical bracketing means a rendered bracket the mathematics does not need is never emitted, so deleting one must change the term: **5,228 of 5,228** grouping-pair deletions detected across every canonical surface, zero blind. The control that read 0.80 last cycle reads **42 of 42 on a floor raised to 0.95**, the foreign `in words` line is served, and the price is published too — the share of the skeleton control's misses that exercise the gate fell 42.5% → 22.4% |
 | A restored clause moves the denominator, not the numerator | the re-specified control verified each mutation changed the term *before* rendering it, and discarded five: `drop_ascription` reads **45 detected of 45 scored**, falsifying its own pre-registered 45-of-50 prediction. Last cycle's 0.90 was not five missed near-misses — it was five mutations that were never mutations |
 | A control's floor can be unmeetable by a correct instrument | the conformance run's perturbation control froze a 99% flip floor and measured **0.650**, voiding every `NO_COUNTEREXAMPLE_FOUND` in the run. Part is the floor — mutations that cannot be made false over the declared `Nat` carrier — and part is a real sampler miss in the same published list, and **the run has no instrument that partitions them**. 8,017 statements compile and the route serves with the void on every answer; no conformance rate exists anywhere |
-| A conversation can carry its own premises, and the fence is what proves it | a per-turn journal records which suppositions each answer consumed. Mutate a **cited** one and the answer must move or refuse: **58 of 58**, 30 of them by typed conflict refusal. Mutate an **uncited** one, or inject a sham, and the answer must not move **at all**: **0 flips of 42** and **0 of 60**. One flip would have meant the replayer was hashing the transcript, and the capability was pre-declared void. Replay reproduces **410 of 410** sealed turns, and tamper detection is **20/20 on each of four arms** — including an adversary who re-signs the whole file under their own key ring. Not claimed: correctness. A wrong answer replays as faithfully as a right one |
+| A recorded conversation can carry its own premises, and the fence is what proves it | a per-turn journal records which suppositions each answer consumed. Mutate a **cited** one and the answer must move or refuse: **58 of 58**, 30 of them by typed conflict refusal. Mutate an **uncited** one, or inject a sham, and the answer must not move **at all**: **0 flips of 42** and **0 of 60**. One flip would have meant the replayer was hashing the transcript, and the capability was pre-declared void. Replay reproduces **410 of 410** sealed turns, and tamper detection is **20/20 on each of four arms** — including an adversary who re-signs the whole file under their own key ring. Not claimed: correctness. A wrong answer replays as faithfully as a right one |
 | A metric that counts successes cannot see a correct refusal | a capability-blind coin flip beat a small model **22 verified selections to 17** on a rule requiring **≤ 8.5**, and the draw was typical rather than lucky (analytic expectation **20.62**). All six of the model's `NONE` answers were **verified correct refusals** on questions with acceptable candidates available — which the blind arm, having no `NONE`, took. On nine questions written to have no answer the model selected for **zero** and the blind arm for **five**. The floor was also unmeetable: the frozen chance rate was `1/8`, the measured expectation **0.687**. The rule was scored exactly as frozen and nothing shipped |
 | An obligation built from one reading compares that reading with itself | a proof-backed conformance instrument discharged **0 of 6** pilot obligations, every one rejected as trivial, because both sides of *"the evaluator agrees with the statement"* descend from **one parser's** parse tree. Handed to the checker with the triviality clause switched off, the same six were **accepted 6 of 6** — what an instrument without the clause would have published as a capability. The lane stopped before it opened, and parks behind an independent second reading as a **construction prerequisite** |
 | A reader that scores half as well on nonsense is not reading | a pinned local model read served sentences blind and reconstructed the term at 0.8417 — and scored 0.5000 on scrambled surfaces, ratio 0.594 against a 0.5 voiding threshold frozen in advance. The machine-reader claim is not made; the human-reader claim has never been attempted, because a one-maintainer repository has no non-maintainer to mark a sheet blind |
@@ -535,9 +547,11 @@ python -c "import json; v=json.load(open('experiments/foreign_voice_rate2.json',
                                             # retained exactly as it read (VOID
                                             # ['C-V4']) and the two are never
                                             # blended
-printf 'suppose n = 4\nsuppose t = 5\nn + t\n' | python scripts/harness.py
-                                            # the supposition persists and the
-                                            # answer cites what it consumed
+printf 'suppose n = 4\n' | python scripts/harness.py
+                                            # the supposition RENDERS. It is not
+                                            # declared as an Assumption record:
+                                            # this CLI attaches no ledger, only
+                                            # session_recorder.py does
 python scripts/replay_session.py experiments/sessions/v021-p08.json
                                             # 9 of 9 turns reproduced offline,
                                             # no key needed; v021-s03.json

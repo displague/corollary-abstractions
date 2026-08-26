@@ -11,9 +11,11 @@ mechanism that produced its verdict rather than with the number alone.
 - **FAILED HONESTLY.** Plain input's `R2 FAILS`, and the failure is the
   finding: a **capability-blind arm beat the model — 22 verified selections
   against 17** — because the frozen metric counts verified selections and
-  **structurally cannot reward a correct refusal**. All six of the model's
-  `NONE` answers were verified correct refusals. The blind arm has no `NONE`
-  in its alphabet.
+  **structurally cannot reward a correct refusal**. Independent review read
+  **all six** of the model's `NONE` answers as correct refusals — one of them,
+  `g1-22`, measured; the other five against the question set's own authored
+  dispositions, which that file is careful to say are not ground truth. The
+  blind arm has no `NONE` in its alphabet.
 - **STOPPED ITSELF.** WITNESS discharged **0 of 6** pilot obligations, every
   one `rejected_trivial`, because one shared front-end makes the obligation
   `P ↔ P`. Handed the same six obligations with the trap removed, the checker
@@ -170,7 +172,7 @@ ids are committed as fixtures** in `docs/BACKLOG.md`.
   authored to exhaust came back as **clarifications naming corpus readings**:
   `g1-26` *"how do i change a tyre"* was offered *Average Rate of Change*,
   *Fundamental Theorem of Calculus, Evaluation Part* and *Derivation Takes Its
-  Category from the Affix*. **The proposer is not what broke it** — it
+  Category from the Affix (Righthand Head Rule)*. **The proposer is not what broke it** — it
   answered `NONE` on both. The **branch rule** fires on the count of verified
   candidates and never consults the model's `NONE`. Frozen in amendment 2
   before it had ever run, so it is published and filed rather than adjusted.
@@ -259,7 +261,17 @@ $ PYTHONIOENCODING=utf-8 python scripts/replay_session.py experiments/sessions/v
 }
 ```
 
-And the surface a person types at:
+**And the line a person types — on a surface that holds no ledger.** This is
+the honest framing, and adversarial review of these notes is what forced it:
+`harness.main()` boots `CoreSession.boot(repo_root, offline=offline)`
+(`scripts/harness.py:2425`) and **never attaches an `AssumptionSet`**. Only
+`SessionRecorder.__post_init__` does (`scripts/session_recorder.py:121-128`).
+So `_route_supposition` reads `getattr(session, "assumptions", None)`, finds
+`None`, and holds the claim in a frame **without declaring an Assumption
+record**. The typed CLI shows the *rendering*; it cannot show the citation,
+because **no answer served from the CLI cites anything**. That is consistent
+with everything else here — the design names no served surface for slice 1 —
+and it is the sentence a reader needs before running the command:
 
 ```
 $ printf 'suppose n = 4\nsuppose t = 5\nn + t\n' | PYTHONIOENCODING=utf-8 python scripts/harness.py
@@ -279,13 +291,25 @@ detail  : no live assumption 'a999' in this session; nothing was changed
 ```
 
 That `retract` line is not decoration — it is where B10 went red, twice, and
-the story is below.
+the story is below. It is also the clearest illustration of the split: the
+refusal reads identically with and without a ledger **by design, after the B10
+repair**, so what you see typed is exactly what a recorded session records —
+and the record is the only place the citation lives.
+
+**Stated plainly, because the skill's own rule asks for it: *"shipped" means
+the acceptance a newcomer can try.*** A newcomer can type `suppose` and
+`retract` and see them render. A newcomer **cannot** see an answer cite an
+assumption without writing a recorder. The claim R1 licenses is a claim about
+`session_ledger_run4.json` and `tests/test_session_ledger.py`, exactly as the
+run artifact says, and this release does not let *"the conversation
+remembers"* become a fact about the prompt. Filed in [BACKLOG](BACKLOG.md);
+named in [ROADMAP-v0.22](ROADMAP-v0.22.md) §4.3.
 
 ### Four runs, and why the first three are part of the record
 
 | run | B10 | capability-blind baseline | B6 | B8 arms | R1 |
 |---|---|---|---|---|---|
-| 1 `session_ledger_run.json` | **RED**, 10 of 260 | RED (broken comparator) | 21 cases vs floor 30 | 2 | **FAILS** |
+| 1 `session_ledger_run.json` | **RED**, 10 of 260 | RED (broken comparator) | 21 produced, ceiling 25, floor 30 | 2 | **FAILS** |
 | 2 `session_ledger_run2.json` | **RED**, the same 10 | GREEN, 0/58 | 42 cases | 2 | **FAILS** |
 | 3 `session_ledger_run3.json` | GREEN, 0/260 | GREEN, 0/58 | 42 cases | 2 | **HOLDS** |
 | 4 `session_ledger_run4.json` | GREEN, 0/260 | GREEN, 0/58 | 42 cases | **4** | **HOLDS** |
@@ -310,8 +334,10 @@ meant a citation no longer implied the answer consumed a premise.
 run 1 exposed three defects in the *runner*, not in the object: a
 capability-blind baseline that compared against the recorded digest instead of
 against the unmutated stateless replay (measuring statelessness, not
-mutation-response); B6's generator capped at **25 cases against its own floor
-of 30** — §4.0(3)'s unmeetable-floor defect appearing *inside the instrument*;
+mutation-response); B6's generator **could not exceed 25 cases** — one per
+half-B session, against 25 sessions — and produced **21**, against a registered
+floor of **30**. A ceiling below its own floor: §4.0(3)'s unmeetable-floor
+defect appearing *inside the instrument*;
 and every zero-flip verdict checking its numerator and never its denominator.
 B10 read red again, as a reading should.
 
@@ -340,8 +366,8 @@ seal records" means every turn, and zero is not every.*
 ### The scope limits, stated where the claim is made rather than beside it
 
 - **B1's first clause MISSED and stays missed.** The replayer was committed at
-  `9a9cb45` and the seal at `a91e39d` — four minutes later, and in the wrong
-  order. B1 is not in R1 and not among the stop conditions, so the run does not
+  `9a9cb45` and the seal at `a91e39d` — under five minutes later, and in the
+  wrong order. B1 is not in R1 and not among the stop conditions, so the run does not
   void; the miss is published unreinterpreted through all four runs. What the
   order taken gives is the stronger half (a replayer cannot be fitted to
   journals that do not exist) and what it gives up is the mirror guard: **the
@@ -737,7 +763,10 @@ asserting *"the repository as it stands is dark."* This cycle continued it with
 a **needle appended to its own haystack**, a **B2 verdict that counted
 divergences and so read green on zero reproductions**, and **B8 arms that were
 one shape run twice**. Zero wrong digests were found in any of the five
-reviews. The defects were all in what a green check was capable of failing.
+reviews. The **recurring shape** was a green check that could not have gone
+red — three of them this cycle — and it sat beside a count wrong by ten
+thousand, a published sweep sentence that was false, and a checker receipt
+filed under the wrong proposition.
 
 **And the discipline applied upward.** The orchestrator's own v0.22 design was
 **falsified twice by review before it landed**: its first version claimed no
@@ -761,8 +790,8 @@ Quoted from [DISCOVERIES](DISCOVERIES.md); linked rather than duplicated:
   WITNESS's 0 of 6, with the counterfactual — 6 of 6 accepted with the trap
   removed — as the evidence for what the trap bought, and the independent
   second reading promoted from residual risk to construction prerequisite.
-- *"A conversation can carry its own premises, and the fence is what proves
-  it."* 58 of 58 cited-mutation responses, against **0 flips of 42** uncited
+- *"A recorded conversation can carry its own premises, and the fence is what
+  proves it."* 58 of 58 cited-mutation responses, against **0 flips of 42** uncited
   and **0 of 60** sham. One flip would have voided the capability.
 - *"A control that dies on a case has not passed that case."* B8's registered
   arms were one tamper shape run twice; the obvious forgery crashed the
@@ -813,6 +842,12 @@ Quoted from [DISCOVERIES](DISCOVERIES.md); linked rather than duplicated:
   descend from the same in-memory `ReadBarrier`.
 - **B13's auditor is the implementer**, and all twenty drawn cases are the same
   easy shape.
+- **The citing surface is not the prompt.** `harness.main()` attaches no
+  `AssumptionSet`; only `SessionRecorder` does. A person typing at the CLI sees
+  `suppose` and `retract` render, and sees **no answer cite an assumption**,
+  because none is declared. R1's claim lives in the run artifact and in
+  `tests/test_session_ledger.py` — which is what the design asked for, and is
+  **not** an acceptance a newcomer can try.
 - **Sessions are reproducible, not correct.**
 - **No stranger-usability claim, anywhere.** Q30's plain questions and P3's
   sessions are maintainer-authored, about a corpus the author knows. STRANGER's
@@ -918,10 +953,14 @@ has an owner.
    again, and this release does not get to write it as though the precedent
    were clean: it is the **second** consecutive rotation to publish the gate
    step as pending.
-2. **`[SUITE-GATE-V20]` was never resolved.** The token appears exactly twice
-   in the whole tree — once in RELEASE-v0.20.0 and once in ROADMAP-v0.20's
-   closed banner — and it is a cross-reference to a section that was never
-   written. ROADMAP-v0.20's banner therefore **still declares three gate
+2. **`[SUITE-GATE-V20]` was never resolved.** Outside this document the token
+   appears **three** times — in RELEASE-v0.20.0, in ROADMAP-v0.20's closed
+   banner, and in the BACKLOG entry that files it — and it is a cross-reference
+   to a section that was never written. *(That count is itself a correction:
+   this paragraph and the BACKLOG entry both first said "exactly twice", and
+   the BACKLOG entry is the third occurrence. A token-count audit that
+   miscounts its own token is the cycle's recurring shape arriving inside the
+   paragraph that catalogues it.)* ROADMAP-v0.20's banner therefore **still declares three gate
    clauses open** (refresh, full-suite, ships-or-parks) even though
    RELEASE-v0.20.0 does report two suite runs with their wall-clocks. The
    banner and the notes were never reconciled. **Named here, not edited** —
@@ -943,8 +982,10 @@ silently corrected in a closed document.
 ROADMAP-v0.21 §3.5 set it: *"If either is still unrun at the v0.22 rotation, it
 stops being a rider and either becomes an item or parks."* Both the **HOLES
 counting table** and the **delete-K ground-truth table** are still unrun, for a
-**third** consecutive cycle — no artifact exists for either. **The rule fires:
-both park**, in ROADMAP-v0.22 §4.3, with their reasons, and neither is listed
+**third** consecutive rotation to list them without running them — unrun
+through v0.20 and v0.21 since ROADMAP-v0.20 §3 scheduled them, and named-and-
+unrun again here. No artifact exists for either. **The rule fires: both
+park**, in ROADMAP-v0.22 §4.3, with their reasons, and neither is listed
 as an available rider again.
 
 **Four more standalone probes have now been named for two or three cycles with
@@ -1082,7 +1123,7 @@ ships. Said.
   (v0.18's *"a metrology **this cycle** has not designed"* against v0.19's and
   v0.20's *"a metrology **no cycle** has designed"*). ROADMAP-v0.22 §4.3 states
   **six**, counting rotations since `DESIGN-grounded-throughput` §10 named it,
-  and says which reading it is counting. **And for the first time the lane has
+  and states the counting basis there. **And for the first time the lane has
   a named successor**: TOLL, parked as a v0.23 incumbent-candidate, is the
   metrology six rotations of the same sentence have been waiting for. The lane
   is still parked; what changed is that the sentence is no longer *"a metrology
@@ -1172,9 +1213,11 @@ compact design landing before its slice, on the WITNESS precedent.
 **CANARY-CURVE and TOLL** park as named **v0.23 incumbent-candidates**, and the
 ordering is CANARY-CURVE's own residual risk answered: its shadow tier prices
 statement *count*, not the density dimensions that bite, so growth is measured
-**after** the enumeration layer exists. **TOLL is the five-cycle-parked cost
-lane returning with a metrology** — the first named unpark candidate that lane
-has had in six rotations.
+**after** the enumeration layer exists. **TOLL is the parked cost lane returning
+with a metrology** — the first named unpark candidate it has had in **six**
+rotations. (The design and the receipt both call it *"the five-cycle-parked
+cost lane"*, written before this rotation counted the sixth; the count here is
+six and §4.3 says what it counts.)
 
 ## The release refresh
 
@@ -1228,7 +1271,11 @@ PYTHONIOENCODING=utf-8 python scripts/check_report_regeneration.py
 # print glyphs cp1252 cannot encode, and the UnicodeEncodeError reads like a
 # refusal and is not one.
 
-# 1. the session, typed: a supposition that persists, and the answer that cites it
+# 1. the supposition surface, typed. NOTE what this does NOT show: the CLI
+#    attaches no AssumptionSet (only the recorder does), so nothing here is
+#    declared as an Assumption record and no answer cites one. `n + t` comes
+#    back from the resolver, not from a binding. The citation lives in the
+#    committed journals and in tests/test_session_ledger.py, and nowhere else.
 printf 'suppose n = 4\nsuppose t = 5\nn + t\n' | PYTHONIOENCODING=utf-8 python scripts/harness.py
 
 # 2. an unknown id refuses by name -- the line B10 went red on, twice

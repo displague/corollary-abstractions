@@ -45,8 +45,10 @@
 > typical, not lucky (analytic expectation **20.62**). **The mechanism is
 > the finding**: the frozen metric counts verified selections and
 > **structurally cannot reward a correct refusal**; **all six** of the
-> model's `NONE` answers were verified correct refusals, on questions that
-> all had verified candidates the blind arm — which has no `NONE` — took;
+> model's `NONE` answers were read by independent review as correct refusals
+> — one (`g1-22`) measured, the other five against the question set's authored
+> dispositions, which that file says are not ground truth — on questions that
+> all had verified candidates the blind arm, which has no `NONE`, took;
 > on the **nine questions authored to exhaust the model selected for zero**
 > and the blind arm for five. The frozen chance rate (`1/8 = 0.125`) was
 > **mis-derived** — the measured expectation is **0.687** — and the clause is
@@ -67,7 +69,8 @@
 > while the design's own §4 argument for that disposition was **measured
 > false by P1** and is marked false where it stands. Findings **F1–F3** and
 > §8.5 published; the red **survives excluding all nine exhaust-authored
-> questions** (17 vs 17, still ≥ 8.5).
+> questions** — 17 vs 17, with the rule re-deriving to the same ≤ 8.5 and the
+> blind arm still far above it.
 >
 > **Item 2 (WITNESS)** — **STOPPED ITSELF, AND PARKS.** **0 of 6** pilot
 > obligations discharged, every one `rejected_trivial`
@@ -103,7 +106,8 @@
 > ROADMAP-v0.22 §4: seven lanes **closed by shipping**, three re-ordered as
 > **prerequisites** with named dependants, the rest **parked with triggers**.
 > §3.5's rider stop rule **came due and fired**: the HOLES counting table and
-> the delete-K ground-truth table, unrun for a third cycle, **park**.
+> the delete-K ground-truth table, unrun through v0.20 and v0.21 and named a
+> third time without running, **park**.
 >
 > **Item 4 (governance)** — the course gate was **INVOKED strictly for the
 > fourth consecutive cycle** (`reports/design-direction-v0.22.json`: nine

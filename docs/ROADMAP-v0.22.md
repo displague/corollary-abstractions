@@ -377,8 +377,9 @@ successor it serves (§4.3).
 rotation.** It said: *if either of the v0.19 course's two accepted riders is
 still unrun at the v0.22 rotation, it stops being a rider and either becomes an
 item or parks with a reason.* Both — the **HOLES counting table** and the
-**delete-K ground-truth table** — are still unrun, for a **third** cycle. The
-rule fires: **both park**, in §4.3, with their reasons. They are not listed as
+**delete-K ground-truth table** — are still unrun. Unrun through v0.20 and
+v0.21 since ROADMAP-v0.20 §3 scheduled them, and named without running a third
+time here. The rule fires: **both park**, in §4.3, with their reasons. They are not listed as
 available riders again.
 
 ## 4. Carried, with dependants named
@@ -420,9 +421,10 @@ ordered before its dependant.
 | **CROSSING** — execution-licensed boundary crossings both ways | Parked with its **20-real-corrections probe** and its **preregistered predicted split (2 / 6 / 12)**. The prediction is committed now so the probe cannot be read after the fact |
 | **LONG CON** — sequence-level adversarial search over conversations | Parked as a **day-probe**: ten hand-written sequences, frozen budget, **mandatory plant**, committed near-miss taxonomy **even on a null**. The **write-gate prohibition is inherited** — it opens no untrusted stream, and HOSTILE DICTATION unparks first if one ever does |
 | **BITROT** — integrity-scope map of the unsealed complement | Parked as a **day-probe with its stop rule stated here**, since the receipt carries only its controls: **undetected-changed-answer count > 0 stops the probe and publishes the narrowed scope; a clean 1,000 publishes the map and closes the probe.** Its never-read-bytes control is the point — *a detector catching unread flips is comparing the store to itself* |
+| **Slice 1's citing behaviour is unreachable from the typed prompt** | **New park, from adversarial review of the v0.21 rotation drafts.** `harness.main()` attaches no `AssumptionSet`; only `scripts/session_recorder.py` does, so at the CLI a `suppose` line renders without declaring an Assumption record and **no answer cites anything**. That is exactly what `DESIGN-session-ledger` specified — it names no served surface for slice 1 — and it is still a gap between the claim's wording and *"shipped means the acceptance a newcomer can try"*. Parked, not carried: **no v0.22 headline item depends on it**, and §1's fence forbids touching served routes. Unpark needs a design saying what a person-facing session **is** — where its key ring comes from, where its journal is written, and what B10 re-scores on it — before any route attaches a ledger outside the recorder. Attaching one silently would move the very thing B10 measures |
 | **The `conform` route advertises the asker's numbers and does not use them** | **New park, from this rotation's drift audit, and it is a product surface.** `scripts/serve_chat.py:635-637` describes the route as *"an exact evaluator over the **asker's own numbers**"*; `scripts/harness.py:2192` parses the bindings and `:2229` calls `run(program, schema.digest)` **without them**. The sheet's own published example (`serve_chat.py:332`) refuses `does_not_parse` when typed, and `_route_conform`'s docstring still describes a stub in a tree where `conform.py` landed. RELEASE-v0.20.0 named the underlying gap in its honest limits and it was filed nowhere. **Not patched at a rotation** — widening or narrowing a served route is a behaviour change owing its own evidence and its own G4 — and parked rather than carried, because **no v0.22 headline item depends on it**. Unpark condition, and it has two admissible discharges: either the route consumes the bindings, with a served diff and a control; **or** the sheet's description, its example and the docstring are corrected to say what the route does, which is cheap and is the honest minimum |
 | **DESIGN-block-vocabulary's one untested property** | **Recovered from the v0.21 catch-all, where it was dropped.** RELEASE-v0.19.0 named it deliberately — *"what survives for any future unpark, named so it is not lost: the design's **append-only, path-independent growth** property, which **no baseline in this probe tested**"* — and ROADMAP-v0.20 §5 kept it in the row. ROADMAP-v0.21 folded the design into a catch-all and the property stopped being quoted anywhere. Quoted again here. Unpark needs a design saying what append-only path-independent growth buys that two indexes with one tag bit do not; the rest of the lane is **parked by numbers** (0.9981 against that baseline) and stays parked |
-| **The cost ledger** (answers per joule and per dollar) | **SIXTH cycle parked** — and for the first time the sentence changes. The five previous rotations all read *"unpark needs a metrology no cycle has designed."* **TOLL is that metrology, named and parked as a v0.23 incumbent-candidate.** The lane is still parked and this cycle still designs nothing for it; what is new is that it now has a **named successor with a denominator**, and the streak is recorded as six rather than allowed to reset on the strength of a candidate |
+| **The cost ledger** (answers per joule and per dollar) | **SIXTH cycle parked** — and for the first time the sentence changes. **Not that it was ever one sentence**, which is a correction this rotation owes: v0.17 wrote *"a metrology **neither cycle** has designed"*, ROADMAP-v0.18 *"a metrology **this cycle has not** designed"*, and ROADMAP-v0.19, v0.20 and v0.21 *"a metrology **no cycle** has designed."* The park is the streak; the wording never was. **TOLL is that metrology, named and parked as a v0.23 incumbent-candidate.** The lane is still parked and this cycle still designs nothing for it; what is new is that it now has a **named successor with a denominator**, and the streak is recorded as six rather than allowed to reset on the strength of a candidate. **The counting basis, stated so the number is checkable**: rotations since `DESIGN-grounded-throughput` §10 named this lane first among two successors to a fired T4 — v0.17, v0.18, v0.19, v0.20, v0.21 and this one |
 | **Ledger-first claims** (v0.17 course lead, gate L1–L13, hardened) — named dependant: ***none this cycle*** | **Sixth pass-over, and three more edits are restored beside the article v0.21 restored.** The trigger, in its original wording and its original tense: *"It **became** a headline candidate the first cycle after **the** throughput readout"* — a definite, one-shot event that fired at v0.17, not a standing conditional. v0.20's row had flipped *became* → *becomes*, dropped *"this cycle"* from the dependant, and compressed the receipt path away; all three are restored here, with the receipt named: `reports/design-direction-v0.17.json`. **v0.21 produced no new throughput readout either**: against `v0.20.0`, `experiments/throughput_tasks.json` moved **exactly two lines**, both digest leaves inside `rendering_module_digests` (`scripts/evaluate.py`, `scripts/harness.py`), with `built_by`, `counts`, `schema`, `scoring_rules`, `seal` and **all 119 task records** byte-identical — and no `throughput_result*.json`, `throughput_trial_*.json` or `throughput_baseline.json` changed at all. Seal rebuilds, not measurements. **But the scorer moved and nothing was re-measured through it**: `scripts/measure_throughput.py` gained a rule-level forfeit for `conditional` **and for a missing status**, so the next readout is **not** a like-for-like comparison with v0.17's and owes that sentence in writing. The lane is overdue. Its mid-cycle lift trigger — a release quoting a number its artifact no longer supports — stands |
 | **Load-bearing / premise-necessity** | Parked; **travels with ledger-first** and unparks with it, never separately. Named again here rather than allowed to disappear a second time |
 | **Realization parameters as data** | Parked. **Askable since v0.18** (R1 fired at 0.9991), **never scheduled**, and askable is not scheduled. The trigger sentence is quoted a second consecutive rotation so it cannot fall out again. Unpark needs a design saying what the parameters buy over the committed grammar |
@@ -470,7 +472,14 @@ rumours:
   brief is on file and hash-verified
   (`reports/design-direction-v0.22-brief.txt`), keeping the same self-check:
   `series_1.r1` **equals** the brief hash by construction, because round one of
-  series one *is* the brief. **No incumbent design existed this cycle**; the
+  series one *is* the brief. **One provenance asymmetry is disclosed rather
+  than left for a reader to find**: the receipt's own `note_on_selection`
+  records that the *selected* direction's `preregistration_draft` block was
+  added in the **post-review patch of 2026-08-26**, while series 2's and
+  series 3's drafts were recorded at first writing. §2's claim that COLD
+  RECEIPT's draft predates this roadmap is therefore checkable as written;
+  HANDLES' draft is the one block that is not, and the receipt says so.
+  **No incumbent design existed this cycle**; the
   occupied ground disclosed at each round two was the v0.21 outcome set and the
   standing parks, and that disclosure is recorded in the receipt's
   `exclusion_note` rather than asserted here.
@@ -505,7 +514,10 @@ rumours:
   **needle appended to its own haystack**, a **B2 verdict that counted
   divergences and so read green on zero reproductions**, and **B8 arms that
   were one tamper shape run twice**. Across five reviews: **zero wrong
-  digests**. Every defect was in what a green check was *capable* of failing.
+  digests**. The recurring *shape* was a green check that could not have gone
+  red; it sat beside defects of other kinds — a count wrong by ten thousand, a
+  published sweep sentence that was false, a receipt filed under the wrong
+  proposition — and the shape is what repeats, not the whole catalogue.
   This is now a standing review question and it is written into this cycle's
   gates rather than restated: §1's B3 is a **producer audit** rather than a
   token comparison, §1.5's voiding sentence can fire **at registration time**,

@@ -48,8 +48,44 @@ or commit history. Each item names the evidence that motivated it.
   description, the example and the docstring are corrected to say what the
   route does. Named in ROADMAP-v0.22 §4.3.
 
-- **The v0.19 course's two riders are unrun for a third cycle, so the stop rule
-  fires and both park (2026-08-26).** ROADMAP-v0.21 §3.5: *"If either is still
+- **Slice 1's citing behaviour is unreachable from the typed prompt, and the
+  release notes' first draft implied otherwise (2026-08-26, from adversarial
+  review of the rotation drafts).** Not a defect in the slice — it is exactly
+  what `DESIGN-session-ledger` specified, which names **no served surface** for
+  slice 1 — but it is a gap between a claim's wording and a claim's acceptance,
+  which is what this entry exists to hold.
+
+  **The mechanism.** `harness.main()` boots
+  `CoreSession.boot(repo_root, offline=offline)` (`scripts/harness.py:2425`)
+  and never sets `session.assumptions`. Only
+  `SessionRecorder.__post_init__` does
+  (`scripts/session_recorder.py:121-128`). So `_route_supposition` reads
+  `getattr(session, "assumptions", None)` (`harness.py:1714`), finds `None`,
+  and holds the claim in a supposition frame **without declaring an Assumption
+  record**. `retract <id>` therefore always refuses `unknown_assumption` at the
+  prompt — correctly, and byte-identically to the ledger case, which is the
+  **B10 repair working**.
+
+  **What that costs a reader.** The release skill's rule is *"shipped means the
+  acceptance a newcomer can try"*, and its worked example is a prior cycle
+  claiming a system could be *driven* when `harness.py` printed a liveness list
+  and exited. A newcomer here can type `suppose` and `retract` and watch them
+  render; a newcomer **cannot** watch an answer cite an assumption without
+  writing a recorder. R1's claim lives in `session_ledger_run4.json` and
+  `tests/test_session_ledger.py`, and the run artifact says so in its own
+  `where_the_claim_lives` field.
+
+  **Filed rather than fixed**, because attaching a ledger to the CLI is a
+  served-behaviour change owing its own evidence: B10's fence exists precisely
+  to prove that ledger state does not reach uncited answers, and a surface that
+  attaches one silently would move the thing B10 measures. Unpark condition: a
+  design that says what a person-facing session is — where its key ring comes
+  from, where its journal is written, and what B10 re-scores on it — before any
+  route attaches an `AssumptionSet` outside the recorder.
+
+- **The v0.19 course's two riders are named-and-unrun for a third rotation, so
+  the stop rule fires and both park (2026-08-26).** Unrun through v0.20 and
+  v0.21 since ROADMAP-v0.20 §3 scheduled them, and listed once more here. ROADMAP-v0.21 §3.5: *"If either is still
   unrun at the v0.22 rotation, it stops being a rider and either becomes an
   item or parks."* Neither the **HOLES counting table**
   (machine-enumerated skeleton gaps, counted, to *"revive-or-close FOUNDRY with
@@ -105,9 +141,14 @@ or commit history. Each item names the evidence that motivated it.
   catch-all in the same edit.
 
 - **`[SUITE-GATE-V20]` was never resolved, and v0.20's refresh clause never
-  landed (2026-08-26).** The token appears exactly twice in the tree — in
-  RELEASE-v0.20.0 and in ROADMAP-v0.20's closed banner — and is a
-  cross-reference to a section nobody wrote. So ROADMAP-v0.20's banner still
+  landed (2026-08-26).** The token appears **three** times outside
+  RELEASE-v0.21.0 — in RELEASE-v0.20.0, in ROADMAP-v0.20's closed banner, and
+  in **this entry**, which is a third occurrence its own first draft did not
+  count. *(Corrected 2026-08-26 from adversarial review: both this entry and
+  the release notes first read "exactly twice". A token-count audit that
+  miscounts its own token is the cycle's recurring shape arriving inside the
+  paragraph that catalogues it, and the miscount is left recorded rather than
+  quietly replaced.)* It is a cross-reference to a section nobody wrote. So ROADMAP-v0.20's banner still
   declares **three** gate clauses open (refresh, full-suite, ships-or-parks)
   while RELEASE-v0.20.0 does report two suite runs; and
   `check_report_regeneration.py`'s three verdicts, which

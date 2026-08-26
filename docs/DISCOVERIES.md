@@ -103,7 +103,7 @@ it a comparison of one parse with itself. Status: **measured, and the lane
 stopped**. Evidence: `experiments/witness_pilot.json`,
 `experiments/witness_fragment_census.json`.
 
-## A conversation can carry its own premises, and the fence is what proves it (2026-08-26)
+## A recorded conversation can carry its own premises, and the fence is what proves it (2026-08-26)
 
 **Claim.** *Citing* the assumptions an answer consumed is only evidence if the
 citation is **read-derived** and if uncited assumptions provably **cannot**
@@ -127,6 +127,13 @@ same line served statelessly* — read **RED on ten turns**, all of them
 whether a ledger was attached, which is the ledger's *existence* reaching an
 answer that consumed nothing. Repaired under the suite-gate precedent, with
 all four runs retained and the red published.
+
+**And the citing surface is the recorder, not the prompt.** `harness.main()`
+attaches no `AssumptionSet`; only `scripts/session_recorder.py` does. A person
+typing at the CLI sees `suppose` and `retract` render and sees no answer cite
+anything, because nothing is declared. The claim lives in the run artifact and
+in `tests/test_session_ledger.py`, which is what the design asked for and is
+not an acceptance a newcomer can try.
 
 **What it does not claim, said where the claim is made.** Sessions are
 **reproducible, not correct** — a wrong answer replays as faithfully as a

@@ -3,9 +3,11 @@
 Six times this cycle, a small language model was asked a question and said *I
 don't know.*
 
-All six times it was correct. Every one of those questions was either outside
-the library it was searching, or the list it had been handed did not contain
-the right answer. Saying nothing was the only honest move available.
+All six look correct on review. One of them demonstrably so — the right
+answers existed and had been pushed off the end of the list it was shown. For
+the other five, the questions had been written in advance to have no answer,
+and the file that records that is careful to say those labels are not ground
+truth. Saying nothing was the honest move available.
 
 And all six times, it scored zero.
 
@@ -168,8 +170,11 @@ the second is the one that matters:
 If that second half had budged even once, the system would have been hashing the
 transcript rather than tracking meaning, and the whole capability was
 pre-declared void. It didn't budge. Hand someone one of these journals and they
-can replay it offline and get identical bytes back — or a typed refusal saying
-the software has changed underneath it since.
+can replay it offline and get identical bytes back — or, as happens on today's
+tree for every one of the sixty, a typed refusal saying the software has moved
+underneath it since. That refusal is the pin check doing its job, and it is
+also the honest state of the repository: those journals are a record of the
+tree they were recorded on.
 
 **And the honest part.** The very first run of that test came back **red**, on
 ten turns, all of them the same line: asking to retract a supposition that does
@@ -219,8 +224,9 @@ everything clears is a cycle whose thresholds were set where its arrows landed.
 
 There is a smaller habit underneath, and this is the second consecutive cycle it
 has surfaced. Five separate adversarial reviews ran over this work. Between
-them they found **not one wrong number**. What they found were **checks that
-could not have failed**:
+them they found **not one wrong digest** — every hash, every pin, every frozen
+identifier checked out. They did find one count wrong by ten thousand. But what
+they mostly found were **checks that could not have failed**:
 
 - a test that asserted a piece of text contained a certain phrase — after
   appending that exact phrase to the text it was searching. It passed on
@@ -254,11 +260,15 @@ things went wrong with the lists.
 
 The design's own showcase example — *how do you compute the greatest common
 divisor recursively* — produced a list with **zero entries**. The model was
-never even asked. The library holds the statement; it just files it under
-`gcd`, and the question shares no words with that.
+never even asked. And the library does hold the statement: search the
+repository for the phrase *greatest common divisor* today and it comes back
+with two of them. It is the **list-builder** that found nothing, because the
+list-builder searches titles and keywords only, and the question shares no
+words with the title `gcd`.
 
 And on another question, about the distributive law, the library holds two
-perfectly correct statements which the checker confirms. They appeared at
+perfectly correct statements, and both pass the verification step. They
+appeared at
 **ranks 21 and 23** in a list truncated at 8. The model never saw them, said
 `NONE`, and was marked wrong. The reason is one line of code: when candidates
 tie on relevance, the tiebreak is **shorter title first**. So `Ohm's Law` — nine
@@ -278,8 +288,9 @@ Which leaves a question sharper than the one it started with, and a likely
 answer nobody wanted.
 
 The plan is to measure, exhaustively, how many of those twelve thousand
-statements can be reached by anything other than their filename. The preliminary
-count is **around two hundred and sixty**. Roughly **two percent**.
+statements can be reached by anything other than the title somebody typed above
+them. The preliminary count is **263 by one of those indexes and 306 by the
+other** — two to two and a half percent, either way.
 
 The reason is mundane and total: twelve and a half thousand of those statements
 were ingested in bulk from an external corpus, and they share three
