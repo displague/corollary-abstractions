@@ -262,15 +262,34 @@ class TheFreezeIsRecordedBeforeTheCompiler(unittest.TestCase):
         cls.doc = json.loads(PREREG.read_text(encoding="utf-8"))
 
     def test_every_frozen_digest_matches_the_tree(self) -> None:
-        for row in self.doc["frozen"]:
-            with self.subTest(role=row["role"]):
-                self.assertEqual(
-                    conform_domain.sha256_lf(ROOT / row["path"]),
-                    row["sha256_lf"],
-                    f"E7 VOID: {row['path']} changed after the preregistration "
-                    f"commit. The independence claim needs its own review "
-                    f"naming the reason.",
-                )
+        """E7's sweep, re-aimed 2026-08-26 for the first retired row.
+
+        The v0.21 session-ledger lane moved scripts/evaluate.py after this
+        freeze, and the v0.21 gate's first run went red here -- the freeze
+        doing its job. The row is retired by dated amendment with its
+        successor pin, so the sweep now uses the shared transitive walk
+        (scripts/prereg_pins.py, built for exactly this at the v0.20
+        integration): an unretired row must match the tree; a retired row
+        must match the pin at the END of its declared chain. Any change
+        past the last amendment is still red.
+        """
+        from prereg_pins import check_frozen
+        for record in check_frozen(
+                self.doc,
+                prereg_path="experiments/conformance_prereg.json",
+                repo_root=ROOT):
+            with self.subTest(role=record["role"]):
+                self.assertIsNotNone(
+                    record["observed_sha256_lf"],
+                    f"{record['path']} is not in the tree")
+                self.assertTrue(
+                    record["agrees"],
+                    f"E7 VOID: {record['path']} matches neither its recorded "
+                    f"pin nor the pin at the end of its retirement chain "
+                    f"(live pin from {record['live_pin_source']}, walked via "
+                    f"{record['retirement_hops'] or 'no amendments'}). A "
+                    f"change past the last amendment needs its own review "
+                    f"naming the reason.")
 
     def test_the_four_the_design_names_are_all_frozen(self) -> None:
         roles = {row["role"] for row in self.doc["frozen"]}

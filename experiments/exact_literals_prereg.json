@@ -68,6 +68,16 @@
         "ROADMAP-v0.20 4c moved this file's subprocess timeouts, which drifted the pin foreign_voice.prereg.v1 froze at 0db59b36. The batch review's M6 ordered the drift declared rather than inherited, so this registry -- already the terminal book for the parser the same batch moved -- carries the successor pin for the second moved file too. One retirement batch, one terminal registry.",
         "The v0.19 foreign run that pin protected was measured under 0db59b36 and stays closed; the v0.20 run's prereg (foreign_voice_prereg2.json) never froze this file. No committed number was measured under the digest recorded here."
       ]
+    },
+    {
+      "path": "scripts/evaluate.py",
+      "role": "evaluator",
+      "sha256_lf": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+      "recorded": "2026-08-26",
+      "why": [
+        "The v0.21 session-ledger lane added free_names (its journal wiring reads a term's free variables through the evaluator), moving the digest conformance.prereg.v1 froze. Found by the v0.21 gate's first run; the dated amendment there names this row as the successor.",
+        "Third moved pin to land here (parser 4b, hermetic_rule 4c review M6, evaluator v0.21): this registry's original one-batch scope is WIDENED by this dated note to serve as the terminal pin book for moved conformance-frozen modules generally, because one registry with a walkable chain beats one registry per move."
+      ]
     }
   ],
   "pending": [],

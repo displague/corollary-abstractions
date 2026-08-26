@@ -117,6 +117,22 @@ class TheRegisterIsFrozenAndComplete(unittest.TestCase):
                       self.doc["e2_denominator"]["what_this_is"])
 
     def test_the_freeze_digests_match_the_tree(self) -> None:
+        """Re-aimed 2026-08-26: a register records what the freeze SAW.
+
+        For a file the conformance prereg has since retired by dated
+        amendment, the register's `*_digest_at_freeze` is a historical
+        record and must equal the prereg's own frozen (historical) digest
+        -- editing it would falsify the record -- while the LIVE tree is
+        checked against the end of the retirement chain via the shared
+        walk. Unretired files still compare directly, and any undeclared
+        change is still red on one side or the other.
+        """
+        import json as _json
+        from prereg_pins import resolve_pin
+        prereg = _json.loads(
+            (ROOT / "experiments" / "conformance_prereg.json").read_text(
+                encoding="utf-8"))
+        frozen_by_path = {row["path"]: row for row in prereg["frozen"]}
         for key, path in (
             ("schema_digest_at_freeze", "data/domains/domain_schema.json"),
             ("parser_digest_at_freeze", "scripts/match_signatures.py"),
@@ -125,8 +141,26 @@ class TheRegisterIsFrozenAndComplete(unittest.TestCase):
             ("census_digest_at_freeze", "scripts/conform_census.py"),
         ):
             with self.subTest(key=key):
-                self.assertEqual(
-                    self.doc[key], conform_domain.sha256_lf(ROOT / path))
+                row = frozen_by_path.get(path)
+                if row is not None and row.get(
+                        "retired_for_future_comparisons"):
+                    self.assertEqual(
+                        self.doc[key], row["sha256_lf"],
+                        f"{key} no longer matches the historical freeze "
+                        f"record -- a retired pin's history must not move")
+                    live = resolve_pin(
+                        prereg, row,
+                        prereg_path="experiments/conformance_prereg.json",
+                        repo_root=ROOT)
+                    self.assertEqual(
+                        live["sha256_lf"],
+                        conform_domain.sha256_lf(ROOT / path),
+                        f"{path} matches neither history nor the declared "
+                        f"chain end -- a change past the last amendment "
+                        f"needs its own")
+                else:
+                    self.assertEqual(
+                        self.doc[key], conform_domain.sha256_lf(ROOT / path))
 
     def test_the_blocked_set_digest_reproduces(self) -> None:
         import hashlib

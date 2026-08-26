@@ -30,6 +30,23 @@
         "It creates no verified_by link and nothing enters prover/verifier-verdicts/."
       ],
       "determinism": "Registered per ROADMAP-v0.21 §4.0(2) as `artifact committed from a deterministic runner; reproductions welcome and recorded`, not as `executed once`. Every field but the per-probe wall-clock `seconds` is a function of committed bytes and the pinned checker."
+    },
+    {
+      "amendment_id": "conformance.prereg.amendment.evaluator-moved-2026-08-26",
+      "dated": "2026-08-26",
+      "cycle": "v0.21 rotation, found by the full-suite gate run 1",
+      "ordering": [
+        "RETROSPECTIVE, and stated so: the v0.21 session-ledger lane added free_names to scripts/evaluate.py (its journal wiring), rebuilt the throughput book for the move, and missed this preregistration's freeze of the same file. The v0.21 gate's first run went red on exactly that omission, which is the freeze doing its job one run later than it should have been fed.",
+        "No run is open against this pin: experiments/conformance_run.json was measured and closed under 09db54679e81e6e8a06d1d6580d05520cd0a0170a61d55b752c8262448c60041, its verdicts stand, and the C-E3 supplement executed while the digests still matched (its C-E4 revalidation would refuse on the tree this amendment describes -- run-time behavior this entry documents rather than repairs)."
+      ],
+      "what_this_retires": [
+        "The evaluator row -- scripts/evaluate.py, LF sha256 09db54679e81e6e8a06d1d6580d05520cd0a0170a61d55b752c8262448c60041 -- is RETIRED FOR FUTURE COMPARISONS as of this dated amendment. Retired, not deleted and not overwritten.",
+        "The successor pin lives in experiments/exact_literals_prereg.json, the terminal registry that already carries the parser's and the hermetic rule's successors -- widened by dated note there to carry moved conformance-frozen modules generally."
+      ],
+      "successor_prereg": {
+        "path": "experiments/exact_literals_prereg.json",
+        "recorded_in": "the same gate-repair commit as this amendment"
+      }
     }
   ],
   "census": {
@@ -166,6 +183,10 @@
       "path": "scripts/evaluate.py",
       "recorded": "2026-08-25",
       "role": "evaluator",
+      "retired_for_future_comparisons": {
+        "amendment": "evaluator-moved-2026-08-26",
+        "note": "retired by the dated amendment below; the original digest stays because experiments/conformance_run.json was measured under it"
+      },
       "sha256_lf": "09db54679e81e6e8a06d1d6580d05520cd0a0170a61d55b752c8262448c60041"
     },
     {
