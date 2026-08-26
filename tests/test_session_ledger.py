@@ -631,5 +631,139 @@ class Replay(_Recorded):
         self.assertIn("refused", statuses.values())
 
 
+SEAL = REPO / "experiments" / "session_corpus_seal.json"
+
+
+class TheSealedCorpus(unittest.TestCase):
+    """P3's seal, and the journals it covers.
+
+    This is the committed pattern `check_regeneration.py:97-100` names for
+    hand-authored artifacts: an artifact under `experiments/` with a digest
+    pin and a test. The seal is the pin; this is the test.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        if not SEAL.exists():  # pragma: no cover - ordering guard
+            raise unittest.SkipTest("the corpus is not sealed yet")
+        cls.seal = json.loads(SEAL.read_text(encoding="utf-8"))
+
+    def test_every_journal_matches_its_sealed_digest(self) -> None:
+        import session_ledger as ledger  # noqa: PLC0415
+
+        for entry in self.seal["sessions"]:
+            journal = REPO / entry["journal"]
+            reads = REPO / entry["read_log"]
+            self.assertEqual(
+                ledger.text_digest(journal.read_text(encoding="utf-8")),
+                entry["journal_digest"],
+                entry["session_id"],
+            )
+            self.assertEqual(
+                ledger.text_digest(reads.read_text(encoding="utf-8")),
+                entry["read_log_digest"],
+                entry["session_id"],
+            )
+
+    def test_journals_live_under_experiments_and_never_under_data(self) -> None:
+        """§3's placement rule: a journal has no seed."""
+
+        for entry in self.seal["sessions"]:
+            self.assertTrue(entry["journal"].startswith("experiments/sessions/"))
+            self.assertNotIn("data/", entry["journal"])
+
+    def test_the_split_is_the_committed_hash_rule(self) -> None:
+        import session_ledger as ledger  # noqa: PLC0415
+
+        for entry in self.seal["sessions"]:
+            self.assertEqual(
+                entry["half"], ledger.half_of(entry["session_id"])
+            )
+
+    def test_no_recorded_turn_reached_the_write_gate(self) -> None:
+        """§6 P3's rule, and the count is published either way."""
+
+        self.assertEqual(self.seal["excluded_sessions"], [])
+        self.assertEqual(
+            self.seal["counts"]["sessions_excluded_by_the_no_write_gate_rule"],
+            0,
+        )
+        for entry in self.seal["sessions"]:
+            journal = json.loads(
+                (REPO / entry["journal"]).read_text(encoding="utf-8")
+            )
+            for turn in journal["turns"]:
+                self.assertNotEqual(
+                    turn["resolution"]["grammar_query"],
+                    "<repo-relative path>",
+                    entry["session_id"],
+                )
+                self.assertNotIn(
+                    turn["result"]["kind"],
+                    {"PROVEN", "VERIFIED", "REFUSED"},
+                    entry["session_id"],
+                )
+
+    def test_the_caps_were_respected(self) -> None:
+        import session_ledger as ledger  # noqa: PLC0415
+
+        protocol = self.seal["protocol"]
+        self.assertLessEqual(
+            self.seal["counts"]["sessions_recorded"],
+            protocol["session_count_cap"],
+        )
+        for entry in self.seal["sessions"]:
+            self.assertLessEqual(
+                entry["turns"], protocol["turn_cap_per_session"]
+            )
+            journal = json.loads(
+                (REPO / entry["journal"]).read_text(encoding="utf-8")
+            )
+            live = sum(
+                1
+                for record in journal["assumptions"]
+                if record["status"] == "live"
+            )
+            self.assertLessEqual(live, ledger.LIVE_ASSUMPTION_CAP)
+
+    def test_the_recorder_that_recorded_is_the_recorder_the_protocol_pinned(
+        self,
+    ) -> None:
+        from session_recorder import recorder_code_digest  # noqa: PLC0415
+
+        self.assertEqual(
+            self.seal["recorder_code_digest"], recorder_code_digest(REPO)
+        )
+
+    def test_the_floor_verdict_is_computed_from_the_counts(self) -> None:
+        counts, floor = self.seal["counts"], self.seal["floor"]
+        self.assertEqual(
+            floor["sessions_met"], counts["sessions_admitted"] >= 30
+        )
+        self.assertEqual(floor["turns_met"], counts["turns_admitted"] >= 120)
+        self.assertEqual(
+            floor["binding_dependent_in_half_b_met"],
+            counts["by_half"]["B"]["binding_dependent_turns"] >= 36,
+        )
+
+    def test_the_other_readings_number_is_published(self) -> None:
+        """The prereg chose a reading; the seal shows what the other gave.
+
+        Without this the choice is convenient. With it, a reader who prefers
+        the roadmap's wording has the number they need to disagree on the
+        evidence.
+        """
+
+        other = self.seal["floor"]["under_the_roadmaps_compressed_reading"]
+        self.assertIn("sessions_in_half_b", other)
+        self.assertIn("sessions_met", other)
+
+    def test_the_corpus_has_all_six_authored_shapes(self) -> None:
+        shapes = {entry["shape"] for entry in self.seal["sessions"]}
+        self.assertEqual(shapes, set(range(6)))
+        self.assertGreater(self.seal["counts"]["assumption_free_sessions"], 0)
+        self.assertGreater(self.seal["counts"]["refusal_turns_admitted"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()
