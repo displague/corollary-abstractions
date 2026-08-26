@@ -1,0 +1,1507 @@
+{
+  "completed_by": "docs/DESIGN-session-ledger.md §5 slice 2",
+  "denominators": "in the corpus seal's `denominators` block. Read it before any rate here: the thirty sealed questions are not one population and the subset sizes are never summed.",
+  "design": "docs/DESIGN-plain-input.md",
+  "determinism": {
+    "P4_two_passes_byte_identical": true,
+    "so_this_artifact": "is committed from a deterministic runner and reproductions are welcome and recorded (ROADMAP-v0.21 §4.0(2))",
+    "status": "the proposer arm registers as determinism-plus-commit (ROADMAP-v0.21 §4.0(2)); reproductions are welcome and recorded",
+    "the_honest_limit": "byte-identity across two passes on one machine on one day is not a proof of determinism. It is the strongest check this repository has ever run on a model call, and it is reported as that and nothing more."
+  },
+  "elapsed_seconds": 48.2,
+  "findings": {
+    "F1_the_ask_branch_fires_on_questions_authored_to_exhaust": {
+      "a_worked_example": {
+        "model_said": "NONE",
+        "readings_offered": [
+          "Average Rate of Change",
+          "Fundamental Theorem of Calculus, Evaluation Part",
+          "Derivation Takes Its Category from the Affix (Righthand Head Rule)"
+        ],
+        "utterance": "how do i change a tyre"
+      },
+      "and_it_is_not_a_G2_counterexample": "nothing is bound and nothing is chosen: the readings are named and the person is asked. G2 is about served interpretations, and a clarification interprets nothing. This is a finding about HONESTY OF REFUSAL, which no gate in this slice measures.",
+      "and_the_proposer_is_not_what_broke_it": "on every one of these the model answered NONE — it found no registered query, exactly as §7 describes. What served the clarification is the BRANCH RULE, which fires on the count of VERIFIED candidates and never consults the model's NONE. So a question outside the corpus comes back with a list of corpus readings to choose between instead of a refusal.",
+      "count": 2,
+      "the_design_sentence_this_contradicts": "Not open-domain. Outside the corpus the honest output is still a refusal. A proposer that cannot find a registered query still exhausts. (DESIGN-plain-input §7)",
+      "what_happened": [
+        {
+          "question_id": "g1-26",
+          "session_id": "v021-p06",
+          "status": "waiting",
+          "turn_index": 0
+        },
+        {
+          "question_id": "g1-29",
+          "session_id": "v021-p06",
+          "status": "waiting",
+          "turn_index": 3
+        }
+      ],
+      "why_it_is_not_repaired_here": "the branch rule is frozen in prereg amendment 2, written against the design's own text BEFORE the rule had ever run. Changing it now — after watching it behave — is the move this repository does not make. It is published and filed."
+    },
+    "F2_the_designs_own_motivating_example_enumerates_nothing": {
+      "questions_with_zero_candidates": [
+        "g1-02",
+        "g1-09",
+        "g1-23",
+        "g1-24",
+        "g1-25",
+        "g1-28"
+      ],
+      "the_one_that_matters": "g1-02",
+      "the_utterance": "how do you compute the greatest common divisor recursively",
+      "what_actually_happens": "the enumerator offers ZERO candidates, so the proposer is never asked and row 12 exhausts exactly as before. Enumeration is by shared content words, and the utterance shares none with a statement the corpus titles `gcd`. The synonym layer the design called 'a design and not a patch' is still not built, and selection-from-an-enumerated-list cannot substitute for it: you cannot select what was never enumerated.",
+      "what_the_design_said_it_was_for": "DESIGN-plain-input §2.3 names the `gcd` miss as the residue the proposer is aimed at — 'greatest common divisor euclid' did not resolve; the corpus writes `gcd`."
+    },
+    "F3_verification_discarded_a_correct_selection": {
+      "count": 1,
+      "rows": [
+        {
+          "question_id": "g1-13",
+          "raw": "1",
+          "selected_index": 0,
+          "verified_of_candidates": "2/4"
+        }
+      ],
+      "the_worked_example": "'how do you compute a factorial iteratively' enumerated 'Factorial, Iterative (TheAlgorithms)' first and the model selected it — the right reading. That candidate did NOT verify, because `word_match` verification requires the statement's own title to resolve back to that statement and this one binds elsewhere. The two candidates that DID verify were both about the DOUBLE factorial, so the person is asked to choose between two wrong readings while the right one is discarded.",
+      "what_it_says_about_the_trust_shape": "'selection narrows; verification decides' is the design's own sentence and it is working exactly as written. The cost it buys is visible here: a verifier weaker than the proposer on a given question throws away the proposer's best answer, and the receipt cannot show what was thrown away because the discard happens before any receipt exists."
+    }
+  },
+  "gates": {
+    "B10": {
+      "and_it_is_filed_rather_than_only_argued": "docs/BACKLOG.md carries the item: run_session_gate.score_b10 needs the stateless side to inherit the journal's configuration, or slice-2 journals will keep reading red for a reason that is not a leak.",
+      "clause": "Every turn with empty `assumptions_cited` must render byte-identical to the same line served statelessly.",
+      "slice_1_arm_unchanged": {
+        "called": "run_session_gate.score_b10, imported and not copied",
+        "misses": [
+          {
+            "input_bytes": "what is two to the tenth",
+            "session_id": "v021-p01",
+            "turn_index": 3
+          },
+          {
+            "input_bytes": "how do you compute a factorial iteratively",
+            "session_id": "v021-p03",
+            "turn_index": 2
+          },
+          {
+            "input_bytes": "how do i change a tyre",
+            "session_id": "v021-p06",
+            "turn_index": 0
+          },
+          {
+            "input_bytes": "what did i ask you before",
+            "session_id": "v021-p06",
+            "turn_index": 3
+          },
+          {
+            "input_bytes": "how do you compute a factorial iteratively",
+            "session_id": "v021-p07",
+            "turn_index": 5
+          }
+        ],
+        "stateless_side": "a fresh session with NO proposer attached",
+        "uncited_turns": 44,
+        "verdict": "RED"
+      },
+      "the_adjudication": "the headline verdict follows THE STATE READING, because the clause's own gloss names state and because slice 1's arm already holds everything else fixed on purpose — it even reuses the recorded `session_id` and the shared resolver index. What it does not hold fixed is a configuration slice 1 did not have. Both numbers are published so a reader who disagrees can disagree on the rows rather than on the framing.",
+      "the_clauses_own_gloss": "The quarantine made mechanical: session state may never leak into unconditional answers.",
+      "the_measured_fact_that_explains_the_difference": {
+        "every_slice_1_miss_is_a_turn_the_plain_input_route_served": true,
+        "plain_input_turns_in_the_corpus": 5,
+        "slice_1_misses": 5,
+        "what_it_means": "the slice-1 arm's misses are exactly the turns where row 12 stopped exhausting — which is the entire behavioural change slice 2 makes, and which G4 separately proves happens NOWHERE ELSE. Read that way, the slice-1 arm's red says 'the proposer changed row 12', not 'session state leaked'."
+      },
+      "the_state_reading": {
+        "misses": [],
+        "stateless_side": "a fresh session with NO assumptions and the SAME proposer configuration — configuration held fixed so the comparison is about state",
+        "uncited_turns": 44,
+        "verdict": "GREEN"
+      },
+      "verdict": "GREEN"
+    },
+    "B12": {
+      "how_the_two_sides_are_written": "the journal's citation list is a per-turn snapshot taken at turn close by the recorder; the read log is written by session_ledger.write_read_log from the barrier's raw event list. Different functions, different files.",
+      "the_boundary_of_this_corroboration": "**Both sides descend from the same in-memory ReadBarrier**, and this field said 'independent' until independent review corrected it (2026-08-26). What B12 corroborates is that the JOURNAL WRITER neither dropped nor invented a citation relative to what the barrier recorded — a real and checkable property, and the one the design asks for when it says the read log is 'recorded independently of the journal writer'. What B12 does NOT corroborate is the barrier itself: if the barrier recorded the wrong thing, both sides would carry the same wrong thing and agree. That is why the barrier is TRUSTED code under §4 rather than a measured component, and why B4 (does the answer move when the cited assumption moves?) is the clause that tests the consumption the barrier claims to have seen.",
+      "turns_checked": 48,
+      "uncorroborated": [],
+      "verdict": "GREEN"
+    },
+    "B9": {
+      "clause_verbatim": "The proposer's input at turn *j* contains no bytes from earlier turns other than assumption `normal_form`s. Any leak is red — history reaches the model only through the exact layer.",
+      "hits_explained_and_published": [],
+      "leaks": [],
+      "prompts_retained_in_total": 16,
+      "prompts_scanned": 8,
+      "prompts_with_at_least_one_earlier_turn": 7,
+      "retained_records_with_no_prompt_to_scan": {
+        "count": 8,
+        "records": [
+          {
+            "session_id": "v021-p01",
+            "turn_index": 1,
+            "utterance": "how do you compute the greatest common divisor recursively"
+          },
+          {
+            "session_id": "v021-p02",
+            "turn_index": 3,
+            "utterance": "what does the corpus say about factorials"
+          },
+          {
+            "session_id": "v021-p05",
+            "turn_index": 2,
+            "utterance": "what will the weather be tomorrow"
+          },
+          {
+            "session_id": "v021-p05",
+            "turn_index": 3,
+            "utterance": "who wrote the iliad"
+          },
+          {
+            "session_id": "v021-p05",
+            "turn_index": 4,
+            "utterance": "what is the capital city of australia"
+          },
+          {
+            "session_id": "v021-p06",
+            "turn_index": 2,
+            "utterance": "should i buy this stock"
+          },
+          {
+            "session_id": "v021-p07",
+            "turn_index": 8,
+            "utterance": "what is the capital city of australia"
+          },
+          {
+            "session_id": "v021-p08",
+            "turn_index": 7,
+            "utterance": "who wrote the iliad"
+          }
+        ],
+        "why": "the enumerator offered no candidate, so `propose` returned before a request was built and the model was never asked. There is no prompt to scan and no model call to leak into. Published so the scanned denominator is visibly smaller than the retained one, and by how much."
+      },
+      "scored_in_this_commission": true,
+      "standard": "ANY LEAK IS RED",
+      "the_construction_arm": {
+        "misses": [],
+        "verdict": "GREEN",
+        "what_it_proves": "the prompt is byte-identical to one rebuilt from this turn's utterance alone, with no session object in scope. B9 is therefore true by construction and not by discipline."
+      },
+      "the_positive_control": {
+        "detected": true,
+        "how": "the forged prompt carries an earlier turn's input_bytes; the independently rebuilt prompt does not; so the scanner's rule classifies it as a leak rather than as corpus material",
+        "session_id": "v021-p01",
+        "spliced_bytes": "what does the corpus say about de morgan's laws",
+        "turn_index": 3
+      },
+      "verdict": "GREEN",
+      "why_explained_hits_are_published_rather_than_filtered": "a scanner that silently drops the hits it can explain is a scanner whose explanations nobody can check. Every hit is listed with the reason it is not a leak, and the reason is a MEASURED property — presence in a prompt rebuilt with no history in scope — not a judgement."
+    },
+    "G1": {
+      "against_the_sealed_ceiling": {
+        "ceiling": 21,
+        "exhaust_prior_questions_the_model_selected_for": 0,
+        "exhaust_prior_questions_with_a_verified_candidate": 5,
+        "of": 30,
+        "why": "nine questions were authored to EXHAUST, and the set says a candidate verifying for one of them 'would be the proposer inventing rather than selecting'."
+      },
+      "at_least_one_verified_candidate": 24,
+      "at_least_one_verified_candidate_rate": 0.8,
+      "denominator": "all 30 sealed questions",
+      "kind": "MEASUREMENT — no floor, published either way",
+      "no_stranger_usability_claim": "maintainer-authored questions about a corpus the author knows. STRANGER's park is cited, not re-encountered.",
+      "rows": [
+        {
+          "any_verified": true,
+          "authors_prior": "ask",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-01",
+          "raw": "2",
+          "selected_index": 1,
+          "selected_line": "De Morgan's Laws (Propositional Form)",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 5
+        },
+        {
+          "any_verified": false,
+          "authors_prior": "conditional",
+          "candidates": 0,
+          "discarded_reason": "no candidates to select from",
+          "question_id": "g1-02",
+          "raw": "",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 0
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-03",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Double-Angle Cosine",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 8
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-04",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "2 ^ 10",
+          "selection_verified": true,
+          "verification_strength": "exact_computation",
+          "verified": 6
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-05",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Pythagorean Identity",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 7
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-06",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Edge Count of the Complete Graph",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 7
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 3,
+          "discarded_reason": null,
+          "question_id": "g1-07",
+          "raw": "2",
+          "selected_index": 1,
+          "selected_line": "Handshake Lemma (Degree-Sum Formula)",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 3
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "exhaust",
+          "candidates": 1,
+          "discarded_reason": null,
+          "question_id": "g1-08",
+          "raw": "NONE",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 1
+        },
+        {
+          "any_verified": false,
+          "authors_prior": "ask",
+          "candidates": 0,
+          "discarded_reason": "no candidates to select from",
+          "question_id": "g1-09",
+          "raw": "",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 0
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-10",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Quadratic Formula",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 8
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-11",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "3 + 4",
+          "selection_verified": true,
+          "verification_strength": "exact_computation",
+          "verified": 4
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "ask",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-12",
+          "raw": "2",
+          "selected_index": 1,
+          "selected_line": "Absorption Law (Intersection over Union)",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 8
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 4,
+          "discarded_reason": null,
+          "question_id": "g1-13",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 2
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-14",
+          "raw": "4",
+          "selected_index": 3,
+          "selected_line": "Definition of Tangent",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 8
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-15",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Cayley's Formula for Labelled Trees",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 5
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-16",
+          "raw": "8",
+          "selected_index": 7,
+          "selected_line": "Twice Any Integer Is Even",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 8
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-17",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Sine of an Angle Sum",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 7
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 2,
+          "discarded_reason": null,
+          "question_id": "g1-18",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "A Tree on n Vertices Has n - 1 Edges",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 2
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "ask",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-19",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Double Negation Elimination",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 8
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 1,
+          "discarded_reason": null,
+          "question_id": "g1-20",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "5 * 6",
+          "selection_verified": true,
+          "verification_strength": "exact_computation",
+          "verified": 1
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "conditional",
+          "candidates": 6,
+          "discarded_reason": null,
+          "question_id": "g1-21",
+          "raw": "1",
+          "selected_index": 0,
+          "selected_line": "Binary Exponentiation, Iterative (TheAlgorithms)",
+          "selection_verified": true,
+          "verification_strength": "word_match",
+          "verified": 6
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "ask",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-22",
+          "raw": "NONE",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 4
+        },
+        {
+          "any_verified": false,
+          "authors_prior": "exhaust",
+          "candidates": 0,
+          "discarded_reason": "no candidates to select from",
+          "question_id": "g1-23",
+          "raw": "",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 0
+        },
+        {
+          "any_verified": false,
+          "authors_prior": "exhaust",
+          "candidates": 0,
+          "discarded_reason": "no candidates to select from",
+          "question_id": "g1-24",
+          "raw": "",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 0
+        },
+        {
+          "any_verified": false,
+          "authors_prior": "exhaust",
+          "candidates": 0,
+          "discarded_reason": "no candidates to select from",
+          "question_id": "g1-25",
+          "raw": "",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 0
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "exhaust",
+          "candidates": 4,
+          "discarded_reason": null,
+          "question_id": "g1-26",
+          "raw": "NONE",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 3
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "exhaust",
+          "candidates": 8,
+          "discarded_reason": null,
+          "question_id": "g1-27",
+          "raw": "NONE",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 6
+        },
+        {
+          "any_verified": false,
+          "authors_prior": "exhaust",
+          "candidates": 0,
+          "discarded_reason": "no candidates to select from",
+          "question_id": "g1-28",
+          "raw": "",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 0
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "exhaust",
+          "candidates": 2,
+          "discarded_reason": null,
+          "question_id": "g1-29",
+          "raw": "NONE",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 2
+        },
+        {
+          "any_verified": true,
+          "authors_prior": "exhaust",
+          "candidates": 1,
+          "discarded_reason": null,
+          "question_id": "g1-30",
+          "raw": "NONE",
+          "selected_index": null,
+          "selected_line": null,
+          "selection_verified": false,
+          "verification_strength": null,
+          "verified": 1
+        }
+      ],
+      "the_number_the_served_behaviour_actually_rests_on": {
+        "model_selected_and_the_selection_verified": 17,
+        "rate": 0.5667,
+        "why_it_is_published_beside_the_headline": "selection plus verification is what a conditional answer stands on. Amendment 1 registered this pairing before the run, so the weaker number cannot travel alone."
+      },
+      "this_is_the_WEAKER_number_and_here_is_why": "prereg amendment 1: enumeration is generous and `word_match` verification is nearly free — a statement candidate is offered whenever the utterance shares a content word with a title or keyword, and it verifies whenever that title resolves back to that statement, which is almost always. So this rate is close to 'how many utterances contain a content word the corpus also uses', and it is NOT a measure of whether the reading is right.",
+      "verdict": "MEASURED (no floor, by registration)"
+    },
+    "G2": {
+      "and_the_denominator_this_gate_does_NOT_cover": "the thirteen the resolver binds at `found`. Those are served interpretations of an earlier row, they are the standing defect, and G9 is where they are adjudicated — NOT MET, by ruling. Scoring them here would let this slice's gate absorb a defect it does not repair.",
+      "counterexamples": [],
+      "denominator": "the 12 proposer-reachable questions — the whole surface this slice adds",
+      "rows": [
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-02",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "supposition",
+          "ok": true,
+          "question_id": "g1-04",
+          "route": "plain_input",
+          "status": "conditional",
+          "suppositions": 1,
+          "verification_strength": "exact_computation"
+        },
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-08",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-09",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "clarification naming the readings",
+          "ok": true,
+          "question_id": "g1-13",
+          "route": "plain_input",
+          "status": "waiting",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-23",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-24",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-25",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "clarification naming the readings",
+          "ok": true,
+          "question_id": "g1-26",
+          "route": "plain_input",
+          "status": "waiting",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-28",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "clarification naming the readings",
+          "ok": true,
+          "question_id": "g1-29",
+          "route": "plain_input",
+          "status": "waiting",
+          "suppositions": 0,
+          "verification_strength": null
+        },
+        {
+          "labelled": "no interpretation served by this slice",
+          "ok": true,
+          "question_id": "g1-30",
+          "route": "dispatcher",
+          "status": "exhausted",
+          "suppositions": 0,
+          "verification_strength": null
+        }
+      ],
+      "standard": "ANY COUNTEREXAMPLE FAILS",
+      "verdict": "GREEN"
+    },
+    "G3": {
+      "excluded": [
+        {
+          "a": "how do you compute the greatest common divisor recursively",
+          "a_selected": null,
+          "a_verified_lines": [],
+          "a_verifies_its_expected_query": false,
+          "b": "how do you compute the greatest common divisor iteratively",
+          "b_selected": null,
+          "b_verified_lines": [],
+          "b_verifies_its_expected_query": false,
+          "excluded_because": "the pre-check could not show these two sentences denote two DIFFERENT verified registered queries, so a proposer mapping them to one query would be CORRECT and scoring it as a collapse would score the set's defect as the model's",
+          "expected_a": "programming.euclid.recursive",
+          "expected_b": "programming.euclid.iterative",
+          "pair_id": "d02"
+        },
+        {
+          "a": "how do you compute a factorial recursively",
+          "a_selected": null,
+          "a_verified_lines": [
+            "Double Factorial, Iterative (TheAlgorithms)",
+            "Double Factorial, Recursive (TheAlgorithms)"
+          ],
+          "a_verifies_its_expected_query": false,
+          "b": "how do you compute a factorial iteratively",
+          "b_selected": null,
+          "b_verified_lines": [
+            "Double Factorial, Iterative (TheAlgorithms)",
+            "Double Factorial, Recursive (TheAlgorithms)"
+          ],
+          "b_verifies_its_expected_query": false,
+          "excluded_because": "the pre-check could not show these two sentences denote two DIFFERENT verified registered queries, so a proposer mapping them to one query would be CORRECT and scoring it as a collapse would score the set's defect as the model's",
+          "expected_a": "programming.factorial.recursive",
+          "expected_b": "programming.factorial.iterative",
+          "pair_id": "d04"
+        },
+        {
+          "a": "what is double negation in logic",
+          "a_selected": "Double Negation Elimination",
+          "a_verified_lines": [
+            "De Morgan's Laws (Propositional Form)",
+            "Double Negation Elimination",
+            "Double-Angle Cosine",
+            "Double-Angle Sine",
+            "Loeb's Axiom (GL)",
+            "Odd Means Not Even",
+            "Reductio ad Absurdum (Negation Introduction)"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what is absorption in logic",
+          "b_selected": null,
+          "b_verified_lines": [
+            "A Product With an Even Factor Is Even",
+            "De Morgan's Laws (Propositional Form)",
+            "Double Negation Elimination",
+            "Expansion Law for Until",
+            "Gradient Descent Step",
+            "Loeb's Axiom (GL)",
+            "Necessitation for Provability",
+            "Next Distributes over Conjunction"
+          ],
+          "b_verifies_its_expected_query": false,
+          "excluded_because": "the pre-check could not show these two sentences denote two DIFFERENT verified registered queries, so a proposer mapping them to one query would be CORRECT and scoring it as a collapse would score the set's defect as the model's",
+          "expected_a": "logic.boolean_laws.double_negation",
+          "expected_b": "logic.boolean_laws.absorption",
+          "pair_id": "d09"
+        }
+      ],
+      "pairs_collapsed": 0,
+      "pairs_excluded_by_the_pre_check": 3,
+      "pairs_in_the_set": 12,
+      "pairs_scored": 9,
+      "registered_floor": 0,
+      "scored": [
+        {
+          "a": "what is the cosine of a double angle",
+          "a_selected": "Double-Angle Cosine",
+          "a_verified_lines": [
+            "Cosine is Even",
+            "Cosine of an Angle Sum",
+            "Definition of Tangent",
+            "Double Negation Elimination",
+            "Double-Angle Cosine",
+            "Double-Angle Sine",
+            "Pythagorean Identity",
+            "Sine of an Angle Sum"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what is the sine of a double angle",
+          "b_selected": "Double-Angle Sine",
+          "b_verified_lines": [
+            "Cosine of an Angle Sum",
+            "Definition of Tangent",
+            "Double Negation Elimination",
+            "Double-Angle Cosine",
+            "Double-Angle Sine",
+            "Pythagorean Identity",
+            "Sine is Odd",
+            "Sine of an Angle Sum"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "trigonometry.identities.double_angle_cosine",
+          "expected_b": "trigonometry.identities.double_angle_sine",
+          "pair_id": "d01"
+        },
+        {
+          "a": "de morgan's laws in logic",
+          "a_selected": "De Morgan's Laws (Propositional Form)",
+          "a_verified_lines": [
+            "De Morgan's Laws (Propositional Form)",
+            "De Morgan's Laws (Set Form)",
+            "Loeb's Axiom (GL)",
+            "Negation of an Existential (Quantifier De Morgan, ∃-Form)",
+            "Past Temporal Duality",
+            "Temporal Duality (Always as Not-Eventually-Not)"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "de morgan's laws in set theory",
+          "b_selected": "De Morgan's Laws (Set Form)",
+          "b_verified_lines": [
+            "De Morgan's Laws (Propositional Form)",
+            "De Morgan's Laws (Set Form)",
+            "Interior-Boundary-Exterior Partition of a Region",
+            "Negation of an Existential (Quantifier De Morgan, ∃-Form)",
+            "Past Temporal Duality",
+            "Sally's Marble-Location Belief",
+            "Temporal Duality (Always as Not-Eventually-Not)"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "logic.boolean_laws.de_morgan_laws",
+          "expected_b": "settheory.boolean_laws.de_morgan_laws",
+          "pair_id": "d03"
+        },
+        {
+          "a": "what is two to the tenth",
+          "a_selected": "2 ^ 10",
+          "a_verified_lines": [
+            "2 ^ 10",
+            "The Square Root of Two Is Irrational",
+            "The Sum of Two Odd Numbers Is Even",
+            "Twice Any Integer Is Even",
+            "Two Is the Only Even Prime",
+            "Two-Component Mixture Distribution"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what is ten to the second",
+          "b_selected": "10 ^ 2",
+          "b_verified_lines": [
+            "10 ^ 2",
+            "Formalized Second Incompleteness (Loeb at Falsum)",
+            "Goedel's Second Incompleteness Theorem"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "2 ^ 10",
+          "expected_b": "10 ^ 2",
+          "pair_id": "d05"
+        },
+        {
+          "a": "what is two plus three",
+          "a_selected": "2 + 3",
+          "a_verified_lines": [
+            "2 + 3",
+            "Setup as Agent Plus Desire",
+            "The Sum of Two Odd Numbers Is Even",
+            "Twice Any Integer Is Even",
+            "Two Is the Only Even Prime",
+            "Two-Component Mixture Distribution"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what is two times three",
+          "b_selected": "2 * 3",
+          "b_verified_lines": [
+            "2 * 3",
+            "The Square Root of Two Is Irrational",
+            "The Sum of Two Odd Numbers Is Even",
+            "Twice Any Integer Is Even",
+            "Two Is the Only Even Prime",
+            "Two-Component Mixture Distribution"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "2 + 3",
+          "expected_b": "2 * 3",
+          "pair_id": "d06"
+        },
+        {
+          "a": "what is the handshake lemma",
+          "a_selected": "Handshake Lemma (Degree-Sum Formula)",
+          "a_verified_lines": [
+            "Average Degree of a Finite Graph",
+            "Handshake Lemma (Degree-Sum Formula)",
+            "Paradigm Realization (Inflection as a Function)"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what is cayley's formula",
+          "b_selected": "Cayley's Formula for Labelled Trees",
+          "b_verified_lines": [
+            "Cayley's Formula for Labelled Trees",
+            "Euler's Polyhedron Formula",
+            "Loeb's Axiom (GL)",
+            "Quadratic Formula",
+            "Stein's Binary GCD"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "graphtheory.degree.handshake_lemma",
+          "expected_b": "graphtheory.enumeration.cayley_formula",
+          "pair_id": "d07"
+        },
+        {
+          "a": "what is the pythagorean identity",
+          "a_selected": "Pythagorean Identity",
+          "a_verified_lines": [
+            "Euclidean Distance Formula",
+            "Euclidean Line Element (Flat Metric)",
+            "GDP Expenditure Identity",
+            "Identity Laws (Conjunction with Truth, Disjunction with Falsity)",
+            "Identity Laws (Intersection with the Universe, Union with the Empty Set)",
+            "Pythagorean Identity",
+            "Zero Morpheme (Identity Element of Concatenation)"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what is the tangent of an angle defined as",
+          "b_selected": "Definition of Tangent",
+          "b_verified_lines": [
+            "Bezier Endpoint Tangent",
+            "Cosine of an Angle Sum",
+            "Definition of Tangent",
+            "Double-Angle Cosine",
+            "Double-Angle Sine",
+            "Setup as Agent Plus Desire",
+            "Sine of an Angle Sum",
+            "Tangent-Line Linearization"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "trigonometry.identities.pythagorean",
+          "expected_b": "trigonometry.definitions.tangent",
+          "pair_id": "d08"
+        },
+        {
+          "a": "what is the quadratic formula",
+          "a_selected": "Quadratic Formula",
+          "a_verified_lines": [
+            "Circle Area Formula",
+            "Cube Volume Formula",
+            "Quadratic Formula",
+            "Rectangle Area Formula",
+            "Sine of an Angle Sum",
+            "Sphere Volume Formula",
+            "Square Area Formula",
+            "Triangle Area Formula"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "how many edges does a complete graph have",
+          "b_selected": "Edge Count of the Complete Graph",
+          "b_verified_lines": [
+            "A Tree on n Vertices Has n - 1 Edges",
+            "Average Degree of a Finite Graph",
+            "Edge Bound for Simple Planar Graphs",
+            "Edge Count of the Complete Graph",
+            "Euler's Polyhedron Formula",
+            "Symmetry of Spatial Adjacency",
+            "Walks Counted by Powers of the Adjacency Matrix"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "algebra.polynomial_equations.quadratic_formula",
+          "expected_b": "graphtheory.enumeration.complete_graph_edge_count",
+          "pair_id": "d10"
+        },
+        {
+          "a": "what is the sine of a sum of two angles",
+          "a_selected": "Sine of an Angle Sum",
+          "a_verified_lines": [
+            "Cosine of an Angle Sum",
+            "Definition of Tangent",
+            "Double-Angle Sine",
+            "Pythagorean Identity",
+            "Sine is Odd",
+            "Sine of an Angle Sum",
+            "The Sum of Two Odd Numbers Is Even"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what is the cosine of a sum of two angles",
+          "b_selected": "Cosine of an Angle Sum",
+          "b_verified_lines": [
+            "Cosine is Even",
+            "Cosine of an Angle Sum",
+            "Definition of Tangent",
+            "Double-Angle Cosine",
+            "Pythagorean Identity",
+            "Sine of an Angle Sum",
+            "The Sum of Two Odd Numbers Is Even"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "trigonometry.identities.sine_angle_sum",
+          "expected_b": "trigonometry.identities.cosine_angle_sum",
+          "pair_id": "d11"
+        },
+        {
+          "a": "what happens when you double an even number",
+          "a_selected": "Twice Any Integer Is Even",
+          "a_verified_lines": [
+            "Cosine is Even",
+            "Double-Angle Cosine",
+            "Double-Angle Sine",
+            "Odd Means Not Even",
+            "One More Than an Even Number Is Odd",
+            "Relative Condition Number",
+            "Twice Any Integer Is Even",
+            "Weak Morse Inequality"
+          ],
+          "a_verifies_its_expected_query": true,
+          "b": "what happens when you add one to an odd number",
+          "b_selected": "One More Than an Even Number Is Odd",
+          "b_verified_lines": [
+            "Asymmetry of Strict Precedence",
+            "Fundamental Group of the Circle",
+            "Odd Means Not Even",
+            "One More Than an Even Number Is Odd",
+            "Relative Condition Number",
+            "Sine is Odd",
+            "Weak Morse Inequality"
+          ],
+          "b_verifies_its_expected_query": true,
+          "collapsed": false,
+          "expected_a": "numbertheory.parity.even_double",
+          "expected_b": "numbertheory.parity.odd_successor",
+          "pair_id": "d12"
+        }
+      ],
+      "the_clause_C_V4_dropped_and_this_run_executed": "every pair was checked BY EXACT CODE to denote two different verified registered queries BEFORE scoring, and the exclusions are counted and published rather than dropped.",
+      "verdict": "GREEN",
+      "voiding_sentence_verbatim": "if the proposer maps a distractor pair to the same query above the registered floor, the design is measuring the verifier's tolerance and not the proposal, and the reading is void."
+    },
+    "G4": {
+      "compared_how": "whole verdict dicts AND their rendered bytes. A summary can agree while the verdicts differ, and the voiding sentence is about the verdict.",
+      "differing": [],
+      "lines_compared": 15,
+      "standard": "BYTE-IDENTICAL, one difference voids",
+      "verdict": "GREEN",
+      "voiding_sentence_verbatim": "a single differing verdict voids the whole reading"
+    },
+    "G4b": {
+      "assumption_records_that_are_proposed_suppositions": [],
+      "citations_are_corroborated_by": "B12, over this corpus's read logs",
+      "clause_verbatim": "A conditional answer's supposition must not be readable by any later turn as a premise.",
+      "conditional_turns_in_the_corpus": 1,
+      "how_this_run_scores_it": "prereg amendment 5: a proposed supposition is a field of the SERVED RECEIPT and is never written into the session's AssumptionSet, so it is not readable at all — stricter than the frozen mechanism, which permitted reading provided the later turn cited it.",
+      "the_ceiling_positive_control": {
+        "ceiling": 8,
+        "refusal_type": "assumption_budget",
+        "refused_the_ninth": true,
+        "statuses_in_order": [
+          "conditional",
+          "conditional",
+          "conditional",
+          "conditional",
+          "conditional",
+          "conditional",
+          "conditional",
+          "conditional",
+          "refused"
+        ],
+        "why_it_is_run_here_and_not_only_in_a_test": "the artifact is what a reader checks. A bound whose only evidence is a green suite is a bound the artifact asserts."
+      },
+      "verdict": "GREEN"
+    },
+    "G5": {
+      "analysis": {
+        "the_draw_was_typical_not_lucky": {
+          "expected_blind_verified_selections": 20.62,
+          "how_it_is_computed": "sum over questions of verified/candidates — the exact chance of a uniform draw landing on a verified candidate, question by question",
+          "observed": 22,
+          "why_this_is_published": "a control that beats the model on one seeded draw invites the reading that the draw was lucky. It was not: the observed number sits beside its own expectation."
+        },
+        "the_mechanism_and_it_is_not_flattering_to_the_METRIC": {
+          "and_this_changes_nothing_about_the_verdict": "the collapse rule was frozen before the proposer existed and it is scored as frozen. This block explains a red; it does not soften one. A rule rewritten because its instrument surprised its author is not a preregistration.",
+          "count": 6,
+          "exhaust_prior_questions_the_model_selected_for": 0,
+          "exhaust_prior_questions_with_a_verified_candidate": 5,
+          "of_those_the_blind_arm_selected_a_verified_candidate_on": 6,
+          "the_model_said_NONE_on": [
+            "g1-08",
+            "g1-22",
+            "g1-26",
+            "g1-27",
+            "g1-29",
+            "g1-30"
+          ],
+          "what_that_says": "the registered rate counts a VERIFIED SELECTION and cannot see a correct refusal. Every question the model declined had verified candidates available, and the blind arm — which has no NONE in its alphabet — took them. On the nine questions authored to exhaust, the model selected for ZERO and the blind arm selected a verified candidate for five. So the metric rewards, in the blind arm, exactly the behaviour the design calls inventing.",
+          "where_the_construction_defect_is_filed": "docs/BACKLOG.md — a successor's collapse rule has to score the branch outcome against the question's disposition, not the raw verified-selection count, and it has to be frozen with a meetability argument per ROADMAP-v0.21 §4.0(3)."
+        }
+      },
+      "blind_verified_selections": 22,
+      "chance_rate_at_the_frozen_candidate_limit": 0.125,
+      "collapsed": false,
+      "denominator": 30,
+      "half_of_the_proposer": 8.5,
+      "if_it_does_not_collapse": "'frequency can beat a weak learner' — the seat ships empty with the number, the enumerator and the conditional status survive as the exact-layer half, and no learned component is served.",
+      "proposer_verified_selections": 17,
+      "registered_collapse_rule": "the blind arm's verified-selection rate must be at most HALF the proposer's on the same question set.",
+      "rows": [
+        {
+          "candidates": 8,
+          "question_id": "g1-01",
+          "selected_index": 1,
+          "selection_verified": true
+        },
+        {
+          "candidates": 0,
+          "question_id": "g1-02",
+          "selected_index": null,
+          "selection_verified": false
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-03",
+          "selected_index": 4,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-04",
+          "selected_index": 6,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-05",
+          "selected_index": 1,
+          "selection_verified": false
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-06",
+          "selected_index": 2,
+          "selection_verified": true
+        },
+        {
+          "candidates": 3,
+          "question_id": "g1-07",
+          "selected_index": 2,
+          "selection_verified": true
+        },
+        {
+          "candidates": 1,
+          "question_id": "g1-08",
+          "selected_index": 0,
+          "selection_verified": true
+        },
+        {
+          "candidates": 0,
+          "question_id": "g1-09",
+          "selected_index": null,
+          "selection_verified": false
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-10",
+          "selected_index": 2,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-11",
+          "selected_index": 3,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-12",
+          "selected_index": 3,
+          "selection_verified": true
+        },
+        {
+          "candidates": 4,
+          "question_id": "g1-13",
+          "selected_index": 2,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-14",
+          "selected_index": 0,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-15",
+          "selected_index": 3,
+          "selection_verified": false
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-16",
+          "selected_index": 7,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-17",
+          "selected_index": 7,
+          "selection_verified": true
+        },
+        {
+          "candidates": 2,
+          "question_id": "g1-18",
+          "selected_index": 0,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-19",
+          "selected_index": 2,
+          "selection_verified": true
+        },
+        {
+          "candidates": 1,
+          "question_id": "g1-20",
+          "selected_index": 0,
+          "selection_verified": true
+        },
+        {
+          "candidates": 6,
+          "question_id": "g1-21",
+          "selected_index": 1,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-22",
+          "selected_index": 7,
+          "selection_verified": true
+        },
+        {
+          "candidates": 0,
+          "question_id": "g1-23",
+          "selected_index": null,
+          "selection_verified": false
+        },
+        {
+          "candidates": 0,
+          "question_id": "g1-24",
+          "selected_index": null,
+          "selection_verified": false
+        },
+        {
+          "candidates": 0,
+          "question_id": "g1-25",
+          "selected_index": null,
+          "selection_verified": false
+        },
+        {
+          "candidates": 4,
+          "question_id": "g1-26",
+          "selected_index": 2,
+          "selection_verified": true
+        },
+        {
+          "candidates": 8,
+          "question_id": "g1-27",
+          "selected_index": 0,
+          "selection_verified": true
+        },
+        {
+          "candidates": 0,
+          "question_id": "g1-28",
+          "selected_index": null,
+          "selection_verified": false
+        },
+        {
+          "candidates": 2,
+          "question_id": "g1-29",
+          "selected_index": 1,
+          "selection_verified": true
+        },
+        {
+          "candidates": 1,
+          "question_id": "g1-30",
+          "selected_index": 0,
+          "selection_verified": true
+        }
+      ],
+      "seed": {
+        "derived_from": "experiments/plain_question_set.json",
+        "why": "seeded from a committed file's digest so the draw is a fact about a sealed set rather than about this run's clock"
+      },
+      "verdict": "RED",
+      "why_a_half": "it is the same ratio C-V3′ inherited for its own skeleton arm ('marked determinate at >= half the served arm's rate'), reused rather than invented, so the number has a precedent in this repository instead of being chosen here."
+    },
+    "G6": {
+      "and_the_difference_that_matters": "the trace records that the model was ABSENT, not that it declined. A refusal and a silence are different facts.",
+      "byte_identical": true,
+      "raised": null,
+      "standard": "byte-identical to the proposer-OFF verdict, and the absent-model path must REFUSE-BY-DESIGN rather than raise",
+      "trace_says_the_model_was_absent": true,
+      "verdict": "GREEN"
+    },
+    "G7": {
+      "check_regeneration": {
+        "elapsed_s": 6.4,
+        "green": true,
+        "returncode": 0,
+        "run": true,
+        "tail": "coherence OK: 25 seeds regenerate committed data byte-identically across data/, data_holdout/",
+        "why_it_may_be_skipped": "check_regeneration re-runs every seed and refuses outright if data/ is dirty. When it is skipped the artifact says so and G7 reports UNSCORED for that half rather than GREEN."
+      },
+      "clause_verbatim": "After a session of conditional answers, `data/*/nodes.json` is unchanged and `check_regeneration` is green.",
+      "nodes_digest_after": "9234faa437ace1d2c1f4eb5e99b00069c1598a799527884159929bfb5336edf6",
+      "nodes_digest_before": "9234faa437ace1d2c1f4eb5e99b00069c1598a799527884159929bfb5336edf6",
+      "standard": "unchanged and green",
+      "unchanged": true,
+      "verdict": "GREEN"
+    },
+    "G7b": {
+      "clause": "a turn served with status `conditional` contributes ZERO useful tokens to the throughput scoring path, whatever its content length, and the check is made from that path rather than from a docstring.",
+      "conditional_arm": {
+        "correct": true,
+        "tokens": 160,
+        "useful_tokens": 0
+      },
+      "driven_through": "measure_throughput.build_records",
+      "forfeiting_set_is_narrower_than_non_answering": true,
+      "non_answering_set_contains_conditional": true,
+      "solved_arm": {
+        "correct": true,
+        "tokens": 160,
+        "useful_tokens": 160
+      },
+      "the_arms_differ_only_in_status": true,
+      "the_control_that_makes_this_evidence": "the `solved` arm must score NON-ZERO on the same content. Without it, a builder that zeroed every record would pass the conditional arm and prove nothing.",
+      "verdict": "GREEN",
+      "why_that_narrowing_matters": "a closure task's `exhausted` IS its answer — a certified bounded negative. The first draft of this guard used the wide set and zeroed exactly that task; the narrowing is kept as a fixture."
+    },
+    "G8": {
+      "clause": "no holdout statement id, holdout statement text, or holdout-derived material appears in any prompt sent to the model, in any candidate list, or in any served answer.",
+      "holdout_ids_known": 2053,
+      "how_that_second_check_is_made": {
+        "data_holdout_literals": 1,
+        "data_literals": 2,
+        "default_index_calls_or_imports": [],
+        "parsed_not_grepped": true,
+        "the_defect_this_check_replaced": "a text search for `default_index()` that matched the module's own docstring explaining why it must never call it. A check a correct explanation can fail is not a check of the code.",
+        "why_a_data_holdout_literal_is_expected": "`holdout_ids()` reads `data_holdout/` on purpose — it exists so the gate can check a negative rather than trust a docstring. The channel that matters is whether the ENUMERATION path calls `resolver.default_index`, which spans both directories."
+      },
+      "occurrences": [],
+      "prompts_scanned": 16,
+      "standard": "ZERO occurrences. One is red and voids the run.",
+      "the_enumerator_reads_data_only": true,
+      "verdict": "GREEN",
+      "why_the_second_check_exists": "resolver.default_index spans data/ AND data_holdout/ — 2,053 holdout ids sit in the index a candidate list would obviously be built from. Scanning prompts catches a leak that happened; this catches the channel that would cause one."
+    },
+    "G9": {
+      "adjudicated": "in advance, by orchestrator ruling",
+      "the_ruling_verbatim": "G9 is adjudicated NOT MET for this slice by orchestrator ruling. The slice's proposer path makes its own choosing explicit; the resolver's pre-emptive binding (13 of 30, measured, upgrading P2's 2-of-10) is the standing defect, published with its mechanism, and its repair is a designed successor requiring its own prereg + control + K re-measurement — filed in BACKLOG with the 13 question ids as fixtures, superseding the p04/p10 entry (dated supersession note there, not deletion).",
+      "verdict": "NOT MET",
+      "where": "experiments/plain_input_prereg.json amendments 3 and 4",
+      "why_it_is_not_scored_here": "a gate adjudicated before the run is a gate the run REPORTS. Re-scoring it would invite the reading that the verdict came out of this run's numbers, and it did not — it comes out of where DESIGN-plain-input places the proposer."
+    }
+  },
+  "non_claims": [
+    "not fluency: the output side is unchanged and every served sentence is still authored by the realizer and the corpus quotation rule. A conditional answer is a LABEL WRAPPED AROUND AN EXISTING ANSWER, not a generated one",
+    "not open-domain: outside the corpus the honest output is still a refusal",
+    "the supposition is not knowledge: it never reaches the graph, the flat prohibition on runtime writes stands, and it expires with the session unless a human promotes it through the write gate",
+    "the model never authors structure: its output alphabet is an index into an exact-code-built list",
+    "not a throughput claim: this slice must not appear in any sentence containing a K number",
+    "no stranger-usability claim: G1's question set and the slice-2 corpus are maintainer-authored, and STRANGER's park is cited rather than re-encountered",
+    "no completeness over readings: the candidate list is what exact code could enumerate, and DESIGN-session-ledger §11 forbids the completeness claim outright",
+    "HOSTILE DICTATION is not unparked and is not needed: this design opens no untrusted stream to the write gate, because suppositions never reach it",
+    "this slice does not repair the silent binding P2 measured; the defect is filed with thirteen fixtures and its repair is a designed successor's work",
+    "no rate here is a rate over 'plain English'; every denominator is a named subset of one maintainer-authored set of thirty"
+  ],
+  "prereg": "experiments/plain_input_prereg.json",
+  "prompts": "experiments/plain_input_prompts.json",
+  "reproduction": {
+    "prior_artifact_found": true,
+    "prior_verdicts": {
+      "B10": "GREEN",
+      "B12": "GREEN",
+      "B9": "GREEN",
+      "G1": "MEASURED (no floor, by registration)",
+      "G2": "GREEN",
+      "G3": "GREEN",
+      "G4": "GREEN",
+      "G4b": "GREEN",
+      "G5": "RED",
+      "G6": "GREEN",
+      "G7": "GREEN",
+      "G7b": "GREEN",
+      "G8": "GREEN",
+      "G9": "NOT MET"
+    },
+    "verdicts": {
+      "B10": "GREEN",
+      "B12": "GREEN",
+      "B9": "GREEN",
+      "G1": "MEASURED (no floor, by registration)",
+      "G2": "GREEN",
+      "G3": "GREEN",
+      "G4": "GREEN",
+      "G4b": "GREEN",
+      "G5": "RED",
+      "G6": "GREEN",
+      "G7": "GREEN",
+      "G7b": "GREEN",
+      "G8": "GREEN",
+      "G9": "NOT MET"
+    },
+    "verdicts_identical": true,
+    "what_this_is_and_is_not": "evidence that the runner reproduces its own reading on this machine on this day. It is not a proof of determinism, and P4's limit is the same limit: byte-identity across passes on one machine on one day is the strongest check this repository runs on a model call, and it is reported as that and nothing more."
+  },
+  "result_gate_R2": {
+    "G9_is_NOT_MET_by_ruling": true,
+    "and_the_G9_limit_is_inside_that_sentence_on_purpose": "slice 1's B10 scope limit set the pattern: a limit in an adjacent field is a limit a quoter drops. Registered as a requirement in prereg amendment 4 before this run — so the sentence carries its limit whether or not the run licenses the sentence.",
+    "clause_verbatim": "the served claim is licensed only if: G2 has no counterexample, G3 has no collapsed pair, G4 is byte-identical, G4b holds, G5 collapses at or below half, G6 is byte-identical with the model absent, G7 is unchanged-and-green, G7b is zero, G8 is zero, G9 repairs both fixtures, B9 has no leak, and B10 and B12 are green.",
+    "clauses": {
+      "B10 and B12 are green": true,
+      "B9 has no leak": true,
+      "G2 has no counterexample": true,
+      "G3 has no collapsed pair": true,
+      "G4 is byte-identical": true,
+      "G4b holds": true,
+      "G5 collapses at or below half": false,
+      "G6 is byte-identical with the model absent": true,
+      "G7 is unchanged-and-green": true,
+      "G7b is zero": true,
+      "G8 is zero": true,
+      "G9 repairs both fixtures": false
+    },
+    "every_clause_but_G9": false,
+    "failed_clauses": [
+      "G5 collapses at or below half",
+      "G9 repairs both fixtures"
+    ],
+    "is_it_licensed": false,
+    "nothing_more": "no coverage claim, no correctness claim, no fluency claim, no throughput claim, and no claim that the model is good at this. G1's rate is a measurement of one maintainer-authored set.",
+    "the_sentence_that_WOULD_have_been_licensed": "Plain prose that the exact layer cannot ground is served either as an answer conditional on a named supposition, or as a question naming the readings, and never as an unmarked answer — and only where the exact layer does not already bind, because 13 of these 30 sealed questions are bound `found` by the resolver before the proposer is consulted, so the silent binding P2 measured is UNREPAIRED by this slice and is filed in docs/BACKLOG.md as a designed successor's work.",
+    "verdict": "FAILS",
+    "what_happens_now_frozen_before_the_run": "nothing is served, the readout is published, and the exact-layer half (the candidate enumerator, the conditional status, the clarify branch) is adjudicated separately on its own evidence.",
+    "what_the_ruling_changes": "R2 as frozen requires G9 to repair both fixtures. Prereg amendment 4 adjudicates G9 NOT MET and moves the defect to BACKLOG with thirteen fixtures. So G9's clause stands UNMET and named — never as a clause quietly satisfied — and the question the run answers is whether every OTHER clause holds."
+  },
+  "run_date": "2026-08-26",
+  "runner": "scripts/run_plain_gate.py",
+  "schema": "corollary.plain-input-run/1",
+  "seal": "experiments/plain_input_corpus_seal.json",
+  "slice": 2,
+  "the_instrument_and_what_was_fixed_before_this_reading": {
+    "defects_found_and_fixed": [
+      "G8's second check searched the enumerator's TEXT for `default_index()` and matched the module's own docstring explaining why it must never call it. Replaced with an AST walk over calls and imports. A check a correct explanation can fail is not a check of the code.",
+      "B10 was scored only by slice 1's arm, whose stateless side boots a session with NO proposer — a configuration difference, not a state difference. Both readings are now computed and both are published.",
+      "G1 carried no `verdict` field, so a summary line printed `None` for a gate that is a measurement with no floor by registration."
+    ],
+    "what_was_NOT_changed": "no clause, no floor, no voiding sentence, no collapse rule and no denominator. G5's two arms are computed by the same code before and after, and its red is the same red.",
+    "why_this_block_exists": "the runner was executed once against the recorded corpus before this reading, to find out whether it worked. It did not, in three places, and saying so is cheaper than a reader wondering. P4 earned determinism-plus-commit (ROADMAP-v0.21 §4.0(2)), so a re-execution is a reproduction rather than a second draw at a result."
+  },
+  "the_model_and_its_pin": {
+    "provider_tag": "ollama:qwen3:4b-instruct",
+    "refused_rather_than_downloaded": "machine_reader.verify_weights hashes the blob's bytes and refuses on absence or mismatch",
+    "temperature": 0,
+    "verified_before_any_question_was_asked": true,
+    "weights_blob_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9"
+  },
+  "voided_or_red_gates": [
+    "G5"
+  ],
+  "where_the_claim_lives_and_what_is_served": {
+    "served_surface": "none beyond what the preregistration registered",
+    "what_that_means_concretely": "`conditional` is in the frozen status alphabet and the capability sheet bumped to corollary.capabilities/2. The proposer is NOT attached to any session the chat skin serves: `CoreSession.proposer` defaults to None and ¶DEV-1 replays every HTTP request into a fresh session. SPEC ¶AMD-1 records the debt that falls due the day that changes — `corollary.chat/2` is owed then, not now.",
+    "why_no_more_was_shipped": "slice 1's precedent: inventing a surface the design did not ask for would be shipping more than the gate licensed."
+  }
+}

@@ -1435,6 +1435,237 @@ class TheDenominatorsBlock(unittest.TestCase):
             self.assertTrue(named.get(gate, "").strip(), gate)
 
 
+class TheRegisteredRun(unittest.TestCase):
+    """The run artifact, held to the preregistration it was scored against.
+
+    These are not a second scoring. They check that the artifact reports
+    every registered clause, that its verdicts are the ones its own numbers
+    imply, and that the two red clauses are named rather than absorbed.
+    """
+
+    #: NOT `cls.run`: `TestCase.run` is the method unittest calls to run
+    #: the test, and shadowing it with a dict makes every case in the
+    #: class raise "'dict' object is not callable" before it starts.
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.report = json.loads(
+            (REPO / "experiments" / "plain_input_run.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        cls.prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+
+    def test_every_registered_gate_is_reported(self) -> None:
+        for name in self.prereg["gates"]:
+            if name == "preamble":
+                continue
+            if name == "B10_and_B12_re_run":
+                self.assertIn("B10", self.report["gates"])
+                self.assertIn("B12", self.report["gates"])
+                continue
+            self.assertIn(name, self.report["gates"], name)
+
+    def test_R2_fails_and_names_exactly_which_clauses(self) -> None:
+        """A failing result gate that could not have named its failures
+        would be a verdict without a reason."""
+
+        gate = self.report["result_gate_R2"]
+        self.assertEqual(gate["verdict"], "FAILS")
+        self.assertEqual(
+            gate["failed_clauses"],
+            ["G5 collapses at or below half", "G9 repairs both fixtures"],
+        )
+        self.assertFalse(gate["is_it_licensed"])
+
+    def test_the_licensing_sentence_carries_the_G9_limit_inside_it(
+        self,
+    ) -> None:
+        """Prereg amendment 4's requirement, checked on the sentence."""
+
+        sentence = self.report["result_gate_R2"][
+            "the_sentence_that_WOULD_have_been_licensed"
+        ]
+        self.assertIn("13 of these 30", sentence)
+        self.assertIn("UNREPAIRED by this slice", sentence)
+        # And the limit must be inside the same sentence as the claim, not
+        # in a following one: no full stop may separate them.
+        claim = sentence.index("never as an unmarked answer")
+        limit = sentence.index("13 of these 30")
+        self.assertNotIn(". ", sentence[claim:limit])
+
+    def test_what_happens_next_was_frozen_before_the_run(self) -> None:
+        self.assertEqual(
+            self.report["result_gate_R2"]["what_happens_now_frozen_before_the_run"],
+            self.prereg["the_result_gate"]["if_R2_fails_on_any_clause"],
+        )
+
+    def test_G5_is_red_and_its_arms_are_published_with_the_rule(self) -> None:
+        gate = self.report["gates"]["G5"]
+        self.assertEqual(gate["verdict"], "RED")
+        self.assertEqual(
+            gate["registered_collapse_rule"],
+            self.prereg["gates"]["G5"]["registered_collapse_rule"],
+        )
+        self.assertGreater(
+            gate["blind_verified_selections"], gate["half_of_the_proposer"]
+        )
+        self.assertFalse(gate["collapsed"])
+
+    def test_G5s_red_is_shown_not_to_be_a_lucky_draw(self) -> None:
+        """A control that beats the model on one seeded draw invites the
+        reading that the draw was lucky."""
+
+        block = gate = self.report["gates"]["G5"]["analysis"]
+        typical = block["the_draw_was_typical_not_lucky"]
+        self.assertLess(
+            abs(typical["observed"]
+                - typical["expected_blind_verified_selections"]),
+            4,
+            "the observed blind draw is far from its own expectation",
+        )
+        del gate
+
+    def test_G5s_mechanism_block_does_not_soften_the_verdict(self) -> None:
+        block = self.report["gates"]["G5"]["analysis"][
+            "the_mechanism_and_it_is_not_flattering_to_the_METRIC"
+        ]
+        self.assertIn(
+            "does not soften one",
+            block["and_this_changes_nothing_about_the_verdict"],
+        )
+        self.assertEqual(
+            block["exhaust_prior_questions_the_model_selected_for"], 0
+        )
+
+    def test_B10_publishes_both_readings_and_the_fact_between_them(
+        self,
+    ) -> None:
+        gate = self.report["gates"]["B10"]
+        self.assertEqual(gate["slice_1_arm_unchanged"]["verdict"], "RED")
+        self.assertEqual(gate["the_state_reading"]["verdict"], "GREEN")
+        self.assertTrue(
+            gate["the_measured_fact_that_explains_the_difference"][
+                "every_slice_1_miss_is_a_turn_the_plain_input_route_served"
+            ]
+        )
+        self.assertTrue(gate["slice_1_arm_unchanged"]["misses"])
+
+    def test_B9_publishes_the_hits_it_explained_and_a_positive_control(
+        self,
+    ) -> None:
+        gate = self.report["gates"]["B9"]
+        self.assertEqual(gate["verdict"], "GREEN")
+        self.assertEqual(gate["leaks"], [])
+        self.assertTrue(gate["the_positive_control"]["detected"])
+        self.assertEqual(gate["the_construction_arm"]["verdict"], "GREEN")
+
+    def test_B9s_scanned_denominator_is_smaller_and_says_by_how_much(
+        self,
+    ) -> None:
+        gate = self.report["gates"]["B9"]
+        self.assertEqual(
+            gate["prompts_scanned"]
+            + gate["retained_records_with_no_prompt_to_scan"]["count"],
+            gate["prompts_retained_in_total"],
+        )
+
+    def test_G3_ran_the_clause_C_V4_dropped(self) -> None:
+        gate = self.report["gates"]["G3"]
+        self.assertEqual(gate["verdict"], "GREEN")
+        self.assertEqual(gate["pairs_collapsed"], 0)
+        self.assertEqual(
+            gate["pairs_scored"] + gate["pairs_excluded_by_the_pre_check"],
+            gate["pairs_in_the_set"],
+        )
+        self.assertGreater(
+            gate["pairs_excluded_by_the_pre_check"], 0,
+            "a pre-check that excluded nothing would not have run",
+        )
+
+    def test_G7b_has_a_control_arm_that_scores_non_zero(self) -> None:
+        """Otherwise a builder that zeroed everything would pass it."""
+
+        gate = self.report["gates"]["G7b"]
+        self.assertEqual(gate["verdict"], "GREEN")
+        self.assertGreater(gate["solved_arm"]["useful_tokens"], 0)
+        self.assertEqual(gate["conditional_arm"]["useful_tokens"], 0)
+        self.assertEqual(
+            gate["solved_arm"]["tokens"], gate["conditional_arm"]["tokens"]
+        )
+
+    def test_G9_is_reported_not_rescored(self) -> None:
+        gate = self.report["gates"]["G9"]
+        self.assertEqual(gate["verdict"], "NOT MET")
+        self.assertIn("orchestrator ruling", gate["adjudicated"])
+        amendment = next(
+            a for a in self.prereg["amendments"] if a["amendment"] == 4
+        )
+        self.assertEqual(
+            gate["the_ruling_verbatim"], amendment["the_ruling_verbatim"]
+        )
+
+    def test_the_run_reproduces_its_own_verdicts(self) -> None:
+        block = self.report["reproduction"]
+        self.assertTrue(block["prior_artifact_found"])
+        self.assertTrue(block["verdicts_identical"])
+
+    def test_the_instrument_fixes_are_disclosed_and_bounded(self) -> None:
+        """Three instrument defects were fixed before this reading."""
+
+        block = self.report["the_instrument_and_what_was_fixed_before_this_reading"]
+        self.assertEqual(len(block["defects_found_and_fixed"]), 3)
+        self.assertIn("no clause, no floor", block["what_was_NOT_changed"])
+
+    def test_nothing_is_served_beyond_the_registration(self) -> None:
+        block = self.report["where_the_claim_lives_and_what_is_served"]
+        self.assertEqual(
+            block["served_surface"],
+            "none beyond what the preregistration registered",
+        )
+        from harness import CoreSession  # noqa: PLC0415
+
+        self.assertIsNone(CoreSession.boot(REPO, offline=True).proposer)
+
+    def test_the_findings_are_computed_and_name_the_sentences_they_break(
+        self,
+    ) -> None:
+        found = self.report["findings"]
+        f1 = found["F1_the_ask_branch_fires_on_questions_authored_to_exhaust"]
+        self.assertEqual(f1["count"], len(f1["what_happened"]))
+        self.assertGreater(f1["count"], 0)
+        self.assertIn("Not open-domain", f1["the_design_sentence_this_contradicts"])
+        self.assertIn(
+            "g1-02",
+            found["F2_the_designs_own_motivating_example_enumerates_nothing"][
+                "questions_with_zero_candidates"
+            ],
+        )
+        f3 = found["F3_verification_discarded_a_correct_selection"]
+        self.assertEqual(f3["count"], len(f3["rows"]))
+
+    def test_the_design_carries_the_contradicted_non_claim_as_a_note(
+        self,
+    ) -> None:
+        """§8.3 — append-only, and the original sentence still stands."""
+
+        plain = _flat(PLAIN.read_text(encoding="utf-8"))
+        self.assertIn("8.3", plain)
+        self.assertIn(
+            "**Not open-domain.** Outside the corpus the honest output is "
+            "still a refusal",
+            plain,
+        )
+        self.assertIn("the **branch rule**, which fires on the count of", plain)
+        self.assertIn("8.4", plain)
+        self.assertIn("You cannot select what was never enumerated", plain)
+
+    def test_the_run_states_that_the_silent_binding_is_unrepaired(
+        self,
+    ) -> None:
+        joined = " ".join(self.report["non_claims"])
+        self.assertIn("does not repair the silent binding", joined)
+
+
 class _StubVerified:
     """A Verified stand-in, so the shape tests need no model."""
 

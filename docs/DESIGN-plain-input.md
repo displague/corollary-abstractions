@@ -742,3 +742,51 @@ move — and it **cannot** touch a reading the resolver already took silently.
 The adjudication, its reasons, and the ruling that fixed it are in
 `experiments/plain_input_prereg.json` amendments 3 and 4; the defect is
 filed in `docs/BACKLOG.md` with the thirteen question ids as its fixtures.
+
+### 8.3 §7's "Not open-domain" non-claim was contradicted by the registered run (2026-08-26)
+
+**The sentence measured false.** §7: *"**Not open-domain.** Outside the
+corpus the honest output is still a refusal
+(`docs/DESIGN-text-resolution.md:185-186`). A proposer that cannot find a
+registered query still exhausts."*
+
+**What the run measured.** Two of the sealed thirty questions authored to
+exhaust came back as clarifications naming corpus readings rather than as
+refusals: `g1-26` *"how do i change a tyre"* and `g1-29` *"what did i ask you
+before"*. The first was offered *Average Rate of Change*, *Fundamental
+Theorem of Calculus, Evaluation Part* and *Derivation Takes Its Category from
+the Affix*.
+
+**And the proposer is not what broke it, which is why this note belongs to
+the design rather than to the model.** On both, the model answered `NONE` —
+it found no registered query, exactly as §7 says. What served the
+clarification is the **branch rule**, which fires on the count of *verified*
+candidates and never consults the proposer's `NONE`. The rule is
+`experiments/plain_input_prereg.json` amendment 2, and amendment 2 was
+written against §3b's `alternatives_not_taken` field and §1's *"the branch
+taken when suppositions multiply past a declared bound"* — it never met this
+sentence. So two sentences of this document imply different branch rules, and
+the run is what found that out.
+
+**Not repaired.** The rule had already been frozen before it ran, and
+changing it after watching it behave is the move this repository does not
+make. It is filed in `docs/BACKLOG.md` with the unpark condition, and with
+the warning that letting a learned `NONE` suppress a clarification puts the
+model back on the refuse/serve boundary the standing clause
+(`docs/DESIGN-sans-template-rendering.md:337-340`) keeps it off.
+
+### 8.4 §2.3's motivating residual is out of this design's reach (2026-08-26)
+
+§2.3 names the `gcd` miss as *"the residue this seed's proposer is aimed
+at"*. In the registered run, *"how do you compute the greatest common divisor
+recursively"* enumerated **zero candidates** — the proposer was never
+consulted and row 12 exhausted exactly as before. Enumeration is by shared
+content words and the utterance shares none with a statement the corpus
+titles `gcd`.
+
+**You cannot select what was never enumerated.** The trust shape §8.1 records
+as stronger than the design's own argument — an index into a finite list — is
+also what puts this residue out of reach: a selector's ceiling is its
+enumerator's recall. The parked synonym layer, *"a design and not a patch"*
+(`docs/DESIGN-text-resolution.md:95-96`), remains the blocker it was, and a
+successor aimed at this residue has to build it rather than route around it.

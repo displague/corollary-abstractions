@@ -119,6 +119,102 @@ or commit history. Each item names the evidence that motivated it.
   licensing sentence carries the limit in the same sentence that claims the
   capability.
 
+- **G5's collapse rule cannot tell selecting-well from selecting-often, and
+  it is why the seat ships empty (2026-08-26, measured by the registered
+  run).** The rule was frozen before the proposer existed and was scored as
+  frozen; this entry is the successor's, not a re-reading of the run.
+
+  **What the run measured.** The blind arm made **22** verified selections on
+  the sealed thirty; the proposer made **17**; the rule required the blind
+  arm to be at or below **8.5**. The blind draw was not lucky — its
+  analytic expectation over the same candidate lists is **20.62** — and the
+  registered consequence therefore fires exactly as written: *"the seat ships
+  empty with the number."*
+
+  **The mechanism, which is a defect in the METRIC and not in the result.**
+  The rule counts a *verified selection* and cannot see a *correct refusal*.
+  The model answered `NONE` on six questions; every one of those six had
+  verified candidates available, and the blind arm — whose alphabet has no
+  `NONE` — took them. On the nine questions authored to exhaust, the model
+  selected for **zero** and the blind arm selected a verified candidate for
+  **five**. The control rewards, in its blind arm, precisely the behaviour
+  DESIGN-plain-input calls inventing.
+
+  **What a successor's rule owes.** Score the BRANCH OUTCOME against the
+  question's registered disposition (conditional / ask / exhaust) rather than
+  the raw verified-selection count, so that declining an out-of-corpus
+  question counts as success for both arms and the blind arm's inability to
+  decline shows up as the incapacity it is. And freeze it with a
+  **meetability argument** per ROADMAP-v0.21 §4.0(3) — a pilot or a
+  construction argument that a *correct* proposer can reach the floor. This
+  rule had none, which is the same defect class C-E1's 0.99 flip floor was.
+
+- **`run_session_gate.score_b10`'s stateless arm does not inherit the
+  journal's configuration (2026-08-26).** Its stateless side boots a session
+  with **no proposer**, because slice 1 had none. On a slice-2 journal that
+  compares two configurations rather than two states, and B10's own gloss is
+  about state: *"session state may never leak into unconditional answers."*
+  The registered run publishes both readings — slice 1's arm unchanged (RED
+  on 5 turns) and a state reading with configuration held fixed (GREEN) —
+  and the measured fact that reconciles them: **every one of the five misses
+  is a turn the plain-input route served**, which is the entire behavioural
+  change slice 2 makes and which G4 separately proves happens nowhere else.
+  The fix is a parameter on the arm, not a new gate; filed so the next slice
+  does not re-derive the argument.
+
+- **Slice 2 turns some honest refusals into clarifying questions, which
+  contradicts DESIGN-plain-input §7's own non-claim (2026-08-26, measured).**
+  *"Not open-domain. Outside the corpus the honest output is still a refusal.
+  A proposer that cannot find a registered query still exhausts."* Two of the
+  sealed questions authored to exhaust — `g1-26` *"how do i change a tyre"*
+  and `g1-29` *"what did i ask you before"* — came back `waiting` with corpus
+  readings named.
+
+  **The proposer is not what broke it.** On both, the model answered `NONE`:
+  it found no registered query, exactly as §7 describes. What served the
+  clarification is the **branch rule**, which fires on the count of VERIFIED
+  candidates and never consults the model's `NONE`. "How do i change a tyre"
+  came back offering *Average Rate of Change*, *Fundamental Theorem of
+  Calculus* and the *Righthand Head Rule*.
+
+  **Not repaired here, and the reason is the rule this repository lives by.**
+  The branch rule is frozen in `plain_input_prereg.json` amendment 2, written
+  against the design's own text *before the rule had ever run*. Changing it
+  after watching it behave is the move that turns a preregistration into a
+  narrative. Unpark condition: a successor prereg whose branch rule consults
+  the proposer's `NONE`, with its own control — and note that letting a
+  learned `NONE` suppress a clarification puts the model back on the
+  refuse/serve boundary, which is the standing clause
+  (`DESIGN-sans-template-rendering:337-340`) that must be argued, not
+  assumed.
+
+- **The synonym layer is still the blocker, and selection cannot substitute
+  for it (2026-08-26, measured).** DESIGN-plain-input §2.3 names the `gcd`
+  miss as the residue the proposer is aimed at. In the registered run,
+  *"how do you compute the greatest common divisor recursively"* enumerated
+  **zero candidates**: the proposer was never asked and row 12 exhausted
+  exactly as before. Enumeration is by shared content words and the utterance
+  shares none with a statement the corpus titles `gcd`. **You cannot select
+  what was never enumerated** — so the parked synonym layer
+  (`DESIGN-text-resolution:95-96`, *"a design and not a patch"*) is not
+  reachable by this design at all, and any successor aimed at that residue
+  has to build it rather than route around it. Five of the thirty sealed
+  questions enumerate nothing for the same reason.
+
+- **A verifier weaker than the proposer discards the proposer's correct
+  answer, before any receipt exists (2026-08-26, measured).** On *"how do you
+  compute a factorial iteratively"* the enumerator offered *Factorial,
+  Iterative (TheAlgorithms)* first and the model selected it — the right
+  reading. It did **not** verify: `word_match` requires a statement's own
+  title to resolve back to that statement and this one binds elsewhere. The
+  two candidates that did verify were both about the **double** factorial, so
+  the person was asked to choose between two wrong readings while the right
+  one was thrown away. *"Selection narrows; verification decides"* is working
+  exactly as designed; this is the cost it buys, and the receipt cannot show
+  what was discarded because the discard happens before a receipt exists.
+  Filed as a receipt-shape question for a successor: a `candidates_discarded`
+  field would make the loss visible without moving the trust shape.
+
 - **Slice 2's wiring staled slice 1's sealed journals, and the closed corpus
   no longer replays against this tree (2026-08-26, measured).** Filed rather
   than repaired, because the repair touches a CLOSED seal and a PUBLISHED
