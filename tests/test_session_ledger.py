@@ -765,5 +765,150 @@ class TheSealedCorpus(unittest.TestCase):
         self.assertGreater(self.seal["counts"]["refusal_turns_admitted"], 0)
 
 
+RUN = REPO / "experiments" / "session_ledger_run.json"
+RUN2 = REPO / "experiments" / "session_ledger_run2.json"
+
+
+class TheRegisteredRun(unittest.TestCase):
+    """The gate's own artifacts, held to the shapes the design registered."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        if not RUN.exists():  # pragma: no cover - ordering guard
+            raise unittest.SkipTest("the gate has not run yet")
+        cls.first = json.loads(RUN.read_text(encoding="utf-8"))
+        cls.second = (
+            json.loads(RUN2.read_text(encoding="utf-8"))
+            if RUN2.exists()
+            else None
+        )
+
+    def test_every_registered_clause_is_adjudicated(self) -> None:
+        gate = self.first["construction_gate"]
+        self.assertEqual(
+            sorted(gate, key=lambda name: int(name[1:])),
+            [f"B{n}" for n in range(1, 14)],
+        )
+
+    def test_b9_is_never_and_says_why(self) -> None:
+        b9 = self.first["construction_gate"]["B9"]
+        self.assertEqual(b9["verdict"], "NEVER")
+        self.assertIn("slice 2", b9["why"])
+
+    def test_r1_is_computed_from_its_clauses(self) -> None:
+        gate = self.second or self.first
+        result = gate["result_gate"]
+        expected = "HOLDS" if all(result["clauses"].values()) else "FAILS"
+        self.assertEqual(result["verdict"], expected)
+
+    def test_b10s_verdict_matches_its_misses(self) -> None:
+        for artifact in filter(None, (self.first, self.second)):
+            b10 = artifact["construction_gate"]["B10"]
+            self.assertEqual(
+                b10["verdict"], "GREEN" if not b10["misses"] else "RED"
+            )
+
+    def test_the_b10_finding_is_the_retract_line_and_nothing_else(self) -> None:
+        """The finding is specific, and a wider one would be a different one."""
+
+        b10 = self.first["construction_gate"]["B10"]
+        self.assertEqual(b10["verdict"], "RED")
+        lines = {miss["input_bytes"] for miss in b10["misses"]}
+        self.assertEqual(lines, {"retract a999"})
+
+    def test_the_scored_rows_carry_no_arm_label(self) -> None:
+        """§8's blindness, checked in the artifact rather than trusted.
+
+        If an arm label had reached the scorer it would be visible in the
+        rows the scorer produced, because the artifact carries them.
+        """
+
+        for artifact in filter(None, (self.first, self.second)):
+            for name in ("B4", "B5", "B6"):
+                clause = artifact["construction_gate"][name]
+                rows = clause.get("misses_published_individually") or clause.get(
+                    "flip_rows", []
+                )
+                for row in rows:
+                    self.assertNotIn("arm", row)
+
+    def test_zero_flip_clauses_watch_their_denominator(self) -> None:
+        """A clause that cannot go red for having too few cases is not one."""
+
+        if self.second is None:  # pragma: no cover - ordering guard
+            self.skipTest("the supplementary run is not committed yet")
+        for name, floor in (("B5", 60), ("B6", 30)):
+            clause = self.second["construction_gate"][name]
+            self.assertEqual(clause["registered_denominator"], floor)
+            self.assertEqual(
+                clause["denominator_met"], clause["cases"] >= floor
+            )
+            if clause["cases"] < floor:
+                self.assertEqual(clause["verdict"], "SHORT OF DENOMINATOR")
+
+    def test_the_supplementary_run_repairs_and_does_not_overturn(self) -> None:
+        if self.second is None:  # pragma: no cover - ordering guard
+            self.skipTest("the supplementary run is not committed yet")
+        supplementary = self.second["supplementary"]
+        self.assertTrue(supplementary["is_supplementary"])
+        self.assertTrue(
+            supplementary["the_original_is_never_edited_or_re_scored"]
+        )
+        # A reading that stands must read the same way twice.
+        self.assertEqual(
+            self.first["construction_gate"]["B10"]["verdict"],
+            self.second["construction_gate"]["B10"]["verdict"],
+        )
+        self.assertEqual(self.second["result_gate"]["verdict"], "FAILS")
+
+    def test_the_baseline_scores_zero_on_b4_after_the_repair(self) -> None:
+        """§8: it cannot respond — by construction, not by hope."""
+
+        if self.second is None:  # pragma: no cover - ordering guard
+            self.skipTest("the supplementary run is not committed yet")
+        baseline = self.second["capability_blind_baseline"]
+        self.assertEqual(baseline["b4_score"], 0)
+        self.assertGreater(baseline["b4_cases_checked"], 0)
+        self.assertEqual(baseline["verdict"], "GREEN")
+
+    def test_the_voiding_sentence_is_carried_verbatim_and_evaluated(
+        self,
+    ) -> None:
+        prereg = json.loads(PREREG.read_text(encoding="utf-8"))
+        for artifact in filter(None, (self.first, self.second)):
+            blind = artifact["blind_control"]
+            self.assertEqual(
+                blind["voiding_sentence"],
+                prereg["blind_control"]["voiding_sentence_verbatim"],
+            )
+            flips = (
+                artifact["construction_gate"]["B5"]["flips"]
+                + artifact["construction_gate"]["B6"]["flips"]
+            )
+            self.assertEqual(blind["voided"], bool(flips))
+
+    def test_b1s_ordering_clause_is_missed_and_published(self) -> None:
+        """Not reinterpreted into green, and the git order is in the record."""
+
+        b1 = self.first["construction_gate"]["B1"]
+        self.assertEqual(b1["clause_1_seal_before_replayer"]["verdict"], "MISSED")
+        self.assertEqual(
+            b1["clause_2_no_sealed_file_was_edited"]["verdict"], "GREEN"
+        )
+        self.assertTrue(
+            b1["clause_1_seal_before_replayer"]["replayer_first_committed"]
+        )
+
+    def test_b13s_table_carries_its_own_limitation(self) -> None:
+        b13 = self.first["construction_gate"]["B13"]
+        self.assertEqual(len(b13["table"]), 20)
+        self.assertIn("weak evidence", b13["and_the_limitation_of_an_easy_audit"])
+        self.assertIn("NOT independent", b13["auditor_independence"])
+
+    def test_no_correctness_claim_appears_anywhere(self) -> None:
+        for artifact in filter(None, (self.first, self.second)):
+            self.assertIn("reproducible, not correct", artifact["negative_honesty"])
+
+
 if __name__ == "__main__":
     unittest.main()

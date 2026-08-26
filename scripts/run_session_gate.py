@@ -60,6 +60,16 @@ ARTIFACT = "experiments/session_ledger_run.json"
 RUN_SCHEMA = "corollary.session-ledger-run/1"
 AUDIT_MARKS = "experiments/session_b13_audit_marks.json"
 
+#: How many B6 cases the mixer may draw from one half-B session. Two, not
+#: one, because half B holds 25 sessions and B6's registered floor is >=30:
+#: at one per session the generator's CEILING was below the floor it fed.
+B6_PER_SESSION = 2
+
+#: The registered denominators, so a clause can go red for having too few
+#: cases and not only for flipping. A verdict that checks the numerator and
+#: not the denominator is a green assertion that could not have gone red.
+REGISTERED_DENOMINATORS = {"B5": 60, "B6": 30, "B8": 20}
+
 
 def _rng(seed_string: str) -> random.Random:
     """The prereg's frozen derivation, written out there and applied here."""
@@ -367,11 +377,22 @@ def build_cases(seal: dict, seed_string: str) -> tuple[list[dict], dict]:
         )
 
     # --- B6: mutate a LIVE BUT UNCITED assumption, watching one turn ------
-    b6 = 0
+    #
+    # Up to B6_PER_SESSION cases per half-B session. The first version of
+    # this generator took at most ONE, and half B holds 25 sessions, so its
+    # ceiling was 25 against a registered floor of >=30 — a generator whose
+    # ceiling sits below the floor it feeds, which is §4.0(3)'s
+    # unmeetable-floor defect appearing inside the instrument. It produced
+    # 21 and the run reported B6 green anyway, because it checked flips and
+    # never checked its own denominator. Both halves of that are fixed here
+    # and the original run stands unedited (prereg amendment 2).
     for entry in half_b:
         journal = _journal(entry)
         ids = [item["assumption_id"] for item in journal["assumptions"]]
+        taken = 0
         for turn in journal["turns"]:
+            if taken >= B6_PER_SESSION:
+                break
             uncited = [
                 item
                 for item in ids
@@ -404,8 +425,7 @@ def build_cases(seal: dict, seed_string: str) -> tuple[list[dict], dict]:
                     },
                 },
             )
-            b6 += 1
-            break
+            taken += 1
     rng.shuffle(cases)
     return cases, key
 
@@ -648,8 +668,15 @@ def score_b8(seal: dict, keyring, seed_string: str) -> dict:
 
     caught = sum(1 for row in repaired if row["detected"])
     by_mac = sum(1 for row in repaired if row["keyed_mac_detected"])
+    floor = REGISTERED_DENOMINATORS["B8"]
     return {
-        "verdict": "GREEN" if caught == 20 else "RED",
+        "verdict": (
+            "GREEN"
+            if caught == floor and len(repaired) == floor
+            else "RED"
+        ),
+        "registered_denominator": floor,
+        "denominator_met": len(repaired) == floor,
         "threat_model": (
             "the tamper script rewrites one turn's bytes AND recomputes every "
             "downstream prev_turn_digest consistently — the naive-chain "
@@ -730,7 +757,35 @@ def b13_draw(seal: dict, seed_string: str) -> list[dict]:
 # --------------------------------------------------------------------------
 
 
-def run(repo_root: Path) -> dict:
+SUPPLEMENTARY = {
+    "is_supplementary": True,
+    "authority": (
+        "ROADMAP-v0.21 §4.0(1), and only its instrument-gap half: a control "
+        "that provably NEVER EXECUTED is a bug, not a reading. Registered in "
+        "experiments/session_ledger_prereg.json amendment 2, dated before "
+        "this run."
+    ),
+    "supplements": "experiments/session_ledger_run.json",
+    "the_original_is_never_edited_or_re_scored": True,
+    "what_it_repairs": [
+        "the capability-blind baseline's B4 arm, which compared the stateless "
+        "replay against the RECORDED digest instead of against the stateless "
+        "replay of the UNMUTATED journal, and therefore measured statelessness "
+        "rather than mutation-response",
+        "B6's generator, whose one-case-per-session rule capped it at 25 "
+        "against a registered floor of >=30 — a ceiling below its own floor",
+        "the verdict logic for every zero-flip clause, which checked the "
+        "numerator and never the denominator",
+    ],
+    "what_it_cannot_do": (
+        "un-fail R1. B10 read RED in the original run and B10 executed "
+        "correctly, so it is a reading and it stands. This run re-scores B10 "
+        "and gets the same answer, which is what a reading should do."
+    ),
+}
+
+
+def run(repo_root: Path, *, supplementary: bool = False) -> dict:
     from resolver import default_index  # noqa: PLC0415
     from session_keys import SessionKeyRing  # noqa: PLC0415
 
@@ -754,15 +809,11 @@ def run(repo_root: Path) -> dict:
         for case in cases
     ]
     scored = score_cases(seal, blind, pins, index)
-    scored_stateless = score_cases(seal, blind, pins, index, stateless=True)
 
     # -- the join, and it is the LAST thing that happens ------------------
     arms: dict[str, list[dict]] = {"B4": [], "B5": [], "B6": []}
     for row in scored:
         arms[key[row["case_id"]]].append(row)
-    stateless_arms: dict[str, list[dict]] = {"B4": [], "B5": [], "B6": []}
-    for row in scored_stateless:
-        stateless_arms[key[row["case_id"]]].append(row)
 
     b4_misses = [row for row in arms["B4"] if not row["flipped"]]
     b4 = {
@@ -779,20 +830,8 @@ def run(repo_root: Path) -> dict:
         "standard": "100% or red, no tolerance, misses published individually",
         "misses_published_individually": b4_misses,
     }
-    b5_flips = [row for row in arms["B5"] if row["flipped"]]
-    b5 = {
-        "verdict": "GREEN" if not b5_flips else "RED",
-        "cases": len(arms["B5"]),
-        "flips": len(b5_flips),
-        "flip_rows": b5_flips,
-    }
-    b6_flips = [row for row in arms["B6"] if row["flipped"]]
-    b6 = {
-        "verdict": "GREEN" if not b6_flips else "RED",
-        "cases": len(arms["B6"]),
-        "flips": len(b6_flips),
-        "flip_rows": b6_flips,
-    }
+    b5 = _zero_flip_clause("B5", arms["B5"])
+    b6 = _zero_flip_clause("B6", arms["B6"])
 
     b7 = score_b7(seal)
     b8 = score_b8(seal, keyring, seeds["mutation_mixer_seed"])
@@ -802,18 +841,20 @@ def run(repo_root: Path) -> dict:
     draw = b13_draw(seal, seeds["audit_draw_seed"])
     b13 = score_b13(draw)
 
+    blind_b4 = score_baseline_b4(seal, blind, key, pins, index)
     baseline = {
         "what_it_is": (
             "§8's capability-blind baseline: a replayer that re-serves each "
             "line statelessly, ignoring Assumption records entirely"
         ),
-        "b4_score": sum(1 for row in stateless_arms["B4"] if row["flipped"]),
+        "b4_score": blind_b4["b4_responses"],
         "b4_must_be_zero_because": (
             "B4's mutation touches only the Assumption record and never the "
             "declaring line's input_bytes, which is all this arm reads. A "
             "score above zero means the mutation harness is leaking into "
             "input_bytes and the HARNESS is red, before anything is scored."
         ),
+        **blind_b4,
         "b2_on_assumption_free_sessions": _baseline_b2(seal, pins, index),
     }
     baseline["verdict"] = (
@@ -823,7 +864,7 @@ def run(repo_root: Path) -> dict:
         else "RED"
     )
 
-    voided = bool(b5_flips or b6_flips)
+    voided = bool(b5["flips"] or b6["flips"])
     r1_clauses = {
         "b2_replays": b2["verdict"] == "GREEN",
         "b4_green": b4["verdict"] == "GREEN",
@@ -857,6 +898,7 @@ def run(repo_root: Path) -> dict:
         "recorder_code_digest": seal["recorder_code_digest"],
         "seeds": seeds,
         "elapsed_seconds": round(time.time() - started, 1),
+        **({"supplementary": SUPPLEMENTARY} if supplementary else {}),
         "construction_gate": {
             "B1": b1,
             "B2": b2,
@@ -903,6 +945,110 @@ def run(repo_root: Path) -> dict:
         ),
         "non_claims": prereg["non_claims"]["verbatim"],
     }
+
+
+def _zero_flip_clause(name: str, rows: list[dict]) -> dict:
+    """A zero-flip clause scored on BOTH its numerator and its denominator.
+
+    The first execution of this gate scored B6 green on 21 cases against a
+    registered floor of >=30, because the verdict looked only at flips. A
+    clause that cannot go red for having too few cases is a clause whose
+    denominator nobody is watching, and this cycle's recurring catch is
+    assertions written so they cannot go red.
+    """
+
+    flips = [row for row in rows if row["flipped"]]
+    floor = REGISTERED_DENOMINATORS[name]
+    if flips:
+        verdict = "RED"
+    elif len(rows) < floor:
+        verdict = "SHORT OF DENOMINATOR"
+    else:
+        verdict = "GREEN"
+    return {
+        "verdict": verdict,
+        "cases": len(rows),
+        "registered_denominator": floor,
+        "denominator_met": len(rows) >= floor,
+        "flips": len(flips),
+        "flip_rows": flips,
+    }
+
+
+def score_baseline_b4(
+    seal: dict, cases: list[dict], key: dict, pins: dict, index
+) -> dict:
+    """§8's vacuity control, comparing the baseline against ITSELF.
+
+    §8 asks whether the stateless replayer can **respond to** a B4 mutation:
+    its output WITH the mutation against its output WITHOUT it. The first
+    execution compared the stateless replay against the RECORDED digest
+    instead, and a binding-dependent turn always diverges from its record
+    under a stateless replayer whether or not anything was mutated — so that
+    arm reported 58 and measured statelessness, not mutation-response. It
+    never executed as designed, which is an instrument gap rather than a
+    reading (ROADMAP-v0.21 §4.0(1)), and this is the repair.
+
+    The expected answer is zero **by construction**: `_apply` touches only
+    Assumption records and no turn's `input_bytes`, and `input_bytes` is all
+    a stateless replay reads. Above zero means the mutation harness is
+    leaking into `input_bytes` and the harness is red.
+    """
+
+    by_id = {entry["session_id"]: entry for entry in seal["sessions"]}
+    responded = []
+    checked = 0
+    for case in cases:
+        if key[case["case_id"]] != "B4":
+            continue
+        checked += 1
+        journal = _journal(by_id[case["session_id"]])
+        without = replay_session.replay(
+            REPO, journal, shared_index=index, live_pins=pins, stateless=True
+        )
+        with_it = replay_session.replay(
+            REPO,
+            _apply(journal, case["mutation"]),
+            shared_index=index,
+            live_pins=pins,
+            stateless=True,
+        )
+        left = _digest_at(without, case["watch_turn"])
+        right = _digest_at(with_it, case["watch_turn"])
+        if left != right:
+            responded.append(
+                {
+                    "case_id": case["case_id"],
+                    "session_id": case["session_id"],
+                    "watch_turn": case["watch_turn"],
+                }
+            )
+    return {
+        "b4_cases_checked": checked,
+        "b4_responses": len(responded),
+        "b4_response_rows": responded,
+        "comparison": (
+            "stateless replay WITH the mutation against stateless replay "
+            "WITHOUT it, at the watched turn — not against the recorded "
+            "digest, which is what the first execution compared and why that "
+            "arm never executed as designed"
+        ),
+    }
+
+
+def _digest_at(report, turn_index: int) -> str:
+    """The replayed digest at one turn, or the sentinel for `unchanged`.
+
+    A replay report names only the turns that DIVERGED from the record, so
+    'no divergence at this turn' means the replay reproduced the record
+    there. Comparing two reports at one turn is therefore comparing which of
+    them diverged and to what.
+    """
+
+    for item in report.divergences:
+        if item["turn_index"] == turn_index:
+            return item["replayed_digest"]
+    return "reproduced-the-record"
 
 
 def _baseline_b2(seal: dict, pins: dict, index) -> dict:
@@ -997,6 +1143,14 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", default=ARTIFACT)
     ap.add_argument(
+        "--supplementary",
+        action="store_true",
+        help=(
+            "mark the artifact as §4.0(1)'s supplementary registered run and "
+            "name the instrument gaps it repairs"
+        ),
+    )
+    ap.add_argument(
         "--draw-only",
         action="store_true",
         help="publish B13's draw and stop, so the auditor marks a sealed sheet",
@@ -1012,7 +1166,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(draw, indent=2, sort_keys=True))
         return 0
 
-    payload = run(REPO)
+    payload = run(REPO, supplementary=args.supplementary)
     out = REPO / args.out
     out.write_text(
         json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n",

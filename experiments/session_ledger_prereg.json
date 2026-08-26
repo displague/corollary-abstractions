@@ -225,6 +225,32 @@
         }
       },
       "what_this_amendment_does_not_do": "it changes no clause, no floor, no seed, no cap and no verdict. Every number in this file was frozen before the recorder existed and none of them moved."
+    },
+    {
+      "amendment": 2,
+      "dated": "2026-08-25",
+      "made_after": "the registered run executed and was committed unedited as experiments/session_ledger_run.json.",
+      "why": "reading the committed run turned up two defects in the RUNNER — not in the system it scores — and ROADMAP-v0.21 §4.0(1) draws exactly that line: the no-chase rule applies to controls that RAN and read unfavourably; it does not apply to a control that provably NEVER EXECUTED, because an instrument gap is a bug and not a reading. Both gaps below are mechanical and demonstrable, which is the condition §4.0(1) attaches. This amendment registers the fix and a supplementary run under that clause's own terms: a NEW artifact, the original never edited or re-scored, and no power to un-void or un-fail anything.",
+      "gap_1_the_capability_blind_baselines_b4_arm": {
+        "what_section_8_asks": "whether the stateless replayer can RESPOND TO a B4 mutation — its output with the mutation against its output without it. §8: 'the stateless baseline cannot respond to any B4 mutation — by construction, not by hope'.",
+        "what_the_runner_did": "compared the stateless replay against the RECORDED digest.",
+        "why_that_is_a_gap_and_not_a_reading": "a binding-dependent turn ALWAYS diverges from its record under a stateless replayer, because the record's answer consumed an assumption the stateless arm ignores — whether or not anything was mutated. The arm's output is therefore a function of statelessness alone and carries no information about the mutation. It never executed as designed, and the demonstration is that it would report the same 58 with a no-op mutation.",
+        "consequence_in_the_committed_artifact": "session_ledger_run.json records `b4_score: 58` beside the sentence 'a score above zero means the mutation harness is leaking into input_bytes'. That diagnosis is wrong and it is LEFT STANDING, unedited, because the artifact is the record of what executed. This amendment is where it is corrected.",
+        "fix": "score_baseline_b4 replays the unmutated journal statelessly and the mutated journal statelessly and compares the watched turn between those two."
+      },
+      "gap_2_b6s_generator_ceiling": {
+        "registered_floor": "B6: ≥30 mutations of live but uncited assumptions.",
+        "what_the_generator_could_produce": "at most one case per half-B session. Half B holds 25 sessions, so the ceiling was 25 before any session was examined; four sessions offered no qualifying turn and it produced 21.",
+        "why_that_is_a_gap_and_not_a_reading": "a generator whose ceiling sits below the floor it feeds is ROADMAP-v0.21 §4.0(3)'s unmeetable-floor construction defect, appearing inside the instrument rather than inside the gate. The floor was meetable — the corpus holds far more than 30 live-but-uncited (turn, assumption) pairs — and only the generator could not reach it.",
+        "fix": "up to two cases per half-B session (B6_PER_SESSION = 2), which raises the ceiling to 50 against a floor of 30."
+      },
+      "gap_3_verdicts_that_watched_only_their_numerator": {
+        "what_happened": "the runner reported B6 GREEN on 21 cases against a registered floor of ≥30, because the verdict checked only that flips were zero.",
+        "why_it_matters_beyond_b6": "this cycle's recurring catch is assertions written so they cannot go red (ROADMAP-v0.21 §4), and this one was found inside the run that was meant to be watching for it. A clause that cannot go red for having too few cases is a clause whose denominator nobody is watching.",
+        "fix": "REGISTERED_DENOMINATORS names B5's 60, B6's 30 and B8's 20, and every zero-flip clause now reports SHORT OF DENOMINATOR rather than GREEN when its case count is below the registered floor."
+      },
+      "what_the_supplementary_run_may_not_do": "un-fail R1. B10 read RED in the original run, B10 executed correctly, and it is therefore a reading that stands. The supplementary run re-scores B10 and must get the same answer; if it did not, that would itself be the finding.",
+      "what_it_changes_in_this_file": "nothing. No clause, floor, seed, cap, denominator or verdict is edited. The registered denominators it names were already registered — in §7, verbatim, in this file's construction_gate block."
     }
   ]
 }
