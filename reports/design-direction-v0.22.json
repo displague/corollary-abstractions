@@ -1,0 +1,150 @@
+{
+ "schema": "design_direction_receipt.v1",
+ "cycle": "v0.22",
+ "status": "complete",
+ "requested_utc": "2026-08-26",
+ "enforced_isolation_mode": {
+  "method": "claude -p (headless) cwd C:/Users/displ/AppData/Local/Temp/forge22 -- empty non-git dir, no project name in path",
+  "denylist": "strict-mcp-config + disallowedTools over every file/shell/network/agent/skill tool",
+  "inherited_from": "reports/design-direction-v0.21.json, reused unchanged"
+ },
+ "brief_sha256_canonical_lf": "38fed9b0b036924473ad457c23b498d68fa89f6c8a12aeb9d8303c2195ed34b1",
+ "brief_on_file": "reports/design-direction-v0.22-brief.txt",
+ "round_prompt_sha256_canonical_lf": {
+  "series_1": {
+   "r1": "38fed9b0b036924473ad457c23b498d68fa89f6c8a12aeb9d8303c2195ed34b1",
+   "r2": "ebd0546509f84488030305add6ed5b4d36ffcf04b9d25ecbc9712e944477c960",
+   "r3": "5f7bbd295bd7747d2fe06df6e1c54fd8284edbd01776f760e368233e6d1bf4d7"
+  },
+  "series_2": {
+   "r1": "7a46bfb111fdf37a7069c3451e49e181f4f38627c652981d2f39ab0a196f4ade",
+   "r2": "08a7df9674e58fa53b351996f72f4b375801fd5c103992f2f5e9ef00be48bd68",
+   "r3": "3ceeeebce0d54ae1ef658d3167cbcfbadf14b002626606dd7e4e2dc6d6715ea3"
+  },
+  "series_3": {
+   "r1": "528f116e08d482e13c4659bb5bc6c117de2c7a9f54d8c3fac7bd62c9350d9dfe",
+   "r2": "f7a0236155a99d9ef22ca4b3f573cdfd7460bfa127872a0b10515d7844c23516",
+   "r3": "d8d15f63c60a632ef35dd5a16a12685a5e7f46c962fadbb5966166cb5cf5d718"
+  },
+  "note": "series_1.r1 equals brief_sha256_canonical_lf by construction -- round one of series one IS the brief; the equality is the checkable form of that sentence"
+ },
+ "exclusion_note": "series 2 r1 excluded series 1 round-one territory; series 3 excluded both and was aimed at the substrate axis, aimed there because no prior course made it a series focus (individual substrate-flavored directions have appeared in earlier funnels); embedded in hashed round-1 prompts. No incumbent design existed this cycle; occupied ground disclosed at each round two was the v0.21 outcome set and the standing parks.",
+ "contexts": [
+  {
+   "series": 1,
+   "session_id": "25a528b4-8215-4fe7-9cb0-7489a02a8e4b",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "status": "complete",
+   "cost_usd": 1.0395
+  },
+  {
+   "series": 2,
+   "session_id": "211ec139-f5b2-4f26-b3d7-c7711321e5e5",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "status": "complete",
+   "cost_usd": 0.8471
+  },
+  {
+   "series": 3,
+   "session_id": "042525e2-050f-4842-99a1-8b016ab4015b",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "status": "complete",
+   "cost_usd": 0.9128
+  }
+ ],
+ "total_cost_usd": 2.7994,
+ "round_one_funnel": {
+  "series_1": [
+   "HANDLES -- title-independent reachability via exact-derived handle sets",
+   "CHAIN -- served derivations with typed frontier refusals",
+   "TWO WITNESSES -- checked independence of two readings",
+   "BRIDGE -- sufficient-condition refusals with a closed prove-S loop",
+   "NOTARY -- composable receipts and void propagation"
+  ],
+  "series_2": [
+   "ERRATUM -- typed-delta replay of served history against growth",
+   "REBUTTAL -- adjudicated two-way correction with checker-discharged rebuttals",
+   "EXIT SIGN -- refusals carrying executed question-repairs",
+   "COLD RECEIPT -- receipts that survive the program's deletion",
+   "LONG CON -- sequence-level adversarial search over conversations"
+  ],
+  "series_3": [
+   "LEDGER -- cost as a production-vs-recheck ratio (the five-cycle-parked cost lane returning)",
+   "CANARY-CURVE -- declared scaling classes frozen before growth + the architecture-vs-smallness split",
+   "PAUPER -- the cheapest-machine certificate with a partition-not-pass rule",
+   "CEILING -- cost as a typed refusal with a named price",
+   "BITROT -- fault-injection scope for exactness on unfaithful hardware"
+  ]
+ },
+ "outcomes": {
+  "series_1": {
+   "lead": "HANDLES",
+   "runner_up": "TWO WITNESSES",
+   "folds": [
+    "CHAIN + BRIDGE -> ONE STEP (answer-or-frontier; both answering and correct refusal score -- the v0.21 metric lesson embodied); survives as rider R1 with its depth-1 census",
+    "NOTARY -> a mandatory receipt column: route_voids[], machine-checked (clean rendering across a published void is red)",
+    "TWO WITNESSES -> rider R2 (derived kernel frozen before overlap; 160-obligation mutation battery all-red)"
+   ],
+   "residual_risk": "specific-but-inhuman handles pass every gate while no human question contains them; question authorship is the unmeasured link -- addressed in the committed design by a producer audit (B3) and the H-P0 stop clause; authorship contamination stays named and unpriced",
+   "preregistration_draft": {
+    "lead": "HANDLES",
+    "larger_move": "Reachability of a statement should be a property of its verified content, not of the string someone typed above it. Derive, by exact code only, a tagged handle set per statement from parsed bodies and checker-elaborated terms; delete titles; publish what survives as an enumerated partition with a named cause per residue member.",
+    "artifact": "handles.tbl (statement_id, handle_token, producer S1..S5, producer_run_id, resolves_to_count, title_derived, specific = resolves_to_count <= 128) + partition.tbl (REACHABLE | RESIDUE with cause) + enum.receipt (candidates with handle_witnesses, budget_used, measured_verification_cost_s, outcome, route_voids[])",
+    "gate": "B1 every handle tagged; B2 K=128; B3 ablation deletes titles and title-derived handles; B4 residue enumerated, UNCLASSIFIED <= 5%; B5 Q60 frozen 42/18 incl. the zero-candidate question at floor 1/1; B6 13/13 silent-bind questions emit choice events; B7 two sealed classes, B=40, chance 40/12777; B8 permuted control; B9 rider floors",
+    "voiding_sentence": "If the permuted index reaches its target on >=5 of the 42 present-target questions, reachability as defined here carries no signal and the capability claim is void regardless of how the true index scored",
+    "residual_risk": "specific-but-inhuman handles: near-unique internal tokens pass every gate while no human question contains them; Q60 authorship is the unmeasured link between reachability-in-principle and reachability-by-a-person",
+    "note_on_selection": "the committed design (docs/DESIGN-handles.md) deviates from this draft under review findings C2-C5 and H1-H6 of the design review: sources rebuilt from the tree (S4/S5 deleted, S3 demoted, S-LEX added from the committed symbol_lexicon), the premise corrected (committed non-title indices exist and resolve the motivating case), the human_vocab partition replaced by a producer audit, the chance rate per-question, the budget pilot-frozen. Every DELTA in the design cites this draft. This draft block was added to the receipt in the post-review patch of 2026-08-26 (the series-2/3 drafts were recorded at first writing); noted so the provenance is honest."
+   }
+  },
+  "series_2": {
+   "lead": "COLD RECEIPT",
+   "runner_up": "ERRATUM",
+   "tiebreak_quoted": "prefer the direction whose null result still changes what the program says about itself -- the census cannot return a null",
+   "folds": [
+    "REBUTTAL + EXIT SIGN -> CROSSING (execution-licensed boundary crossings both ways; 20-real-corrections probe with a preregistered predicted split 2/6/12); parks with the probe named",
+    "LONG CON -> retired to a day-probe (ten hand-written sequences; frozen budget; mandatory plant; committed near-miss taxonomy even on a null); write-gate prohibition inherited"
+   ],
+   "preregistration_draft": {
+    "lead": "COLD RECEIPT",
+    "artifact": "cold/ bundle: census.json one record per receipt kind (emitting_routes, bundle_manifest, external_deps{name,pin_hash,role}, recheck_procedure{raw_checker_invocation|program_replay|none}, verdict SURVIVES|NEEDS-PROGRAM|UNTESTED, verdict_evidence, blocking_dependency confirmed_by_removal, tamper_result 3 mutations, omission_result FAIL_LOUD, sham_result, pin_audit_ref, census_seal) + harness/ container recipe + path_audit + scramble_baseline + one worked stranger-path transcript",
+    "gate": "B1 unmapped emitting routes = 0; B2 >=1 kind SURVIVES (the raw-checker-invocation exception exists); B3 tamper 3x per kind 100% FAIL; B4 omission FAIL LOUD naming the missing dependency, silent pass voids the harness; B5 sham-checker SURVIVES count = 0; B6 chance measured: 200 scrambled bundles; if 0 of 200 pass, publish the 1.5% rule-of-three upper bound as the chance rate; B7 100% NEEDS-PROGRAM carry confirmed_by_removal (a correct NEEDS-PROGRAM scores as a hit); B8 >=90% SURVIVES on first run voids pending audited-empty-PATH re-execution; B9 version-drift ceded to the pin audit, reference only; B10 census_seal fixed before the harness runs, later finds publish as census misses",
+    "voiding_sentence": "If any receipt kind is annotated SURVIVES while the pinned checker is replaced by the accept-all stub, the harness is measuring bundle presence rather than verification, and the claim is void for every kind in this census",
+    "added_clause_by_selection": "external_deps[].provenance in {third_party_pinned, program_configured}; any SURVIVES resting on a program_configured dependency downgrades to UNTESTED (the draft's own residual risk, priced before registration)",
+    "residual_risk": "the harness deletes the program's code while keeping the program's prepared world -- program absence is priced, environment provenance was not; the added clause is the repair"
+   }
+  },
+  "series_3": {
+   "lead": "CANARY-CURVE",
+   "runner_up": "TOLL",
+   "folds": [
+    "LEDGER + PAUPER -> TOLL (production cost vs stranger-path re-check cost on a named floor machine; the composition with series 2's harness claimed explicitly: refusing it would mean the affordability claim marking its own homework)",
+    "CEILING -> TOLL's named successor (no budget freezes before the cost distribution exists -- the v0.21 mis-derived-floor lesson); a budget blown at 10x is a curve row, not a failure",
+    "BITROT -> day-probe (integrity-scope map of the unsealed complement; never-read-bytes control: a detector catching unread flips is comparing the store to itself)"
+   ],
+   "preregistration_draft": {
+    "lead": "CANARY-CURVE",
+    "artifact": "scaling.prereg.json (one row per route x guarantee, declared_class, git-tagged before the first shadow statement; row zero = the template-specialization quadratic found at 1/20th scale, the lane's origin) + a 10x measurement-only shadow tier (~128k statements from the untouched tail, holdout-root discipline: regenerable, schema-checked, never served) + curves/ (sizes 12800/25600/64000/128000, 5 reps, fitted_class, verdict GREEN|RED|INDETERMINATE) + split.json (advantage_1x, advantage_10x, retention, verdict ARCHITECTURAL|SUBSTANTIALLY_CORPUS_SIZE|INDETERMINATE) + blind/fit.json + fence.json (1000 probes, shadow_reachable_count must be 0)",
+    "gate": "B1 prereg tag ancestor of first shadow-ingest commit; B2 >=40 non-canary rows; B3 zero RED among non-canary rows voids as UNDER-DECLARED; B4 the deliberately-O(n^2) canary declared O(n) must go RED at 10x with >=3x margin or the whole run voids; B5 retention >=0.50 for ARCHITECTURAL; B6 IQR spanning two classes reads INDETERMINATE and scores when measured; B7 blind-fitter floor = shuffle_mean + 2 sigma over >=1000 label shuffles; B8 fence 0/1000",
+    "voiding_sentence": "If the label-blind fitter's agreement with the frozen declarations over non-canary rows is >=0.95, or <= the shuffle floor, the capability that these scaling classes were measured rather than read off the implementation is VOID for this cycle and no class claim is served",
+    "residual_risk": "the tail is not the head: a clean pass prices statement count while the intake-bottleneck dimensions (title-collision density, enumeration fan-out) may be sparser in the tail -- answered in the selection by ordering: growth is measured AFTER the enumeration layer exists (v0.23), so density is measurable instead of missed"
+   },
+   "runner_up_note": "TOLL is a fold (LEDGER+PAUPER), not a round-one entry; recorded as runner-up because series 3 round 3 named it so"
+  }
+ },
+ "selection": {
+  "selected": "docs/DESIGN-handles.md -- series 1's lead, rebuilt twice under adversarial review: the premise corrected (committed non-title indices exist and resolve the motivating phrase; the v0.21 defect was the enumerator never consulting them), the sources cut to the three with committed producers (S-LEX, title-free S-INV call heads, S-SKEL), and the served claim scoped to what the H-P0 census finds -- the review measured indicative specific-handle coverage near 2%, so the slice's honest expected headline is the census itself: the ingested library is effectively nameless, and the naming layer must be built, not indexed. The H-P0 stop clause makes that outcome a first-class result rather than a failure.",
+  "adopted_second": "COLD RECEIPT -> ROADMAP-v0.22 item 2 with the provenance clause added; compact design lands before its slice (the WITNESS precedent)",
+  "riders": "R1 ONE STEP census and R3 ERRATUM flip probe, each with a B9 floor and stop rule in the design; R2 (TWO WITNESSES kernel+overlap+mutation battery) was DEMOTED from rider to parked item-candidate by the design review (H9: the 160-obligation battery is a slice-sized cost, not a rider) and waits with the parked conformance successor",
+  "parked_with_reasons": {
+   "CANARY-CURVE": "v0.23 incumbent-candidate; ordering reason = its own residual risk (density measurable only after the enumeration layer lands)",
+   "TOLL": "v0.23 incumbent-candidate beside it; denominator waits on item 2 harness; unparks the five-cycle cost lane with a real metrology",
+   "CROSSING": "parked with the 20-corrections probe and the predicted 2/6/12 split",
+   "LONG_CON": "day-probe with frozen budget, mandatory plant, committed taxonomy; write-gate prohibition inherited",
+   "BITROT": "day-probe; the unsealed-complement scope map; stop rule recorded in the design section 2: any undetected changed answer stops and publishes the narrowed scope, a clean 1000 publishes the map and closes",
+   "TWO_WITNESSES": "parked item-candidate beside the conformance successor; demoted from rider by review H9"
+  }
+ }
+}
