@@ -60,6 +60,7 @@ declaring line's `input_bytes`, which is all the stateless arm ever reads.
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import sys
 from dataclasses import dataclass, field
@@ -73,6 +74,30 @@ import session_ledger as ledger  # noqa: E402
 from harness import CoreSession, route_line  # noqa: E402
 
 STALE = "stale-environment"
+
+#: §3's sixth pin: *"slice 2 only, key omitted until then, omission meaning
+#: 'no proposer served'"*.
+#:
+#: Registered HERE and not in `session_ledger`, and the reason is a frozen
+#: digest rather than taste: the recording protocol pins
+#: `recorder_code_digest` over `session_ledger.py` and `session_recorder.py`,
+#: and slice 2 records under **slice 1's unmodified recorder** or it is not
+#: recording under the same protocol. Adding a constant to the ledger would
+#: have moved that digest for a line the recorder never reads.
+#:
+#: It is deliberately NOT in `ledger.PIN_FIELDS`. B3 perturbs every field of
+#: that tuple on every session and requires `stale-environment`, and a
+#: slice-1 journal has no proposer pin to perturb; requiring it would make
+#: sixty headers mismatch against a value they were right to omit. What this
+#: registry buys is the other half: :func:`compare_pins` treats a recorded
+#: pin it does not know as a mismatch, deliberately, *"so the pin table's own
+#: growth [is not] invisible to B3"* — and without a registry, a slice-2
+#: journal carrying the pin §3 asked for would be refused on every replay. A
+#: journal made unreplayable by obeying its own design.
+#:
+#: Present-and-equal passes; absent is allowed; present-and-different is a
+#: mismatch like any other.
+OPTIONAL_PIN_FIELDS = ("proposer_model_digest",)
 
 
 @dataclass
@@ -109,6 +134,46 @@ class ReplayReport:
         )
 
 
+@functools.lru_cache(maxsize=1)
+def _live_proposer_digest() -> str | None:
+    """The proposer weights this machine can CERTIFY, or None.
+
+    Certified means hashed: `machine_reader.verify_weights` reads the blob's
+    bytes and refuses on absence or mismatch. Reading the digest out of the
+    journal instead would be checking the copy against itself, which is the
+    reason that function exists.
+
+    Cached, because the blob is gigabytes and a corpus replay would otherwise
+    hash it once per session. `None` when it cannot be certified — omitted,
+    never guessed, so a journal that carries the pin refuses
+    `stale-environment` on a machine that cannot vouch for the model. That is
+    the pin working.
+    """
+
+    try:
+        import plain_proposer  # noqa: PLC0415
+
+        return plain_proposer.verify_pin()["sha256"]
+    except Exception:  # noqa: BLE001 - any failure to certify is a None
+        return None
+
+
+def live_pin_table(repo_root: Path, matrix, recorded: dict) -> dict:
+    """§3's five pins, plus an optional one when the journal carries it.
+
+    The optional pin is resolved only if the journal under replay records it,
+    so a slice-1 corpus — sixty journals that predate the proposer — never
+    pays to hash a model it never used.
+    """
+
+    table = ledger.pins(repo_root, matrix)
+    if "proposer_model_digest" in recorded:
+        digest = _live_proposer_digest()
+        if digest is not None:
+            table["proposer_model_digest"] = digest
+    return table
+
+
 def compare_pins(recorded: dict, live: dict) -> list[str]:
     """Which pin fields disagree. Every pin, no sampling (B3)."""
 
@@ -116,7 +181,16 @@ def compare_pins(recorded: dict, live: dict) -> list[str]:
     for name in ledger.PIN_FIELDS:
         if recorded.get(name) != live.get(name):
             mismatched.append(name)
-    for name in sorted(set(recorded) - set(ledger.PIN_FIELDS)):
+    for name in OPTIONAL_PIN_FIELDS:
+        # §3's slice-2 pin: present-and-equal passes, absent is allowed (the
+        # omission is the statement "no proposer served"), and
+        # present-and-different is a mismatch like any other. Driven from the
+        # registry rather than special-cased, so the sweep below still
+        # catches a pin nobody registered.
+        if name in recorded and recorded[name] != live.get(name):
+            mismatched.append(name)
+    known = set(ledger.PIN_FIELDS) | set(OPTIONAL_PIN_FIELDS)
+    for name in sorted(set(recorded) - known):
         # A pin the journal carries and this build does not know about is a
         # mismatch too. Silently ignoring an unknown pin would make the pin
         # table's own growth invisible to B3.
@@ -244,7 +318,7 @@ def replay(
     pins_now = (
         live_pins
         if live_pins is not None
-        else ledger.pins(repo_root, session.matrix)
+        else live_pin_table(repo_root, session.matrix, header["pins"])
     )
     report.pin_mismatch = compare_pins(header["pins"], pins_now)
     if report.pin_mismatch:

@@ -1082,6 +1082,111 @@ class AmendmentFiveStatesBothHalves(unittest.TestCase):
         self.assertTrue(refused["both_were_checked_rather_than_assumed"])
 
 
+class TheSixthPinTheDesignRegistered(unittest.TestCase):
+    """§3's `proposer_model_digest`, and the machinery that has to know it.
+
+    The pin is registered by the DESIGN — *"slice 2 only, key omitted until
+    then, omission meaning 'no proposer served'"*. Before this, a journal
+    that carried it would have been refused `stale-environment` on every
+    replay by the unknown-pin sweep: a journal made unreplayable by obeying
+    its own design.
+    """
+
+    def test_the_required_five_are_unchanged(self) -> None:
+        import session_ledger as sl  # noqa: PLC0415
+
+        self.assertEqual(len(sl.PIN_FIELDS), 5)
+        self.assertNotIn("proposer_model_digest", sl.PIN_FIELDS)
+
+    def test_the_optional_pin_is_registered_not_special_cased(self) -> None:
+        import replay_session  # noqa: PLC0415
+
+        self.assertEqual(
+            replay_session.OPTIONAL_PIN_FIELDS, ("proposer_model_digest",)
+        )
+
+    def test_the_recorder_the_protocol_froze_is_byte_unchanged(self) -> None:
+        """Why the registry is in the replayer and not in the ledger.
+
+        The recording protocol pins a digest over `session_ledger.py` and
+        `session_recorder.py`. Slice 2 records under slice 1's unmodified
+        recorder or it is not recording under the same protocol, so a
+        constant added to the ledger would have cost that.
+        """
+
+        from session_recorder import recorder_code_digest  # noqa: PLC0415
+
+        frozen = json.loads(
+            (REPO / "experiments" / "session_ledger_prereg.json").read_text(
+                encoding="utf-8"
+            )
+        )["amendments"][0]["adds"]["recorder_code_digest"]
+        self.assertEqual(recorder_code_digest(REPO), frozen)
+
+    def test_absent_is_allowed_equal_passes_and_different_mismatches(
+        self,
+    ) -> None:
+        import replay_session  # noqa: PLC0415
+        import session_ledger as sl  # noqa: PLC0415
+
+        base = {name: name for name in sl.PIN_FIELDS}
+        live = dict(base, proposer_model_digest="abc")
+
+        self.assertEqual(replay_session.compare_pins(dict(base), live), [])
+        self.assertEqual(
+            replay_session.compare_pins(
+                dict(base, proposer_model_digest="abc"), live
+            ),
+            [],
+        )
+        self.assertEqual(
+            replay_session.compare_pins(
+                dict(base, proposer_model_digest="zzz"), live
+            ),
+            ["proposer_model_digest"],
+        )
+
+    def test_an_unregistered_pin_is_still_a_mismatch(self) -> None:
+        """The sweep the optional registry must not have disabled."""
+
+        import replay_session  # noqa: PLC0415
+        import session_ledger as sl  # noqa: PLC0415
+
+        base = {name: name for name in sl.PIN_FIELDS}
+        self.assertEqual(
+            replay_session.compare_pins(
+                dict(base, some_future_pin="x"), dict(base)
+            ),
+            ["some_future_pin"],
+        )
+
+    def test_the_live_table_does_not_hash_a_model_it_does_not_need(
+        self,
+    ) -> None:
+        """A slice-1 journal must not pay to hash a model it never used."""
+
+        import replay_session  # noqa: PLC0415
+        import session_ledger as sl  # noqa: PLC0415
+
+        calls = []
+        original = replay_session._live_proposer_digest
+        replay_session._live_proposer_digest = lambda: calls.append(1) or "x"
+        stub = {name: name for name in sl.PIN_FIELDS}
+        original_pins = sl.pins
+        sl.pins = lambda repo_root, matrix: dict(stub)  # noqa: ARG005
+        try:
+            without = replay_session.live_pin_table(REPO, None, dict(stub))
+            withpin = replay_session.live_pin_table(
+                REPO, None, dict(stub, proposer_model_digest="anything")
+            )
+        finally:
+            sl.pins = original_pins
+            replay_session._live_proposer_digest = original
+        self.assertNotIn("proposer_model_digest", without)
+        self.assertEqual(withpin["proposer_model_digest"], "x")
+        self.assertEqual(len(calls), 1, "the blob was hashed when unneeded")
+
+
 class TheDesignsAppendOnlyNotes(unittest.TestCase):
     """§8 — added after the seed, never editing what it corrects."""
 

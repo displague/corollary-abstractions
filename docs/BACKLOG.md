@@ -119,6 +119,43 @@ or commit history. Each item names the evidence that motivated it.
   licensing sentence carries the limit in the same sentence that claims the
   capability.
 
+- **Slice 2's wiring staled slice 1's sealed journals, and the closed corpus
+  no longer replays against this tree (2026-08-26, measured).** Filed rather
+  than repaired, because the repair touches a CLOSED seal and a PUBLISHED
+  run.
+
+  **The mechanism, measured and not inferred.** `scripts/harness.py` is in
+  `build_throughput_tasks.RENDERING_MODULES`, so its digest is one leaf of
+  every journal's `rendering_module_digests` pin. Slice 2's wiring commit
+  added `_route_proposed` to that file. The sixty slice-1 journals record
+  `09eda754…`; the tree now hashes `9dc6e660…`; `replay_session.compare_pins`
+  therefore returns a mismatch and every replay refuses `stale-environment`.
+  That is **B3's mechanism working**, not a failure — but it means slice 1's
+  published R1 is a claim about the tree it was recorded against (`b388e6b`)
+  and cannot be re-executed on this branch without re-recording.
+
+  **The same edit left one debt that WAS payable and is paid.**
+  `experiments/throughput_tasks.json` carries a digest witness over the same
+  modules and went stale in the same commit; `tests/test_throughput_tasks.py`
+  went red on it. The book is rebuilt and exactly one line moved — the
+  harness witness — with no task, count or A/B assignment touched. It was
+  caught by a suite the wiring commit did not run.
+
+  **Why the journals are not re-recorded to match.** `record_session_corpus.py`
+  exists for exactly this and slice 1 used it once already. Running it now
+  would rewrite sixty committed journals and slice 1's **closed** seal, and
+  the published `experiments/session_ledger_run4.json` scores those journals
+  by the digests that seal carries — so a re-recording would leave a
+  published run pointing at a corpus that no longer exists. A record that
+  cannot be checked against the thing it measured is worse than a corpus that
+  needs a re-recording.
+
+  **What a repair looks like, when one is wanted.** Re-record at a fixed tree
+  into a NEW seal (the `foreign_voice_rate.json` → `foreign_voice_rate2.json`
+  successor pattern), retaining the prior seal byte for byte, and re-score B2
+  and B3 against it. Its own commit, its own delta block, and the original
+  never edited.
+
 ## Filed at the v0.20 rotation (the voice completed, the course, the drift audit)
 
 - **`leanworkbook.skel.lean_workbook_50397` needs a seed regeneration, and no
