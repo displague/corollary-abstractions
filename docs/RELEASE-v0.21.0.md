@@ -1229,19 +1229,24 @@ reported here.
   byte-identically** across `data/` and `data_holdout/`, exit 0. Reported
   independently by B11 inside the registered run, which also verifies the
   journals left `data/` untouched and every seal digest revalidates
-- `signature_matches`, `specializations` and `compression` — regenerated with
-  the release refresh at `[SUITE-GATE-V21]`
-- `ingest_wold.py reach` — **not run in this rotation.** It refuses without the
-  gitignored pinned WordNet archive, and that refusal is *cannot verify*, not
-  *skipped*. It runs with the full-suite gate on the frozen tip and its verdict
-  lands here then. No reach number is claimed in this document.
-- `check_report_regeneration.py` — **has not run in this rotation**, and the
-  release gate requires its verdicts in these notes. It runs on the frozen tip
-  with the full-suite gate, with `decompositions.json`'s **declared** divergence
-  carrying its TRIAGE-v0.11 citation, as in the last four cycles.
+- `signature_matches`, `specializations` and `compression` — regenerated at
+  rotation start (the orchestrator's step-1 refresh, before the v0.22 course
+  ran) **byte-identical to the committed reports**, exit 0.
+- `ingest_wold.py reach` — **ran at rotation start, exit 0**: WordNet reach
+  **1,394/1,460 = 95.5%** (mapped-any 1,395; unmapped 65; langgen_vocab 27;
+  corpus_node_tokens 59), against the pinned gitignored archive present on
+  this machine. A contributor without the archive still gets the refusal, and
+  that refusal is *cannot verify*, never *skipped*.
+- `check_report_regeneration.py` — **ran at this rotation, exit 0**, closing
+  the item the drift audit above flags as pending for a second cycle:
+  `signature_matches.json` clean · `specializations.json` clean ·
+  `compression.json` clean · `decompositions.json` **declared_divergence**
+  with its TRIAGE-v0.11 row-6 citation, exactly as the declaration requires.
+  The two-cycle pending streak ends here, and the drift-audit paragraph above
+  stays as written — the record of the streak is part of the record.
 
-Saying "not yet" is the point: a refresh step reported without its exit status
-is a step nobody checked.
+A refresh step reported without its exit status is a step nobody checked;
+every step above carries one.
 
 ## The suite at the tip
 
