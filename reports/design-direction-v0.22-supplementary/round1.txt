@@ -1,0 +1,63 @@
+I use “claim” narrowly: an end-to-end proposition licensed by the committed artifact, not an aspiration inferred from adjacent measurements. Throughout, empirical floors should be frozen before implementation, justified by an attainable reference construction, compared with a capability-blind baseline, and scored so that correct refusal earns credit. Null rates must be measured through actual verification work.
+
+1. The Premise Ledger
+
+**Claim.** For a preregistered decidable fragment, every conditional answer carries an inclusion-minimal assumption set \(A^*\): the external checker proves \(A^* \vdash q\), while for each \(a \in A^*\), a checked countermodel establishes \(A^* \setminus \{a\} \nvdash q\). The receipt would therefore certify necessity as well as sufficiency.
+
+**Why presently unmakeable.** The conversation object records which assumptions a proof consumed. Consumption is syntactic provenance, not logical necessity; proof search may retain redundant premises. Present receipts cannot distinguish indispensable assumptions from accidental dependencies.
+
+**Construction gate.** Freeze the fragment, minimality definition, and countermodel format before building the minimizer. One redundant reported premise, one invalid countermodel, or one surviving premise-deletion mutant fails the direction.
+
+**Cheapest honest failure.** Use fifty small propositional problems containing deliberately redundant assumptions, adjudicated by exhaustive truth tables independent of the serving path. If the method cannot return correct minimal receipts for every accepted case, or cannot outperform the capability-blind “return every assumption” baseline under the cost-derived score, terminate before proof-assistant generalization.
+
+2. Bounded Omniscience
+
+**Claim.** For an explicitly finite, preregistered query universe \(U\), the service is complete rather than merely sound: every member receives a recheckable true-or-false verdict, while every non-member receives only a scope refusal accompanied by a mechanically checked membership result.
+
+**Why presently unmakeable.** Library lookup establishes answers when suitable material is found, but supplies no closed denominator. Namelessness, incomplete indices, and the voided evaluator claim mean that refusal conflates at least three conditions: absent knowledge, failed retrieval, and unsupported semantics.
+
+**Construction gate.** Freeze \(U\)’s grammar, domain bounds, enumeration digest, and an adjudicator distinct from the serving implementation. Any refused member, incorrect member verdict, substantive answer outside \(U\), or shared oracle that makes comparison reflexive voids the claim. The floor is 100%, justified because a correct finite enumerator can decide all of \(U\).
+
+**Cheapest honest failure.** Enumerate all closed affine equalities over small residue rings under a short expression bound. Replay every query and recheck offline. If even this manifest cannot be closed exactly within one cycle, abandon completeness islands. This is a coverage theorem, not a frontier-derivation proposal.
+
+3. Two Judges
+
+**Claim.** For a declared logical fragment, a served theorem receipt contains native proof objects accepted by two independently implemented, pinned proof assistants; disagreement forces refusal. The precise claim is checker-diverse corroboration—not truth independent of all shared axioms.
+
+**Why presently unmakeable.** A pinned external assistant removes authority from programme-authored code, but still leaves one proof kernel as a common-mode point of failure. Replayability reproduces that kernel’s verdict; it does not diversify it.
+
+**Construction gate.** Freeze a canonical formula language, axiom correspondence, two separately authored elaboration paths, and corruption batteries before selecting successful examples. The direction fails if either proof is merely a translated proof term from the other, if altered connectives remain paired as “the same” proposition, or if either kernel’s rejection can still yield SERVED.
+
+**Cheapest honest failure.** Attempt twenty elementary theorems in the assistants’ common propositional or first-order core. Corrupt each proof independently and mutate the canonical formulas. If one theorem requires an unchecked semantic bridge, or dual production cannot fit a cycle, terminate.
+
+It is conjecture—not an established consequence—that kernel diversity materially reduces common-mode error. This is the intellectually risky direction: apparent independence may prove largely cosmetic.
+
+4. The Meaning Handshake
+
+**Claim.** A plain-text utterance, including an assumption, may enter a live session only after a learned proposer offers at most \(k\) formal readings and the person confirms one canonical, verified rendering. The receipt binds that confirmation to a unique formal object. The defensible claim is therefore “answered under a user-selected machine-fixed meaning,” not “the model understood the original sentence.”
+
+**Why presently unmakeable.** Verified English is presently an outbound rendering, not an inverse interface. The live prompt lacks persistent assumptions, the registered grammar remains mandatory, and the learned intake result failed. Moreover, most content lacks usable names.
+
+**Construction gate.** Freeze \(k\), a confirmation-slate recall floor, and the live/replay protocol before training or prompting. Any answer before confirmation, any confirmation resolving to multiple formal objects, or any unconfirmed assumption affecting a later answer fails. Out-of-scope refusal must receive full credit.
+
+**Cheapest honest failure.** Use a hidden set of thirty in-scope colloquial questions and thirty matched near-misses. Compare slate recall with capability-blind lexical retrieval, deriving the null from actually verified proposals. If the frozen recall floor is missed while safe refusal is preserved, terminate the learned slate.
+
+This is deliberately not question-repair or adjudicated correction: before confirmation, no semantic claim exists.
+
+5. The Split-Semantics Compiler
+
+**Claim.** For every statement \(s\) in a restricted fragment and every declared input \(x\), the external assistant proves
+\[
+\operatorname{run}(\operatorname{compile}(s),x)
+=
+\operatorname{denote}(s,x),
+\]
+where source denotation and target-machine execution are separately specified. This would license corpus-level evaluator conformance for that fragment, rather than isolated per-point verdicts.
+
+**Why presently unmakeable.** The existing conformance claim voided, and its successor exposed the decisive pathology: a shared front-end made every obligation \(P \leftrightarrow P\). Thus neither successful execution nor a checked reflexive theorem currently connects two independent meanings.
+
+**Construction gate.** Freeze non-isomorphic source and target ASTs, separate parsers, both semantic definitions, and operator mutants before compiler work. Every obligation must mention both semantics and use compiler-specific lemmas. If it normalizes to reflexivity before those lemmas, the entire claim voids. Every seeded target mutant must break a proof.
+
+**Cheapest honest failure.** Restrict the pilot to constants, one variable, and addition over bounded integers; use a dozen statements plus one mutant per constructor and an exhaustive independent oracle. If one mutant survives, or connecting even this fragment requires identifying the two front-ends by fiat, terminate.
+
+The conjectural risk is that “semantic separation” merely relocates the shared assumption instead of eliminating it.

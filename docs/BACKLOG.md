@@ -336,6 +336,15 @@ so a later cycle inherits the disposition and not a rumour.
   proposer. **The thirteen are the fixtures**; they are committed, in order,
   in a file whose commit is an ancestor of every proposer commit on this
   branch.
+  **Candidate mechanism (2026-08-27, from the supplementary design
+  series).** The outside referee's MEANING HANDSHAKE proposes the repair
+  shape this entry lacked: *person-confirmation as the license* —
+  "confirmation subsumes the old pre-emption: all thirteen exact-match hits
+  become proposals and still await confirmation." Recorded as the candidate
+  mechanism for this successor's own preregistration, not adopted here; the
+  successor still owes its own prereg, control, and K re-measurement, and
+  inherits the referee's UNNAMED_SCOPE typed refusal for questions over the
+  nameless majority.
 
   **Why the obvious repairs are refused rather than untried.** Moving the
   proposer ahead of the resolver breaches G4 — *"a single differing verdict
@@ -674,6 +683,15 @@ cycle inherits the disposition and not a rumour.
   decompression**. That rule is the park's value: it is the STRANGER problem
   with a licence-clean population attached, and the drawing rule is what stops
   the population being chosen after the answers are seen.
+  **Convergence note (2026-08-27).** The maintainer-directed supplementary
+  design series (a different model family; receipt
+  `reports/design-direction-v0.22.json` `supplementary_series`) was asked,
+  as an outside examiner, to name the one methodological weakness none of
+  its own directions addressed, and answered with this park's exact ground:
+  *"who selected the problems, whose costs define success, and what
+  prevents the benchmark from rewarding the programme's own ontology."*
+  An independent cross-family arrival on parked territory is convergent
+  evidence; DEMAND's unpark case strengthens accordingly.
 
 - **ABSENCE — snapshot-relative library-absence certificates (2026-08-25).**
   Parked **behind DEMAND**; let demand aim it. Unparking ABSENCE first would

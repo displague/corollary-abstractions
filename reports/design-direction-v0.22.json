@@ -146,5 +146,48 @@
    "BITROT": "day-probe; the unsealed-complement scope map; stop rule recorded in the design section 2: any undetected changed answer stops and publishes the narrowed scope, a clean 1000 publishes the map and closes",
    "TWO_WITNESSES": "parked item-candidate beside the conformance successor; demoted from rider by review H9"
   }
+ },
+ "supplementary_series": {
+  "dated": "2026-08-27",
+  "authority": "maintainer-directed: 'kick off another design round with a different agent doing the thinking (not necessarily about arxiv) to get some outside model views. use academic language and explain.'",
+  "provider": "openai",
+  "model": "gpt-5.6-sol",
+  "cli": "codex-cli 0.147.0",
+  "reasoning_effort": "xhigh",
+  "rounds": 3,
+  "isolation": {
+   "method": "codex exec --skip-git-repo-check, cwd C:/Users/displ/AppData/Local/Temp/forge22x -- empty non-git dir, no project name in path; per-round stateless invocations with prior-round text passed verbatim in-prompt (auditable continuation)",
+   "flags": "-c model_reasoning_effort=xhigh -c web_search=disabled -c approval_policy=never -c default_permissions=isolated -c permissions.isolated.filesystem={:minimal=read,:root=deny} -c permissions.isolated.network.enabled=false",
+   "note": "web search was maintainer-permitted but not used; all three rounds ran network-disabled"
+  },
+  "brief_sha256_canonical_lf": "94c8574ac1c93d920e008413ab7d89626e6e7ac85439215ebe6d4dc3ab438b93",
+  "round_prompt_sha256_canonical_lf": {
+   "r1": "94c8574ac1c93d920e008413ab7d89626e6e7ac85439215ebe6d4dc3ab438b93",
+   "r2": "f3a9c97002c69787d8c76e4e95e4dc9588360114f7f3c7a7ea446c10486a97e4",
+   "r3": "16a0745653b889163c1e9d82dd2ff6bb97341c80ed79012cf52c5abf5148aa12"
+  },
+  "register": "academic, by direction; the brief framed the series as an external referee's prospectuses",
+  "ordering_note": "ran AFTER this course's selection landed; the incumbent (DESIGN-handles) and the full 15-direction exclusion card were disclosed in round 1, so this series is a supplementary outside view over EXCLUDED-territory-complement, not a rival course",
+  "round_one_funnel": [
+   "PREMISE LEDGER -- inclusion-minimal assumption sets: checker proves A* entails q AND per-premise countermodels prove A* minus a does not; necessity certified, not just consumption",
+   "BOUNDED OMNISCIENCE -- completeness islands: a finite preregistered query universe where every member is decided and every non-member scope-refused with checked membership",
+   "TWO JUDGES -- checker-diverse corroboration by two independently implemented pinned proof assistants; self-flagged risky (diversity may be cosmetic)",
+   "MEANING HANDSHAKE -- plain-text intake licensed by PERSON-confirmation of a bounded verified reading slate; claim shrinks to 'answered under a user-selected machine-fixed meaning'",
+   "SPLIT-SEMANTICS COMPILER -- run(compile(s),x) = denote(s,x) proved with separated denotation/execution semantics, non-isomorphic ASTs, per-constructor mutants"
+  ],
+  "outcome": {
+   "lead": "PREMISE LEDGER (full preregistration draft on file in the series transcript: PremiseLedgerV1 schema, B1-B7 incl. the verbatim voiding string VOID: CAPABILITY_BLIND_CONTROL_SCORE=60/60; 50 accepted rows 25 redundant/25 irredundant + 10 refusals across 5 strata; truth-table checker digest-pinned and code-disjoint from Lean; <=450 exhaustive mutants; chance = 99th percentile of 1,000 budget-matched deletion searches; one-shot scoring)",
+   "runner_up": "BOUNDED OMNISCIENCE x SPLIT-SEMANTICS merged (a 36-command closed island proving completeness AND non-reflexive compiler correspondence in one artifact; 'SPLIT-SEMANTICS subsumes the parked P-iff-P lane; no residue remains'; TWO JUDGES its later completion)",
+   "third": "MEANING HANDSHAKE (UNNAMED_SCOPE typed refusal over the nameless ~98%; 'confirmation subsumes the old pre-emption: all thirteen exact-match hits become proposals and still await confirmation')",
+   "residual_risk_lead": "a perfectly proved ledger over a mistranslated abstraction: encode the premise wrongly and every proof, countermodel and mutant passes while certifying the wrong proposition",
+   "programme_blind_spot_verbatim": "None of the five directions supplies a prospectively sampled, externally sourced task distribution with an independently justified loss function. The programme can therefore become exceptionally rigorous about artifacts chosen, formalised, and scored by its own designers while remaining unable to show that those artifacts represent consequential failures outside the programme; an external examiner would first ask who selected the problems, whose costs define success, and what prevents the benchmark from rewarding the programme's own ontology."
+  },
+  "adjudication": {
+   "incumbent": "STANDS. Nothing in the series contests DESIGN-handles; the series' own Handshake binds slate recall to the enumeration layer beneath it, which is the incumbent's territory.",
+   "PREMISE_LEDGER": "recorded as a THIRD v0.23 incumbent-candidate, capability-class (beside the instrument-class CANARY-CURVE and TOLL): it attacks the session ledger's published byte-vs-semantic-dependence limitation with committed machinery, its pilot is cycle-feasible, and its draft is preregistration-grade. The v0.23 course compares, per the incumbent rule.",
+   "OMNISCIENCE_x_SPLIT_SEMANTICS": "adopted as the STRENGTHENED unpark formulation of the parked conformance-successor lane (TWO WITNESSES + independent-second-reading): the unpark condition now requires separated denotation/execution semantics with non-isomorphic ASTs and per-constructor mutants, piloted on the 36-command island. TWO JUDGES parks behind it as its later completion.",
+   "MEANING_HANDSHAKE": "bounded lessons imported: (a) UNNAMED_SCOPE enters the intake successor's typed-refusal vocabulary; (b) person-confirmation-subsumes-pre-emption is recorded in the resolver-binding successor's BACKLOG entry as the candidate mechanism for its 13 fixtures; the full direction parks behind HANDLES by its own recall-bounded-by-enumeration argument.",
+   "blind_spot": "CONVERGENT EVIDENCE for the parked DEMAND direction (v0.21 course: an obstruction ledger against a question dump the programme did not author) -- an independent cross-family arrival on the same ground; DEMAND's park gains the convergence note and its unpark case strengthens accordingly."
+  }
  }
 }
