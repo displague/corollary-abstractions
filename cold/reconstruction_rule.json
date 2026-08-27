@@ -1,0 +1,178 @@
+{
+  "schema": "cold-reconstruction-rule/1",
+  "design": "docs/DESIGN-cold-receipt.md",
+  "prerequisite": "CR-P1",
+  "kind_id": "conformance_ce3_supplement:decide_both_directions",
+  "source_artifact": "experiments/conformance_ce3_supplement.json",
+  "status_note": "Published BEFORE the general harness, on the WITNESS W1 precedent (DESIGN-cold-receipt.md §12). This is the rule, not an assertion that the rows are re-checkable.",
+  "steps": [
+    {
+      "step": 1,
+      "name": "proposition",
+      "rule": "take row['substituted_proposition'] verbatim; it is already parenthesised and carrier-ascribed, and a reconstructor neither re-renders nor re-binds",
+      "needs": []
+    },
+    {
+      "step": 2,
+      "name": "source text",
+      "rule": "substitute the proposition into the two templates",
+      "positive_template": "example : ({prop} : Prop) := by decide\n",
+      "negative_template": "example : (¬({prop}) : Prop) := by decide\n",
+      "notes": [
+        "the negation is U+00AC NOT SIGN",
+        "the negative form introduces one extra paren pair inside the ': Prop' ascription",
+        "exactly one trailing LF; no import, no header, no BOM"
+      ],
+      "needs": [
+        "the negative template, which the artifact does not carry"
+      ]
+    },
+    {
+      "step": 3,
+      "name": "digest",
+      "rule": "sha256(source_text.encode('utf-8')) over the LF form",
+      "notes": [
+        "the recorded digest covers the in-memory LF string, not the file the writer put on disk: Path.write_text translated the newline, so the bytes the checker parsed on this Windows workstation ended CRLF"
+      ],
+      "needs": []
+    },
+    {
+      "step": 4,
+      "name": "invocation",
+      "rule": "write the source to <tmp>/Probe.lean and run [<lean binary>, <that path>] with cwd=<tmp>",
+      "argv_shape": [
+        "<lean binary>",
+        "<tmp>/Probe.lean"
+      ],
+      "flags": [],
+      "cwd": "<tmp>",
+      "environment": "inherited; nothing scrubbed",
+      "verdict_from": "returncode == 0, and nothing else",
+      "needs": [
+        "the pinned third-party checker binary"
+      ]
+    },
+    {
+      "step": 5,
+      "name": "verdict",
+      "rule": "(accepted, not accepted) -> refuted_counterexample; (not accepted, accepted) -> confirmed_counterexample; otherwise did_not_reduce",
+      "needs": []
+    }
+  ],
+  "what_each_step_needs": {
+    "steps_1_to_3": "no program and no checker",
+    "step_4": "the pinned third-party binary and nothing of this repository",
+    "step_5": "arithmetic on two integers"
+  },
+  "checker_pin": {
+    "toolchain": "leanprover/lean4:v4.32.2",
+    "binary": "~/.elan/toolchains/leanprover--lean4---v4.32.2/bin/lean.exe",
+    "binary_sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+    "timeout_seconds": 120
+  },
+  "verification": {
+    "rows_with_a_receipt": 25,
+    "rows_whose_both_digests_reconstruct": 25,
+    "mismatches": []
+  },
+  "unrecorded_half_of_the_rule": {
+    "negation_glyph": "U+00AC NOT SIGN",
+    "occurrences_in_artifact_bytes": 0,
+    "occurrences_in_artifact_text": 0,
+    "patterns_recorded_in_the_artifact": [
+      "example : (<prop> : Prop) := by decide"
+    ],
+    "recorded_pattern_matches_the_derived_positive_template": true,
+    "derived_positive_template": "example : (<prop> : Prop) := by decide",
+    "derived_negative_template": "example : (¬(<prop>) : Prop) := by decide",
+    "trailing_newline_recorded_anywhere_in_the_artifact": false,
+    "unrecorded_half": [
+      "the negative template, including the U+00AC glyph and the extra paren pair it introduces",
+      "the single trailing LF both templates append",
+      "that the digest is over the LF form rather than over the CRLF bytes Path.write_text put on disk"
+    ],
+    "where_the_unrecorded_half_lives": "scripts/conformance_ce3_supplement.py, in the two f-strings that build positive_source and negative_source",
+    "what_this_means_for_B2": "a reconstructor handed only the artifact can rebuild the POSITIVE probe from the artifact's own pattern field, and must infer the NEGATIVE one. The rule is publishable — it is published here — but it is not self-describing from the receipt, and DESIGN-cold-receipt §12 records that publishing the gap strengthens B2 rather than softening it: the floor is met by a rule a reader can execute, not by a receipt that carries it."
+  },
+  "transcripts": [
+    {
+      "statement_id": "leanworkbook.skel.lean_workbook_10096",
+      "substituted_proposition": "((((((3) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))) : Nat) >= ((((((3 * 2) + 7) + 1) * (((3 * 7) + 2) + 1)) * (((3 * 1) + 2) + 7)) : Nat))",
+      "positive": {
+        "source_text": "example : (((((((3) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))) : Nat) >= ((((((3 * 2) + 7) + 1) * (((3 * 7) + 2) + 1)) * (((3 * 1) + 2) + 7)) : Nat)) : Prop) := by decide\n",
+        "source_bytes_len": 217,
+        "recomputed_sha256": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f",
+        "recorded_sha256": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f",
+        "recorded_returncode": 1
+      },
+      "negative": {
+        "source_text": "example : (¬(((((((3) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))) : Nat) >= ((((((3 * 2) + 7) + 1) * (((3 * 7) + 2) + 1)) * (((3 * 1) + 2) + 7)) : Nat))) : Prop) := by decide\n",
+        "source_bytes_len": 221,
+        "recomputed_sha256": "f249eaea9ccfae4d1d643ec72113b0afe89ef8e27fdab6ebac8334f21a30f4d6",
+        "recorded_sha256": "f249eaea9ccfae4d1d643ec72113b0afe89ef8e27fdab6ebac8334f21a30f4d6",
+        "recorded_returncode": 0
+      },
+      "recorded_verdict": "confirmed_counterexample"
+    },
+    {
+      "statement_id": "leanworkbook.skel.lean_workbook_10197",
+      "substituted_proposition": "(((((1 + 3) ^ 3) * (1 + ((16) / ((3 ^ 3))))) : Nat) >= (81 : Nat))",
+      "positive": {
+        "source_text": "example : ((((((1 + 3) ^ 3) * (1 + ((16) / ((3 ^ 3))))) : Nat) >= (81 : Nat)) : Prop) := by decide\n",
+        "source_bytes_len": 99,
+        "recomputed_sha256": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f",
+        "recorded_sha256": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f",
+        "recorded_returncode": 1
+      },
+      "negative": {
+        "source_text": "example : (¬((((((1 + 3) ^ 3) * (1 + ((16) / ((3 ^ 3))))) : Nat) >= (81 : Nat))) : Prop) := by decide\n",
+        "source_bytes_len": 103,
+        "recomputed_sha256": "04d2df4523a2beb12f34016084296ae53281ef137dd6c4a0165a39e31053ce52",
+        "recorded_sha256": "04d2df4523a2beb12f34016084296ae53281ef137dd6c4a0165a39e31053ce52",
+        "recorded_returncode": 0
+      },
+      "recorded_verdict": "confirmed_counterexample"
+    },
+    {
+      "statement_id": "leanworkbook.skel.lean_workbook_1032",
+      "substituted_proposition": "(((((5) / (3)) * ((((3 ^ 2) + (7 ^ 2)) + (0 ^ 2)) ^ 2)) : Nat) >= (((2 * ((((3 ^ 3) * 7) + ((7 ^ 3) * 0)) + ((0 ^ 3) * 3))) + (3 * (((3 * (7 ^ 3)) + (7 * (0 ^ 3))) + (0 * (3 ^ 3))))) : Nat))",
+      "positive": {
+        "source_text": "example : ((((((5) / (3)) * ((((3 ^ 2) + (7 ^ 2)) + (0 ^ 2)) ^ 2)) : Nat) >= (((2 * ((((3 ^ 3) * 7) + ((7 ^ 3) * 0)) + ((0 ^ 3) * 3))) + (3 * (((3 * (7 ^ 3)) + (7 * (0 ^ 3))) + (0 * (3 ^ 3))))) : Nat)) : Prop) := by decide\n",
+        "source_bytes_len": 223,
+        "recomputed_sha256": "eecaae562274263a3f9319dd9512a5b90adc8067b2044809881f9b2ad0df165b",
+        "recorded_sha256": "eecaae562274263a3f9319dd9512a5b90adc8067b2044809881f9b2ad0df165b",
+        "recorded_returncode": 1
+      },
+      "negative": {
+        "source_text": "example : (¬((((((5) / (3)) * ((((3 ^ 2) + (7 ^ 2)) + (0 ^ 2)) ^ 2)) : Nat) >= (((2 * ((((3 ^ 3) * 7) + ((7 ^ 3) * 0)) + ((0 ^ 3) * 3))) + (3 * (((3 * (7 ^ 3)) + (7 * (0 ^ 3))) + (0 * (3 ^ 3))))) : Nat))) : Prop) := by decide\n",
+        "source_bytes_len": 227,
+        "recomputed_sha256": "bd8ced8242ffda6aded97330177707e90583d8d4d666e6b419b49618bcf10a45",
+        "recorded_sha256": "bd8ced8242ffda6aded97330177707e90583d8d4d666e6b419b49618bcf10a45",
+        "recorded_returncode": 0
+      },
+      "recorded_verdict": "confirmed_counterexample"
+    }
+  ],
+  "b2_meetability": {
+    "clause": "DESIGN-cold-receipt.md §12: if the rule cannot be published as a rule, B2's floor of one is not meetable and the slice publishes that instead of opening",
+    "rule_published_as_a_rule": true,
+    "every_committed_row_reconstructs": true,
+    "b2_floor_meetable": true
+  },
+  "non_claims": [
+    "no stranger-success claim: what is demonstrated is a program-absent reconstruction on this workstation, and no person outside this repository is in the instrument",
+    "reconstructing a digest is not running the checker; step 4 is published as a rule here and executed by the harness, not by this script",
+    "nothing here upgrades the C-E3 supplement's own non-claims, which stand unaltered"
+  ],
+  "provenance": {
+    "writer": "scripts/cold_reconstruct_ce3.py",
+    "writer_sha256_lf": "bb48ccd03d9a26d2b14f5f2afd8eb92c306e064c463867bd6e5ac412839a07a2",
+    "inputs": [
+      {
+        "path": "experiments/conformance_ce3_supplement.json",
+        "sha256_lf": "4ada9567f470805e3c578ae6ca9c150278a025841cffcc505e4df7f1ea327602"
+      }
+    ],
+    "emitted_at_generation": true
+  }
+}

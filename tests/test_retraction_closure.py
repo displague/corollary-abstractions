@@ -723,6 +723,7 @@ PROVENANCED_LEDGERS = {
     #: provenance block adopted without the guard that scores it is
     #: decoration.
     "experiments/cold_registry_census.json": "scripts/cold_registry_census.py",
+    "cold/reconstruction_rule.json": "scripts/cold_reconstruct_ce3.py",
 }
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")

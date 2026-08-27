@@ -26,6 +26,8 @@ import cold_registry_census as census  # noqa: E402
 
 ARTIFACT = REPO / "experiments" / "cold_registry_census.json"
 WRITER = REPO / "scripts" / "cold_registry_census.py"
+RULE = REPO / "cold" / "reconstruction_rule.json"
+SUPPLEMENT = REPO / "experiments" / "conformance_ce3_supplement.json"
 
 
 def _load() -> dict:
@@ -255,6 +257,118 @@ class TheExternalDepsSeedRecordsChoiceAndDeclinesToTagBytes(unittest.TestCase):
             row = next(r for k, r in rows.items() if k == name)
             self.assertIsNone(row["pin_hash"])
             self.assertEqual(row["selection_provenance"], "machine_state")
+
+
+class CRP1PublishesARuleAndTheGapInIt(unittest.TestCase):
+    """§12's CR-P1, scored by re-deriving it rather than by reading it.
+
+    The templates below are written out again here, deliberately. A test that
+    imported `cold_reconstruct_ce3.POSITIVE_TEMPLATE` would agree with the
+    rule even if the rule were wrong; what has to hold is that *these* bytes
+    reach *those* digests.
+    """
+
+    POSITIVE = "example : ({prop} : Prop) := by decide\n"
+    NEGATIVE = "example : (¬({prop}) : Prop) := by decide\n"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.rule = json.loads(RULE.read_text(encoding="utf-8"))
+        cls.supplement = json.loads(SUPPLEMENT.read_text(encoding="utf-8"))
+        cls.rows = [r for r in cls.supplement["rows"] if "checker_receipt" in r]
+
+    @staticmethod
+    def _digest(text: str) -> str:
+        return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+    def test_every_committed_row_reconstructs_both_digests(self) -> None:
+        misses = []
+        for row in self.rows:
+            receipt = row["checker_receipt"]
+            prop = row["substituted_proposition"]
+            if self._digest(self.POSITIVE.format(prop=prop)) != receipt[
+                "positive_probe"
+            ]["source_sha256"]:
+                misses.append((row["statement_id"], "positive"))
+            if self._digest(self.NEGATIVE.format(prop=prop)) != receipt[
+                "negative_probe"
+            ]["source_sha256"]:
+                misses.append((row["statement_id"], "negative"))
+        self.assertEqual(misses, [])
+        self.assertEqual(
+            self.rule["verification"]["rows_whose_both_digests_reconstruct"],
+            len(self.rows),
+        )
+
+    def test_the_digest_is_sensitive_to_the_trailing_newline(self) -> None:
+        # The vacuity check. If the digest did not move when the newline was
+        # dropped, the reconstruction rule's step 3 would be claiming a
+        # precision it does not have, and B2's floor would rest on a digest
+        # that agreed with anything shaped roughly right.
+        prop = self.rows[0]["substituted_proposition"]
+        recorded = self.rows[0]["checker_receipt"]["positive_probe"][
+            "source_sha256"
+        ]
+        without = self.POSITIVE.format(prop=prop).rstrip("\n")
+        self.assertNotEqual(self._digest(without), recorded)
+        crlf = self.POSITIVE.format(prop=prop).replace("\n", "\r\n")
+        self.assertNotEqual(self._digest(crlf), recorded)
+
+    def test_the_negation_glyph_is_absent_from_the_artifact(self) -> None:
+        # §12's finding, recomputed: the artifact carries only the positive
+        # template, so a reconstructor must supply half the rule from outside
+        # the receipt. Publishing that gap is what strengthens B2.
+        text = SUPPLEMENT.read_text(encoding="utf-8")
+        self.assertEqual(text.count("¬"), 0)
+        gap = self.rule["unrecorded_half_of_the_rule"]
+        self.assertEqual(gap["occurrences_in_artifact_text"], 0)
+        self.assertEqual(gap["occurrences_in_artifact_bytes"], 0)
+        self.assertTrue(gap["unrecorded_half"])
+
+    def test_the_recorded_pattern_is_only_the_positive_template(self) -> None:
+        patterns = {
+            row["checker_receipt"]["pattern"]
+            for row in self.rows
+            if "pattern" in row["checker_receipt"]
+        }
+        self.assertEqual(patterns, {self.POSITIVE.rstrip("\n").replace("{prop}", "<prop>")})
+
+    def test_b2_meetability_is_adjudicated_by_the_reconstruction(self) -> None:
+        meet = self.rule["b2_meetability"]
+        verification = self.rule["verification"]
+        self.assertEqual(
+            meet["every_committed_row_reconstructs"],
+            verification["rows_with_a_receipt"]
+            == verification["rows_whose_both_digests_reconstruct"],
+        )
+        self.assertEqual(
+            meet["b2_floor_meetable"],
+            meet["rule_published_as_a_rule"]
+            and meet["every_committed_row_reconstructs"],
+        )
+
+    def test_the_transcripts_carry_the_bytes_and_not_a_summary(self) -> None:
+        for transcript in self.rule["transcripts"]:
+            for side in ("positive", "negative"):
+                probe = transcript[side]
+                self.assertEqual(
+                    self._digest(probe["source_text"]), probe["recorded_sha256"]
+                )
+                self.assertEqual(
+                    probe["source_bytes_len"],
+                    len(probe["source_text"].encode("utf-8")),
+                )
+
+    def test_the_rule_carries_its_provenance(self) -> None:
+        block = self.rule["provenance"]
+        self.assertEqual(block["writer"], "scripts/cold_reconstruct_ce3.py")
+        self.assertEqual(
+            block["writer_sha256_lf"], _sha256_lf(REPO / block["writer"])
+        )
+        for row in block["inputs"]:
+            self.assertEqual(
+                row["sha256_lf"], _sha256_lf(REPO / row["path"]), row
+            )
 
 
 if __name__ == "__main__":  # pragma: no cover
