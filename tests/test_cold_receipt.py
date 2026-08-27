@@ -371,5 +371,224 @@ class CRP1PublishesARuleAndTheGapInIt(unittest.TestCase):
             )
 
 
+COLD_CENSUS = REPO / "cold" / "census.json"
+PATH_AUDIT = REPO / "cold" / "path_audit.txt"
+PATH_AUDIT_JSON = REPO / "cold" / "evidence" / "path_audit.json"
+SCRAMBLE = REPO / "cold" / "scramble_baseline.json"
+
+
+def _cold() -> dict:
+    return json.loads(COLD_CENSUS.read_text(encoding="utf-8"))
+
+
+class ThePathAuditCarriesBothAssertions(unittest.TestCase):
+    """§6's C2 repair, scored where it was written.
+
+    *"§1's own exhibit is the counter-example: replay_session.py:69-71 reaches
+    scripts/ through Path(__file__).resolve().parents[1] and sys.path.insert.
+    No PATH setting anywhere would have stopped it."* So a harness that proved
+    only the PATH claim would have proved the wrong thing, and these tests are
+    the reason it cannot.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.audit = json.loads(PATH_AUDIT_JSON.read_text(encoding="utf-8"))
+
+    def test_assertion_one_the_program_tree_is_unresolvable(self) -> None:
+        first = self.audit["assertion_1_program_tree_unresolvable"]
+        self.assertTrue(first["holds"])
+        self.assertTrue(first["imports"])
+        for row in first["imports"]:
+            self.assertFalse(row["imported"], row["module"])
+            # The traceback IS the evidence; a bare False would be a claim.
+            self.assertIn("ModuleNotFoundError", row["traceback"])
+
+    def test_assertion_two_no_sys_path_entry_resolves_inside_the_repo(self) -> None:
+        second = self.audit["assertion_2_no_sys_path_entry_inside_the_repository"]
+        self.assertTrue(second["holds"])
+        inside = [row for row in second["sys_path"] if row["inside_repository"]]
+        self.assertEqual(inside, [])
+
+    def test_no_PATH_entry_resolves_inside_the_repository(self) -> None:
+        self.assertEqual(self.audit["path_entries_inside_repository"], [])
+        for row in self.audit["path_entries"]:
+            self.assertIsNotNone(row["listing_sha256"], row["resolved"])
+
+    def test_the_interpreter_is_not_the_repositorys_own_virtualenv(self) -> None:
+        # The harness cannot exclude its own interpreter (§6 names it in the
+        # not-excluded list). It can decline to use the one the program
+        # prepared, and this is that declining, checked.
+        interpreter = self.audit["interpreter"]
+        self.assertFalse(interpreter["inside_repository"])
+        self.assertTrue(interpreter["flags_no_site"])
+        self.assertTrue(interpreter["flags_isolated"])
+
+    def test_the_rendered_audit_states_both_assertions_and_the_scope(self) -> None:
+        text = PATH_AUDIT.read_text(encoding="utf-8")
+        self.assertIn("ASSERTION 1", text)
+        self.assertIn("ASSERTION 2", text)
+        self.assertIn("BOTH ASSERTIONS HOLD: True", text)
+        # The scope travels with the number; it is not a footnote.
+        self.assertIn("does NOT exclude", text)
+        self.assertIn("weaker", text)
+
+
+class TheHarnessRestoredTheTreeItMeasured(unittest.TestCase):
+    """§6's C4: the rename is a known, reversible side effect with a restore
+    path, and a mismatch is a harness failure reported as such, never absorbed.
+    """
+
+    def test_the_working_tree_is_byte_identical_across_the_rename(self) -> None:
+        tree = _cold()["scope"]["working_tree"]
+        self.assertTrue(tree["program_tree_restored"])
+        self.assertEqual(
+            tree["digest_before_rename"]["digest"],
+            tree["digest_after_restore"]["digest"],
+        )
+        self.assertTrue(tree["byte_identical"])
+
+    def test_the_scope_names_what_the_harness_does_not_exclude(self) -> None:
+        scope = _cold()["scope"]
+        self.assertTrue(scope["weaker_than_a_container"])
+        joined = " ".join(scope["not_excluded"]).lower()
+        for item in ("registry", "userprofile", "site-packages", "interpreter"):
+            self.assertIn(item, joined)
+
+
+class EveryArmIsScoredAndCouldHaveGoneRed(unittest.TestCase):
+    """§7's four arms and §10's meetability rows, checked as numbers."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.cold = _cold()
+        cls.arms = cls.cold["arms"]
+        cls.gate = cls.cold["gate"]
+
+    def test_b3_runs_three_mutations_that_are_different_in_kind(self) -> None:
+        runs = {row["mutation"]: row for row in self.arms["tamper"]["runs"]}
+        self.assertEqual(set(runs), {"content", "digest", "binding"})
+        signatures = {}
+        for name, row in runs.items():
+            self.assertFalse(row["discarded"], name)
+            self.assertTrue(row["witness_of_difference"]["changed"], name)
+            self.assertEqual(row["outcome"], "FAIL", name)
+            checks = tuple(
+                sorted(
+                    {
+                        check
+                        for failure in (row["failed_checks"] or [])
+                        for check in failure["failed_checks"]
+                    }
+                )
+            )
+            signatures[name] = checks
+        # v0.21's B8 arms "were one tamper shape run twice". Three distinct
+        # failure signatures is the machine form of "different in kind".
+        self.assertEqual(len(set(signatures.values())), 3, signatures)
+        # The digest mutation's whole point: it makes step 3 agree by
+        # construction, so ONLY the invocation can catch it.
+        self.assertNotIn("positive_digest", signatures["digest"])
+        self.assertIn("positive_exit_code", signatures["digest"])
+        # The binding mutation leaves every file and digest internally
+        # consistent; only the attribution is wrong.
+        self.assertIn("positive_digest", signatures["binding"])
+        self.assertNotIn("positive_exit_code", signatures["binding"])
+        self.assertTrue(self.gate["B3"]["green"])
+
+    def test_b4_fails_loud_and_names_the_missing_dependency(self) -> None:
+        arm = self.arms["omission"]
+        self.assertFalse(arm["gate"]["silent_pass"])
+        self.assertTrue(arm["gate"]["failed_loud"])
+        self.assertTrue(arm["gate"]["named_the_dependency"])
+        self.assertIn(arm["removed_dependency"], arm["stdout_head"])
+
+    def test_b5_has_a_working_negative_control_and_no_sham_survivor(self) -> None:
+        arm = self.arms["sham"]
+        # The instrument must be able to say no.
+        self.assertTrue(arm["negative_control"]["real_checker_rejects_the_known_bad_bundle"])
+        self.assertEqual(arm["runs"]["real_checker_good_bundle"]["outcome"], "PASS")
+        self.assertEqual(arm["runs"]["real_checker_known_bad_bundle"]["outcome"], "FAIL")
+        self.assertEqual(arm["gate"]["value"], 0)
+        self.assertFalse(self.cold["voiding_sentence"]["fired"])
+        # The weakness in the substitution is disclosed rather than glossed.
+        self.assertIn("weaker than", arm["disclosed_weakness"])
+
+    def test_b6_ran_the_budgeted_arm_and_published_its_bound_honestly(self) -> None:
+        arm = self.arms["scramble"]
+        self.assertEqual(arm["bundles_requested"], 200)
+        self.assertEqual(arm["bundles_run"], 200)
+        self.assertEqual(arm["bundles_passed"], 0)
+        self.assertAlmostEqual(arm["gate"]["rule_of_three_upper_bound"], 0.015)
+        self.assertIn("never a measured rate", arm["gate"]["upper_bound_is_not_a_measured_rate"])
+        self.assertEqual(arm["checker_invocations"], 200 * 50)
+
+    def test_b6_prices_what_its_invocation_step_can_discriminate(self) -> None:
+        # A vacuity check on the vacuity control. Every committed row of this
+        # kind records the same exit-code pair, so a permutation leaves step 4
+        # unchanged and only step 3 can catch it. Measured, not explained after.
+        discrimination = self.arms["scramble"][
+            "what_the_invocation_step_can_discriminate"
+        ]
+        self.assertEqual(len(discrimination["distinct_recorded_exit_code_pairs"]), 1)
+
+    def test_b7_confirms_every_needs_program_by_removal(self) -> None:
+        needs = [k for k in self.cold["kinds"] if k["verdict"] == "NEEDS-PROGRAM"]
+        self.assertTrue(needs)
+        for kind in needs:
+            blocking = kind["blocking_dependency"]
+            self.assertTrue(blocking["confirmed_by_removal"], kind["kind_id"])
+            self.assertNotEqual(kind["verdict_evidence"]["exit_code"], 0)
+            self.assertIn("ModuleNotFoundError", kind["verdict_evidence"]["stderr_head"])
+        self.assertEqual(self.gate["B7"]["denominator"], len(needs))
+        self.assertTrue(self.gate["B7"]["green"])
+
+    def test_b8_applies_its_denominator_rule(self) -> None:
+        b8 = self.gate["B8"]
+        self.assertGreaterEqual(b8["denominator"], 5)
+        self.assertTrue(b8["applies"])
+        self.assertLess(b8["survives_fraction"], 0.9)
+
+    def test_b11_assigns_provenance_from_the_bytes(self) -> None:
+        deps = {d["name"]: d for d in self.arms["provenance"]["dependencies"]}
+        lean = deps["lean.exe"]
+        self.assertEqual(lean["provenance"], "third_party_pinned")
+        test = lean["provenance_test"]
+        self.assertTrue(test["a_pin_is_over_the_executing_artifact"])
+        self.assertTrue(test["b_pin_identifies_a_third_partys_release"])
+        self.assertEqual(test["recomputed_sha256"], lean["pin_hash"])
+        self.assertEqual(test["assigner"], "the harness, from the bytes")
+        for name, dep in deps.items():
+            if name == "lean.exe":
+                continue
+            self.assertEqual(dep["provenance"], "program_configured", name)
+
+
+class TheColdArtifactsCarryTheirProvenance(unittest.TestCase):
+    """PROVENANCED_LEDGERS' pattern for the harness's own three artifacts.
+
+    The harness reimplements the block rather than importing
+    `scripts/report_provenance.py`, because it imports nothing from this
+    repository. The guard is the same either way.
+    """
+
+    def test_each_cold_artifact_names_its_writer_and_its_digest_matches(self) -> None:
+        for artifact, writer in (
+            (COLD_CENSUS, "harness/cold_harness.py"),
+            (SCRAMBLE, "harness/cold_harness.py"),
+        ):
+            with self.subTest(artifact=artifact.name):
+                block = json.loads(artifact.read_text(encoding="utf-8"))["provenance"]
+                self.assertEqual(block["writer"], writer)
+                self.assertEqual(
+                    block["writer_sha256_lf"], _sha256_lf(REPO / writer)
+                )
+                self.assertTrue(block["emitted_at_generation"])
+                for row in block["inputs"]:
+                    self.assertEqual(
+                        row["sha256_lf"], _sha256_lf(REPO / row["path"]), row
+                    )
+
+
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
