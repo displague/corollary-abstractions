@@ -1,0 +1,59 @@
+{
+  "assumptions": [],
+  "header": {
+    "created_utc": "2026-08-25T00:00:00Z",
+    "pins": {
+      "capability_sheet_digest": "4f8b2150bd96e8dbc8df0f0a413dfbd04bca712bc07f09b9c0684c3ac1179911",
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "09eda754405b5f9281d6a0fabb8667d89811c60e445757ad0b1d88b32d55714c",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      }
+    },
+    "session_id": "v022-erratum-plant"
+  },
+  "plant_provenance": {
+    "authentication": "placeholder; replay never verifies a MAC (scripts/replay_session.py:26-42)",
+    "input_line_names_statement": "algtop.homology.betti_alternating_sum",
+    "purpose": "R3's B9 mechanism check -- a designated flip the probe must detect",
+    "refusal_digest_taken_from_line": "twin no.such.statement.at.all",
+    "statement_exists_today": true,
+    "synthetic": true
+  },
+  "schema": "corollary.session-journal/1",
+  "turns": [
+    {
+      "assumptions_cited": [],
+      "assumptions_declared": [],
+      "input_bytes": "twin algtop.homology.betti_alternating_sum",
+      "key_id": "planted-not-authenticated",
+      "live_set_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mac": "planted-not-authenticated",
+      "prev_turn_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "receipt_digest": "372eb3774802a8d97badd0f3afdabbf7a17ef8a1f900b394db99a460b893406c",
+      "resolution": {
+        "assumption_id": null,
+        "grammar_query": "twin <statement-id>",
+        "kind": "refusal"
+      },
+      "result": {
+        "answer_bytes_digest": "4a47f0a90db1e9b4e389dbd3c4baad9c7b8814dcd5cba8cf70f294b7a5174098",
+        "kind": "refused",
+        "refusal_type": "twin_exhausted"
+      },
+      "session_events": [],
+      "turn_index": 0
+    }
+  ]
+}

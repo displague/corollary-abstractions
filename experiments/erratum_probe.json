@@ -1,0 +1,133 @@
+{
+  "schema": "erratum_probe.v1",
+  "design": "docs/DESIGN-handles.md",
+  "roadmap": "docs/ROADMAP-v0.22.md",
+  "roadmap_item": "v0.22 rider R3 -- ERRATUM's flip probe",
+  "headline": "0 real flips over 410 replayed turns from 60 committed v0.21 journals (70 of those turns recorded a refusal). The planted flip was detected 1/1, meeting B9's floor of 1. Statements added in the window: 0.",
+  "flip_definition": {
+    "a_flip_is": "a turn whose RECORDED result was a refusal and whose replay today is NOT a refusal",
+    "a_flip_is_not": "any turn whose answer merely re-rendered differently. That is a DIVERGENCE and is counted separately. Folding the two together would inflate the flip count with cosmetics, which is the easiest way to make a probe like this look productive",
+    "refusal_statuses": [
+      "REFUSED",
+      "exhausted",
+      "refused"
+    ],
+    "recorded_refusal_test": "result.kind in refusal_statuses, or result.refusal_type is not null"
+  },
+  "window": {
+    "authoritative_because_it_is_a_digest": {
+      "recorded_corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "live_corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "corpus_moved": false,
+      "statements_today": 12777,
+      "statements_added_in_the_window": 0,
+      "why_this_and_not_the_commit_log": "the journals pin the corpus by digest. If the recomputed digest equals the recorded one, no byte of any corpus moved and no statement was added -- proven from the artifacts themselves, with no checkout archaeology and no assumption that a commit touching data/ is the only way statements arrive. If they differ, this probe does NOT guess a count; it publishes null and names the digests."
+    },
+    "capability_flips": {
+      "definition": "a pin that moved between the recorded header and today's live pin table. These are the flips in what the PROGRAM can do, as distinct from flips in what the LIBRARY holds",
+      "pins_that_moved": [
+        "rendering_module_digests",
+        "capability_sheet_digest"
+      ],
+      "pins_that_held": [
+        "corpora_digest",
+        "line_grammar_digest",
+        "checker_toolchain_digest"
+      ],
+      "rendering_modules_that_moved": [
+        "scripts/harness.py"
+      ],
+      "reading": "2 of 5 pins moved. The corpus pin is not among them"
+    },
+    "checkout_derived_narrative": {
+      "caveat": "these figures come from `git` and therefore from checkout state, not from committed bytes. They are context for the digest facts above, never evidence for them",
+      "pathspec": "the 60 v021-s*.json journals only, never the sessions directory -- the later p-journals share it and would date this window to their commit",
+      "journals_added_at": "a91e39dfdc1da9e0515394fee0c4463522508661 2026-08-25",
+      "journals_last_rewritten_at": "641b9972b3b814d05f269b65cfe4d680fd894ce1 2026-08-26",
+      "head": "a9f2926e0ebd3316abdc213868f71d267ac5f7d8",
+      "merge_base_with_main": "f9536e1452aef33299502827a5ee44177bf3aacb",
+      "the_named_window": {
+        "from": "641b9972b3b814d05f269b65cfe4d680fd894ce1",
+        "to": "f9536e1452aef33299502827a5ee44177bf3aacb",
+        "why_to_the_merge_base_and_not_to_head": "HEAD carries this slice's own commits. Counting them inside the window being measured would be the probe reporting its own footprint as library growth",
+        "commits": "26",
+        "shortstat": "70 files changed, 21844 insertions(+), 113 deletions(-)",
+        "data_dir_numstat": "(no change)"
+      },
+      "commits_since_the_journals_were_last_written": "28",
+      "shortstat_over_the_window": "77 files changed, 191560 insertions(+), 113 deletions(-)",
+      "data_dir_numstat_over_the_window": "(no change)"
+    }
+  },
+  "method_disclosures": {
+    "pin_bypass": {
+      "what": "replay passes each journal's own header pins as the live pin table, so the environment-staleness gate does not stop the run",
+      "why": "at today's tip these journals refuse `stale-environment`. That refusal is the pin gate working, and a probe that stopped there would measure environment drift and call it answer drift. The genuine pin comparison is published in `window.capability_flips` so the bypass is a stated method rather than a silent one",
+      "genuine_pin_mismatch": [
+        "rendering_module_digests",
+        "capability_sheet_digest"
+      ]
+    },
+    "macs_are_not_verified": "replay never verifies a MAC (scripts/replay_session.py:26-42), so neither does this probe, and the planted journal carries placeholder authentication. The plant's detectability therefore says nothing about forgery detection",
+    "no_write_gate_reached": "every replayed line is a read; no line in the v0.21 s-corpus reached the write gate and the plant's line is a `twin` query"
+  },
+  "planted_flip": {
+    "floor": 1,
+    "detected": 1,
+    "met": true,
+    "journal": "experiments/erratum_plant_journal.json",
+    "construction": {
+      "synthetic": true,
+      "purpose": "R3's B9 mechanism check -- a designated flip the probe must detect",
+      "refusal_digest_taken_from_line": "twin no.such.statement.at.all",
+      "input_line_names_statement": "algtop.homology.betti_alternating_sum",
+      "statement_exists_today": true,
+      "authentication": "placeholder; replay never verifies a MAC (scripts/replay_session.py:26-42)"
+    },
+    "turns": [
+      {
+        "session_id": "v022-erratum-plant",
+        "turn_index": 0,
+        "input_bytes": "twin algtop.homology.betti_alternating_sum",
+        "recorded_kind": "refused",
+        "recorded_refusal_type": "twin_exhausted",
+        "recorded_was_refusal": true,
+        "replayed_status": "found",
+        "replayed_route": "twin",
+        "replayed_is_refusal": false,
+        "digest_matched": false,
+        "outcome": "FLIP"
+      }
+    ],
+    "why_the_floor_is_on_the_plant_and_not_on_the_yield": "a floor of 1 on a real-flip count would be a floor on the world's behaviour, which no instrument can meet by being correct. The floor is on the mechanism: if the probe cannot see a flip it was handed, its real count means nothing whatever that count is"
+  },
+  "real_flips": {
+    "count": 0,
+    "flips": [],
+    "turns_replayed": 410,
+    "journals_replayed": 60,
+    "turns_recording_a_refusal": 70,
+    "refusal_types_replayed": {
+      "assumption_conflict": 10,
+      "conform_refused": 10,
+      "ownership_refused": 10,
+      "supposition_refused": 10,
+      "twin_exhausted": 10,
+      "twin_refused": 10,
+      "unknown_assumption": 10
+    },
+    "turns_reproduced": 410,
+    "divergences": {
+      "count": 0,
+      "rows": []
+    }
+  },
+  "scale_sentence": "Zero refusals flipped, and the window is why: between the tip these journals were recorded at and today, the corpus did not move by a single byte -- the recorded `corpora_digest` and the recomputed one are the same string. The probe measured a growth window containing no growth. What it did establish is that the mechanism works: a planted refusal naming a statement that exists today was detected as a flip. So the real-flip count of zero prices the WINDOW, not the phenomenon, and R3's v0.23 candidacy is a question about whether a cycle with real ingest is coming -- decided by this count, per the stop rule, and not by re-running the probe.",
+  "stop_rule": "DESIGN-handles §7 B9: zero real flips publishes the scale sentence and R3's v0.23 candidacy is decided by the count, not re-run. This artifact is that publication. The probe does not re-run, does not widen its corpus, and does not go looking for a window with more growth in it.",
+  "non_claims": [
+    "no claim that the program's refusals are correct, then or now",
+    "no claim about flips outside the 60 committed v0.21 s-journals; the p-journals and every unrecorded session are outside the denominator and stay outside it",
+    "no claim that a zero count is evidence the phenomenon is rare -- it is evidence this window held no growth, which is a different sentence and the scale sentence says which one it is",
+    "no forgery claim: MACs are not verified anywhere on this path"
+  ]
+}
