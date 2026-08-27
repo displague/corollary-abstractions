@@ -13,6 +13,39 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## The receipts a program can re-check without itself are the ones whose checker is not the program (2026-08-27)
+
+**Claim.** Offline-checkability is not a property a receipt earns by carrying
+digests. It is a property it earns by naming an ADJUDICATOR that is not the
+program. Across 19 receipt kinds this repository emits, exactly one survived
+its producer's deletion — and the thing that separated it was not richer
+evidence but a third party holding the decision.
+
+**Evidence.** `cold/census.json`. The surviving kind, the C-E3 probe
+receipts, records a digest of `lean.exe`'s own bytes and a probe template; its
+verdict is an exit code from a binary `leanprover` published. Nine kinds that
+carry just as much digest material read NEEDS-PROGRAM, confirmed by removal.
+The sharpest instance is `retraction_radius:certify`: its certificates carry
+an explicit `recheck_command` field — the most self-describing receipt in the
+tree — and it still reads NEEDS-PROGRAM, because that command reads
+`python scripts/radius_recheck.py`. A recheck descriptor that names the
+program tree is a program replay wearing a descriptor's clothes.
+
+**The corollary that cost the most to learn.** The reconstruction rule for
+the one surviving kind is only HALF recorded in its own artifact: the
+positive probe template appears 25 times, and the negation glyph appears
+**zero** times. The negative template, the trailing newline, and the fact
+that the digest covers the LF form rather than the CRLF bytes actually handed
+to the compiler all live in the writer's source and nowhere in the receipt. A
+kind can be genuinely cold-recheckable and still not be self-describing, and
+the census records the difference (`cold/reconstruction_rule.json`).
+
+**Status:** measured, with the instrument's controls green — tamper 3/3 FAIL
+on three distinct signatures, omission failing loud, sham survivors 0, and 0
+of 200 scrambled bundles passing.
+
+---
+
 ## A metric that counts successes cannot see a correct refusal (2026-08-26)
 
 **Claim.** A capability-blind control that scores *accepted answers given*

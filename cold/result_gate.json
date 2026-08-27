@@ -1,0 +1,104 @@
+{
+  "schema": "cold-result-gate/1",
+  "design": "docs/DESIGN-cold-receipt.md §13",
+  "registered_before_the_run": true,
+  "counts": {
+    "kinds": 19,
+    "SURVIVES": 1,
+    "NEEDS-PROGRAM": 9,
+    "UNTESTED": 9
+  },
+  "verdicts": {
+    "SURVIVES": [
+      "conformance_ce3_supplement:decide_both_directions"
+    ],
+    "NEEDS-PROGRAM": [
+      "build_throughput_tasks:exact_value_task",
+      "closure-receipt/1",
+      "closure_query:query",
+      "external_verifier:main",
+      "harness:_route_twin",
+      "measure_when_to_ask:_oewn_samples",
+      "retraction_radius:certify",
+      "serve_chat:_evaluate_receipt",
+      "serve_chat:kernel_receipt"
+    ],
+    "UNTESTED": [
+      "foreign_voice:receipt",
+      "harness:_route_conform",
+      "harness:_route_ownership",
+      "plain_router:_ask",
+      "plain_router:_conditional",
+      "serve_chat:_resolution_receipt",
+      "serve_chat:_story_receipt",
+      "write_stage:accept_write",
+      "write_stage:stage_write"
+    ],
+    "downgraded_by_B11": []
+  },
+  "gate_greens": {
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "B4": true,
+    "B5": true,
+    "B6": true,
+    "B7": true,
+    "B8": true,
+    "B9": true,
+    "B10": true,
+    "B11": true
+  },
+  "gate_reds": [],
+  "voiding_sentence_fired": false,
+  "ordering": {
+    "cr_p0_commit": "d93015000d057f06e301c4bb146ec3cf1047b7cd",
+    "cr_p1_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
+    "cr_p0_precedes_cr_p1": true,
+    "how_checked": "git merge-base --is-ancestor over the two artifacts' commits"
+  },
+  "R_C": {
+    "clause": "B1 through B11 green, the voiding sentence not fired, and CR-P0 and CR-P1 committed in order",
+    "green": true,
+    "note": "R-C failing on any clause serves nothing and publishes the readout"
+  },
+  "partition": ">=1 SURVIVES, some NEEDS-PROGRAM",
+  "licensed_sentence": "For the receipt kinds cold/census.json names SURVIVES, the recorded verdict can be re-derived on this workstation with the program's script tree renamed away and no sys.path entry inside the repository, using only the bundle and dependencies tagged third_party_pinned.",
+  "attached_to_the_sentence": {
+    "scoped_to_kinds": [
+      "conformance_ce3_supplement:decide_both_directions"
+    ],
+    "needs_program_kinds_published_by_name": [
+      "build_throughput_tasks:exact_value_task",
+      "closure-receipt/1",
+      "closure_query:query",
+      "external_verifier:main",
+      "harness:_route_twin",
+      "measure_when_to_ask:_oewn_samples",
+      "retraction_radius:certify",
+      "serve_chat:_evaluate_receipt",
+      "serve_chat:kernel_receipt"
+    ],
+    "b7_note": "a correct NEEDS-PROGRAM scores as a hit, so this partition is a reading and not a shortfall",
+    "nothing_more": "no rate, no other machine, no person"
+  },
+  "non_claims": [
+    "No stranger-success claim. What the harness shows is program-absent-harness success: a procedure completed with this repository's script tree renamed away, on this Windows workstation, under §6's named weaker-than-a-container exclusions. No person outside this repository is in the instrument; STRANGER stays parked.",
+    "No version-drift claim, deferred by B9 to a parked lane.",
+    "No composition claim. Each kind is adjudicated alone; that kinds A and B each SURVIVE says nothing about a claim resting on both.",
+    "No coverage claim over the repository. The census covers what CR-P0 enumerates; later finds publish as census misses (B10).",
+    "No retroactive effect. A SURVIVES makes no past sentence true; a NEEDS-PROGRAM voids no run — it voids the offline-checkability sentence about that kind, and nothing else.",
+    "No security claim."
+  ],
+  "provenance": {
+    "writer": "harness/result_gate.py",
+    "writer_sha256_lf": "771f6c21919daa2e020b84b2380fdc795cd465aeac7570289c84de21a9f1000b",
+    "inputs": [
+      {
+        "path": "cold/census.json",
+        "sha256_lf": "d83fefedfb0069eca3932f8bdc6e781252f65068bc12e69b6b2108c7ac7c4851"
+      }
+    ],
+    "emitted_at_generation": true
+  }
+}

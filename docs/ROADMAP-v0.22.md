@@ -294,6 +294,21 @@ index side; question authorship stays the unmeasured link, and it stays named.
 
 ## 2. COLD RECEIPT — does the program's evidence survive the program's deletion?
 
+> **Outcome, dated 2026-08-27: the slice shipped its registered run.**
+> CR-P0's registry census enumerated by RULE — `B1 = 0` unmapped emitting
+> routes, so the §5 stop clause did **not** fire and the harness opened.
+> 19 receipt kinds: **1 SURVIVES, 9 NEEDS-PROGRAM, 9 UNTESTED**
+> (`cold/census.json`). All of B1–B11 GREEN, the voiding sentence NOT
+> fired, and `cold/result_gate.json` licenses §13's third partition —
+> *R-C's sentence, scoped to the named kinds, with the NEEDS-PROGRAM kinds
+> published by name.* B4's omission arm failed loud naming `lean.exe`; no
+> SURVIVES rested on a `program_configured` dependency, so B11 downgraded
+> nothing. B6 ran 200 scrambled bundles / 10,000 checker invocations in 57
+> minutes against a 59-minute estimate, 0 passed, and publishes 1.5% as a
+> rule-of-three **upper bound** rather than a rate. **No reachability rate
+> is published; the deliverable is the partition.**
+
+
 **Why it is item 2.** It moves what a *reader outside this repository* can
 check, which is the standing gap behind STRANGER, C-V3 and every
 maintainer-authored denominator this project has published. It is the second

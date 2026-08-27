@@ -1,3 +1,69 @@
+# COLD RECEIPT: 1 of 19 receipt kinds survives the program's deletion (2026-08-27)
+
+`cold/census.json`, harness `harness/cold_harness.py`, registry
+`experiments/cold_registry_census.json` (sealed before the harness existed),
+reconstruction rule `cold/reconstruction_rule.json`, reading
+`cold/result_gate.json`. Design: `docs/DESIGN-cold-receipt.md`.
+
+**The partition, which is the deliverable.** With this repository's `scripts/`
+tree renamed away for 58.8 minutes and no `sys.path` entry resolving inside
+the repository:
+
+| verdict | kinds | what it means |
+|---|---|---|
+| **SURVIVES** | **1** | `conformance_ce3_supplement:decide_both_directions` — 25 rows, 50 checker invocations, re-checked from the bundle and a `third_party_pinned` binary alone |
+| **NEEDS-PROGRAM** | **9** | every one confirmed by REMOVAL: the writer module raised `ModuleNotFoundError` with the tree renamed away |
+| **UNTESTED** | **9** | no committed instance and no published reconstruction rule; never a procedure that quietly passed |
+
+The nine NEEDS-PROGRAM kinds, published by name because B7 scores a correct
+one as a hit: `build_throughput_tasks:exact_value_task`, `closure-receipt/1`,
+`closure_query:query`, `external_verifier:main`, `harness:_route_twin`,
+`measure_when_to_ask:_oewn_samples`, `retraction_radius:certify`,
+`serve_chat:_evaluate_receipt`, `serve_chat:kernel_receipt`.
+
+**Every floor, as a number.**
+
+| floor | reading |
+|---|---|
+| **B1** unmapped emitting routes | **0** — the enumeration is a rule, so the §5 stop did not fire |
+| **B2** ≥1 SURVIVES | **1** |
+| **B3** tamper 3× 100% FAIL | **3 scored, 0 discarded, 3 FAIL**, with three DISTINCT failure signatures |
+| **B4** omission FAIL LOUD | exit **2**, names `lean.exe`, no silent pass |
+| **B5** sham SURVIVES count | **0**, with the negative control working (real checker rejects the known-bad bundle) |
+| **B6** scrambled bundles | **0 of 200** passed; 10,000 invocations in **3422 s** against a 59-minute estimate; **1.5% rule-of-three UPPER BOUND**, not a rate |
+| **B7** NEEDS-PROGRAM confirmed by removal | **9 of 9** |
+| **B8** ≥90% SURVIVES voids | **5.26%** at a denominator of 19 |
+| **B9** version drift | ceded; the `proofcurve` v4.29.1 divergence is recorded `adjudicated: false` |
+| **B10** seal before the harness | **0 census misses**; no `harness/` file existed at the sealing commit |
+| **B11** provenance downgrade | **0 downgrades**; `lean.exe` `third_party_pinned` on both limbs, recomputed from the bytes |
+
+**Three findings the numbers do not carry on their own.**
+
+1. **The census is 19 kinds, not the design's indicative 15**, and the
+   differences are findings. The rule reaches `write_stage`'s two receipt
+   kinds and the `Verdict` store only through a fourth marking predicate
+   (a named write boundary), because their payloads are dataclasses and not
+   mapping displays. It reaches `serve_chat`'s receipt shapes as FIVE kinds
+   where the walk grouped them as one.
+2. **B6's invocation step discriminates nothing here.** Every committed row
+   of the surviving kind records the same `(1, 0)` exit-code pair, so a
+   permutation of receipts across rows leaves step 4 unchanged and only the
+   digest comparison can catch it. The hour bought a control whose second
+   half was structurally idle — measured in the artifact, not noticed after.
+3. **The rule's recall is priced at 132 uncovered sites.** A deliberately
+   wider net reaches 148 receipt-vocabulary sites; the rule admits 16 of
+   them. The census claims no coverage over the remainder and publishes them
+   as candidate B10 misses.
+
+**What this does NOT say.** No stranger-success claim: the harness shows
+program-absent-harness success on this Windows workstation under exclusions
+weaker than a container's — `%USERPROFILE%`, the registry, ambient DLL paths
+and the harness's own interpreter are all still present, and
+`cold/path_audit.txt` names them. No composition claim, no coverage claim, no
+retroactive effect, and no reachability rate.
+
+---
+
 # Plain input, slice 2: R2 FAILS, and the metric is the finding (2026-08-26)
 
 `experiments/plain_input_run.json`, runner `scripts/run_plain_gate.py`,

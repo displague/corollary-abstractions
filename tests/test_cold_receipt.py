@@ -375,6 +375,7 @@ COLD_CENSUS = REPO / "cold" / "census.json"
 PATH_AUDIT = REPO / "cold" / "path_audit.txt"
 PATH_AUDIT_JSON = REPO / "cold" / "evidence" / "path_audit.json"
 SCRAMBLE = REPO / "cold" / "scramble_baseline.json"
+RESULT_GATE = REPO / "cold" / "result_gate.json"
 
 
 def _cold() -> dict:
@@ -564,6 +565,79 @@ class EveryArmIsScoredAndCouldHaveGoneRed(unittest.TestCase):
             self.assertEqual(dep["provenance"], "program_configured", name)
 
 
+class TheResultGateLicensesOneSentenceAndNothingWider(unittest.TestCase):
+    """§13, executed. The reading is computed from the census, not written
+    about it, so the sentence a partition licenses cannot widen on the way to
+    a release note.
+    """
+
+    #: §13's table, transcribed here independently of the writer's copy. Two
+    #: transcriptions of the same frozen strings: if either moves, this fails
+    #: rather than the gate quietly moving.
+    PARTITIONS = {
+        "B1 unmeetable (CR-P0's stop)",
+        "voiding sentence fires",
+        "0 kinds SURVIVE (B2 red)",
+        "all UNTESTED via B11",
+        ">=1 SURVIVES, some NEEDS-PROGRAM",
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.gate = json.loads(RESULT_GATE.read_text(encoding="utf-8"))
+        cls.cold = _cold()
+
+    def test_the_partition_is_the_one_the_counts_imply(self) -> None:
+        counts = self.cold["counts"]
+        self.assertIn(self.gate["partition"], self.PARTITIONS)
+        if self.cold["voiding_sentence"]["fired"]:
+            expected = "voiding sentence fires"
+        elif self.cold["gate"]["B1"]["value"] != 0:
+            expected = "B1 unmeetable (CR-P0's stop)"
+        elif counts["SURVIVES"] == 0:
+            expected = "0 kinds SURVIVE (B2 red)"
+        elif counts["NEEDS-PROGRAM"] == 0 and counts["SURVIVES"] == 0:
+            expected = "all UNTESTED via B11"
+        else:
+            expected = ">=1 SURVIVES, some NEEDS-PROGRAM"
+        self.assertEqual(self.gate["partition"], expected)
+
+    def test_R_C_is_green_only_on_all_three_clauses(self) -> None:
+        r_c = self.gate["R_C"]
+        self.assertEqual(
+            r_c["green"],
+            not self.gate["gate_reds"]
+            and not self.gate["voiding_sentence_fired"]
+            and self.gate["ordering"]["cr_p0_precedes_cr_p1"],
+        )
+
+    def test_the_prerequisites_were_committed_in_order(self) -> None:
+        ordering = self.gate["ordering"]
+        self.assertTrue(ordering["cr_p0_commit"])
+        self.assertTrue(ordering["cr_p1_commit"])
+        self.assertTrue(ordering["cr_p0_precedes_cr_p1"])
+
+    def test_the_sentence_attaches_nothing_wider(self) -> None:
+        # "Nothing more — no rate, no other machine, no person."
+        sentence = self.gate["licensed_sentence"]
+        self.assertNotIn("%", sentence)
+        self.assertNotIn("stranger", sentence.lower())
+        self.assertNotIn("anyone", sentence.lower())
+        joined = " ".join(self.gate["non_claims"]).lower()
+        self.assertIn("no stranger-success claim", joined)
+        self.assertIn("no composition claim", joined)
+        self.assertIn("no retroactive effect", joined)
+
+    def test_the_named_kinds_are_the_verdicts_the_census_published(self) -> None:
+        if self.gate["partition"] != ">=1 SURVIVES, some NEEDS-PROGRAM":
+            self.skipTest("a different partition is licensed")
+        attached = self.gate["attached_to_the_sentence"]
+        survives = [k["kind_id"] for k in self.cold["kinds"] if k["verdict"] == "SURVIVES"]
+        needs = [k["kind_id"] for k in self.cold["kinds"] if k["verdict"] == "NEEDS-PROGRAM"]
+        self.assertEqual(attached["scoped_to_kinds"], survives)
+        self.assertEqual(attached["needs_program_kinds_published_by_name"], needs)
+
+
 class TheColdArtifactsCarryTheirProvenance(unittest.TestCase):
     """PROVENANCED_LEDGERS' pattern for the harness's own three artifacts.
 
@@ -576,6 +650,7 @@ class TheColdArtifactsCarryTheirProvenance(unittest.TestCase):
         for artifact, writer in (
             (COLD_CENSUS, "harness/cold_harness.py"),
             (SCRAMBLE, "harness/cold_harness.py"),
+            (RESULT_GATE, "harness/result_gate.py"),
         ):
             with self.subTest(artifact=artifact.name):
                 block = json.loads(artifact.read_text(encoding="utf-8"))["provenance"]

@@ -726,6 +726,7 @@ PROVENANCED_LEDGERS = {
     "cold/reconstruction_rule.json": "scripts/cold_reconstruct_ce3.py",
     "cold/census.json": "harness/cold_harness.py",
     "cold/scramble_baseline.json": "harness/cold_harness.py",
+    "cold/result_gate.json": "harness/result_gate.py",
 }
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
