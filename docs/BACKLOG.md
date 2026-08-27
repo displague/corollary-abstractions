@@ -3,6 +3,76 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.22 rotation (the two censuses, the drift audit, and the v0.23 course's parks)
+
+- **The naming-layer question — how does a nameless library get names a person
+  can ask by? (2026-08-27, forced by both v0.22 censuses).** A **first-class
+  carried lane**, not a park with a trigger: H-P0 measured that only 417 of
+  12,777 statements (3.26%) carry a specific typable handle, and the cross-census
+  overlay found only 125 of the 9,048 one-step-consumable statements are nameable
+  (`experiments/handles_census.json`, `experiments/onestep_census.json`). *The
+  naming layer must be built, not indexed.* Candidate material recorded, not
+  chosen: **name-derivation from the verified English renderings** the voice
+  serves; the **S3 term store** priced at ~223.5 s batched over 2,313 covered
+  statements (`handles_census.json` `s3_price`; the design addendum rounds to
+  ~217 s). Carries to the **v0.24 course** unchanged. HANDLEBAR parks behind it.
+
+- **ORPHAN — receipts that outlive the program (2026-08-27, the cold-census's own
+  recorded next question).** Series-1 runner-up of the v0.23 course. The census
+  found 1 of 19 receipt kinds SURVIVES and 10 NEED-PROGRAM; ORPHAN asks **which
+  single pinned dependency converts the most NEEDS-PROGRAM kinds to SURVIVES**.
+  Its value beyond the census: **it unparks TOLL's n=1 denominator** — the cost
+  lane's metrology now has both an instrument (§2's harness) and a denominator
+  path. Parked with its trigger.
+
+- **SELF-SEED — provenance-typed growth by proof (2026-08-27, v0.23 series 2).**
+  The commit half of the parked derivations lane, carrying the **novelty verdict
+  the park lacked**; seeds mechanically drawn, the maintainer may not pick.
+  Unpark when a cycle wants proof-gated, provenance-typed corpus growth.
+
+- **UPSTREAM-PATCH — program-free defect reproducers to reviewed upstream
+  (2026-08-27, v0.23 series 2).** The give-back direction. **Capped at UNTESTED**
+  by the outside-participation constraint: a receipt whose adjudicator is a
+  third-party reviewed upstream is one this repository cannot pin, so its
+  survival cannot be tested here. Parked with its license discipline.
+
+- **FOREIGN-SEAM's feasibility residue (2026-08-27, v0.23 series 2, cut).**
+  Adjudicated cross-corpus divergence was **cut, cut defended**: within-ecosystem
+  divergence is ingestion in a seam costume, and cross-assistant divergence needs
+  an alignment language that exceeds one cycle. What remains parked is only a
+  **feasibility spike** — no instrument is claimed, and the residue is recorded
+  so a later cycle inherits the cut's reasoning rather than re-proposing it.
+
+- **HANDLEBAR — reach-by-hole-term (2026-08-27, v0.23 series 1).** Parked behind
+  the naming-layer question its shuffle limb would have probed; the shuffle limb
+  was a candidate rider. Unpark when the naming-layer lane is scheduled and a
+  hole-term reach is the mechanism it needs.
+
+- **STRANGER-GATE — red-team the proven-material write gate (2026-08-27, v0.23
+  series 2 lead, parked).** A **v0.24 incumbent-candidate with a PROHIBITION
+  trigger**: it MUST run before any untrusted stream reaches the write gate, and
+  nothing the v0.23 cycle opens one (GUEST AXIOM's guest text enters a *frame*,
+  never the gate). Residual risk recorded: one head authors the attacks, the
+  twins and the gate, so it measures whether the gate DISCRIMINATES, never
+  whether the corpus is ADEQUATE; a PASS licenses "24 named evasions closed,"
+  coverage unmeasured.
+
+- **PREMISE LEDGER — necessity receipts (2026-08-27, v0.23 incumbent-candidate,
+  capability-class).** From the v0.22 supplementary family series; the successor
+  to GUEST AXIOM's consumption-only scope — receipts certifying assumption
+  *necessity* by per-premise countermodels. LOADBEARING (v0.23 series 1) folded
+  into it as independent convergence. Carries to the **v0.24 course** unchanged;
+  its necessity claim is explicitly **not** taken by GUEST AXIOM this cycle.
+
+- **The two review defects, fixed with headline numbers unmoved (2026-08-27).**
+  Recorded so the fixes are not mistaken for silent edits. (1) `handles_census.json`
+  and `skeleton_index.json` attested a `writer_sha256_lf` for a version of the
+  writer that no longer existed — a provenance block nothing scores. (2)
+  Underneath it, the `most_resolving` handle rankings ordered ties by
+  `PYTHONHASHSEED`; the artifact's own *"recomputes byte-identical"* sentence was
+  false. Both fixed (ties now break on the handle's own bytes); no coverage,
+  distribution, split or union number moved.
+
 ## Filed at the v0.21 rotation (the drift audit, and the v0.22 course's parks)
 
 - **The `conform` capability sheet advertises the asker's numbers; the route
@@ -692,6 +762,15 @@ cycle inherits the disposition and not a rumour.
   prevents the benchmark from rewarding the programme's own ontology."*
   An independent cross-family arrival on parked territory is convergent
   evidence; DEMAND's unpark case strengthens accordingly.
+  **Third arrival (2026-08-27, the v0.23 course).** Series 1's
+  **STRANGER'S EXAM** — externally-calibrated refusals — folded into this lane
+  as its **calibration upgrade**, recorded in
+  `reports/design-direction-v0.23.json` `outcomes.series_1.folds` as *"the
+  third independent arrival."* DEMAND now carries **triple convergence**: the
+  original park, the v0.22 supplementary examiner's blind-spot answer, and the
+  v0.23 series-1 fold. Still parked — it needs a population of askers this
+  repository did not author — but three independent arrivals on the same
+  missing-population problem is the unpark case accumulating, not a new lane.
 
 - **ABSENCE — snapshot-relative library-absence certificates (2026-08-25).**
   Parked **behind DEMAND**; let demand aim it. Unparking ABSENCE first would

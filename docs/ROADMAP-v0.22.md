@@ -1,3 +1,41 @@
+> **CLOSED at v0.22.0.** This plan is the historical plan-of-record; it is not
+> edited except for this banner. Both headline items were CENSUSES that returned
+> findings rather than capabilities, adjudicated against stop clauses frozen
+> before the numbers were known. Where each item went:
+>
+> - **§1 HANDLES / H-P0** → **RELEASE-v0.22.0** headline. The census shipped as
+>   the result; §9's stop clause **adjudicated FIRED** on two grounds
+>   (cap-at-302; a 42-target seal against a 417 population = a manifest consuming
+>   its population). 417/12,777 (3.26%) typable specific handles; the capability
+>   sentence, handle table, H-P1, H-P2 and Q60 do **not** exist (tests assert the
+>   absences). The naming-layer question it forced carries to the v0.23 course.
+> - **§2 COLD RECEIPT** → **RELEASE-v0.22.0**. Reviewed design landed before the
+>   slice; census ran, then amended under §4.0(1). `cold/census_run2.json`: 1
+>   SURVIVES / 10 NEEDS-PROGRAM / 8 UNTESTED, all B1–B11 green, R-C licenses the
+>   partition. The one SURVIVES kind was replicated repo-free by review.
+> - **§3 R1 ONE STEP** → **SHIPPED.** 9,048 one-step-consumable (statement limb
+>   45× floor); question limb DEFERRED (Q60 unsealed); cross-census 125-of-9,048
+>   is the cycle's sharpest reading. Lane-opening decision → v0.23 rotation.
+> - **§3 R3 ERRATUM** → **SHIPPED.** 0 real flips over 410 turns; plant 1/1;
+>   zero-growth digest-proven window. R3's candidacy folded into v0.23's rider
+>   R-NF, decided by the count, not re-run.
+> - **§3 R2 (removed) and the §3.5 standing-rider stop** → both the HOLES table
+>   and the delete-K table parked (the §3.5 rule fired), per §4.3.
+> - **§5.0 the supplementary outside-family series** → SHIPPED; dispositions
+>   carry to the v0.23 course (PREMISE LEDGER → v0.23 incumbent-candidate;
+>   BOUNDED OMNISCIENCE × SPLIT-SEMANTICS → strengthened conformance-successor;
+>   its blind spot → convergent evidence for parked DEMAND, now a third arrival).
+> - **§4.0's three relaxations** → **EXERCISED again** — bug-not-result twice on
+>   the cold-receipt lane (the never-executed removal arm; the registry instance
+>   rule that read `none` for two kinds holding thousands). The line held: no
+>   control that ran and read unfavourably was repaired and re-run.
+> - **§4.2–§4.4 carried/parked lanes** → migrated to
+>   **[ROADMAP-v0.23](ROADMAP-v0.23.md) §4** with dependants named; new parks
+>   filed in [BACKLOG](BACKLOG.md).
+> - **Release gate `[SUITE-GATE-V22]`** → open in RELEASE-v0.22.0 until the gate
+>   runs on the frozen tip; the third consecutive unresolved suite-gate
+>   placeholder, named in the drift audit rather than hidden.
+
 # Roadmap v0.22 — how a question finds a statement, and whether the evidence outlives the program
 
 v0.21 registered three things and got three different verdicts. The session

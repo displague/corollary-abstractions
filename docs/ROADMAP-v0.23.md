@@ -1,0 +1,373 @@
+# Roadmap v0.23 — the person supplies the premise, and the answer is an honest if-then
+
+v0.22 registered two censuses and both came back findings rather than
+capabilities. The library is **nameless** — 417 of 12,777 statements carry a
+handle a person could type — and its evidence is **program-bound** — 1 of 19
+receipt kinds survives the program's deletion. The sharpest sentence of the
+cycle was the overlay: of the 9,048 statements the engine can consume in one
+step, **125** carry a name a person could type. The library computes far more
+than anyone can ask it for. (The 125 *carry* handles; nothing is claimed
+reachable in service.)
+
+For four cycles the project has built scaffolding toward one goal the maintainer
+wrote down long ago: a plain conversation, where a person supplies an assumption
+the library does not contain and gets an honest answer under it. v0.20 designed
+the supposition frame; v0.21 served a session that remembers its suppositions
+and failed a proposer that reads plain questions; v0.22 measured why the
+proposer starved. This cycle builds the object those three were scaffolding for.
+
+**It does not need names.** GUEST AXIOM turns the supposition frame *inbound* on
+the 2,313 statements the voice can already speak — the part of the library that
+does have something to say its own name with — so the nameless finding is what
+clears its path rather than what blocks it.
+
+## 1. Headline — THE GUEST AXIOM: an answer under an assumption the library lacks
+
+[DESIGN-guest-axiom](DESIGN-guest-axiom.md) is the v0.23 course's selection
+(receipt: `reports/design-direction-v0.23.json`). It is the maintainer's own
+standing question — *"something can be predicated on assumptions, true or false,
+and be verifiable under that pretext… hidden variables, suppositions on unknown
+framing constraints"* — arrived at independently by the course's third series.
+
+**The boundary being moved.** Today a person may **select** a statement the
+library holds but never **supply** a premise it lacks, so every question turning
+on an unstated assumption ends in refusal. GUEST AXIOM serves a **machine-checked
+implication** instead — *if what you assumed holds, this follows* — with the
+guest hypothesis named, undischarged, and explicitly **not believed**; or a
+typed refusal. Ignorance about a premise becomes an answer conditioned on that
+premise, checkable by a stranger, that can never be mistaken for a claim the
+system endorses.
+
+**Not greenfield.** The frame is built and served: `scripts/supposition.py`
+opens a `FrameExecutor` with `on_exit="conjectured"` (anything leaving a
+supposition frame leaves as conjecture), and `scripts/serve_chat.py` freezes a
+`conditional` status **outside** `ANSWERING_STATUSES`, so a conditional answer
+scores zero useful throughput tokens by construction — the incentive that would
+corrupt it is removed, not policed. What does not exist is the frame turned
+inbound: a person-supplied hypothesis, elaborated and checked, driving a served
+implication. This cycle builds only that.
+
+### 1.1 Why this direction, over the metric leader — recorded as a decision
+
+Series 3 ranked **NO-FLIP** first on information-per-effort and **flagged its own
+ranking** as the point a maintainer whose purpose is the conversation would
+overrule it. The overrule is taken, on grounds recorded in
+`DESIGN-guest-axiom` §2 so it is a decision and not a preference:
+
+- **NO-FLIP measured its own emptiness in advance.** This cycle's R3 rider
+  proved **zero** library growth over the recorded-journal window
+  (digest-identical corpora), so NO-FLIP's improvement channel is dead this
+  cycle by its own logic, and its surviving regression half substantially
+  re-runs the erratum probe R3 already shipped.
+- **GUEST AXIOM can run this cycle.** Scoped to the **2,313** round-trippable
+  statements, it needs no intake this design lacks — the person supplies a
+  hypothesis *about* a statement the voice can already speak.
+- **It is the goal.** Declining the plain-conversation object a fourth cycle
+  would be the focus-attrition the drift audit exists to catch.
+
+The NO-FLIP ranking becomes rider **R-NF** (§3), not a discard.
+
+### 1.2 Construction prerequisites, ordered before any elaboration
+
+- **G-P0 — the sealed hypothesis set, 50 hypotheses**, committed before any
+  elaboration runs (review G3-followup: the person-wrong control needs 20 real
+  corrections for power, so the set is 30 + 20, not 40). The **30** recorded
+  natural questions (`experiments/plain_question_set.json`) recast as hypotheses
+  about their round-trippable targets, plus **20** sampled from the parked
+  two-way-correction lane's **real maintainer corrections** (externally sourced,
+  not author-invented — the denominator-provenance constraint; these 20 are also
+  §7's person-wrong sample). Every non-`nameless_probe` target must be in the
+  2,313 set; sealed with a drawing rule committed before the draw.
+- **G-P1 — the quarantine harness.** The digest-before/after machinery proven to
+  fire: a deliberately-writing control session must move the working-tree digest
+  over `data/` and be caught, before any real guest session runs. *A fence that
+  cannot catch a planted write is no fence* — the v0.21 session-ledger B-control
+  precedent.
+
+### 1.3 The slice, the gate, the person-wrong disposition
+
+**One new first-class object**: `experiments/guest_dispositions.json`, one record
+per sealed hypothesis, `disposition` ∈ {`CONDITIONAL`, `CLARIFY`, `REFUTED`,
+`GUEST_UNELABORABLE`, `GUEST_UNCONSUMED`, `GUEST_UNNAMED_PIECES`}, each with the
+library digest before and after (the quarantine witness), the served implication
+term, a `consumed` flag, and the checker invocation digest.
+
+**The gate (numbers frozen in `DESIGN-guest-axiom` §6):**
+
+- **B1 — quarantine, structural and checked.** `library_digest_before ==
+  library_digest_after` for **100%** of the 50 sessions; one mismatch fails the
+  lane as a containment defect. The frame path is a pure in-memory evaluator
+  with no `data/` write path (structural); the implication builder, checker
+  invocation and writer are protected by the per-session digest (checked). The
+  digest check can go red — that is why it is the gate and not a comment.
+- **B3 — elaboration floor over the restricted population.** ≥40% of the
+  non-`nameless_probe` hypotheses reach a checker verdict, **and** that
+  population is itself ≥15, or the lane reports the recast-yield census as its
+  finding. Both numbers re-frozen from a 10-hypothesis pilot by dated amendment
+  before the remaining 30 run (the 30 recorded questions include 9 authored to
+  exhaust, so the recast yield is not assumed).
+- **B4 — no vacuous implication served.** Every `CONDITIONAL` has
+  `consumed == true`; a hypothesis that elaborates but is not consumed is refused
+  `GUEST_UNCONSUMED`.
+- **B7 — person-wrong, the sharp disposition.** A `maintainer_correction`
+  hypothesis asserting a served answer is wrong is an inbound supposition;
+  `REFUTED` emits a checker **countermodel** as the artifact — the system
+  telling a person they are wrong, with proof. Scored against the checker's
+  verdict, never against the objector's claim.
+
+**The person-wrong control and voiding sentence (§7).** The person-wrong arm
+scores **20 real maintainer corrections** against **20 sham objections**
+(well-formed, uncited, derived from no served answer). If a two-sample test over
+the {REFUTED, CONDITIONAL, refused} partition fails to reject the null that the
+two distributions are equal at **α = 0.05** (frozen here, not deferred), the
+adjudicator is not demonstrably reading content over form and the person-wrong
+claim is **UNDERPOWERED, not made, this cycle**. A **perfect** control score —
+shams REFUTED at the real corrections' rate — is a **positive void**: the
+adjudicator refutes on shape. Underpower withholds only the person-wrong claim,
+not the other dispositions.
+
+**Result gate R-G**, per §7a, licenses one sentence per disposition and nothing
+wider: a `CONDITIONAL` licenses *"if the named guest hypothesis holds, the
+consequent follows"* — never that the hypothesis holds, that the consequent is a
+library fact, or that the premise was necessary. **Premise necessity is not
+claimed** (that is PREMISE LEDGER's, the incumbent-candidate — §4); this design
+claims premise **consumption** only.
+
+### 1.4 Stop conditions and non-claims
+
+Stop if B1 or B2 fails (a fence that leaks or cannot catch a write) before real
+sessions; if any B5 ask-arm scores without ECHO's licensing collision result; if
+the pilot reads below 40% (freeze the floor lower **or** stop with the
+elaboration census as the finding). Non-claims: no claim the guest hypothesis is
+**true**; no premise-necessity claim; no coverage over the nameless majority
+(its `nameless_probe` stratum is exploratory, and `GUEST_UNNAMED_PIECES` over it
+is the v0.22 nameless-library finding reaching the intake channel — a scored
+result, not a gap); no prose-understanding claim (the atomizer is
+negation-marker only); the guest text never enters the committed library and B1
+is the proof.
+
+## 2. Item 2 — ECHO: is the served voice injective?
+
+[DESIGN-echo](DESIGN-echo.md) is series 1's lead, scheduled **before** item 1
+because its collision result licenses GUEST AXIOM's clarify-vs-conditional B5
+rule, it runs entirely on committed instruments, and its blind control is
+already known to be hostile.
+
+**The boundary.** The system can **speak** — verified English renderings gated by
+an exact round trip — but has never checked that what it says **determines what
+it meant**. ECHO hands each served sentence to a reader and asks whether the
+source statement is reconstructed, the external checker adjudicating identity.
+
+**The honest bound, stated on the page (review E1).** There is **no committed
+sentence→term path that is not the renderer's own inverse** `delexicalize`;
+pointing that path back at a sentence would be a checker validating its own
+output — the arc's signature defect. So ECHO draws disjointness where it holds:
+
+- **B3 — identity is checker-adjudicated.** `RECOVERED` may be set only by the
+  external pinned checker, which shares no code with the renderer. This is the
+  disjointness that matters for the truth of an identity verdict.
+- **B4 — the reparser is newly authored, and honest about what that buys.**
+  `scripts/echo_reparse.py` is a from-scratch longest-match table reader over the
+  committed lexicon, importing neither `render` nor `delexicalize`; its import
+  closure must be disjoint from the render/inverse pair or the run voids before
+  rendering. It is **import-disjoint but not algorithmically independent** —
+  because the committed lexicon is bijective, any faithful table inverse produces
+  `delexicalize`'s token string. So `RECOVERED` is **bounded by lexicon
+  bijectivity** and *guarded, not proven,* by the scramble arm.
+
+**The robust half does not depend on the reparser at all.** The collision finding
+(B6) — *do distinct statements render to identical sentences?* — is computed from
+`render` plus the external checker's identity obligation, never from
+`echo_reparse`. Collisions license item 1's **clarify** disposition and hand
+GUEST AXIOM a machine-sealed colliding population instead of an author-chosen
+one, regardless of the reparser's dependence.
+
+**Blind control and voiding sentence.** The scramble arm permutes tokens within a
+sentence, preserving the multiset (glossary tokens survive, order dies). Known
+hostile: v0.20's machine-blind-reader control already measured that scrambled
+sentences leak structure. If scramble recovery ≥ real recovery at equal or
+greater checker time, the reader is riding surviving glossary tokens and **the
+echo claim is void**. Separation below the pilot-frozen margin M is
+`UNDERPOWERED`, not a pass.
+
+**Result gate R-E**: the injectivity sentence is licensed only for a stratum
+where the real arm beats the null by ≥M, beats scramble, and reports its
+collisions. A collision-bearing stratum licenses **no** injectivity sentence — it
+licenses item 1's clarify disposition. **Non-claims:** no reader-*meaning* claim
+(that stayed voided in v0.21 — injectivity is not comprehension); no universal
+injectivity; no rate is a capability; the renderer and reader are code-disjoint
+but **ontology-shared**, searching a closed ~8,500-term universe, so ECHO can
+clear every clause and license nothing about a stranger — the decoy-population
+arm is a stated hole with no generator, priced by naming it.
+
+## 3. Riders — two, each with a floor and a stop rule
+
+**R-NF — NO-FLIP's regression census.** A day-probe, red-capable: a served-answer
+regression census over the recorded window, seeding a sensitivity-proven detector
+for the erratum lane's future. Its improvement half is dead this cycle (R3's
+zero-growth window), and its named residual risk is recorded: a canonicalizing
+comparator can score two equally-valid answers identical while both mutation
+limbs still flip, so *"stable"* may mean *"the comparator cannot see the
+instability a person would notice."* The regression half is the part that can go
+red; the census publishes whichever way it reads.
+
+**R-HANDBACK — the separator object.** Typed non-answer turns emit an
+admitted-command separator or unlock (the fold of TWO-KEY BIND and WANT-LIST into
+one object type). It **upgrades GUEST AXIOM's decision rule next cycle**: with no
+ECHO collision result and no HANDBACK separator, GUEST AXIOM's B5 fallback is
+frozen **always-conditional, never-ask**, and the contrast is itself a recorded
+finding. HANDBACK parks as the rider that makes the ask-arm reachable in v0.24.
+
+## 4. Carried, with dependants named
+
+The rule, unchanged: **every carried lane names its dependant, or it parks.**
+
+### 4.1 Discharged by v0.22 — closed, not carried
+
+| lane (ROADMAP-v0.22) | outcome |
+|---|---|
+| **§1 HANDLES / H-P0** | **SHIPPED as the census; §9 stop clause FIRED.** The nameless finding is the result. Closed as an item; the naming-layer question carries below |
+| **§2 COLD RECEIPT design + census** | **SHIPPED**, reviewed before the slice; 1/10/8 partition, all B1–B11 green. Closed |
+| **§3 R1 ONE STEP** | **SHIPPED.** Statement limb 45× floor; question limb DEFERRED (Q60 unsealed). Lane-opening decision carries below |
+| **§3 R3 ERRATUM** | **SHIPPED.** 0 real flips, plant 1/1, zero-growth window. R3's v0.23 candidacy decided by the count: folded into R-NF, not re-run |
+| **§4.0 relaxations** | **EXERCISED again** (bug-not-result twice; §5). Standing as rules |
+
+### 4.2 Carried with a named dependant — these are prerequisites
+
+| lane | named dependant | disposition |
+|---|---|---|
+| **G-P0 / G-P1** | **§1 — this cycle** | not carried, **scheduled and ordered first**; the slice does not begin until both are committed |
+| **ECHO's collision result** | **§1's B5 ask-arm** | not carried, **it is item 2**, scheduled before item 1 |
+
+### 4.3 Parked, with triggers
+
+| lane | trigger to unpark |
+|---|---|
+| **The naming-layer question** — *how does a nameless library get names a person can ask by?* | **The NEW first-class carried lane both v0.22 censuses forced.** Carries to the **v0.24 course** unchanged. Candidate material named, not chosen: name-derivation from the verified English renderings the voice serves; the S3 term store priced at ~223.5 s batched over 2,313 covered statements (`experiments/handles_census.json`, `s3_price`). HANDLEBAR parks behind it |
+| **STRANGER-GATE** — the write gate's overdue adversarial red-team | **v0.24 incumbent-candidate with a PROHIBITION trigger**: it MUST run before any untrusted stream reaches the write gate, and nothing this cycle opens one (GUEST AXIOM's guest text enters a *frame*, never the gate — B1 is the proof). Its residual risk is recorded: one head authors the attacks, the twins and the gate, so it measures whether the gate DISCRIMINATES, never whether the corpus is ADEQUATE |
+| **ORPHAN** — receipts that outlive the program | **Parked as the cold-census's own recorded next question** (which single pinned dependency converts the most NEEDS-PROGRAM kinds), series-1 runner-up. **It unparks TOLL's n=1 denominator** — the shift the v0.22 drift audit named: the cost lane's metrology now has both an instrument (§2's harness) and a denominator path (ORPHAN) |
+| **PREMISE LEDGER** (supplementary-family) | **v0.23 incumbent-candidate, capability-class**, the successor to GUEST AXIOM's consumption-only scope — receipts certifying assumption *necessity* by per-premise countermodels. Carries to the **v0.24 course** unchanged; its necessity claim is explicitly **not** taken this cycle. LOADBEARING folded into it (independent convergence = evidence for it) |
+| **CANARY-CURVE** and **TOLL** | **v0.23 incumbent-candidates, instrument-class**, carry to the **v0.24 course** unchanged. CANARY-CURVE measures growth after the enumeration layer exists; TOLL is the cost lane's metrology, now with a re-check instrument (§2) and ORPHAN's denominator path. CEILING routes with TOLL |
+| **SELF-SEED** | Parked: the commit half of the parked derivations lane, with the novelty verdict the park lacked; seeds mechanically drawn, the maintainer may not pick. Unpark when a cycle wants provenance-typed growth by proof |
+| **UPSTREAM-PATCH** | Parked: the give-back direction — program-free defect reproducers to reviewed upstream — capped at UNTESTED by the outside-participation constraint (a receipt whose adjudicator is a third party the repository cannot pin). Parked with its license discipline |
+| **FOREIGN-SEAM** | **Cut, cut defended**: cross-assistant alignment language exceeds one cycle, and within-ecosystem divergence is ingestion in a seam costume. The honest residue is a **feasibility spike**, parked as such — no instrument is claimed |
+| **HANDLEBAR** — reach-by-hole-term | Parked behind the naming-layer question its shuffle limb would have probed. Its shuffle limb was a candidate rider; parked with the lane it depends on |
+| **DEMAND** — an obstruction ledger against an externally-sourced question distribution | **Parked, now with TRIPLE convergence.** The v0.22 supplementary series' programme-level blind spot (no prospectively sampled, externally sourced task distribution) was convergent evidence for it; the v0.23 course's **STRANGER'S EXAM folds into it as its calibration upgrade — the third independent arrival** (`reports/design-direction-v0.23.json`, `outcomes.series_1.folds`). Unpark needs a population of askers this repository did not author; still the missing-population problem behind STRANGER and C-V3 |
+| **The resolver's pre-emptive binding** (v0.21's G9, NOT MET) | Parked with its 13 committed fixtures; **no v0.23 headline item depends on it**, and GUEST AXIOM touches no resolver score. Unpark needs its own prereg, its own capability-blind control, and a K re-measurement. THE MEANING HANDSHAKE's `UNNAMED_SCOPE` typed refusal and person-confirmation-subsuming-resolver-pre-emption lessons are recorded against it in BACKLOG |
+| **The `conform` route advertises the asker's numbers and does not use them** | Parked unchanged from ROADMAP-v0.22 §4.3, verified not-patched this cycle; two admissible discharges intact (consume the bindings with a served diff and control, or correct the sheet/example/docstring). No v0.23 headline item depends on it |
+| **The G5-metric successor** | Parked with its rule written down; the correction is already at work (GUEST AXIOM's person-wrong control scores a correct refusal, R-NF scores regression by outcome). Unpark when a proposer lane is scheduled again |
+| **TWO WITNESSES + the independent second reading** (with the parked conformance successor) | Parked together as item-candidates; the **BOUNDED OMNISCIENCE × SPLIT-SEMANTICS** strengthened unpark formulation from the v0.22 supplementary series stands, TWO JUDGES behind it. Fragment growth alone does not unpark WITNESS — the divergent class is reachable but non-linear |
+| **The cost ledger** (answers per joule and per dollar) | **SEVENTH cycle parked**, counting basis unchanged (rotations since `DESIGN-grounded-throughput` §10: v0.17–v0.23). Still parked, still designing nothing for it this cycle — but its metrology **TOLL** now has an instrument (§2) and a denominator path (ORPHAN), which is the shift RELEASE-v0.22.0's drift audit records |
+| **Ledger-first claims** (v0.17 course, gate L1–L13, hardened) — named dependant: ***none this cycle*** | **Seventh pass-over.** Trigger restored in wording: *it **became** a headline candidate the first cycle after the throughput readout* (a fired event at v0.17, receipt `reports/design-direction-v0.17.json`). v0.22 produced no throughput readout — `experiments/throughput_tasks.json` did not change at all. Load-bearing / premise-necessity travels with it and unparks with it |
+| **Open-English input / the reverse-lexicon synonym layer** | **Parked, and the nameless finding is its definitive answer on the index side**: the lexicon the question would invert is the same glossary whose bulk (96.74% of the library) is boilerplate, so there is nothing to invert for it. The **mechanism** (inverting the lexicon) remains a distinct unanswered park; GUEST AXIOM works the 2,313-statement named remainder from the person's side. Folded under the naming-layer question |
+| **Realization parameters as data** | Parked. Askable since v0.18 (R1 fired at 0.9991), never scheduled. Unpark needs a design saying what the parameters buy over the committed grammar |
+| **The register's `mathlib_head` budget** | Parked (not "carried"): a resourcing decision, not a design one. `data/` did not move this cycle, so `blocked_total` 1,878 and `mathlib_head` 1,706 are byte-identical to v0.20/v0.21 |
+| **HOSTILE DICTATION** | Parked with the prohibition trigger; STRANGER-GATE now carries the same prohibition explicitly and is the lane most likely to discharge it. The next lane to touch it owes a **shown** answer, not a stated one |
+| **CROSSING, LONG CON, BITROT** | Parked unchanged (probes and stop rules recorded in ROADMAP-v0.22 §4.3) |
+| **C-V3 (human) — the determinacy sheet; canonical-bracketing-load-bearing; STRANGER; UNSAY/RECALL; VERDICT, DEBT NOTES, COURIER, WORD OF HONOR (standalone probes, still unrun); ATLAS, ABSENCE, RATCHET, GRAFT, IF, TRANSPLANT, BORROWED PREMISES, and the v0.19/v0.20 catch-alls** | Parked unchanged with the triggers recorded in `reports/design-direction-v0.19/20/21/22.json`. IF's second reason stands (WITNESS's 0-of-6 is its empirical form); BORROWED PREMISES' next look is due now the supposition object has matured into GUEST AXIOM |
+
+### 4.4 New parks from the v0.23 course
+
+Every declined direction carries its disposition, quoted from
+`reports/design-direction-v0.23.json` and filed in [BACKLOG](BACKLOG.md):
+
+| direction | disposition |
+|---|---|
+| **NO-FLIP** | metric leader, **overruled** → rider R-NF (regression half) |
+| **TOMORROW'S DIFF** | folded → **NO-FLIP**, cut to the regression half (R3 measured zero growth, so the improvement channel is dead this cycle) |
+| **AXIOM-BUDGET** | folded → **STRANGER-GATE** (the three-axiom PASS whitelist is the attack surface; a perimeter never attacked is the assertion that cannot go red) |
+| **TWO-KEY BIND + WANT-LIST** | folded → **HANDBACK**, the rider |
+| **THE OBJECTION SLOT** | folded → GUEST AXIOM's **person-wrong** disposition (REFUTED emits a countermodel) |
+| **TWO READINGS** | folded → **ECHO** (voice read back, no person in loop) |
+| **LOADBEARING** | folded → the **PREMISE LEDGER** incumbent (independent convergence) |
+| **STRANGER'S EXAM** | folded → the parked **DEMAND** lane, third independent arrival |
+| **STRANGER-GATE, ORPHAN, SELF-SEED, HANDLEBAR, UPSTREAM-PATCH, FOREIGN-SEAM** | parked (§4.3), each with its trigger |
+
+## 5. Governance
+
+- **The course gate was INVOKED strictly for the fifth consecutive cycle.**
+  `reports/design-direction-v0.23.json` records three isolated series, three
+  rounds each — **nine rounds, fifteen round-one directions, $2.99** — run
+  headless from an empty non-git directory outside the repository under a strict
+  tool denylist, isolation mode inherited unchanged from the v0.22 receipt. The
+  brief is on file and hash-verified; `series_1.r1` equals the brief hash by
+  construction. The v0.22 incumbent-candidates and the supplementary PREMISE
+  LEDGER were disclosed at each round two, recorded in `exclusion_note`.
+
+- **The v0.22 supplementary outside-family series carries its dispositions
+  forward.** GPT-5.6-sol via codex produced **THE PREMISE LEDGER** (recorded as
+  a v0.23 incumbent-candidate, capability-class), the **BOUNDED OMNISCIENCE ×
+  SPLIT-SEMANTICS** strengthened conformance-successor formulation, and a
+  programme-level blind spot — no prospectively sampled externally-sourced task
+  distribution — that is **convergent evidence for the parked DEMAND direction**
+  (§4.3). Nothing in the series contested the v0.22 incumbent.
+
+- **Two censuses that returned findings are this cycle's evidence pattern.**
+  v0.21 registered three outcomes with three verdicts; v0.22 registered two
+  censuses and both came back findings against a frozen stop clause — the
+  library is nameless, the evidence is program-bound. A published census is a
+  result; a quiet descope is not. GUEST AXIOM inherits the shape: its floors are
+  frozen before its instrument exists, and its pilot can stop the slice with the
+  elaboration census as the finding.
+
+- **§4.0's relaxations were exercised again, and audited.** Bug-not-result was
+  used twice on the cold-receipt lane — the C-E3 supplement's removal arm was a
+  provably-never-executed control (a bug, re-run under amendment 2), and the
+  registry-half instance rule read `none` for two kinds holding thousands of
+  instances. The line held: not once was a control that ran and read unfavourably
+  repaired and re-run — the corrected two-limb arm read 1/10/8, and the honest
+  number is smaller than run 1's, not larger.
+
+- **The review gate binds the orchestrator, and both v0.23 designs are the
+  evidence.** ECHO was falsified before landing — it claimed a code-disjoint
+  reader the tree does not hold (there is no committed sentence→term path that is
+  not the renderer's own inverse), and now builds one from scratch while stating
+  on the page that it is import-disjoint but not algorithmically independent.
+  GUEST AXIOM was falsified before landing — its draft lacked a result gate and a
+  powered person-wrong control, both now frozen. This is the **second consecutive
+  cycle** in which the selected designs failed their first review; a review gate
+  that binds the measurements and not the person planning them has a hole in it,
+  and this cycle closes it the only way it can be closed — an adversarial reader
+  who checks the plan against the tree before it lands.
+
+- **Headline selection remains part of the evidence trail.** When the v0.24
+  course reports, its selection and every declined disposition are recorded in
+  the roadmap, the receipt, and the release notes.
+
+## Release gate
+
+v0.23 is ready only if:
+
+- **G-P0 and G-P1 are committed in order, before the slice begins**, with G-P0's
+  50 hypotheses sealed under a drawing rule committed before the draw, and the 20
+  person-wrong corrections externally sourced;
+- **B1's quarantine holds for 100% of the 50 sessions** — one digest mismatch
+  fails the lane as a containment defect — and **G-P1's planted-write control is
+  caught 1/1** before any real session runs;
+- **the elaboration pilot's floor is frozen from the pilot by dated amendment**
+  before the remaining hypotheses run, and if the reading is below 40% the lane
+  **stops with the elaboration census as its finding** rather than shipping a
+  rate over a tiny remainder;
+- **the person-wrong control is scored**, and if the two-sample test at α = 0.05
+  cannot reject, the person-wrong claim is published **UNDERPOWERED, not made**;
+  a perfect control score is a **positive void**;
+- **no `CONDITIONAL` record is served with `consumed == false`** — a vacuous
+  implication is refused `GUEST_UNCONSUMED`, never served;
+- **ECHO ships before item 1**, with `reparser_sha256`'s import closure audited
+  disjoint from the render/inverse pair at registration (an import voids the run
+  before rendering), the scramble arm run, and collisions published
+  falsification-only; **no injectivity rate is a capability**;
+- **the guest hypothesis text never enters the committed library** — B1 is the
+  proof, tested not asserted;
+- **no premise-necessity claim, no prose-understanding claim, and no
+  stranger-usability claim** is made anywhere; G-P0's authorship contamination
+  travels with every number;
+- `check_report_regeneration.py` runs in the release refresh **with its verdicts
+  in the notes**, and `ingest_wold.py reach` either runs or is reported as
+  *cannot verify* rather than as a skip;
+- the full suite is green on a frozen tip with retained receipts, and
+  `[SUITE-GATE-V22]`/`[SUITE-GATE-V23]` are resolved rather than left as a fourth
+  unresolved placeholder;
+- every unfinished item ships or parks **in writing**;
+- the outside design inquiry is **invoked** for v0.24 with the receipt named, and
+  the v0.24 brief carries this cycle's readouts **including any stop**.

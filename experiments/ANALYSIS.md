@@ -1,3 +1,76 @@
+# HANDLES / H-P0: the ingested library is effectively nameless (2026-08-27)
+
+`experiments/handles_census.json`, writer `scripts/handles_census.py`, id→skeleton
+table `experiments/skeleton_index.json`. Design: `docs/DESIGN-handles.md` §9.
+
+**The readout.** Of 12,777 statements, the typable union of specific handles is
+**417 (3.26%)** — S-LEX **263 (2.06%)**, S-INV **306 (2.39%)** — leaving 12,360
+with none. S-LEX's 263 are exactly the 263 curated statements: the 12,514
+`lean_workbook` bulk carry **9 distinct glossary tokens** (1 a name token,
+`equality`) and 6 distinct raw glossary strings between all of them, six of the
+nine tokens each blanketing >12,200 statements, so K = 128 excludes them and 0
+of 12,514 has a specific S-LEX handle.
+
+**K is not the lever.** Sweep published in `k_sensitivity`: the typable union is
+invariant at 417 for K ∈ [80, 218]; the bulk's specific-S-LEX coverage stays 0
+until K crosses 302, where it jumps to **302 and caps there forever** (302 at
+K=302/1024/4096). B2's re-freeze trigger fired on the strand condition and was
+adjudicated NOT-FIRED (no re-freeze rescues the bulk).
+
+**S3 priced, not taken.** 2,319 oracle-eligible, 2,313 covered (a subset, never
+summed). Measured runtime estimate: **~223.5 s batched** for one term per
+covered statement (`s3_price.runtime_estimate.projected_seconds`; the design
+addendum rounds to ~217 s). Only digests are persisted today
+(`scripts/foreign_voice.py:182-191`), so a term store is a storage + re-elaboration
+cost.
+
+**Adjudication.** §9's stop clause **FIRED** (two grounds: cap-at-302; a
+42-target Q60 seal against a 417 population is a manifest consuming its
+population). Census is the deliverable; no table, no pilot, no Q60. Review
+reproduced every number to the digit with row-level agreement on all 12,777, and
+caught two instrument defects (false writer attestation; hash-seed tie-order in
+the `most_resolving` ranking) — both fixed, no headline number moved.
+
+# R1 / ONE STEP: 9,048 statements have a one-step consumer shape; 125 are nameable (2026-08-27)
+
+`experiments/onestep_census.json`. Design: `docs/DESIGN-handles.md` §7 B9.
+Rider R1 — the fold of CHAIN and BRIDGE.
+
+**The readout.** 9,048 of 12,777 statements (70.8%) admit a one-step consumer
+shape under the strict reading (IMPLICATION 2,081 + CONDITIONAL_INEQUALITY 960 +
+SIDE_CONDITIONED_BOUND 6,007); 9,393 under the widest reading. This is a parse
+question only — no search, no Lean, no proof attempt, and no claim any consumable
+statement *can* be consumed.
+
+**Floor.** B9's statement-side floor (≥200 one-step-consumable) is met **45×
+over** (9,048/200). The **question-side half is DEFERRED**: Q60 is unsealed and
+this slice is forbidden to seal it; a number from unsealed drafts would be the
+sealed-after-the-fact defect.
+
+**Cross-census reading, the cycle's sharpest.** Of the 9,048 one-step-consumable
+statements, **125 carry a specific S-LEX or S-INV handle** (K = 128); 8,923 carry
+none. The consumable mass and the reachable mass are largely the same nameless
+statements. Recorded as an observation over two committed censuses, not a verdict
+on either lane.
+
+# R3 / ERRATUM: 0 real flips over a digest-proven zero-growth window (2026-08-27)
+
+`experiments/erratum_probe.json`, plant journal `experiments/erratum_plant_journal.json`.
+Design: `docs/DESIGN-handles.md` §7 B9. Rider R3 — typed-delta replay of served
+history against corpus growth.
+
+**The readout.** 0 real flips over **410 replayed turns** from 60 committed v0.21
+journals (70 of those turns recorded a refusal, across 7 refusal types, 10 each).
+The **planted flip was detected 1/1**, meeting B9's floor. Statements added in
+the window: **0** — the recorded and live `corpora_digest` are byte-identical
+(`22091b1f…`), so the probe measured a growth window containing no growth.
+
+**Scale sentence.** Zero is evidence the window held no growth, which is a
+different sentence from "flips are rare," and the artifact says which one it is.
+Per B9, this publication decides R3's v0.23 candidacy by the count, not by
+re-running — folded into v0.23's rider R-NF. No forgery claim (MACs are not
+verified on this path).
+
 # COLD RECEIPT: 1 of 19 receipt kinds survives the program's deletion (2026-08-27)
 
 `cold/census_run2.json`, harness `harness/cold_harness.py`, registry

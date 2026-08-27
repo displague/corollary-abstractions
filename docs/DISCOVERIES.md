@@ -13,6 +13,49 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## The ingested library is effectively nameless — 417 of 12,777 statements can be named specifically enough to ask for (2026-08-27)
+
+**Claim.** Reachability by name, not by title, is a property the whole
+architecture assumed and never measured. Measured now: of 12,777 statements,
+only **417 (3.26%)** carry a handle from either title-free index specific enough
+for a person to type and reach them by — **263 (2.06%)** via the per-node
+glossary (S-LEX), **306 (2.39%)** via the call-head inventory (S-INV). The
+other **12,360** carry none.
+
+**Evidence.** `experiments/handles_census.json`. The cause is measured:
+**12,514 `lean_workbook` statements were ingested in bulk and carry nine
+distinct glossary tokens between all of them**, six of which each blanket more
+than 12,200 statements — so the specificity bound `K = 128` excludes them all,
+and not one of the 12,514 has a specific S-LEX handle. No re-freeze of K rescues
+the bulk: coverage of the bulk caps at **302 statements** at every K forever
+(302 at K=302, at K=1024, at K=4096). The typable union is invariant at 417 for
+all K in [80, 218].
+
+**Status.** The design's §9 stop clause **fired**: *the ingested library is
+effectively nameless; the naming layer must be built, not indexed.* No
+capability sentence, no handle table, no Q60. Hostile review reproduced every
+number to the digit, including row-level agreement on all 12,777 one-step
+classifications; two instrument defects (a false writer attestation, a hash-seed
+tie-order) were caught and fixed with no headline number moved.
+
+## The library can compute far more than anyone can name to ask for — 125 of 9,048 consumable statements are nameable (2026-08-27)
+
+**Claim.** Two censuses overlaid give the cycle's sharpest reading. Of the
+**9,048** statements (70.8%) whose committed form has the shape of a one-step
+consumer — a hypothesis it could discharge, a bound it could take — only **125**
+carry a specific typable handle. The mass the program can *work on* and the mass
+a person can *reach* are almost disjoint.
+
+**Evidence.** `experiments/onestep_census.json`, `cross_census_reading` (against
+`experiments/handles_census.json` at K = 128). This is an observation about two
+committed censuses, not a verdict on either lane: shape is a parse question and
+no prover ran, so no statement is claimed *consumable*, only consumer-*shaped*;
+the 125 *carry* handles, and nothing is claimed reachable in service.
+
+**Status.** R1's statement-side floor (200) is met 45× over; its question-side
+half is DEFERRED with Q60 unsealed. The gap between computable and nameable is
+what the v0.23 course's GUEST AXIOM approaches from the person's side.
+
 ## A receipt is cold-recheckable only when its adjudicator is not the program — and one executed case is all this measures (2026-08-27)
 
 **Claim, scoped to what ran.** Across 19 receipt kinds this repository emits,

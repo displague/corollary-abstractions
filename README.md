@@ -6,7 +6,27 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. Latest release: [v0.21.0](docs/RELEASE-v0.21.0.md) — **three
+interface. <!-- [SUITE-GATE-V22] the full-suite verdict, its wall-clock and any red runs
+     land at the frozen tip in docs/RELEASE-v0.22.0.md and reports/test_gate_v022/;
+     this placeholder is the third consecutive unresolved suite-gate token (V20,
+     V21, V22) and is named in RELEASE-v0.22.0's drift audit rather than hidden. -->
+Latest release: [v0.22.0](docs/RELEASE-v0.22.0.md) — **two censuses, two
+findings: the library is nameless and its evidence is program-bound.** Asked how
+much of the corpus a person could reach by name rather than by title, the census
+came back **417 of 12,777 statements (3.26%)** with a specific typable handle and
+**12,360 with none** — the bulk of the library shares nine boilerplate glossary
+words, and no threshold rescues it (it caps at 302 rescuable names forever). The
+design's stop clause **fired**, and firing it is the result: *the ingested
+library is effectively nameless; the naming layer must be built, not indexed.*
+The sharpest overlay: of the **9,048** statements the engine can consume in one
+step, **125** are nameable — the library computes far more than anyone can ask it
+for. Separately, of 19 kinds of receipt this program emits, **1 survives** the
+program's deletion, **10 need the program**, and **8 could not be re-checked at
+all** — offline-checkability is earned by naming an adjudicator that is not the
+program, not by carrying a digest of your own work. Both are published stops
+against clauses frozen before the numbers were known. See [the library that had
+no names](docs/blog/the-library-that-had-no-names.md).
+[v0.21.0](docs/RELEASE-v0.21.0.md) is the floor under it — **three
 registered outcomes, three different verdicts, every one published with its
 mechanism.** A **recorded** conversation is now a **journal**: `suppose n = 4`
 persists as an Assumption record, answers name **which suppositions they
