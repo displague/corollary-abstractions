@@ -718,6 +718,11 @@ PROVENANCED_LEDGERS = {
     "experiments/skeleton_index.json": "scripts/handles_census.py",
     "experiments/onestep_census.json": "scripts/onestep_census.py",
     "experiments/erratum_probe.json": "scripts/erratum_probe.py",
+    #: v0.22 item 2, CR-P0. Joins the list at the moment it is committed
+    #: rather than after the fact, because this cycle's lesson is that a
+    #: provenance block adopted without the guard that scores it is
+    #: decoration.
+    "experiments/cold_registry_census.json": "scripts/cold_registry_census.py",
 }
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
