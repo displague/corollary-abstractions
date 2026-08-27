@@ -1,0 +1,1309 @@
+{
+  "schema": "handles_census.v1",
+  "design": "docs/DESIGN-handles.md",
+  "roadmap": "docs/ROADMAP-v0.22.md",
+  "roadmap_item": "v0.22 item 1 -- H-P0, the construction prerequisite",
+  "measurement_only": "No handle table is built here, no budget is frozen, no question set is sealed. DESIGN-handles.md §6 orders this census before all three, and B10 makes a handle from outside its coverage red.",
+  "headline": "The ingested library is effectively nameless. Of 12777 statements, S-LEX gives a specific handle to 263 (2.06%) and S-INV to 306 (2.39%); their union -- everything a person could plausibly type -- is 417 (3.26%), leaving 12360 statements with no specific handle at all. S-LEX's 263 are exactly the 263 curated statements minus 0: the 12514 lean_workbook statements carry 9 distinct glossary tokens and 6 distinct glossary strings between all of them, and not one of them has a specific S-LEX handle. The naming layer must be built, not indexed.",
+  "headline_is_the_stop_clause": "DESIGN-handles.md §9's stop clause fires on specific-handle coverage near the review's indicative ~2%. The review's two indicative numbers are reproduced here exactly -- 263 via S-LEX (review said ~263) and 306 via S-INV (review said ~306) -- so the ~2% figure is confirmed per source, at 2.06% and 2.39%. The typable union is 3.26%, which is the wider reading and is published beside them rather than instead of them. The clause is the design's to adjudicate and the roadmap's to seal; this census's job is to make sure the adjudication has numbers.",
+  "specificity_K": 128,
+  "specificity_definition": "a handle is specific iff resolves_to_count <= K (DESIGN-handles.md §7 B2). K is NOT re-frozen here; B2 says a re-freeze is argued from the distribution this census publishes, by dated amendment before the table run.",
+  "provenance": {
+    "writer": "scripts/handles_census.py",
+    "writer_sha256_lf": "836c42234f2bb04e43109945b889cac8d591319a68a19c8bc1f631a1165e4487",
+    "inputs": [
+      {
+        "path": "data/algebra/nodes.json",
+        "sha256_lf": "ddadd7134e687d4f7b7c6fcc6085ba858d5583c8bcf2d72ca2d58f76d8ea90a3"
+      },
+      {
+        "path": "data/algebraic_topology/nodes.json",
+        "sha256_lf": "79fc174c2f3cc74139c44465cf84d1fb40631940b6dd587c92e14af1cd137b60"
+      },
+      {
+        "path": "data/calculus/nodes.json",
+        "sha256_lf": "42465086821490d7366715bc703799ce7c9309819b40937fd71ea2e72d02e059"
+      },
+      {
+        "path": "data/chemistry/nodes.json",
+        "sha256_lf": "9ac039b23d7feaf8be8b44404a9b3a6997d4a3b5c96c5f1430527014645faed0"
+      },
+      {
+        "path": "data/differential_geometry/nodes.json",
+        "sha256_lf": "83c6a3928cfe577cb0360c776085ca9a51a8d28809d10cbccc3a202b84154fb0"
+      },
+      {
+        "path": "data/differential_topology/nodes.json",
+        "sha256_lf": "f66370167c27cfb3118996f7ab99142d97053a6aaabcdf8ae3cd4bc5355b70df"
+      },
+      {
+        "path": "data/economics/nodes.json",
+        "sha256_lf": "6f110c42a54ed490ae11b2dce0cb3bcc65381d0472de630307ddeb3cefd540d1"
+      },
+      {
+        "path": "data/foreign_voice/eligibility_preview.json",
+        "sha256_lf": "31dca78a064815f6ceb94cc3d4f0fa4e56a5bc37da293e1bea0c209230c7ba3f"
+      },
+      {
+        "path": "data/foreign_voice/register.json",
+        "sha256_lf": "1b8d5c2dbc221df1b4c6894a0e7e4a8bc558182cba655f9dbdddaa6b11e3f857"
+      },
+      {
+        "path": "data/geometric_modeling/nodes.json",
+        "sha256_lf": "8ad24415cd4a5fee88a9addacdfe29fb00890bc1f63156ab7bc60fb653b0f3a7"
+      },
+      {
+        "path": "data/geometry/nodes.json",
+        "sha256_lf": "dfe25f99d8ecddccc23999a1b9033c94ba6f5ee2fa22e718d029c1cce49a7287"
+      },
+      {
+        "path": "data/geospatial_topology/nodes.json",
+        "sha256_lf": "207fe4fff677a05fb540142ae402a58d54ef23ff7578809ce1e931c5ffbcff05"
+      },
+      {
+        "path": "data/graph_theory/nodes.json",
+        "sha256_lf": "4455013e79d53040abc3c4335152a411f22644cc70600f3b5c0f9ddf9b1c4677"
+      },
+      {
+        "path": "data/information_theory/nodes.json",
+        "sha256_lf": "17be2d8cebe4ac91df2ef255fd0cba7997c9884cc5f5f1a8a93667ed66d0e8d9"
+      },
+      {
+        "path": "data/ingested_arithmetic/nodes.json",
+        "sha256_lf": "6e19d72abcfac49dfb36b03103919cc860f1dc76c3f2d94a102b0892fc9a549d"
+      },
+      {
+        "path": "data/lean_workbook/nodes.json",
+        "sha256_lf": "bf6a5efd62fc298cb2a7e7558792f0c2c968a53ce80133a30f9c3244ad266468"
+      },
+      {
+        "path": "data/logic/nodes.json",
+        "sha256_lf": "a46cdc1ce7e070028b6096001e0656b748a0c5f6f74cbd13a6c1c73090fbe018"
+      },
+      {
+        "path": "data/machine_learning/nodes.json",
+        "sha256_lf": "333753fe8329c4569ae83d534dc1d8ece58498859524164f15044328b2486528"
+      },
+      {
+        "path": "data/morphology/nodes.json",
+        "sha256_lf": "524112d2a0053006dce95e3b5554b6bd331d2dacb0c21ad90da16d4105df17e1"
+      },
+      {
+        "path": "data/narrative/nodes.json",
+        "sha256_lf": "8d7605f7ce60c2a0c19d1e04ef17c80c1f7b4f7363bbfcc88bf572f4fcc2dd08"
+      },
+      {
+        "path": "data/number_theory/nodes.json",
+        "sha256_lf": "330c1f7bfc51ba0df4edca8c0f94376c0231a1699812dd90c68d2d9a2ebe5037"
+      },
+      {
+        "path": "data/numerical_analysis/nodes.json",
+        "sha256_lf": "fe816fbe02847fd816a8a8980cf1c7010370911b4fbdf5e22460e6d714f9fe59"
+      },
+      {
+        "path": "data/physics/nodes.json",
+        "sha256_lf": "56c0bd01b33293845ab7ef313ba2d44f5df67a5bc429fa68e79ca4d1835e985b"
+      },
+      {
+        "path": "data/programming/nodes.json",
+        "sha256_lf": "09408f5b6ccf832b789619daa73d4d0ccb7a3087b3750427dc15fed9d078d741"
+      },
+      {
+        "path": "data/provability/nodes.json",
+        "sha256_lf": "a562bf2d4c23f03d46f9649ee56be1e9b709dcd75e789918d678d36cbb8e04ee"
+      },
+      {
+        "path": "data/realization/lexicon.json",
+        "sha256_lf": "f2c22a5cccedf9eb8d18549c06eb017c95b07f51aa901dfcb85585ed05c82587"
+      },
+      {
+        "path": "data/set_theory/nodes.json",
+        "sha256_lf": "cf6d12b00585156a333af4770b2860861b34d48c57fcf865df4fc9172a1e184c"
+      },
+      {
+        "path": "data/statistics/nodes.json",
+        "sha256_lf": "9849a90aeb4d9db98b5eefff563a5b0244cb352e3b969c00994ac02fe041f85d"
+      },
+      {
+        "path": "data/temporal_logic/nodes.json",
+        "sha256_lf": "e798dddfc71ece9156b291d9779fbee7fd268cf97a0954f53e82f1c49c04cdd2"
+      },
+      {
+        "path": "data/trigonometry/nodes.json",
+        "sha256_lf": "b98b18235968f980ccea32bc029075211edfc662afbd9ed7da5bc7b5ff199a03"
+      },
+      {
+        "path": "experiments/foreign_voice_rate.json",
+        "sha256_lf": "294fb72184087bef216b2b678eb577ef7656175b33236359a57efd152463901d"
+      }
+    ],
+    "emitted_at_generation": true
+  },
+  "corpus": {
+    "statements": 12777,
+    "curated": 263,
+    "bulk_lean_workbook": 12514,
+    "template_parse_problems": 0,
+    "per_corpus": {
+      "algebra": 1,
+      "algebraic_topology": 8,
+      "calculus": 11,
+      "chemistry": 10,
+      "differential_geometry": 9,
+      "differential_topology": 7,
+      "economics": 11,
+      "geometric_modeling": 8,
+      "geometry": 15,
+      "geospatial_topology": 7,
+      "graph_theory": 8,
+      "information_theory": 10,
+      "ingested_arithmetic": 1,
+      "lean_workbook": 12514,
+      "logic": 20,
+      "machine_learning": 14,
+      "morphology": 11,
+      "narrative": 13,
+      "number_theory": 16,
+      "numerical_analysis": 8,
+      "physics": 15,
+      "programming": 9,
+      "provability": 6,
+      "set_theory": 10,
+      "statistics": 11,
+      "temporal_logic": 16,
+      "trigonometry": 8
+    }
+  },
+  "sources": {
+    "S-LEX": {
+      "producer": "scripts/resolver.py:264-277 (the per-node symbol_lexicon glossary resolver.by_lexicon is built from)",
+      "definition": "handle = a content word of a glossary entry's name, description or semantic_role, over the five groups ['symbols', 'operators', 'functionals', 'constants', 'index_sets'], lowercased on [a-z0-9_]+ with resolver.STOPWORDS removed -- the resolver's own field set and its own reduction",
+      "reads_title_or_keywords": false,
+      "coverage": {
+        "statements_with_any_handle": 12777,
+        "statements_with_specific_handle": 263,
+        "statements_with_no_handle": 0,
+        "statements_with_only_overbroad_handles": 12514,
+        "specific_by_corpus": {
+          "algebra": 1,
+          "algebraic_topology": 8,
+          "calculus": 11,
+          "chemistry": 10,
+          "differential_geometry": 9,
+          "differential_topology": 7,
+          "economics": 11,
+          "geometric_modeling": 8,
+          "geometry": 15,
+          "geospatial_topology": 7,
+          "graph_theory": 8,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "logic": 20,
+          "machine_learning": 14,
+          "morphology": 11,
+          "narrative": 13,
+          "number_theory": 16,
+          "numerical_analysis": 8,
+          "physics": 15,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 10,
+          "statistics": 11,
+          "temporal_logic": 16,
+          "trigonometry": 8
+        },
+        "any_by_corpus": {
+          "algebra": 1,
+          "algebraic_topology": 8,
+          "calculus": 11,
+          "chemistry": 10,
+          "differential_geometry": 9,
+          "differential_topology": 7,
+          "economics": 11,
+          "geometric_modeling": 8,
+          "geometry": 15,
+          "geospatial_topology": 7,
+          "graph_theory": 8,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "lean_workbook": 12514,
+          "logic": 20,
+          "machine_learning": 14,
+          "morphology": 11,
+          "narrative": 13,
+          "number_theory": 16,
+          "numerical_analysis": 8,
+          "physics": 15,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 10,
+          "statistics": 11,
+          "temporal_logic": 16,
+          "trigonometry": 8
+        }
+      },
+      "distribution": {
+        "distinct_handles": 1919,
+        "specific_handles": 1910,
+        "overbroad_handles": 9,
+        "min": 1,
+        "max": 12705,
+        "mean": 44.346,
+        "median": 2,
+        "quantiles": {
+          "p50": 2,
+          "p90": 12,
+          "p99": 56
+        },
+        "histogram": {
+          "1": 848,
+          "2": 295,
+          "3-4": 240,
+          "5-8": 247,
+          "9-16": 154,
+          "17-32": 69,
+          "33-64": 48,
+          "65-128": 9,
+          "129-256": 0,
+          "257-1024": 3,
+          "1025-4096": 0,
+          "4097-16384": 6,
+          ">16384": 0
+        },
+        "most_resolving": [
+          {
+            "handle": "equality",
+            "resolves_to_count": 12705
+          },
+          {
+            "handle": "template",
+            "resolves_to_count": 12522
+          },
+          {
+            "handle": "standing",
+            "resolves_to_count": 12516
+          },
+          {
+            "handle": "slot",
+            "resolves_to_count": 12248
+          },
+          {
+            "handle": "ingested_slot",
+            "resolves_to_count": 12212
+          },
+          {
+            "handle": "emitted",
+            "resolves_to_count": 12212
+          },
+          {
+            "handle": "ground",
+            "resolves_to_count": 305
+          },
+          {
+            "handle": "numeral",
+            "resolves_to_count": 305
+          },
+          {
+            "handle": "ground_numeral",
+            "resolves_to_count": 302
+          },
+          {
+            "handle": "multiplication",
+            "resolves_to_count": 97
+          },
+          {
+            "handle": "second",
+            "resolves_to_count": 88
+          },
+          {
+            "handle": "head",
+            "resolves_to_count": 77
+          },
+          {
+            "handle": "same",
+            "resolves_to_count": 75
+          },
+          {
+            "handle": "two",
+            "resolves_to_count": 72
+          },
+          {
+            "handle": "argument",
+            "resolves_to_count": 71
+          },
+          {
+            "handle": "s",
+            "resolves_to_count": 68
+          },
+          {
+            "handle": "first",
+            "resolves_to_count": 68
+          },
+          {
+            "handle": "statement",
+            "resolves_to_count": 65
+          },
+          {
+            "handle": "logic",
+            "resolves_to_count": 58
+          },
+          {
+            "handle": "arbitrary",
+            "resolves_to_count": 56
+          },
+          {
+            "handle": "meet",
+            "resolves_to_count": 55
+          },
+          {
+            "handle": "data",
+            "resolves_to_count": 53
+          },
+          {
+            "handle": "output",
+            "resolves_to_count": 51
+          },
+          {
+            "handle": "lattice",
+            "resolves_to_count": 50
+          },
+          {
+            "handle": "addition",
+            "resolves_to_count": 49
+          }
+        ]
+      }
+    },
+    "S-LEX-names-only": {
+      "producer": "same glossary, `name` key alone",
+      "definition": "the sensitivity reading: §3's table calls the source \"symbol_lexicon names\" while the producer it cites reads three keys. Published so neither reading is quietly chosen.",
+      "reads_title_or_keywords": false,
+      "coverage": {
+        "statements_with_any_handle": 12777,
+        "statements_with_specific_handle": 262,
+        "statements_with_no_handle": 0,
+        "statements_with_only_overbroad_handles": 12515,
+        "specific_by_corpus": {
+          "algebra": 1,
+          "algebraic_topology": 8,
+          "calculus": 11,
+          "chemistry": 10,
+          "differential_geometry": 9,
+          "differential_topology": 7,
+          "economics": 11,
+          "geometric_modeling": 8,
+          "geometry": 15,
+          "geospatial_topology": 7,
+          "graph_theory": 8,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "logic": 20,
+          "machine_learning": 14,
+          "morphology": 11,
+          "narrative": 13,
+          "number_theory": 16,
+          "numerical_analysis": 8,
+          "physics": 14,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 10,
+          "statistics": 11,
+          "temporal_logic": 16,
+          "trigonometry": 8
+        },
+        "any_by_corpus": {
+          "algebra": 1,
+          "algebraic_topology": 8,
+          "calculus": 11,
+          "chemistry": 10,
+          "differential_geometry": 9,
+          "differential_topology": 7,
+          "economics": 11,
+          "geometric_modeling": 8,
+          "geometry": 15,
+          "geospatial_topology": 7,
+          "graph_theory": 8,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "lean_workbook": 12514,
+          "logic": 20,
+          "machine_learning": 14,
+          "morphology": 11,
+          "narrative": 13,
+          "number_theory": 16,
+          "numerical_analysis": 8,
+          "physics": 15,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 10,
+          "statistics": 11,
+          "temporal_logic": 16,
+          "trigonometry": 8
+        }
+      },
+      "distribution": {
+        "distinct_handles": 234,
+        "specific_handles": 233,
+        "overbroad_handles": 1,
+        "min": 1,
+        "max": 12705,
+        "mean": 60.0556,
+        "median": 2.0,
+        "quantiles": {
+          "p50": 2,
+          "p90": 14,
+          "p99": 49
+        },
+        "histogram": {
+          "1": 87,
+          "2": 42,
+          "3-4": 38,
+          "5-8": 22,
+          "9-16": 26,
+          "17-32": 10,
+          "33-64": 7,
+          "65-128": 1,
+          "129-256": 0,
+          "257-1024": 0,
+          "1025-4096": 0,
+          "4097-16384": 1,
+          ">16384": 0
+        },
+        "most_resolving": [
+          {
+            "handle": "equality",
+            "resolves_to_count": 12705
+          },
+          {
+            "handle": "multiplication",
+            "resolves_to_count": 96
+          },
+          {
+            "handle": "addition",
+            "resolves_to_count": 49
+          },
+          {
+            "handle": "lattice",
+            "resolves_to_count": 49
+          },
+          {
+            "handle": "subtraction",
+            "resolves_to_count": 40
+          },
+          {
+            "handle": "implication",
+            "resolves_to_count": 36
+          },
+          {
+            "handle": "material",
+            "resolves_to_count": 35
+          },
+          {
+            "handle": "set",
+            "resolves_to_count": 34
+          },
+          {
+            "handle": "negation",
+            "resolves_to_count": 34
+          },
+          {
+            "handle": "meet",
+            "resolves_to_count": 32
+          },
+          {
+            "handle": "exponentiation",
+            "resolves_to_count": 29
+          },
+          {
+            "handle": "division",
+            "resolves_to_count": 28
+          },
+          {
+            "handle": "conjunction",
+            "resolves_to_count": 26
+          },
+          {
+            "handle": "modality",
+            "resolves_to_count": 23
+          },
+          {
+            "handle": "equivalence",
+            "resolves_to_count": 22
+          },
+          {
+            "handle": "predicate",
+            "resolves_to_count": 19
+          },
+          {
+            "handle": "complement",
+            "resolves_to_count": 18
+          },
+          {
+            "handle": "elements",
+            "resolves_to_count": 18
+          },
+          {
+            "handle": "algebra",
+            "resolves_to_count": 18
+          },
+          {
+            "handle": "join",
+            "resolves_to_count": 16
+          },
+          {
+            "handle": "summation",
+            "resolves_to_count": 15
+          },
+          {
+            "handle": "level",
+            "resolves_to_count": 14
+          },
+          {
+            "handle": "meta",
+            "resolves_to_count": 14
+          },
+          {
+            "handle": "disjunction",
+            "resolves_to_count": 14
+          },
+          {
+            "handle": "index",
+            "resolves_to_count": 13
+          }
+        ]
+      }
+    },
+    "S-INV": {
+      "producer": "scripts/match_signatures.py:952 (template_call_heads), reached at :1038 via load_nodes",
+      "definition": "handle = a call head occurring anywhere in the canonical parse of structural_signature.anonymized_template. Title-free by construction",
+      "reads_title_or_keywords": false,
+      "coverage": {
+        "statements_with_any_handle": 10690,
+        "statements_with_specific_handle": 306,
+        "statements_with_no_handle": 2087,
+        "statements_with_only_overbroad_handles": 10384,
+        "specific_by_corpus": {
+          "algebraic_topology": 4,
+          "calculus": 9,
+          "chemistry": 4,
+          "differential_geometry": 5,
+          "differential_topology": 6,
+          "economics": 2,
+          "geometric_modeling": 4,
+          "geometry": 1,
+          "geospatial_topology": 5,
+          "graph_theory": 2,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "lean_workbook": 154,
+          "logic": 9,
+          "machine_learning": 8,
+          "morphology": 11,
+          "narrative": 12,
+          "number_theory": 16,
+          "numerical_analysis": 1,
+          "physics": 1,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 3,
+          "statistics": 6,
+          "temporal_logic": 16,
+          "trigonometry": 1
+        },
+        "any_by_corpus": {
+          "algebra": 1,
+          "algebraic_topology": 4,
+          "calculus": 9,
+          "chemistry": 4,
+          "differential_geometry": 5,
+          "differential_topology": 6,
+          "economics": 2,
+          "geometric_modeling": 4,
+          "geometry": 1,
+          "geospatial_topology": 6,
+          "graph_theory": 2,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "lean_workbook": 10509,
+          "logic": 20,
+          "machine_learning": 8,
+          "morphology": 11,
+          "narrative": 13,
+          "number_theory": 16,
+          "numerical_analysis": 1,
+          "physics": 2,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 10,
+          "statistics": 6,
+          "temporal_logic": 16,
+          "trigonometry": 8
+        }
+      },
+      "distribution": {
+        "distinct_handles": 95,
+        "specific_handles": 86,
+        "overbroad_handles": 9,
+        "min": 1,
+        "max": 9403,
+        "mean": 228.3263,
+        "median": 2,
+        "quantiles": {
+          "p50": 2,
+          "p90": 80,
+          "p99": 9403
+        },
+        "histogram": {
+          "1": 39,
+          "2": 18,
+          "3-4": 10,
+          "5-8": 8,
+          "9-16": 7,
+          "17-32": 2,
+          "33-64": 1,
+          "65-128": 1,
+          "129-256": 2,
+          "257-1024": 4,
+          "1025-4096": 1,
+          "4097-16384": 2,
+          ">16384": 0
+        },
+        "most_resolving": [
+          {
+            "handle": "IMPLIES",
+            "resolves_to_count": 9403
+          },
+          {
+            "handle": "MEET",
+            "resolves_to_count": 8160
+          },
+          {
+            "handle": "SQRT",
+            "resolves_to_count": 1345
+          },
+          {
+            "handle": "FORALL",
+            "resolves_to_count": 933
+          },
+          {
+            "handle": "NEG",
+            "resolves_to_count": 406
+          },
+          {
+            "handle": "COS",
+            "resolves_to_count": 298
+          },
+          {
+            "handle": "SIN",
+            "resolves_to_count": 281
+          },
+          {
+            "handle": "JOIN",
+            "resolves_to_count": 233
+          },
+          {
+            "handle": "EXISTS",
+            "resolves_to_count": 219
+          },
+          {
+            "handle": "LOG",
+            "resolves_to_count": 80
+          },
+          {
+            "handle": "EXP",
+            "resolves_to_count": 51
+          },
+          {
+            "handle": "TAN",
+            "resolves_to_count": 24
+          },
+          {
+            "handle": "EVEN",
+            "resolves_to_count": 23
+          },
+          {
+            "handle": "sum",
+            "resolves_to_count": 16
+          },
+          {
+            "handle": "ODD",
+            "resolves_to_count": 14
+          },
+          {
+            "handle": "LEQ",
+            "resolves_to_count": 12
+          },
+          {
+            "handle": "D",
+            "resolves_to_count": 10
+          },
+          {
+            "handle": "PRIME",
+            "resolves_to_count": 9
+          },
+          {
+            "handle": "CONCAT",
+            "resolves_to_count": 9
+          },
+          {
+            "handle": "ITE",
+            "resolves_to_count": 9
+          },
+          {
+            "handle": "PRED",
+            "resolves_to_count": 8
+          },
+          {
+            "handle": "INTEGRAL",
+            "resolves_to_count": 7
+          },
+          {
+            "handle": "ALWAYS",
+            "resolves_to_count": 7
+          },
+          {
+            "handle": "EVENTUALLY",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "BOX",
+            "resolves_to_count": 6
+          }
+        ]
+      },
+      "full_head_index": {
+        "IMPLIES": 9403,
+        "MEET": 8160,
+        "SQRT": 1345,
+        "FORALL": 933,
+        "NEG": 406,
+        "COS": 298,
+        "SIN": 281,
+        "JOIN": 233,
+        "EXISTS": 219,
+        "LOG": 80,
+        "EXP": 51,
+        "TAN": 24,
+        "EVEN": 23,
+        "sum": 16,
+        "ODD": 14,
+        "LEQ": 12,
+        "D": 10,
+        "CONCAT": 9,
+        "ITE": 9,
+        "PRIME": 9,
+        "PRED": 8,
+        "ALWAYS": 7,
+        "INTEGRAL": 7,
+        "BOX": 6,
+        "EVENTUALLY": 6,
+        "CARD": 5,
+        "EQ": 5,
+        "MOD": 5,
+        "NEXT": 4,
+        "ONCE": 4,
+        "ABS": 3,
+        "COMPOSE": 3,
+        "EULERCHAR": 3,
+        "F": 3,
+        "HALVE": 3,
+        "HISTORICALLY": 3,
+        "IRRATIONAL": 3,
+        "PREV": 3,
+        "AGGREGATE_n": 2,
+        "BEXP": 2,
+        "CATEGORY": 2,
+        "DEGREE": 2,
+        "DFACT": 2,
+        "DISCHARGED": 2,
+        "FACT": 2,
+        "FALLS": 2,
+        "GCD": 2,
+        "LOCATION": 2,
+        "LT": 2,
+        "MINOF": 2,
+        "NOTICES": 2,
+        "PLANTED": 2,
+        "PREDB": 2,
+        "SELFMAP": 2,
+        "SIGMOID": 2,
+        "SINCE": 2,
+        "ACTIVATION": 1,
+        "AGGREGATE": 1,
+        "BEFORE": 1,
+        "BOUNDARY": 1,
+        "BOUNDARYINTEGRAL": 1,
+        "CAPMAX": 1,
+        "CAUSES": 1,
+        "CLIPCALL": 1,
+        "CROSS": 1,
+        "DIVIDES": 1,
+        "ENABLES": 1,
+        "ENTROPYOF": 1,
+        "EXTERIOR": 1,
+        "E[]": 1,
+        "FEAT": 1,
+        "FUNDGROUP": 1,
+        "HOLDS": 1,
+        "HOMOLOGY": 1,
+        "HOMOTOPYEQUIVALENT": 1,
+        "INTERIOR": 1,
+        "INTRODUCE": 1,
+        "LENGTH": 1,
+        "LIM": 1,
+        "MATRIXPOWER": 1,
+        "MEANING": 1,
+        "OBSTRUCT": 1,
+        "OUTER": 1,
+        "REALIZE": 1,
+        "REF_LAW": 1,
+        "RESOLVE": 1,
+        "SCALE": 1,
+        "SEQUENCE": 1,
+        "STANDARDIZE": 1,
+        "STEIN": 1,
+        "SUM": 1,
+        "TOUCHES": 1,
+        "UNTIL": 1,
+        "UPDATE": 1,
+        "lim": 1
+      }
+    },
+    "S-SKEL": {
+      "producer": "scripts/measure_compression.py (field `family` from the same load_nodes)",
+      "definition": "handle = the node's family skeleton string. K never binds here, which is B2's own argument: the largest bucket holds 10 statements",
+      "reads_title_or_keywords": false,
+      "coverage": {
+        "statements_with_any_handle": 12777,
+        "statements_with_specific_handle": 12777,
+        "statements_with_no_handle": 0,
+        "statements_with_only_overbroad_handles": 0,
+        "specific_by_corpus": {
+          "algebra": 1,
+          "algebraic_topology": 8,
+          "calculus": 11,
+          "chemistry": 10,
+          "differential_geometry": 9,
+          "differential_topology": 7,
+          "economics": 11,
+          "geometric_modeling": 8,
+          "geometry": 15,
+          "geospatial_topology": 7,
+          "graph_theory": 8,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "lean_workbook": 12514,
+          "logic": 20,
+          "machine_learning": 14,
+          "morphology": 11,
+          "narrative": 13,
+          "number_theory": 16,
+          "numerical_analysis": 8,
+          "physics": 15,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 10,
+          "statistics": 11,
+          "temporal_logic": 16,
+          "trigonometry": 8
+        },
+        "any_by_corpus": {
+          "algebra": 1,
+          "algebraic_topology": 8,
+          "calculus": 11,
+          "chemistry": 10,
+          "differential_geometry": 9,
+          "differential_topology": 7,
+          "economics": 11,
+          "geometric_modeling": 8,
+          "geometry": 15,
+          "geospatial_topology": 7,
+          "graph_theory": 8,
+          "information_theory": 10,
+          "ingested_arithmetic": 1,
+          "lean_workbook": 12514,
+          "logic": 20,
+          "machine_learning": 14,
+          "morphology": 11,
+          "narrative": 13,
+          "number_theory": 16,
+          "numerical_analysis": 8,
+          "physics": 15,
+          "programming": 9,
+          "provability": 6,
+          "set_theory": 10,
+          "statistics": 11,
+          "temporal_logic": 16,
+          "trigonometry": 8
+        }
+      },
+      "distribution": {
+        "distinct_handles": 11434,
+        "specific_handles": 11434,
+        "overbroad_handles": 0,
+        "min": 1,
+        "max": 10,
+        "mean": 1.1175,
+        "median": 1.0,
+        "quantiles": {
+          "p50": 1,
+          "p90": 1,
+          "p99": 3
+        },
+        "histogram": {
+          "1": 10460,
+          "2": 754,
+          "3-4": 185,
+          "5-8": 31,
+          "9-16": 4,
+          "17-32": 0,
+          "33-64": 0,
+          "65-128": 0,
+          "129-256": 0,
+          "257-1024": 0,
+          "1025-4096": 0,
+          "4097-16384": 0,
+          ">16384": 0
+        },
+        "most_resolving": [
+          {
+            "handle": "^(+(?0:V, ?1:V, ?2:V), 2) >= *(3, +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V)))",
+            "resolves_to_count": 10
+          },
+          {
+            "handle": "*(+(*(2, ?0:V, ?1:V), *(2, ^(?1:V, 2)), ^(?0:V, 2)), +(*(2, ^(?1:V, 2)), ^(?0:V, 2), neg(*(2, ?0:V, ?1:V)))) = +(*(4, ^(?1:V, 4)), ^(?0:V, 4))",
+            "resolves_to_count": 10
+          },
+          {
+            "handle": "1 = +(^(COS⟨?0:V⟩, 2), ^(SIN⟨?0:V⟩, 2))",
+            "resolves_to_count": 9
+          },
+          {
+            "handle": "*(+(?0:V, ?1:V, ?2:V), +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), neg(*(?0:V, ?1:V)), neg(*(?1:V, ?2:V)), neg(*(?2:V, ?0:V)))) = +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), neg(*(3, ?0:V, ?1:V, ?2:V)))",
+            "resolves_to_count": 9
+          },
+          {
+            "handle": "SIN⟨+(?0:V, ?1:V)⟩ = +(*(COS⟨?1:V⟩, SIN⟨?0:V⟩), *(COS⟨?0:V⟩, SIN⟨?1:V⟩))",
+            "resolves_to_count": 8
+          },
+          {
+            "handle": "?0:V = *(?1:V, inv(?2:V))",
+            "resolves_to_count": 7
+          },
+          {
+            "handle": "IMPLIES⟨2 = +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2)), +(?0:V, ?1:V, ?2:V) <= +(2, *(?0:V, ?1:V, ?2:V))⟩",
+            "resolves_to_count": 7
+          },
+          {
+            "handle": "IMPLIES⟨MEET⟨MEET⟨0 < ?0:V, 0 < ?1:V⟩, 0 < ?2:V⟩, IMPLIES⟨+(*(1, inv(+(1, ?0:V, ?1:V))), *(1, inv(+(1, ?1:V, ?2:V))), *(1, inv(+(1, ?2:V, ?0:V)))) >= 1, +(?0:V, ?1:V, ?2:V) >= +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V))⟩⟩",
+            "resolves_to_count": 7
+          },
+          {
+            "handle": "IMPLIES⟨MEET⟨1 < ?0:V, 1 < ?1:V⟩, +(*(^(?0:V, 2), inv(+(?1:V, neg(1)))), *(^(?1:V, 2), inv(+(?0:V, neg(1))))) >= 8⟩",
+            "resolves_to_count": 7
+          },
+          {
+            "handle": "IMPLIES⟨MEET⟨MEET⟨0 < ?0:V, 0 < ?1:V⟩, 0 < ?2:V⟩, +(*(^(?0:V, 3), inv(+(*(?0:V, ?1:V), ^(?0:V, 2), ^(?1:V, 2)))), *(^(?1:V, 3), inv(+(*(?1:V, ?2:V), ^(?1:V, 2), ^(?2:V, 2)))), *(^(?2:V, 3), inv(+(*(?2:V, ?0:V), ^(?2:V, 2), ^(?0:V, 2))))) >= *(+(?0:V, ?1:V, ?2:V), inv(3))⟩",
+            "resolves_to_count": 7
+          },
+          {
+            "handle": "?0:V = +(?1:P, *(?2:P, ?3:V))",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "*(+(2, ^(?0:V, 2)), +(2, ^(?1:V, 2)), +(2, ^(?2:V, 2))) >= *(3, ^(+(?0:V, ?1:V, ?2:V), 2))",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "*(+(^(?0:V, 2), ^(?1:V, 2)), +(^(?2:V, 2), ^(?3:V, 2))) >= ^(+(*(?0:V, ?2:V), *(?1:V, ?3:V)), 2)",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "IMPLIES⟨?0:V > 0, +(?0:V, *(1, inv(?0:V))) >= 2⟩",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "FORALL⟨?0:V, *(+(1, COS⟨*(2, ?0:V)⟩), inv(2)) = ^(COS⟨?0:V⟩, 2)⟩",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "IMPLIES⟨+(?0:V, ?1:V, ?2:V) >= *(?0:V, ?1:V, ?2:V), +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2)) >= *(?0:V, ?1:V, ?2:V)⟩",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "?0:V = *(?1:P, EXP⟨*(?2:P, ?3:V)⟩)",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "IMPLIES⟨MEET⟨MEET⟨MEET⟨?0:V > 0, ?1:V > 0⟩, ?2:V > 0⟩, 1 = *(?0:V, ?1:V, ?2:V)⟩, +(*(1, inv(+(1, ?0:V, ^(?0:V, 2)))), *(1, inv(+(1, ?1:V, ^(?1:V, 2)))), *(1, inv(+(1, ?2:V, ^(?2:V, 2))))) >= 1⟩",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "+(*(^(?0:V, 2), ^(?1:V, 2)), *(^(?1:V, 2), ^(?2:V, 2)), *(^(?2:V, 2), ^(?0:V, 2))) >= *(?0:V, ?1:V, ?2:V, +(?0:V, ?1:V, ?2:V))",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "*(2, COS⟨*(+(?0:V, ?1:V), inv(2))⟩, COS⟨*(+(?0:V, neg(?1:V)), inv(2))⟩) = +(COS⟨?0:V⟩, COS⟨?1:V⟩)",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "FORALL⟨?0:V, FORALL⟨?1:V, FORALL⟨?2:V, +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2)) >= +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V))⟩⟩⟩",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "*(+(?0:V, ?1:V, ?2:V), +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), neg(*(?0:V, ?1:V)), neg(*(?0:V, ?2:V)), neg(*(?1:V, ?2:V)))) = +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), neg(*(3, ?0:V, ?1:V, ?2:V)))",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "+(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2)) >= *(1, ^(+(?0:V, ?1:V, ?2:V), 2), inv(3))",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "IMPLIES⟨1 = *(?0:V, ?1:V, ?2:V), +(*(1, inv(+(1, ?0:V, ^(?0:V, 2)))), *(1, inv(+(1, ?1:V, ^(?1:V, 2)))), *(1, inv(+(1, ?2:V, ^(?2:V, 2))))) >= 1⟩",
+            "resolves_to_count": 5
+          },
+          {
+            "handle": "IMPLIES⟨MEET⟨MEET⟨MEET⟨MEET⟨0 < ?0:V, 0 < ?1:V⟩, 0 < ?2:V⟩, 0 < ?3:V⟩, 1 = +(?0:V, ?1:V, ?2:V, ?3:V)⟩, *(6, +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), ^(?3:V, 3))) >= +(*(1, inv(8)), ^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), ^(?3:V, 2))⟩",
+            "resolves_to_count": 5
+          }
+        ]
+      },
+      "non_claim": "a skeleton string is nothing a person types. S-SKEL's coverage is total and carries no human-question match; it is excluded from the typable union below and the design claims nothing for it.",
+      "table": "experiments/skeleton_index.json"
+    }
+  },
+  "union": {
+    "typable_sources": [
+      "S-LEX",
+      "S-INV"
+    ],
+    "specific_handle_union_typable": 417,
+    "specific_handle_union_typable_pct": 3.2637,
+    "specific_handle_union_all_sources": 12777,
+    "why_two_unions": "S-SKEL reaches every statement, so a union including it is 12,777 by construction and answers no question a person could ask. The typable union is the number the stop clause is about.",
+    "typable_union_by_corpus": {
+      "algebra": 1,
+      "algebraic_topology": 8,
+      "calculus": 11,
+      "chemistry": 10,
+      "differential_geometry": 9,
+      "differential_topology": 7,
+      "economics": 11,
+      "geometric_modeling": 8,
+      "geometry": 15,
+      "geospatial_topology": 7,
+      "graph_theory": 8,
+      "information_theory": 10,
+      "ingested_arithmetic": 1,
+      "lean_workbook": 154,
+      "logic": 20,
+      "machine_learning": 14,
+      "morphology": 11,
+      "narrative": 13,
+      "number_theory": 16,
+      "numerical_analysis": 8,
+      "physics": 15,
+      "programming": 9,
+      "provability": 6,
+      "set_theory": 10,
+      "statistics": 11,
+      "temporal_logic": 16,
+      "trigonometry": 8
+    },
+    "slex_only": 111,
+    "sinv_only": 154,
+    "both": 152,
+    "neither": 12360
+  },
+  "per_corpus_split": {
+    "curated": {
+      "statements": 263,
+      "specific_S-LEX": 263,
+      "specific_S-INV": 152,
+      "specific_typable_union": 263
+    },
+    "lean_workbook_bulk": {
+      "statements": 12514,
+      "specific_S-LEX": 0,
+      "specific_S-INV": 154,
+      "specific_typable_union": 154
+    }
+  },
+  "boilerplate_finding": {
+    "claim_under_test": "review N7: 93% of the 27,182 by_lexicon entries are bulk-ingest boilerplate. DESIGN-handles.md §3 says the 12,514 lean_workbook nodes share three boilerplate name pairs (equality / template / standing).",
+    "bulk_statements": 12514,
+    "distinct_glossary_tokens_over_the_bulk": 9,
+    "the_tokens": [
+      "emitted",
+      "equality",
+      "ground",
+      "ground_numeral",
+      "ingested_slot",
+      "numeral",
+      "slot",
+      "standing",
+      "template"
+    ],
+    "distinct_name_tokens_over_the_bulk": 1,
+    "the_name_tokens": [
+      "equality"
+    ],
+    "distinct_raw_glossary_strings_over_the_bulk": 6,
+    "the_raw_strings": [
+      {
+        "string": "operators.name=equality",
+        "statements": 12514
+      },
+      {
+        "string": "symbols.description=A slot standing in an emitted template.",
+        "statements": 12212
+      },
+      {
+        "string": "symbols.semantic_role=ingested_slot",
+        "statements": 12212
+      },
+      {
+        "string": "symbols.description=A ground numeral standing in the template.",
+        "statements": 302
+      },
+      {
+        "string": "symbols.semantic_role=ground_numeral",
+        "statements": 302
+      },
+      {
+        "string": "constants.description=ground numeral",
+        "statements": 302
+      }
+    ],
+    "reading": "12514 statements, 9 distinct glossary tokens, 6 distinct raw glossary strings. Every one of those tokens resolves to more than K statements, so the bulk's specific-S-LEX coverage is 0."
+  },
+  "s3_price": {
+    "question": "what would S3 term-serialization cost, if a later slice took it",
+    "why_it_is_a_price_and_not_a_source": "the pinned oracle computes a serialization for every term and keeps only its sha256: `Receipt` (scripts/foreign_voice.py:182-191) has no field for the payload, and `gate` (scripts/foreign_voice.py:486-498) lets `answers` fall out of scope. A term layer would have to persist what that path throws away, so its cost is a storage cost plus a re-elaboration cost.",
+    "counts": {
+      "oracle_eligible": 2319,
+      "covered": 2313,
+      "register_blocked_ids": 1878,
+      "anti_merge_note": "covered is a SUBSET of oracle_eligible. The two are never summed (docs/BACKLOG.md:1122-1133). The difference, 6, is eligible statements the register blocks.",
+      "eligible_by_corpus": {
+        "geometric_modeling": 1,
+        "ingested_arithmetic": 1,
+        "lean_workbook": 2316,
+        "number_theory": 1
+      },
+      "covered_by_corpus": {
+        "geometric_modeling": 1,
+        "ingested_arithmetic": 1,
+        "lean_workbook": 2310,
+        "number_theory": 1
+      }
+    },
+    "terms_that_would_need_persisting": {
+      "one_per_covered_statement": 2313,
+      "two_per_covered_statement_identity_relation": 4626,
+      "definition": "the identity relation serializes each covered statement twice -- the interpreted original and the delexicalized round-trip (scripts/foreign_voice.py:483-484). Persisting only the original is one term per statement; persisting what the relation actually elaborates is two. Both are published; they are alternative scopes, not addends.",
+      "receipts_committed": 2313
+    },
+    "runtime_estimate": {
+      "measured": true,
+      "note": "wall-clock, so this block is the only non-deterministic bytes in this artifact. Everything else recomputes byte-identical.",
+      "toolchain": "leanprover/lean4:v4.32.2",
+      "calls": 20,
+      "sample": "first N committed receipts by statement_id, term = `interpreted`",
+      "cold_first_call_seconds": 1.1572,
+      "cold_start_note": "the first call pays for the OS bringing the toolchain and `import Lean` into cache; it is an order of magnitude above every later call and would poison a mean of twenty. It is reported separately and excluded from `per_call_seconds`, and the projections below use the warm median.",
+      "per_call_seconds": {
+        "basis": "calls 2..N, one Lean process per term (batch_size=1)",
+        "mean": 1.1581,
+        "median": 1.1297,
+        "min": 1.0884,
+        "max": 1.5426
+      },
+      "batched_seconds_for_all": 1.8774,
+      "batched_ok": 20,
+      "liveness": {
+        "digests_reproduced": 20,
+        "of": 20,
+        "refusals": 0,
+        "why": "each call's sha256 is compared with the digest the committed receipt recorded. A no-op cannot reproduce these."
+      },
+      "payload_chars": {
+        "n": 20,
+        "mean": 5987.9,
+        "min": 507,
+        "max": 35405
+      },
+      "projected_seconds": {
+        "basis": "warm median per-call seconds x term count. Unbatched is one Lean process per term -- the ceiling. Batched is the same twenty terms in one process divided by twenty -- the floor. The real cost of a term-store build sits between them and depends on a batch size nobody has chosen yet.",
+        "one_term_per_covered_statement_unbatched": 2613.0,
+        "two_terms_per_covered_statement_unbatched": 5226.0,
+        "one_term_per_covered_statement_batched": 217.1,
+        "two_terms_per_covered_statement_batched": 434.2
+      },
+      "projected_store_bytes": {
+        "basis": "mean measured serialization length (UTF-8 chars, the serializations are ASCII S-expressions) x term count. Storage only: no index, no framing, no compression.",
+        "one_term_per_covered_statement": 13850012,
+        "two_terms_per_covered_statement": 27700025
+      }
+    }
+  },
+  "P-L": {
+    "park": "the lexicon-backwards question (docs/BACKLOG.md; ROADMAP-v0.22.md §4.3 'Open-English input')",
+    "the_one_line": "which S-LEX names also appear in the realization lexicon's English -- recorded for that park's future unpark case, and nothing else",
+    "realization_english_content_words": 237,
+    "slex_handles_total": 1919,
+    "slex_handles_in_realization_english": 173,
+    "slex_specific_handles_total": 1910,
+    "slex_specific_handles_in_realization_english": 171,
+    "overlap_sample": [
+      "absolute",
+      "activation",
+      "adjacency",
+      "aggregate",
+      "all",
+      "always",
+      "application",
+      "applied",
+      "argument",
+      "base",
+      "because",
+      "binary",
+      "boolean",
+      "boundary",
+      "box",
+      "call",
+      "capital",
+      "cardinality",
+      "case",
+      "category",
+      "causation",
+      "characteristic",
+      "chi",
+      "class",
+      "clipping",
+      "common",
+      "complement",
+      "composition",
+      "concat",
+      "concatenation",
+      "corpus",
+      "cos",
+      "cosine",
+      "cross",
+      "d",
+      "declared",
+      "degree",
+      "determinant",
+      "deviation",
+      "differ"
+    ],
+    "non_claim": "an overlap is not an inversion. This line records how much vocabulary the two sides share; it says nothing about whether the lexicon runs backwards."
+  },
+  "non_claims": [
+    "no reachability rate is published -- the deliverable this census serves is a partition, and the partition does not exist yet",
+    "no handle table is built, no budget frozen, no question sealed",
+    "no claim that a statement with a specific handle is CORRECTLY reachable, only that a specific handle exists for it",
+    "no stranger-usability claim: no population of askers is involved in this census at all",
+    "the S3 runtime projection is a per-call cost times a term count. It prices elaboration, not the design of a term store"
+  ]
+}
