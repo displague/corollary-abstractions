@@ -294,20 +294,28 @@ index side; question authorship stays the unmeasured link, and it stays named.
 
 ## 2. COLD RECEIPT — does the program's evidence survive the program's deletion?
 
-> **Outcome, dated 2026-08-27: the slice shipped its registered run.**
-> CR-P0's registry census enumerated by RULE — `B1 = 0` unmapped emitting
-> routes, so the §5 stop clause did **not** fire and the harness opened.
-> 19 receipt kinds: **1 SURVIVES, 9 NEEDS-PROGRAM, 9 UNTESTED**
-> (`cold/census.json`). All of B1–B11 GREEN, the voiding sentence NOT
-> fired, and `cold/result_gate.json` licenses §13's third partition —
-> *R-C's sentence, scoped to the named kinds, with the NEEDS-PROGRAM kinds
-> published by name.* B4's omission arm failed loud naming `lean.exe`; no
-> SURVIVES rested on a `program_configured` dependency, so B11 downgraded
-> nothing. B6 ran 200 scrambled bundles / 10,000 checker invocations in 57
-> minutes against a 59-minute estimate, 0 passed, and publishes 1.5% as a
-> rule-of-three **upper bound** rather than a rate. **No reachability rate
-> is published; the deliverable is the partition.**
-
+> **Outcome, dated 2026-08-27: the slice shipped its registered run, then
+> amended it.** CR-P0's registry census enumerated by RULE — `B1 = 0`
+> unmapped emitting routes, so the §5 stop clause did **not** fire and the
+> harness opened. Adversarial review then found the removal arm could not go
+> red (`-I` implies `-E`, so the program tree was never on the child's path
+> and the import failed with `scripts/` present or absent), which under
+> ROADMAP-v0.21 §4.0(1) is a bug and not a reading. **Amendment 2** re-ran
+> the census with a two-limb arm — a with-program positive control that must
+> SUCCEED, and the program-absent limb — and repaired the instance rule that
+> had read `none` for two kinds holding 160 and 2,313 committed instances.
+> Corrected reading, `cold/census_run2.json`: 19 kinds, **1 SURVIVES, 10
+> NEEDS-PROGRAM, 8 UNTESTED**. All of B1–B11 GREEN, the voiding sentence NOT
+> fired, 3 census misses published under B10, and
+> `cold/result_gate_run2.json` licenses §13's third partition — *R-C's
+> sentence, scoped to the named kinds, with the NEEDS-PROGRAM kinds published
+> by name.* B4's omission arm failed loud naming `lean.exe`; no SURVIVES
+> rested on a `program_configured` dependency, so B11 downgraded nothing. B6
+> ran 200 scrambled bundles / 10,000 checker invocations in 57 minutes
+> against a 59-minute estimate, 0 passed, and publishes 1.5% as a
+> rule-of-three **upper bound** rather than a rate. B3/B4/B5 are green over a
+> **one-kind denominator** and say nothing about the other eighteen. **No
+> reachability rate is published; the deliverable is the partition.**
 
 **Why it is item 2.** It moves what a *reader outside this repository* can
 check, which is the standing gap behind STRANGER, C-V3 and every

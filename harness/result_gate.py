@@ -56,14 +56,27 @@ def provenance_block(writer: Path, inputs: list[Path]) -> dict:
     }
 
 
-def _commit_of(path: str) -> str | None:
+def _commit_of(path: str, first: bool = True) -> str | None:
+    """The commit that INTRODUCED `path`, not the one that last touched it.
+
+    R-C's third clause is that CR-P0 and CR-P1 were committed **in order**,
+    which is a fact about when each prerequisite LANDED. Reading the latest
+    commit instead would let a later amendment to CR-P0 — exactly what
+    amendment 2 is — retroactively falsify an ordering that did hold. The
+    latest commit is recorded too, so the amendment stays visible.
+    """
+
+    argv = ["git", "-C", str(REPO), "log", "--format=%H"]
+    if first:
+        argv += ["--diff-filter=A", "--reverse"]
+    else:
+        argv += ["-1"]
+    argv += ["--", path]
     completed = subprocess.run(
-        ["git", "-C", str(REPO), "log", "-1", "--format=%H", "--", path],
-        capture_output=True,
-        text=True,
-        timeout=60,
+        argv, capture_output=True, text=True, timeout=60
     )
-    return completed.stdout.strip() or None
+    lines = [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+    return lines[0] if lines else None
 
 
 def _is_ancestor(earlier: str, later: str) -> bool:
@@ -82,10 +95,17 @@ def committed_in_order() -> dict:
     p1 = _commit_of(CR_P1_ARTIFACT)
     ordered = bool(p0 and p1) and (p0 == p1 or _is_ancestor(p0, p1))
     return {
-        "cr_p0_commit": p0,
-        "cr_p1_commit": p1,
+        "cr_p0_first_commit": p0,
+        "cr_p1_first_commit": p1,
+        "cr_p0_latest_commit": _commit_of(CR_P0_ARTIFACT, first=False),
+        "cr_p1_latest_commit": _commit_of(CR_P1_ARTIFACT, first=False),
         "cr_p0_precedes_cr_p1": ordered,
-        "how_checked": "git merge-base --is-ancestor over the two artifacts' commits",
+        "how_checked": (
+            "git merge-base --is-ancestor over the commits that INTRODUCED "
+            "each artifact; the latest commits are recorded beside them so a "
+            "later amendment stays visible without falsifying an ordering that "
+            "did hold"
+        ),
     }
 
 
@@ -149,11 +169,14 @@ def adjudicate(census: dict) -> dict:
         attached = {"tags": census["arms"]["provenance"]["dependencies"]}
     else:
         partition = ">=1 SURVIVES, some NEEDS-PROGRAM"
+        # §13's string, transcribed exactly. "census.json" is the design's
+        # spelling; substituting the artifact's path would be paraphrasing a
+        # frozen sentence, which is the habit this gate exists to prevent.
         sentence = (
-            "For the receipt kinds cold/census.json names SURVIVES, the "
-            "recorded verdict can be re-derived on this workstation with the "
-            "program's script tree renamed away and no sys.path entry inside "
-            "the repository, using only the bundle and dependencies tagged "
+            "For the receipt kinds census.json names SURVIVES, the recorded "
+            "verdict can be re-derived on this workstation with the program's "
+            "script tree renamed away and no sys.path entry inside the "
+            "repository, using only the bundle and dependencies tagged "
             "third_party_pinned."
         )
         attached = {

@@ -1,0 +1,107 @@
+{
+  "schema": "cold-result-gate/1",
+  "design": "docs/DESIGN-cold-receipt.md §13",
+  "registered_before_the_run": true,
+  "counts": {
+    "kinds": 19,
+    "SURVIVES": 1,
+    "NEEDS-PROGRAM": 10,
+    "UNTESTED": 8
+  },
+  "verdicts": {
+    "SURVIVES": [
+      "conformance_ce3_supplement:decide_both_directions"
+    ],
+    "NEEDS-PROGRAM": [
+      "build_throughput_tasks:exact_value_task",
+      "closure-receipt/1",
+      "closure_query:query",
+      "external_verifier:main",
+      "foreign_voice:receipt",
+      "harness:_route_twin",
+      "measure_when_to_ask:_oewn_samples",
+      "serve_chat:_evaluate_receipt",
+      "serve_chat:_resolution_receipt",
+      "serve_chat:kernel_receipt"
+    ],
+    "UNTESTED": [
+      "harness:_route_conform",
+      "harness:_route_ownership",
+      "plain_router:_ask",
+      "plain_router:_conditional",
+      "retraction_radius:certify",
+      "serve_chat:_story_receipt",
+      "write_stage:accept_write",
+      "write_stage:stage_write"
+    ],
+    "downgraded_by_B11": []
+  },
+  "gate_greens": {
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "B4": true,
+    "B5": true,
+    "B6": true,
+    "B7": true,
+    "B8": true,
+    "B9": true,
+    "B10": true,
+    "B11": true
+  },
+  "gate_reds": [],
+  "voiding_sentence_fired": false,
+  "ordering": {
+    "cr_p0_first_commit": "d93015000d057f06e301c4bb146ec3cf1047b7cd",
+    "cr_p1_first_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
+    "cr_p0_latest_commit": "d2ac619a097a698964627880277c4641eb74b713",
+    "cr_p1_latest_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
+    "cr_p0_precedes_cr_p1": true,
+    "how_checked": "git merge-base --is-ancestor over the commits that INTRODUCED each artifact; the latest commits are recorded beside them so a later amendment stays visible without falsifying an ordering that did hold"
+  },
+  "R_C": {
+    "clause": "B1 through B11 green, the voiding sentence not fired, and CR-P0 and CR-P1 committed in order",
+    "green": true,
+    "note": "R-C failing on any clause serves nothing and publishes the readout"
+  },
+  "partition": ">=1 SURVIVES, some NEEDS-PROGRAM",
+  "licensed_sentence": "For the receipt kinds census.json names SURVIVES, the recorded verdict can be re-derived on this workstation with the program's script tree renamed away and no sys.path entry inside the repository, using only the bundle and dependencies tagged third_party_pinned.",
+  "attached_to_the_sentence": {
+    "scoped_to_kinds": [
+      "conformance_ce3_supplement:decide_both_directions"
+    ],
+    "needs_program_kinds_published_by_name": [
+      "build_throughput_tasks:exact_value_task",
+      "closure-receipt/1",
+      "closure_query:query",
+      "external_verifier:main",
+      "foreign_voice:receipt",
+      "harness:_route_twin",
+      "measure_when_to_ask:_oewn_samples",
+      "serve_chat:_evaluate_receipt",
+      "serve_chat:_resolution_receipt",
+      "serve_chat:kernel_receipt"
+    ],
+    "b7_note": "a correct NEEDS-PROGRAM scores as a hit, so this partition is a reading and not a shortfall",
+    "nothing_more": "no rate, no other machine, no person"
+  },
+  "non_claims": [
+    "No stranger-success claim. What the harness shows is program-absent-harness success: a procedure completed with this repository's script tree renamed away, on this Windows workstation, under §6's named weaker-than-a-container exclusions. No person outside this repository is in the instrument; STRANGER stays parked.",
+    "No version-drift claim, deferred by B9 to a parked lane.",
+    "No composition claim. Each kind is adjudicated alone; that kinds A and B each SURVIVE says nothing about a claim resting on both.",
+    "No coverage claim over the repository. The census covers what CR-P0 enumerates; later finds publish as census misses (B10).",
+    "No retroactive effect. A SURVIVES makes no past sentence true; a NEEDS-PROGRAM voids no run — it voids the offline-checkability sentence about that kind, and nothing else.",
+    "No security claim."
+  ],
+  "provenance": {
+    "writer": "harness/result_gate.py",
+    "writer_sha256_lf": "aec1b64fd5b4335767d4b2e42837d1c846b0f203b793e79ab97d1bfee5af50b4",
+    "inputs": [
+      {
+        "path": "cold/census_run2.json",
+        "sha256_lf": "67afe9aaf9eae071bc1ec6657cab2617b6e6a168ef8a181d56665fb3e9875d60"
+      }
+    ],
+    "emitted_at_generation": true
+  }
+}

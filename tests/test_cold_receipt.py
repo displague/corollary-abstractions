@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -371,11 +373,19 @@ class CRP1PublishesARuleAndTheGapInIt(unittest.TestCase):
             )
 
 
-COLD_CENSUS = REPO / "cold" / "census.json"
-PATH_AUDIT = REPO / "cold" / "path_audit.txt"
-PATH_AUDIT_JSON = REPO / "cold" / "evidence" / "path_audit.json"
+#: Run 1's artifacts, retained UNEDITED as the record of what the defective
+#: removal arm actually produced. They are not the census any sentence rests
+#: on; amendment 2's run is.
+RUN1_CENSUS = REPO / "cold" / "census.json"
+RUN1_RESULT_GATE = REPO / "cold" / "result_gate.json"
+
+#: Amendment 2's run — the corrected census, and the one the gate reads.
+COLD_CENSUS = REPO / "cold" / "census_run2.json"
+PATH_AUDIT = REPO / "cold" / "path_audit_run2.txt"
+PATH_AUDIT_JSON = REPO / "cold" / "evidence_run2" / "path_audit.json"
+TREE_MANIFEST = REPO / "cold" / "evidence_run2" / "tree_manifest_before.json"
 SCRAMBLE = REPO / "cold" / "scramble_baseline.json"
-RESULT_GATE = REPO / "cold" / "result_gate.json"
+RESULT_GATE = REPO / "cold" / "result_gate_run2.json"
 
 
 def _cold() -> dict:
@@ -612,10 +622,17 @@ class TheResultGateLicensesOneSentenceAndNothingWider(unittest.TestCase):
         )
 
     def test_the_prerequisites_were_committed_in_order(self) -> None:
+        # The clause is about when each prerequisite LANDED. Amendment 2 gave
+        # CR-P0 a later commit than CR-P1; reading the latest commit instead of
+        # the first would let a repair retroactively falsify an ordering that
+        # did hold, so the gate reads the introducing commit and records both.
         ordering = self.gate["ordering"]
-        self.assertTrue(ordering["cr_p0_commit"])
-        self.assertTrue(ordering["cr_p1_commit"])
+        self.assertTrue(ordering["cr_p0_first_commit"])
+        self.assertTrue(ordering["cr_p1_first_commit"])
         self.assertTrue(ordering["cr_p0_precedes_cr_p1"])
+        self.assertNotEqual(
+            ordering["cr_p0_latest_commit"], ordering["cr_p0_first_commit"]
+        )
 
     def test_the_sentence_attaches_nothing_wider(self) -> None:
         # "Nothing more — no rate, no other machine, no person."
@@ -649,7 +666,6 @@ class TheColdArtifactsCarryTheirProvenance(unittest.TestCase):
     def test_each_cold_artifact_names_its_writer_and_its_digest_matches(self) -> None:
         for artifact, writer in (
             (COLD_CENSUS, "harness/cold_harness.py"),
-            (SCRAMBLE, "harness/cold_harness.py"),
             (RESULT_GATE, "harness/result_gate.py"),
         ):
             with self.subTest(artifact=artifact.name):
@@ -663,6 +679,313 @@ class TheColdArtifactsCarryTheirProvenance(unittest.TestCase):
                     self.assertEqual(
                         row["sha256_lf"], _sha256_lf(REPO / row["path"]), row
                     )
+
+
+class RunOneIsRetainedAndItsProvenanceIsHistorical(unittest.TestCase):
+    """Amendment 2 kept run 1 unedited, so its blocks attest a PAST writer.
+
+    `PROVENANCED_LEDGERS` asks whether an artifact's writer digest matches the
+    writer as committed NOW. For a deliberately retained artifact that is the
+    wrong question — the right one is whether it matches the writer as
+    committed AT ITS RUN. These artifacts therefore come off the live list and
+    are checked against history instead, which is a stronger claim than the
+    live guard makes, not a weaker one.
+    """
+
+    #: The commits at which run 1's writers stood when run 1 executed.
+    RUN1_HARNESS_COMMIT = "d4b4753"
+    RUN1_GATE_COMMIT = "aca2f2a"
+
+    @staticmethod
+    def _blob_sha256_lf(commit: str, path: str) -> str:
+        blob = subprocess.run(
+            ["git", "-C", str(REPO), "show", f"{commit}:{path}"],
+            capture_output=True,
+            check=True,
+        ).stdout
+        return hashlib.sha256(blob.replace(b"\r\n", b"\n")).hexdigest()
+
+    def test_run_one_artifacts_are_still_present_and_unedited(self) -> None:
+        for artifact in (RUN1_CENSUS, RUN1_RESULT_GATE, SCRAMBLE):
+            self.assertTrue(artifact.is_file(), artifact)
+
+    def test_run_one_blocks_match_the_writers_as_committed_at_run_one(self) -> None:
+        for artifact, writer, commit in (
+            (RUN1_CENSUS, "harness/cold_harness.py", self.RUN1_HARNESS_COMMIT),
+            (SCRAMBLE, "harness/cold_harness.py", self.RUN1_HARNESS_COMMIT),
+            (RUN1_RESULT_GATE, "harness/result_gate.py", self.RUN1_GATE_COMMIT),
+        ):
+            with self.subTest(artifact=artifact.name):
+                block = json.loads(artifact.read_text(encoding="utf-8"))["provenance"]
+                self.assertEqual(block["writer"], writer)
+                self.assertEqual(
+                    block["writer_sha256_lf"],
+                    self._blob_sha256_lf(commit, writer),
+                )
+
+    def test_run_one_recorded_the_defective_arm_and_run_two_says_so(self) -> None:
+        # Run 1's nine confirmed_by_removal verdicts are retained as the record
+        # of what the defective arm produced. The corrected census must name
+        # the defect rather than quietly superseding it.
+        amendment = _cold()["amendment"]
+        self.assertEqual(amendment["amendment"], 2)
+        self.assertIn("-I", amendment["flags_dropped"])
+        self.assertIn("PYTHONPATH was ignored", amendment["defect"])
+        self.assertIn(
+            "cold/census.json", amendment["run_one_artifacts_retained_unedited"]
+        )
+
+
+class TheRemovalArmDependsOnTheRemoval(unittest.TestCase):
+    """C1, the defect amendment 2 repairs, scored so it cannot come back.
+
+    Run 1 ran `python -S -I -c "import <module>"`. `-I` implies `-E`, so
+    `PYTHONPATH` was discarded and the program tree was never on the child's
+    path: the import failed identically whether `scripts/` was present or
+    absent. Nine `confirmed_by_removal` verdicts rested on a check that could
+    not go red for the reason it claimed.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.cold = _cold()
+        cls.needs = [
+            k for k in cls.cold["kinds"] if k["verdict"] == "NEEDS-PROGRAM"
+        ]
+
+    def test_the_isolated_flag_is_gone_from_every_removal_argv(self) -> None:
+        for kind in self.cold["kinds"]:
+            arm = kind.get("removal_arm")
+            if not arm:
+                continue
+            for limb in ("with_program_limb", "program_absent_limb"):
+                for module, row in arm[limb].items():
+                    with self.subTest(
+                        kind=kind["kind_id"], limb=limb, module=module
+                    ):
+                        self.assertNotIn("-I", row["argv"])
+                        self.assertTrue(row["pythonpath"].endswith("scripts"))
+
+    def test_both_limbs_run_identical_argv_and_differ_only_in_the_removal(
+        self,
+    ) -> None:
+        for kind in self.cold["kinds"]:
+            arm = kind.get("removal_arm")
+            if not arm:
+                continue
+            for module in arm["with_program_limb"]:
+                with self.subTest(kind=kind["kind_id"], module=module):
+                    present = arm["with_program_limb"][module]
+                    absent = arm["program_absent_limb"][module]
+                    self.assertEqual(present["argv"], absent["argv"])
+                    self.assertEqual(present["pythonpath"], absent["pythonpath"])
+                    self.assertTrue(present["program_tree_present"])
+                    self.assertFalse(absent["program_tree_present"])
+
+    def test_every_needs_program_has_a_succeeding_positive_control(self) -> None:
+        # This is the assertion run 1 could not have passed. Without it,
+        # "confirmed by removal" is a sentence about a failure that had
+        # nothing to do with the removal.
+        self.assertTrue(self.needs)
+        for kind in self.needs:
+            with self.subTest(kind=kind["kind_id"]):
+                arm = kind["removal_arm"]
+                self.assertTrue(arm["with_program_limb"])
+                for module, row in arm["with_program_limb"].items():
+                    self.assertTrue(row["import_succeeded"], module)
+                for module, row in arm["program_absent_limb"].items():
+                    self.assertFalse(row["import_succeeded"], module)
+                    self.assertEqual(row["missing_module"], module)
+                self.assertTrue(kind["blocking_dependency"]["confirmed_by_removal"])
+
+    def test_a_kind_blocked_by_something_else_reads_untested_and_names_it(
+        self,
+    ) -> None:
+        # H4/H5: the radius certificates' recheck_command runs
+        # scripts/radius_recheck.py, which cannot import jsonschema — a
+        # dependency of the repository's .venv, not of the program. With the
+        # program FULLY PRESENT the procedure still cannot run, so the kind
+        # cannot be scored NEEDS-PROGRAM however plausible that reading was.
+        kind = next(
+            k
+            for k in self.cold["kinds"]
+            if k["kind_id"] == "retraction_radius:certify"
+        )
+        self.assertEqual(kind["verdict"], "UNTESTED")
+        self.assertEqual(
+            kind["removal_arm"]["targets"]["selected_by"], "recheck_descriptor"
+        )
+        self.assertEqual(
+            kind["removal_arm"]["targets"]["modules"], ["radius_recheck"]
+        )
+        self.assertIn("jsonschema", kind["blocking_dependency"]["name"])
+        self.assertFalse(kind["blocking_dependency"]["confirmed_by_removal"])
+
+    def test_the_removal_target_comes_from_the_descriptor_where_one_exists(
+        self,
+    ) -> None:
+        # Removing the WRITER when the receipt names a RECHECKER would test the
+        # wrong program and call the result a removal.
+        kind = next(
+            k
+            for k in self.cold["kinds"]
+            if k["kind_id"] == "retraction_radius:certify"
+        )
+        commands = kind["removal_arm"]["targets"]["descriptor_commands"]
+        self.assertTrue(commands)
+        for command in commands:
+            self.assertIn("radius_recheck.py", command)
+        self.assertNotIn(
+            "retraction_radius", kind["removal_arm"]["targets"]["modules"]
+        )
+
+    def test_a_multi_route_kind_is_adjudicated_over_all_its_routes(self) -> None:
+        # §5 names closure_query as an emitter of closure-receipt/1;
+        # emitting_routes[0] is build_throughput_tasks. Run 1 tested only the
+        # first.
+        kind = next(
+            k for k in self.cold["kinds"] if k["kind_id"] == "closure-receipt/1"
+        )
+        modules = kind["removal_arm"]["targets"]["modules"]
+        self.assertIn("closure_query", modules)
+        self.assertIn("build_throughput_tasks", modules)
+        self.assertGreaterEqual(len(kind["removal_arm"]["with_program_limb"]), 2)
+
+
+class TheArmsAreRecordedOnTheKindTheyRanOn(unittest.TestCase):
+    """H1: a kind's own record must not contradict the arms block above it."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.cold = _cold()
+        cls.executable = cls.cold["run"]["executable_kind"]["kind_id"]
+
+    def test_the_executable_kind_is_discovered_and_not_a_literal(self) -> None:
+        # M4: the harness finds it from the declared procedure type plus the
+        # published reconstruction rule, so a second raw-invocation kind would
+        # be picked up rather than ignored.
+        discovered = self.cold["run"]["executable_kind"]
+        self.assertIn(
+            "declared_recheck_procedure.type", discovered["discovered_by"]
+        )
+        self.assertIn(
+            self.executable,
+            discovered["candidates_declaring_raw_checker_invocation"],
+        )
+
+    def test_the_kind_the_arms_ran_on_carries_their_results(self) -> None:
+        kind = next(
+            k for k in self.cold["kinds"] if k["kind_id"] == self.executable
+        )
+        for field in ("tamper_result", "omission_result", "sham_result"):
+            with self.subTest(field=field):
+                self.assertNotEqual(kind[field]["verdict"], "UNTESTED")
+        self.assertEqual(kind["tamper_result"]["mutations_failed"], 3)
+        self.assertEqual(kind["omission_result"]["verdict"], "FAIL_LOUD")
+        self.assertEqual(kind["sham_result"]["survives_count"], 0)
+
+    def test_other_kinds_say_why_no_arm_ran_rather_than_asserting_one(self) -> None:
+        for kind in self.cold["kinds"]:
+            if kind["kind_id"] == self.executable:
+                continue
+            with self.subTest(kind=kind["kind_id"]):
+                self.assertEqual(kind["tamper_result"]["verdict"], "UNTESTED")
+                self.assertIn("no procedure", kind["tamper_result"]["reason"])
+                self.assertIn("M5", kind["omission_result"]["reason"])
+
+    def test_the_arm_gate_rows_carry_their_one_kind_denominator(self) -> None:
+        # M2: B3/B4/B5 are green over ONE kind and silent about eighteen.
+        for name in ("B3", "B4", "B5"):
+            row = self.cold["gate"][name]
+            with self.subTest(gate=name):
+                self.assertEqual(row["kinds_in_denominator"], 1)
+                self.assertEqual(row["kind_in_denominator"], self.executable)
+                self.assertTrue(row["scope_note"])
+
+    def test_the_sham_arm_records_that_it_could_not_have_fired(self) -> None:
+        # M3: the structural point, beside the interface weakness.
+        mechanism = self.cold["arms"]["sham"]["mechanism"]
+        self.assertIn("cannot read SURVIVES", mechanism["therefore"])
+        self.assertIn("STRUCTURAL", mechanism["therefore"])
+        self.assertIn("not claimed", mechanism["what_that_costs"])
+
+
+class TheTreeIdentityRecomputesFromItsManifest(unittest.TestCase):
+    """M5: the byte-identity claim is re-derived, not believed."""
+
+    def test_the_summary_digest_recomputes_from_the_committed_manifest(self) -> None:
+        manifest = json.loads(TREE_MANIFEST.read_text(encoding="utf-8"))
+        entries = manifest["manifest"]
+        recomputed = hashlib.sha256(
+            "\n".join(entries).encode("utf-8")
+        ).hexdigest()
+        self.assertEqual(recomputed, manifest["digest"])
+        reported = _cold()["scope"]["working_tree"]["digest_before_rename"]
+        self.assertEqual(reported["digest"], recomputed)
+        self.assertEqual(reported["files"], len(entries))
+
+    def test_a_sample_of_manifest_digests_matches_the_files_on_disk(self) -> None:
+        entries = json.loads(TREE_MANIFEST.read_text(encoding="utf-8"))["manifest"]
+        for entry in (entries[0], entries[len(entries) // 2], entries[-1]):
+            relative, _, digest = entry.rpartition(":")
+            path = REPO / relative
+            if not path.is_file():
+                continue
+            self.assertEqual(
+                hashlib.sha256(path.read_bytes()).hexdigest(), digest, relative
+            )
+
+    def test_pycache_is_excluded_by_a_named_rule(self) -> None:
+        # The amended arm imports real modules, and a successful import writes
+        # __pycache__ into the tree the harness is proving it did not disturb.
+        # Both guards are in place: -B on the argv, and this exclusion.
+        manifest = json.loads(TREE_MANIFEST.read_text(encoding="utf-8"))
+        self.assertIn("__pycache__", manifest["excluded_by_name"])
+        self.assertFalse([e for e in manifest["manifest"] if "__pycache__" in e])
+
+
+class TheProseNumbersMatchTheArtifacts(unittest.TestCase):
+    """H3: ANALYSIS quoted a pre-CR-P1 recall run and nobody noticed.
+
+    Prose is where a stale number survives longest, so the prose is pinned to
+    the artifact rather than to a reviewer's memory.
+    """
+
+    @staticmethod
+    def _head() -> str:
+        # Whitespace-normalised: prose wraps, and a number that fell across a
+        # line break should not be able to hide from its own guard.
+        head = (
+            (REPO / "experiments" / "ANALYSIS.md")
+            .read_text(encoding="utf-8")
+            .split("\n---\n", 1)[0]
+        )
+        return re.sub(r"\s+", " ", head)
+
+    def test_analysis_recall_numbers_are_the_registrys(self) -> None:
+        registry = json.loads(ARTIFACT.read_text(encoding="utf-8"))
+        probe = registry["recall_probe"]
+        admitted = probe["wider_net_sites"] - probe["uncovered_site_count"]
+        head = self._head()
+        self.assertTrue(
+            f"{probe['uncovered_site_count']} uncovered" in head,
+            "ANALYSIS uncovered-site count is stale",
+        )
+        self.assertTrue(
+            f"{probe['wider_net_sites']} receipt-vocabulary sites" in head,
+            "ANALYSIS wider-net count is stale",
+        )
+        self.assertTrue(
+            f"admits {admitted} of" in head, "ANALYSIS admitted count is stale"
+        )
+
+    def test_analysis_partition_counts_are_the_censuss(self) -> None:
+        counts = _cold()["counts"]
+        head = self._head()
+        for key in ("SURVIVES", "NEEDS-PROGRAM", "UNTESTED"):
+            self.assertTrue(
+                f"**{counts[key]}**" in head, f"ANALYSIS {key} count is stale"
+            )
 
 
 if __name__ == "__main__":  # pragma: no cover

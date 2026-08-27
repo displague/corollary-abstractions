@@ -52,6 +52,7 @@ import hashlib
 import json
 import os
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -70,10 +71,39 @@ CENSUS_PATH = REPO / "experiments" / "cold_registry_census.json"
 RULE_PATH = REPO / "cold" / "reconstruction_rule.json"
 SUPPLEMENT_PATH = REPO / "experiments" / "conformance_ce3_supplement.json"
 
-#: The one kind for which CR-P1 published a reconstruction rule, and therefore
-#: the one this harness can execute program-absent. Every other kind reads its
-#: verdict from the removal arm or from UNTESTED — never from a declaration.
-EXECUTABLE_KIND = "conformance_ce3_supplement:decide_both_directions"
+#: The program tree, as the child sees it. Both limbs of the removal arm put
+#: this exact string on `PYTHONPATH`; in the with-program limb the directory
+#: is there and in the program-absent limb it is not. That single difference
+#: is the whole experiment, and amendment 2 exists because the first run did
+#: not have it (see `REMOVAL_ARM_AMENDMENT`).
+PROGRAM_TREE_ON_PATH = str(PROGRAM_TREE)
+
+REMOVAL_ARM_AMENDMENT = {
+    "amendment": 2,
+    "dated": "2026-08-27",
+    "authority": (
+        "ROADMAP-v0.21 §4.0(1) — an arm that never executed as designed is a "
+        "bug, not a reading"
+    ),
+    "defect": (
+        "run 1's removal arm ran `python -S -I -c \"import <module>\"`. Since "
+        "3.11 `-I` implies `-E` and `-P`, so PYTHONPATH was ignored and the "
+        "program tree was never on the child's path at all. The import failed "
+        "identically with scripts/ PRESENT and ABSENT: the arm could not go "
+        "red for the reason it claimed, and all nine confirmed_by_removal "
+        "verdicts rested on it."
+    ),
+    "repair": (
+        "two limbs per kind with identical argv and environment, differing "
+        "only in whether the program tree exists: a with-program POSITIVE "
+        "CONTROL run before the rename, and the program-absent limb run "
+        "during it. NEEDS-PROGRAM now requires positive-limb SUCCESS and "
+        "absent-limb FAILURE. A kind that fails both ways reads UNTESTED with "
+        "its true blocking dependency named."
+    ),
+    "flags_dropped": ["-I"],
+    "why": "-I implies -E, which is what silently discarded PYTHONPATH",
+}
 
 #: Trees excluded from the working-tree digest §6 requires be taken before and
 #: after the rename. `cold/` is excluded because this harness writes it.
@@ -86,6 +116,12 @@ TREE_DIGEST_EXCLUDED = {
 }
 
 B6_BUDGET_SECONDS = 90 * 60
+
+#: The commit that first sealed this registry, and the seal it carried. Both
+#: are history, quoted so B10's W0 fact stays checkable after the registry is
+#: amended — an amendment must not be able to erase the ordering it inherited.
+FIRST_SEAL_COMMIT = "d930150"
+RUN_ONE_SEAL = "6c575c70dbbdd7f79245a90902b84b0d1dd74e13176e2f878ece4f1b91b00ded"
 
 
 # --------------------------------------------------------------------------
@@ -145,6 +181,11 @@ def working_tree_digest(root: Path) -> dict[str, Any]:
         relative = path.relative_to(root)
         if relative.parts and relative.parts[0] in TREE_DIGEST_EXCLUDED:
             continue
+        # Gitignored build output, not the repository. Excluded by name so the
+        # exclusion is a rule rather than a convenience applied after a
+        # surprise.
+        if "__pycache__" in relative.parts:
+            continue
         if not path.is_file():
             continue
         entries.append(f"{relative.as_posix()}:{sha256_file(path)}")
@@ -152,6 +193,12 @@ def working_tree_digest(root: Path) -> dict[str, Any]:
         "files": len(entries),
         "digest": hashlib.sha256("\n".join(entries).encode("utf-8")).hexdigest(),
         "excluded_top_level": sorted(TREE_DIGEST_EXCLUDED),
+        "excluded_by_name": ["__pycache__"],
+        "manifest": entries,
+        "manifest_note": (
+            "M5: the file:digest list the summary digest is computed FROM, so "
+            "a test can re-derive it instead of believing this report"
+        ),
     }
 
 
@@ -256,6 +303,87 @@ def run(argv: list[str], env: dict[str, str], cwd: Path, timeout: int = 3600):
 # --------------------------------------------------------------------------
 # The bundle
 # --------------------------------------------------------------------------
+
+
+def _strings(value: Any):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for item in value.values():
+            yield from _strings(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _strings(item)
+
+
+def removal_targets(record: dict, repo: Path) -> dict:
+    """Which module the removal arm must actually remove (H4/H5).
+
+    Two rules, in order, and the artifact records which one fired:
+
+    - **descriptor**: if the kind's committed instances carry a
+      `recheck_command`, the thing to remove is what that command RUNS, not
+      the module that WROTE the receipt. The radius certificates name
+      `scripts/radius_recheck.py`; removing `retraction_radius` would have
+      tested the writer and called it the rechecker.
+    - **all routes**: otherwise every distinct `writer_file` across ALL of the
+      kind's `emitting_routes`. Run 1 took `emitting_routes[0]` and therefore
+      tested one route of a multi-route kind — `closure-receipt/1` is emitted
+      from `build_throughput_tasks` and `closure_query`, and the design's §5
+      names the latter.
+    """
+
+    commands: list[str] = []
+    for rel in record["committed_instances"].get("sample_paths", []):
+        path = repo / rel
+        if not path.is_file() or path.suffix not in (".json", ".jsonl"):
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8", errors="replace"))
+        except json.JSONDecodeError:
+            continue
+        for mapping in _iter_mappings_any(data):
+            value = mapping.get("recheck_command")
+            if isinstance(value, str):
+                commands.append(value)
+
+    modules: list[str] = []
+    for command in commands:
+        for token in re.findall(r"scripts[/\\]([A-Za-z_][A-Za-z0-9_]*)\.py", command):
+            modules.append(token)
+    if modules:
+        return {
+            "modules": sorted(set(modules)),
+            "selected_by": "recheck_descriptor",
+            "descriptor_commands": sorted(set(commands))[:4],
+            "note": (
+                "the descriptor names what the recheck RUNS; removing the "
+                "writer instead would have tested the wrong program"
+            ),
+        }
+
+    writers = sorted(
+        {Path(row["writer_file"]).stem for row in record["emitting_routes"]}
+    )
+    return {
+        "modules": writers,
+        "selected_by": "all_emitting_routes",
+        "routes_covered": len(record["emitting_routes"]),
+        "note": (
+            "every distinct writer across ALL emitting routes, not "
+            "emitting_routes[0]"
+        ),
+    }
+
+
+def _iter_mappings_any(value: Any):
+    if isinstance(value, dict):
+        yield value
+        for item in value.values():
+            yield from _iter_mappings_any(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _iter_mappings_any(item)
 
 
 def build_bundle(root: Path, receipts: dict, rule: dict, census: dict) -> dict:
@@ -462,23 +590,62 @@ class Runner:
         }
 
     def import_program_module(self, module: str, cwd: Path) -> dict:
-        """B7's removal confirmation, run rather than declared."""
+        """One limb of B7's removal arm, run rather than declared.
+
+        `-I` is deliberately ABSENT: it implies `-E`, which discards
+        `PYTHONPATH`, which is exactly the bug amendment 2 repairs. `-S` stays,
+        so no `site-packages` is on the path and a third-party import failure
+        is visible as itself rather than hidden by the repository's `.venv`.
+
+        The caller runs this twice with the same argv and environment — once
+        with the program tree present, once with it renamed away — so the only
+        difference between the two results is the removal.
+        """
 
         env = constructed_env(self.dependency_dirs, cwd)
+        env["PYTHONPATH"] = PROGRAM_TREE_ON_PATH
+        # `-B` because the with-program limb imports real modules, and a
+        # successful import writes __pycache__ INTO the tree this harness is
+        # simultaneously proving it did not disturb. The first run of the
+        # amended arm caught exactly that: 1251 files in, 1265 out.
+        env["PYTHONDONTWRITEBYTECODE"] = "1"
         argv = [
             self.interpreter["executable"],
             "-S",
-            "-I",
+            "-B",
             "-c",
             f"import {module}",
         ]
-        completed = run(argv, env, cwd, timeout=120)
+        try:
+            completed = run(argv, env, cwd, timeout=180)
+        except subprocess.TimeoutExpired:  # pragma: no cover
+            return {
+                "argv": argv,
+                "pythonpath": PROGRAM_TREE_ON_PATH,
+                "exit_code": None,
+                "stderr_head": "TimeoutExpired",
+                "import_succeeded": False,
+                "missing_module": None,
+            }
+        stderr = completed.stderr.strip()
+        missing = None
+        marker = "ModuleNotFoundError: No module named "
+        if marker in stderr:
+            missing = stderr.split(marker)[-1].split("\n")[0].strip().strip("'\"")
         return {
             "argv": argv,
+            "pythonpath": PROGRAM_TREE_ON_PATH,
+            "program_tree_present": PROGRAM_TREE.is_dir(),
             "exit_code": completed.returncode,
-            "stderr_head": completed.stderr.strip()[-400:],
+            "stderr_head": stderr[-500:],
             "import_succeeded": completed.returncode == 0,
+            "missing_module": missing,
         }
+
+    def removal_limbs(self, modules: list[str], cwd: Path) -> dict:
+        """Run one limb of the arm over every target module of one kind."""
+
+        return {module: self.import_program_module(module, cwd) for module in modules}
 
 
 # --------------------------------------------------------------------------
@@ -613,15 +780,15 @@ def build_cold_census(args, state: dict) -> dict:
             "seal": census["census_seal"],
             "sealed_at_commit": state["census_commit"],
             "harness_first_commit": state["harness_commit"],
-            "harness_files_at_the_census_commit": state[
-                "harness_files_at_census_commit"
-            ],
+            "registry_uncommitted_at_run": state["registry_uncommitted_at_run"],
             "how_checked": (
-                "at the commit that sealed the census, no file under harness/ "
-                "existed — the WITNESS W0 ordering made checkable in history"
+                "the seal the harness read is the committed one, and the "
+                "registry had no uncommitted modification when the run began"
             ),
+            "w0_ordering_at_first_seal": state["w0_ordering_at_first_seal"],
             "green": state["seal_predates_harness"],
             "census_misses": state["census_misses"],
+            "census_miss_count": len(state["census_misses"]),
         },
         "B11": state["arms"]["provenance"]["gate"],
     }
@@ -662,8 +829,8 @@ def build_cold_census(args, state: dict) -> dict:
         },
         "kinds": kinds,
         "arms": state["arms"],
-        "path_audit_ref": "cold/path_audit.txt",
-        "scramble_baseline_ref": "cold/scramble_baseline.json",
+        "path_audit_ref": state.get("path_audit_ref", "cold/path_audit.txt"),
+        "scramble_baseline_ref": state.get("scramble_ref", "cold/scramble_baseline.json"),
         "reconstruction_rule_ref": "cold/reconstruction_rule.json",
     }
 
@@ -674,6 +841,19 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
     parser.add_argument("--scramble-bundles", type=int, default=200)
     parser.add_argument("--bundle-root", type=Path, default=None)
     parser.add_argument("--restore-only", action="store_true")
+    parser.add_argument(
+        "--run-label",
+        default="",
+        help="suffix for this run's artifacts, so an earlier run is retained "
+        "unedited rather than overwritten",
+    )
+    parser.add_argument(
+        "--reuse-scramble",
+        type=Path,
+        default=None,
+        help="carry a previous B6 result forward with its digest and the "
+        "reason it was not re-run",
+    )
     args = parser.parse_args(argv)
 
     if args.restore_only:
@@ -689,7 +869,8 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
     # child resolve it against the bundle root.
     out_dir = args.out_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-    evidence = out_dir / "evidence"
+    suffix = f"_{args.run_label}" if args.run_label else ""
+    evidence = out_dir / f"evidence{suffix}"
     evidence.mkdir(exist_ok=True)
 
     census = json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
@@ -724,6 +905,14 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
     ]
 
     before = working_tree_digest(REPO)
+    # M5: the manifest the byte-identity claim is recomputed FROM lands in
+    # evidence, so a test re-derives the digest instead of believing this
+    # harness's own report of it. The census keeps the summary only.
+    (evidence / "tree_manifest_before.json").write_text(
+        json.dumps(before, indent=2), encoding="utf-8"
+    )
+    before = {k: v for k, v in before.items() if k != "manifest"}
+    before["manifest_file"] = f"cold/evidence{suffix}/tree_manifest_before.json"
 
     state: dict[str, Any] = {
         "census": census,
@@ -731,6 +920,23 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
         "arms": {},
         "census_misses": [],
     }
+
+    # -- C1's POSITIVE CONTROL, run while the program is still present -------
+    # Identical argv and environment to the program-absent limb; the only
+    # difference is that scripts/ exists. A kind whose import fails HERE is
+    # blocked by something other than the removal, and the arm says which.
+    targets = {
+        record["kind_id"]: removal_targets(record, REPO)
+        for record in census["kinds"]
+    }
+    with_program: dict[str, dict] = {}
+    for record in census["kinds"]:
+        kind_id = record["kind_id"]
+        if record["declared_recheck_procedure"]["type"] != "program_replay":
+            continue
+        with_program[kind_id] = runner.removal_limbs(
+            targets[kind_id]["modules"], bundle_root / "good"
+        )
 
     if PROGRAM_TREE.exists():
         PROGRAM_TREE.rename(RENAMED_TREE)
@@ -776,6 +982,33 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
             bundle_root / "good", real_argv, main_report_path
         )
 
+        # M4: discovered, not a literal. The executable kind is the one whose
+        # DECLARED procedure is a raw checker invocation and for which CR-P1
+        # published a reconstruction rule naming it.
+        executable_kind = next(
+            (
+                record["kind_id"]
+                for record in census["kinds"]
+                if record["declared_recheck_procedure"]["type"]
+                == "raw_checker_invocation"
+                and record["kind_id"] == rule.get("kind_id")
+            ),
+            None,
+        )
+        state["executable_kind"] = {
+            "kind_id": executable_kind,
+            "discovered_by": (
+                "declared_recheck_procedure.type == 'raw_checker_invocation' "
+                "AND cold/reconstruction_rule.json names this kind_id"
+            ),
+            "candidates_declaring_raw_checker_invocation": [
+                record["kind_id"]
+                for record in census["kinds"]
+                if record["declared_recheck_procedure"]["type"]
+                == "raw_checker_invocation"
+            ],
+        }
+
         for record in census["kinds"]:
             kind_id = record["kind_id"]
             declared = record["declared_recheck_procedure"]["type"]
@@ -790,21 +1023,38 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
                 ],
                 "bundle_manifest": [],
                 "external_deps": [],
+                # H1: these are the defaults for kinds NO arm ran on, and they
+                # say why rather than asserting a verdict the arm never
+                # produced. The kind the arms DID run on gets its real results
+                # written in below.
                 "tamper_result": {
                     "verdict": "UNTESTED",
-                    "reason": "no executable recheck procedure to tamper with",
+                    "reason": (
+                        "no procedure executed program-absent for this kind, "
+                        "so no input a procedure reads could be mutated "
+                        "(§10's B3 row: a kind whose procedure cannot be shown "
+                        "to read the mutated input yields no tamper arm and is "
+                        "UNTESTED, never a silent pass)"
+                    ),
                 },
                 "omission_result": {
                     "verdict": "UNTESTED",
-                    "reason": "no removable dependency: the procedure invokes none",
+                    "reason": (
+                        "§7's M5 escape: no procedure ran, so no listed "
+                        "dependency could be removed from one"
+                    ),
                 },
                 "sham_result": {
                     "verdict": "UNTESTED",
-                    "reason": "no adjudicating dependency to replace",
+                    "reason": (
+                        "no adjudicating dependency was invoked for this kind, "
+                        "so there was nothing for the accept-all stub to "
+                        "replace"
+                    ),
                 },
             }
 
-            if kind_id == EXECUTABLE_KIND and declared == "raw_checker_invocation":
+            if kind_id == executable_kind and declared == "raw_checker_invocation":
                 report = main_run["report"]
                 survived = report.get("outcome") == "PASS"
                 entry["executed_recheck_procedure"] = "raw_checker_invocation"
@@ -846,46 +1096,138 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
                         "note": "the executed procedure did not reach a correct verdict",
                     }
             elif declared == "program_replay":
-                module = Path(record["emitting_routes"][0]["writer_file"]).stem
-                removal = runner.import_program_module(module, bundle_root / "good")
-                entry["executed_recheck_procedure"] = "program_replay"
-                entry["verdict"] = (
-                    "NEEDS-PROGRAM" if not removal["import_succeeded"] else "UNTESTED"
+                target = targets[kind_id]
+                present = with_program[kind_id]
+                absent = runner.removal_limbs(
+                    target["modules"], bundle_root / "good"
                 )
-                entry["verdict_evidence"] = {
-                    "argv": removal["argv"],
-                    "exit_code": removal["exit_code"],
-                    "stderr_head": removal["stderr_head"],
-                }
-                entry["blocking_dependency"] = {
-                    "name": f"scripts/{module}.py",
-                    "role": "this repository's own code, which the declared "
-                    "recheck procedure replays",
-                    "confirmed_by_removal": not removal["import_succeeded"],
-                    "how_confirmed": (
-                        "the writer module was imported with the program tree "
-                        "renamed away; the import raised"
+                entry["executed_recheck_procedure"] = "program_replay"
+                entry["removal_arm"] = {
+                    "targets": target,
+                    "with_program_limb": present,
+                    "program_absent_limb": absent,
+                    "single_variable": (
+                        "identical argv and environment in both limbs; the only "
+                        "difference is whether scripts/ exists"
                     ),
+                    "amendment": REMOVAL_ARM_AMENDMENT["amendment"],
                 }
-                if removal["import_succeeded"]:
+
+                positive_ok = bool(present) and all(
+                    row["import_succeeded"] for row in present.values()
+                )
+                absent_failed = bool(absent) and all(
+                    not row["import_succeeded"] for row in absent.values()
+                )
+                imported_while_absent = [
+                    module
+                    for module, row in absent.items()
+                    if row["import_succeeded"]
+                ]
+
+                if positive_ok and absent_failed:
+                    entry["verdict"] = "NEEDS-PROGRAM"
+                    entry["blocking_dependency"] = {
+                        "name": [f"scripts/{m}.py" for m in target["modules"]],
+                        "role": (
+                            "this repository's own code, which the declared "
+                            "recheck procedure replays"
+                        ),
+                        "confirmed_by_removal": True,
+                        "how_confirmed": (
+                            "the same import, with the same argv and the same "
+                            "PYTHONPATH, SUCCEEDED with scripts/ present and "
+                            "FAILED with it renamed away; the difference "
+                            "between the two limbs is the removal and nothing "
+                            "else"
+                        ),
+                    }
+                elif not positive_ok:
+                    # The kind is blocked by something that is not the program.
+                    # Naming it is the whole value of the positive control.
+                    blockers = sorted(
+                        {
+                            row["missing_module"]
+                            for row in present.values()
+                            if not row["import_succeeded"] and row["missing_module"]
+                        }
+                    )
+                    entry["verdict"] = "UNTESTED"
+                    entry["blocking_dependency"] = {
+                        "name": blockers or ["unknown"],
+                        "role": (
+                            "a dependency that is NOT this repository's code: "
+                            "the recheck could not run even with the program "
+                            "fully present"
+                        ),
+                        "confirmed_by_removal": False,
+                        "how_confirmed": (
+                            "the with-program positive control FAILED, so the "
+                            "program-absent failure cannot be attributed to "
+                            "the removal. The true blocking dependency is "
+                            "named here instead."
+                        ),
+                        "is_program_configured": True,
+                    }
                     state["census_misses"].append(
                         {
                             "kind_id": kind_id,
-                            "miss": "a program_replay kind's writer imported "
-                            "with the program tree renamed away",
-                            "consequence": "verdict read UNTESTED, not "
-                            "NEEDS-PROGRAM; the declaration and the executed "
-                            "procedure disagree (B10)",
+                            "miss": (
+                                "declared program_replay, but the procedure "
+                                "cannot run even with the program present"
+                            ),
+                            "true_blocking_dependency": blockers,
+                            "consequence": (
+                                "verdict reads UNTESTED, not NEEDS-PROGRAM "
+                                "(B10: the declared and executed procedures "
+                                "disagree)"
+                            ),
                         }
                     )
+                else:
+                    entry["verdict"] = "UNTESTED"
+                    entry["blocking_dependency"] = {
+                        "name": imported_while_absent,
+                        "role": "resolved from outside the renamed program tree",
+                        "confirmed_by_removal": False,
+                        "how_confirmed": (
+                            "a target imported with the program tree renamed "
+                            "away, so the removal did not remove it"
+                        ),
+                    }
+                    state["census_misses"].append(
+                        {
+                            "kind_id": kind_id,
+                            "miss": (
+                                "a program_replay target imported with the "
+                                "program tree renamed away"
+                            ),
+                            "modules": imported_while_absent,
+                            "consequence": "verdict read UNTESTED, not NEEDS-PROGRAM",
+                        }
+                    )
+
+                sample = next(iter(absent.values()), {})
+                entry["verdict_evidence"] = {
+                    "argv": sample.get("argv"),
+                    "pythonpath": sample.get("pythonpath"),
+                    "exit_code": sample.get("exit_code"),
+                    "stderr_head": sample.get("stderr_head"),
+                    "with_program_limb_succeeded": positive_ok,
+                    "program_absent_limb_failed": absent_failed,
+                    "note": (
+                        "the verdict comes from the EXECUTED pair of limbs, "
+                        "never from the declaration (§4)"
+                    ),
+                }
             else:
                 entry["executed_recheck_procedure"] = "none"
                 entry["verdict"] = "UNTESTED"
                 entry["verdict_evidence"] = {
                     "reason": (
-                        "the census found no committed instance and no "
-                        "published reconstruction rule, so there was no "
-                        "procedure to execute"
+                        "the census found no committed instance of this kind "
+                        "under either the exact or the superset rule, so there "
+                        "was no receipt to re-check"
                         if declared == "none"
                         else "this kind declares a raw checker invocation but "
                         "no reconstruction rule has been published for it; "
@@ -917,9 +1259,20 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
         scored = [row for row in tamper_runs if not row["discarded"]]
         state["arms"]["tamper"] = {
             "design": "§7 B3 — three mutations different IN KIND, 100% must FAIL",
+            "ran_on_kind": executable_kind,
             "runs": tamper_runs,
             "gate": {
                 "clause": "tamper 3x per kind 100% FAIL",
+                # M2: the denominator is ONE kind. B3 is green over the kind
+                # whose procedure executed, and silent about the other 18.
+                "kinds_in_denominator": 1,
+                "kind_in_denominator": executable_kind,
+                "kinds_with_no_tamper_arm": len(census["kinds"]) - 1,
+                "scope_note": (
+                    "this row scores the one kind whose procedure executed "
+                    "program-absent. It says nothing about the other 18, which "
+                    "read UNTESTED for tamper because no procedure ran on them."
+                ),
                 "mutations_scored": len(scored),
                 "mutations_discarded": len(tamper_runs) - len(scored),
                 "failed": sum(1 for row in scored if row["outcome"] == "FAIL"),
@@ -942,8 +1295,15 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
             "exit_code": omission["exit_code"],
             "stdout_head": omission["stdout_head"],
             "report": omission["report"],
+            "ran_on_kind": executable_kind,
             "gate": {
                 "clause": "omission FAIL LOUD naming the missing dependency",
+                "kinds_in_denominator": 1,
+                "kind_in_denominator": executable_kind,
+                "scope_note": (
+                    "one kind invoked a removable dependency; every other kind "
+                    "reads §7's M5 UNTESTED escape because no procedure ran"
+                ),
                 "failed_loud": omission["exit_code"] == 2,
                 "named_the_dependency": names_it,
                 "silent_pass": omission["exit_code"] == 0,
@@ -993,32 +1353,128 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
                 ),
                 "known_bad_witness": bad_witness,
             },
+            "ran_on_kind": executable_kind,
             "gate": {
                 "clause": "sham-checker SURVIVES count = 0",
+                "kinds_in_denominator": 1,
+                "kind_in_denominator": executable_kind,
+                "scope_note": (
+                    "one kind invoked an adjudicating dependency for the stub "
+                    "to replace; the arm is silent about the other 18"
+                ),
                 "value": sham_survives,
                 "green": sham_survives == 0,
             },
-            "why_this_arm_reads_the_way_it_does": (
-                "this kind's procedure compares against the RECORDED exit "
-                "codes, and every committed row records positive=1. A stub "
-                "that always exits 0 therefore cannot reproduce them. That is "
-                "why B5 reads zero here, and it is stated so nobody mistakes a "
-                "structural fact for a strong result."
-            ),
+            # M3: the arm's ACTUAL mechanism, recorded beside the interface
+            # weakness, because they are two different limitations.
+            "mechanism": {
+                "what_the_stub_does": "prints nothing, exits 0, for every probe",
+                "what_the_procedure_compares": (
+                    "the RECORDED exit codes, and every committed row of this "
+                    "kind records positive=1 / negative=0"
+                ),
+                "therefore": (
+                    "a constant-zero stub fails the good bundle AND the "
+                    "known-bad bundle. It cannot read SURVIVES for this kind "
+                    "under ANY bundle, so B5's zero here is STRUCTURAL: the "
+                    "arm could not have fired for this kind however the "
+                    "receipts read."
+                ),
+                "what_that_costs": (
+                    "B5 is a real control against a harness that checked only "
+                    "bundle PRESENCE — that harness would have passed the "
+                    "sham. It is NOT evidence that this kind's procedure would "
+                    "detect a subtler stub, e.g. one replaying the recorded "
+                    "exit codes. That stronger arm is not run here and is not "
+                    "claimed."
+                ),
+            },
         }
 
         # -- B6 scramble -------------------------------------------------
-        scramble_record = run_scramble(
-            runner,
-            args.scramble_bundles,
-            bundle_root,
-            receipts,
-            rule,
-            census,
-            real_argv,
-            evidence,
-        )
-        state["arms"]["scramble"] = scramble_record
+        if args.reuse_scramble is not None:
+            carried = json.loads(
+                args.reuse_scramble.read_text(encoding="utf-8")
+            )
+            carried["carried_forward"] = {
+                "from_artifact": args.reuse_scramble.resolve()
+                .relative_to(REPO)
+                .as_posix(),
+                "artifact_sha256": sha256_file(args.reuse_scramble),
+                "why_not_re_run": (
+                    "amendment 2 repairs the REMOVAL arm. B6 scrambles the "
+                    "C-E3 bundle and invokes the pinned checker; nothing the "
+                    "amendment changes touches it, its rule is seeded from the "
+                    "kind_id, and the run is deterministic. Re-running 10,000 "
+                    "invocations to reproduce a number the fix cannot move "
+                    "would be an hour spent proving determinism."
+                ),
+                "what_would_invalidate_this": (
+                    "any change to the scramble rule, the bundle contents, the "
+                    "reconstruction rule, or the checker pin"
+                ),
+            }
+            carried.pop("provenance", None)
+            state["arms"]["scramble"] = carried
+        else:
+            state["arms"]["scramble"] = run_scramble(
+                runner,
+                args.scramble_bundles,
+                bundle_root,
+                receipts,
+                rule,
+                census,
+                real_argv,
+                evidence,
+            )
+
+        # -- H1: the arms' results, written INTO the kind they ran on ----
+        # Run 1 left this record saying UNTESTED on all three arms while the
+        # arms block above it showed them running on exactly this kind. A
+        # record that contradicts its own evidence is worse than a silent one.
+        if executable_kind and executable_kind in state["verdicts"]:
+            target = state["verdicts"][executable_kind]
+            tamper_gate = state["arms"]["tamper"]["gate"]
+            target["tamper_result"] = {
+                "verdict": "FAIL_ON_ALL_MUTATIONS"
+                if tamper_gate["green"]
+                else "NOT_ALL_MUTATIONS_FAILED",
+                "mutations_scored": tamper_gate["mutations_scored"],
+                "mutations_discarded": tamper_gate["mutations_discarded"],
+                "mutations_failed": tamper_gate["failed"],
+                "per_mutation": {
+                    row["mutation"]: {
+                        "outcome": row["outcome"],
+                        "failed_checks": sorted(
+                            {
+                                check
+                                for failure in (row["failed_checks"] or [])
+                                for check in failure["failed_checks"]
+                            }
+                        ),
+                    }
+                    for row in state["arms"]["tamper"]["runs"]
+                },
+            }
+            omission_gate = state["arms"]["omission"]["gate"]
+            target["omission_result"] = {
+                "verdict": "FAIL_LOUD"
+                if omission_gate["green"]
+                else ("SILENT_PASS" if omission_gate["silent_pass"] else "FAILED_QUIETLY"),
+                "removed_dependency": state["arms"]["omission"]["removed_dependency"],
+                "exit_code": state["arms"]["omission"]["exit_code"],
+                "named_the_dependency": omission_gate["named_the_dependency"],
+            }
+            sham_gate = state["arms"]["sham"]["gate"]
+            target["sham_result"] = {
+                "verdict": "NO_SURVIVOR" if sham_gate["green"] else "SURVIVED_THE_STUB",
+                "survives_count": sham_gate["value"],
+                "runs": {
+                    label: row["outcome"]
+                    for label, row in state["arms"]["sham"]["runs"].items()
+                },
+                "mechanism_ref": "arms.sham.mechanism",
+            }
 
         # -- B11 provenance ----------------------------------------------
         tagged = []
@@ -1056,6 +1512,11 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
             RENAMED_TREE.rename(PROGRAM_TREE)
 
     after = working_tree_digest(REPO)
+    (evidence / "tree_manifest_after.json").write_text(
+        json.dumps(after, indent=2), encoding="utf-8"
+    )
+    after = {k: v for k, v in after.items() if k != "manifest"}
+    after["manifest_file"] = f"cold/evidence{suffix}/tree_manifest_after.json"
 
     state["scope"] = {
         "harness_shape": "clean-PATH subprocess environment, not a container",
@@ -1096,7 +1557,14 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
             "program_tree_restored": PROGRAM_TREE.is_dir(),
         },
     }
+    state["scramble_ref"] = (
+        args.reuse_scramble.resolve().relative_to(REPO).as_posix()
+        if args.reuse_scramble is not None
+        else f"cold/scramble_baseline{suffix}.json"
+    )
+    state["path_audit_ref"] = f"cold/path_audit{suffix}.txt"
     state["run_metadata"] = {
+        "executable_kind": state.get("executable_kind"),
         "started_utc_epoch": int(started_wall),
         "elapsed_seconds": round(time.time() - started_wall, 1),
         "bundle_root": str(bundle_root),
@@ -1112,32 +1580,84 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
     state["census_commit"] = seal_commit
     state["harness_commit"] = git_commit_touching(HARNESS / "cold_harness.py")
     state["harness_files_at_census_commit"] = tree_files_at(seal_commit, "harness")
-    state["seal_predates_harness"] = bool(seal_commit) and not state[
-        "harness_files_at_census_commit"
-    ]
+    # B10, generalised for a second run. Run 1 could ask "did any harness file
+    # exist at the sealing commit?"; run 2 cannot, because the harness exists.
+    # What must hold for EVERY run is that the seal the harness read is the
+    # committed one and was committed before the run started.
+    state["registry_uncommitted_at_run"] = not git_clean(CENSUS_PATH)
+    state["seal_predates_harness"] = (
+        bool(seal_commit) and not state["registry_uncommitted_at_run"]
+    )
+    state["w0_ordering_at_first_seal"] = {
+        "statement": (
+            "at the commit that first sealed this registry, no file under "
+            "harness/ existed — the WITNESS W0 ordering"
+        ),
+        "first_seal_commit": FIRST_SEAL_COMMIT,
+        "harness_files_at_that_commit": tree_files_at(FIRST_SEAL_COMMIT, "harness"),
+    }
+
+    # H2: the two instance-side misses, published as B10 misses because they
+    # were found AFTER run 1's seal. The amended registry repairs the rule; the
+    # miss is recorded against the seal that did not have it.
+    for row in census.get("instance_recall_probe", {}).get(
+        "kinds_the_exact_rule_alone_would_have_read_as_none", []
+    ):
+        state["census_misses"].append(
+            {
+                "kind_id": row["kind_id"],
+                "miss": (
+                    "run 1's exact key-set instance rule read 0 committed "
+                    f"instances; a proper-superset match finds "
+                    f"{row['superset_only_count']}"
+                ),
+                "found_after_seal": RUN_ONE_SEAL,
+                "repaired_in": "registry amendment 2 (I2b)",
+                "consequence": (
+                    "the kind's declared recheck procedure moved from `none` "
+                    "to `program_replay`, and it is adjudicated by the removal "
+                    "arm in this run rather than skipped"
+                ),
+            }
+        )
 
     block = provenance_block(
         Path(__file__), [CENSUS_PATH, RULE_PATH, SUPPLEMENT_PATH]
     )
     cold_census = redact(build_cold_census(args, state))
+    cold_census["amendment"] = REMOVAL_ARM_AMENDMENT | {
+        "run_one_artifacts_retained_unedited": [
+            "cold/census.json",
+            "cold/path_audit.txt",
+            "cold/scramble_baseline.json",
+            "cold/evidence/",
+            "cold/result_gate.json",
+        ],
+        "registry_amendment": census.get("amendment", {}).get("amendment"),
+        "registry_seal_run_one": RUN_ONE_SEAL,
+        "registry_seal_this_run": census["census_seal"],
+    }
     cold_census["provenance"] = block
-    state["arms"]["scramble"]["provenance"] = block
-    (out_dir / "census.json").write_text(
+    (out_dir / f"census{suffix}.json").write_text(
         json.dumps(cold_census, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
-    (out_dir / "path_audit.txt").write_text(
+    (out_dir / f"path_audit{suffix}.txt").write_text(
         redact(render_path_audit(path_audit)), encoding="utf-8"
     )
     (evidence / "path_audit.json").write_text(
         json.dumps(redact(path_audit), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
-    (out_dir / "scramble_baseline.json").write_text(
-        json.dumps(redact(state["arms"]["scramble"]), indent=2, ensure_ascii=False)
-        + "\n",
-        encoding="utf-8",
-    )
+    if args.reuse_scramble is None:
+        state["arms"]["scramble"]["provenance"] = block
+        (out_dir / f"scramble_baseline{suffix}.json").write_text(
+            json.dumps(
+                redact(state["arms"]["scramble"]), indent=2, ensure_ascii=False
+            )
+            + "\n",
+            encoding="utf-8",
+        )
     # The per-run evidence probe_recheck wrote is rewritten on the same rule:
     # it is committed beside the census and must obey R5 too.
     for path in sorted(evidence.glob("*.json")):
@@ -1350,6 +1870,20 @@ def git_commit_touching(path: Path) -> str | None:
         return None
     value = completed.stdout.strip()
     return value or None
+
+
+def git_clean(path: Path) -> bool:
+    """True when `path` has no uncommitted modification."""
+
+    try:
+        completed = subprocess.run(
+            ["git", "-C", str(REPO), "diff", "--quiet", "HEAD", "--", str(path)],
+            capture_output=True,
+            timeout=60,
+        )
+    except OSError:  # pragma: no cover
+        return False
+    return completed.returncode == 0
 
 
 def tree_files_at(commit: str | None, prefix: str) -> list[str]:

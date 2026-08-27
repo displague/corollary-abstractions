@@ -13,36 +13,54 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
-## The receipts a program can re-check without itself are the ones whose checker is not the program (2026-08-27)
+## A receipt is cold-recheckable only when its adjudicator is not the program — and one executed case is all this measures (2026-08-27)
 
-**Claim.** Offline-checkability is not a property a receipt earns by carrying
-digests. It is a property it earns by naming an ADJUDICATOR that is not the
-program. Across 19 receipt kinds this repository emits, exactly one survived
-its producer's deletion — and the thing that separated it was not richer
-evidence but a third party holding the decision.
+**Claim, scoped to what ran.** Across 19 receipt kinds this repository emits,
+**one** was re-checked with its producer deleted. What separated it was not
+richer evidence but a third party holding the decision: its verdict is an exit
+code from a binary `leanprover` published, pinned by a digest of the executing
+bytes. Ten kinds read NEEDS-PROGRAM under a two-limb removal arm. This is
+**one executed positive case**, not a law — the generalization is the direction
+the evidence points, and the sample is one.
 
-**Evidence.** `cold/census.json`. The surviving kind, the C-E3 probe
-receipts, records a digest of `lean.exe`'s own bytes and a probe template; its
-verdict is an exit code from a binary `leanprover` published. Nine kinds that
-carry just as much digest material read NEEDS-PROGRAM, confirmed by removal.
-The sharpest instance is `retraction_radius:certify`: its certificates carry
-an explicit `recheck_command` field — the most self-describing receipt in the
-tree — and it still reads NEEDS-PROGRAM, because that command reads
-`python scripts/radius_recheck.py`. A recheck descriptor that names the
-program tree is a program replay wearing a descriptor's clothes.
+**Evidence.** `cold/census_run2.json`. The surviving kind, the C-E3 probe
+receipts, carries a probe template and a checker digest; steps 1–3 of its
+recheck need no program and no checker, and step 4 needs the pinned third-party
+binary and nothing of this repository.
 
-**The corollary that cost the most to learn.** The reconstruction rule for
-the one surviving kind is only HALF recorded in its own artifact: the
-positive probe template appears 25 times, and the negation glyph appears
-**zero** times. The negative template, the trailing newline, and the fact
-that the digest covers the LF form rather than the CRLF bytes actually handed
-to the compiler all live in the writer's source and nowhere in the receipt. A
-kind can be genuinely cold-recheckable and still not be self-describing, and
-the census records the difference (`cold/reconstruction_rule.json`).
+**The negative half is only as strong as its arm, and the first arm was
+broken.** Run 1 confirmed nine kinds NEEDS-PROGRAM by running
+`python -S -I -c "import <module>"` with the tree renamed away. `-I` implies
+`-E`, so `PYTHONPATH` was discarded and the module was never findable either
+way: the check failed identically with the program PRESENT. Amendment 2 runs
+both limbs with identical argv and environment, differing only in whether
+`scripts/` exists, and requires the with-program limb to SUCCEED. Ten kinds now
+pass that stricter pair. A confirmation that cannot go red is not a
+confirmation, and the first version of this entry claimed one.
 
-**Status:** measured, with the instrument's controls green — tamper 3/3 FAIL
-on three distinct signatures, omission failing loud, sham survivors 0, and 0
-of 200 scrambled bundles passing.
+**The sharpest instance is the one that changed verdict.**
+`retraction_radius:certify` carries an explicit `recheck_command` — the most
+self-describing receipt in the tree. Amendment 2 removes what the descriptor
+*runs* (`scripts/radius_recheck.py`) rather than what *wrote* the receipt, and
+the with-program positive control fails: `radius_recheck` cannot import
+`jsonschema`, which no manifest here pins. With the program fully present the
+procedure still cannot run. So the kind reads **UNTESTED with `jsonschema`
+named**, not NEEDS-PROGRAM. A receipt can be blocked by the world its program
+was maintained in rather than by the program, and only a positive control can
+tell the two apart.
+
+**The corollary that cost the most to learn.** The reconstruction rule for the
+one surviving kind is only HALF recorded in its own artifact: the positive probe
+template appears 25 times, the negation glyph **zero** times. The negative
+template, the trailing newline, and the fact that the digest covers the LF form
+rather than the CRLF bytes handed to the compiler all live in the writer's
+source and nowhere in the receipt. A kind can be genuinely cold-recheckable and
+still not be self-describing (`cold/reconstruction_rule.json`).
+
+**Status:** measured. Instrument controls green over their **one-kind**
+denominator — tamper 3/3 FAIL on three distinct signatures, omission failing
+loud, sham survivors 0 (structurally, see ANALYSIS), and 0 of 200 scrambled
+bundles passing.
 
 ---
 
