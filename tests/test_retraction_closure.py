@@ -697,13 +697,27 @@ class GateRegenerationCheckRuns(unittest.TestCase):
         self.assertEqual(check_report_regeneration.main([]), 0)
 
 
-#: The three ledgers whose writers adopted the provenance convention in
-#: wave 1, with the writer each must name. `decompositions.json` is absent
-#: on purpose — see the assertion at the end of the class.
+#: The ledgers whose writers adopted the provenance convention, with the
+#: writer each must name. `decompositions.json` is absent on purpose — see
+#: the assertion at the end of the class.
+#:
+#: Wave 1 was the three `reports/` ledgers. **Wave 2 (2026-08-27) adds the
+#: four v0.22 item-1 measurement artifacts**, and they are here because
+#: this guard would have caught a defect they shipped with:
+#: `handles_census.json` and `skeleton_index.json` were generated, their
+#: writer was then edited, and neither was regenerated — so both attested
+#: a writer digest no committed file had. Nothing in the suite could see
+#: it, because the convention was adopted without the guard that scores
+#: it. An artifact carrying a provenance block belongs on this list or the
+#: block is decoration.
 PROVENANCED_LEDGERS = {
     "reports/signature_matches.json": "scripts/match_signatures.py",
     "reports/specializations.json": "scripts/specialize.py",
     "reports/compression.json": "scripts/measure_compression.py",
+    "experiments/handles_census.json": "scripts/handles_census.py",
+    "experiments/skeleton_index.json": "scripts/handles_census.py",
+    "experiments/onestep_census.json": "scripts/onestep_census.py",
+    "experiments/erratum_probe.json": "scripts/erratum_probe.py",
 }
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")

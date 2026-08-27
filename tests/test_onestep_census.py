@@ -238,8 +238,16 @@ class TheFloorReadoutClaimsOnlyWhatItMeasured(unittest.TestCase):
         rule it was meant to enforce.
         """
 
-        for name in ("q60.json", "handles_q60.json", "handles_questions.json"):
-            self.assertFalse((ROOT / "experiments" / name).exists(), name)
+        # A rule, not three literal filenames: a fence naming the three
+        # files someone might have written is a fence that any fourth
+        # name walks through.
+        allowed = {"plain_question_set.json"}  # v0.21's, committed
+        offenders = sorted(
+            path.name for path in (ROOT / "experiments").glob("*.json")
+            if path.name not in allowed
+            and ("q60" in path.name.lower() or "question" in path.name.lower()))
+        self.assertEqual(offenders, [], "a question-set artifact appeared in "
+                                        "a slice forbidden to seal one")
         source = (ROOT / "scripts" / "onestep_census.py").read_text(
             encoding="utf-8")
         self.assertEqual(source.count("write_text"), 1)
@@ -259,6 +267,33 @@ class TheFloorReadoutClaimsOnlyWhatItMeasured(unittest.TestCase):
             block["with_a_specific_typable_handle"]
             + block["without_any_specific_typable_handle"],
             block["one_step_consumable_strict"])
+
+    def test_the_artifact_attests_the_committed_writer(self) -> None:
+        """The H1 guard, locally. See test_handles_census for what it cost."""
+
+        import hashlib  # noqa: PLC0415
+
+        block = self.artifact["provenance"]
+        writer = ROOT / "scripts" / "onestep_census.py"
+        self.assertEqual(block["writer"], "scripts/onestep_census.py")
+        self.assertEqual(
+            block["writer_sha256_lf"],
+            hashlib.sha256(
+                writer.read_bytes().replace(b"\r\n", b"\n")).hexdigest(),
+            "the artifact attests a writer that is not the committed one -- "
+            "regenerate it")
+
+    def test_no_budget_or_pilot_artifact_exists(self) -> None:
+        """H-P1 is not this slice's to author, and B is not frozen anywhere."""
+
+        for name in ("handles_budget.json", "budget_pilot.json",
+                     "handles_budget_pilot.json", "hp1_budget.json"):
+            self.assertFalse((ROOT / "experiments" / name).exists(), name)
+        for source in ("onestep_census.py", "handles_census.py",
+                       "erratum_probe.py"):
+            text = (ROOT / "scripts" / source).read_text(encoding="utf-8")
+            self.assertNotIn("B = 40", text, source)
+            self.assertNotIn("budget_used", text, source)
 
     def test_no_proof_or_search_claim_is_made(self) -> None:
         blob = json.dumps(self.artifact).lower()

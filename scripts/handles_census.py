@@ -212,8 +212,20 @@ def distribution(counts: collections.Counter, k: int) -> dict:
         "quantiles": {"p50": quantile(0.50), "p90": quantile(0.90),
                       "p99": quantile(0.99)},
         "histogram": buckets,
-        "most_resolving": [{"handle": h, "resolves_to_count": c}
-                           for h, c in counts.most_common(25)],
+        # NOT `counts.most_common(25)`. `resolves_to` accumulates over
+        # per-statement SETS, so the counter's insertion order — and
+        # therefore `most_common`'s tie order — follows PYTHONHASHSEED.
+        # Measured across three seeds: five leaves of this list moved,
+        # and at one seed the twenty-fifth entry was a different handle
+        # entirely, because two handles tied on the cut. Ties break on
+        # the handle's own bytes, which is the rule `full_head_index`
+        # already used and the rule DESIGN-handles §4 freezes one layer
+        # up for candidate truncation.
+        "most_resolving": [
+            {"handle": handle, "resolves_to_count": count}
+            for handle, count in sorted(counts.items(),
+                                        key=lambda kv: (-kv[1], kv[0]))[:25]
+        ],
     }
 
 
@@ -718,8 +730,9 @@ def build(data_dir: Path, repo_root: Path, k: int, oracle_calls: int) -> tuple[d
             "the_name_tokens": sorted(bulk_name_tokens),
             "distinct_raw_glossary_strings_over_the_bulk": len(bulk_raw_strings),
             "the_raw_strings": [
-                {"string": s, "statements": c}
-                for s, c in bulk_raw_strings.most_common()
+                {"string": text, "statements": count}
+                for text, count in sorted(bulk_raw_strings.items(),
+                                          key=lambda kv: (-kv[1], kv[0]))
             ],
             "reading": (
                 f"{len(bulk)} statements, {len(bulk_tokens)} distinct glossary "

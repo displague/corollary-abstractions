@@ -352,6 +352,93 @@ class TheArtifactSaysWhatItMeasured(unittest.TestCase):
                             for c in self.artifact["non_claims"]))
 
 
+class TheArtifactsAttestTheWriterThatMadeThem(unittest.TestCase):
+    """The guard this slice shipped without, and paid for.
+
+    Both artifacts were generated, the writer was then edited, and
+    neither was regenerated -- so both carried a `writer_sha256_lf` that
+    no committed file hashed to. Every surrounding test stayed green,
+    because a provenance block nothing scores is a block nothing scores.
+    `test_retraction_closure.PROVENANCED_LEDGERS` now covers these two as
+    the house guard; this is the local one, so the failure is legible
+    from the module that owns the artifacts.
+    """
+
+    @staticmethod
+    def sha256_lf(path: Path) -> str:
+        import hashlib  # noqa: PLC0415
+
+        return hashlib.sha256(
+            path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+    def test_both_artifacts_name_the_committed_writer(self) -> None:
+        writer = ROOT / "scripts" / "handles_census.py"
+        for path in (CENSUS, SKELETONS):
+            block = load(path)["provenance"]
+            self.assertEqual(block["writer"], "scripts/handles_census.py")
+            self.assertEqual(block["writer_sha256_lf"], self.sha256_lf(writer),
+                             f"{path.name} attests a writer that is not the "
+                             f"committed one -- regenerate it")
+
+    def test_every_declared_input_digest_is_the_committed_file(self) -> None:
+        for path in (CENSUS, SKELETONS):
+            for row in load(path)["provenance"]["inputs"]:
+                target = ROOT / row["path"]
+                self.assertTrue(target.is_file(), row)
+                self.assertEqual(row["sha256_lf"], self.sha256_lf(target), row)
+
+
+class TheDeterministicHalfIsDeterministic(unittest.TestCase):
+    """The artifact claims everything but the clock recomputes identically.
+
+    That claim was false when it was first written. `resolves_to`
+    accumulates over per-statement SETS, so the counter's insertion order
+    -- and with it `Counter.most_common`'s tie order -- followed
+    PYTHONHASHSEED. Across three seeds, entries of `most_resolving` moved
+    and at one seed a tied handle dropped off the twenty-fifth slot
+    entirely. Ties now break on the handle's own bytes.
+
+    This test is the reason the claim is allowed to stay in the artifact:
+    it runs the writer twice under different hash seeds and compares
+    every byte except the wall-clock block the artifact names.
+    """
+
+    @staticmethod
+    def build_under(seed: str, out: Path) -> dict:
+        import os  # noqa: PLC0415
+        import subprocess  # noqa: PLC0415
+
+        env = dict(os.environ, PYTHONHASHSEED=seed, PYTHONIOENCODING="utf-8")
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "handles_census.py"),
+             "--oracle-calls", "0", "--out", str(out),
+             "--skeleton-index", str(out.with_name(out.stem + "-skel.json"))],
+            check=True, capture_output=True, env=env, cwd=str(ROOT))
+        return json.loads(out.read_text(encoding="utf-8"))
+
+    def test_two_hash_seeds_produce_the_same_census(self) -> None:
+        import tempfile  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory() as tmp:
+            first = self.build_under("1", Path(tmp) / "a.json")
+            second = self.build_under("7", Path(tmp) / "b.json")
+        for payload in (first, second):
+            # the clock block is the artifact's own declared exception,
+            # and with --oracle-calls 0 it is not measured at all
+            payload["s3_price"].pop("runtime_estimate", None)
+        self.assertEqual(json.dumps(first, sort_keys=True),
+                         json.dumps(second, sort_keys=True))
+
+    def test_the_most_resolving_lists_are_in_the_frozen_order(self) -> None:
+        """Descending count, ties on the handle's bytes -- §4's rule."""
+
+        artifact = load(CENSUS)
+        for name, block in artifact["sources"].items():
+            rows = block["distribution"]["most_resolving"]
+            keys = [(-row["resolves_to_count"], row["handle"]) for row in rows]
+            self.assertEqual(keys, sorted(keys), name)
+
+
 class TheSliceBuiltNothing(unittest.TestCase):
     """Measurement only. H-P0 lands before the table, and only H-P0."""
 

@@ -10,7 +10,7 @@
   "specificity_definition": "a handle is specific iff resolves_to_count <= K (DESIGN-handles.md §7 B2). K is NOT re-frozen here; B2 says a re-freeze is argued from the distribution this census publishes, by dated amendment before the table run.",
   "provenance": {
     "writer": "scripts/handles_census.py",
-    "writer_sha256_lf": "836c42234f2bb04e43109945b889cac8d591319a68a19c8bc1f631a1165e4487",
+    "writer_sha256_lf": "d2be2d3984c16257fafa0a0c1a578446c5c89bd2d7192555ccc702127757d412",
     "inputs": [
       {
         "path": "data/algebra/nodes.json",
@@ -288,11 +288,11 @@
             "resolves_to_count": 12248
           },
           {
-            "handle": "ingested_slot",
+            "handle": "emitted",
             "resolves_to_count": 12212
           },
           {
-            "handle": "emitted",
+            "handle": "ingested_slot",
             "resolves_to_count": 12212
           },
           {
@@ -332,11 +332,11 @@
             "resolves_to_count": 71
           },
           {
-            "handle": "s",
+            "handle": "first",
             "resolves_to_count": 68
           },
           {
-            "handle": "first",
+            "handle": "s",
             "resolves_to_count": 68
           },
           {
@@ -499,11 +499,11 @@
             "resolves_to_count": 35
           },
           {
-            "handle": "set",
+            "handle": "negation",
             "resolves_to_count": 34
           },
           {
-            "handle": "negation",
+            "handle": "set",
             "resolves_to_count": 34
           },
           {
@@ -535,15 +535,15 @@
             "resolves_to_count": 19
           },
           {
+            "handle": "algebra",
+            "resolves_to_count": 18
+          },
+          {
             "handle": "complement",
             "resolves_to_count": 18
           },
           {
             "handle": "elements",
-            "resolves_to_count": 18
-          },
-          {
-            "handle": "algebra",
             "resolves_to_count": 18
           },
           {
@@ -555,6 +555,10 @@
             "resolves_to_count": 15
           },
           {
+            "handle": "disjunction",
+            "resolves_to_count": 14
+          },
+          {
             "handle": "level",
             "resolves_to_count": 14
           },
@@ -563,11 +567,7 @@
             "resolves_to_count": 14
           },
           {
-            "handle": "disjunction",
-            "resolves_to_count": 14
-          },
-          {
-            "handle": "index",
+            "handle": "finite",
             "resolves_to_count": 13
           }
         ]
@@ -738,10 +738,6 @@
             "resolves_to_count": 10
           },
           {
-            "handle": "PRIME",
-            "resolves_to_count": 9
-          },
-          {
             "handle": "CONCAT",
             "resolves_to_count": 9
           },
@@ -750,23 +746,27 @@
             "resolves_to_count": 9
           },
           {
-            "handle": "PRED",
-            "resolves_to_count": 8
+            "handle": "PRIME",
+            "resolves_to_count": 9
           },
           {
-            "handle": "INTEGRAL",
-            "resolves_to_count": 7
+            "handle": "PRED",
+            "resolves_to_count": 8
           },
           {
             "handle": "ALWAYS",
             "resolves_to_count": 7
           },
           {
-            "handle": "EVENTUALLY",
-            "resolves_to_count": 6
+            "handle": "INTEGRAL",
+            "resolves_to_count": 7
           },
           {
             "handle": "BOX",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "EVENTUALLY",
             "resolves_to_count": 6
           }
         ]
@@ -967,19 +967,19 @@
         },
         "most_resolving": [
           {
-            "handle": "^(+(?0:V, ?1:V, ?2:V), 2) >= *(3, +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V)))",
-            "resolves_to_count": 10
-          },
-          {
             "handle": "*(+(*(2, ?0:V, ?1:V), *(2, ^(?1:V, 2)), ^(?0:V, 2)), +(*(2, ^(?1:V, 2)), ^(?0:V, 2), neg(*(2, ?0:V, ?1:V)))) = +(*(4, ^(?1:V, 4)), ^(?0:V, 4))",
             "resolves_to_count": 10
           },
           {
-            "handle": "1 = +(^(COS⟨?0:V⟩, 2), ^(SIN⟨?0:V⟩, 2))",
-            "resolves_to_count": 9
+            "handle": "^(+(?0:V, ?1:V, ?2:V), 2) >= *(3, +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V)))",
+            "resolves_to_count": 10
           },
           {
             "handle": "*(+(?0:V, ?1:V, ?2:V), +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), neg(*(?0:V, ?1:V)), neg(*(?1:V, ?2:V)), neg(*(?2:V, ?0:V)))) = +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), neg(*(3, ?0:V, ?1:V, ?2:V)))",
+            "resolves_to_count": 9
+          },
+          {
+            "handle": "1 = +(^(COS⟨?0:V⟩, 2), ^(SIN⟨?0:V⟩, 2))",
             "resolves_to_count": 9
           },
           {
@@ -995,10 +995,6 @@
             "resolves_to_count": 7
           },
           {
-            "handle": "IMPLIES⟨MEET⟨MEET⟨0 < ?0:V, 0 < ?1:V⟩, 0 < ?2:V⟩, IMPLIES⟨+(*(1, inv(+(1, ?0:V, ?1:V))), *(1, inv(+(1, ?1:V, ?2:V))), *(1, inv(+(1, ?2:V, ?0:V)))) >= 1, +(?0:V, ?1:V, ?2:V) >= +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V))⟩⟩",
-            "resolves_to_count": 7
-          },
-          {
             "handle": "IMPLIES⟨MEET⟨1 < ?0:V, 1 < ?1:V⟩, +(*(^(?0:V, 2), inv(+(?1:V, neg(1)))), *(^(?1:V, 2), inv(+(?0:V, neg(1))))) >= 8⟩",
             "resolves_to_count": 7
           },
@@ -1007,8 +1003,8 @@
             "resolves_to_count": 7
           },
           {
-            "handle": "?0:V = +(?1:P, *(?2:P, ?3:V))",
-            "resolves_to_count": 6
+            "handle": "IMPLIES⟨MEET⟨MEET⟨0 < ?0:V, 0 < ?1:V⟩, 0 < ?2:V⟩, IMPLIES⟨+(*(1, inv(+(1, ?0:V, ?1:V))), *(1, inv(+(1, ?1:V, ?2:V))), *(1, inv(+(1, ?2:V, ?0:V)))) >= 1, +(?0:V, ?1:V, ?2:V) >= +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V))⟩⟩",
+            "resolves_to_count": 7
           },
           {
             "handle": "*(+(2, ^(?0:V, 2)), +(2, ^(?1:V, 2)), +(2, ^(?2:V, 2))) >= *(3, ^(+(?0:V, ?1:V, ?2:V), 2))",
@@ -1019,7 +1015,7 @@
             "resolves_to_count": 6
           },
           {
-            "handle": "IMPLIES⟨?0:V > 0, +(?0:V, *(1, inv(?0:V))) >= 2⟩",
+            "handle": "?0:V = +(?1:P, *(?2:P, ?3:V))",
             "resolves_to_count": 6
           },
           {
@@ -1031,15 +1027,19 @@
             "resolves_to_count": 6
           },
           {
-            "handle": "?0:V = *(?1:P, EXP⟨*(?2:P, ?3:V)⟩)",
+            "handle": "IMPLIES⟨?0:V > 0, +(?0:V, *(1, inv(?0:V))) >= 2⟩",
+            "resolves_to_count": 6
+          },
+          {
+            "handle": "*(+(?0:V, ?1:V, ?2:V), +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), neg(*(?0:V, ?1:V)), neg(*(?0:V, ?2:V)), neg(*(?1:V, ?2:V)))) = +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), neg(*(3, ?0:V, ?1:V, ?2:V)))",
             "resolves_to_count": 5
           },
           {
-            "handle": "IMPLIES⟨MEET⟨MEET⟨MEET⟨?0:V > 0, ?1:V > 0⟩, ?2:V > 0⟩, 1 = *(?0:V, ?1:V, ?2:V)⟩, +(*(1, inv(+(1, ?0:V, ^(?0:V, 2)))), *(1, inv(+(1, ?1:V, ^(?1:V, 2)))), *(1, inv(+(1, ?2:V, ^(?2:V, 2))))) >= 1⟩",
+            "handle": "*(+(^(?0:V, 2), ^(?1:V, 2)), +(^(?2:V, 2), ^(?3:V, 2))) = +(^(+(*(?0:V, ?2:V), *(?1:V, ?3:V)), 2), ^(+(*(?0:V, ?3:V), neg(*(?1:V, ?2:V))), 2))",
             "resolves_to_count": 5
           },
           {
-            "handle": "+(*(^(?0:V, 2), ^(?1:V, 2)), *(^(?1:V, 2), ^(?2:V, 2)), *(^(?2:V, 2), ^(?0:V, 2))) >= *(?0:V, ?1:V, ?2:V, +(?0:V, ?1:V, ?2:V))",
+            "handle": "*(1, +(?0:V, ?1:V, ?2:V), +(^(+(?0:V, neg(?1:V)), 2), ^(+(?1:V, neg(?2:V)), 2), ^(+(?2:V, neg(?0:V)), 2)), inv(2)) = +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), neg(*(3, ?0:V, ?1:V, ?2:V)))",
             "resolves_to_count": 5
           },
           {
@@ -1047,23 +1047,23 @@
             "resolves_to_count": 5
           },
           {
-            "handle": "FORALL⟨?0:V, FORALL⟨?1:V, FORALL⟨?2:V, +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2)) >= +(*(?0:V, ?1:V), *(?1:V, ?2:V), *(?2:V, ?0:V))⟩⟩⟩",
+            "handle": "*(SIN⟨+(?0:V, ?1:V)⟩, SIN⟨+(?0:V, neg(?1:V))⟩) = +(^(SIN⟨?0:V⟩, 2), neg(^(SIN⟨?1:V⟩, 2)))",
             "resolves_to_count": 5
           },
           {
-            "handle": "*(+(?0:V, ?1:V, ?2:V), +(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), neg(*(?0:V, ?1:V)), neg(*(?0:V, ?2:V)), neg(*(?1:V, ?2:V)))) = +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), neg(*(3, ?0:V, ?1:V, ?2:V)))",
+            "handle": "+(*(^(?0:V, 2), ^(?1:V, 2)), *(^(?0:V, 2), ^(?2:V, 2)), *(^(?1:V, 2), ^(?2:V, 2))) >= +(*(?1:V, ?2:V, ^(?0:V, 2)), *(?0:V, ?2:V, ^(?1:V, 2)), *(?0:V, ?1:V, ^(?2:V, 2)))",
             "resolves_to_count": 5
           },
           {
-            "handle": "+(^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2)) >= *(1, ^(+(?0:V, ?1:V, ?2:V), 2), inv(3))",
+            "handle": "+(*(^(?0:V, 2), ^(?1:V, 2)), *(^(?1:V, 2), ^(?2:V, 2)), *(^(?2:V, 2), ^(?0:V, 2))) >= *(?0:V, ?1:V, ?2:V, +(?0:V, ?1:V, ?2:V))",
             "resolves_to_count": 5
           },
           {
-            "handle": "IMPLIES⟨1 = *(?0:V, ?1:V, ?2:V), +(*(1, inv(+(1, ?0:V, ^(?0:V, 2)))), *(1, inv(+(1, ?1:V, ^(?1:V, 2)))), *(1, inv(+(1, ?2:V, ^(?2:V, 2))))) >= 1⟩",
+            "handle": "+(SQRT⟨+(^(?0:V, 2), ^(+(1, neg(?1:V)), 2))⟩, SQRT⟨+(^(?1:V, 2), ^(+(1, neg(?2:V)), 2))⟩, SQRT⟨+(^(?2:V, 2), ^(+(1, neg(?0:V)), 2))⟩) >= *(3, SQRT⟨2⟩, inv(2))",
             "resolves_to_count": 5
           },
           {
-            "handle": "IMPLIES⟨MEET⟨MEET⟨MEET⟨MEET⟨0 < ?0:V, 0 < ?1:V⟩, 0 < ?2:V⟩, 0 < ?3:V⟩, 1 = +(?0:V, ?1:V, ?2:V, ?3:V)⟩, *(6, +(^(?0:V, 3), ^(?1:V, 3), ^(?2:V, 3), ^(?3:V, 3))) >= +(*(1, inv(8)), ^(?0:V, 2), ^(?1:V, 2), ^(?2:V, 2), ^(?3:V, 2))⟩",
+            "handle": "+(^(?0:V, 2), ^(?1:V, 2)) >= *(2, ?0:V, ?1:V)",
             "resolves_to_count": 5
           }
         ]
@@ -1163,15 +1163,15 @@
         "statements": 12212
       },
       {
+        "string": "constants.description=ground numeral",
+        "statements": 302
+      },
+      {
         "string": "symbols.description=A ground numeral standing in the template.",
         "statements": 302
       },
       {
         "string": "symbols.semantic_role=ground_numeral",
-        "statements": 302
-      },
-      {
-        "string": "constants.description=ground numeral",
         "statements": 302
       }
     ],
@@ -1210,16 +1210,16 @@
       "toolchain": "leanprover/lean4:v4.32.2",
       "calls": 20,
       "sample": "first N committed receipts by statement_id, term = `interpreted`",
-      "cold_first_call_seconds": 1.1572,
-      "cold_start_note": "the first call pays for the OS bringing the toolchain and `import Lean` into cache; it is an order of magnitude above every later call and would poison a mean of twenty. It is reported separately and excluded from `per_call_seconds`, and the projections below use the warm median.",
+      "cold_first_call_seconds": 1.1333,
+      "cold_start_note": "the first call is reported separately and excluded from `per_call_seconds` because it may pay for the OS bringing the toolchain and `import Lean` into cache, and on a cold box that cost can be large enough to move a mean of twenty. Whether it did on THIS run is readable from the two numbers: compare `cold_first_call_seconds` with `per_call_seconds.median`. The exclusion is a rule fixed before the run, not a reaction to what the run produced.",
       "per_call_seconds": {
         "basis": "calls 2..N, one Lean process per term (batch_size=1)",
-        "mean": 1.1581,
-        "median": 1.1297,
-        "min": 1.0884,
-        "max": 1.5426
+        "mean": 1.1603,
+        "median": 1.1372,
+        "min": 1.0781,
+        "max": 1.5521
       },
-      "batched_seconds_for_all": 1.8774,
+      "batched_seconds_for_all": 1.9556,
       "batched_ok": 20,
       "liveness": {
         "digests_reproduced": 20,
@@ -1235,10 +1235,10 @@
       },
       "projected_seconds": {
         "basis": "warm median per-call seconds x term count. Unbatched is one Lean process per term -- the ceiling. Batched is the same twenty terms in one process divided by twenty -- the floor. The real cost of a term-store build sits between them and depends on a batch size nobody has chosen yet.",
-        "one_term_per_covered_statement_unbatched": 2613.0,
-        "two_terms_per_covered_statement_unbatched": 5226.0,
-        "one_term_per_covered_statement_batched": 217.1,
-        "two_terms_per_covered_statement_batched": 434.2
+        "one_term_per_covered_statement_unbatched": 2630.3,
+        "two_terms_per_covered_statement_unbatched": 5260.7,
+        "one_term_per_covered_statement_batched": 226.2,
+        "two_terms_per_covered_statement_batched": 452.3
       },
       "projected_store_bytes": {
         "basis": "mean measured serialization length (UTF-8 chars, the serializations are ASCII S-expressions) x term count. Storage only: no index, no framing, no compression.",

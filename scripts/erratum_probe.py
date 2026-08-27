@@ -82,7 +82,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import replay_session  # noqa: E402
 import session_ledger as ledger  # noqa: E402
 from harness import CoreSession, route_line  # noqa: E402
-from report_provenance import repo_relative  # noqa: E402
+from report_provenance import provenance_block, repo_relative  # noqa: E402
 
 SCHEMA = "erratum_probe.v1"
 PLANT_SCHEMA = "corollary.session-journal/1"
@@ -495,6 +495,24 @@ def build(repo_root: Path, sessions_dir: Path, plant_path: Path,
             f"{len(plant_turns)}, meeting B9's floor of {PLANTED_FLIP_FLOOR}. "
             f"Statements added in the window: "
             f"{win['authoritative_because_it_is_a_digest']['statements_added_in_the_window']}."
+        ),
+        "provenance": provenance_block(
+            Path(__file__),
+            [*journal_paths,
+             repo_root / "reports" / "signature_matches.json",
+             *sorted((repo_root / "data").glob("*/nodes.json"))],
+            repo_root,
+        ),
+        "provenance_scope": (
+            "the writer, the 60 journals it replayed, the twin-group report "
+            "the plant's subject was drawn from, and every committed corpus. "
+            "What the block does NOT cover is the serving path itself -- "
+            "`harness`, `serve_chat` and the resolver are read as code, not as "
+            "inputs -- and that is deliberate rather than an omission: those "
+            "are exactly what `window.capability_flips` measures by pin, and "
+            "two of them moved in this window. A provenance hash over a module "
+            "the artifact separately reports as changed would say the same "
+            "thing twice and pin neither."
         ),
         "flip_definition": {
             "a_flip_is": (

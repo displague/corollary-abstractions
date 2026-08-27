@@ -242,6 +242,59 @@ class TheWindowIsStatedFromADigest(unittest.TestCase):
             sorted(flips["pins_that_moved"] + flips["pins_that_held"]),
             sorted(ledger.PIN_FIELDS))
 
+    def test_the_artifact_attests_the_committed_writer(self) -> None:
+        """L2's answer: a provenance block, not a plea that the live guards
+        substitute for one."""
+
+        import hashlib  # noqa: PLC0415
+
+        block = self.artifact["provenance"]
+        writer = ROOT / "scripts" / "erratum_probe.py"
+        self.assertEqual(block["writer"], "scripts/erratum_probe.py")
+        self.assertEqual(
+            block["writer_sha256_lf"],
+            hashlib.sha256(
+                writer.read_bytes().replace(b"\r\n", b"\n")).hexdigest(),
+            "the artifact attests a writer that is not the committed one -- "
+            "regenerate it")
+        self.assertTrue(block["inputs"])
+        self.assertIn("does NOT cover", self.artifact["provenance_scope"])
+
+    def test_every_replayed_journal_is_a_declared_input(self) -> None:
+        """The provenance block must name what the probe actually read."""
+
+        declared = {row["path"] for row in self.artifact["provenance"]["inputs"]}
+        journals = [p for p in sorted(SESSIONS.glob("v021-s*.json"))
+                    if not p.name.endswith(".reads.json")]
+        for path in journals:
+            self.assertIn(f"experiments/sessions/{path.name}", declared)
+
+    def test_the_probe_wrote_only_its_two_artifacts(self) -> None:
+        """The containment fence its siblings carry."""
+
+        source = (ROOT / "scripts" / "erratum_probe.py").read_text(
+            encoding="utf-8")
+        self.assertEqual(source.count("write_text"), 2)
+        self.assertIn("erratum_probe.json", source)
+        self.assertIn("erratum_plant_journal.json", source)
+
+    def test_the_slice_built_no_table_budget_or_question_set(self) -> None:
+        for name in ("handles_table.json", "handles_partition.json",
+                     "handles_enum_receipts.json", "handles_budget.json",
+                     "budget_pilot.json"):
+            self.assertFalse((ROOT / "experiments" / name).exists(), name)
+
+    def test_the_plant_did_not_enter_the_sealed_journal_corpus(self) -> None:
+        """A synthetic journal must never sit where the sealed ones live."""
+
+        self.assertFalse((SESSIONS / PLANT.name).exists())
+        self.assertEqual(PLANT.parent, ROOT / "experiments")
+        seal = ROOT / "experiments" / "session_corpus_seal.json"
+        if seal.exists():
+            sealed = {entry["journal"] for entry in
+                      json.loads(seal.read_text(encoding="utf-8"))["sessions"]}
+            self.assertNotIn("experiments/erratum_plant_journal.json", sealed)
+
     def test_no_forgery_or_correctness_claim_is_made(self) -> None:
         claims = self.artifact["non_claims"]
         self.assertTrue(any("forgery" in c for c in claims))
