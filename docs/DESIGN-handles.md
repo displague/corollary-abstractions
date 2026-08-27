@@ -115,6 +115,25 @@ this table's to assert**; the indicative yields above are the review's
 measurement, cited as the reason §9 and §10 are scoped the way they
 are.
 
+> **H-P0 has now returned them (2026-08-27,
+> `experiments/handles_census.json`), and both indicative yields are
+> exact**: 263 via S-LEX, 306 via S-INV, at K=128. Their union — the
+> only reading that speaks to what a person could type, since S-SKEL
+> reaches everything and nobody types a skeleton — is **417 of 12,777,
+> 3.26%**.
+>
+> **One dated correction to the sentence above.** "Three boilerplate
+> name pairs" was the review's approximation and is inexact in both
+> directions. Measured over the 12,514: **nine** distinct glossary
+> tokens (`emitted`, `equality`, `ground`, `ground_numeral`,
+> `ingested_slot`, `numeral`, `slot`, `standing`, `template`), drawn
+> from **six** distinct raw glossary strings, of which exactly **one** is
+> an entry `name` — `equality`. The three words quoted are real and are
+> among the nine; the count "three" and the word "name" are not. The
+> finding the sentence carries is unaffected and is understated by it:
+> nine tokens across 12,514 statements, none of them specific at any K
+> that excludes boilerplate (§7 B2's dated adjudication).
+
 | source | producer (committed code) | status |
 |---|---|---|
 | S-LEX: `symbol_lexicon` names | `resolver.by_lexicon`'s underlying per-node glossary | records on all 12,777; specific-handle yield ~2% (curated corpora); H-P0 measures |
@@ -207,6 +226,27 @@ pin and a regeneration test, never a corpus.
   resolves-to-count distribution per source; if it shows K=128 strands
   whole corpora with no specific handle, K is re-frozen from H-P0's
   distribution by dated amendment BEFORE the table run — never after.
+
+  > **Trigger adjudicated NOT FIRED (2026-08-27).** H-P0 ran and the
+  > re-freeze condition is arguably met on its face: lean_workbook's
+  > specific-S-LEX coverage is **0 of 12,514**. The adjudication, with
+  > its numbers in `experiments/handles_census.json` `k_sensitivity`, is
+  > that K stays **128** — (a) the corpus is not *wholly* stranded, since
+  > S-INV gives **154** of those 12,514 a specific handle; (b) K=128 is
+  > **interior to a plateau**, not on its edge — S-LEX's 263 is invariant
+  > for K ∈ [22, 301] and S-INV's 306 and the union's 417 for K ∈ [80,
+  > 218], so any re-freeze inside that range returns identical numbers;
+  > and (c) decisively, **no re-freeze rescues the bulk.** The smallest K
+  > at which S-LEX reaches a single lean_workbook statement is **302**,
+  > and it gets there by admitting one token — `ground_numeral`, a
+  > boilerplate `semantic_role` — which is precisely what K exists to
+  > exclude; even then it caps at **302 statements, 2.41% of the bulk, at
+  > every larger K forever**, because six of the bulk's nine glossary
+  > tokens are each held by more than 12,200 statements. A re-freeze
+  > cannot turn the finding around; it can only buy 2% of the bulk by
+  > admitting the boilerplate the finding is about. What would change
+  > this is a source that gives the bulk names, which is §9's headline
+  > and a v0.23 rotation question, not a K question.
 - **B3** Title ablation, red-able by construction (review H5):
   `title_derived` is not a token comparison — it is a **producer
   audit**: an AST check (the v0.21 G8-repair precedent) that the table
