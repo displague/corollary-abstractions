@@ -1,0 +1,137 @@
+{
+  "repository_root": "<repo>",
+  "interpreter": {
+    "executable": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+    "version": "3.13.12",
+    "prefix": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none",
+    "base_prefix": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none",
+    "flags_no_site": true,
+    "flags_isolated": true,
+    "inside_repository": false
+  },
+  "cwd": "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\good",
+  "cwd_inside_repository": false,
+  "assertion_1_program_tree_unresolvable": {
+    "statement": "an import of a known program module raises, with the traceback quoted",
+    "holds": true,
+    "imports": [
+      {
+        "module": "serve_chat",
+        "imported": false,
+        "traceback": "Traceback (most recent call last):\n  File \"<repo>\\harness\\path_probe.py\", line 105, in main\n    __import__(name)\n    ~~~~~~~~~~^^^^^^\nModuleNotFoundError: No module named 'serve_chat'\n"
+      },
+      {
+        "module": "harness",
+        "imported": false,
+        "traceback": "Traceback (most recent call last):\n  File \"<repo>\\harness\\path_probe.py\", line 105, in main\n    __import__(name)\n    ~~~~~~~~~~^^^^^^\nModuleNotFoundError: No module named 'harness'\n"
+      },
+      {
+        "module": "session_ledger",
+        "imported": false,
+        "traceback": "Traceback (most recent call last):\n  File \"<repo>\\harness\\path_probe.py\", line 105, in main\n    __import__(name)\n    ~~~~~~~~~~^^^^^^\nModuleNotFoundError: No module named 'session_ledger'\n"
+      }
+    ]
+  },
+  "assertion_2_no_sys_path_entry_inside_the_repository": {
+    "statement": "every resolved sys.path entry lies outside the repository root",
+    "holds": true,
+    "sys_path": [
+      {
+        "raw": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python313.zip",
+        "resolved": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13.12-windows-x86_64-none\\python313.zip",
+        "inside_repository": false,
+        "exists": false
+      },
+      {
+        "raw": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\DLLs",
+        "resolved": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13.12-windows-x86_64-none\\DLLs",
+        "inside_repository": false,
+        "exists": true
+      },
+      {
+        "raw": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\Lib",
+        "resolved": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13.12-windows-x86_64-none\\Lib",
+        "inside_repository": false,
+        "exists": true
+      },
+      {
+        "raw": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13.12-windows-x86_64-none",
+        "resolved": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13.12-windows-x86_64-none",
+        "inside_repository": false,
+        "exists": true
+      }
+    ]
+  },
+  "path_entries": [
+    {
+      "raw": "~\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin",
+      "resolved": "~\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin",
+      "inside_repository": false,
+      "exists": true,
+      "listing_sha256": "afa22a0b531a749d9c040e3964838ff8f9eb12f830231e3446990f8bca68142b"
+    },
+    {
+      "raw": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none",
+      "resolved": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13.12-windows-x86_64-none",
+      "inside_repository": false,
+      "exists": true,
+      "listing_sha256": "a63ab4f2e2728788ca89315154676dcb4d17422f030870ac8a80e7033105d839"
+    }
+  ],
+  "path_entries_inside_repository": [],
+  "dependencies": [
+    {
+      "name": "lean.exe",
+      "requested": "~\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "resolved": "~\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+      "exists": true,
+      "sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "size_bytes": 83968
+    },
+    {
+      "name": "interpreter",
+      "requested": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+      "resolved": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13.12-windows-x86_64-none\\python.exe",
+      "exists": true,
+      "sha256": "3e191df011bfee78f4129f9914936003f41105cdcbfd9c134be6c135e0f7b0df",
+      "size_bytes": 91648
+    }
+  ],
+  "environment_keys_present": [
+    "COMSPEC",
+    "HOMEDRIVE",
+    "HOMEPATH",
+    "PATH",
+    "PYTHONIOENCODING",
+    "PYTHONNOUSERSITE",
+    "PYTHONPATH",
+    "SYSTEMROOT",
+    "TEMP",
+    "TMP",
+    "USERPROFILE"
+  ],
+  "both_assertions_hold": true,
+  "harness_argv": [
+    "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+    "-S",
+    "-I",
+    "<repo>\\harness\\path_probe.py",
+    "--repo-root",
+    "<repo>",
+    "--program-module",
+    "serve_chat",
+    "--program-module",
+    "harness",
+    "--program-module",
+    "session_ledger",
+    "--dependency",
+    "lean.exe=~\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin\\lean.exe",
+    "--dependency",
+    "interpreter=~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+    "--out",
+    "<repo>\\cold\\evidence_run2\\path_audit.json"
+  ],
+  "harness_exit_code": 0,
+  "program_tree_renamed_to": "scripts.renamed-away-by-cold-harness",
+  "program_tree_exists": false
+}

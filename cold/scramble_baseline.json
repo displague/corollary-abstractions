@@ -1,0 +1,1860 @@
+{
+  "design": "§7 B6 — the vacuity control: what a bundle earns by being THE RIGHT ONE rather than by being A BUNDLE",
+  "scramble_rule": {
+    "type": "permute_instances_within_artifact",
+    "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+    "seed": 1858455228,
+    "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+    "applicable": true,
+    "why_not_applicable": null
+  },
+  "bundles_requested": 200,
+  "bundles_run": 200,
+  "bundles_passed": 0,
+  "checker_invocations": 10000,
+  "elapsed_seconds": 3422.4,
+  "budget": {
+    "design_estimate_minutes": "59 at the mean, 63 at the observed max",
+    "overrun_threshold_minutes": 90,
+    "overran": false,
+    "published_before_any_chance_rate_is_read": true
+  },
+  "what_the_invocation_step_can_discriminate": {
+    "distinct_recorded_exit_code_pairs": [
+      [
+        1,
+        0
+      ]
+    ],
+    "note": "every committed row of this kind records the same (positive, negative) exit-code pair, so a permutation of receipts across rows leaves step 4's comparison unchanged and ONLY step 3's digest comparison can catch it. The invocation step contributes nothing to detecting this scramble. That is a property of the data, measured here rather than discovered after the number was read."
+  },
+  "outcomes": [
+    {
+      "bundle": 0,
+      "seed": 1858455228,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.89
+    },
+    {
+      "bundle": 1,
+      "seed": 1858455229,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.073
+    },
+    {
+      "bundle": 2,
+      "seed": 1858455230,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.983
+    },
+    {
+      "bundle": 3,
+      "seed": 1858455231,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.025
+    },
+    {
+      "bundle": 4,
+      "seed": 1858455232,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.996
+    },
+    {
+      "bundle": 5,
+      "seed": 1858455233,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.173
+    },
+    {
+      "bundle": 6,
+      "seed": 1858455234,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.136
+    },
+    {
+      "bundle": 7,
+      "seed": 1858455235,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.01
+    },
+    {
+      "bundle": 8,
+      "seed": 1858455236,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.896
+    },
+    {
+      "bundle": 9,
+      "seed": 1858455237,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.934
+    },
+    {
+      "bundle": 10,
+      "seed": 1858455238,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.965
+    },
+    {
+      "bundle": 11,
+      "seed": 1858455239,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.049
+    },
+    {
+      "bundle": 12,
+      "seed": 1858455240,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.974
+    },
+    {
+      "bundle": 13,
+      "seed": 1858455241,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.9
+    },
+    {
+      "bundle": 14,
+      "seed": 1858455242,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.919
+    },
+    {
+      "bundle": 15,
+      "seed": 1858455243,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.954
+    },
+    {
+      "bundle": 16,
+      "seed": 1858455244,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.026
+    },
+    {
+      "bundle": 17,
+      "seed": 1858455245,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.001
+    },
+    {
+      "bundle": 18,
+      "seed": 1858455246,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.978
+    },
+    {
+      "bundle": 19,
+      "seed": 1858455247,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 4,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.016
+    },
+    {
+      "bundle": 20,
+      "seed": 1858455248,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.937
+    },
+    {
+      "bundle": 21,
+      "seed": 1858455249,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.992
+    },
+    {
+      "bundle": 22,
+      "seed": 1858455250,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.886
+    },
+    {
+      "bundle": 23,
+      "seed": 1858455251,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.933
+    },
+    {
+      "bundle": 24,
+      "seed": 1858455252,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.92
+    },
+    {
+      "bundle": 25,
+      "seed": 1858455253,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.925
+    },
+    {
+      "bundle": 26,
+      "seed": 1858455254,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.928
+    },
+    {
+      "bundle": 27,
+      "seed": 1858455255,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 4,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.987
+    },
+    {
+      "bundle": 28,
+      "seed": 1858455256,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.857
+    },
+    {
+      "bundle": 29,
+      "seed": 1858455257,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.822
+    },
+    {
+      "bundle": 30,
+      "seed": 1858455258,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.907
+    },
+    {
+      "bundle": 31,
+      "seed": 1858455259,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.928
+    },
+    {
+      "bundle": 32,
+      "seed": 1858455260,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.981
+    },
+    {
+      "bundle": 33,
+      "seed": 1858455261,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.917
+    },
+    {
+      "bundle": 34,
+      "seed": 1858455262,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.828
+    },
+    {
+      "bundle": 35,
+      "seed": 1858455263,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.818
+    },
+    {
+      "bundle": 36,
+      "seed": 1858455264,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.889
+    },
+    {
+      "bundle": 37,
+      "seed": 1858455265,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.825
+    },
+    {
+      "bundle": 38,
+      "seed": 1858455266,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.026
+    },
+    {
+      "bundle": 39,
+      "seed": 1858455267,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.139
+    },
+    {
+      "bundle": 40,
+      "seed": 1858455268,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.895
+    },
+    {
+      "bundle": 41,
+      "seed": 1858455269,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.975
+    },
+    {
+      "bundle": 42,
+      "seed": 1858455270,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.942
+    },
+    {
+      "bundle": 43,
+      "seed": 1858455271,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.885
+    },
+    {
+      "bundle": 44,
+      "seed": 1858455272,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.92
+    },
+    {
+      "bundle": 45,
+      "seed": 1858455273,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.961
+    },
+    {
+      "bundle": 46,
+      "seed": 1858455274,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.98
+    },
+    {
+      "bundle": 47,
+      "seed": 1858455275,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.932
+    },
+    {
+      "bundle": 48,
+      "seed": 1858455276,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.98
+    },
+    {
+      "bundle": 49,
+      "seed": 1858455277,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.884
+    },
+    {
+      "bundle": 50,
+      "seed": 1858455278,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.929
+    },
+    {
+      "bundle": 51,
+      "seed": 1858455279,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.893
+    },
+    {
+      "bundle": 52,
+      "seed": 1858455280,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.86
+    },
+    {
+      "bundle": 53,
+      "seed": 1858455281,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.917
+    },
+    {
+      "bundle": 54,
+      "seed": 1858455282,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.877
+    },
+    {
+      "bundle": 55,
+      "seed": 1858455283,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.917
+    },
+    {
+      "bundle": 56,
+      "seed": 1858455284,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.123
+    },
+    {
+      "bundle": 57,
+      "seed": 1858455285,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.905
+    },
+    {
+      "bundle": 58,
+      "seed": 1858455286,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.877
+    },
+    {
+      "bundle": 59,
+      "seed": 1858455287,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.894
+    },
+    {
+      "bundle": 60,
+      "seed": 1858455288,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.881
+    },
+    {
+      "bundle": 61,
+      "seed": 1858455289,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.865
+    },
+    {
+      "bundle": 62,
+      "seed": 1858455290,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.942
+    },
+    {
+      "bundle": 63,
+      "seed": 1858455291,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.892
+    },
+    {
+      "bundle": 64,
+      "seed": 1858455292,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.009
+    },
+    {
+      "bundle": 65,
+      "seed": 1858455293,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.847
+    },
+    {
+      "bundle": 66,
+      "seed": 1858455294,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.946
+    },
+    {
+      "bundle": 67,
+      "seed": 1858455295,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.93
+    },
+    {
+      "bundle": 68,
+      "seed": 1858455296,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.921
+    },
+    {
+      "bundle": 69,
+      "seed": 1858455297,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.062
+    },
+    {
+      "bundle": 70,
+      "seed": 1858455298,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.975
+    },
+    {
+      "bundle": 71,
+      "seed": 1858455299,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.019
+    },
+    {
+      "bundle": 72,
+      "seed": 1858455300,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.936
+    },
+    {
+      "bundle": 73,
+      "seed": 1858455301,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.912
+    },
+    {
+      "bundle": 74,
+      "seed": 1858455302,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.906
+    },
+    {
+      "bundle": 75,
+      "seed": 1858455303,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.94
+    },
+    {
+      "bundle": 76,
+      "seed": 1858455304,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.959
+    },
+    {
+      "bundle": 77,
+      "seed": 1858455305,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.95
+    },
+    {
+      "bundle": 78,
+      "seed": 1858455306,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.956
+    },
+    {
+      "bundle": 79,
+      "seed": 1858455307,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.885
+    },
+    {
+      "bundle": 80,
+      "seed": 1858455308,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.045
+    },
+    {
+      "bundle": 81,
+      "seed": 1858455309,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.923
+    },
+    {
+      "bundle": 82,
+      "seed": 1858455310,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.933
+    },
+    {
+      "bundle": 83,
+      "seed": 1858455311,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.889
+    },
+    {
+      "bundle": 84,
+      "seed": 1858455312,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.883
+    },
+    {
+      "bundle": 85,
+      "seed": 1858455313,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.937
+    },
+    {
+      "bundle": 86,
+      "seed": 1858455314,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.996
+    },
+    {
+      "bundle": 87,
+      "seed": 1858455315,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.898
+    },
+    {
+      "bundle": 88,
+      "seed": 1858455316,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 7,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.898
+    },
+    {
+      "bundle": 89,
+      "seed": 1858455317,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.046
+    },
+    {
+      "bundle": 90,
+      "seed": 1858455318,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.925
+    },
+    {
+      "bundle": 91,
+      "seed": 1858455319,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.028
+    },
+    {
+      "bundle": 92,
+      "seed": 1858455320,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.081
+    },
+    {
+      "bundle": 93,
+      "seed": 1858455321,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.911
+    },
+    {
+      "bundle": 94,
+      "seed": 1858455322,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.902
+    },
+    {
+      "bundle": 95,
+      "seed": 1858455323,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.951
+    },
+    {
+      "bundle": 96,
+      "seed": 1858455324,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.884
+    },
+    {
+      "bundle": 97,
+      "seed": 1858455325,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.927
+    },
+    {
+      "bundle": 98,
+      "seed": 1858455326,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.987
+    },
+    {
+      "bundle": 99,
+      "seed": 1858455327,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.862
+    },
+    {
+      "bundle": 100,
+      "seed": 1858455328,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.933
+    },
+    {
+      "bundle": 101,
+      "seed": 1858455329,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.91
+    },
+    {
+      "bundle": 102,
+      "seed": 1858455330,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.938
+    },
+    {
+      "bundle": 103,
+      "seed": 1858455331,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.885
+    },
+    {
+      "bundle": 104,
+      "seed": 1858455332,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.922
+    },
+    {
+      "bundle": 105,
+      "seed": 1858455333,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.892
+    },
+    {
+      "bundle": 106,
+      "seed": 1858455334,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.922
+    },
+    {
+      "bundle": 107,
+      "seed": 1858455335,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.887
+    },
+    {
+      "bundle": 108,
+      "seed": 1858455336,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.018
+    },
+    {
+      "bundle": 109,
+      "seed": 1858455337,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.943
+    },
+    {
+      "bundle": 110,
+      "seed": 1858455338,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.946
+    },
+    {
+      "bundle": 111,
+      "seed": 1858455339,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.919
+    },
+    {
+      "bundle": 112,
+      "seed": 1858455340,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.939
+    },
+    {
+      "bundle": 113,
+      "seed": 1858455341,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.958
+    },
+    {
+      "bundle": 114,
+      "seed": 1858455342,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.928
+    },
+    {
+      "bundle": 115,
+      "seed": 1858455343,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.998
+    },
+    {
+      "bundle": 116,
+      "seed": 1858455344,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.907
+    },
+    {
+      "bundle": 117,
+      "seed": 1858455345,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.932
+    },
+    {
+      "bundle": 118,
+      "seed": 1858455346,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.881
+    },
+    {
+      "bundle": 119,
+      "seed": 1858455347,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.876
+    },
+    {
+      "bundle": 120,
+      "seed": 1858455348,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.961
+    },
+    {
+      "bundle": 121,
+      "seed": 1858455349,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.976
+    },
+    {
+      "bundle": 122,
+      "seed": 1858455350,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.983
+    },
+    {
+      "bundle": 123,
+      "seed": 1858455351,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.835
+    },
+    {
+      "bundle": 124,
+      "seed": 1858455352,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.953
+    },
+    {
+      "bundle": 125,
+      "seed": 1858455353,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.994
+    },
+    {
+      "bundle": 126,
+      "seed": 1858455354,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.919
+    },
+    {
+      "bundle": 127,
+      "seed": 1858455355,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.932
+    },
+    {
+      "bundle": 128,
+      "seed": 1858455356,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.891
+    },
+    {
+      "bundle": 129,
+      "seed": 1858455357,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.911
+    },
+    {
+      "bundle": 130,
+      "seed": 1858455358,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.992
+    },
+    {
+      "bundle": 131,
+      "seed": 1858455359,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.902
+    },
+    {
+      "bundle": 132,
+      "seed": 1858455360,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.006
+    },
+    {
+      "bundle": 133,
+      "seed": 1858455361,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.971
+    },
+    {
+      "bundle": 134,
+      "seed": 1858455362,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.961
+    },
+    {
+      "bundle": 135,
+      "seed": 1858455363,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.939
+    },
+    {
+      "bundle": 136,
+      "seed": 1858455364,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.94
+    },
+    {
+      "bundle": 137,
+      "seed": 1858455365,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.86
+    },
+    {
+      "bundle": 138,
+      "seed": 1858455366,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.904
+    },
+    {
+      "bundle": 139,
+      "seed": 1858455367,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.956
+    },
+    {
+      "bundle": 140,
+      "seed": 1858455368,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.931
+    },
+    {
+      "bundle": 141,
+      "seed": 1858455369,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.938
+    },
+    {
+      "bundle": 142,
+      "seed": 1858455370,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.883
+    },
+    {
+      "bundle": 143,
+      "seed": 1858455371,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.019
+    },
+    {
+      "bundle": 144,
+      "seed": 1858455372,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.973
+    },
+    {
+      "bundle": 145,
+      "seed": 1858455373,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.902
+    },
+    {
+      "bundle": 146,
+      "seed": 1858455374,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.973
+    },
+    {
+      "bundle": 147,
+      "seed": 1858455375,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.9
+    },
+    {
+      "bundle": 148,
+      "seed": 1858455376,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.946
+    },
+    {
+      "bundle": 149,
+      "seed": 1858455377,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.924
+    },
+    {
+      "bundle": 150,
+      "seed": 1858455378,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.906
+    },
+    {
+      "bundle": 151,
+      "seed": 1858455379,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.886
+    },
+    {
+      "bundle": 152,
+      "seed": 1858455380,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.971
+    },
+    {
+      "bundle": 153,
+      "seed": 1858455381,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.959
+    },
+    {
+      "bundle": 154,
+      "seed": 1858455382,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.903
+    },
+    {
+      "bundle": 155,
+      "seed": 1858455383,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.904
+    },
+    {
+      "bundle": 156,
+      "seed": 1858455384,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.847
+    },
+    {
+      "bundle": 157,
+      "seed": 1858455385,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.909
+    },
+    {
+      "bundle": 158,
+      "seed": 1858455386,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.914
+    },
+    {
+      "bundle": 159,
+      "seed": 1858455387,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.89
+    },
+    {
+      "bundle": 160,
+      "seed": 1858455388,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.949
+    },
+    {
+      "bundle": 161,
+      "seed": 1858455389,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.946
+    },
+    {
+      "bundle": 162,
+      "seed": 1858455390,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.927
+    },
+    {
+      "bundle": 163,
+      "seed": 1858455391,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.902
+    },
+    {
+      "bundle": 164,
+      "seed": 1858455392,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.934
+    },
+    {
+      "bundle": 165,
+      "seed": 1858455393,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.863
+    },
+    {
+      "bundle": 166,
+      "seed": 1858455394,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.916
+    },
+    {
+      "bundle": 167,
+      "seed": 1858455395,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.909
+    },
+    {
+      "bundle": 168,
+      "seed": 1858455396,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.954
+    },
+    {
+      "bundle": 169,
+      "seed": 1858455397,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.828
+    },
+    {
+      "bundle": 170,
+      "seed": 1858455398,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.919
+    },
+    {
+      "bundle": 171,
+      "seed": 1858455399,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.838
+    },
+    {
+      "bundle": 172,
+      "seed": 1858455400,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.872
+    },
+    {
+      "bundle": 173,
+      "seed": 1858455401,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.891
+    },
+    {
+      "bundle": 174,
+      "seed": 1858455402,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.056
+    },
+    {
+      "bundle": 175,
+      "seed": 1858455403,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.866
+    },
+    {
+      "bundle": 176,
+      "seed": 1858455404,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.974
+    },
+    {
+      "bundle": 177,
+      "seed": 1858455405,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.891
+    },
+    {
+      "bundle": 178,
+      "seed": 1858455406,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.895
+    },
+    {
+      "bundle": 179,
+      "seed": 1858455407,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.929
+    },
+    {
+      "bundle": 180,
+      "seed": 1858455408,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.824
+    },
+    {
+      "bundle": 181,
+      "seed": 1858455409,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.016
+    },
+    {
+      "bundle": 182,
+      "seed": 1858455410,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.946
+    },
+    {
+      "bundle": 183,
+      "seed": 1858455411,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.942
+    },
+    {
+      "bundle": 184,
+      "seed": 1858455412,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.868
+    },
+    {
+      "bundle": 185,
+      "seed": 1858455413,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.89
+    },
+    {
+      "bundle": 186,
+      "seed": 1858455414,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.94
+    },
+    {
+      "bundle": 187,
+      "seed": 1858455415,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 3,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.942
+    },
+    {
+      "bundle": 188,
+      "seed": 1858455416,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.952
+    },
+    {
+      "bundle": 189,
+      "seed": 1858455417,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.891
+    },
+    {
+      "bundle": 190,
+      "seed": 1858455418,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.956
+    },
+    {
+      "bundle": 191,
+      "seed": 1858455419,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.996
+    },
+    {
+      "bundle": 192,
+      "seed": 1858455420,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.916
+    },
+    {
+      "bundle": 193,
+      "seed": 1858455421,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.947
+    },
+    {
+      "bundle": 194,
+      "seed": 1858455422,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.954
+    },
+    {
+      "bundle": 195,
+      "seed": 1858455423,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.982
+    },
+    {
+      "bundle": 196,
+      "seed": 1858455424,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 2,
+      "checker_invocations": 50,
+      "elapsed_seconds": 17.002
+    },
+    {
+      "bundle": 197,
+      "seed": 1858455425,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 0,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.909
+    },
+    {
+      "bundle": 198,
+      "seed": 1858455426,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.933
+    },
+    {
+      "bundle": 199,
+      "seed": 1858455427,
+      "identity_redraws": 0,
+      "outcome": "FAIL",
+      "rows_ok": 1,
+      "checker_invocations": 50,
+      "elapsed_seconds": 16.97
+    }
+  ],
+  "gate": {
+    "clause": "chance measured: 200 scrambled bundles; if 0 of 200 pass, publish the 1.5% rule-of-three upper bound as the chance rate",
+    "bundles": 200,
+    "passed": 0,
+    "rule_of_three_upper_bound": 0.015,
+    "upper_bound_is_not_a_measured_rate": "an upper bound on a chance rate, never a measured rate, and never quoted as though 0 were the finding",
+    "green": true
+  },
+  "provenance": {
+    "writer": "harness/cold_harness.py",
+    "writer_sha256_lf": "ece69d337fb480f05210423290a769fda7c76e8d6945d6c92589fd02f41e0a27",
+    "inputs": [
+      {
+        "path": "cold/reconstruction_rule.json",
+        "sha256_lf": "0251e1c9889b9eb164bc697e707ca6bc2404205b56f4d5b9fe48b27bb0ecf85b"
+      },
+      {
+        "path": "experiments/cold_registry_census.json",
+        "sha256_lf": "0040ce74951bef41dd936b90d0252ec613071da86a27c3350e60eda25ad14b46"
+      },
+      {
+        "path": "experiments/conformance_ce3_supplement.json",
+        "sha256_lf": "4ada9567f470805e3c578ae6ca9c150278a025841cffcc505e4df7f1ea327602"
+      }
+    ],
+    "emitted_at_generation": true
+  }
+}

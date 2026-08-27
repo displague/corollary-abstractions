@@ -718,6 +718,21 @@ PROVENANCED_LEDGERS = {
     "experiments/skeleton_index.json": "scripts/handles_census.py",
     "experiments/onestep_census.json": "scripts/onestep_census.py",
     "experiments/erratum_probe.json": "scripts/erratum_probe.py",
+    #: v0.22 item 2, CR-P0. Joins the list at the moment it is committed
+    #: rather than after the fact, because this cycle's lesson is that a
+    #: provenance block adopted without the guard that scores it is
+    #: decoration.
+    "experiments/cold_registry_census.json": "scripts/cold_registry_census.py",
+    "cold/reconstruction_rule.json": "scripts/cold_reconstruct_ce3.py",
+    #: Amendment 2's run. Run 1's cold/census.json, cold/scramble_baseline.json
+    #: and cold/result_gate.json are deliberately NOT here: they are retained
+    #: unedited and attest the writers as committed at THEIR run, which
+    #: tests.test_cold_receipt checks against git history instead. This guard
+    #: asks whether an artifact matches the writer as committed NOW, which is
+    #: the wrong question for a retained record and the right one for a live
+    #: reading.
+    "cold/census_run2.json": "harness/cold_harness.py",
+    "cold/result_gate_run2.json": "harness/result_gate.py",
 }
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")

@@ -1,3 +1,105 @@
+# COLD RECEIPT: 1 of 19 receipt kinds survives the program's deletion (2026-08-27)
+
+`cold/census_run2.json`, harness `harness/cold_harness.py`, registry
+`experiments/cold_registry_census.json` (sealed before the harness existed),
+reconstruction rule `cold/reconstruction_rule.json`, reading
+`cold/result_gate_run2.json`. Design: `docs/DESIGN-cold-receipt.md`.
+
+**Read this run, not run 1.** `cold/census.json` is retained unedited as the
+record of what a defective removal arm produced. Adversarial review found that
+arm ran `python -S -I -c "import <module>"`, and `-I` implies `-E`: the program
+tree was never on the child's path, so the import failed identically whether
+`scripts/` was present or absent. All nine of run 1's `confirmed_by_removal`
+verdicts rested on a check that could not go red for the reason it claimed.
+Under ROADMAP-v0.21 §4.0(1) that is a **bug, not a reading**, and amendment 2
+re-ran the census with a two-limb arm.
+
+**The partition, which is the deliverable.** With this repository's `scripts/`
+tree renamed away and no `sys.path` entry resolving inside the repository:
+
+| verdict | kinds | what it means |
+|---|---|---|
+| **SURVIVES** | **1** | `conformance_ce3_supplement:decide_both_directions` — 25 rows, 50 checker invocations, re-checked from the bundle and a `third_party_pinned` binary alone |
+| **NEEDS-PROGRAM** | **10** | for each: the *same* import, *same* argv, *same* `PYTHONPATH`, SUCCEEDED with `scripts/` present and FAILED with it renamed away |
+| **UNTESTED** | **8** | 7 with no committed instance and no published reconstruction rule; 1 (`retraction_radius:certify`) blocked by a dependency that is not the program |
+
+The ten NEEDS-PROGRAM kinds, published by name because B7 scores a correct one
+as a hit: `build_throughput_tasks:exact_value_task`, `closure-receipt/1`,
+`closure_query:query`, `external_verifier:main`, `foreign_voice:receipt`,
+`harness:_route_twin`, `measure_when_to_ask:_oewn_samples`,
+`serve_chat:_evaluate_receipt`, `serve_chat:_resolution_receipt`,
+`serve_chat:kernel_receipt`.
+
+**Every floor, as a number.**
+
+| floor | reading |
+|---|---|
+| **B1** unmapped emitting routes | **0** — the enumeration is a rule, so the §5 stop did not fire |
+| **B2** ≥1 SURVIVES | **1** |
+| **B3** tamper 3× 100% FAIL | **3 scored, 0 discarded, 3 FAIL**, three DISTINCT failure signatures — **over one kind**, the only one whose procedure executed |
+| **B4** omission FAIL LOUD | exit **2**, names `lean.exe`, no silent pass — **over that same one kind** |
+| **B5** sham SURVIVES count | **0** — **over that same one kind**, and structurally: see below |
+| **B6** scrambled bundles | **0 of 200** passed; 10,000 invocations in **3422 s** against a 59-minute estimate; **1.5% rule-of-three UPPER BOUND**, not a rate. Carried forward from run 1 with its digest, because amendment 2 cannot move it |
+| **B7** NEEDS-PROGRAM confirmed by removal | **10 of 10**, each with a *succeeding* with-program positive control |
+| **B8** ≥90% SURVIVES voids | **5.26%** at a denominator of 19 |
+| **B9** version drift | ceded; the `proofcurve` v4.29.1 divergence is recorded `adjudicated: false` |
+| **B10** seal before the harness | **3 census misses**, all published; no `harness/` file existed at the first sealing commit |
+| **B11** provenance downgrade | **0 downgrades**; `lean.exe` `third_party_pinned` on both limbs, recomputed from the bytes |
+
+**B3, B4 and B5 have a denominator of one.** They score the single kind whose
+procedure executed program-absent and say nothing about the other eighteen,
+which read UNTESTED on all three arms because no procedure ran on them. The
+gate rows carry that denominator explicitly so the greens cannot be read as
+repository-wide.
+
+**B5's zero is structural, not strong.** This kind's procedure compares against
+the *recorded* exit codes, and every committed row records positive=1. A stub
+that always exits 0 therefore fails the good bundle *and* the known-bad one: it
+could not have read SURVIVES for this kind however the receipts read. B5 is a
+real control against a harness that checked only bundle *presence* — that
+harness would have passed the sham. It is **not** evidence that this procedure
+would detect a subtler stub, e.g. one replaying the recorded exit codes. That
+stronger arm is not run and is not claimed.
+
+**Four findings the numbers do not carry on their own.**
+
+1. **The census is 19 kinds, not the design's indicative 15**, and the
+   differences are findings. The rule reaches `write_stage`'s two receipt kinds
+   and the `Verdict` store only through a fourth marking predicate (a named
+   write boundary), because their payloads are dataclasses and not mapping
+   displays. It reaches `serve_chat`'s receipt shapes as FIVE kinds where the
+   walk grouped them as one.
+2. **The most self-describing receipt in the tree is not cold-recheckable, and
+   not because of the program.** `retraction_radius:certify` carries an explicit
+   `recheck_command`. Amendment 2 takes the removal target from that descriptor
+   — `scripts/radius_recheck.py`, the rechecker, not `retraction_radius`, the
+   writer — and the with-program positive control **fails**: `radius_recheck`
+   cannot import `jsonschema`, which no manifest in this repository pins. With
+   the program fully present the procedure still cannot run, so the kind reads
+   UNTESTED with `jsonschema` named as the true blocking dependency. Run 1
+   scored it NEEDS-PROGRAM.
+3. **B6's invocation step discriminates nothing here.** Every committed row of
+   the surviving kind records the same `(1, 0)` exit-code pair, so a permutation
+   leaves step 4 unchanged and only the digest comparison can catch it. The hour
+   bought a control whose second half was structurally idle — measured in the
+   artifact, not noticed after.
+4. **Both recall probes are numbers now.** Site side: a wider net reaches 151
+   receipt-vocabulary sites and the rule admits 16 of them, so 135 uncovered
+   sites are published as candidate B10 misses. Instance side (added by
+   amendment 2): the exact key-set rule read **0** committed instances for two
+   kinds the tree holds **160** and **2,313** instances of. Instance brittleness
+   was the half that was not priced, and a rule that answers "no committed
+   instance" for 2,473 committed instances is not being conservative.
+
+**What this does NOT say.** No stranger-success claim: the harness shows
+program-absent-harness success on this Windows workstation under exclusions
+weaker than a container's — `%USERPROFILE%`, the registry, ambient DLL paths and
+the harness's own interpreter are all still present, and
+`cold/path_audit_run2.txt` names them. No composition claim, no coverage claim,
+no retroactive effect, and no reachability rate.
+
+---
+
 # Plain input, slice 2: R2 FAILS, and the metric is the finding (2026-08-26)
 
 `experiments/plain_input_run.json`, runner `scripts/run_plain_gate.py`,

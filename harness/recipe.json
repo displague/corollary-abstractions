@@ -1,0 +1,101 @@
+{
+  "schema": "cold-harness-recipe/1",
+  "design": "docs/DESIGN-cold-receipt.md",
+  "what_the_draft_asked_for": "harness/ container recipe",
+  "what_this_is": "a clean-PATH subprocess environment, not a container",
+  "delta_and_the_finding_that_forced_it": {
+    "section": "§6",
+    "limb": "the receipts pin a digest of a Windows binary",
+    "evidence": [
+      "experiments/conformance_ce3_supplement.json records checker.binary_sha256 over lean.exe",
+      "the three prover/verifier-verdicts/*.lean4.json record environment.platform = win32"
+    ],
+    "consequence": "a Linux container runs a different binary with a different digest, so a re-check inside one cannot confirm the recorded pin: it would be a re-check of different receipts, not a colder re-check of these ones",
+    "limbs_withdrawn_as_wrong": [
+      "external_verifier.py:196-217 is NOT Windows-bound — it selects lean.exe on nt and lean elsewhere",
+      "the NEVER-downloads rule in that docstring binds that function, not a Dockerfile"
+    ],
+    "stated_plainly": "this harness is weaker than a container, and every SURVIVES it publishes is scoped to that weaker exclusion"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "name": "capture the pin table",
+      "detail": "already done, in CR-P0: session_ledger.pins() lives under scripts/ and imports serve_chat and write_stage, so after the rename it cannot run (§6's C4 ordering repair). experiments/cold_registry_census.json carries it.",
+      "runs_before_the_rename": true
+    },
+    {
+      "step": 2,
+      "name": "digest the working tree",
+      "detail": "a recursive sha256 over the repository, excluding .git, .venv, .worktrees, cold/ and the renamed tree. Taken before the rename and again after the restore. write_stage's own working_tree_byte_identity check cannot do this — it lives under scripts/.",
+      "runs_before_the_rename": true
+    },
+    {
+      "step": 3,
+      "name": "build the bundle outside the repository",
+      "detail": "the files the kind's receipt names, copied to a temporary root outside the repository root, with a bundle_manifest.json carrying each file's sha256 and size."
+    },
+    {
+      "step": 4,
+      "name": "rename the program tree away",
+      "detail": "scripts/ -> scripts.renamed-away-by-cold-harness. Rename rather than deletion, because it is reversible and the audit can prove it happened. An import is then an error and not a silent fallback.",
+      "known_reversible_side_effect": "the working-tree digest is disturbed while the rename holds",
+      "restore_path": "the rename is undone in a finally block and the tree is re-digested against the pre-rename value; a mismatch is a harness failure reported as such, never absorbed"
+    },
+    {
+      "step": 5,
+      "name": "construct the environment",
+      "detail": "PATH reduced to the explicitly listed dependency directories; PYTHONPATH empty; PYTHONHOME unset; PYTHONNOUSERSITE set; cwd inside the bundle.",
+      "interpreter": "sys.base_prefix's python, run with -S -I: it sits outside the repository root, and -S -I keeps every site-packages (and therefore the repository's own .venv) off the child's sys.path"
+    },
+    {
+      "step": 6,
+      "name": "write path_audit",
+      "detail": "two assertions, not one — see path_audit_asserts below"
+    },
+    {
+      "step": 7,
+      "name": "run the arms",
+      "detail": "per-kind verdicts, then B3 tamper, B4 omission, B5 sham, B6 scramble, B7 removal, B11 provenance"
+    },
+    {
+      "step": 8,
+      "name": "restore and re-digest",
+      "detail": "undo the rename, re-take the working-tree digest, and publish the comparison"
+    }
+  ],
+  "path_audit_asserts": {
+    "why_two": "§1's own exhibit is scripts/replay_session.py:69-71, which reaches scripts/ through Path(__file__).resolve().parents[1] and sys.path.insert. No PATH setting anywhere would have stopped it, so PATH alone is not the audit (§6's C2 repair).",
+    "assertion_1": "scripts/ is unresolvable — an import of a known program module raises, with the traceback quoted",
+    "assertion_2": "no sys.path entry resolves inside the repository — the subprocess dumps its own resolved sys.path and every entry is shown to lie outside the repository root, alongside PATH's entries with their listing digests, and every invoked dependency's resolved path and sha256"
+  },
+  "b8_remedy_delta": {
+    "draft_wording": "B8 >=90% SURVIVES on first run voids pending audited-empty-PATH re-execution",
+    "replacement": "re-execution under a path_audit carrying BOTH assertions above",
+    "why": "the draft's remedy was written for the container §6 rejects; against a rename harness an empty PATH proves nothing about the leak vector that actually exists",
+    "recorded_rather_than_performed_silently": true
+  },
+  "environment_kept_and_why": {
+    "SYSTEMROOT": "Windows process creation needs it",
+    "COMSPEC": "Windows process creation needs it",
+    "TEMP/TMP": "the procedure writes its probe to a temporary directory, redirected inside the bundle",
+    "USERPROFILE/HOMEDRIVE/HOMEPATH": "§11's L3 records that Path.home() reads these and that the constructed environment does NOT clear them; a reduced PATH is irrelevant to it. Kept and disclosed rather than cleared and claimed."
+  },
+  "not_excluded": [
+    "the Windows registry",
+    "%USERPROFILE% (and therefore ~/.elan, where the checker lives)",
+    ".runtime/",
+    "any system-wide Python and its site-packages",
+    "every ambient DLL search path",
+    "the harness's own interpreter"
+  ],
+  "not_excluded_note": "named here so no reader has to find it. A container would exclude most of this list. This one does not.",
+  "files": {
+    "harness/cold_harness.py": "the orchestrator: bundles, rename, arms, restore",
+    "harness/probe_recheck.py": "the program-absent rechecker for the one kind CR-P1 published a rule for",
+    "harness/path_probe.py": "the subprocess that writes path_audit's evidence",
+    "harness/sham_lean.py": "B5's accept-all stub"
+  },
+  "harness_imports_nothing_from_this_repository": true,
+  "stdlib_only": true
+}

@@ -1,0 +1,4183 @@
+{
+  "schema": "cold-registry-census/1",
+  "design": "docs/DESIGN-cold-receipt.md",
+  "prerequisite": "CR-P0",
+  "status_note": "Committed BEFORE any COLD RECEIPT harness code exists, on the WITNESS W0 precedent. The count below is measured, never predicted: DESIGN-cold-receipt.md §5's indicative fifteen-kind walk is not this census's answer, and every difference from it is a finding rather than an error.",
+  "enumeration_rule": {
+    "rule_id": "CR-P0/1",
+    "universe": {
+      "program_tree_glob": "scripts/**/*.py",
+      "artifact_roots": [
+        "reports",
+        "experiments",
+        "prover",
+        "staging"
+      ],
+      "artifact_suffixes": [
+        ".json",
+        ".jsonl"
+      ],
+      "roots_outside_the_universe": [
+        "data",
+        "data_holdout",
+        "data_sources"
+      ],
+      "why_those_roots_are_outside": "they are the program's inputs; a census of emitted evidence that counted its own corpora would be counting what the program was handed rather than what it wrote"
+    },
+    "marking_predicates": {
+      "RM-A": {
+        "name": "self-tagging",
+        "test": "an ast.Dict carrying one of TAG_KEYS whose string value (literal, or a module-level string constant resolved by name) matches TAG_VALUE_RE",
+        "tag_keys": [
+          "schema",
+          "kind",
+          "type"
+        ],
+        "tag_value_regex": "(?i)receipt|certificate"
+      },
+      "RM-B": {
+        "name": "name-bound",
+        "test": "an ast.Dict that is the direct value of a return from, or an assignment to, a name matching BINDING_NAME_RE",
+        "binding_name_regex": "(?i)(^|_)(receipt|cert|certificate)s?($|_)"
+      },
+      "RM-C": {
+        "name": "member",
+        "test": "an ast.Dict that is the value of a key drawn from the EXACT set MEMBER_KEY_EXACT",
+        "member_keys_exact": [
+          "receipt",
+          "receipts",
+          "cert",
+          "certificate",
+          "certificates"
+        ],
+        "why_exact": "a substring rule would sweep in receipt_expect, receipts_committed, correct_with_receipt and receipt_sha256 — facts about receipts rather than receipts"
+      },
+      "RM-D": {
+        "name": "named write boundary",
+        "test": "an ast.Call whose callee name matches WRITE_BOUNDARY_RE: the program's own name for the write says it is writing evidence",
+        "write_boundary_regex": "(?i)(^|_)(write|emit|record)_?(receipt|verdict|certificate|cert)s?($|_)",
+        "why": "RM-A/B/C see mapping displays only; a kind whose payload is a dataclass rendered by as_dict() is invisible to them"
+      }
+    },
+    "kind_formation": [
+      "RM-A: kind_id is the tag string",
+      "RM-C whose value is a Call: kind_id is the callee's kind",
+      "otherwise: kind_id is '<module>:<enclosing symbol>'"
+    ],
+    "exclusion_rules": {
+      "X1": {
+        "name": "vacuous-literal",
+        "test": "every receipt-marked mapping of the candidate is the empty display {}",
+        "reason_template": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
+      },
+      "X2": {
+        "name": "non-mapping-member",
+        "test": "an RM-C-only candidate whose member value is neither a non-empty dict display nor a call to a symbol matching BINDING_NAME_RE",
+        "reason_template": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+      }
+    },
+    "route_resolution": "string literals compared against, or tested for membership by, a variable named 'route' in an ast.If that dominates the site, intersected with the route vocabulary extracted from serve_chat.LINE_GRAMMAR; a site under no route guard takes '<module>.<symbol>' — the writer is the route",
+    "declared_recheck_procedure": {
+      "raw_checker_invocation": "the artifact holding a committed instance carries a SELF-CONTAINED recheck descriptor: a digest of a checker's own bytes matching RECHECK_BINARY_PIN_RE, or a field in RECHECK_DESCRIPTOR_FIELDS whose value does not name the program tree",
+      "program_replay": "committed instances exist, carrying no such descriptor",
+      "none": "the rule finds no committed instance",
+      "descriptor_fields": [
+        "recheck_command"
+      ],
+      "binary_pin_regex": "(?i)binary_sha256$",
+      "program_tree_reference_disqualifies": true,
+      "why_it_disqualifies": "a recheck_command reading 'python scripts/…' describes a program replay wearing a descriptor's clothes",
+      "authority": "DESIGN-cold-receipt.md §4 gives the harness's EXECUTED procedure the last word; a disagreement with this declaration is a census miss under B10"
+    },
+    "instance_resolution": {
+      "I1": "a mapping in a committed artifact carrying the kind's tag",
+      "I2": "a mapping whose key set is exactly one of the site's literal key sets",
+      "I3": "RM-D kinds only: a module-level string constant in the writer's module resolving to an existing DIRECTORY under an artifact root",
+      "I3_scope_note": "scoped to RM-D because that is the case I1/I2 cannot reach, and restricted to directories because a file-valued module constant is as often an input as a destination"
+    },
+    "program_defined_canonicalization": {
+      "test": "the site's enclosing symbol calls a function whose name matches 'canonical'",
+      "why": "DESIGN-cold-receipt.md §11: the census must distinguish a kind that needs the program to ADJUDICATE from one that needs it only to SERIALIZE. Recorded as a reason, never as a verdict."
+    },
+    "scramble_rule": {
+      "type": "permute_instances_within_artifact",
+      "statement": "B6's per-kind rule, committed here: reassign a kind's committed instances across that kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+      "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen"
+    },
+    "recall_probe": {
+      "substring_regex": "(?i)receipt|certificate|verdict|journal",
+      "purpose": "measure what the rule's exactness costs: sites a deliberately wider net reaches that the rule does not are published as candidate census misses under B10, computed rather than remembered"
+    }
+  },
+  "route_vocabulary": {
+    "source": "scripts/serve_chat.py LINE_GRAMMAR",
+    "routes": [
+      "belief",
+      "closure",
+      "conform",
+      "dispatcher",
+      "evaluate",
+      "gloss",
+      "none",
+      "ownership",
+      "resolver",
+      "resolver_context",
+      "retraction",
+      "story",
+      "supposition",
+      "twin",
+      "write_gate"
+    ],
+    "note": "a vocabulary, never a kind list: LINE_GRAMMAR enumerates serving routes, and a serving route is not a receipt kind"
+  },
+  "counts": {
+    "program_tree_files_scanned": 178,
+    "receipt_marked_sites": 37,
+    "kinds": 19,
+    "excluded_sites": 10,
+    "kinds_with_committed_instances": 12,
+    "declared_raw_checker_invocation": 1,
+    "declared_program_replay": 11,
+    "declared_none": 7
+  },
+  "kinds": [
+    {
+      "kind_id": "build_throughput_tasks:exact_value_task",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 1958533204,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "build_throughput_tasks.exact_value_task",
+          "writer_file": "scripts/build_throughput_tasks.py",
+          "writer_symbol": "exact_value_task",
+          "line": 653,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "build_throughput_tasks.exact_value_task",
+          "writer_file": "scripts/build_throughput_tasks.py",
+          "writer_symbol": "exact_value_task",
+          "line": 666,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/build_throughput_tasks.py",
+          "line_range": [
+            653,
+            657
+          ],
+          "rule": "RM-B",
+          "symbol": "exact_value_task",
+          "key_set": [
+            "exact",
+            "expression",
+            "grounding"
+          ]
+        },
+        {
+          "path": "scripts/build_throughput_tasks.py",
+          "line_range": [
+            666,
+            666
+          ],
+          "rule": "RM-B",
+          "symbol": "exact_value_task",
+          "key_set": [
+            "expression",
+            "grounding"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "exact",
+        "expression",
+        "grounding"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 130,
+        "exact_count": 130,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "closure-receipt/1",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 673558807,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [
+        "closure-receipt/1"
+      ],
+      "marking_rules": [
+        "RM-A"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "build_throughput_tasks.closure_tasks",
+          "writer_file": "scripts/build_throughput_tasks.py",
+          "writer_symbol": "closure_tasks",
+          "line": 906,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "closure_query.query",
+          "writer_file": "scripts/closure_query.py",
+          "writer_symbol": "query",
+          "line": 288,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/build_throughput_tasks.py",
+          "line_range": [
+            906,
+            915
+          ],
+          "rule": "RM-A",
+          "symbol": "closure_tasks",
+          "key_set": [
+            "adapter_id",
+            "closure_digest",
+            "horizon",
+            "outcome",
+            "schema",
+            "target_digest",
+            "visited_states",
+            "world_id"
+          ]
+        },
+        {
+          "path": "scripts/closure_query.py",
+          "line_range": [
+            288,
+            297
+          ],
+          "rule": "RM-A",
+          "symbol": "query",
+          "key_set": [
+            "adapter_id",
+            "closure_digest",
+            "horizon",
+            "outcome",
+            "schema",
+            "target_digest",
+            "visited_states",
+            "world_id"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "adapter_id",
+        "closure_digest",
+        "horizon",
+        "outcome",
+        "schema",
+        "target_digest",
+        "visited_states",
+        "world_id"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 41,
+        "exact_count": 41,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I1"
+        ],
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json",
+          "reports/closures/story.golden_chicken.demo-receipt.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": true,
+      "canonicalization_note": "the writer calls this repository's canonicalizer, so the recorded digest is taken over program-defined bytes: this kind needs the program to SERIALIZE, which is a different question from whether it needs it to ADJUDICATE (DESIGN-cold-receipt.md §11)"
+    },
+    {
+      "kind_id": "closure_query:query",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 3825494416,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "closure_query.query",
+          "writer_file": "scripts/closure_query.py",
+          "writer_symbol": "query",
+          "line": 288,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/closure_query.py",
+          "line_range": [
+            288,
+            297
+          ],
+          "rule": "RM-B",
+          "symbol": "query",
+          "key_set": [
+            "adapter_id",
+            "closure_digest",
+            "horizon",
+            "outcome",
+            "schema",
+            "target_digest",
+            "visited_states",
+            "world_id"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "adapter_id",
+        "closure_digest",
+        "horizon",
+        "outcome",
+        "schema",
+        "target_digest",
+        "visited_states",
+        "world_id"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 41,
+        "exact_count": 16,
+        "superset_only_count": 25,
+        "resolved_by": [
+          "I2",
+          "I2b"
+        ],
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "superset_sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json",
+          "reports/closures/story.golden_chicken.demo-receipt.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": true,
+      "canonicalization_note": "the writer calls this repository's canonicalizer, so the recorded digest is taken over program-defined bytes: this kind needs the program to SERIALIZE, which is a different question from whether it needs it to ADJUDICATE (DESIGN-cold-receipt.md §11)"
+    },
+    {
+      "kind_id": "conformance_ce3_supplement:decide_both_directions",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 1858455228,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "conformance_ce3_supplement.decide_both_directions",
+          "writer_file": "scripts/conformance_ce3_supplement.py",
+          "writer_symbol": "decide_both_directions",
+          "line": 447,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/conformance_ce3_supplement.py",
+          "line_range": [
+            447,
+            448
+          ],
+          "rule": "RM-B",
+          "symbol": "decide_both_directions",
+          "key_set": [
+            "negative_probe",
+            "pattern",
+            "positive_probe"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "negative_probe",
+        "pattern",
+        "positive_probe"
+      ],
+      "declared_recheck_procedure": {
+        "type": "raw_checker_invocation",
+        "basis": "the artifact holding a committed instance carries a self-contained recheck descriptor: binary_sha256"
+      },
+      "committed_instances": {
+        "count": 25,
+        "exact_count": 25,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "experiments/conformance_ce3_supplement.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": [
+          "binary_sha256"
+        ]
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "external_verifier:main",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 4009428480,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-D"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "external_verifier.main",
+          "writer_file": "scripts/external_verifier.py",
+          "writer_symbol": "main",
+          "line": 832,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/external_verifier.py",
+          "line_range": [
+            832,
+            832
+          ],
+          "rule": "RM-D",
+          "symbol": "main",
+          "key_set": []
+        }
+      ],
+      "site_key_set": [],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 15,
+        "exact_count": 15,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I3"
+        ],
+        "sample_paths": [
+          "prover/verifier-verdicts/lean_workbook_1041.lean4.json",
+          "prover/verifier-verdicts/lean_workbook_1041.python-tests.json",
+          "prover/verifier-verdicts/lean_workbook_10411.lean4.json",
+          "prover/verifier-verdicts/lean_workbook_22080.lean4.json",
+          "prover/verifier-verdicts/programming_binexp_iterative.python-tests.json",
+          "prover/verifier-verdicts/programming_binexp_recursive.python-tests.json",
+          "prover/verifier-verdicts/programming_dfactorial_iterative.python-tests.json",
+          "prover/verifier-verdicts/programming_dfactorial_recursive.python-tests.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [
+          "prover/verifier-verdicts"
+        ],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "foreign_voice:receipt",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 828562138,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "foreign_voice.Rendering.receipt",
+          "writer_file": "scripts/foreign_voice.py",
+          "writer_symbol": "Rendering.receipt",
+          "line": 155,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/foreign_voice.py",
+          "line_range": [
+            155,
+            178
+          ],
+          "rule": "RM-B",
+          "symbol": "Rendering.receipt",
+          "key_set": [
+            "canonical",
+            "interpretation_shift",
+            "interpreted",
+            "lexicon_entries",
+            "parameters",
+            "renderer_id",
+            "source",
+            "statement_id",
+            "surface"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "canonical",
+        "interpretation_shift",
+        "interpreted",
+        "lexicon_entries",
+        "parameters",
+        "renderer_id",
+        "source",
+        "statement_id",
+        "surface"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 2313,
+        "exact_count": 0,
+        "superset_only_count": 2313,
+        "resolved_by": [
+          "I2b"
+        ],
+        "sample_paths": [],
+        "superset_sample_paths": [
+          "experiments/foreign_voice_rate2.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "harness:_route_conform",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2614043815,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-C"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "harness._route_conform",
+          "writer_file": "scripts/harness.py",
+          "writer_symbol": "_route_conform",
+          "line": 2281,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/harness.py",
+          "line_range": [
+            2281,
+            2302
+          ],
+          "rule": "RM-C",
+          "symbol": "_route_conform",
+          "key_set": [
+            "certifies",
+            "counterexample",
+            "domain",
+            "points_admitted",
+            "points_sampled",
+            "registered_run",
+            "registered_run_verdict",
+            "sampler_seed",
+            "schema_digest",
+            "statement_id",
+            "verdict"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "certifies",
+        "counterexample",
+        "domain",
+        "points_admitted",
+        "points_sampled",
+        "registered_run",
+        "registered_run_verdict",
+        "sampler_seed",
+        "schema_digest",
+        "statement_id",
+        "verdict"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "harness:_route_ownership",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2607727694,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-C"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "harness._route_ownership",
+          "writer_file": "scripts/harness.py",
+          "writer_symbol": "_route_ownership",
+          "line": 1150,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/harness.py",
+          "line_range": [
+            1150,
+            1177
+          ],
+          "rule": "RM-C",
+          "symbol": "_route_ownership",
+          "key_set": [
+            "by_corpus",
+            "hosts",
+            "query_skeleton",
+            "searched"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "by_corpus",
+        "hosts",
+        "query_skeleton",
+        "searched"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "harness:_route_twin",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 3004087601,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-C"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "harness._route_twin",
+          "writer_file": "scripts/harness.py",
+          "writer_symbol": "_route_twin",
+          "line": 1898,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/harness.py",
+          "line_range": [
+            1898,
+            1923
+          ],
+          "rule": "RM-C",
+          "symbol": "_route_twin",
+          "key_set": [
+            "group_index",
+            "ledger_path",
+            "level",
+            "member_ids"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "group_index",
+        "ledger_path",
+        "level",
+        "member_ids"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 80,
+        "exact_count": 80,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "measure_when_to_ask:_oewn_samples",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2008643114,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "measure_when_to_ask._oewn_samples",
+          "writer_file": "scripts/measure_when_to_ask.py",
+          "writer_symbol": "_oewn_samples",
+          "line": 939,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/measure_when_to_ask.py",
+          "line_range": [
+            939,
+            945
+          ],
+          "rule": "RM-B",
+          "symbol": "_oewn_samples",
+          "key_set": [
+            "archive_sha256",
+            "arms",
+            "canonical_spent_keys",
+            "f4_seed",
+            "limitation",
+            "published_claimed_texts",
+            "python_version",
+            "runtime",
+            "schema"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "archive_sha256",
+        "arms",
+        "canonical_spent_keys",
+        "f4_seed",
+        "limitation",
+        "published_claimed_texts",
+        "python_version",
+        "runtime",
+        "schema"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 1,
+        "exact_count": 1,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "experiments/when_to_ask_oewn_keys.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "plain_router:_ask",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 3717973582,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-C"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "plain_router.PlainRouter._ask",
+          "writer_file": "scripts/plain_router.py",
+          "writer_symbol": "PlainRouter._ask",
+          "line": 280,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/plain_router.py",
+          "line_range": [
+            280,
+            302
+          ],
+          "rule": "RM-C",
+          "symbol": "PlainRouter._ask",
+          "key_set": [
+            "suppositions",
+            "verified_readings",
+            "why_not_conditional"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "suppositions",
+        "verified_readings",
+        "why_not_conditional"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "plain_router:_conditional",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 1331220912,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-C"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "plain_router.PlainRouter._conditional",
+          "writer_file": "scripts/plain_router.py",
+          "writer_symbol": "PlainRouter._conditional",
+          "line": 241,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/plain_router.py",
+          "line_range": [
+            241,
+            276
+          ],
+          "rule": "RM-C",
+          "symbol": "PlainRouter._conditional",
+          "key_set": [
+            "alternatives_not_taken",
+            "route_that_produced_the_answer",
+            "supposition_budget",
+            "suppositions",
+            "underlying_status",
+            "verification_detail",
+            "verification_strength"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "alternatives_not_taken",
+        "route_that_produced_the_answer",
+        "supposition_budget",
+        "suppositions",
+        "underlying_status",
+        "verification_detail",
+        "verification_strength"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "retraction_radius:certify",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 4028634567,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "retraction_radius.certify",
+          "writer_file": "scripts/retraction_radius.py",
+          "writer_symbol": "certify",
+          "line": 207,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/retraction_radius.py",
+          "line_range": [
+            207,
+            224
+          ],
+          "rule": "RM-B",
+          "symbol": "certify",
+          "key_set": [
+            "cert_id",
+            "closure",
+            "closure_size",
+            "depth_histogram",
+            "graph_sha256",
+            "inferred_edges_excluded",
+            "recheck_command",
+            "root_falsification_kind",
+            "root_node",
+            "standing_limitation",
+            "tool_version",
+            "unprovenanced_nodes"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "cert_id",
+        "closure",
+        "closure_size",
+        "depth_histogram",
+        "graph_sha256",
+        "inferred_edges_excluded",
+        "recheck_command",
+        "root_falsification_kind",
+        "root_node",
+        "standing_limitation",
+        "tool_version",
+        "unprovenanced_nodes"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor (the descriptors present name the program tree: recheck_command(names-the-program-tree)), so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 4,
+        "exact_count": 4,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "reports/radius/replay-1-recombination.cert.json",
+          "reports/radius/replay-2-struct-wins.cert.json",
+          "reports/radius/root-a-compression.cert.json",
+          "reports/radius/root-b-decompositions.cert.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": [
+          "recheck_command(names-the-program-tree)"
+        ]
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "serve_chat:_evaluate_receipt",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 1890072867,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "serve_chat._evaluate_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_evaluate_receipt",
+          "line": 1080,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._evaluate_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_evaluate_receipt",
+          "line": 1084,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._evaluate_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_evaluate_receipt",
+          "line": 1085,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1080,
+            1080
+          ],
+          "rule": "RM-B",
+          "symbol": "_evaluate_receipt",
+          "key_set": [
+            "expression",
+            "grounding"
+          ]
+        },
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1084,
+            1084
+          ],
+          "rule": "RM-B",
+          "symbol": "_evaluate_receipt",
+          "key_set": [
+            "grounding"
+          ]
+        },
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1085,
+            1089
+          ],
+          "rule": "RM-B",
+          "symbol": "_evaluate_receipt",
+          "key_set": [
+            "exact",
+            "expression",
+            "grounding"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "exact",
+        "expression",
+        "grounding"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 130,
+        "exact_count": 130,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "serve_chat:_resolution_receipt",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 715058333,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "serve_chat._resolution_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_resolution_receipt",
+          "line": 1023,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._resolution_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_resolution_receipt",
+          "line": 1029,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._resolution_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_resolution_receipt",
+          "line": 1031,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1023,
+            1023
+          ],
+          "rule": "RM-B",
+          "symbol": "_resolution_receipt",
+          "key_set": []
+        },
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1029,
+            1029
+          ],
+          "rule": "RM-B",
+          "symbol": "_resolution_receipt",
+          "key_set": []
+        },
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1031,
+            1034
+          ],
+          "rule": "RM-B",
+          "symbol": "_resolution_receipt",
+          "key_set": [
+            "node_sha256",
+            "statement_id"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "node_sha256",
+        "statement_id"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 160,
+        "exact_count": 0,
+        "superset_only_count": 160,
+        "resolved_by": [
+          "I2b"
+        ],
+        "sample_paths": [],
+        "superset_sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": true,
+      "canonicalization_note": "the writer calls this repository's canonicalizer, so the recorded digest is taken over program-defined bytes: this kind needs the program to SERIALIZE, which is a different question from whether it needs it to ADJUDICATE (DESIGN-cold-receipt.md §11)"
+    },
+    {
+      "kind_id": "serve_chat:_story_receipt",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2323960694,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "serve_chat._story_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_story_receipt",
+          "line": 1099,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1099,
+            1102
+          ],
+          "rule": "RM-B",
+          "symbol": "_story_receipt",
+          "key_set": [
+            "constraint_ids",
+            "corpus_path"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "constraint_ids",
+        "corpus_path"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "serve_chat:kernel_receipt",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 3031557983,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "belief",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1143,
+          "route_source": "dominating_guard"
+        },
+        {
+          "route_id": "supposition",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1143,
+          "route_source": "dominating_guard"
+        },
+        {
+          "route_id": "write_gate",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1145,
+          "route_source": "dominating_guard"
+        },
+        {
+          "route_id": "serve_chat.kernel_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1149,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1143,
+            1143
+          ],
+          "rule": "RM-B",
+          "symbol": "kernel_receipt",
+          "key_set": [
+            "derivation"
+          ]
+        },
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1145,
+            1145
+          ],
+          "rule": "RM-B",
+          "symbol": "kernel_receipt",
+          "key_set": [
+            "grounding"
+          ]
+        },
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1149,
+            1149
+          ],
+          "rule": "RM-B",
+          "symbol": "kernel_receipt",
+          "key_set": []
+        }
+      ],
+      "site_key_set": [
+        "derivation"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 211,
+        "exact_count": 70,
+        "superset_only_count": 141,
+        "resolved_by": [
+          "I2",
+          "I2b"
+        ],
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "superset_sample_paths": [
+          "experiments/text_resolution_holdout3_provenance.json",
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "write_stage:accept_write",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2869342236,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-D"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "write_stage.accept_write",
+          "writer_file": "scripts/write_stage.py",
+          "writer_symbol": "accept_write",
+          "line": 2153,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/write_stage.py",
+          "line_range": [
+            2153,
+            2158
+          ],
+          "rule": "RM-D",
+          "symbol": "accept_write",
+          "key_set": []
+        }
+      ],
+      "site_key_set": [],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "write_stage:stage_write",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2260326314,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-D"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "write_stage.stage_write",
+          "writer_file": "scripts/write_stage.py",
+          "writer_symbol": "stage_write",
+          "line": 1653,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/write_stage.py",
+          "line_range": [
+            1653,
+            1658
+          ],
+          "rule": "RM-D",
+          "symbol": "stage_write",
+          "key_set": []
+        }
+      ],
+      "site_key_set": [],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    }
+  ],
+  "excluded": [
+    {
+      "rule_id": "X1",
+      "kind_id_candidate": "dump_server:do_POST",
+      "path": "scripts/dump_server.py",
+      "line_range": [
+        176,
+        176
+      ],
+      "enclosing_line_range": [
+        166,
+        179
+      ],
+      "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
+    },
+    {
+      "rule_id": "X1",
+      "kind_id_candidate": "serve_chat:_ownership_receipt",
+      "path": "scripts/serve_chat.py",
+      "line_range": [
+        1060,
+        1060
+      ],
+      "enclosing_line_range": [
+        1060,
+        1060
+      ],
+      "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
+    },
+    {
+      "rule_id": "X1",
+      "kind_id_candidate": "serve_chat:render_conversation_turn",
+      "path": "scripts/serve_chat.py",
+      "line_range": [
+        1255,
+        1255
+      ],
+      "enclosing_line_range": [
+        1249,
+        1256
+      ],
+      "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
+    },
+    {
+      "rule_id": "X2",
+      "kind_id_candidate": "harness:_route_reachable",
+      "path": "scripts/harness.py",
+      "line_range": [
+        2097,
+        2097
+      ],
+      "enclosing_line_range": [
+        2090,
+        2098
+      ],
+      "member_expression": "Name",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
+      "kind_id_candidate": "measure_foreign_voice:b1",
+      "path": "scripts/measure_foreign_voice.py",
+      "line_range": [
+        539,
+        539
+      ],
+      "enclosing_line_range": [
+        496,
+        540
+      ],
+      "member_expression": "ListComp",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
+      "kind_id_candidate": "plan_test_shards:measure",
+      "path": "scripts/plan_test_shards.py",
+      "line_range": [
+        562,
+        562
+      ],
+      "enclosing_line_range": [
+        560,
+        571
+      ],
+      "member_expression": "Name",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
+      "kind_id_candidate": "serve_chat:render_kernel_turn",
+      "path": "scripts/serve_chat.py",
+      "line_range": [
+        1206,
+        1208
+      ],
+      "enclosing_line_range": [
+        1199,
+        1210
+      ],
+      "member_expression": "IfExp",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
+      "kind_id_candidate": "veto_score:run",
+      "path": "scripts/veto_score.py",
+      "line_range": [
+        98,
+        98
+      ],
+      "enclosing_line_range": [
+        93,
+        99
+      ],
+      "member_expression": "Name",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
+      "kind_id_candidate": "witness_pilot:build",
+      "path": "scripts/witness_pilot.py",
+      "line_range": [
+        421,
+        421
+      ],
+      "enclosing_line_range": [
+        418,
+        423
+      ],
+      "member_expression": "Name",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
+      "kind_id_candidate": "witness_pilot:build",
+      "path": "scripts/witness_pilot.py",
+      "line_range": [
+        428,
+        428
+      ],
+      "enclosing_line_range": [
+        424,
+        430
+      ],
+      "member_expression": "Name",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    }
+  ],
+  "seeded_exclusion_check": {
+    "seed": {
+      "path": "scripts/dump_server.py",
+      "line_range": [
+        169,
+        178
+      ]
+    },
+    "reproduced_by_the_rule": true,
+    "rule_that_reached_it": [
+      "X1"
+    ],
+    "line_range_the_rule_computed": [
+      [
+        176,
+        176
+      ]
+    ],
+    "enclosing_line_range_the_rule_computed": [
+      [
+        166,
+        179
+      ]
+    ],
+    "note": "the rule reached this site knowing nothing about the control it is; the seeded range and the computed range are both published, and a difference between them is a fact about the seed's citation rather than about the exclusion"
+  },
+  "recall_probe": {
+    "substring_regex": "(?i)receipt|certificate|verdict|journal",
+    "wider_net_sites": 151,
+    "uncovered_site_count": 135,
+    "uncovered_sites": [
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          74,
+          111
+        ],
+        "symbol": "<module>",
+        "matched_keys": [
+          "receipt_subset"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          414,
+          425
+        ],
+        "symbol": "corpus_definition_task",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          676,
+          683
+        ],
+        "symbol": "exact_value_task",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          798,
+          810
+        ],
+        "symbol": "twin_task",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          1002,
+          1009
+        ],
+        "symbol": "belief_task",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          1071,
+          1081
+        ],
+        "symbol": "refusal_tasks.add",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          1246,
+          1254
+        ],
+        "symbol": "clarification_tasks",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          1283,
+          1293
+        ],
+        "symbol": "clarification_tasks",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "line_range": [
+          1329,
+          1346
+        ],
+        "symbol": "clarification_tasks",
+        "matched_keys": [
+          "receipt_expect"
+        ]
+      },
+      {
+        "path": "scripts/cold_reconstruct_ce3.py",
+        "line_range": [
+          139,
+          148
+        ],
+        "symbol": "verify",
+        "matched_keys": [
+          "rows_with_a_receipt"
+        ]
+      },
+      {
+        "path": "scripts/cold_reconstruct_ce3.py",
+        "line_range": [
+          220,
+          238
+        ],
+        "symbol": "transcripts",
+        "matched_keys": [
+          "recorded_verdict"
+        ]
+      },
+      {
+        "path": "scripts/cold_reconstruct_ce3.py",
+        "line_range": [
+          304,
+          317
+        ],
+        "symbol": "build_rule",
+        "matched_keys": [
+          "verdict_from"
+        ]
+      },
+      {
+        "path": "scripts/cold_registry_census.py",
+        "line_range": [
+          1593,
+          1614
+        ],
+        "symbol": "build_census",
+        "matched_keys": [
+          "receipt_marked_sites"
+        ]
+      },
+      {
+        "path": "scripts/conform.py",
+        "line_range": [
+          590,
+          599
+        ],
+        "symbol": "rational_root_test",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/conform.py",
+        "line_range": [
+          601,
+          609
+        ],
+        "symbol": "rational_root_test",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/conform.py",
+        "line_range": [
+          616,
+          621
+        ],
+        "symbol": "rational_root_test",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/conform.py",
+        "line_range": [
+          625,
+          633
+        ],
+        "symbol": "rational_root_test",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/conform.py",
+        "line_range": [
+          652,
+          660
+        ],
+        "symbol": "rational_root_test",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/conform.py",
+        "line_range": [
+          663,
+          671
+        ],
+        "symbol": "rational_root_test",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/conformance_ce3_supplement.py",
+        "line_range": [
+          518,
+          525
+        ],
+        "symbol": "adjudicate",
+        "matched_keys": [
+          "verdict_in_the_run"
+        ]
+      },
+      {
+        "path": "scripts/conformance_ce3_supplement.py",
+        "line_range": [
+          713,
+          756
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "by_verdict"
+        ]
+      },
+      {
+        "path": "scripts/conformance_ce3_supplement.py",
+        "line_range": [
+          793,
+          844
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "no_verdict_moved"
+        ]
+      },
+      {
+        "path": "scripts/erratum_probe.py",
+        "line_range": [
+          204,
+          232
+        ],
+        "symbol": "window",
+        "matched_keys": [
+          "commits_since_the_journals_were_last_written",
+          "journals_added_at",
+          "journals_last_rewritten_at"
+        ]
+      },
+      {
+        "path": "scripts/erratum_probe.py",
+        "line_range": [
+          389,
+          410
+        ],
+        "symbol": "build_plant",
+        "matched_keys": [
+          "receipt_digest"
+        ]
+      },
+      {
+        "path": "scripts/erratum_probe.py",
+        "line_range": [
+          563,
+          577
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "journal"
+        ]
+      },
+      {
+        "path": "scripts/erratum_probe.py",
+        "line_range": [
+          578,
+          592
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "journals_replayed"
+        ]
+      },
+      {
+        "path": "scripts/exact_literals_served_diff.py",
+        "line_range": [
+          248,
+          252
+        ],
+        "symbol": "main",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/external_verifier.py",
+        "line_range": [
+          120,
+          129
+        ],
+        "symbol": "Verdict.as_dict",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/foreign_voice_arming.py",
+        "line_range": [
+          164,
+          174
+        ],
+        "symbol": "arming_state",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/foreign_voice_wiring_served_diff.py",
+        "line_range": [
+          110,
+          161
+        ],
+        "symbol": "main",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/handles_census.py",
+        "line_range": [
+          364,
+          406
+        ],
+        "symbol": "k_sensitivity",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/handles_census.py",
+        "line_range": [
+          464,
+          476
+        ],
+        "symbol": "s3_price",
+        "matched_keys": [
+          "receipts_committed"
+        ]
+      },
+      {
+        "path": "scripts/machine_reader.py",
+        "line_range": [
+          473,
+          501
+        ],
+        "symbol": "arm",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_admission_pilot.py",
+        "line_range": [
+          86,
+          93
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "line_range": [
+          94,
+          95
+        ],
+        "symbol": "revalidate_prereg",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "line_range": [
+          269,
+          313
+        ],
+        "symbol": "run_ce1",
+        "matched_keys": [
+          "flipped_a_verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "line_range": [
+          343,
+          387
+        ],
+        "symbol": "run_ce2",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "line_range": [
+          478,
+          481
+        ],
+        "symbol": "run_ce3",
+        "matched_keys": [
+          "our_verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "line_range": [
+          672,
+          677
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "line_range": [
+          692,
+          696
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdicts"
+        ]
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "line_range": [
+          722,
+          780
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdicts"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice.py",
+        "line_range": [
+          918,
+          919
+        ],
+        "symbol": "verdicts.gate",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice.py",
+        "line_range": [
+          923,
+          924
+        ],
+        "symbol": "verdicts.control",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice.py",
+        "line_range": [
+          1016,
+          1022
+        ],
+        "symbol": "verdicts",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          428,
+          428
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          429,
+          429
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          430,
+          431
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          432,
+          433
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          434,
+          435
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          436,
+          437
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          438,
+          439
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          440,
+          441
+        ],
+        "symbol": "prerequisites",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          510,
+          523
+        ],
+        "symbol": "measure",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          533,
+          534
+        ],
+        "symbol": "verdicts.gate",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          539,
+          540
+        ],
+        "symbol": "verdicts",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          571,
+          572
+        ],
+        "symbol": "verdicts.control",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "line_range": [
+          588,
+          589
+        ],
+        "symbol": "verdicts",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_ownership_receipt.py",
+        "line_range": [
+          125,
+          152
+        ],
+        "symbol": "measure",
+        "matched_keys": [
+          "receipt_keys"
+        ]
+      },
+      {
+        "path": "scripts/measure_ownership_receipt.py",
+        "line_range": [
+          213,
+          230
+        ],
+        "symbol": "main",
+        "matched_keys": [
+          "receipt_unchanged"
+        ]
+      },
+      {
+        "path": "scripts/measure_realization.py",
+        "line_range": [
+          277,
+          292
+        ],
+        "symbol": "revalidate_prereg",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_realization.py",
+        "line_range": [
+          391,
+          412
+        ],
+        "symbol": "measure",
+        "matched_keys": [
+          "r1_per_corpus_verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_realization.py",
+        "line_range": [
+          603,
+          664
+        ],
+        "symbol": "control_c_r1",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_realization.py",
+        "line_range": [
+          839,
+          890
+        ],
+        "symbol": "control_c_r2",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_realization.py",
+        "line_range": [
+          973,
+          1016
+        ],
+        "symbol": "build_artifact",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_realization.py",
+        "line_range": [
+          1017,
+          1030
+        ],
+        "symbol": "build_artifact",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/measure_throughput.py",
+        "line_range": [
+          1431,
+          1484
+        ],
+        "symbol": "build_records",
+        "matched_keys": [
+          "receipt_ok",
+          "receipted"
+        ]
+      },
+      {
+        "path": "scripts/measure_throughput.py",
+        "line_range": [
+          1617,
+          1623
+        ],
+        "symbol": "summarize",
+        "matched_keys": [
+          "correct_with_receipt"
+        ]
+      },
+      {
+        "path": "scripts/measure_throughput.py",
+        "line_range": [
+          1670,
+          1676
+        ],
+        "symbol": "summarize",
+        "matched_keys": [
+          "correct_with_receipt"
+        ]
+      },
+      {
+        "path": "scripts/measure_transliteration.py",
+        "line_range": [
+          136,
+          166
+        ],
+        "symbol": "revalidate_prereg",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/onestep_census.py",
+        "line_range": [
+          371,
+          405
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "line_range": [
+          966,
+          971
+        ],
+        "symbol": "build_report",
+        "matched_keys": [
+          "verdict_rule"
+        ]
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "line_range": [
+          1053,
+          1088
+        ],
+        "symbol": "verdict",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "line_range": [
+          1089,
+          1124
+        ],
+        "symbol": "verdict",
+        "matched_keys": [
+          "verdict",
+          "what_this_verdict_is_worth"
+        ]
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "line_range": [
+          1091,
+          1099
+        ],
+        "symbol": "verdict",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "line_range": [
+          1100,
+          1108
+        ],
+        "symbol": "verdict",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "line_range": [
+          1125,
+          1144
+        ],
+        "symbol": "verdict",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "line_range": [
+          1132,
+          1137
+        ],
+        "symbol": "verdict",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/probe_convention_pairs.py",
+        "line_range": [
+          500,
+          518
+        ],
+        "symbol": "build_report",
+        "matched_keys": [
+          "verdict",
+          "verdict_meaning"
+        ]
+      },
+      {
+        "path": "scripts/probe_convention_pairs.py",
+        "line_range": [
+          588,
+          692
+        ],
+        "symbol": "build_report",
+        "matched_keys": [
+          "course_receipt"
+        ]
+      },
+      {
+        "path": "scripts/probe_convention_pairs.py",
+        "line_range": [
+          644,
+          661
+        ],
+        "symbol": "build_report",
+        "matched_keys": [
+          "counts_by_verdict"
+        ]
+      },
+      {
+        "path": "scripts/probe_separator_expressibility.py",
+        "line_range": [
+          328,
+          334
+        ],
+        "symbol": "probe",
+        "matched_keys": [
+          "receipt_present"
+        ]
+      },
+      {
+        "path": "scripts/probe_separator_expressibility.py",
+        "line_range": [
+          338,
+          338
+        ],
+        "symbol": "probe",
+        "matched_keys": [
+          "verdicts"
+        ]
+      },
+      {
+        "path": "scripts/probe_separator_expressibility.py",
+        "line_range": [
+          465,
+          566
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdicts"
+        ]
+      },
+      {
+        "path": "scripts/proof_correspondence.py",
+        "line_range": [
+          915,
+          928
+        ],
+        "symbol": "CorrespondenceResult.as_dict",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/realize_term.py",
+        "line_range": [
+          659,
+          675
+        ],
+        "symbol": "census",
+        "matched_keys": [
+          "r1_verdict",
+          "r2_verdict"
+        ]
+      },
+      {
+        "path": "scripts/record_plain_corpus.py",
+        "line_range": [
+          293,
+          318
+        ],
+        "symbol": "record",
+        "matched_keys": [
+          "journal",
+          "journal_digest"
+        ]
+      },
+      {
+        "path": "scripts/record_session_corpus.py",
+        "line_range": [
+          317,
+          337
+        ],
+        "symbol": "record",
+        "matched_keys": [
+          "journal",
+          "journal_digest"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          157,
+          201
+        ],
+        "symbol": "score_g1",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          265,
+          280
+        ],
+        "symbol": "score_g3",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          341,
+          357
+        ],
+        "symbol": "score_g2",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          378,
+          389
+        ],
+        "symbol": "score_g4",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          413,
+          434
+        ],
+        "symbol": "score_g4b",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          495,
+          522
+        ],
+        "symbol": "score_g5",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          547,
+          569
+        ],
+        "symbol": "score_g6",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          609,
+          624
+        ],
+        "symbol": "score_g7",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          675,
+          710
+        ],
+        "symbol": "score_g7b",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          864,
+          884
+        ],
+        "symbol": "score_g8",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          976,
+          1025
+        ],
+        "symbol": "score_b9",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1010,
+          1018
+        ],
+        "symbol": "score_b9",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1124,
+          1180
+        ],
+        "symbol": "score_b10_both_ways",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1133,
+          1139
+        ],
+        "symbol": "score_b10_both_ways",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1140,
+          1149
+        ],
+        "symbol": "score_b10_both_ways",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1210,
+          1245
+        ],
+        "symbol": "_g5_analysis",
+        "matched_keys": [
+          "and_this_changes_nothing_about_the_verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1390,
+          1397
+        ],
+        "symbol": "_reproduction",
+        "matched_keys": [
+          "verdicts"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1403,
+          1415
+        ],
+        "symbol": "_reproduction",
+        "matched_keys": [
+          "prior_verdicts",
+          "verdicts",
+          "verdicts_identical"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1461,
+          1474
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "line_range": [
+          1553,
+          1585
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          158,
+          162
+        ],
+        "symbol": "score_b1",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          163,
+          196
+        ],
+        "symbol": "score_b1",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          239,
+          269
+        ],
+        "symbol": "score_b2",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          300,
+          306
+        ],
+        "symbol": "score_b3",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          535,
+          540
+        ],
+        "symbol": "score_b7",
+        "matched_keys": [
+          "receipt_digest"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          542,
+          547
+        ],
+        "symbol": "score_b7",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          573,
+          577
+        ],
+        "symbol": "score_b10",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          596,
+          601
+        ],
+        "symbol": "score_b12",
+        "matched_keys": [
+          "journal_says"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          603,
+          628
+        ],
+        "symbol": "score_b12",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          799,
+          884
+        ],
+        "symbol": "score_b8",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1156,
+          1169
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1215,
+          1254
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1280,
+          1283
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1337,
+          1344
+        ],
+        "symbol": "_zero_flip_clause",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1440,
+          1444
+        ],
+        "symbol": "_baseline_b2",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1455,
+          1465
+        ],
+        "symbol": "score_b11",
+        "matched_keys": [
+          "journals_left_data_untouched",
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1473,
+          1481
+        ],
+        "symbol": "score_b13",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "line_range": [
+          1490,
+          1503
+        ],
+        "symbol": "score_b13",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/serve_chat.py",
+        "line_range": [
+          578,
+          588
+        ],
+        "symbol": "foreign_voice_row",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/session_ledger.py",
+        "line_range": [
+          556,
+          569
+        ],
+        "symbol": "Turn.record",
+        "matched_keys": [
+          "receipt_digest"
+        ]
+      },
+      {
+        "path": "scripts/session_recorder.py",
+        "line_range": [
+          243,
+          249
+        ],
+        "symbol": "SessionRecorder._fresh_events",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/session_run.py",
+        "line_range": [
+          372,
+          379
+        ],
+        "symbol": "run_session",
+        "matched_keys": [
+          "verdict",
+          "verdict_path"
+        ]
+      },
+      {
+        "path": "scripts/session_run.py",
+        "line_range": [
+          439,
+          444
+        ],
+        "symbol": "run_session",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/transliteration_served_diff.py",
+        "line_range": [
+          295,
+          296
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/witness_fragment_census.py",
+        "line_range": [
+          376,
+          396
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/witness_pilot.py",
+        "line_range": [
+          340,
+          352
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/witness_pilot.py",
+        "line_range": [
+          443,
+          456
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/witness_pilot.py",
+        "line_range": [
+          491,
+          506
+        ],
+        "symbol": "build",
+        "matched_keys": [
+          "verdict"
+        ]
+      }
+    ],
+    "means": "each uncovered site is a mapping whose key names mention this program's evidence vocabulary and that the census rule did not admit. They are candidate census misses under B10 — computed by the probe, not remembered by a maintainer — and the census claims no coverage over them."
+  },
+  "instance_recall_probe": {
+    "exact_instances": 512,
+    "superset_only_instances": 2639,
+    "kinds_the_exact_rule_alone_would_have_read_as_none": [
+      {
+        "kind_id": "foreign_voice:receipt",
+        "exact_count": 0,
+        "superset_only_count": 2313,
+        "sample_paths": [
+          "experiments/foreign_voice_rate2.json"
+        ],
+        "why_the_exact_rule_missed": "the committed mapping carries keys the site's literal key set does not, so an exact match found nothing while a proper superset match found these"
+      },
+      {
+        "kind_id": "serve_chat:_resolution_receipt",
+        "exact_count": 0,
+        "superset_only_count": 160,
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "why_the_exact_rule_missed": "the committed mapping carries keys the site's literal key set does not, so an exact match found nothing while a proper superset match found these"
+      }
+    ],
+    "means": "the exact key-set rule stays the rule; this probe is what makes its brittleness a number instead of a surprise"
+  },
+  "pin_table": {
+    "captured_by": "session_ledger.pins()",
+    "captured_before_rename": true,
+    "why_here": "session_ledger.pins() lives under scripts/ and imports serve_chat and write_stage; after the harness's rename it cannot run, so the pin table is CR-P0's artifact (DESIGN-cold-receipt.md §6, C4)",
+    "pin_fields": [
+      "capability_sheet_digest",
+      "checker_toolchain_digest",
+      "corpora_digest",
+      "line_grammar_digest",
+      "rendering_module_digests"
+    ],
+    "pins": {
+      "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "line_grammar_digest": "82102f98e3375e5f8603969b0f518029bbf24277091e7e7a445265cf797de3bf",
+      "rendering_module_digests": {
+        "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
+        "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
+        "scripts/closure_query.py": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead",
+        "scripts/evaluate.py": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba",
+        "scripts/gloss.py": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085",
+        "scripts/harness.py": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1",
+        "scripts/ownership.py": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c",
+        "scripts/resolver.py": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48",
+        "scripts/retrieval.py": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed",
+        "scripts/story.py": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c",
+        "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      },
+      "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
+      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62"
+    },
+    "status": "captured"
+  },
+  "external_deps_seed": [
+    {
+      "name": "lean.exe",
+      "role": "the pinned external checker the C-E3 probes invoke by path",
+      "pin_hash": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "pin_is_over": "the executing binary's own bytes, recorded per-artifact by conformance_ce3_supplement.py as checker.binary_sha256",
+      "toolchain": "leanprover/lean4:v4.32.2",
+      "resolved_path": "~/.elan/toolchains/leanprover--lean4---v4.32.2/bin/lean.exe",
+      "recomputed_digest_now": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+      "recomputed_matches_pin": true,
+      "selection_provenance": "repository_file",
+      "selection_evidence": "prover/lean/normalizer/lean-toolchain",
+      "selection_note": "prover/lean/normalizer/lean-toolchain selects this release out of the toolchains this machine's elan installed; §8 records the choice and declines to downgrade on it, which is a decision and not a proof"
+    },
+    {
+      "name": "python (this repository's .venv interpreter)",
+      "role": "runs every python-based recheck procedure",
+      "pin_hash": null,
+      "pin_is_over": null,
+      "resolved_path": "~/Documents/corollary-abstractions/.venv/Scripts/python.exe",
+      "version": "3.13.12",
+      "selection_provenance": "machine_state",
+      "selection_note": "no digest of the interpreter is pinned anywhere in this repository; §6 pre-tags it program_configured and §8 states the consequence — every python-based recheck's SURVIVES downgrades to UNTESTED"
+    },
+    {
+      "name": "mypy",
+      "role": "pinned in the python-tests verdicts' environment block",
+      "pin_hash": null,
+      "pin_is_over": null,
+      "selection_provenance": "machine_state",
+      "version": "2.3.0",
+      "resolved_path": "~/Documents/corollary-abstractions/.venv/Lib/site-packages/mypy/__init__.cp313-win_amd64.pyd"
+    },
+    {
+      "name": "jsonschema",
+      "role": "imported by scripts/radius_recheck.py; no manifest in this repository pins it",
+      "pin_hash": null,
+      "pin_is_over": null,
+      "selection_provenance": "machine_state",
+      "version": "4.26.0",
+      "resolved_path": "~/Documents/corollary-abstractions/.venv/Lib/site-packages/jsonschema/__init__.py"
+    }
+  ],
+  "pin_divergence": [
+    {
+      "pin_a": "prover/**/lean-toolchain",
+      "pin_b": "prover/**/lean-toolchain",
+      "values": {
+        "prover/lean/ingested/lean-toolchain": "leanprover/lean4:v4.32.2",
+        "prover/lean/normalizer/lean-toolchain": "leanprover/lean4:v4.32.2",
+        "prover/lean/proofcurve/lean-toolchain": "leanprover/lean4:v4.29.1",
+        "prover/lean/session/lean-toolchain": "leanprover/lean4:v4.32.2"
+      },
+      "adjudicated": false,
+      "note": "B9 cedes version drift to the pin audit, and DESIGN-cold-receipt.md §4 records that the pin audit is parked: this is recorded, not resolved"
+    }
+  ],
+  "stop_clause": {
+    "clause": "DESIGN-cold-receipt.md §5: if the enumeration cannot be made machine-executable — if identifying a kind's emitting routes requires reading code rather than running a rule — then B1 is not meetable, the harness does not open, and CR-P0 publishes as the result",
+    "test": "every published kind was reached by an ENUMERATION_RULE predicate and carries at least one rule-resolved emitting route",
+    "kinds_with_no_machine_resolved_route": [],
+    "fired": false,
+    "b1_unmapped_emitting_routes": 0
+  },
+  "census_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+  "provenance": {
+    "writer": "scripts/cold_registry_census.py",
+    "writer_sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb",
+    "inputs": [
+      {
+        "path": "scripts/_verifier_sandbox.py",
+        "sha256_lf": "d2dc2598211d9ee8a1576850c59f3ccbcb56dd32e4f9b5d8ce261d9c9ff2d989"
+      },
+      {
+        "path": "scripts/add_node.py",
+        "sha256_lf": "e4e3c4493fd163434fcc67b0e973306e43127d677e957ec8a94c53fc5be21f46"
+      },
+      {
+        "path": "scripts/ambiguity.py",
+        "sha256_lf": "e41561429e528d57399af5da8af9203b3770277b049a693487f51974e1c4a8bd"
+      },
+      {
+        "path": "scripts/answer.py",
+        "sha256_lf": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9"
+      },
+      {
+        "path": "scripts/belief.py",
+        "sha256_lf": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089"
+      },
+      {
+        "path": "scripts/block_census.py",
+        "sha256_lf": "6a4541729bcd633e3355474056de1a2875cee1563154a9e418a84a38f2e0c465"
+      },
+      {
+        "path": "scripts/build_throughput_tasks.py",
+        "sha256_lf": "c63b12943e4b64d3852df6ee6436cecfeab080ea1d9b360f65922a1320d805bd"
+      },
+      {
+        "path": "scripts/candidate_enumerator.py",
+        "sha256_lf": "b5251631f7a220f8d599e3acf0787ae9027b1ad203000fbf9b7daf1211b5452e"
+      },
+      {
+        "path": "scripts/check_proposer_determinism.py",
+        "sha256_lf": "3f4fbf19fb3720bfcb8e5cacd0698f819a33f4ee8a64cfc679a042c103669d9f"
+      },
+      {
+        "path": "scripts/check_regeneration.py",
+        "sha256_lf": "d7a01981fca5aad94a8c1bc1fc39afa01e37ad7c35dbbe16b90fe45c8ce926ff"
+      },
+      {
+        "path": "scripts/check_report_regeneration.py",
+        "sha256_lf": "4f504f89641764145a80ff6bf6a4637f25d9ddaad80a1d14de172ef936227388"
+      },
+      {
+        "path": "scripts/closure_build.py",
+        "sha256_lf": "752618d02964016a7bbfafe6d3e6463d97e8bf4d2b1cfc84a9d1b1a38dcaa961"
+      },
+      {
+        "path": "scripts/closure_check.py",
+        "sha256_lf": "1771e55290c5509ea860316be833b7863a3d313b15c1461d12560335743a0d39"
+      },
+      {
+        "path": "scripts/closure_corrupt.py",
+        "sha256_lf": "a847122399bc9327d8c56b3ad40c1a4e6428c19962266edc55915a10c549e24f"
+      },
+      {
+        "path": "scripts/closure_query.py",
+        "sha256_lf": "d7fa83abd0245bf27691cd212c526408daada77e15dee0789dfb9cffab0e5ead"
+      },
+      {
+        "path": "scripts/closure_worlds.py",
+        "sha256_lf": "a4137cf30a09bea3ba8d74f433a7852e75a4e6b8904557c00090ed6a5736123e"
+      },
+      {
+        "path": "scripts/cold_reconstruct_ce3.py",
+        "sha256_lf": "bb48ccd03d9a26d2b14f5f2afd8eb92c306e064c463867bd6e5ac412839a07a2"
+      },
+      {
+        "path": "scripts/cold_registry_census.py",
+        "sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb"
+      },
+      {
+        "path": "scripts/compose_assert.py",
+        "sha256_lf": "49da11aeccd657dba94ec77e7c7bfe4e5ed32094d7fa50c9a831a9bcf8241887"
+      },
+      {
+        "path": "scripts/conform.py",
+        "sha256_lf": "213a239e67f7e2e697ea7ad84aad5465a20b416712c33d359bf2ad512c975cd3"
+      },
+      {
+        "path": "scripts/conform_census.py",
+        "sha256_lf": "c77122c6110e72380186de3135e9d8c0251be1ab8b99563c14279e0bc58388be"
+      },
+      {
+        "path": "scripts/conform_domain.py",
+        "sha256_lf": "a50f4c62c3e7047128a1a04582d18ab193002ab7e640322c7e78c8c03cddf467"
+      },
+      {
+        "path": "scripts/conform_sampler.py",
+        "sha256_lf": "2c89b8472089443632c149825be8151d9c7e8ebd3920b80df3147bc1bd520208"
+      },
+      {
+        "path": "scripts/conformance_ce3_supplement.py",
+        "sha256_lf": "1103bb4f48e1311af1b07eba8026fd9cdcd3dd4b95cb0486e4c0bb2a8aa87537"
+      },
+      {
+        "path": "scripts/controller.py",
+        "sha256_lf": "3a5c70ed00cc86b6ce0dad1ff592ddaa019f9b0e0703aec9f7c6e2475ff59978"
+      },
+      {
+        "path": "scripts/conversation.py",
+        "sha256_lf": "141e8a10e1e3948cf8a2db0c5b388ad3f6936c3428c98555f0396bddf4d350ac"
+      },
+      {
+        "path": "scripts/cv4_replay.py",
+        "sha256_lf": "1025c40c3de2d42e893830e1e1fcf2ca9dc40fd29bf126e4ac2e5013c0a7d70e"
+      },
+      {
+        "path": "scripts/decompose.py",
+        "sha256_lf": "e9749c27fa2dc5b73df34b7d50db05dc7ebc5a3b122ef0d09fd30501025912d3"
+      },
+      {
+        "path": "scripts/deixis.py",
+        "sha256_lf": "2461d2e2dc1ad0a22c3c7198dce3662a3c035043309467fbfade08a4655a3255"
+      },
+      {
+        "path": "scripts/discourse.py",
+        "sha256_lf": "60e86597eba9ae25fdbbdc713a4c620fbce8b605b266c2fcc64fd300fcd07748"
+      },
+      {
+        "path": "scripts/dispatcher.py",
+        "sha256_lf": "dee348ce652bcbcb920a7227fcaf9920a41bab0b18ccff897900c548cbdb0004"
+      },
+      {
+        "path": "scripts/dump_server.py",
+        "sha256_lf": "74e7da77ece28f925e7513a178818dcef20a1a759910e7dc976bde9ee7b1a22b"
+      },
+      {
+        "path": "scripts/emit_skeleton.py",
+        "sha256_lf": "ec44e78381d6440d6844ff17c68957eda3da53bb52482ce1f6f075ef39c49f74"
+      },
+      {
+        "path": "scripts/entailment.py",
+        "sha256_lf": "5e9cc2d00c8edd2d2e1781d519b2649454d21a23e1e7f50469bb9b9933f408f2"
+      },
+      {
+        "path": "scripts/erratum_probe.py",
+        "sha256_lf": "6f50215ffddc5fc47a8243da53d487b04a052ad307a0d16c9fa8b747d181fb4a"
+      },
+      {
+        "path": "scripts/evaluate.py",
+        "sha256_lf": "39afacbf8aab796d6ed1d42f1f1c001de8bb46f356ab762d9ce46240d1e6dfba"
+      },
+      {
+        "path": "scripts/exact_literals_served_diff.py",
+        "sha256_lf": "f2e7f04de669077cd860cc18563c247646ea63ad783b15c62743affa0fd3ab38"
+      },
+      {
+        "path": "scripts/external_verifier.py",
+        "sha256_lf": "36f6ad64d06deb5d6a69be165e113591397276f445224020ee4ea464c1759b5f"
+      },
+      {
+        "path": "scripts/fetch_sources.py",
+        "sha256_lf": "e49620031b462f5c19638c4f8a49e81d106b93297e27c8823d53d8e4841fd2a1"
+      },
+      {
+        "path": "scripts/foreign_voice.py",
+        "sha256_lf": "759f24a71467c9a74222b61227e6a7956f8e232671d8a7c535dbebb71757a550"
+      },
+      {
+        "path": "scripts/foreign_voice_arming.py",
+        "sha256_lf": "093f7f776e2f57b54867d1e7928e7fd8201fce66449daeeea5b7dbd327cda2bd"
+      },
+      {
+        "path": "scripts/foreign_voice_eligibility.py",
+        "sha256_lf": "3b0bca9b943880dd489a670e78f22fc7b1c7e7382166ec9e37efb5e8787011c6"
+      },
+      {
+        "path": "scripts/foreign_voice_lexicon.py",
+        "sha256_lf": "38c7f3d7e1c14928ee6413f8f637112f9400edd2440ae2f7e65752cc4657a3be"
+      },
+      {
+        "path": "scripts/foreign_voice_oracle.py",
+        "sha256_lf": "59a21dcc9dbd80929383fc35e8a55c462dc146a9fc53f0e94b990c99c4c4ad3a"
+      },
+      {
+        "path": "scripts/foreign_voice_register.py",
+        "sha256_lf": "2935d7c42f198f539bb43c0bad99bee4aa22a35b1fa634f7e75fc78aa34a609f"
+      },
+      {
+        "path": "scripts/foreign_voice_rule_r.py",
+        "sha256_lf": "3ca7a5ba25c69e7fb06fb3c04ebb274d8824ee158e0fe4f72dc73b919bb5eb20"
+      },
+      {
+        "path": "scripts/foreign_voice_select.py",
+        "sha256_lf": "085f15bcd1bda5890bb3a8594896205cd3d2b90dbed4a5841fba08ce99dec7dc"
+      },
+      {
+        "path": "scripts/foreign_voice_wiring_served_diff.py",
+        "sha256_lf": "a6aabd9bd575416fa0760d5f8d6b53924f44c25a8edbcf6f3c7f5b114ea4f8db"
+      },
+      {
+        "path": "scripts/frames.py",
+        "sha256_lf": "f8bbf957705cb1102d04b78aefe3213352d344c3dc59a025f517abbe4b371959"
+      },
+      {
+        "path": "scripts/gloss.py",
+        "sha256_lf": "3f7191ece14f1e1fcfabe6759ff31131919cdd2ca44d6ff0ed1734bff74b8085"
+      },
+      {
+        "path": "scripts/grammar_coverage.py",
+        "sha256_lf": "721312db4a2af13554d9a29ad2a00e07c52e49dc8a3383adf4e4cc21cb6e3e66"
+      },
+      {
+        "path": "scripts/grouping_canonical_probe.py",
+        "sha256_lf": "b097ae66890b30a2af3394a3927e0512d8a0aed9addfdad8cd540b5c62f41b9b"
+      },
+      {
+        "path": "scripts/handles_census.py",
+        "sha256_lf": "a90cbb0ccc8897cbbc0df45fef1480a8f42435b1280d78d08eb97db9ff6f165b"
+      },
+      {
+        "path": "scripts/harness.py",
+        "sha256_lf": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1"
+      },
+      {
+        "path": "scripts/index_language.py",
+        "sha256_lf": "af1a132d4124e1f97e0a16e45c5450e9fb3d85f795a48cf2d6f59f93b22de344"
+      },
+      {
+        "path": "scripts/ingest_algorithms.py",
+        "sha256_lf": "1be065a5da0fa1b6a792a2f48de333bd96e418f3044c3c9a96ae81f37c942003"
+      },
+      {
+        "path": "scripts/ingest_goedel_pset.py",
+        "sha256_lf": "5c4947210807191fc2f6d34cc2ebbe0f4188d05a441f3652a3f8b9f054270c5c"
+      },
+      {
+        "path": "scripts/ingest_lean_workbook.py",
+        "sha256_lf": "1ce20010299c847c3e13702af4f67092efcffea16cdcdd3de5838cc629df9372"
+      },
+      {
+        "path": "scripts/ingest_minif2f.py",
+        "sha256_lf": "a80ad33a9f9c396b001f144408a969f2f8ebbaea07a28449efa22e0593a22e2d"
+      },
+      {
+        "path": "scripts/ingest_wold.py",
+        "sha256_lf": "9e809592f03bc2fe8ee914cdbbb4180876ff985ae72f6db5cb06cf6a96659ffe"
+      },
+      {
+        "path": "scripts/legality_strata.py",
+        "sha256_lf": "ca13a0d1b18c2d4b62f5d78738e4d03aa7c53e16728652f9443d92e1a40ba79b"
+      },
+      {
+        "path": "scripts/lifetimes.py",
+        "sha256_lf": "c971cce01a8a4896a0753892256ca6e82e192cc8b40f89d49006033985a8a2a2"
+      },
+      {
+        "path": "scripts/machine_reader.py",
+        "sha256_lf": "6a74451baaabb59b6c122472512a8804e52f5f1d4aa649377bc8a5d43f8d13fe"
+      },
+      {
+        "path": "scripts/match_signatures.py",
+        "sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf"
+      },
+      {
+        "path": "scripts/measure_admission_pilot.py",
+        "sha256_lf": "13ea2664c43beea17452b599c5fdffc28b3869f4580f16b3fc2d5c131c8604d6"
+      },
+      {
+        "path": "scripts/measure_ambiguity.py",
+        "sha256_lf": "e1ef2e0a9675afb42648508774b8d1692bc57cde848ce18aca4a5c6400bea834"
+      },
+      {
+        "path": "scripts/measure_block_mdl.py",
+        "sha256_lf": "8e2c0c7838fbc8eb3c680853fb724b489fe3a9c5a9c023bb762908021a1cce74"
+      },
+      {
+        "path": "scripts/measure_command_bound.py",
+        "sha256_lf": "4e730562bd790b3261ddda98e7540abb30f23827fd72dfa9a8cf57d871acc71a"
+      },
+      {
+        "path": "scripts/measure_compression.py",
+        "sha256_lf": "17ce9f4270ad95978b47ac5cd7ef5bfd2476b6b588eccf62f6e61074d32dbd20"
+      },
+      {
+        "path": "scripts/measure_conformance.py",
+        "sha256_lf": "ef7309626cfc979ad09a36fee8a0b17f160f21a17634f42d278888a6e94a760b"
+      },
+      {
+        "path": "scripts/measure_exponent_bound.py",
+        "sha256_lf": "51b39d298ddcd94107b266ffdc0be7451263a9a8c88460d8fb41de1742303dd6"
+      },
+      {
+        "path": "scripts/measure_false_positive.py",
+        "sha256_lf": "da8b63751806d974e8171f4dbbe6820a038bbc22f759253ce20b4773a92d6124"
+      },
+      {
+        "path": "scripts/measure_false_positive_f2.py",
+        "sha256_lf": "08e4e8548d719e6588d3e4fe80eb6e6d1e18938ec466f62ec4986712318a997b"
+      },
+      {
+        "path": "scripts/measure_false_positive_f3.py",
+        "sha256_lf": "a885d6f3fce18c5bc1125084977709bebeeace25d19d696ad558129d0c954476"
+      },
+      {
+        "path": "scripts/measure_false_positive_f4.py",
+        "sha256_lf": "64da2a17bc53b6eb7d5b134ec8685aade61c26f39dff16e848ea81a1352f9297"
+      },
+      {
+        "path": "scripts/measure_foreign_voice.py",
+        "sha256_lf": "b5b17830c07d47d7da54ca8cf9b87a24da482516f8780dbb713fb6c5fe09378a"
+      },
+      {
+        "path": "scripts/measure_foreign_voice2.py",
+        "sha256_lf": "51889e74b208a9e6a4c346872cc4eaab25870f5eacd8e67952cfb3d88ba2df35"
+      },
+      {
+        "path": "scripts/measure_grounded_admission.py",
+        "sha256_lf": "4b5173d08a1f1ffb909c5c3402cacda2df7c88a02245c2c082851f9d6d1a3b37"
+      },
+      {
+        "path": "scripts/measure_grouping_agreement.py",
+        "sha256_lf": "fd1cee446ee31b87d19b7ec725ba2554b0745e96128ac0360606765e621770fd"
+      },
+      {
+        "path": "scripts/measure_heldout_recovery.py",
+        "sha256_lf": "daaa1487a36de64377202964ca5697ceec9ef8214f238088ebffda0488c13390"
+      },
+      {
+        "path": "scripts/measure_holdout2_text.py",
+        "sha256_lf": "d04a5c8950de4575b7d3960b28619602aa0b3f05aef5115335022053f1d01455"
+      },
+      {
+        "path": "scripts/measure_holdout_text.py",
+        "sha256_lf": "0ef82f1e47e5235143d34b6ec93b8e222ededda6f5c952fa6303a87afae13a3b"
+      },
+      {
+        "path": "scripts/measure_operator_bag.py",
+        "sha256_lf": "7f39fc0fe667757397d2e95b8726239a06c475ac1ebaebd96c24a4a1bac2c50a"
+      },
+      {
+        "path": "scripts/measure_ownership_receipt.py",
+        "sha256_lf": "81a368e3948d16f951041156892039e1c24c6c9df6faa464d0c9e3af7ea2b955"
+      },
+      {
+        "path": "scripts/measure_realization.py",
+        "sha256_lf": "cbab0a0965e4c34086ddaa1c55eaaf1713775923dab6135e673a0c8fbf3a18f4"
+      },
+      {
+        "path": "scripts/measure_resolution_scale.py",
+        "sha256_lf": "3d537aaaedc4b18c18eab6664ad1e492f58020fd4de41c0f7aaad3af0de0251e"
+      },
+      {
+        "path": "scripts/measure_self_grounding.py",
+        "sha256_lf": "6c0df4de02410e6cb6deb1c3bf1ed2179e1550393f51dd89742b403c1be3f0e3"
+      },
+      {
+        "path": "scripts/measure_text_resolution.py",
+        "sha256_lf": "62b1f431b2b93c2cef21b595f1ed38addb3dcea0d8015e3c5aa45e84baf4934a"
+      },
+      {
+        "path": "scripts/measure_text_resolution_holdout3.py",
+        "sha256_lf": "fd71a38e96bc9016f83db5e46e082b57c7eeecfa00b02d52bcf9191d8dfd0818"
+      },
+      {
+        "path": "scripts/measure_throughput.py",
+        "sha256_lf": "81970a7797b4520c26de900a3d6281720657daf34d9abbbb51557a9613f28063"
+      },
+      {
+        "path": "scripts/measure_transliteration.py",
+        "sha256_lf": "0126490a078c0c8cd0eee5e6ed50a7f5e58c25d8b8b6e4c8edb9c931ce9b13e3"
+      },
+      {
+        "path": "scripts/measure_when_to_ask.py",
+        "sha256_lf": "355ca176bffcdae4dabebefea0f328b891e687c89c6ac90d26e146690e185009"
+      },
+      {
+        "path": "scripts/narrative_realize.py",
+        "sha256_lf": "90c6b266c2ec90c232e4127872b1a95ddaa95aec9fcc14921b25aeea78f5e16c"
+      },
+      {
+        "path": "scripts/numeral_words.py",
+        "sha256_lf": "98dde23126fba37f47e48d4968faeb3755e9f68797b2a0103ac01fabab8ce1b4"
+      },
+      {
+        "path": "scripts/observation_adapter.py",
+        "sha256_lf": "daa66e7d3646da09e546d7899412570d4e712bfc444bdf8336ae47c236e2be41"
+      },
+      {
+        "path": "scripts/onestep_census.py",
+        "sha256_lf": "0c35fdb87961dafbbedaafbfefbeb14ca870be91675f0ae3f682f7c026874a94"
+      },
+      {
+        "path": "scripts/oracle_controller_demo.py",
+        "sha256_lf": "36c08247b0f3cf9b9be88424af4df3cb052be7750a399f466e7d56a2aa7093e4"
+      },
+      {
+        "path": "scripts/ownership.py",
+        "sha256_lf": "a8e1a446fdc1586b84ba8a7acdef280370bb2202a1b22d6fa60c83e2eba8a56c"
+      },
+      {
+        "path": "scripts/plain_proposer.py",
+        "sha256_lf": "dd1d4870218cf4ffaaff22a92f0c380c3c421d012ff3f1b943501e7727666b59"
+      },
+      {
+        "path": "scripts/plain_router.py",
+        "sha256_lf": "aa6c8eef8f74a402627af6a8233d3f955fefe37c3eb61428b1fef516547990a4"
+      },
+      {
+        "path": "scripts/plan_test_shards.py",
+        "sha256_lf": "d82f3d9ae259a08054f3c206339b5db1a9a5e3c97b890af324b7a153f3b7605f"
+      },
+      {
+        "path": "scripts/preference.py",
+        "sha256_lf": "af1c13ae499f3903ab1a14fab1d3acd05aea1454b6a2c02d4f46fe6eef656e4f"
+      },
+      {
+        "path": "scripts/prereg_pins.py",
+        "sha256_lf": "77248a6984a62f37711a4b1a153923447df27deed2146a648d9d252973bc3291"
+      },
+      {
+        "path": "scripts/probe_address_space.py",
+        "sha256_lf": "27581e48d48b198d6d488911ba82fa22923aeb0065d5c3a87760db73c4faa8da"
+      },
+      {
+        "path": "scripts/probe_convention_pairs.py",
+        "sha256_lf": "ca0fef3e169e74332e39e82df80ce1352e5b9bfd62064facd1dffc9d4259acc3"
+      },
+      {
+        "path": "scripts/probe_separator_expressibility.py",
+        "sha256_lf": "ec1fc8786ee79638402e259bb555047ad87aaf3a32228ed1f337a5e75101d08b"
+      },
+      {
+        "path": "scripts/proof_artifacts.py",
+        "sha256_lf": "318f7d205cdc97d1c88e6ada4814baf330a4ed49f9af1d1da5538c96f96c37ae"
+      },
+      {
+        "path": "scripts/proof_correspondence.py",
+        "sha256_lf": "1257d3abf6af8f89e8a6416a94810f2db5a96376034bf285a6ff805509d45555"
+      },
+      {
+        "path": "scripts/prose.py",
+        "sha256_lf": "486b059cdd6e19f7db305b16489bb068a462e6f7ab6dfcf3aea6ff0d3de39f6b"
+      },
+      {
+        "path": "scripts/provenance_graph.py",
+        "sha256_lf": "71929ed86d71595a5c93edf80e2bfbe7aa233b0ce2bb8fd91e07bf350de618d2"
+      },
+      {
+        "path": "scripts/radius_adjudicate.py",
+        "sha256_lf": "44d7aa0be103017d0e0cc8a40cc61c372f3c8dfc78375af62155e11fdc1702a3"
+      },
+      {
+        "path": "scripts/radius_blind_control.py",
+        "sha256_lf": "2ad6e589010ca9a2972b5025ac9d46b9f78814730ae77db852d5892454ae6d89"
+      },
+      {
+        "path": "scripts/radius_recheck.py",
+        "sha256_lf": "f66e59ea98cc73a536f9390133ed40a21723b5e95415745d006755c4ddfde803"
+      },
+      {
+        "path": "scripts/realization_lexicon.py",
+        "sha256_lf": "cc7dd3c20b01cf22a80d2e43850bd1e4ac1ee265e85e9e6701ff0de3d44740ea"
+      },
+      {
+        "path": "scripts/realize_term.py",
+        "sha256_lf": "527a0cd0f036747cff6e998c7f48f8b09cd1d07eec3a851304fd90defb527cac"
+      },
+      {
+        "path": "scripts/record_plain_corpus.py",
+        "sha256_lf": "b5e5aaa3900304ad6aa4e91a60dcf0be9e478b6a8fe8434ec84fb16944a3ba00"
+      },
+      {
+        "path": "scripts/record_session_corpus.py",
+        "sha256_lf": "87eefc41e778b70e5efe1a26fd10b1374dd2f3957270cec2fdd82536f8007d0a"
+      },
+      {
+        "path": "scripts/replay_session.py",
+        "sha256_lf": "a6aa8481ade68c6c9b5235c679e679272ce156978679b9e87414889c627c88bc"
+      },
+      {
+        "path": "scripts/report_provenance.py",
+        "sha256_lf": "99a58e22b963b79d5e3e08c5753536971f3ae84d22b9346d961f5b79eccdb834"
+      },
+      {
+        "path": "scripts/request_grammar.py",
+        "sha256_lf": "0ecc0357c32a55c0738601070b3e063835973a2abb0824ecc069aa212c15d0b9"
+      },
+      {
+        "path": "scripts/resolver.py",
+        "sha256_lf": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48"
+      },
+      {
+        "path": "scripts/retraction_radius.py",
+        "sha256_lf": "eb874e6e4d38a5537391d0e5283653c65ac8116dc9185b4e9e33769cc224652b"
+      },
+      {
+        "path": "scripts/retrieval.py",
+        "sha256_lf": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed"
+      },
+      {
+        "path": "scripts/run_plain_gate.py",
+        "sha256_lf": "4a411c7415b57b9e14811a3df9bdd43ea548c7a7909f7c8278a5178b26741981"
+      },
+      {
+        "path": "scripts/run_session_gate.py",
+        "sha256_lf": "10e4ce0bbd2a9b3337b31e3e088d02a061df92e30215da4fda438d372d137a4e"
+      },
+      {
+        "path": "scripts/sample_goedel_pset.py",
+        "sha256_lf": "9a33dac815562078c3ef67015cbce367095a46d474056eb1112cc8ca33c55150"
+      },
+      {
+        "path": "scripts/seed_appends.py",
+        "sha256_lf": "89f7fdd1c505ed52d21bc13b7e8112bacd38794532bed616aecde30e155d79ef"
+      },
+      {
+        "path": "scripts/seed_calculus.py",
+        "sha256_lf": "cd290433b922e6d218b51fd99bc9a33de39093d944c3d35c482f401262b497c0"
+      },
+      {
+        "path": "scripts/seed_chemistry.py",
+        "sha256_lf": "68b5c0e54fb924fb0394b5f22f6b217cf8399379c2c834e85c2ed771bd1e9b89"
+      },
+      {
+        "path": "scripts/seed_closure_targets.py",
+        "sha256_lf": "828a3a9b059dd7617f7f40a96bf16dd27eeb2fee68bfd2817ae6c653ad339944"
+      },
+      {
+        "path": "scripts/seed_closure_worlds.py",
+        "sha256_lf": "e164280681897ba939a62ebe9c30e4dabe06ddd51b3f1da01e539cc1bea43ac5"
+      },
+      {
+        "path": "scripts/seed_diffgeo.py",
+        "sha256_lf": "66b8d2ba590a3edb64bc60c5e77c061b36daf016b05ae19139e1c00d38956adb"
+      },
+      {
+        "path": "scripts/seed_economics.py",
+        "sha256_lf": "0ea014cfb2dc5b0241c8dba65a9294f12360f209d1aae04f1fe732b01ef29b09"
+      },
+      {
+        "path": "scripts/seed_goedel_pset.py",
+        "sha256_lf": "3ecb451fa5046303434837e7ad443eb89507eafc80936710eb3b70f31ed696bd"
+      },
+      {
+        "path": "scripts/seed_infotheory.py",
+        "sha256_lf": "b61e556ea38eec699f0c50018bb1d02fdb2f6cef4f083d53d770abd4166d4912"
+      },
+      {
+        "path": "scripts/seed_ingested_arithmetic.py",
+        "sha256_lf": "0eddcd248f44b1ef6559b935c77a6aa92484d2eaef16136cb9b3877e1023c285"
+      },
+      {
+        "path": "scripts/seed_lean_workbook.py",
+        "sha256_lf": "32ec9a68ec835614ef5f0eb7ac9b6b554b8de48d6df49232d0c5c34d7b3838f3"
+      },
+      {
+        "path": "scripts/seed_logic.py",
+        "sha256_lf": "6bc73eb4e42849ad91c06ce0315385634956f1deb592c703aae7b5451edd7c98"
+      },
+      {
+        "path": "scripts/seed_minif2f.py",
+        "sha256_lf": "de16dcabd6863585f913aeb183b30d7bbede73e4a33540a7ad12c7047b34435c"
+      },
+      {
+        "path": "scripts/seed_ml.py",
+        "sha256_lf": "6850bc876f27bf93ede186be77b1c41cd60145801702f7371068d56cd0931f87"
+      },
+      {
+        "path": "scripts/seed_morphology.py",
+        "sha256_lf": "ccd9ba13c71127e6b6dfaddcaea60f2a4e997a9c73309c326998f11ad4475976"
+      },
+      {
+        "path": "scripts/seed_number_theory.py",
+        "sha256_lf": "ac2eedbe9478a5325305642a2978b829bb31f595a9d3f47a08100cfd66a3119a"
+      },
+      {
+        "path": "scripts/seed_numgraph.py",
+        "sha256_lf": "928f70f9c93d488cacbd3a71f0927e6f22c673ea8fc1ca47f61cc03b1b7e50d0"
+      },
+      {
+        "path": "scripts/seed_physics.py",
+        "sha256_lf": "35fc912e6a67d97da18ff567f56e0e847126c33a7e0b45fa48c2520f50f131f3"
+      },
+      {
+        "path": "scripts/seed_programming.py",
+        "sha256_lf": "5ade31aa060916c435e4c90e4c4036e62eaa539ca741767a7f545b28a0f1886f"
+      },
+      {
+        "path": "scripts/seed_provability.py",
+        "sha256_lf": "7a7092b74e372a25280e46dac1d535c856320972ab91ee755b315cf80689a752"
+      },
+      {
+        "path": "scripts/seed_retraction_closure.py",
+        "sha256_lf": "169a00586002b5171ed7c9aba2c72fa3e719417cadda29f7b8348a3f81db10c8"
+      },
+      {
+        "path": "scripts/seed_statistics.py",
+        "sha256_lf": "d3d13dbe1025e4abbc300bef196ae470f6eb3555883508c86c38da833965620b"
+      },
+      {
+        "path": "scripts/seed_temporal.py",
+        "sha256_lf": "b9407127c63c0b2518d04d78b1407ca4b7937fd935a2b290ae4ce996f0e9c88d"
+      },
+      {
+        "path": "scripts/seed_topology.py",
+        "sha256_lf": "f6fb60cf139765b512f508816aa3cbd43f850e14449751ace3dfd7b8942ee262"
+      },
+      {
+        "path": "scripts/seed_trigonometry.py",
+        "sha256_lf": "1a41daf60958b37c0b3295bbd61c7a932f06a8a0d15dca04bb61e24c18c30e80"
+      },
+      {
+        "path": "scripts/serve_chat.py",
+        "sha256_lf": "c07d878767ff40efcff5be47f8b8e3a765a653239ea65173e574ffd1b751d74d"
+      },
+      {
+        "path": "scripts/session_keys.py",
+        "sha256_lf": "74d355d62c322a4d745b693b8b7d914473c81b75ff4a650f8e89a2aa03961cf2"
+      },
+      {
+        "path": "scripts/session_ledger.py",
+        "sha256_lf": "079d9aea5fd71c2382e8eecbd95522723640c3ffd2438ac59a607d0d56b91318"
+      },
+      {
+        "path": "scripts/session_recorder.py",
+        "sha256_lf": "5a53d2f683da0c9a0de723dce36006cbf9dd80b61c5826fc2d828f06cf3688a3"
+      },
+      {
+        "path": "scripts/session_run.py",
+        "sha256_lf": "3db4a79f2a800cc926e59b47842b5904fe806a77bb84afd9f9380e1f9f48ff3a"
+      },
+      {
+        "path": "scripts/session_state.py",
+        "sha256_lf": "a204b88dce89da64d4673cedbe247611d3b8a6fcbd95a8da87a061a3853acc7c"
+      },
+      {
+        "path": "scripts/specialize.py",
+        "sha256_lf": "17a0d35f9217026f3bab195e79f90fbf376b8f88f35a2ed09ac7f7859b68431b"
+      },
+      {
+        "path": "scripts/story.py",
+        "sha256_lf": "9e4a4b37e5e298b0996ecbb61a21dd7fe44b7184646f694260c3e313ea3c759c"
+      },
+      {
+        "path": "scripts/supposition.py",
+        "sha256_lf": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
+      },
+      {
+        "path": "scripts/text_keys.py",
+        "sha256_lf": "63ae081e0d2168f5b9e35fad9573c0174c87efba1e11b1e6348a97c7f53ff1a3"
+      },
+      {
+        "path": "scripts/theory_of_mind.py",
+        "sha256_lf": "10cb865d4d6cfef057ab907f207fa523bd282f4640da9894f778792f37ef8037"
+      },
+      {
+        "path": "scripts/time_tests.py",
+        "sha256_lf": "e5aba6b7ed58c8a359ec7c0f0b1e925638797fcc5ffc9cfc70ec41af2a764a55"
+      },
+      {
+        "path": "scripts/trace_to_triples.py",
+        "sha256_lf": "ee56d1510e7f53e7808651414ac25c9d9d5e8cd4f0714af19eb4b7eef08c9865"
+      },
+      {
+        "path": "scripts/transliteration_served_diff.py",
+        "sha256_lf": "059a7590a6b91d1d5813d002ec44d9765b0b51c79a9e3e3e43d42fd7b178b556"
+      },
+      {
+        "path": "scripts/validate_nodes.py",
+        "sha256_lf": "5bb5261cc81c0cd0f784385507aadcedf81eecbcba084de8b7d13c38d4106eac"
+      },
+      {
+        "path": "scripts/verify_slice.py",
+        "sha256_lf": "207775dc29ff9ae2029b30b7661b201605ec309812eea741a34224253a5930e5"
+      },
+      {
+        "path": "scripts/veto_full_cross_rerun.py",
+        "sha256_lf": "79b07d32968bb60732b88ca56973de7e2dec7e057a640ec18f9d4d5043b2d53d"
+      },
+      {
+        "path": "scripts/veto_inventory.py",
+        "sha256_lf": "ad6e0c2fdcd5643c720ef03b743acf56dc2f5520e0fc4e7b34d22a612c517c58"
+      },
+      {
+        "path": "scripts/veto_score.py",
+        "sha256_lf": "ee81091ba4f98d8dedd5049da19626ad7237fc730834f11512c30342cdc092ab"
+      },
+      {
+        "path": "scripts/witness_fragment_census.py",
+        "sha256_lf": "515c0b583089be9d8f54294c86ef7440a55e6d7f39d21adae7e5736049d6b451"
+      },
+      {
+        "path": "scripts/witness_obligation.py",
+        "sha256_lf": "a91b1c9c5e0831723bf618ac99b86f93c6ff4036ff5984b31e4b9d809805cc00"
+      },
+      {
+        "path": "scripts/witness_pilot.py",
+        "sha256_lf": "f82b7c31240850d8e329703f7b18fca105a8eb97247dd5c7caad3cb419324086"
+      },
+      {
+        "path": "scripts/wordnet_eval.py",
+        "sha256_lf": "4a574940b51d1fca6fe47a4903a97fe292b0031e197b35107cbcc51bb2adc179"
+      },
+      {
+        "path": "scripts/wordnet_store.py",
+        "sha256_lf": "a17e64a9744443ef97bcdb92c7117de509ee0a2a245547250ddffdafe56a00b7"
+      },
+      {
+        "path": "scripts/write_conformance_prereg.py",
+        "sha256_lf": "3892e51ebb72d6314b2236b029ccf9046e0cfc735671bfc7e93e0b661f06c5ea"
+      },
+      {
+        "path": "scripts/write_conformance_register.py",
+        "sha256_lf": "40da183ca99d021d44cc5d249ccce2072630b87838862a7ac118c9543de7142a"
+      },
+      {
+        "path": "scripts/write_stage.py",
+        "sha256_lf": "786d0e57d8a1adb137e568ef7add290aa5916c1f634599fb7a703d7e1a1adbd6"
+      }
+    ],
+    "emitted_at_generation": true
+  },
+  "amendment": {
+    "amendment": 2,
+    "dated": "2026-08-27",
+    "authority": "ROADMAP-v0.21 §4.0(1) — an arm that never executed as designed is a bug, not a reading",
+    "defect": "I2 matched an artifact mapping only when its key set was EXACTLY the site's. A site whose mapping gains one conditional key therefore matched nothing, and the census declared recheck_procedure `none` for kinds with committed instances.",
+    "repair": "I2b: a proper-superset match, counted beside the exact one and never instead of it, plus an instance-side recall probe so the exact rule's brittleness is a published number",
+    "what_did_not_change": [
+      "the four marking predicates RM-A/B/C/D",
+      "the exclusion rules X1/X2 and the seeded-exclusion check",
+      "the site-side recall probe",
+      "the route resolution rule"
+    ],
+    "previous_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+    "new_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+    "diff_shape": {
+      "kinds_added": [],
+      "kinds_removed": [],
+      "counts_moved": {},
+      "declared_recheck_procedure_moved": []
+    }
+  }
+}

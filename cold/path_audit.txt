@@ -1,0 +1,74 @@
+COLD RECEIPT — path_audit
+=========================
+
+DESIGN-cold-receipt.md §6 (C2): PATH alone is not the audit. §1's own
+exhibit reaches scripts/ through Path(__file__).parents[1] and
+sys.path.insert, which no PATH setting anywhere would have stopped.
+Two assertions therefore, not one.
+
+repository root : <repo>
+program tree    : renamed to scripts.renamed-away-by-cold-harness
+scripts/ exists : False
+cwd             : ~\AppData\Local\Temp\cold-receipt-jt52u69y\good (inside repo: False)
+
+interpreter
+-----------
+  executable             ~\AppData\Roaming\uv\python\cpython-3.13-windows-x86_64-none\python.exe
+  version                3.13.12
+  prefix                 ~\AppData\Roaming\uv\python\cpython-3.13-windows-x86_64-none
+  base_prefix            ~\AppData\Roaming\uv\python\cpython-3.13-windows-x86_64-none
+  flags_no_site          True
+  flags_isolated         True
+  inside_repository      False
+
+ASSERTION 1 — scripts/ is unresolvable
+--------------------------------------
+  holds: True
+  import serve_chat: imported=False
+      Traceback (most recent call last):
+        File "<repo>\harness\path_probe.py", line 105, in main
+          __import__(name)
+          ~~~~~~~~~~^^^^^^
+      ModuleNotFoundError: No module named 'serve_chat'
+  import harness: imported=False
+      Traceback (most recent call last):
+        File "<repo>\harness\path_probe.py", line 105, in main
+          __import__(name)
+          ~~~~~~~~~~^^^^^^
+      ModuleNotFoundError: No module named 'harness'
+  import session_ledger: imported=False
+      Traceback (most recent call last):
+        File "<repo>\harness\path_probe.py", line 105, in main
+          __import__(name)
+          ~~~~~~~~~~^^^^^^
+      ModuleNotFoundError: No module named 'session_ledger'
+
+ASSERTION 2 — no sys.path entry resolves inside the repository
+--------------------------------------------------------------
+  holds: True
+  inside_repo=False ~\AppData\Roaming\uv\python\cpython-3.13.12-windows-x86_64-none\python313.zip
+  inside_repo=False ~\AppData\Roaming\uv\python\cpython-3.13.12-windows-x86_64-none\DLLs
+  inside_repo=False ~\AppData\Roaming\uv\python\cpython-3.13.12-windows-x86_64-none\Lib
+  inside_repo=False ~\AppData\Roaming\uv\python\cpython-3.13.12-windows-x86_64-none
+
+PATH entries (with listing digests)
+-----------------------------------
+  inside_repo=False afa22a0b531a749d ~\.elan\toolchains\leanprover--lean4---v4.32.2\bin
+  inside_repo=False a63ab4f2e2728788 ~\AppData\Roaming\uv\python\cpython-3.13.12-windows-x86_64-none
+
+dependencies resolved and digested
+----------------------------------
+  lean.exe     exists=True sha256=567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7
+      ~\.elan\toolchains\leanprover--lean4---v4.32.2\bin\lean.exe
+  interpreter  exists=True sha256=3e191df011bfee78f4129f9914936003f41105cdcbfd9c134be6c135e0f7b0df
+      ~\AppData\Roaming\uv\python\cpython-3.13.12-windows-x86_64-none\python.exe
+
+BOTH ASSERTIONS HOLD: True
+
+What this harness does NOT exclude (§6, named so no reader has to
+find it): the Windows registry, %USERPROFILE% (and therefore ~/.elan,
+where the checker lives), .runtime/, any system-wide Python and its
+site-packages, every ambient DLL search path, and the harness's own
+interpreter. A container would exclude most of this list. This one
+does not, and every SURVIVES in this census is scoped to that weaker
+exclusion.

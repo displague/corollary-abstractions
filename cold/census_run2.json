@@ -1,0 +1,4053 @@
+{
+  "schema": "cold-census/1",
+  "design": "docs/DESIGN-cold-receipt.md",
+  "run": {
+    "executable_kind": {
+      "kind_id": "conformance_ce3_supplement:decide_both_directions",
+      "discovered_by": "declared_recheck_procedure.type == 'raw_checker_invocation' AND cold/reconstruction_rule.json names this kind_id",
+      "candidates_declaring_raw_checker_invocation": [
+        "conformance_ce3_supplement:decide_both_directions"
+      ]
+    },
+    "started_utc_epoch": 1787854470,
+    "elapsed_seconds": 107.0,
+    "bundle_root": "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36",
+    "platform": "win32"
+  },
+  "scope": {
+    "harness_shape": "clean-PATH subprocess environment, not a container",
+    "why_not_a_container": "the receipts pin a digest of a Windows binary: the C-E3 supplement records binary_sha256 over lean.exe and the three lean4 verdicts record platform win32. A Linux container runs a different binary with a different digest, so a re-check inside one would be a re-check of different receipts (§6).",
+    "weaker_than_a_container": true,
+    "not_excluded": [
+      "the Windows registry",
+      "%USERPROFILE% (and therefore ~/.elan, where the checker lives)",
+      ".runtime/",
+      "any system-wide Python and its site-packages",
+      "every ambient DLL search path",
+      "the harness's own interpreter"
+    ],
+    "interpreter": {
+      "executable": "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+      "source": "sys.base_prefix",
+      "inside_repository": false
+    },
+    "interpreter_note": "the harness declines to use this repository's .venv: sys.base_prefix points outside the repository root, and -S -I keeps every site-packages off the child's path. It is still program_configured under §8 — no digest of it is pinned anywhere — and it is listed above rather than assumed away.",
+    "dependency_dirs_on_path": [
+      "~\\.elan\\toolchains\\leanprover--lean4---v4.32.2\\bin",
+      "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none"
+    ],
+    "working_tree": {
+      "digest_before_rename": {
+        "files": 1208,
+        "digest": "ee13f590eb893ad2913c883a6056f7fd4e10f591305807486c1400f5bf55e539",
+        "excluded_top_level": [
+          ".git",
+          ".venv",
+          ".worktrees",
+          "cold",
+          "scripts.renamed-away-by-cold-harness"
+        ],
+        "excluded_by_name": [
+          "__pycache__"
+        ],
+        "manifest_note": "M5: the file:digest list the summary digest is computed FROM, so a test can re-derive it instead of believing this report",
+        "manifest_file": "cold/evidence_run2/tree_manifest_before.json"
+      },
+      "digest_after_restore": {
+        "files": 1208,
+        "digest": "ee13f590eb893ad2913c883a6056f7fd4e10f591305807486c1400f5bf55e539",
+        "excluded_top_level": [
+          ".git",
+          ".venv",
+          ".worktrees",
+          "cold",
+          "scripts.renamed-away-by-cold-harness"
+        ],
+        "excluded_by_name": [
+          "__pycache__"
+        ],
+        "manifest_note": "M5: the file:digest list the summary digest is computed FROM, so a test can re-derive it instead of believing this report",
+        "manifest_file": "cold/evidence_run2/tree_manifest_after.json"
+      },
+      "byte_identical": true,
+      "restore_path": "the rename is undone in a finally block and the tree is re-digested against the pre-rename value; a mismatch is a harness failure reported as such, never absorbed (§6)",
+      "program_tree_restored": true
+    }
+  },
+  "census_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+  "pin_table_ref": {
+    "artifact": "experiments/cold_registry_census.json",
+    "field": "pin_table",
+    "note": "DELTA (H1): the draft's pin_audit_ref splits into this reference-only pointer and pin_divergence[]; neither is a verdict input"
+  },
+  "pin_divergence": [
+    {
+      "pin_a": "prover/**/lean-toolchain",
+      "pin_b": "prover/**/lean-toolchain",
+      "values": {
+        "prover/lean/ingested/lean-toolchain": "leanprover/lean4:v4.32.2",
+        "prover/lean/normalizer/lean-toolchain": "leanprover/lean4:v4.32.2",
+        "prover/lean/proofcurve/lean-toolchain": "leanprover/lean4:v4.29.1",
+        "prover/lean/session/lean-toolchain": "leanprover/lean4:v4.32.2"
+      },
+      "adjudicated": false,
+      "note": "B9 cedes version drift to the pin audit, and DESIGN-cold-receipt.md §4 records that the pin audit is parked: this is recorded, not resolved"
+    }
+  ],
+  "counts": {
+    "kinds": 19,
+    "SURVIVES": 1,
+    "NEEDS-PROGRAM": 10,
+    "UNTESTED": 8
+  },
+  "gate": {
+    "B1": {
+      "clause": "unmapped emitting routes = 0",
+      "value": 0,
+      "green": true
+    },
+    "B2": {
+      "clause": ">=1 kind SURVIVES",
+      "value": 1,
+      "green": true,
+      "kinds": [
+        "conformance_ce3_supplement:decide_both_directions"
+      ]
+    },
+    "B3": {
+      "clause": "tamper 3x per kind 100% FAIL",
+      "kinds_in_denominator": 1,
+      "kind_in_denominator": "conformance_ce3_supplement:decide_both_directions",
+      "kinds_with_no_tamper_arm": 18,
+      "scope_note": "this row scores the one kind whose procedure executed program-absent. It says nothing about the other 18, which read UNTESTED for tamper because no procedure ran on them.",
+      "mutations_scored": 3,
+      "mutations_discarded": 0,
+      "failed": 3,
+      "green": true
+    },
+    "B4": {
+      "clause": "omission FAIL LOUD naming the missing dependency",
+      "kinds_in_denominator": 1,
+      "kind_in_denominator": "conformance_ce3_supplement:decide_both_directions",
+      "scope_note": "one kind invoked a removable dependency; every other kind reads §7's M5 UNTESTED escape because no procedure ran",
+      "failed_loud": true,
+      "named_the_dependency": true,
+      "silent_pass": false,
+      "green": true,
+      "voids_the_harness_if_silent": true
+    },
+    "B5": {
+      "clause": "sham-checker SURVIVES count = 0",
+      "kinds_in_denominator": 1,
+      "kind_in_denominator": "conformance_ce3_supplement:decide_both_directions",
+      "scope_note": "one kind invoked an adjudicating dependency for the stub to replace; the arm is silent about the other 18",
+      "value": 0,
+      "green": true
+    },
+    "B6": {
+      "clause": "chance measured: 200 scrambled bundles; if 0 of 200 pass, publish the 1.5% rule-of-three upper bound as the chance rate",
+      "bundles": 200,
+      "passed": 0,
+      "rule_of_three_upper_bound": 0.015,
+      "upper_bound_is_not_a_measured_rate": "an upper bound on a chance rate, never a measured rate, and never quoted as though 0 were the finding",
+      "green": true
+    },
+    "B7": {
+      "clause": "100% NEEDS-PROGRAM carry confirmed_by_removal",
+      "value": 10,
+      "denominator": 10,
+      "green": true,
+      "note": "a correct NEEDS-PROGRAM scores as a hit, so the instrument has no incentive to over-read SURVIVES"
+    },
+    "B8": {
+      "clause": ">=90% SURVIVES on first run voids pending re-execution under a path_audit carrying BOTH of §6's assertions (DELTA on the draft's empty-PATH remedy, C2)",
+      "survives_fraction": 0.0526,
+      "denominator": 19,
+      "applies": true,
+      "denominator_note": "M6: the clause applies only at >=5 kinds; below that a single SURVIVES would trip a percentage that means nothing, and B2's floor of one must never be what fires B8",
+      "green": true
+    },
+    "B9": {
+      "clause": "version drift ceded to the pin audit, reference only",
+      "green": true,
+      "pin_divergence": [
+        {
+          "pin_a": "prover/**/lean-toolchain",
+          "pin_b": "prover/**/lean-toolchain",
+          "values": {
+            "prover/lean/ingested/lean-toolchain": "leanprover/lean4:v4.32.2",
+            "prover/lean/normalizer/lean-toolchain": "leanprover/lean4:v4.32.2",
+            "prover/lean/proofcurve/lean-toolchain": "leanprover/lean4:v4.29.1",
+            "prover/lean/session/lean-toolchain": "leanprover/lean4:v4.32.2"
+          },
+          "adjudicated": false,
+          "note": "B9 cedes version drift to the pin audit, and DESIGN-cold-receipt.md §4 records that the pin audit is parked: this is recorded, not resolved"
+        }
+      ],
+      "note": "§4: the cession is a DEFERRAL to a lane that is not running (RATCHET's pin audit is parked), not a hand-off to an instrument that will adjudicate it"
+    },
+    "B10": {
+      "clause": "census_seal fixed before the harness runs",
+      "seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+      "sealed_at_commit": "d2ac619a097a698964627880277c4641eb74b713",
+      "harness_first_commit": "d4b47538714ca089f6f5b8ce544aa54afb8ad571",
+      "registry_uncommitted_at_run": false,
+      "how_checked": "the seal the harness read is the committed one, and the registry had no uncommitted modification when the run began",
+      "w0_ordering_at_first_seal": {
+        "statement": "at the commit that first sealed this registry, no file under harness/ existed — the WITNESS W0 ordering",
+        "first_seal_commit": "d930150",
+        "harness_files_at_that_commit": []
+      },
+      "green": true,
+      "census_misses": [
+        {
+          "kind_id": "retraction_radius:certify",
+          "miss": "declared program_replay, but the procedure cannot run even with the program present",
+          "true_blocking_dependency": [
+            "jsonschema"
+          ],
+          "consequence": "verdict reads UNTESTED, not NEEDS-PROGRAM (B10: the declared and executed procedures disagree)"
+        },
+        {
+          "kind_id": "foreign_voice:receipt",
+          "miss": "run 1's exact key-set instance rule read 0 committed instances; a proper-superset match finds 2313",
+          "found_after_seal": "6c575c70dbbdd7f79245a90902b84b0d1dd74e13176e2f878ece4f1b91b00ded",
+          "repaired_in": "registry amendment 2 (I2b)",
+          "consequence": "the kind's declared recheck procedure moved from `none` to `program_replay`, and it is adjudicated by the removal arm in this run rather than skipped"
+        },
+        {
+          "kind_id": "serve_chat:_resolution_receipt",
+          "miss": "run 1's exact key-set instance rule read 0 committed instances; a proper-superset match finds 160",
+          "found_after_seal": "6c575c70dbbdd7f79245a90902b84b0d1dd74e13176e2f878ece4f1b91b00ded",
+          "repaired_in": "registry amendment 2 (I2b)",
+          "consequence": "the kind's declared recheck procedure moved from `none` to `program_replay`, and it is adjudicated by the removal arm in this run rather than skipped"
+        }
+      ],
+      "census_miss_count": 3
+    },
+    "B11": {
+      "clause": "any SURVIVES resting on a program_configured dependency downgrades to UNTESTED",
+      "downgrades_applied": [],
+      "green": true,
+      "note": "B11 cannot go red; it can only move verdicts. It is green when the downgrade was applied mechanically, which the harness does per kind from the bytes."
+    }
+  },
+  "voiding_sentence": {
+    "text": "If any receipt kind is annotated SURVIVES while the pinned checker is replaced by the accept-all stub, the harness is measuring bundle presence rather than verification, and the claim is void for every kind in this census",
+    "fired": false
+  },
+  "kinds": [
+    {
+      "kind_id": "build_throughput_tasks:exact_value_task",
+      "emitting_routes": [
+        {
+          "route_id": "build_throughput_tasks.exact_value_task",
+          "writer_file": "scripts/build_throughput_tasks.py",
+          "writer_symbol": "exact_value_task",
+          "line": 653,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "build_throughput_tasks.exact_value_task",
+          "writer_file": "scripts/build_throughput_tasks.py",
+          "writer_symbol": "exact_value_task",
+          "line": 666,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "build_throughput_tasks"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 2,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "build_throughput_tasks": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import build_throughput_tasks"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "build_throughput_tasks": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import build_throughput_tasks"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import build_throughput_tasks\nModuleNotFoundError: No module named 'build_throughput_tasks'",
+            "import_succeeded": false,
+            "missing_module": "build_throughput_tasks"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/build_throughput_tasks.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import build_throughput_tasks"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import build_throughput_tasks\nModuleNotFoundError: No module named 'build_throughput_tasks'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "closure-receipt/1",
+      "emitting_routes": [
+        {
+          "route_id": "build_throughput_tasks.closure_tasks",
+          "writer_file": "scripts/build_throughput_tasks.py",
+          "writer_symbol": "closure_tasks",
+          "line": 906,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "closure_query.query",
+          "writer_file": "scripts/closure_query.py",
+          "writer_symbol": "query",
+          "line": 288,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": true,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "build_throughput_tasks",
+            "closure_query"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 2,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "build_throughput_tasks": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import build_throughput_tasks"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          },
+          "closure_query": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import closure_query"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "build_throughput_tasks": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import build_throughput_tasks"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import build_throughput_tasks\nModuleNotFoundError: No module named 'build_throughput_tasks'",
+            "import_succeeded": false,
+            "missing_module": "build_throughput_tasks"
+          },
+          "closure_query": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import closure_query"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import closure_query\nModuleNotFoundError: No module named 'closure_query'",
+            "import_succeeded": false,
+            "missing_module": "closure_query"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/build_throughput_tasks.py",
+          "scripts/closure_query.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import build_throughput_tasks"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import build_throughput_tasks\nModuleNotFoundError: No module named 'build_throughput_tasks'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "closure_query:query",
+      "emitting_routes": [
+        {
+          "route_id": "closure_query.query",
+          "writer_file": "scripts/closure_query.py",
+          "writer_symbol": "query",
+          "line": 288,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": true,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "closure_query"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 1,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "closure_query": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import closure_query"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "closure_query": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import closure_query"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import closure_query\nModuleNotFoundError: No module named 'closure_query'",
+            "import_succeeded": false,
+            "missing_module": "closure_query"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/closure_query.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import closure_query"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import closure_query\nModuleNotFoundError: No module named 'closure_query'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "conformance_ce3_supplement:decide_both_directions",
+      "emitting_routes": [
+        {
+          "route_id": "conformance_ce3_supplement.decide_both_directions",
+          "writer_file": "scripts/conformance_ce3_supplement.py",
+          "writer_symbol": "decide_both_directions",
+          "line": 447,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "raw_checker_invocation",
+        "basis": "the artifact holding a committed instance carries a self-contained recheck descriptor: binary_sha256"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [
+        {
+          "path": "receipts.json",
+          "sha256": "09c3ac095be507cc518f95008d69679a2c49291531ca571378486fb5eadf56a0",
+          "size_bytes": 85298
+        },
+        {
+          "path": "reconstruction_rule.json",
+          "sha256": "b3c8fa8de1f096ce0037fa0023cc4aa53fee8e881e8eb5f707b5815952add62f",
+          "size_bytes": 9622
+        },
+        {
+          "path": "census.json",
+          "sha256": "8030419ab33171eaa6b9d651a7f80060a4d4594ee3f17e762204007632ebf1cc",
+          "size_bytes": 134300
+        }
+      ],
+      "external_deps": [
+        {
+          "name": "lean.exe",
+          "pin_hash": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+          "role": "the pinned external checker the C-E3 probes invoke by path",
+          "adjudicating": true,
+          "provenance": "third_party_pinned",
+          "provenance_test": {
+            "a_pin_is_over_the_executing_artifact": true,
+            "b_pin_identifies_a_third_partys_release": true,
+            "recomputed_sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+            "assigner": "the harness, from the bytes"
+          },
+          "selection_provenance": "repository_file",
+          "selection_provenance_assigner": "CR-P0",
+          "b11_note": "B11 downgrades on `provenance`, never on `selection_provenance`: §8 split the draft's single tag because lean.exe satisfied both values of it"
+        }
+      ],
+      "tamper_result": {
+        "verdict": "FAIL_ON_ALL_MUTATIONS",
+        "mutations_scored": 3,
+        "mutations_discarded": 0,
+        "mutations_failed": 3,
+        "per_mutation": {
+          "content": {
+            "outcome": "FAIL",
+            "failed_checks": [
+              "negative_digest",
+              "negative_exit_code",
+              "positive_digest",
+              "positive_exit_code",
+              "verdict"
+            ]
+          },
+          "digest": {
+            "outcome": "FAIL",
+            "failed_checks": [
+              "negative_exit_code",
+              "positive_exit_code",
+              "verdict"
+            ]
+          },
+          "binding": {
+            "outcome": "FAIL",
+            "failed_checks": [
+              "negative_digest",
+              "positive_digest"
+            ]
+          }
+        }
+      },
+      "omission_result": {
+        "verdict": "FAIL_LOUD",
+        "removed_dependency": "lean.exe",
+        "exit_code": 2,
+        "named_the_dependency": true
+      },
+      "sham_result": {
+        "verdict": "NO_SURVIVOR",
+        "survives_count": 0,
+        "runs": {
+          "real_checker_good_bundle": "PASS",
+          "real_checker_known_bad_bundle": "FAIL",
+          "sham_checker_good_bundle": "FAIL",
+          "sham_checker_known_bad_bundle": "FAIL"
+        },
+        "mechanism_ref": "arms.sham.mechanism"
+      },
+      "executed_recheck_procedure": "raw_checker_invocation",
+      "executor": "harness/probe_recheck.py",
+      "verdict": "SURVIVES",
+      "b11_downgrade_applied": false,
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-I",
+          "<repo>\\harness\\probe_recheck.py",
+          "--bundle",
+          "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\good",
+          "--checker-argv",
+          "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
+          "--out",
+          "<repo>\\cold\\evidence_run2\\recheck_good.json"
+        ],
+        "exit_code": 0,
+        "stdout_head": "PASS rows 25/25 invocations 50 elapsed 17.06s",
+        "rows_ok": 25,
+        "rows_evaluated": 25,
+        "checker_invocations": 50,
+        "elapsed_seconds": 17.06,
+        "evidence_file": "cold/evidence/recheck_good.json"
+      }
+    },
+    {
+      "kind_id": "external_verifier:main",
+      "emitting_routes": [
+        {
+          "route_id": "external_verifier.main",
+          "writer_file": "scripts/external_verifier.py",
+          "writer_symbol": "main",
+          "line": 832,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "external_verifier"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 1,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "external_verifier": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import external_verifier"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "external_verifier": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import external_verifier"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import external_verifier\nModuleNotFoundError: No module named 'external_verifier'",
+            "import_succeeded": false,
+            "missing_module": "external_verifier"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/external_verifier.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import external_verifier"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import external_verifier\nModuleNotFoundError: No module named 'external_verifier'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "foreign_voice:receipt",
+      "emitting_routes": [
+        {
+          "route_id": "foreign_voice.Rendering.receipt",
+          "writer_file": "scripts/foreign_voice.py",
+          "writer_symbol": "Rendering.receipt",
+          "line": 155,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "foreign_voice"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 1,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "foreign_voice": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import foreign_voice"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "foreign_voice": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import foreign_voice"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import foreign_voice\nModuleNotFoundError: No module named 'foreign_voice'",
+            "import_succeeded": false,
+            "missing_module": "foreign_voice"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/foreign_voice.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import foreign_voice"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import foreign_voice\nModuleNotFoundError: No module named 'foreign_voice'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "harness:_route_conform",
+      "emitting_routes": [
+        {
+          "route_id": "harness._route_conform",
+          "writer_file": "scripts/harness.py",
+          "writer_symbol": "_route_conform",
+          "line": 2281,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "none",
+      "verdict": "UNTESTED",
+      "verdict_evidence": {
+        "reason": "the census found no committed instance of this kind under either the exact or the superset rule, so there was no receipt to re-check"
+      }
+    },
+    {
+      "kind_id": "harness:_route_ownership",
+      "emitting_routes": [
+        {
+          "route_id": "harness._route_ownership",
+          "writer_file": "scripts/harness.py",
+          "writer_symbol": "_route_ownership",
+          "line": 1150,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "none",
+      "verdict": "UNTESTED",
+      "verdict_evidence": {
+        "reason": "the census found no committed instance of this kind under either the exact or the superset rule, so there was no receipt to re-check"
+      }
+    },
+    {
+      "kind_id": "harness:_route_twin",
+      "emitting_routes": [
+        {
+          "route_id": "harness._route_twin",
+          "writer_file": "scripts/harness.py",
+          "writer_symbol": "_route_twin",
+          "line": 1898,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "harness"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 1,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "harness": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import harness"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "harness": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import harness"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import harness\nModuleNotFoundError: No module named 'harness'",
+            "import_succeeded": false,
+            "missing_module": "harness"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/harness.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import harness"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import harness\nModuleNotFoundError: No module named 'harness'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "measure_when_to_ask:_oewn_samples",
+      "emitting_routes": [
+        {
+          "route_id": "measure_when_to_ask._oewn_samples",
+          "writer_file": "scripts/measure_when_to_ask.py",
+          "writer_symbol": "_oewn_samples",
+          "line": 939,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "measure_when_to_ask"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 1,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "measure_when_to_ask": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import measure_when_to_ask"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "measure_when_to_ask": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import measure_when_to_ask"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import measure_when_to_ask\nModuleNotFoundError: No module named 'measure_when_to_ask'",
+            "import_succeeded": false,
+            "missing_module": "measure_when_to_ask"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/measure_when_to_ask.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import measure_when_to_ask"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import measure_when_to_ask\nModuleNotFoundError: No module named 'measure_when_to_ask'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "plain_router:_ask",
+      "emitting_routes": [
+        {
+          "route_id": "plain_router.PlainRouter._ask",
+          "writer_file": "scripts/plain_router.py",
+          "writer_symbol": "PlainRouter._ask",
+          "line": 280,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "none",
+      "verdict": "UNTESTED",
+      "verdict_evidence": {
+        "reason": "the census found no committed instance of this kind under either the exact or the superset rule, so there was no receipt to re-check"
+      }
+    },
+    {
+      "kind_id": "plain_router:_conditional",
+      "emitting_routes": [
+        {
+          "route_id": "plain_router.PlainRouter._conditional",
+          "writer_file": "scripts/plain_router.py",
+          "writer_symbol": "PlainRouter._conditional",
+          "line": 241,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "none",
+      "verdict": "UNTESTED",
+      "verdict_evidence": {
+        "reason": "the census found no committed instance of this kind under either the exact or the superset rule, so there was no receipt to re-check"
+      }
+    },
+    {
+      "kind_id": "retraction_radius:certify",
+      "emitting_routes": [
+        {
+          "route_id": "retraction_radius.certify",
+          "writer_file": "scripts/retraction_radius.py",
+          "writer_symbol": "certify",
+          "line": 207,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor (the descriptors present name the program tree: recheck_command(names-the-program-tree)), so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "radius_recheck"
+          ],
+          "selected_by": "recheck_descriptor",
+          "descriptor_commands": [
+            "python scripts/radius_recheck.py reports/radius/replay-1-recombination.cert.json",
+            "python scripts/radius_recheck.py reports/radius/replay-2-struct-wins.cert.json",
+            "python scripts/radius_recheck.py reports/radius/root-a-compression.cert.json",
+            "python scripts/radius_recheck.py reports/radius/root-b-decompositions.cert.json"
+          ],
+          "note": "the descriptor names what the recheck RUNS; removing the writer instead would have tested the wrong program"
+        },
+        "with_program_limb": {
+          "radius_recheck": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import radius_recheck"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import radius_recheck\n  File \"<repo>\\scripts\\radius_recheck.py\", line 58, in <module>\n    import jsonschema\nModuleNotFoundError: No module named 'jsonschema'",
+            "import_succeeded": false,
+            "missing_module": "jsonschema"
+          }
+        },
+        "program_absent_limb": {
+          "radius_recheck": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import radius_recheck"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import radius_recheck\nModuleNotFoundError: No module named 'radius_recheck'",
+            "import_succeeded": false,
+            "missing_module": "radius_recheck"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "UNTESTED",
+      "blocking_dependency": {
+        "name": [
+          "jsonschema"
+        ],
+        "role": "a dependency that is NOT this repository's code: the recheck could not run even with the program fully present",
+        "confirmed_by_removal": false,
+        "how_confirmed": "the with-program positive control FAILED, so the program-absent failure cannot be attributed to the removal. The true blocking dependency is named here instead.",
+        "is_program_configured": true
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import radius_recheck"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import radius_recheck\nModuleNotFoundError: No module named 'radius_recheck'",
+        "with_program_limb_succeeded": false,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "serve_chat:_evaluate_receipt",
+      "emitting_routes": [
+        {
+          "route_id": "serve_chat._evaluate_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_evaluate_receipt",
+          "line": 1080,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._evaluate_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_evaluate_receipt",
+          "line": 1084,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._evaluate_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_evaluate_receipt",
+          "line": 1085,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "serve_chat"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 3,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "serve_chat": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import serve_chat"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "serve_chat": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import serve_chat"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import serve_chat\nModuleNotFoundError: No module named 'serve_chat'",
+            "import_succeeded": false,
+            "missing_module": "serve_chat"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/serve_chat.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import serve_chat"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import serve_chat\nModuleNotFoundError: No module named 'serve_chat'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "serve_chat:_resolution_receipt",
+      "emitting_routes": [
+        {
+          "route_id": "serve_chat._resolution_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_resolution_receipt",
+          "line": 1023,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._resolution_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_resolution_receipt",
+          "line": 1029,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat._resolution_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_resolution_receipt",
+          "line": 1031,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": true,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "serve_chat"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 3,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "serve_chat": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import serve_chat"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "serve_chat": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import serve_chat"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import serve_chat\nModuleNotFoundError: No module named 'serve_chat'",
+            "import_succeeded": false,
+            "missing_module": "serve_chat"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/serve_chat.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import serve_chat"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import serve_chat\nModuleNotFoundError: No module named 'serve_chat'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "serve_chat:_story_receipt",
+      "emitting_routes": [
+        {
+          "route_id": "serve_chat._story_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "_story_receipt",
+          "line": 1099,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "none",
+      "verdict": "UNTESTED",
+      "verdict_evidence": {
+        "reason": "the census found no committed instance of this kind under either the exact or the superset rule, so there was no receipt to re-check"
+      }
+    },
+    {
+      "kind_id": "serve_chat:kernel_receipt",
+      "emitting_routes": [
+        {
+          "route_id": "belief",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1143,
+          "route_source": "dominating_guard"
+        },
+        {
+          "route_id": "supposition",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1143,
+          "route_source": "dominating_guard"
+        },
+        {
+          "route_id": "write_gate",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1145,
+          "route_source": "dominating_guard"
+        },
+        {
+          "route_id": "serve_chat.kernel_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "kernel_receipt",
+          "line": 1149,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "program_replay",
+      "removal_arm": {
+        "targets": {
+          "modules": [
+            "serve_chat"
+          ],
+          "selected_by": "all_emitting_routes",
+          "routes_covered": 4,
+          "note": "every distinct writer across ALL emitting routes, not emitting_routes[0]"
+        },
+        "with_program_limb": {
+          "serve_chat": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import serve_chat"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": true,
+            "exit_code": 0,
+            "stderr_head": "",
+            "import_succeeded": true,
+            "missing_module": null
+          }
+        },
+        "program_absent_limb": {
+          "serve_chat": {
+            "argv": [
+              "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+              "-S",
+              "-B",
+              "-c",
+              "import serve_chat"
+            ],
+            "pythonpath": "<repo>\\scripts",
+            "program_tree_present": false,
+            "exit_code": 1,
+            "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import serve_chat\nModuleNotFoundError: No module named 'serve_chat'",
+            "import_succeeded": false,
+            "missing_module": "serve_chat"
+          }
+        },
+        "single_variable": "identical argv and environment in both limbs; the only difference is whether scripts/ exists",
+        "amendment": 2
+      },
+      "verdict": "NEEDS-PROGRAM",
+      "blocking_dependency": {
+        "name": [
+          "scripts/serve_chat.py"
+        ],
+        "role": "this repository's own code, which the declared recheck procedure replays",
+        "confirmed_by_removal": true,
+        "how_confirmed": "the same import, with the same argv and the same PYTHONPATH, SUCCEEDED with scripts/ present and FAILED with it renamed away; the difference between the two limbs is the removal and nothing else"
+      },
+      "verdict_evidence": {
+        "argv": [
+          "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+          "-S",
+          "-B",
+          "-c",
+          "import serve_chat"
+        ],
+        "pythonpath": "<repo>\\scripts",
+        "exit_code": 1,
+        "stderr_head": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import serve_chat\nModuleNotFoundError: No module named 'serve_chat'",
+        "with_program_limb_succeeded": true,
+        "program_absent_limb_failed": true,
+        "note": "the verdict comes from the EXECUTED pair of limbs, never from the declaration (§4)"
+      }
+    },
+    {
+      "kind_id": "write_stage:accept_write",
+      "emitting_routes": [
+        {
+          "route_id": "write_stage.accept_write",
+          "writer_file": "scripts/write_stage.py",
+          "writer_symbol": "accept_write",
+          "line": 2153,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "none",
+      "verdict": "UNTESTED",
+      "verdict_evidence": {
+        "reason": "the census found no committed instance of this kind under either the exact or the superset rule, so there was no receipt to re-check"
+      }
+    },
+    {
+      "kind_id": "write_stage:stage_write",
+      "emitting_routes": [
+        {
+          "route_id": "write_stage.stage_write",
+          "writer_file": "scripts/write_stage.py",
+          "writer_symbol": "stage_write",
+          "line": 1653,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "canonicalization_is_program_defined": false,
+      "bundle_manifest": [],
+      "external_deps": [],
+      "tamper_result": {
+        "verdict": "UNTESTED",
+        "reason": "no procedure executed program-absent for this kind, so no input a procedure reads could be mutated (§10's B3 row: a kind whose procedure cannot be shown to read the mutated input yields no tamper arm and is UNTESTED, never a silent pass)"
+      },
+      "omission_result": {
+        "verdict": "UNTESTED",
+        "reason": "§7's M5 escape: no procedure ran, so no listed dependency could be removed from one"
+      },
+      "sham_result": {
+        "verdict": "UNTESTED",
+        "reason": "no adjudicating dependency was invoked for this kind, so there was nothing for the accept-all stub to replace"
+      },
+      "executed_recheck_procedure": "none",
+      "verdict": "UNTESTED",
+      "verdict_evidence": {
+        "reason": "the census found no committed instance of this kind under either the exact or the superset rule, so there was no receipt to re-check"
+      }
+    }
+  ],
+  "arms": {
+    "tamper": {
+      "design": "§7 B3 — three mutations different IN KIND, 100% must FAIL",
+      "ran_on_kind": "conformance_ce3_supplement:decide_both_directions",
+      "runs": [
+        {
+          "mutation": "content",
+          "witness_of_difference": {
+            "mutation": "content",
+            "differs_in_kind_from": "digest, binding",
+            "field": "rows[0].substituted_proposition",
+            "before": "((((((3) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))",
+            "after": "((((((5) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))",
+            "changed": true,
+            "input_the_procedure_reads": "step 1 takes this field verbatim"
+          },
+          "discarded": false,
+          "outcome": "FAIL",
+          "exit_code": 1,
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 17.061s",
+          "failed_checks": [
+            {
+              "row_index": 0,
+              "statement_id": "leanworkbook.skel.lean_workbook_10096",
+              "failed_checks": [
+                "negative_digest",
+                "negative_exit_code",
+                "positive_digest",
+                "positive_exit_code",
+                "verdict"
+              ]
+            }
+          ],
+          "evidence_file": "cold/evidence/tamper_content.json"
+        },
+        {
+          "mutation": "digest",
+          "witness_of_difference": {
+            "mutation": "digest",
+            "differs_in_kind_from": "content, binding",
+            "field": "rows[0].substituted_proposition + its recorded digests",
+            "before": "((((((3) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))",
+            "after": "((1 : Nat) >= (0 : Nat))",
+            "recorded_digest_before": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f",
+            "recorded_digest_after": "04659144ee3789723d2de3429dd9a7724bbb313866d493418dafcde0f7b24ef8",
+            "changed": true,
+            "input_the_procedure_reads": "step 3 is made to agree by construction; only step 4's exit-code comparison can still catch this one, because the replacement proposition is TRUE where the original was false"
+          },
+          "discarded": false,
+          "outcome": "FAIL",
+          "exit_code": 1,
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 16.956s",
+          "failed_checks": [
+            {
+              "row_index": 0,
+              "statement_id": "leanworkbook.skel.lean_workbook_10096",
+              "failed_checks": [
+                "negative_exit_code",
+                "positive_exit_code",
+                "verdict"
+              ]
+            }
+          ],
+          "evidence_file": "cold/evidence/tamper_digest.json"
+        },
+        {
+          "mutation": "binding",
+          "witness_of_difference": {
+            "mutation": "binding",
+            "differs_in_kind_from": "content, digest",
+            "field": "rows[0].checker_receipt <-> rows[1].checker_receipt",
+            "before": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f",
+            "after": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f",
+            "changed": true,
+            "input_the_procedure_reads": "every file and every digest stays internally consistent; only the pairing of a proposition to its receipt is wrong"
+          },
+          "discarded": false,
+          "outcome": "FAIL",
+          "exit_code": 1,
+          "stdout_head": "FAIL rows 23/25 invocations 50 elapsed 17.174s",
+          "failed_checks": [
+            {
+              "row_index": 0,
+              "statement_id": "leanworkbook.skel.lean_workbook_10096",
+              "failed_checks": [
+                "negative_digest",
+                "positive_digest"
+              ]
+            },
+            {
+              "row_index": 1,
+              "statement_id": "leanworkbook.skel.lean_workbook_10197",
+              "failed_checks": [
+                "negative_digest",
+                "positive_digest"
+              ]
+            }
+          ],
+          "evidence_file": "cold/evidence/tamper_binding.json"
+        }
+      ],
+      "gate": {
+        "clause": "tamper 3x per kind 100% FAIL",
+        "kinds_in_denominator": 1,
+        "kind_in_denominator": "conformance_ce3_supplement:decide_both_directions",
+        "kinds_with_no_tamper_arm": 18,
+        "scope_note": "this row scores the one kind whose procedure executed program-absent. It says nothing about the other 18, which read UNTESTED for tamper because no procedure ran on them.",
+        "mutations_scored": 3,
+        "mutations_discarded": 0,
+        "failed": 3,
+        "green": true
+      }
+    },
+    "omission": {
+      "design": "§7 B4 — FAIL LOUD naming the missing dependency; a silent pass voids THE HARNESS, not the kind",
+      "removed_dependency": "lean.exe",
+      "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\emptied_deps\\lean.exe",
+      "exit_code": 2,
+      "stdout_head": "FAIL-LOUD: missing dependency lean.exe (resolved to ~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\emptied_deps\\lean.exe); the procedure cannot run",
+      "report": {
+        "outcome": "MISSING_DEPENDENCY",
+        "missing_dependency": {
+          "name": "lean.exe",
+          "role": "the pinned external checker this procedure invokes by path",
+          "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\emptied_deps\\lean.exe",
+          "error": "the listed dependency is not present at the path the procedure resolves it to"
+        }
+      },
+      "ran_on_kind": "conformance_ce3_supplement:decide_both_directions",
+      "gate": {
+        "clause": "omission FAIL LOUD naming the missing dependency",
+        "kinds_in_denominator": 1,
+        "kind_in_denominator": "conformance_ce3_supplement:decide_both_directions",
+        "scope_note": "one kind invoked a removable dependency; every other kind reads §7's M5 UNTESTED escape because no procedure ran",
+        "failed_loud": true,
+        "named_the_dependency": true,
+        "silent_pass": false,
+        "green": true,
+        "voids_the_harness_if_silent": true
+      }
+    },
+    "sham": {
+      "design": "§7 B5 — the capability-blind control; it can void every kind at once and is written to be able to",
+      "stub": "harness/sham_lean.py (prints nothing, exits 0)",
+      "disclosed_weakness": "the stub matches the INTERFACE — argv shape, cwd, exit-code contract — but not the NAME: producing a same-named native executable needs a toolchain this workstation does not have. The substitution is weaker than §7's wording and is recorded as such.",
+      "runs": {
+        "real_checker_good_bundle": {
+          "argv": [
+            "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+            "-S",
+            "-I",
+            "<repo>\\harness\\probe_recheck.py",
+            "--bundle",
+            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\good",
+            "--checker-argv",
+            "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
+            "--out",
+            "<repo>\\cold\\evidence_run2\\sham_real_checker_good_bundle.json"
+          ],
+          "outcome": "PASS",
+          "exit_code": 0,
+          "stdout_head": "PASS rows 25/25 invocations 50 elapsed 16.998s",
+          "evidence_file": "cold/evidence/sham_real_checker_good_bundle.json"
+        },
+        "real_checker_known_bad_bundle": {
+          "argv": [
+            "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+            "-S",
+            "-I",
+            "<repo>\\harness\\probe_recheck.py",
+            "--bundle",
+            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\known_bad",
+            "--checker-argv",
+            "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
+            "--out",
+            "<repo>\\cold\\evidence_run2\\sham_real_checker_known_bad_bundle.json"
+          ],
+          "outcome": "FAIL",
+          "exit_code": 1,
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 17.076s",
+          "evidence_file": "cold/evidence/sham_real_checker_known_bad_bundle.json"
+        },
+        "sham_checker_good_bundle": {
+          "argv": [
+            "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+            "-S",
+            "-I",
+            "<repo>\\harness\\probe_recheck.py",
+            "--bundle",
+            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\good",
+            "--checker-argv",
+            "[\"~\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\python.exe\", \"-S\", \"-I\", \"<repo>\\\\harness\\\\sham_lean.py\"]",
+            "--out",
+            "<repo>\\cold\\evidence_run2\\sham_sham_checker_good_bundle.json"
+          ],
+          "outcome": "FAIL",
+          "exit_code": 1,
+          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.778s",
+          "evidence_file": "cold/evidence/sham_sham_checker_good_bundle.json"
+        },
+        "sham_checker_known_bad_bundle": {
+          "argv": [
+            "~\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\python.exe",
+            "-S",
+            "-I",
+            "<repo>\\harness\\probe_recheck.py",
+            "--bundle",
+            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\known_bad",
+            "--checker-argv",
+            "[\"~\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\python.exe\", \"-S\", \"-I\", \"<repo>\\\\harness\\\\sham_lean.py\"]",
+            "--out",
+            "<repo>\\cold\\evidence_run2\\sham_sham_checker_known_bad_bundle.json"
+          ],
+          "outcome": "FAIL",
+          "exit_code": 1,
+          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.767s",
+          "evidence_file": "cold/evidence/sham_sham_checker_known_bad_bundle.json"
+        }
+      },
+      "negative_control": {
+        "statement": "the instrument must be able to say no",
+        "real_checker_rejects_the_known_bad_bundle": true,
+        "known_bad_witness": {
+          "mutation": "content",
+          "differs_in_kind_from": "digest, binding",
+          "field": "rows[0].substituted_proposition",
+          "before": "((((((3) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))",
+          "after": "((((((5) / (2)) * ((2 + 7) + 1)) * ((((3 * (((2 + 7) + 1) ^ 2)) + (2 * 7)) + (2 * 1)) + (7 * 1))",
+          "changed": true,
+          "input_the_procedure_reads": "step 1 takes this field verbatim"
+        }
+      },
+      "ran_on_kind": "conformance_ce3_supplement:decide_both_directions",
+      "gate": {
+        "clause": "sham-checker SURVIVES count = 0",
+        "kinds_in_denominator": 1,
+        "kind_in_denominator": "conformance_ce3_supplement:decide_both_directions",
+        "scope_note": "one kind invoked an adjudicating dependency for the stub to replace; the arm is silent about the other 18",
+        "value": 0,
+        "green": true
+      },
+      "mechanism": {
+        "what_the_stub_does": "prints nothing, exits 0, for every probe",
+        "what_the_procedure_compares": "the RECORDED exit codes, and every committed row of this kind records positive=1 / negative=0",
+        "therefore": "a constant-zero stub fails the good bundle AND the known-bad bundle. It cannot read SURVIVES for this kind under ANY bundle, so B5's zero here is STRUCTURAL: the arm could not have fired for this kind however the receipts read.",
+        "what_that_costs": "B5 is a real control against a harness that checked only bundle PRESENCE — that harness would have passed the sham. It is NOT evidence that this kind's procedure would detect a subtler stub, e.g. one replaying the recorded exit codes. That stronger arm is not run here and is not claimed."
+      }
+    },
+    "scramble": {
+      "design": "§7 B6 — the vacuity control: what a bundle earns by being THE RIGHT ONE rather than by being A BUNDLE",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 1858455228,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "bundles_requested": 200,
+      "bundles_run": 200,
+      "bundles_passed": 0,
+      "checker_invocations": 10000,
+      "elapsed_seconds": 3422.4,
+      "budget": {
+        "design_estimate_minutes": "59 at the mean, 63 at the observed max",
+        "overrun_threshold_minutes": 90,
+        "overran": false,
+        "published_before_any_chance_rate_is_read": true
+      },
+      "what_the_invocation_step_can_discriminate": {
+        "distinct_recorded_exit_code_pairs": [
+          [
+            1,
+            0
+          ]
+        ],
+        "note": "every committed row of this kind records the same (positive, negative) exit-code pair, so a permutation of receipts across rows leaves step 4's comparison unchanged and ONLY step 3's digest comparison can catch it. The invocation step contributes nothing to detecting this scramble. That is a property of the data, measured here rather than discovered after the number was read."
+      },
+      "outcomes": [
+        {
+          "bundle": 0,
+          "seed": 1858455228,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.89
+        },
+        {
+          "bundle": 1,
+          "seed": 1858455229,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.073
+        },
+        {
+          "bundle": 2,
+          "seed": 1858455230,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.983
+        },
+        {
+          "bundle": 3,
+          "seed": 1858455231,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.025
+        },
+        {
+          "bundle": 4,
+          "seed": 1858455232,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.996
+        },
+        {
+          "bundle": 5,
+          "seed": 1858455233,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.173
+        },
+        {
+          "bundle": 6,
+          "seed": 1858455234,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.136
+        },
+        {
+          "bundle": 7,
+          "seed": 1858455235,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.01
+        },
+        {
+          "bundle": 8,
+          "seed": 1858455236,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.896
+        },
+        {
+          "bundle": 9,
+          "seed": 1858455237,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.934
+        },
+        {
+          "bundle": 10,
+          "seed": 1858455238,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.965
+        },
+        {
+          "bundle": 11,
+          "seed": 1858455239,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.049
+        },
+        {
+          "bundle": 12,
+          "seed": 1858455240,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.974
+        },
+        {
+          "bundle": 13,
+          "seed": 1858455241,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.9
+        },
+        {
+          "bundle": 14,
+          "seed": 1858455242,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.919
+        },
+        {
+          "bundle": 15,
+          "seed": 1858455243,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.954
+        },
+        {
+          "bundle": 16,
+          "seed": 1858455244,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.026
+        },
+        {
+          "bundle": 17,
+          "seed": 1858455245,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.001
+        },
+        {
+          "bundle": 18,
+          "seed": 1858455246,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.978
+        },
+        {
+          "bundle": 19,
+          "seed": 1858455247,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 4,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.016
+        },
+        {
+          "bundle": 20,
+          "seed": 1858455248,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.937
+        },
+        {
+          "bundle": 21,
+          "seed": 1858455249,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.992
+        },
+        {
+          "bundle": 22,
+          "seed": 1858455250,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.886
+        },
+        {
+          "bundle": 23,
+          "seed": 1858455251,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.933
+        },
+        {
+          "bundle": 24,
+          "seed": 1858455252,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.92
+        },
+        {
+          "bundle": 25,
+          "seed": 1858455253,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.925
+        },
+        {
+          "bundle": 26,
+          "seed": 1858455254,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.928
+        },
+        {
+          "bundle": 27,
+          "seed": 1858455255,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 4,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.987
+        },
+        {
+          "bundle": 28,
+          "seed": 1858455256,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.857
+        },
+        {
+          "bundle": 29,
+          "seed": 1858455257,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.822
+        },
+        {
+          "bundle": 30,
+          "seed": 1858455258,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.907
+        },
+        {
+          "bundle": 31,
+          "seed": 1858455259,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.928
+        },
+        {
+          "bundle": 32,
+          "seed": 1858455260,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.981
+        },
+        {
+          "bundle": 33,
+          "seed": 1858455261,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.917
+        },
+        {
+          "bundle": 34,
+          "seed": 1858455262,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.828
+        },
+        {
+          "bundle": 35,
+          "seed": 1858455263,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.818
+        },
+        {
+          "bundle": 36,
+          "seed": 1858455264,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.889
+        },
+        {
+          "bundle": 37,
+          "seed": 1858455265,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.825
+        },
+        {
+          "bundle": 38,
+          "seed": 1858455266,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.026
+        },
+        {
+          "bundle": 39,
+          "seed": 1858455267,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.139
+        },
+        {
+          "bundle": 40,
+          "seed": 1858455268,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.895
+        },
+        {
+          "bundle": 41,
+          "seed": 1858455269,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.975
+        },
+        {
+          "bundle": 42,
+          "seed": 1858455270,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.942
+        },
+        {
+          "bundle": 43,
+          "seed": 1858455271,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.885
+        },
+        {
+          "bundle": 44,
+          "seed": 1858455272,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.92
+        },
+        {
+          "bundle": 45,
+          "seed": 1858455273,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.961
+        },
+        {
+          "bundle": 46,
+          "seed": 1858455274,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.98
+        },
+        {
+          "bundle": 47,
+          "seed": 1858455275,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.932
+        },
+        {
+          "bundle": 48,
+          "seed": 1858455276,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.98
+        },
+        {
+          "bundle": 49,
+          "seed": 1858455277,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.884
+        },
+        {
+          "bundle": 50,
+          "seed": 1858455278,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.929
+        },
+        {
+          "bundle": 51,
+          "seed": 1858455279,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.893
+        },
+        {
+          "bundle": 52,
+          "seed": 1858455280,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.86
+        },
+        {
+          "bundle": 53,
+          "seed": 1858455281,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.917
+        },
+        {
+          "bundle": 54,
+          "seed": 1858455282,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.877
+        },
+        {
+          "bundle": 55,
+          "seed": 1858455283,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.917
+        },
+        {
+          "bundle": 56,
+          "seed": 1858455284,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.123
+        },
+        {
+          "bundle": 57,
+          "seed": 1858455285,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.905
+        },
+        {
+          "bundle": 58,
+          "seed": 1858455286,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.877
+        },
+        {
+          "bundle": 59,
+          "seed": 1858455287,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.894
+        },
+        {
+          "bundle": 60,
+          "seed": 1858455288,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.881
+        },
+        {
+          "bundle": 61,
+          "seed": 1858455289,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.865
+        },
+        {
+          "bundle": 62,
+          "seed": 1858455290,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.942
+        },
+        {
+          "bundle": 63,
+          "seed": 1858455291,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.892
+        },
+        {
+          "bundle": 64,
+          "seed": 1858455292,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.009
+        },
+        {
+          "bundle": 65,
+          "seed": 1858455293,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.847
+        },
+        {
+          "bundle": 66,
+          "seed": 1858455294,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.946
+        },
+        {
+          "bundle": 67,
+          "seed": 1858455295,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.93
+        },
+        {
+          "bundle": 68,
+          "seed": 1858455296,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.921
+        },
+        {
+          "bundle": 69,
+          "seed": 1858455297,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.062
+        },
+        {
+          "bundle": 70,
+          "seed": 1858455298,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.975
+        },
+        {
+          "bundle": 71,
+          "seed": 1858455299,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.019
+        },
+        {
+          "bundle": 72,
+          "seed": 1858455300,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.936
+        },
+        {
+          "bundle": 73,
+          "seed": 1858455301,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.912
+        },
+        {
+          "bundle": 74,
+          "seed": 1858455302,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.906
+        },
+        {
+          "bundle": 75,
+          "seed": 1858455303,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.94
+        },
+        {
+          "bundle": 76,
+          "seed": 1858455304,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.959
+        },
+        {
+          "bundle": 77,
+          "seed": 1858455305,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.95
+        },
+        {
+          "bundle": 78,
+          "seed": 1858455306,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.956
+        },
+        {
+          "bundle": 79,
+          "seed": 1858455307,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.885
+        },
+        {
+          "bundle": 80,
+          "seed": 1858455308,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.045
+        },
+        {
+          "bundle": 81,
+          "seed": 1858455309,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.923
+        },
+        {
+          "bundle": 82,
+          "seed": 1858455310,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.933
+        },
+        {
+          "bundle": 83,
+          "seed": 1858455311,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.889
+        },
+        {
+          "bundle": 84,
+          "seed": 1858455312,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.883
+        },
+        {
+          "bundle": 85,
+          "seed": 1858455313,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.937
+        },
+        {
+          "bundle": 86,
+          "seed": 1858455314,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.996
+        },
+        {
+          "bundle": 87,
+          "seed": 1858455315,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.898
+        },
+        {
+          "bundle": 88,
+          "seed": 1858455316,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 7,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.898
+        },
+        {
+          "bundle": 89,
+          "seed": 1858455317,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.046
+        },
+        {
+          "bundle": 90,
+          "seed": 1858455318,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.925
+        },
+        {
+          "bundle": 91,
+          "seed": 1858455319,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.028
+        },
+        {
+          "bundle": 92,
+          "seed": 1858455320,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.081
+        },
+        {
+          "bundle": 93,
+          "seed": 1858455321,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.911
+        },
+        {
+          "bundle": 94,
+          "seed": 1858455322,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.902
+        },
+        {
+          "bundle": 95,
+          "seed": 1858455323,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.951
+        },
+        {
+          "bundle": 96,
+          "seed": 1858455324,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.884
+        },
+        {
+          "bundle": 97,
+          "seed": 1858455325,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.927
+        },
+        {
+          "bundle": 98,
+          "seed": 1858455326,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.987
+        },
+        {
+          "bundle": 99,
+          "seed": 1858455327,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.862
+        },
+        {
+          "bundle": 100,
+          "seed": 1858455328,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.933
+        },
+        {
+          "bundle": 101,
+          "seed": 1858455329,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.91
+        },
+        {
+          "bundle": 102,
+          "seed": 1858455330,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.938
+        },
+        {
+          "bundle": 103,
+          "seed": 1858455331,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.885
+        },
+        {
+          "bundle": 104,
+          "seed": 1858455332,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.922
+        },
+        {
+          "bundle": 105,
+          "seed": 1858455333,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.892
+        },
+        {
+          "bundle": 106,
+          "seed": 1858455334,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.922
+        },
+        {
+          "bundle": 107,
+          "seed": 1858455335,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.887
+        },
+        {
+          "bundle": 108,
+          "seed": 1858455336,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.018
+        },
+        {
+          "bundle": 109,
+          "seed": 1858455337,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.943
+        },
+        {
+          "bundle": 110,
+          "seed": 1858455338,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.946
+        },
+        {
+          "bundle": 111,
+          "seed": 1858455339,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.919
+        },
+        {
+          "bundle": 112,
+          "seed": 1858455340,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.939
+        },
+        {
+          "bundle": 113,
+          "seed": 1858455341,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.958
+        },
+        {
+          "bundle": 114,
+          "seed": 1858455342,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.928
+        },
+        {
+          "bundle": 115,
+          "seed": 1858455343,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.998
+        },
+        {
+          "bundle": 116,
+          "seed": 1858455344,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.907
+        },
+        {
+          "bundle": 117,
+          "seed": 1858455345,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.932
+        },
+        {
+          "bundle": 118,
+          "seed": 1858455346,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.881
+        },
+        {
+          "bundle": 119,
+          "seed": 1858455347,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.876
+        },
+        {
+          "bundle": 120,
+          "seed": 1858455348,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.961
+        },
+        {
+          "bundle": 121,
+          "seed": 1858455349,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.976
+        },
+        {
+          "bundle": 122,
+          "seed": 1858455350,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.983
+        },
+        {
+          "bundle": 123,
+          "seed": 1858455351,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.835
+        },
+        {
+          "bundle": 124,
+          "seed": 1858455352,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.953
+        },
+        {
+          "bundle": 125,
+          "seed": 1858455353,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.994
+        },
+        {
+          "bundle": 126,
+          "seed": 1858455354,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.919
+        },
+        {
+          "bundle": 127,
+          "seed": 1858455355,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.932
+        },
+        {
+          "bundle": 128,
+          "seed": 1858455356,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.891
+        },
+        {
+          "bundle": 129,
+          "seed": 1858455357,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.911
+        },
+        {
+          "bundle": 130,
+          "seed": 1858455358,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.992
+        },
+        {
+          "bundle": 131,
+          "seed": 1858455359,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.902
+        },
+        {
+          "bundle": 132,
+          "seed": 1858455360,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.006
+        },
+        {
+          "bundle": 133,
+          "seed": 1858455361,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.971
+        },
+        {
+          "bundle": 134,
+          "seed": 1858455362,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.961
+        },
+        {
+          "bundle": 135,
+          "seed": 1858455363,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.939
+        },
+        {
+          "bundle": 136,
+          "seed": 1858455364,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.94
+        },
+        {
+          "bundle": 137,
+          "seed": 1858455365,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.86
+        },
+        {
+          "bundle": 138,
+          "seed": 1858455366,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.904
+        },
+        {
+          "bundle": 139,
+          "seed": 1858455367,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.956
+        },
+        {
+          "bundle": 140,
+          "seed": 1858455368,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.931
+        },
+        {
+          "bundle": 141,
+          "seed": 1858455369,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.938
+        },
+        {
+          "bundle": 142,
+          "seed": 1858455370,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.883
+        },
+        {
+          "bundle": 143,
+          "seed": 1858455371,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.019
+        },
+        {
+          "bundle": 144,
+          "seed": 1858455372,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.973
+        },
+        {
+          "bundle": 145,
+          "seed": 1858455373,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.902
+        },
+        {
+          "bundle": 146,
+          "seed": 1858455374,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.973
+        },
+        {
+          "bundle": 147,
+          "seed": 1858455375,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.9
+        },
+        {
+          "bundle": 148,
+          "seed": 1858455376,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.946
+        },
+        {
+          "bundle": 149,
+          "seed": 1858455377,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.924
+        },
+        {
+          "bundle": 150,
+          "seed": 1858455378,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.906
+        },
+        {
+          "bundle": 151,
+          "seed": 1858455379,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.886
+        },
+        {
+          "bundle": 152,
+          "seed": 1858455380,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.971
+        },
+        {
+          "bundle": 153,
+          "seed": 1858455381,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.959
+        },
+        {
+          "bundle": 154,
+          "seed": 1858455382,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.903
+        },
+        {
+          "bundle": 155,
+          "seed": 1858455383,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.904
+        },
+        {
+          "bundle": 156,
+          "seed": 1858455384,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.847
+        },
+        {
+          "bundle": 157,
+          "seed": 1858455385,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.909
+        },
+        {
+          "bundle": 158,
+          "seed": 1858455386,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.914
+        },
+        {
+          "bundle": 159,
+          "seed": 1858455387,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.89
+        },
+        {
+          "bundle": 160,
+          "seed": 1858455388,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.949
+        },
+        {
+          "bundle": 161,
+          "seed": 1858455389,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.946
+        },
+        {
+          "bundle": 162,
+          "seed": 1858455390,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.927
+        },
+        {
+          "bundle": 163,
+          "seed": 1858455391,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.902
+        },
+        {
+          "bundle": 164,
+          "seed": 1858455392,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.934
+        },
+        {
+          "bundle": 165,
+          "seed": 1858455393,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.863
+        },
+        {
+          "bundle": 166,
+          "seed": 1858455394,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.916
+        },
+        {
+          "bundle": 167,
+          "seed": 1858455395,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.909
+        },
+        {
+          "bundle": 168,
+          "seed": 1858455396,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.954
+        },
+        {
+          "bundle": 169,
+          "seed": 1858455397,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.828
+        },
+        {
+          "bundle": 170,
+          "seed": 1858455398,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.919
+        },
+        {
+          "bundle": 171,
+          "seed": 1858455399,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.838
+        },
+        {
+          "bundle": 172,
+          "seed": 1858455400,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.872
+        },
+        {
+          "bundle": 173,
+          "seed": 1858455401,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.891
+        },
+        {
+          "bundle": 174,
+          "seed": 1858455402,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.056
+        },
+        {
+          "bundle": 175,
+          "seed": 1858455403,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.866
+        },
+        {
+          "bundle": 176,
+          "seed": 1858455404,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.974
+        },
+        {
+          "bundle": 177,
+          "seed": 1858455405,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.891
+        },
+        {
+          "bundle": 178,
+          "seed": 1858455406,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.895
+        },
+        {
+          "bundle": 179,
+          "seed": 1858455407,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.929
+        },
+        {
+          "bundle": 180,
+          "seed": 1858455408,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.824
+        },
+        {
+          "bundle": 181,
+          "seed": 1858455409,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.016
+        },
+        {
+          "bundle": 182,
+          "seed": 1858455410,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.946
+        },
+        {
+          "bundle": 183,
+          "seed": 1858455411,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.942
+        },
+        {
+          "bundle": 184,
+          "seed": 1858455412,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.868
+        },
+        {
+          "bundle": 185,
+          "seed": 1858455413,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.89
+        },
+        {
+          "bundle": 186,
+          "seed": 1858455414,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.94
+        },
+        {
+          "bundle": 187,
+          "seed": 1858455415,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 3,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.942
+        },
+        {
+          "bundle": 188,
+          "seed": 1858455416,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.952
+        },
+        {
+          "bundle": 189,
+          "seed": 1858455417,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.891
+        },
+        {
+          "bundle": 190,
+          "seed": 1858455418,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.956
+        },
+        {
+          "bundle": 191,
+          "seed": 1858455419,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.996
+        },
+        {
+          "bundle": 192,
+          "seed": 1858455420,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.916
+        },
+        {
+          "bundle": 193,
+          "seed": 1858455421,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.947
+        },
+        {
+          "bundle": 194,
+          "seed": 1858455422,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.954
+        },
+        {
+          "bundle": 195,
+          "seed": 1858455423,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.982
+        },
+        {
+          "bundle": 196,
+          "seed": 1858455424,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 2,
+          "checker_invocations": 50,
+          "elapsed_seconds": 17.002
+        },
+        {
+          "bundle": 197,
+          "seed": 1858455425,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 0,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.909
+        },
+        {
+          "bundle": 198,
+          "seed": 1858455426,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.933
+        },
+        {
+          "bundle": 199,
+          "seed": 1858455427,
+          "identity_redraws": 0,
+          "outcome": "FAIL",
+          "rows_ok": 1,
+          "checker_invocations": 50,
+          "elapsed_seconds": 16.97
+        }
+      ],
+      "gate": {
+        "clause": "chance measured: 200 scrambled bundles; if 0 of 200 pass, publish the 1.5% rule-of-three upper bound as the chance rate",
+        "bundles": 200,
+        "passed": 0,
+        "rule_of_three_upper_bound": 0.015,
+        "upper_bound_is_not_a_measured_rate": "an upper bound on a chance rate, never a measured rate, and never quoted as though 0 were the finding",
+        "green": true
+      },
+      "carried_forward": {
+        "from_artifact": "cold/scramble_baseline.json",
+        "artifact_sha256": "23e8c8fec605d2851f66fc4481f664fb7e6ad81a4e95a6be943e17593c889af6",
+        "why_not_re_run": "amendment 2 repairs the REMOVAL arm. B6 scrambles the C-E3 bundle and invokes the pinned checker; nothing the amendment changes touches it, its rule is seeded from the kind_id, and the run is deterministic. Re-running 10,000 invocations to reproduce a number the fix cannot move would be an hour spent proving determinism.",
+        "what_would_invalidate_this": "any change to the scramble rule, the bundle contents, the reconstruction rule, or the checker pin"
+      }
+    },
+    "provenance": {
+      "design": "§8 B11 — two tags, two tests, two assigners",
+      "dependencies": [
+        {
+          "name": "lean.exe",
+          "role": "the pinned external checker the C-E3 probes invoke by path",
+          "pin_hash": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+          "provenance": "third_party_pinned",
+          "provenance_test": {
+            "a_pin_is_over_the_executing_artifact": true,
+            "b_pin_identifies_a_third_partys_release": true,
+            "recomputed_sha256": "567d145fa0421711568eeebb80656fd612de4e2f1c2413e29ce49b8f83ec5ac7",
+            "assigner": "the harness, from the bytes"
+          },
+          "selection_provenance": "repository_file",
+          "selection_provenance_assigner": "CR-P0",
+          "b11_note": "B11 downgrades on `provenance`, never on `selection_provenance`: §8 split the draft's single tag because lean.exe satisfied both values of it"
+        },
+        {
+          "name": "python (this repository's .venv interpreter)",
+          "role": "runs every python-based recheck procedure",
+          "pin_hash": null,
+          "provenance": "program_configured",
+          "provenance_test": {
+            "a_pin_is_over_the_executing_artifact": false,
+            "b_pin_identifies_a_third_partys_release": false,
+            "recomputed_sha256": null,
+            "assigner": "the harness, from the bytes"
+          },
+          "selection_provenance": "machine_state",
+          "selection_provenance_assigner": "CR-P0",
+          "b11_note": "B11 downgrades on `provenance`, never on `selection_provenance`: §8 split the draft's single tag because lean.exe satisfied both values of it"
+        },
+        {
+          "name": "mypy",
+          "role": "pinned in the python-tests verdicts' environment block",
+          "pin_hash": null,
+          "provenance": "program_configured",
+          "provenance_test": {
+            "a_pin_is_over_the_executing_artifact": false,
+            "b_pin_identifies_a_third_partys_release": false,
+            "recomputed_sha256": null,
+            "assigner": "the harness, from the bytes"
+          },
+          "selection_provenance": "machine_state",
+          "selection_provenance_assigner": "CR-P0",
+          "b11_note": "B11 downgrades on `provenance`, never on `selection_provenance`: §8 split the draft's single tag because lean.exe satisfied both values of it"
+        },
+        {
+          "name": "jsonschema",
+          "role": "imported by scripts/radius_recheck.py; no manifest in this repository pins it",
+          "pin_hash": null,
+          "provenance": "program_configured",
+          "provenance_test": {
+            "a_pin_is_over_the_executing_artifact": false,
+            "b_pin_identifies_a_third_partys_release": false,
+            "recomputed_sha256": null,
+            "assigner": "the harness, from the bytes"
+          },
+          "selection_provenance": "machine_state",
+          "selection_provenance_assigner": "CR-P0",
+          "b11_note": "B11 downgrades on `provenance`, never on `selection_provenance`: §8 split the draft's single tag because lean.exe satisfied both values of it"
+        }
+      ],
+      "gate": {
+        "clause": "any SURVIVES resting on a program_configured dependency downgrades to UNTESTED",
+        "downgrades_applied": [],
+        "green": true,
+        "note": "B11 cannot go red; it can only move verdicts. It is green when the downgrade was applied mechanically, which the harness does per kind from the bytes."
+      }
+    }
+  },
+  "path_audit_ref": "cold/path_audit_run2.txt",
+  "scramble_baseline_ref": "cold/scramble_baseline.json",
+  "reconstruction_rule_ref": "cold/reconstruction_rule.json",
+  "amendment": {
+    "amendment": 2,
+    "dated": "2026-08-27",
+    "authority": "ROADMAP-v0.21 §4.0(1) — an arm that never executed as designed is a bug, not a reading",
+    "defect": "run 1's removal arm ran `python -S -I -c \"import <module>\"`. Since 3.11 `-I` implies `-E` and `-P`, so PYTHONPATH was ignored and the program tree was never on the child's path at all. The import failed identically with scripts/ PRESENT and ABSENT: the arm could not go red for the reason it claimed, and all nine confirmed_by_removal verdicts rested on it.",
+    "repair": "two limbs per kind with identical argv and environment, differing only in whether the program tree exists: a with-program POSITIVE CONTROL run before the rename, and the program-absent limb run during it. NEEDS-PROGRAM now requires positive-limb SUCCESS and absent-limb FAILURE. A kind that fails both ways reads UNTESTED with its true blocking dependency named.",
+    "flags_dropped": [
+      "-I"
+    ],
+    "why": "-I implies -E, which is what silently discarded PYTHONPATH",
+    "run_one_artifacts_retained_unedited": [
+      "cold/census.json",
+      "cold/path_audit.txt",
+      "cold/scramble_baseline.json",
+      "cold/evidence/",
+      "cold/result_gate.json"
+    ],
+    "registry_amendment": 2,
+    "registry_seal_run_one": "6c575c70dbbdd7f79245a90902b84b0d1dd74e13176e2f878ece4f1b91b00ded",
+    "registry_seal_this_run": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c"
+  },
+  "provenance": {
+    "writer": "harness/cold_harness.py",
+    "writer_sha256_lf": "368be7d62f3af80a80284cbb34c9a4e72d9d3079bd7507e2dc69a6313a482fb8",
+    "inputs": [
+      {
+        "path": "cold/reconstruction_rule.json",
+        "sha256_lf": "0251e1c9889b9eb164bc697e707ca6bc2404205b56f4d5b9fe48b27bb0ecf85b"
+      },
+      {
+        "path": "experiments/cold_registry_census.json",
+        "sha256_lf": "e5c7d4436fd89e292acfdb5fd0a35a75ba0f9f06c82c9ce8d3c6ab1a65d18844"
+      },
+      {
+        "path": "experiments/conformance_ce3_supplement.json",
+        "sha256_lf": "4ada9567f470805e3c578ae6ca9c150278a025841cffcc505e4df7f1ea327602"
+      }
+    ],
+    "emitted_at_generation": true
+  }
+}
