@@ -119,11 +119,22 @@ function whose name matches ``canonical``. Such kinds carry
 ``canonicalization_is_program_defined``, which is a recorded reason and not a
 verdict.
 
-*Recall probe.* The rule's own recall is measured rather than asserted. A
-deliberately wider net — substring name matching, no exact-key restriction —
-is run beside the rule, and the sites it reaches that the rule does not are
-published as ``recall_probe.uncovered_sites``. Every one is a candidate
-census miss under B10, computed rather than remembered.
+*Recall probes, two of them.* The rule's own recall is measured rather than
+asserted, on **both** sides:
+
+- *site side*: a deliberately wider net — substring name matching, no
+  exact-key restriction — is run beside the rule, and the sites it reaches
+  that the rule does not are published as ``recall_probe.uncovered_sites``.
+- *instance side* (**amendment 2**): ``I2``'s exact key-set match is brittle
+  in a way the first run did not price. A site whose mapping gains one
+  conditional key matches nothing, and the census then reads ``none`` for a
+  kind with thousands of committed instances. ``I2b`` runs a **proper
+  superset** match beside the exact one, and both counts are published per
+  kind. The exact rule stays the rule; the superset count is what makes its
+  brittleness a number.
+
+Every uncovered site and every superset-only instance is a candidate census
+miss under B10, computed rather than remembered.
 
 Usage
 -----
@@ -798,6 +809,16 @@ def form_kinds(
                     "line_range": [site["line"], site["end_line"]],
                     "rule": site["rule"],
                     "symbol": site["symbol_path"],
+                    # L4: this site's OWN key set. The union across sites is a
+                    # shape no single site ever constructs, and publishing only
+                    # the union hides which site the instance rule matches on.
+                    "key_set": sorted(
+                        set(
+                            site.get("member_keys")
+                            if site["rule"] == "RM-C" and site.get("member_keys")
+                            else site["keys"]
+                        )
+                    ),
                 }
                 for site in sites_
             ],
@@ -914,17 +935,24 @@ def resolve_instances(
 
     by_tag: dict[str, list[str]] = {}
     by_keyset: dict[tuple[str, ...], list[str]] = {}
+    # I2b's index, anchored on each key set's lexicographically-first key so a
+    # superset test is only run against mappings that could possibly match.
+    by_anchor: dict[str, list[tuple[str, frozenset]]] = {}
     for kind_id, kind in kinds.items():
         for tag in kind["tags"]:
             by_tag.setdefault(tag, []).append(kind_id)
         for keys in kind["site_key_sets"]:
             if keys:
                 by_keyset.setdefault(tuple(sorted(keys)), []).append(kind_id)
+                frozen = frozenset(keys)
+                by_anchor.setdefault(min(frozen), []).append((kind_id, frozen))
 
     found: dict[str, dict[str, Any]] = {
         kind_id: {
             "count": 0,
+            "superset_count": 0,
             "paths": set(),
+            "superset_paths": set(),
             "descriptor_fields": set(),
             "rules": set(),
         }
@@ -956,7 +984,8 @@ def resolve_instances(
                 if isinstance(tag, str) and tag in by_tag:
                     for kind_id in by_tag[tag]:
                         hits[kind_id] = "I1"
-            keyset = tuple(sorted(k for k in mapping if isinstance(k, str)))
+            string_keys = frozenset(k for k in mapping if isinstance(k, str))
+            keyset = tuple(sorted(string_keys))
             if keyset in by_keyset:
                 for kind_id in by_keyset[keyset]:
                     hits.setdefault(kind_id, "I2")
@@ -967,6 +996,19 @@ def resolve_instances(
                 if len(slot["paths"]) < 8:
                     slot["paths"].add(rel)
                 slot["descriptor_fields"].update(descriptors)
+
+            # I2b — proper superset, counted beside the exact rule and never
+            # instead of it. This is what prices the exact rule's brittleness.
+            for anchor in string_keys & by_anchor.keys():
+                for kind_id, frozen in by_anchor[anchor]:
+                    if kind_id in hits or not frozen < string_keys:
+                        continue
+                    slot = found[kind_id]
+                    slot["superset_count"] += 1
+                    slot["rules"].add("I2b")
+                    if len(slot["superset_paths"]) < 8:
+                        slot["superset_paths"].add(rel)
+                    slot["descriptor_fields"].update(descriptors)
 
     for kind_id, dests in destinations.items():
         if not dests:
@@ -983,13 +1025,64 @@ def resolve_instances(
 
     return {
         kind_id: {
-            "count": slot["count"],
+            "count": slot["count"] + slot["superset_count"],
+            "exact_count": slot["count"],
+            "superset_only_count": slot["superset_count"],
             "resolved_by": sorted(slot["rules"]),
             "sample_paths": sorted(slot["paths"]),
+            "superset_sample_paths": sorted(slot["superset_paths"]),
+            "instance_rule_note": (
+                "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: "
+                "the first run counted the exact match alone and read `none` "
+                "for kinds with thousands of committed instances, because a "
+                "site whose mapping gains one conditional key matches nothing "
+                "exactly."
+            ),
             "destination_constants": sorted(destinations[kind_id]),
             "recheck_descriptor_fields": sorted(slot["descriptor_fields"]),
         }
         for kind_id, slot in found.items()
+    }
+
+
+def instance_recall_probe(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Amendment 2: price I2's brittleness the way the site probe prices RM-C's.
+
+    A kind whose exact count is zero and whose superset count is not is a kind
+    the first run called `none` while the tree held its instances all along.
+    Those are census misses under B10, and they are computed here rather than
+    found by a reviewer.
+    """
+
+    rows = []
+    for record in records:
+        instances = record["committed_instances"]
+        if instances["exact_count"] == 0 and instances["superset_only_count"] > 0:
+            rows.append(
+                {
+                    "kind_id": record["kind_id"],
+                    "exact_count": instances["exact_count"],
+                    "superset_only_count": instances["superset_only_count"],
+                    "sample_paths": instances["superset_sample_paths"],
+                    "why_the_exact_rule_missed": (
+                        "the committed mapping carries keys the site's literal "
+                        "key set does not, so an exact match found nothing "
+                        "while a proper superset match found these"
+                    ),
+                }
+            )
+    total_exact = sum(r["committed_instances"]["exact_count"] for r in records)
+    total_superset = sum(
+        r["committed_instances"]["superset_only_count"] for r in records
+    )
+    return {
+        "exact_instances": total_exact,
+        "superset_only_instances": total_superset,
+        "kinds_the_exact_rule_alone_would_have_read_as_none": rows,
+        "means": (
+            "the exact key-set rule stays the rule; this probe is what makes "
+            "its brittleness a number instead of a surprise"
+        ),
     }
 
 
@@ -1523,6 +1616,7 @@ def build_census(repo: Path) -> dict[str, Any]:
         "excluded": excluded,
         "seeded_exclusion_check": seeded_exclusion_check(excluded),
         "recall_probe": recall_probe(repo, kinds, excluded),
+        "instance_recall_probe": instance_recall_probe(records),
         "pin_table": capture_pin_table(repo),
         "external_deps_seed": capture_external_deps(repo),
         "pin_divergence": pin_divergences(repo),
@@ -1531,6 +1625,75 @@ def build_census(repo: Path) -> dict[str, Any]:
     census["census_seal"] = census_seal(records, excluded)
     census["provenance"] = provenance_block(Path(__file__), inputs, repo)
     return census
+
+
+def amendment_block(previous: dict | None, census: dict) -> dict[str, Any]:
+    """Amendment 2 (2026-08-27), under ROADMAP-v0.21 §4.0(1).
+
+    The instrument did not do what it was written to do, which is a **bug and
+    not a reading**: `I2`'s exact key-set match read `none` for kinds whose
+    instances the tree held all along. The repair is additive — `I2b` counts a
+    proper superset beside the exact match — and the diff against the previous
+    seal is published rather than absorbed, because a regenerated registry that
+    did not say what moved would be a re-seal wearing an amendment's clothes.
+    """
+
+    block: dict[str, Any] = {
+        "amendment": 2,
+        "dated": "2026-08-27",
+        "authority": "ROADMAP-v0.21 §4.0(1) — an arm that never executed as designed is a bug, not a reading",
+        "defect": (
+            "I2 matched an artifact mapping only when its key set was EXACTLY "
+            "the site's. A site whose mapping gains one conditional key "
+            "therefore matched nothing, and the census declared "
+            "recheck_procedure `none` for kinds with committed instances."
+        ),
+        "repair": (
+            "I2b: a proper-superset match, counted beside the exact one and "
+            "never instead of it, plus an instance-side recall probe so the "
+            "exact rule's brittleness is a published number"
+        ),
+        "what_did_not_change": [
+            "the four marking predicates RM-A/B/C/D",
+            "the exclusion rules X1/X2 and the seeded-exclusion check",
+            "the site-side recall probe",
+            "the route resolution rule",
+        ],
+    }
+    if previous is None:
+        block["previous_seal"] = None
+        block["diff_shape"] = "no previous artifact was present to diff against"
+        return block
+
+    before, after = previous.get("counts", {}), census["counts"]
+    moved = {
+        key: [before.get(key), after.get(key)]
+        for key in sorted(set(before) | set(after))
+        if before.get(key) != after.get(key)
+    }
+    previous_kinds = {k["kind_id"] for k in previous.get("kinds", [])}
+    current_kinds = {k["kind_id"] for k in census["kinds"]}
+    declared_moves = []
+    previous_declared = {
+        k["kind_id"]: k["declared_recheck_procedure"]["type"]
+        for k in previous.get("kinds", [])
+    }
+    for record in census["kinds"]:
+        was = previous_declared.get(record["kind_id"])
+        now = record["declared_recheck_procedure"]["type"]
+        if was is not None and was != now:
+            declared_moves.append(
+                {"kind_id": record["kind_id"], "from": was, "to": now}
+            )
+    block["previous_seal"] = previous.get("census_seal")
+    block["new_seal"] = census["census_seal"]
+    block["diff_shape"] = {
+        "kinds_added": sorted(current_kinds - previous_kinds),
+        "kinds_removed": sorted(previous_kinds - current_kinds),
+        "counts_moved": moved,
+        "declared_recheck_procedure_moved": declared_moves,
+    }
+    return block
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1544,7 +1707,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    previous = None
+    if args.out is not None and args.out.is_file():
+        try:
+            previous = json.loads(args.out.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:  # pragma: no cover
+            previous = None
+
     census = build_census(REPO)
+    census["amendment"] = amendment_block(previous, census)
 
     if args.check is not None:
         committed = json.loads(args.check.read_text(encoding="utf-8"))

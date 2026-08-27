@@ -135,10 +135,10 @@
     "receipt_marked_sites": 37,
     "kinds": 19,
     "excluded_sites": 10,
-    "kinds_with_committed_instances": 10,
+    "kinds_with_committed_instances": 12,
     "declared_raw_checker_invocation": 1,
-    "declared_program_replay": 9,
-    "declared_none": 9
+    "declared_program_replay": 11,
+    "declared_none": 7
   },
   "kinds": [
     {
@@ -179,7 +179,12 @@
             657
           ],
           "rule": "RM-B",
-          "symbol": "exact_value_task"
+          "symbol": "exact_value_task",
+          "key_set": [
+            "exact",
+            "expression",
+            "grounding"
+          ]
         },
         {
           "path": "scripts/build_throughput_tasks.py",
@@ -188,7 +193,11 @@
             666
           ],
           "rule": "RM-B",
-          "symbol": "exact_value_task"
+          "symbol": "exact_value_task",
+          "key_set": [
+            "expression",
+            "grounding"
+          ]
         }
       ],
       "site_key_set": [
@@ -202,6 +211,8 @@
       },
       "committed_instances": {
         "count": 130,
+        "exact_count": 130,
+        "superset_only_count": 0,
         "resolved_by": [
           "I2"
         ],
@@ -212,6 +223,8 @@
           "experiments/throughput_trial_c2_halfA.json",
           "experiments/throughput_trial_kernel_halfA.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -257,7 +270,17 @@
             915
           ],
           "rule": "RM-A",
-          "symbol": "closure_tasks"
+          "symbol": "closure_tasks",
+          "key_set": [
+            "adapter_id",
+            "closure_digest",
+            "horizon",
+            "outcome",
+            "schema",
+            "target_digest",
+            "visited_states",
+            "world_id"
+          ]
         },
         {
           "path": "scripts/closure_query.py",
@@ -266,7 +289,17 @@
             297
           ],
           "rule": "RM-A",
-          "symbol": "query"
+          "symbol": "query",
+          "key_set": [
+            "adapter_id",
+            "closure_digest",
+            "horizon",
+            "outcome",
+            "schema",
+            "target_digest",
+            "visited_states",
+            "world_id"
+          ]
         }
       ],
       "site_key_set": [
@@ -285,6 +318,8 @@
       },
       "committed_instances": {
         "count": 41,
+        "exact_count": 41,
+        "superset_only_count": 0,
         "resolved_by": [
           "I1"
         ],
@@ -296,6 +331,8 @@
           "experiments/throughput_trial_kernel_halfA.json",
           "reports/closures/story.golden_chicken.demo-receipt.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -333,7 +370,17 @@
             297
           ],
           "rule": "RM-B",
-          "symbol": "query"
+          "symbol": "query",
+          "key_set": [
+            "adapter_id",
+            "closure_digest",
+            "horizon",
+            "outcome",
+            "schema",
+            "target_digest",
+            "visited_states",
+            "world_id"
+          ]
         }
       ],
       "site_key_set": [
@@ -351,9 +398,12 @@
         "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
       },
       "committed_instances": {
-        "count": 16,
+        "count": 41,
+        "exact_count": 16,
+        "superset_only_count": 25,
         "resolved_by": [
-          "I2"
+          "I2",
+          "I2b"
         ],
         "sample_paths": [
           "experiments/throughput_result.json",
@@ -362,6 +412,14 @@
           "experiments/throughput_trial_c2_halfA.json",
           "experiments/throughput_trial_kernel_halfA.json"
         ],
+        "superset_sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json",
+          "reports/closures/story.golden_chicken.demo-receipt.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -399,7 +457,12 @@
             448
           ],
           "rule": "RM-B",
-          "symbol": "decide_both_directions"
+          "symbol": "decide_both_directions",
+          "key_set": [
+            "negative_probe",
+            "pattern",
+            "positive_probe"
+          ]
         }
       ],
       "site_key_set": [
@@ -413,12 +476,16 @@
       },
       "committed_instances": {
         "count": 25,
+        "exact_count": 25,
+        "superset_only_count": 0,
         "resolved_by": [
           "I2"
         ],
         "sample_paths": [
           "experiments/conformance_ce3_supplement.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": [
           "binary_sha256"
@@ -457,7 +524,8 @@
             832
           ],
           "rule": "RM-D",
-          "symbol": "main"
+          "symbol": "main",
+          "key_set": []
         }
       ],
       "site_key_set": [],
@@ -467,6 +535,8 @@
       },
       "committed_instances": {
         "count": 15,
+        "exact_count": 15,
+        "superset_only_count": 0,
         "resolved_by": [
           "I3"
         ],
@@ -480,6 +550,8 @@
           "prover/verifier-verdicts/programming_dfactorial_iterative.python-tests.json",
           "prover/verifier-verdicts/programming_dfactorial_recursive.python-tests.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [
           "prover/verifier-verdicts"
         ],
@@ -494,8 +566,8 @@
         "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
         "seed": 828562138,
         "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
-        "applicable": false,
-        "why_not_applicable": "a permutation needs at least two records to reassign between"
+        "applicable": true,
+        "why_not_applicable": null
       },
       "tags": [],
       "marking_rules": [
@@ -518,7 +590,18 @@
             178
           ],
           "rule": "RM-B",
-          "symbol": "Rendering.receipt"
+          "symbol": "Rendering.receipt",
+          "key_set": [
+            "canonical",
+            "interpretation_shift",
+            "interpreted",
+            "lexicon_entries",
+            "parameters",
+            "renderer_id",
+            "source",
+            "statement_id",
+            "surface"
+          ]
         }
       ],
       "site_key_set": [
@@ -533,13 +616,21 @@
         "surface"
       ],
       "declared_recheck_procedure": {
-        "type": "none",
-        "basis": "the rule found no committed instance of this kind"
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
       },
       "committed_instances": {
-        "count": 0,
-        "resolved_by": [],
+        "count": 2313,
+        "exact_count": 0,
+        "superset_only_count": 2313,
+        "resolved_by": [
+          "I2b"
+        ],
         "sample_paths": [],
+        "superset_sample_paths": [
+          "experiments/foreign_voice_rate2.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -576,7 +667,20 @@
             2302
           ],
           "rule": "RM-C",
-          "symbol": "_route_conform"
+          "symbol": "_route_conform",
+          "key_set": [
+            "certifies",
+            "counterexample",
+            "domain",
+            "points_admitted",
+            "points_sampled",
+            "registered_run",
+            "registered_run_verdict",
+            "sampler_seed",
+            "schema_digest",
+            "statement_id",
+            "verdict"
+          ]
         }
       ],
       "site_key_set": [
@@ -598,8 +702,12 @@
       },
       "committed_instances": {
         "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
         "resolved_by": [],
         "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -636,7 +744,13 @@
             1177
           ],
           "rule": "RM-C",
-          "symbol": "_route_ownership"
+          "symbol": "_route_ownership",
+          "key_set": [
+            "by_corpus",
+            "hosts",
+            "query_skeleton",
+            "searched"
+          ]
         }
       ],
       "site_key_set": [
@@ -651,8 +765,12 @@
       },
       "committed_instances": {
         "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
         "resolved_by": [],
         "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -689,7 +807,13 @@
             1923
           ],
           "rule": "RM-C",
-          "symbol": "_route_twin"
+          "symbol": "_route_twin",
+          "key_set": [
+            "group_index",
+            "ledger_path",
+            "level",
+            "member_ids"
+          ]
         }
       ],
       "site_key_set": [
@@ -704,6 +828,8 @@
       },
       "committed_instances": {
         "count": 80,
+        "exact_count": 80,
+        "superset_only_count": 0,
         "resolved_by": [
           "I2"
         ],
@@ -714,6 +840,8 @@
           "experiments/throughput_trial_c2_halfA.json",
           "experiments/throughput_trial_kernel_halfA.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -750,7 +878,18 @@
             945
           ],
           "rule": "RM-B",
-          "symbol": "_oewn_samples"
+          "symbol": "_oewn_samples",
+          "key_set": [
+            "archive_sha256",
+            "arms",
+            "canonical_spent_keys",
+            "f4_seed",
+            "limitation",
+            "published_claimed_texts",
+            "python_version",
+            "runtime",
+            "schema"
+          ]
         }
       ],
       "site_key_set": [
@@ -770,12 +909,16 @@
       },
       "committed_instances": {
         "count": 1,
+        "exact_count": 1,
+        "superset_only_count": 0,
         "resolved_by": [
           "I2"
         ],
         "sample_paths": [
           "experiments/when_to_ask_oewn_keys.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -812,7 +955,12 @@
             302
           ],
           "rule": "RM-C",
-          "symbol": "PlainRouter._ask"
+          "symbol": "PlainRouter._ask",
+          "key_set": [
+            "suppositions",
+            "verified_readings",
+            "why_not_conditional"
+          ]
         }
       ],
       "site_key_set": [
@@ -826,8 +974,12 @@
       },
       "committed_instances": {
         "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
         "resolved_by": [],
         "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -864,7 +1016,16 @@
             276
           ],
           "rule": "RM-C",
-          "symbol": "PlainRouter._conditional"
+          "symbol": "PlainRouter._conditional",
+          "key_set": [
+            "alternatives_not_taken",
+            "route_that_produced_the_answer",
+            "supposition_budget",
+            "suppositions",
+            "underlying_status",
+            "verification_detail",
+            "verification_strength"
+          ]
         }
       ],
       "site_key_set": [
@@ -882,8 +1043,12 @@
       },
       "committed_instances": {
         "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
         "resolved_by": [],
         "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -920,7 +1085,21 @@
             224
           ],
           "rule": "RM-B",
-          "symbol": "certify"
+          "symbol": "certify",
+          "key_set": [
+            "cert_id",
+            "closure",
+            "closure_size",
+            "depth_histogram",
+            "graph_sha256",
+            "inferred_edges_excluded",
+            "recheck_command",
+            "root_falsification_kind",
+            "root_node",
+            "standing_limitation",
+            "tool_version",
+            "unprovenanced_nodes"
+          ]
         }
       ],
       "site_key_set": [
@@ -943,6 +1122,8 @@
       },
       "committed_instances": {
         "count": 4,
+        "exact_count": 4,
+        "superset_only_count": 0,
         "resolved_by": [
           "I2"
         ],
@@ -952,6 +1133,8 @@
           "reports/radius/root-a-compression.cert.json",
           "reports/radius/root-b-decompositions.cert.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": [
           "recheck_command(names-the-program-tree)"
@@ -1004,7 +1187,11 @@
             1080
           ],
           "rule": "RM-B",
-          "symbol": "_evaluate_receipt"
+          "symbol": "_evaluate_receipt",
+          "key_set": [
+            "expression",
+            "grounding"
+          ]
         },
         {
           "path": "scripts/serve_chat.py",
@@ -1013,7 +1200,10 @@
             1084
           ],
           "rule": "RM-B",
-          "symbol": "_evaluate_receipt"
+          "symbol": "_evaluate_receipt",
+          "key_set": [
+            "grounding"
+          ]
         },
         {
           "path": "scripts/serve_chat.py",
@@ -1022,7 +1212,12 @@
             1089
           ],
           "rule": "RM-B",
-          "symbol": "_evaluate_receipt"
+          "symbol": "_evaluate_receipt",
+          "key_set": [
+            "exact",
+            "expression",
+            "grounding"
+          ]
         }
       ],
       "site_key_set": [
@@ -1036,6 +1231,8 @@
       },
       "committed_instances": {
         "count": 130,
+        "exact_count": 130,
+        "superset_only_count": 0,
         "resolved_by": [
           "I2"
         ],
@@ -1046,6 +1243,8 @@
           "experiments/throughput_trial_c2_halfA.json",
           "experiments/throughput_trial_kernel_halfA.json"
         ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -1058,8 +1257,8 @@
         "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
         "seed": 715058333,
         "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
-        "applicable": false,
-        "why_not_applicable": "a permutation needs at least two records to reassign between"
+        "applicable": true,
+        "why_not_applicable": null
       },
       "tags": [],
       "marking_rules": [
@@ -1096,7 +1295,8 @@
             1023
           ],
           "rule": "RM-B",
-          "symbol": "_resolution_receipt"
+          "symbol": "_resolution_receipt",
+          "key_set": []
         },
         {
           "path": "scripts/serve_chat.py",
@@ -1105,7 +1305,8 @@
             1029
           ],
           "rule": "RM-B",
-          "symbol": "_resolution_receipt"
+          "symbol": "_resolution_receipt",
+          "key_set": []
         },
         {
           "path": "scripts/serve_chat.py",
@@ -1114,7 +1315,11 @@
             1034
           ],
           "rule": "RM-B",
-          "symbol": "_resolution_receipt"
+          "symbol": "_resolution_receipt",
+          "key_set": [
+            "node_sha256",
+            "statement_id"
+          ]
         }
       ],
       "site_key_set": [
@@ -1122,13 +1327,25 @@
         "statement_id"
       ],
       "declared_recheck_procedure": {
-        "type": "none",
-        "basis": "the rule found no committed instance of this kind"
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
       },
       "committed_instances": {
-        "count": 0,
-        "resolved_by": [],
+        "count": 160,
+        "exact_count": 0,
+        "superset_only_count": 160,
+        "resolved_by": [
+          "I2b"
+        ],
         "sample_paths": [],
+        "superset_sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -1166,7 +1383,11 @@
             1102
           ],
           "rule": "RM-B",
-          "symbol": "_story_receipt"
+          "symbol": "_story_receipt",
+          "key_set": [
+            "constraint_ids",
+            "corpus_path"
+          ]
         }
       ],
       "site_key_set": [
@@ -1179,8 +1400,12 @@
       },
       "committed_instances": {
         "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
         "resolved_by": [],
         "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -1238,7 +1463,10 @@
             1143
           ],
           "rule": "RM-B",
-          "symbol": "kernel_receipt"
+          "symbol": "kernel_receipt",
+          "key_set": [
+            "derivation"
+          ]
         },
         {
           "path": "scripts/serve_chat.py",
@@ -1247,7 +1475,10 @@
             1145
           ],
           "rule": "RM-B",
-          "symbol": "kernel_receipt"
+          "symbol": "kernel_receipt",
+          "key_set": [
+            "grounding"
+          ]
         },
         {
           "path": "scripts/serve_chat.py",
@@ -1256,7 +1487,8 @@
             1149
           ],
           "rule": "RM-B",
-          "symbol": "kernel_receipt"
+          "symbol": "kernel_receipt",
+          "key_set": []
         }
       ],
       "site_key_set": [
@@ -1267,9 +1499,12 @@
         "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
       },
       "committed_instances": {
-        "count": 70,
+        "count": 211,
+        "exact_count": 70,
+        "superset_only_count": 141,
         "resolved_by": [
-          "I2"
+          "I2",
+          "I2b"
         ],
         "sample_paths": [
           "experiments/throughput_result.json",
@@ -1278,6 +1513,15 @@
           "experiments/throughput_trial_c2_halfA.json",
           "experiments/throughput_trial_kernel_halfA.json"
         ],
+        "superset_sample_paths": [
+          "experiments/text_resolution_holdout3_provenance.json",
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -1314,7 +1558,8 @@
             2158
           ],
           "rule": "RM-D",
-          "symbol": "accept_write"
+          "symbol": "accept_write",
+          "key_set": []
         }
       ],
       "site_key_set": [],
@@ -1324,8 +1569,12 @@
       },
       "committed_instances": {
         "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
         "resolved_by": [],
         "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -1362,7 +1611,8 @@
             1658
           ],
           "rule": "RM-D",
-          "symbol": "stage_write"
+          "symbol": "stage_write",
+          "key_set": []
         }
       ],
       "site_key_set": [],
@@ -1372,8 +1622,12 @@
       },
       "committed_instances": {
         "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
         "resolved_by": [],
         "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
       },
@@ -1695,8 +1949,8 @@
       {
         "path": "scripts/cold_registry_census.py",
         "line_range": [
-          1500,
-          1521
+          1593,
+          1614
         ],
         "symbol": "build_census",
         "matched_keys": [
@@ -3060,6 +3314,35 @@
     ],
     "means": "each uncovered site is a mapping whose key names mention this program's evidence vocabulary and that the census rule did not admit. They are candidate census misses under B10 — computed by the probe, not remembered by a maintainer — and the census claims no coverage over them."
   },
+  "instance_recall_probe": {
+    "exact_instances": 512,
+    "superset_only_instances": 2639,
+    "kinds_the_exact_rule_alone_would_have_read_as_none": [
+      {
+        "kind_id": "foreign_voice:receipt",
+        "exact_count": 0,
+        "superset_only_count": 2313,
+        "sample_paths": [
+          "experiments/foreign_voice_rate2.json"
+        ],
+        "why_the_exact_rule_missed": "the committed mapping carries keys the site's literal key set does not, so an exact match found nothing while a proper superset match found these"
+      },
+      {
+        "kind_id": "serve_chat:_resolution_receipt",
+        "exact_count": 0,
+        "superset_only_count": 160,
+        "sample_paths": [
+          "experiments/throughput_result.json",
+          "experiments/throughput_result_c2.json",
+          "experiments/throughput_tasks.json",
+          "experiments/throughput_trial_c2_halfA.json",
+          "experiments/throughput_trial_kernel_halfA.json"
+        ],
+        "why_the_exact_rule_missed": "the committed mapping carries keys the site's literal key set does not, so an exact match found nothing while a proper superset match found these"
+      }
+    ],
+    "means": "the exact key-set rule stays the rule; this probe is what makes its brittleness a number instead of a surprise"
+  },
   "pin_table": {
     "captured_by": "session_ledger.pins()",
     "captured_before_rename": true,
@@ -3156,10 +3439,10 @@
     "fired": false,
     "b1_unmapped_emitting_routes": 0
   },
-  "census_seal": "6c575c70dbbdd7f79245a90902b84b0d1dd74e13176e2f878ece4f1b91b00ded",
+  "census_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
   "provenance": {
     "writer": "scripts/cold_registry_census.py",
-    "writer_sha256_lf": "1c316dcf0c50aa381ce0b981372fc2bdf6ccf4c2cf149e6f46e7652c59864930",
+    "writer_sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb",
     "inputs": [
       {
         "path": "scripts/_verifier_sandbox.py",
@@ -3231,7 +3514,7 @@
       },
       {
         "path": "scripts/cold_registry_census.py",
-        "sha256_lf": "1c316dcf0c50aa381ce0b981372fc2bdf6ccf4c2cf149e6f46e7652c59864930"
+        "sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb"
       },
       {
         "path": "scripts/compose_assert.py",
@@ -3875,5 +4158,26 @@
       }
     ],
     "emitted_at_generation": true
+  },
+  "amendment": {
+    "amendment": 2,
+    "dated": "2026-08-27",
+    "authority": "ROADMAP-v0.21 §4.0(1) — an arm that never executed as designed is a bug, not a reading",
+    "defect": "I2 matched an artifact mapping only when its key set was EXACTLY the site's. A site whose mapping gains one conditional key therefore matched nothing, and the census declared recheck_procedure `none` for kinds with committed instances.",
+    "repair": "I2b: a proper-superset match, counted beside the exact one and never instead of it, plus an instance-side recall probe so the exact rule's brittleness is a published number",
+    "what_did_not_change": [
+      "the four marking predicates RM-A/B/C/D",
+      "the exclusion rules X1/X2 and the seeded-exclusion check",
+      "the site-side recall probe",
+      "the route resolution rule"
+    ],
+    "previous_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+    "new_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+    "diff_shape": {
+      "kinds_added": [],
+      "kinds_removed": [],
+      "counts_moved": {},
+      "declared_recheck_procedure_moved": []
+    }
   }
 }
