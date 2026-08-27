@@ -463,6 +463,46 @@ rumours:
 
 ## 5. Governance
 
+### 5.0 The supplementary outside series (dated 2026-08-27, maintainer-directed)
+
+After this roadmap's course closed, the maintainer directed a
+supplementary design series with **a different model family doing the
+thinking** — GPT-5.6-sol via the codex CLI at maximum reasoning effort,
+network-disabled, filesystem-isolated, from a neutral non-git directory,
+in an academic register, with this course's full fifteen-direction
+exclusion card disclosed in round one. Three rounds; brief and per-round
+prompt hashes, flags, and the full adjudication in
+`reports/design-direction-v0.22.json` `supplementary_series`; the three
+round outputs committed at
+`reports/design-direction-v0.22-supplementary/` by maintainer direction
+(they are referee prospectuses, not chat — the transcript-dumping rule's
+target is noise, and the maintainer asked to see the thinking).
+
+Dispositions, so nothing is silently disposed:
+
+- **The incumbent stands.** Nothing in the series contests HANDLES; the
+  series' own intake proposal binds itself to the enumeration layer
+  beneath it.
+- **THE PREMISE LEDGER** (its lead: receipts certifying assumption
+  *necessity* by per-premise countermodels, not mere consumption — aimed
+  at the session ledger's own published byte-vs-semantic limitation) is
+  recorded as a **third v0.23 incumbent-candidate, capability-class**,
+  beside the instrument-class CANARY-CURVE and TOLL, with its
+  preregistration-grade draft on file.
+- **BOUNDED OMNISCIENCE × SPLIT-SEMANTICS** (its runner-up: a
+  36-command closed island proving completeness and non-reflexive
+  compiler correspondence in one artifact) is **adopted as the
+  strengthened unpark formulation** of the parked conformance-successor
+  lane; TWO JUDGES parks behind it as its later completion.
+- **THE MEANING HANDSHAKE** contributes two bounded lessons (the
+  `UNNAMED_SCOPE` typed refusal; person-confirmation subsuming the
+  resolver pre-emption — both recorded in the relevant BACKLOG entries)
+  and parks as a direction behind HANDLES, by its own
+  recall-bounded-by-enumeration argument.
+- **Its programme-level blind spot** — no prospectively sampled,
+  externally sourced task distribution — is **convergent evidence for
+  the parked DEMAND direction**, noted there.
+
 - **The course gate was INVOKED strictly for the fourth consecutive cycle.**
   `reports/design-direction-v0.22.json` records three isolated series, three
   rounds each — **nine rounds, fifteen round-one directions, $2.80** — run

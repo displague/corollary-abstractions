@@ -1,0 +1,108 @@
+**THE PREMISE LEDGER** is the lead; the sole runner-up is **BOUNDED OMNISCIENCE × THE SPLIT-SEMANTICS COMPILER**, because its closed denominator and non-reflexive correspondence proofs provide the strongest alternative test, but at materially greater construction cost.
+
+### 1. Larger move
+
+THE PREMISE LEDGER upgrades provenance from recording which premises were consumed to certifying which premises were necessary for a conclusion within a frozen decidable semantics. Success would establish a replayable, mutation-tested necessity receipt—not understanding, causal reasoning, or validity beyond that semantics.
+
+### 2. First-class artifact
+
+```text
+PremiseLedgerV1 {
+  preregistration_digest: hex64,
+  corpus_digest: hex64,
+  lean_checker_digest: hex64,
+  truth_checker_digest: hex64,
+  mutant_spec_digest: hex64,
+  budget_ms: uint,
+  chance_scores: uint[1000],
+  capability_blind_control_score: uint,
+  rows: LedgerRow[60],
+  gate_status: PASS | FAIL | VOID | UNTESTED
+}
+
+LedgerRow {
+  row_id: string,
+  stratum: ACCEPT | ATOM_LIMIT | ASSUMPTION_LIMIT |
+           UNSUPPORTED_QUANTIFIER | MALFORMED_FORMULA |
+           UNSUPPORTED_CONNECTIVE,
+  source_assumptions: string[],
+  source_query: string,
+  atom_order: string[],
+  assumptions: FormulaRecord[] | null,
+  query: FormulaRecord | null,
+  decision: ACCEPT | REFUSE,
+  refusal_code: string | null,
+  receipt: Receipt | null
+}
+
+FormulaRecord {
+  source: string,
+  parsed_ast: string,
+  canonical_normal_form: string,
+  formula_digest: hex64
+}
+
+Receipt {
+  retained_assumption_ids: string[],
+  removed_assumption_ids: string[],
+  lean_proof: {
+    theorem_text: string,
+    proof_text: string,
+    checker_output_digest: hex64,
+    accepted: bool
+  },
+  necessity_witnesses: NecessityWitness[],
+  mutant_results: MutantResult[]
+}
+
+NecessityWitness {
+  removed_retained_id: string,
+  valuation: map<string,bool>,
+  remaining_assumptions_all_true: bool,
+  query_false: bool,
+  truth_checker_accepted: bool
+}
+
+MutantResult {
+  mutant_id: string,
+  kind: PROOF_FINAL_STEP_DELETION | MODEL_ATOM_OMISSION,
+  parent_digest: hex64,
+  mutant_digest: hex64,
+  expected: REJECT,
+  observed: ACCEPT | REJECT
+}
+```
+
+### 3. Construction gate
+
+**B1.** Freeze exactly 50 accepted rows—25 with at least one redundant input premise and 25 irredundant—and 10 refusals, two for each named refusal stratum. Accepted rows contain 1–8 atoms and 2–8 assumptions. These numbers are meetable: examples exist in both accepted strata, while exhaustive adjudication requires at most \(2^8=256\) valuations per check.
+
+**B2.** Require 50/50 receipts to contain a Lean-kernel-accepted proof of \(A^*\vdash q\) and exactly one independently checked witness for every retained premise \(a\), satisfying \(A^*\setminus\{a\}\land\neg q\); require 10/10 exact refusal codes. The maximum is eight witnesses per receipt, hence finite and exhaustively checkable.
+
+**B3.** Pin Lean and the separately authored truth-table checker by digest and prohibit shared evaluation code. Generate one final-proof-step deletion per accepted row and one atom-omission mutant per witness; every mutant must be rejected. At most 450 mutants arise, so exhaustive mutation adjudication is meetable.
+
+**B4.** Require 60/60 successes. Any redundant retained premise, invalid proof, invalid witness, wrong refusal, digest drift, or accepted mutant fails the artifact; perfection is meetable because propositional entailment and each countermodel condition are decidable over the frozen bounds.
+
+**B5.** Pilot-defer only `budget_ms` to **P-BUDGET**, comprising 12 disjoint development sequents, six redundant and six irredundant. Set it to the largest successful end-to-end verifier CPU time rounded upward to the next 100 ms; freeze it immediately after the pilot commit and before candidate authoring or target-row scoring. Any unsuccessful pilot row stops the study.
+
+**B6.** Freeze 1,000 budget-matched random deletion-search runs with seeds 0–999. The chance threshold is the 990th ordered score—the nearest-rank 99th percentile—and the candidate must score strictly above it as well as satisfying B4; bounded rows and seeds make the computation meetable, while a threshold of 60 correctly makes passage impossible.
+
+**B7.** Run the capability-blind control under the same adjudicator: it retains every parsed assumption and refuses every parser-rejected row. If its score is 60, emit verbatim:
+
+`VOID: CAPABILITY_BLIND_CONTROL_SCORE=60/60; NO_CAPABILITY_BEYOND_BYTE_CONSUMPTION_PROVENANCE_IS_ATTRIBUTABLE.`
+
+### 4. Stop conditions and non-claims
+
+Scoring is one-shot: pilot failure, provenance drift, any B-clause failure, failure to exceed chance, or the void condition terminates the capability claim; the raw ledger is committed before any compact report, with no row replacement, repair, or rescoring. The result makes no claim of unique minimum, minimum cardinality, semantic necessity outside the registered abstraction, full-assistant generalisation, or human-like reasoning; absent external replication remains **UNTESTED**, not silently positive.
+
+### 5. Next question
+
+If the gate fires: can premise-minimal receipts be composed across multi-step, state-changing solves while preserving necessity under substitution?
+
+### 7. Residual risk
+
+The most likely surviving wrong artifact is a perfectly proved ledger over a mistranslated abstraction: if the original premise or query is encoded incorrectly, every proof, countermodel, and mutant result can pass while certifying the wrong proposition.
+
+### 8. Programme-level blind spot
+
+None of the five directions supplies a prospectively sampled, externally sourced task distribution with an independently justified loss function. The programme can therefore become exceptionally rigorous about artifacts chosen, formalised, and scored by its own designers while remaining unable to show that those artifacts represent consequential failures outside the programme; an external examiner would first ask who selected the problems, whose costs define success, and what prevents the benchmark from rewarding the programme’s own ontology.

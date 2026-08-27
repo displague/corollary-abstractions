@@ -1,0 +1,133 @@
+You are an external referee and research advisor to a small research
+programme you have not seen. Everything you may know of it is contained
+in this document; no code, data, or bibliography will be provided.
+Your value lies precisely in your exteriority and in the divergence of
+your priors from those of the programme's habitual reviewers. Please
+respond in a scholarly register, with explicit argumentation: state
+your premises, derive your claims, and mark conjecture as conjecture.
+
+THE PROGRAMME'S THESIS. Small language models are unreliable assertors,
+and conventional programs are narrow ones. The programme investigates a
+third architecture: a large and growing library of exact,
+machine-checkable statements (presently mathematics), served by
+ordinary programs that parse, index, evaluate, and answer over that
+library, with small learned components admitted only at the periphery
+under a strict contract — they may PROPOSE, they may never DECIDE.
+Every served answer is a quotation, a computation, or a refusal, each
+carrying a receipt that a third party can re-verify offline. An
+external proof assistant that the programme did not author adjudicates
+formal claims; its verdicts are pinned by digest and replayable.
+
+THE CURRENT STATE OF THE ARTIFACT, described by kind rather than name:
+- A statement library of ~12,800 exact statements across ~27 topic
+  areas, ingested from public formal-mathematics corpora, growing at
+  runtime through a gated write path that admits only machine-proven
+  material, append-only.
+- A chat-style HTTP service conforming to a widely-adopted LLM API, so
+  third-party agent harnesses can attach; input is a registered grammar
+  of typed one-line commands; a capability sheet teaches the grammar.
+- A measured throughput result: for questions within the registered
+  grammar over covered ground, correct receipted answers are served
+  several hundred times faster than a pinned small-LLM baseline, under
+  three preregistered voiding controls.
+- A conversation object: recorded sessions are committed, replayable
+  artifacts; a declared assumption persists across turns as a receipted
+  record; every answer names which assumptions it consumed; mutation
+  controls (sham and uncited assumptions must move nothing) and keyed
+  message-authentication chains gate the claim. The live prompt does
+  not yet persist assumptions; only recorded sessions do, and the
+  distinction is published rather than blurred.
+- Verified English renderings of formal statements, licensed only by an
+  exact round trip through the proof assistant; roughly two-thirds of
+  the library speaks natively; a second voice for the formally foreign
+  residue passed its verification gates after once failing them.
+- A compiler from statements to exact evaluators (integers and exact
+  rationals under declared domains), whose corpus-level conformance
+  claim VOIDED on its own preregistered controls; the route serves
+  per-point verdicts with the void published on it, and no conformance
+  rate exists anywhere in the programme's literature.
+- Three registered outcomes in the most recent cycle, with three
+  distinct verdicts, all published with mechanism: the conversation
+  object SERVED; plain-language intake FAILED HONESTLY (a
+  capability-blind control outscored the learned proposer because the
+  frozen metric was structurally incapable of rewarding a correct
+  refusal — all six of the model's declinations were verifiably
+  correct); and a proof-carrying conformance successor STOPPED ITSELF
+  at its pilot upon discovering that a single shared front-end reduced
+  every obligation to the tautology P-iff-P.
+- A measured negative of consequence: the two committed non-title
+  indices yield discriminating "handles" for roughly 2% of the
+  library, because the bulk-ingested majority carries only boilerplate
+  glossary entries. The working hypothesis for the coming cycle is
+  that the ingested library is effectively NAMELESS, and that the
+  naming layer between human vocabulary and formal content must be
+  constructed rather than indexed.
+
+THE MEASUREMENT CULTURE, which binds any proposal you make:
+preregistration precedes implementation; gates and floors are frozen
+before instruments exist, and every frozen floor must be accompanied at
+registration by an argument that a correct instrument could meet it;
+capability-blind baselines with written voiding sentences accompany
+every claim; negative results and voids are published as first-class
+outcomes; every metric must derive its chance rate from measured
+verification cost rather than nominal alternatives (1/N is forbidden),
+and every metric must be capable of rewarding a correct refusal. The
+recurring failure mode the programme hunts in itself: assertions so
+constructed that they cannot go red — checks that compare an object to
+itself, prose that borrows authority from adjacent machine-checked
+numbers, controls whose perfect score would be uninformative.
+
+STANDING CONSTRAINTS: exact code owns structure, equality, and
+verdicts; one maintainer, one workstation, pinned local models and
+toolchains, no network access at serving time; first slices must fit
+one release cycle and yield a committed, checkable artifact; outside
+participation must degrade honestly to "untested" rather than block a
+cycle; the library grows only by addition.
+
+AMBITIONS, stated as human capabilities: a person holds a plain
+conversation in plain text and receives only exact, receipted, or
+honestly-refused answers, including answers conditional on stated
+assumptions; the system knows and says what it does not know, and
+renders its ignorance actionable; the unreachable majority of the
+library becomes reachable; downstream software agents compose its
+answers without re-verification.
+
+EXCLUDED TERRITORY. The following conceptual ground is already claimed
+by the programme's own recent inquiries (three isolated series of a
+sibling advisor, whose funnel is committed). Do not propose these or
+near-variants; where an idea of yours drifts toward one, disclose the
+drift and replace it:
+(i) title-independent reachability via exactly-derived handle sets
+with title-deletion ablation; (ii) served single-step derivations
+returning an answer or a typed frontier refusal carrying a signed
+reduction; (iii) machine-checked independence of two readings of a
+statement (derived kernels, closure disjointness, mutation batteries);
+(iv) composable receipts and void propagation across routes;
+(v) typed-delta replay of served history against a grown library;
+(vi) adjudicated two-way correction with checker-discharged rebuttals;
+(vii) refusals carrying executed question-repairs; (viii) receipts
+that survive deletion of the producing program; (ix) sequence-level
+adversarial search over conversations; (x) cost as a
+production-versus-recheck ratio on a named floor machine;
+(xi) declared scaling classes frozen before measured growth, with the
+decomposition of the throughput result into architectural and
+corpus-size components; (xii) cheapest-machine certificates;
+(xiii) cost ceilings as typed refusals; (xiv) fault-injection scopes
+for exactness on unfaithful hardware; (xv) person-taught macros over
+the registered grammar.
+
+YOUR TASK. Propose FIVE distinct forward directions for this
+programme, each argued in the manner of a short research prospectus.
+For each, in no more than 200 words: (a) the novel class of claim the
+direction would render true, stated precisely; (b) an argument from
+the programme's present state for why that claim is presently
+unmakeable; (c) a falsifiable construction gate — what, decided in
+advance of any measurement, would count as the direction failing; and
+(d) the cheapest honest failure: the least expensive experiment whose
+negative outcome would justifiably terminate the direction. The five
+must be conceptually independent — five instantiations of one idea
+will be treated as one. At least one should strike you as
+intellectually risky. Number them and give each a short memorable
+name. You are encouraged to draw on the general research literature
+where it sharpens an argument, but cite from memory honestly:
+attribute only what you are confident exists.

@@ -1,0 +1,41 @@
+I retain THE MEANING HANDSHAKE and THE PREMISE LEDGER, and merge BOUNDED OMNISCIENCE with THE SPLIT-SEMANTICS COMPILER. TWO JUDGES becomes the merged direction’s natural completion, not its rival: independent readings must exist before a second checker can corroborate anything non-reflexive.
+
+### 1. THE PREMISE LEDGER
+
+The first slice is a committed, replayable ledger for fifty propositional sequents with at most eight atoms and eight assumptions, deliberately including redundancy, plus ten frozen out-of-fragment boundary cases. Each accepted row contains exact normal forms, an external-assistant proof of \(A^* \vdash q\), and—for every \(a\in A^*\)—an independently truth-tabled valuation satisfying \(A^*\setminus\{a\}\land\neg q\). This composes directly with the programme’s substitution discipline and exact assumption records.
+
+The construction gate is 50/50 valid minimal receipts and 10/10 correct scope refusals. One redundant retained premise, invalid proof, invalid countermodel, or surviving proof/model mutant fails the artifact. The full assistant fragment is pilot-deferred because countermodel production there is not cycle-feasible; no evidence from this pilot transfers automatically.
+
+The score counts either a valid receipt or a correct refusal as one success. Its chance distribution is frozen from 1,000 random deletion-search runs constrained by the measured proof-and-countermodel verification budget; passage additionally requires exceeding its 99th percentile.
+
+The capability-blind control returns every assumption and refuses parser-rejected cases. A perfect control score would show that the corpus or metric never tests necessity, voiding the proposed upgrade over byte-consumption provenance.
+
+Refusals: no unique-minimum or minimum-cardinality claim; no semantic necessity beyond the frozen propositional abstraction; no full-fragment generalisation. Absent outside replication is recorded as **UNTESTED**, never cycle-blocking.
+
+### 2. BOUNDED OMNISCIENCE × THE SPLIT-SEMANTICS COMPILER
+
+The first slice is a committed “closed semantics island”: the twelve expressions \(0,1,x\), and the nine ordered sums of two such leaves, each evaluated at \(x\in\{-1,0,1\}\)—exactly 36 member commands—plus twelve boundary nonmembers. The artifact contains an enumeration digest, a source parser and denotational AST, a separate parser for non-isomorphic stack-machine code, the compiler and execution semantics, correspondence proofs, exact results, and an independently written adjudication ledger importing neither serving parser nor evaluator.
+
+The gate requires 36/36 correct member values, 12/12 checked refusals, explicit occurrence of both semantics and a compiler-specific lemma in every proof, no obligation reducing to reflexivity, and rejection of one mutant for each of the three source and three target constructors. The existing census of 34,863 commands supplies the parent ground, not the pilot denominator. Extension to all 34,863 is deferred because its second-semantics construction cost has not been measured.
+
+Chance is the score distribution of 1,000 membership-aware but semantics-blind, frequency-matched controls run under the measured adjudication budget; correct refusals receive full credit. A perfect control score would void the attribution of any capability beyond census and membership testing.
+
+SPLIT-SEMANTICS subsumes the parked P-iff-P lane within compiler conformance; no residue remains there. TWO JUDGES is its later completion, bounded by shared classical foundations. Refused now: dual toolchains, natural language, full-universe completeness, and extrapolation. Missing outside replication is **UNTESTED**.
+
+### 3. THE MEANING HANDSHAKE
+
+Its principal contribution is precisely the shrinkage: not “the proposer understood the utterance,” but “the answer is licensed under a person-selected, machine-fixed meaning.” The first slice commits a replay bundle for the thirty sealed natural questions and thirty matched near-misses: enumeration digest, verified index slate, canonical rendering, PERSON confirmation or refusal, selected-object digest, answer/ASK decision, and exact replay receipt. Unresolved suppositions may be displayed, but the pilot chooses clarification; they cannot license conditional answers.
+
+Confirmation subsumes the old pre-emption: all thirteen exact-match hits become proposals and still await confirmation. Over the approximately 98% nameless majority, the handshake claims nothing: without a stable, person-discriminable rendering it returns **UNNAMED_SCOPE**. Confirming an opaque index is insufficient.
+
+The gate permits no pre-confirmation answer, multi-object confirmation, replay drift, or exact-match bypass; it requires at least 9/10 target-in-slate performance on the ambiguous separator stratum and 30/30 near-miss refusals. \(k\) is pilot-deferred and frozen after measuring verified-index cost and enumeration width. The score’s chance rate comes from 1,000 cost-matched runs of lexical ranking over the same verified lists; correct scope refusal scores fully.
+
+A perfect lexical-control score would void any learned proposal capability, leaving only the confirmation receipt. Refused: English understanding, question repair, nameless-library coverage, and unconfirmed conditional answers. Absent outside confirmers are **UNTESTED**; maintainer-person construction proceeds.
+
+### Ranking
+
+1. **THE PREMISE LEDGER** offers the highest information per effort: it attacks an acknowledged limitation with machinery already committed, while exhaustive propositional adjudication makes failure decisive.
+2. **BOUNDED OMNISCIENCE × SPLIT-SEMANTICS** costs more, but one small artifact tests both a genuine closed denominator and escape from P-iff-P.
+3. **THE MEANING HANDSHAKE** is relatively inexpensive, yet its information yield is intrinsically narrower: the defensible advance is a licensing discipline, while enumeration recall and namelessness remain untouched.
+
+I have also retained the programme’s previously recorded discipline of preregistration before candidate construction and raw evidence before compact reporting; this is a methodological convention, not a claim about current release status.
