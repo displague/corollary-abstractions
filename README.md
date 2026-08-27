@@ -604,15 +604,18 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # test_conform_register, test_cv4_replay, test_grouping_agreement,
 # test_grouping_canonical, test_machine_reader) and grows thirteen
 # existing ones.
-# [SUITE-GATE-V21] -- v0.21.0's full-gate line lands here: tests run,
-# failures, skips, wall-clock and tip, with receipts in
-# reports/test_gate_v021/. The tag waits on it. This cycle adds five
-# wholly new modules -- test_conform_ce3_supplement, test_plain_input,
-# test_session_ledger, test_session_prereqs, test_witness -- and grows
-# several existing ones. Per-slice suites were green at each landing;
-# a targeted suite proves the surfaces you listed and the full gate
-# proves the ones you forgot, which is why this is a placeholder and
-# not a number.
+# 2,632 tests, 0 failures, 5 skipped at v0.21.0 -- 6h47m serial
+# (24,393.8s) at tip 7692220, green on run 3. Run 1 (2 fails) was one
+# missing amendment: a lane moved evaluate.py, fed the throughput book
+# and not the conformance prereg -- repaired by the retirement-chain
+# mechanics, third exercise. Run 2 (1 fail) was the append-only proof
+# meeting its second layer: the reversibility test peeled amendments
+# but not retirement markers; the property held, the test's model was
+# one layer shallow. All three runs' receipts:
+# reports/test_gate_v021/ (run1-red, run2-red, run3-green). This cycle
+# adds five wholly new modules -- test_conform_ce3_supplement,
+# test_plain_input, test_session_ledger, test_session_prereqs,
+# test_witness -- and grows several existing ones.
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

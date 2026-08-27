@@ -1250,17 +1250,42 @@ every step above carries one.
 
 ## The suite at the tip
 
-`[SUITE-GATE-V21]` — the full `unittest discover -s tests` run on a frozen tip,
-with retained receipts in `reports/test_gate_v021/`, lands here with its
-wall-clock, its failure count and its skip list. **The tag waits on it.** The
-v0.20 baseline is 2,326 tests, OK (skipped=5), 21,828.9 s (6 h 04 m).
+Three runs, all retained in `reports/test_gate_v021/`, and the two red ones
+are part of the record:
 
-This cycle adds five wholly new test modules — `test_conform_ce3_supplement`,
-`test_plain_input`, `test_session_ledger`, `test_session_prereqs`,
-`test_witness` — and grows several existing ones. Per-slice suites were green
-at each landing; **a targeted suite proves the surfaces you listed, and the
-full gate proves the ones you forgot**, which is v0.20's own lesson and the
-reason this section is a placeholder rather than a number.
+| run | tip | result |
+|---|---|---|
+| 1 | `de91713` | **2,632 ran, FAILED (failures=2, skipped=5), 21,126.9 s (5 h 52 m)** |
+| 2 | `d26cb04` | **2,632 ran, FAILED (failures=1, skipped=5), 21,498.3 s (5 h 58 m)** |
+| 3 | `7692220` | **2,632 ran, OK (skipped=5), 24,393.8 s (6 h 47 m)** |
+
+**Run 1's two failures were one missing amendment.** The session-ledger lane
+added `free_names` to `scripts/evaluate.py`, rebuilt the throughput book for
+the move, and never fed the **conformance** preregistration that froze the
+same file — the E7 sweep and the register's freeze check both went red at
+the gate, the freeze doing its job one run later than it should have been
+fed (`v0.20`'s run-1 shape, one lane over). Repaired by the retirement-chain
+mechanics' third exercise: a dated RETROSPECTIVE amendment retiring the
+evaluator row (the conformance run stands as measured under the old digest),
+the successor pin in `exact_literals_prereg.json` — widened by dated note
+into the terminal pin book for moved conformance-frozen modules — and both
+guards re-aimed at the shared transitive walk (`scripts/prereg_pins.py`).
+
+**Run 2's one failure was the cheapest red a six-hour run has bought:** the
+append-only reversibility proof — delete the amendment, get the sealed blob
+back byte-for-byte — did not know the retirement mechanics add **two**
+structures (amendment entries *and* retirement markers on frozen rows), so
+run 1's repair left a marker the test could not peel. The property held; the
+test's model of it was one layer too shallow. Re-aimed: removing both
+restores the seal, and anything else that moved still fails.
+
+Run 3, green: **2,632 tests, 0 failures, 5 skips** — up from v0.20.0's
+2,326 by this cycle's five wholly new modules
+(`test_conform_ce3_supplement`, `test_plain_input`, `test_session_ledger`,
+`test_session_prereqs`, `test_witness`) and growth in existing ones. The
+five skips are the standing set. **A targeted suite proves the surfaces you
+listed, and the full gate proves the ones you forgot** — v0.20's lesson,
+paid twice more here and both times cheaply.
 
 ## Reproduce
 
