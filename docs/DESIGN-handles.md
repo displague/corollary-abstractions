@@ -1,6 +1,15 @@
 # Handles
 
-**Status: design only.** Nothing here is implemented. This is the v0.22
+**Status: H-P0 measured; §9's stop clause ADJUDICATED FIRED
+(2026-08-27).** The census returned 417/12,777 (3.26%) typable specific
+handles (`experiments/handles_census.json`, hostile-review-reproduced
+to the digit), and the orchestrator's dated ruling in §9's addendum
+concludes item 1 with the census as its registered result: the
+capability sentence does not ship this cycle, no table, pilot, or Q60
+exists (tests assert the absences), and the naming-layer question
+routes to the v0.23 course. The design below §6 remains the
+preregistration-ready plan for a library whose census clears the
+clause — it is inherited, not discarded. This is the v0.22
 course's selected direction (receipt:
 `reports/design-direction-v0.22.json`, which records the outside draft
 verbatim in `outcomes.series_1.preregistration_draft`). The first
@@ -338,6 +347,25 @@ this slice's assumption. The resolver's own routes and scores are
 untouched (the fence: `_route_resolver`'s served bytes byte-identical
 before and after, tested — this design changes candidate enumeration
 for the proposer path only).
+
+> **Adjudication, dated 2026-08-27 (orchestrator ruling).** The stop
+> clause **FIRES**, on two independent grounds. (1) The census read
+> 3.26% typable specific coverage — inside the clause's ambit, and not
+> rescuable by any re-freeze of K: coverage of the bulk caps at 302
+> statements (2.41%) at every K forever, because six of its nine
+> glossary tokens each blanket >12,200 statements (B2's NOT-FIRED
+> adjudication carries the measurement). (2) Independently decisive:
+> sealing Q60's 42 in-library targets against a 417-statement handle
+> population would be a manifest consuming its population — the
+> construction defect §4.0(3) exists to catch, and the same shape that
+> stopped WITNESS at 60-of-66. Item 1 therefore concludes with the
+> census as its registered result; H-P1, H-P2, the table, and the
+> registered run do not occur this cycle; R1's lane-opening decision
+> goes to the rotation with its statement limb at 45× the floor and
+> its question limb dead with Q60 unsealed; the naming-layer question
+> is the v0.23 course's to adjudicate, with the S3 pricing (217 s
+> batched for terms over the 2,313 covered statements) and the
+> verified-renderings route named as candidate material, not chosen.
 
 ## 10. Stop conditions and non-claims
 

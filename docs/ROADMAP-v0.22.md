@@ -17,6 +17,24 @@ of evidence is worth when the program that produced it is gone.
 
 ## 1. Headline — HANDLES, and the census that may be the whole result
 
+> **Outcome, dated 2026-08-27: the census WAS the whole result.** H-P0
+> returned **417/12,777 (3.26%)** typable specific handles
+> (`experiments/handles_census.json`; every load-bearing number
+> independently reproduced by hostile review, including row-level
+> agreement on all 12,777 one-step classifications), and the design's
+> §9 stop clause is **adjudicated FIRED** — the ruling, with both
+> grounds (the cap-at-302-forever measurement; Q60 would consume its
+> 417-statement population), is in the design's §9 addendum. Item 1
+> concludes with the census as its registered result: *the ingested
+> library is effectively nameless; the naming layer must be built, not
+> indexed.* The cross-census sentence is the cycle's sharpest: of the
+> **9,048** statements structurally consumable by one-step derivation,
+> **125** carry a handle anyone could type. R1's statement limb read
+> 45× its floor (question limb dead with Q60 unsealed — lane decision
+> at rotation); R3 read zero flips over a digest-proven zero-growth
+> window with its plant detected 1/1. Release copy quotes the
+> artifacts: the 125 *carry* handles; nothing is claimed reachable.
+
 [DESIGN-handles](DESIGN-handles.md) is the v0.22 course's selection
 (receipt: `reports/design-direction-v0.22.json`). It was **rebuilt twice under
 adversarial review** before it landed, and both falsifications are why the item
