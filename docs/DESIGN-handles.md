@@ -363,8 +363,10 @@ for the proposer path only).
 > registered run do not occur this cycle; R1's lane-opening decision
 > goes to the rotation with its statement limb at 45× the floor and
 > its question limb dead with Q60 unsealed; the naming-layer question
-> is the v0.23 course's to adjudicate, with the S3 pricing (217 s
-> batched for terms over the 2,313 covered statements) and the
+> is the v0.23 course's to adjudicate, with the S3 pricing (**223.5 s**
+> batched for terms over the 2,313 covered statements — the census
+> artifact's own `s3_price` projection is the number of record; an
+> earlier "~217 s" rounding is corrected to it here) and the
 > verified-renderings route named as candidate material, not chosen.
 
 ## 10. Stop conditions and non-claims
