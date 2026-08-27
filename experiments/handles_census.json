@@ -10,7 +10,7 @@
   "specificity_definition": "a handle is specific iff resolves_to_count <= K (DESIGN-handles.md §7 B2). K is NOT re-frozen here; B2 says a re-freeze is argued from the distribution this census publishes, by dated amendment before the table run.",
   "provenance": {
     "writer": "scripts/handles_census.py",
-    "writer_sha256_lf": "d2be2d3984c16257fafa0a0c1a578446c5c89bd2d7192555ccc702127757d412",
+    "writer_sha256_lf": "a90cbb0ccc8897cbbc0df45fef1480a8f42435b1280d78d08eb97db9ff6f165b",
     "inputs": [
       {
         "path": "data/algebra/nodes.json",
@@ -1177,6 +1177,156 @@
     ],
     "reading": "12514 statements, 9 distinct glossary tokens, 6 distinct raw glossary strings. Every one of those tokens resolves to more than K statements, so the bulk's specific-S-LEX coverage is 0."
   },
+  "k_sensitivity": {
+    "why_this_block_exists": "B2's re-freeze trigger fires on K stranding whole corpora with no specific handle. This census measured exactly that condition -- lean_workbook's specific-S-LEX coverage is 0 of 12,514 -- so the trigger has to be adjudicated rather than reported and left.",
+    "plateaus": {
+      "S-LEX": {
+        "coverage_at_K": 263,
+        "invariant_for_K_in": [
+          22,
+          301
+        ],
+        "plateau_width": 280,
+        "K_is_interior": true
+      },
+      "S-INV": {
+        "coverage_at_K": 306,
+        "invariant_for_K_in": [
+          80,
+          218
+        ],
+        "plateau_width": 139,
+        "K_is_interior": true
+      },
+      "typable union": {
+        "coverage_at_K": 417,
+        "invariant_for_K_in": [
+          80,
+          218
+        ],
+        "plateau_width": 139,
+        "K_is_interior": true
+      }
+    },
+    "sweep": [
+      {
+        "K": 16,
+        "S-LEX": 262,
+        "S-INV": 152,
+        "typable_union": 277,
+        "union_pct": 2.168,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 32,
+        "S-LEX": 263,
+        "S-INV": 188,
+        "typable_union": 309,
+        "union_pct": 2.4184,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 64,
+        "S-LEX": 263,
+        "S-INV": 238,
+        "typable_union": 353,
+        "union_pct": 2.7628,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 128,
+        "S-LEX": 263,
+        "S-INV": 306,
+        "typable_union": 417,
+        "union_pct": 3.2637,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 218,
+        "S-LEX": 263,
+        "S-INV": 306,
+        "typable_union": 417,
+        "union_pct": 3.2637,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 219,
+        "S-LEX": 263,
+        "S-INV": 512,
+        "typable_union": 623,
+        "union_pct": 4.8759,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 256,
+        "S-LEX": 263,
+        "S-INV": 726,
+        "typable_union": 831,
+        "union_pct": 6.5039,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 301,
+        "S-LEX": 263,
+        "S-INV": 1070,
+        "typable_union": 1168,
+        "union_pct": 9.1414,
+        "lean_workbook_specific_S-LEX": 0
+      },
+      {
+        "K": 302,
+        "S-LEX": 565,
+        "S-INV": 1070,
+        "typable_union": 1470,
+        "union_pct": 11.505,
+        "lean_workbook_specific_S-LEX": 302
+      },
+      {
+        "K": 305,
+        "S-LEX": 565,
+        "S-INV": 1070,
+        "typable_union": 1470,
+        "union_pct": 11.505,
+        "lean_workbook_specific_S-LEX": 302
+      },
+      {
+        "K": 1024,
+        "S-LEX": 565,
+        "S-INV": 2099,
+        "typable_union": 2492,
+        "union_pct": 19.5038,
+        "lean_workbook_specific_S-LEX": 302
+      },
+      {
+        "K": 4096,
+        "S-LEX": 565,
+        "S-INV": 3264,
+        "typable_union": 3648,
+        "union_pct": 28.5513,
+        "lean_workbook_specific_S-LEX": 302
+      }
+    ],
+    "what_a_refreeze_would_buy_the_bulk": {
+      "smallest_K_giving_any_lean_workbook_statement_a_specific_S-LEX_handle": 302,
+      "the_token_that_K_admits": "ground_numeral",
+      "what_that_token_is": "a `semantic_role` value on the ingest template -- boilerplate, not a name a mathematician uses and not a phrase anybody types",
+      "ceiling_on_bulk_S-LEX_coverage_at_any_K": 302,
+      "ceiling_as_share_of_the_bulk": 2.4133,
+      "why_there_is_a_ceiling": "the bulk carries nine distinct glossary tokens in total and six of them are held by more than 12,200 statements each. No threshold below the corpus size admits those six without admitting the whole corpus, so S-LEX coverage of the bulk cannot exceed the holders of the three rare ones however far K is raised."
+    },
+    "adjudication": {
+      "dated": "2026-08-27",
+      "trigger": "DESIGN-handles.md §7 B2: if K = 128 strands whole corpora with no specific handle, K is re-frozen from H-P0's distribution by dated amendment BEFORE the table run",
+      "verdict": "NOT FIRED",
+      "reasons": [
+        "(a) lean_workbook is not WHOLLY stranded. S-INV gives 154 of its 12,514 statements a specific handle at K = 128. The trigger's condition is a corpus with no specific handle, and this corpus has one source that reaches it.",
+        "(b) the headline is not a knife-edge artifact of K's value. S-LEX's coverage is invariant across K in [22, 301], and S-INV's and the union's across [80, 218] -- so K = 128 sits INSIDE the plateau rather than on its edge, and any re-freeze within that range returns the identical numbers.",
+        "(c) and the decisive one: no re-freeze rescues the bulk. The smallest K at which S-LEX reaches a single lean_workbook statement is 302, and it does so by admitting one token -- `ground_numeral`, a boilerplate semantic_role -- which is exactly what K exists to exclude. Even then it caps at 302 statements, 2.41% of the bulk, at every larger K forever. A re-freeze cannot turn the finding around; it can only buy 2% of the bulk by admitting the boilerplate the finding is about."
+      ],
+      "consequence": "K stays 128. No dated amendment to B2's number is owed, and this block is the record of the trigger being adjudicated rather than silently left measured.",
+      "what_would_change_this": "a source that gives the bulk names. That is the census's headline -- the naming layer must be built, not indexed -- and it is a v0.23 rotation question, not a K question."
+    }
+  },
   "s3_price": {
     "question": "what would S3 term-serialization cost, if a later slice took it",
     "why_it_is_a_price_and_not_a_source": "the pinned oracle computes a serialization for every term and keeps only its sha256: `Receipt` (scripts/foreign_voice.py:182-191) has no field for the payload, and `gate` (scripts/foreign_voice.py:486-498) lets `answers` fall out of scope. A term layer would have to persist what that path throws away, so its cost is a storage cost plus a re-elaboration cost.",
@@ -1210,16 +1360,16 @@
       "toolchain": "leanprover/lean4:v4.32.2",
       "calls": 20,
       "sample": "first N committed receipts by statement_id, term = `interpreted`",
-      "cold_first_call_seconds": 1.1333,
+      "cold_first_call_seconds": 1.1764,
       "cold_start_note": "the first call is reported separately and excluded from `per_call_seconds` because it may pay for the OS bringing the toolchain and `import Lean` into cache, and on a cold box that cost can be large enough to move a mean of twenty. Whether it did on THIS run is readable from the two numbers: compare `cold_first_call_seconds` with `per_call_seconds.median`. The exclusion is a rule fixed before the run, not a reaction to what the run produced.",
       "per_call_seconds": {
         "basis": "calls 2..N, one Lean process per term (batch_size=1)",
-        "mean": 1.1603,
-        "median": 1.1372,
-        "min": 1.0781,
-        "max": 1.5521
+        "mean": 1.1628,
+        "median": 1.1353,
+        "min": 1.0996,
+        "max": 1.6174
       },
-      "batched_seconds_for_all": 1.9556,
+      "batched_seconds_for_all": 1.9323,
       "batched_ok": 20,
       "liveness": {
         "digests_reproduced": 20,
@@ -1235,10 +1385,10 @@
       },
       "projected_seconds": {
         "basis": "warm median per-call seconds x term count. Unbatched is one Lean process per term -- the ceiling. Batched is the same twenty terms in one process divided by twenty -- the floor. The real cost of a term-store build sits between them and depends on a batch size nobody has chosen yet.",
-        "one_term_per_covered_statement_unbatched": 2630.3,
-        "two_terms_per_covered_statement_unbatched": 5260.7,
-        "one_term_per_covered_statement_batched": 226.2,
-        "two_terms_per_covered_statement_batched": 452.3
+        "one_term_per_covered_statement_unbatched": 2625.9,
+        "two_terms_per_covered_statement_unbatched": 5251.9,
+        "one_term_per_covered_statement_batched": 223.5,
+        "two_terms_per_covered_statement_batched": 446.9
       },
       "projected_store_bytes": {
         "basis": "mean measured serialization length (UTF-8 chars, the serializations are ASCII S-expressions) x term count. Storage only: no index, no framing, no compression.",
@@ -1250,6 +1400,7 @@
   "P-L": {
     "park": "the lexicon-backwards question (docs/BACKLOG.md; ROADMAP-v0.22.md §4.3 'Open-English input')",
     "the_one_line": "which S-LEX names also appear in the realization lexicon's English -- recorded for that park's future unpark case, and nothing else",
+    "denominator": "\"the realization lexicon's English\" is defined here so the three numbers below are recomputable from this artifact alone: every string reachable by walking the seven sections ['call_heads', 'operators', 'relations', 'structural', 'slot_marker', 'operator_tokens', 'naming_conventions'] of data/realization/lexicon.json (recursively, values only), lowercased on [a-z0-9_]+ with resolver.STOPWORDS removed -- the same reduction S-LEX uses, so the two sides are compared in one vocabulary rather than across two. Sections of that file outside the seven (design, purpose, lexicon_id, head_coverage, registered, reading_rules) are prose ABOUT the lexicon rather than renderings it emits, and are excluded.",
     "realization_english_content_words": 237,
     "slex_handles_total": 1919,
     "slex_handles_in_realization_english": 173,

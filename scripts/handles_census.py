@@ -256,6 +256,158 @@ def strip_private(block: dict) -> dict:
 
 
 # --------------------------------------------------------------------------
+# K sensitivity -- what B2's re-freeze would and would not buy
+# --------------------------------------------------------------------------
+
+
+def cheapest_handle(forward: dict[str, set[str]],
+                    counts: collections.Counter) -> dict[str, int]:
+    """Each statement's most specific handle, as a resolves-to-count.
+
+    A statement has a specific handle at K exactly when this number is
+    <= K, so the whole K sweep reduces to comparisons against one integer
+    per statement instead of a rescan per K. Equivalent by construction:
+    `any(counts[h] <= K)` is `min(counts[h]) <= K`.
+    """
+
+    out: dict[str, int] = {}
+    for sid, handles in forward.items():
+        out[sid] = min((counts[h] for h in handles), default=1 << 30)
+    return out
+
+
+def k_sensitivity(slex_min: dict[str, int], sinv_min: dict[str, int],
+                  corpus_of: dict[str, str], k: int) -> dict:
+    """B2's re-freeze argument, measured rather than asserted.
+
+    B2 says that if K strands whole corpora with no specific handle, K is
+    re-frozen from this census's distribution by dated amendment before
+    the table run. That trigger was measured by this census
+    (lean_workbook's specific-S-LEX coverage is 0 of 12,514) and has to
+    be adjudicated, not merely reported -- so this block publishes the
+    two things an adjudication needs: how wide the plateau around K is,
+    and what a re-freeze would actually buy.
+    """
+
+    total = len(slex_min)
+    union_min = {sid: min(slex_min[sid], sinv_min[sid]) for sid in slex_min}
+    bulk = [sid for sid in slex_min if corpus_of[sid] == "lean_workbook"]
+
+    def at(series: dict[str, int], threshold: int,
+           members: list[str] | None = None) -> int:
+        pool = members if members is not None else list(series)
+        return sum(1 for sid in pool if series[sid] <= threshold)
+
+    def plateau(series: dict[str, int]) -> tuple[int, int, int]:
+        base = at(series, k)
+        low = k
+        while low > 1 and at(series, low - 1) == base:
+            low -= 1
+        high = k
+        while high < total and at(series, high + 1) == base:
+            high += 1
+        return base, low, high
+
+    plateaus = {}
+    for name, series in (("S-LEX", slex_min), ("S-INV", sinv_min),
+                         ("typable union", union_min)):
+        base, low, high = plateau(series)
+        plateaus[name] = {"coverage_at_K": base, "invariant_for_K_in": [low, high],
+                          "plateau_width": high - low + 1,
+                          "K_is_interior": low < k < high}
+
+    sweep = []
+    for threshold in (16, 32, 64, k, 218, 219, 256, 301, 302, 305, 1024, 4096):
+        sweep.append({
+            "K": threshold,
+            "S-LEX": at(slex_min, threshold),
+            "S-INV": at(sinv_min, threshold),
+            "typable_union": at(union_min, threshold),
+            "union_pct": round(100.0 * at(union_min, threshold) / total, 4),
+            "lean_workbook_specific_S-LEX": at(slex_min, threshold, bulk),
+        })
+
+    bulk_ceiling = max(row["lean_workbook_specific_S-LEX"] for row in sweep)
+    first_rescue = next((row["K"] for row in sweep
+                         if row["lean_workbook_specific_S-LEX"] > 0), None)
+
+    return {
+        "why_this_block_exists": (
+            "B2's re-freeze trigger fires on K stranding whole corpora with "
+            "no specific handle. This census measured exactly that condition "
+            "-- lean_workbook's specific-S-LEX coverage is 0 of 12,514 -- so "
+            "the trigger has to be adjudicated rather than reported and left."
+        ),
+        "plateaus": plateaus,
+        "sweep": sweep,
+        "what_a_refreeze_would_buy_the_bulk": {
+            "smallest_K_giving_any_lean_workbook_statement_a_specific_S-LEX_handle":
+                first_rescue,
+            "the_token_that_K_admits": "ground_numeral",
+            "what_that_token_is": (
+                "a `semantic_role` value on the ingest template -- "
+                "boilerplate, not a name a mathematician uses and not a "
+                "phrase anybody types"
+            ),
+            "ceiling_on_bulk_S-LEX_coverage_at_any_K": bulk_ceiling,
+            "ceiling_as_share_of_the_bulk": round(
+                100.0 * bulk_ceiling / len(bulk), 4),
+            "why_there_is_a_ceiling": (
+                "the bulk carries nine distinct glossary tokens in total and "
+                "six of them are held by more than 12,200 statements each. No "
+                "threshold below the corpus size admits those six without "
+                "admitting the whole corpus, so S-LEX coverage of the bulk "
+                "cannot exceed the holders of the three rare ones however far "
+                "K is raised."
+            ),
+        },
+        "adjudication": {
+            "dated": "2026-08-27",
+            "trigger": (
+                "DESIGN-handles.md §7 B2: if K = 128 strands whole corpora "
+                "with no specific handle, K is re-frozen from H-P0's "
+                "distribution by dated amendment BEFORE the table run"
+            ),
+            "verdict": "NOT FIRED",
+            "reasons": [
+                "(a) lean_workbook is not WHOLLY stranded. S-INV gives "
+                f"{at(sinv_min, k, bulk)} of its 12,514 statements a specific "
+                "handle at K = 128. The trigger's condition is a corpus with "
+                "no specific handle, and this corpus has one source that "
+                "reaches it.",
+                "(b) the headline is not a knife-edge artifact of K's value. "
+                f"S-LEX's coverage is invariant across K in "
+                f"{plateaus['S-LEX']['invariant_for_K_in']}, and S-INV's and "
+                f"the union's across "
+                f"{plateaus['typable union']['invariant_for_K_in']} -- so K = "
+                "128 sits INSIDE the plateau rather than on its edge, and any "
+                "re-freeze within that range returns the identical numbers.",
+                "(c) and the decisive one: no re-freeze rescues the bulk. The "
+                f"smallest K at which S-LEX reaches a single lean_workbook "
+                f"statement is {first_rescue}, and it does so by admitting one "
+                "token -- `ground_numeral`, a boilerplate semantic_role -- "
+                f"which is exactly what K exists to exclude. Even then it caps "
+                f"at {bulk_ceiling} statements, "
+                f"{round(100.0 * bulk_ceiling / len(bulk), 2)}% of the bulk, "
+                "at every larger K forever. A re-freeze cannot turn the "
+                "finding around; it can only buy 2% of the bulk by admitting "
+                "the boilerplate the finding is about.",
+            ],
+            "consequence": (
+                "K stays 128. No dated amendment to B2's number is owed, and "
+                "this block is the record of the trigger being adjudicated "
+                "rather than silently left measured."
+            ),
+            "what_would_change_this": (
+                "a source that gives the bulk names. That is the census's "
+                "headline -- the naming layer must be built, not indexed -- "
+                "and it is a v0.23 rotation question, not a K question."
+            ),
+        },
+    }
+
+
+# --------------------------------------------------------------------------
 # S3 -- the priced question
 # --------------------------------------------------------------------------
 
@@ -466,6 +618,14 @@ def measure_oracle(repo_root: Path, receipts: list[dict], n: int) -> dict:
 # --------------------------------------------------------------------------
 
 
+#: The sections of `data/realization/lexicon.json` that hold renderings
+#: the lexicon EMITS. The file's other keys (`design`, `purpose`,
+#: `lexicon_id`, `head_coverage`, `registered`, `reading_rules`) are prose
+#: about the lexicon and are not part of P-L's denominator.
+REALIZATION_SECTIONS = ("call_heads", "operators", "relations", "structural",
+                        "slot_marker", "operator_tokens", "naming_conventions")
+
+
 def realization_english(path: Path) -> set[str]:
     """Content words of every English rendering string in the lexicon."""
 
@@ -482,8 +642,7 @@ def realization_english(path: Path) -> set[str]:
             for child in value:
                 walk(child)
 
-    for section in ("call_heads", "operators", "relations", "structural",
-                    "slot_marker", "operator_tokens", "naming_conventions"):
+    for section in REALIZATION_SECTIONS:
         walk(document.get(section))
     return words - STOPWORDS
 
@@ -742,6 +901,9 @@ def build(data_dir: Path, repo_root: Path, k: int, oracle_calls: int) -> tuple[d
                 f"{sum(1 for s in bulk if s in slex_cov['_specific_ids'])}."
             ),
         },
+        "k_sensitivity": k_sensitivity(
+            cheapest_handle(slex, slex_counts),
+            cheapest_handle(sinv, sinv_counts), corpus_of, k),
         "s3_price": s3_price(repo_root, oracle_calls),
         "P-L": {
             "park": "the lexicon-backwards question (docs/BACKLOG.md; "
@@ -750,6 +912,19 @@ def build(data_dir: Path, repo_root: Path, k: int, oracle_calls: int) -> tuple[d
                 "which S-LEX names also appear in the realization lexicon's "
                 "English -- recorded for that park's future unpark case, and "
                 "nothing else"
+            ),
+            "denominator": (
+                "\"the realization lexicon's English\" is defined here so the "
+                "three numbers below are recomputable from this artifact "
+                "alone: every string reachable by walking the seven sections "
+                f"{list(REALIZATION_SECTIONS)} of "
+                "data/realization/lexicon.json (recursively, values only), "
+                "lowercased on [a-z0-9_]+ with resolver.STOPWORDS removed -- "
+                "the same reduction S-LEX uses, so the two sides are compared "
+                "in one vocabulary rather than across two. Sections of that "
+                "file outside the seven (design, purpose, lexicon_id, "
+                "head_coverage, registered, reading_rules) are prose ABOUT the "
+                "lexicon rather than renderings it emits, and are excluded."
             ),
             "realization_english_content_words": len(english),
             "slex_handles_total": len(slex_all_tokens),

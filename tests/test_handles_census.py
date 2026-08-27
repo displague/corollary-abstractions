@@ -439,6 +439,142 @@ class TheDeterministicHalfIsDeterministic(unittest.TestCase):
             self.assertEqual(keys, sorted(keys), name)
 
 
+class TheB2TriggerWasAdjudicatedNotJustMeasured(unittest.TestCase):
+    """M1. The census measured B2's re-freeze condition and owed a verdict.
+
+    lean_workbook's specific-S-LEX coverage is 0 of 12,514, which is
+    arguably "a corpus stranded with no specific handle" -- B2's trigger
+    in its own words. A census that measured the trigger and left it
+    lying there would be the cycle's recurring defect in its purest
+    form: a clause that could have gone red, never adjudicated.
+
+    Every number in the adjudication is checked against the measurement
+    it cites, and the sweep is recomputed from the producers.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.artifact = load(CENSUS)
+        cls.block = cls.artifact["k_sensitivity"]
+
+    def test_the_sweep_recomputes_from_the_producers(self) -> None:
+        from match_signatures import load_nodes  # noqa: PLC0415
+
+        rows = census.corpus_rows(DATA)
+        parsed = {n.statement_id: n for n in load_nodes(DATA)[0]}
+        slex = {sid: census.slex_handles(node) for _c, sid, node in rows}
+        sinv = {sid: set(parsed[sid].call_heads) if sid in parsed else set()
+                for _c, sid, _n in rows}
+        slex_counts = census.resolves_to(slex)
+        sinv_counts = census.resolves_to(sinv)
+        corpus_of = {sid: corpus for corpus, sid, _ in rows}
+        for row in self.block["sweep"]:
+            k = row["K"]
+            a = {s for s in slex if any(slex_counts[h] <= k for h in slex[s])}
+            b = {s for s in sinv if any(sinv_counts[h] <= k for h in sinv[s])}
+            self.assertEqual(len(a), row["S-LEX"], k)
+            self.assertEqual(len(b), row["S-INV"], k)
+            self.assertEqual(len(a | b), row["typable_union"], k)
+            self.assertEqual(
+                sum(1 for s in a if corpus_of[s] == "lean_workbook"),
+                row["lean_workbook_specific_S-LEX"], k)
+
+    def test_the_committed_K_is_interior_to_its_plateau(self) -> None:
+        k = self.artifact["specificity_K"]
+        for name, entry in self.block["plateaus"].items():
+            low, high = entry["invariant_for_K_in"]
+            self.assertLess(low, k, name)
+            self.assertLess(k, high, name)
+            self.assertTrue(entry["K_is_interior"], name)
+
+    def test_the_plateau_endpoints_are_real_endpoints(self) -> None:
+        """Inside the range the number holds; one step outside it moves."""
+
+        sweep = {row["K"]: row for row in self.block["sweep"]}
+        union = self.block["plateaus"]["typable union"]
+        low, high = union["invariant_for_K_in"]
+        self.assertIn(high, sweep)
+        self.assertIn(high + 1, sweep)
+        self.assertEqual(sweep[high]["typable_union"], union["coverage_at_K"])
+        self.assertNotEqual(sweep[high + 1]["typable_union"],
+                            union["coverage_at_K"])
+
+    def test_reason_a_cites_the_measured_bulk_coverage(self) -> None:
+        measured = self.artifact["per_corpus_split"]["lean_workbook_bulk"][
+            "specific_S-INV"]
+        self.assertGreater(measured, 0)
+        self.assertIn(str(measured), self.block["adjudication"]["reasons"][0])
+
+    def test_reason_b_cites_the_measured_plateaus(self) -> None:
+        reason = self.block["adjudication"]["reasons"][1]
+        for name in ("S-LEX", "typable union"):
+            low, high = self.block["plateaus"][name]["invariant_for_K_in"]
+            self.assertIn(f"[{low}, {high}]", reason, name)
+
+    def test_reason_c_cites_the_measured_ceiling_and_the_token(self) -> None:
+        buy = self.block["what_a_refreeze_would_buy_the_bulk"]
+        reason = self.block["adjudication"]["reasons"][2]
+        rescue = buy[
+            "smallest_K_giving_any_lean_workbook_statement_a_specific_S-LEX_handle"]
+        self.assertIn(str(rescue), reason)
+        self.assertIn(str(buy["ceiling_on_bulk_S-LEX_coverage_at_any_K"]), reason)
+        self.assertIn(buy["the_token_that_K_admits"], reason)
+
+    def test_the_ceiling_really_is_a_ceiling(self) -> None:
+        """Checked at the largest K in the sweep, not asserted in prose."""
+
+        buy = self.block["what_a_refreeze_would_buy_the_bulk"]
+        largest = max(self.block["sweep"], key=lambda row: row["K"])
+        self.assertEqual(largest["lean_workbook_specific_S-LEX"],
+                         buy["ceiling_on_bulk_S-LEX_coverage_at_any_K"])
+        self.assertLess(buy["ceiling_as_share_of_the_bulk"], 5.0)
+
+    def test_the_verdict_is_recorded_and_dated(self) -> None:
+        adjudication = self.block["adjudication"]
+        self.assertEqual(adjudication["verdict"], "NOT FIRED")
+        self.assertEqual(adjudication["dated"], "2026-08-27")
+        self.assertIn("K stays 128", adjudication["consequence"])
+        self.assertEqual(self.artifact["specificity_K"], 128)
+
+    def test_the_token_the_refreeze_admits_is_a_real_bulk_token(self) -> None:
+        """The adjudication names a token; it must be one the bulk carries."""
+
+        token = self.block["what_a_refreeze_would_buy_the_bulk"][
+            "the_token_that_K_admits"]
+        self.assertIn(token, self.artifact["boilerplate_finding"]["the_tokens"])
+
+
+class ThePLDenominatorIsRecomputable(unittest.TestCase):
+    """L3. Three numbers nobody could check without knowing the walk."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.block = load(CENSUS)["P-L"]
+
+    def test_the_denominator_names_the_sections_and_the_file(self) -> None:
+        text = self.block["denominator"]
+        self.assertIn("data/realization/lexicon.json", text)
+        for section in census.REALIZATION_SECTIONS:
+            self.assertIn(section, text)
+        self.assertIn("STOPWORDS", text)
+
+    def test_the_three_numbers_recompute_from_that_definition(self) -> None:
+        english = census.realization_english(
+            ROOT / "data" / "realization" / "lexicon.json")
+        self.assertEqual(len(english),
+                         self.block["realization_english_content_words"])
+        rows = census.corpus_rows(DATA)
+        slex = {sid: census.slex_handles(node) for _c, sid, node in rows}
+        counts = census.resolves_to(slex)
+        handles = set(counts)
+        specific = {h for h, c in counts.items() if c <= census.DEFAULT_K}
+        self.assertEqual(len(handles & english),
+                         self.block["slex_handles_in_realization_english"])
+        self.assertEqual(
+            len(specific & english),
+            self.block["slex_specific_handles_in_realization_english"])
+
+
 class TheSliceBuiltNothing(unittest.TestCase):
     """Measurement only. H-P0 lands before the table, and only H-P0."""
 
