@@ -1,0 +1,141 @@
+You are an outside advisor to a small research program you have never seen.
+Everything you know about it is in this message; no code or data will be
+provided. Your value here is precisely that you are outside it.
+
+THE PROGRAM'S THESIS. Small language models are poor at being right and
+programs are poor at being broad. The program bets on a third shape: a
+large, growing library of exact machine-checkable statements (currently
+mathematics), plus ordinary programs that parse, index, evaluate, and
+answer over that library, plus -- at the edges only -- small learned
+components that may PROPOSE but never DECIDE. Every served answer must be
+a quotation, a computation, or a refusal, each carrying a receipt a
+stranger can re-check offline. An external proof checker the program did
+not build adjudicates formal claims; its verdicts are pinned and
+replayable.
+
+WHAT EXISTS TODAY (by kind, not name):
+- A statement library of ~12,800 exact statements across ~27 topic areas,
+  ingested from public formal-math sources; it grows at runtime through a
+  gated write path that accepts only machine-proven material, append-only.
+- A chat-style HTTP service speaking a common LLM API, so third-party
+  agent harnesses can attach. Input today is a registered grammar of typed
+  one-line commands, not open prose. A capability sheet teaches the
+  grammar.
+- A measured throughput result: for questions inside the registered
+  grammar over covered ground, the system serves correct receipted answers
+  hundreds of times faster than a pinned small-LLM baseline; three voiding
+  controls guard the claim.
+- Formal statements can be rendered as verified English sentences:
+  rendering is licensed only by an exact round trip back through the proof
+  checker; about two-thirds of the library speaks natively this way; a
+  second English voice for statements that cannot round-trip natively
+  passed its verification gates this cycle after failing them last cycle,
+  and is now served.
+- Statements can be COMPILED to exact evaluators (integers and exact
+  rationals; typed number domains; refusal on anything outside the
+  declared reading), and a served route returns per-point verdicts with
+  receipts. But the registered verification run for "the library conforms
+  at sampled points" VOIDED on its own controls: one control's floor
+  turned out unmeetable even by a correct instrument over restricted
+  number domains, and an independent-adjudication control turned out not
+  to have executed on the class that mattered. No conformance rate is
+  claimed. The route serves with the void published on it.
+- Refusals are typed and named everywhere; a refusal is a first-class
+  result. Falsification-only honesty is the rule: finding no
+  counterexample certifies nothing universal.
+- A blind-reader instrument exists: a pinned local model that grades
+  whether served sentences carry meaning to a reader who cannot see the
+  formal source. Its own control voided the reader-claim this cycle
+  (scrambled sentences still leak structure), so no reader claim is made
+  -- the instrument survives, the claim does not.
+
+MEASUREMENT CULTURE. Preregistration before implementation: gates and
+floors frozen before numbers exist; capability-blind baselines with
+written voiding sentences; negative results and voids published
+first-class (three of the last five cycles led with one); every claim's
+denominator sealed before the scored party can move it. The recurring
+failure mode the program has learned to hunt in itself: assertions
+written so they cannot go red -- checks that compare a thing to itself,
+prose that carries authority beside machine-checked numbers without being
+machine-checked, controls whose perfect score would be meaningless.
+
+STANDING CONSTRAINTS:
+- Exact code owns structure, equality, and verdicts. A learned component
+  may rank, propose, or translate INTO the exact layer, and everything it
+  proposes must be verified by exact code before it can matter.
+- One maintainer, one workstation, pinned local models and toolchains, no
+  network fetches at run time. First slices must fit one release cycle
+  and produce a committed, checkable artifact.
+- Outside participation (volunteers, strangers, crowds) must degrade
+  honestly to "untested" -- it may not block a cycle.
+- The library may only grow by addition; nothing already committed is
+  rewritten by growth.
+
+AMBITIONS (the boundary the program wants moved, stated as human
+abilities):
+- A person should eventually hold a plain conversation with it, in plain
+  text, and get only answers that are exact, receipted, or honestly
+  refused -- including answers conditional on stated assumptions when the
+  question was ambiguous.
+- The system should know and say what it does not know, and make its
+  ignorance useful: what would need to be true, what is missing, what
+  distinguishes the candidate readings.
+- The library's unreachable majority should become reachable: most of it
+  cannot yet be answered about, evaluated, or spoken.
+- Downstream software agents should be able to trust and compose its
+  answers without re-verifying them.
+
+DO NOT PROPOSE: more corpus entries as the headline; more matches or
+counts as the result; training a model to imitate an exact capability; a
+rate-only deliverable; benchmarks against large LLMs.
+
+SINCE THE LAST TIME THIS BRIEF WAS WRITTEN (one release ago), the
+programme ran two registered censuses and both returned findings
+rather than capabilities, plus an outside-family referee series whose
+dispositions are committed. Stated plainly:
+- THE LIBRARY IS NAMELESS, measured: of ~12,800 statements, 417
+  (3.26%) carry a specific handle a person could type; the
+  bulk-ingested majority (12,514 statements) shares NINE glossary
+  tokens between them, one of which is a name. No specificity
+  threshold ever rescues it: bulk coverage caps at 302 statements
+  forever. The planned reachability capability correctly declined to
+  run (its question set would have consumed its own 417-statement
+  population), and the finding stands as the release headline. The
+  sharpest cross-reading: of 9,048 statements structurally consumable
+  by one-step derivation, 125 carry a typable handle -- the library
+  can compute far more than anyone can ask for. Pricing exists for
+  one naming route: persisting checker-elaborated terms for the
+  2,313 statements that round-trip through the verified English voice
+  costs about four minutes of checker time, measured.
+- THE EVIDENCE IS PROGRAM-BOUND, measured: of 19 receipt kinds the
+  programme emits, exactly ONE survives deletion of the program (a
+  raw checker invocation reconstructible from its artifact alone --
+  independently replicated from a repository-free environment); 10
+  need the program, each verdict earned by a succeeding with-program
+  control AND a failing program-absent limb; 8 are untested. The
+  sharpest instance: the tree's most self-describing receipt, which
+  carries its own recheck command, cannot be rechecked even WITH the
+  program present, because the named rechecker requires a dependency
+  nothing pins. Offline-checkability is earned by naming an
+  adjudicator that is not the program, not by carrying digests.
+- A supplementary referee from a different model family reviewed the
+  programme and left three adjudicated contributions: a
+  necessity-certifying upgrade to conditional-answer receipts
+  (per-premise countermodels -- "which assumptions were NEEDED", not
+  "which were consumed"); a completeness-island-plus-split-semantics
+  merger now standing as the unpark condition of the parked
+  conformance lane; and, asked for the programme's blind spot, the
+  answer: no prospectively sampled, externally sourced task
+  distribution -- "who selected the problems, whose costs define
+  success, and what prevents the benchmark from rewarding the
+  programme's own ontology."
+- Standing incumbent-candidates awaiting this inquiry's comparison,
+  disclosed at round two per protocol, not here.
+
+Propose FIVE distinct forward directions. For each, in under 150 words:
+(a) the new kind of claim it would make true; (b) why the current shape
+cannot make that claim today; (c) a falsifiable construction gate -- what,
+decided in advance, would count as the idea failing; (d) the cheapest
+honest failure. The five must not be five flavors of one idea. Range
+widely; at least one should feel risky to you. Number them with short
+memorable names.

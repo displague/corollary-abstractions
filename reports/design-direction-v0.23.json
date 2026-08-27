@@ -1,0 +1,130 @@
+{
+ "schema": "design_direction_receipt.v1",
+ "cycle": "v0.23",
+ "status": "complete",
+ "requested_utc": "2026-08-27",
+ "enforced_isolation_mode": {
+  "method": "claude -p (headless) cwd C:/Users/displ/AppData/Local/Temp/forge23 -- empty non-git dir, no project name in path",
+  "denylist": "strict-mcp-config + disallowedTools over every file/shell/network/agent/skill tool",
+  "inherited_from": "reports/design-direction-v0.22.json, reused unchanged"
+ },
+ "brief_sha256_canonical_lf": "7ea446b9a9af1e2d69aaab0de4252cc8ca5f58b7a3991e8bc68f8ecc763b37fc",
+ "brief_on_file": "reports/design-direction-v0.23-brief.txt",
+ "round_prompt_sha256_canonical_lf": {
+  "series_1": {
+   "r1": "7ea446b9a9af1e2d69aaab0de4252cc8ca5f58b7a3991e8bc68f8ecc763b37fc",
+   "r2": "2511f972bdb7313cb2ff1f0723d6fcdafddf9cbabde0b9b6be50e097b6a72dcf",
+   "r3": "d7458615142a8e0bbd2ba7aeaee3cabc4a7855e3a6badaa1018f45a5de92c1c7"
+  },
+  "series_2": {
+   "r1": "07a475f12bfb8f63dd62bb5588a838fcb1fac91f17c4b0ef59d410e6166af4c7",
+   "r2": "25478782f8b5112b12127fd9a4b111ab2bbf5d40d247e72cb9c02033b5bd2cd9",
+   "r3": "a4f7677f695d2e25d193355d1021b12b643619d1d60b929cadab1d006b02b5f9"
+  },
+  "series_3": {
+   "r1": "06210a2c7b83c1106fd86b38b33c1303ccb80abc0da9776e5945a791f20071e0",
+   "r2": "e259bde17cb69b1b6c48ed53375426b3cf7d470a7e034a27df6fd6e32c9af6cd",
+   "r3": "a8b98c9b5560c511c083223913bde66c8627b80f00ba3e33d2823988e85976f6"
+  },
+  "note": "series_1.r1 equals brief_sha256_canonical_lf by construction"
+ },
+ "exclusion_note": "series 2 r1 excluded series 1's round-one territory (five lines); series 3 excluded both (ten lines). The three v0.22 incumbent-candidates + the supplementary PREMISE LEDGER + the parked lanes were disclosed at each round two, not round one.",
+ "contexts": [
+  {
+   "series": 1,
+   "session_id": "4c784daf-8136-476c-966c-ae8afc00368c",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "cost_usd": 1.1861
+  },
+  {
+   "series": 2,
+   "session_id": "4d4f10f5-0a0f-4d05-a7e1-23541c113103",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "cost_usd": 0.8244
+  },
+  {
+   "series": 3,
+   "session_id": "342e449d-e105-4b62-91f4-87995bb28644",
+   "model": "claude-opus-5",
+   "rounds": 3,
+   "cost_usd": 0.9794
+  }
+ ],
+ "total_cost_usd": 2.9899,
+ "round_one_funnel": {
+  "series_1": [
+   "HANDLEBAR -- reach by obligation, not name",
+   "TWO READINGS -- prose that cannot be silently misread",
+   "LOADBEARING -- premises proved necessary",
+   "ORPHAN -- receipts that outlive the program",
+   "STRANGER'S EXAM -- externally-calibrated refusals"
+  ],
+  "series_2": [
+   "SELF-SEED -- provenance-typed growth by proof",
+   "STRANGER-GATE -- red-team the proven-material write gate",
+   "FOREIGN-SEAM -- adjudicated cross-corpus divergence",
+   "AXIOM-BUDGET -- answers naming their foundational footprint",
+   "UPSTREAM-PATCH -- defect reproducers submitted to reviewed upstream"
+  ],
+  "series_3": [
+   "TWO-KEY BIND -- referential correctness as a separate receipt",
+   "WANT-LIST -- refusals that can be proven wrong",
+   "TOMORROW'S DIFF -- the session as a standing subscription",
+   "THE OBJECTION SLOT -- being corrected, third-party adjudicated",
+   "THE GUEST AXIOM -- answers under assumptions the library lacks"
+  ]
+ },
+ "outcomes": {
+  "series_1": {
+   "lead": "ECHO",
+   "runner_up": "ORPHAN",
+   "folds": [
+    "TWO READINGS -> ECHO (voice read back, no person in loop)",
+    "LOADBEARING -> folded into the PREMISE LEDGER incumbent (independent convergence = evidence for it)",
+    "STRANGER'S EXAM -> folded into the parked DEMAND lane as its calibration upgrade (third independent arrival)",
+    "HANDLEBAR -> parked (reach-by-hole-term; its shuffle limb was a candidate rider)"
+   ],
+   "residual_risk": "ECHO's renderer and reader are code-disjoint but ontology-shared, searching a closed ~8,500-statement universe -- it can clear every clause and license nothing about a stranger with an open term universe; the decoy-population arm is a stated hole, no generator exists"
+  },
+  "series_2": {
+   "lead": "STRANGER-GATE",
+   "runner_up": "SELF-SEED",
+   "folds": [
+    "AXIOM-BUDGET -> STRANGER-GATE (the three-axiom PASS whitelist is the attack surface; a perimeter never attacked is the assertion-that-cannot-go-red)",
+    "FOREIGN-SEAM -> cut, cut defended (within-ecosystem is ingestion in a seam costume; cross-assistant needs an alignment language > one cycle)",
+    "UPSTREAM-PATCH -> parked (program-free defect reproducers to the reviewed upstream; capped at UNTESTED by constraint 2)"
+   ],
+   "residual_risk": "one head authors the attacks, the twins, and the gate -- STRANGER-GATE measures whether the gate DISCRIMINATES, never whether the corpus is ADEQUATE; PASS licenses '24 named evasions closed', coverage unmeasured, and constraint 2 forecloses the only cheap fix (a stranger not sharing the maintainer's threat model)"
+  },
+  "series_3": {
+   "lead": "NO-FLIP (by the information-per-effort metric)",
+   "overruled_to": "THE GUEST AXIOM (by orchestrator ruling -- the referee flagged its own ranking as the overrule point if the cycle's purpose is the conversation)",
+   "runner_up": "GUEST AXIOM (promoted to lead by the ruling)",
+   "folds": [
+    "TWO-KEY BIND + WANT-LIST -> HANDBACK (typed non-answer turns emit an admitted-command separator or unlock -- one object type; parked as GUEST AXIOM's next-cycle decision-rule rider)",
+    "TOMORROW'S DIFF -> NO-FLIP, cut to the regression half (R3 measured zero growth, so the improvement channel is dead this cycle)",
+    "THE OBJECTION SLOT -> folded into GUEST AXIOM as the person-wrong disposition (REFUTED emits a checker countermodel)"
+   ],
+   "residual_risk_no_flip": "NO-FLIP's comparator granularity is a hidden free parameter; a canonicalizing comparator can score two equally-valid answers IDENTICAL (a rival-statement tie broken differently, a witness re-derived by an equivalent route) while both mutation limbs still flip -- the artifact reads 'stable' having measured 'the comparator cannot see the instability a person would notice'",
+   "residual_risk_guest_axiom": "two, named and unpriced (design section 7a): (1) authorship provenance -- G-P0 recasts 30 maintainer-authored questions, so the hypotheses are the maintainer's not a stranger's (the HANDLES contamination); the 20 real corrections narrow it, a stranger's guest hypotheses stay unmeasured. (2) ontology-shared closed world -- GUEST AXIOM inherits ECHO's ~8,500-term-universe risk: it measures whether a supplied EXPRESSIBLE hypothesis yields a checked implication, never whether a person's actual assumption is expressible at all"
+  }
+ },
+ "selection": {
+  "selected": "docs/DESIGN-guest-axiom.md -- the supposition frame turned INBOUND: a person supplies a hypothesis the library lacks, the system serves a machine-checked implication naming it undischarged. The maintainer's own long-recorded goal (memory: 'predicated on assumptions... verifiable under that pretext, hidden variables'), arrived at independently by series 3, and CHOSEN OVER the metric-leader NO-FLIP by explicit orchestrator ruling recorded in the design's section 2.",
+  "orchestrator_ruling": "NO-FLIP led series 3 on information-per-effort and flagged its own ranking as the overrule point. Overruled to GUEST AXIOM: NO-FLIP's improvement channel is dead this cycle (R3 zero-growth) and its regression half re-runs the erratum probe; GUEST AXIOM can run THIS cycle scoped to the 2,313 round-trippable statements without intake it lacks; and it is the four-cycle goal, declining it a fourth time would be focus-attrition the drift audit catches. Recorded as a DECISION.",
+  "item_2": "docs/DESIGN-echo.md -- ECHO (series 1's lead): is the served voice injective? Scheduled BEFORE item 1 because its collision result licenses GUEST AXIOM's clarify-vs-conditional B5 rule; runs on committed instruments; blind control known-hostile.",
+  "riders": "R-NF (NO-FLIP regression census, a day, red-capable, seeds the erratum lane's detector) and HANDBACK (the admitted-command separator object that upgrades GUEST AXIOM's decision rule next cycle)",
+  "parked_with_reasons": {
+   "STRANGER-GATE": "v0.24 incumbent-candidate with a PROHIBITION trigger -- it must run before any untrusted stream reaches the write gate; nothing this cycle opens one",
+   "ORPHAN": "the cold-census's own recorded next question (which single pinned dependency converts the most NEEDS-PROGRAM kinds); series-1 runner-up; unparks TOLL's n=1 denominator",
+   "SELF-SEED": "the commit half of the parked derivations lane, with the novelty verdict the park lacked; seeds mechanically drawn, maintainer may not pick",
+   "HANDLEBAR": "reach-by-hole-term; parked behind the naming-layer question its shuffle limb would have probed",
+   "UPSTREAM-PATCH": "the give-back direction; capped at UNTESTED by outside-participation, parked with its license discipline",
+   "FOREIGN-SEAM": "cut; cross-assistant alignment language exceeds one cycle; a feasibility spike is the honest residue"
+  },
+  "carried_incumbent_candidates": "PREMISE LEDGER (supplementary-family, necessity receipts -- the successor to GUEST AXIOM's consumption-only scope, stated in its section 8), CANARY-CURVE and TOLL (v0.22 course) all carry to the v0.24 course unchanged; the naming-layer question both v0.22 censuses forced carries with them",
+  "selected_residual_risk": "see outcomes.series_3.residual_risk_guest_axiom -- the selected design's own unpriced risk, carried here per the review's R1"
+ }
+}
