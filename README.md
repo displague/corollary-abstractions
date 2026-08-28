@@ -95,6 +95,23 @@ $ curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: applicatio
     -d '{"model":"corollary/kernel","messages":[{"role":"user","content":"owns x ^ 2"}]}'
 ```
 
+Current Codex CLI uses the Responses protocol for custom providers. On
+Windows, start the server with UTF-8 output in one PowerShell:
+
+```powershell
+$env:PYTHONIOENCODING = "utf-8"
+.\.venv\Scripts\python.exe scripts\serve_chat.py
+```
+
+Then open Codex from another PowerShell. This command intentionally has no
+prompt argument: type the registered harness line after the TUI opens. The
+harness accepts Codex's `instructions` and tool declarations but ignores and
+reports them; it has no preprompt or generative tool-call path.
+
+```powershell
+codex.cmd -m "corollary/kernel" -c 'model_provider="corollary_local"' -c 'model_providers.corollary_local.name="Corollary Local"' -c 'model_providers.corollary_local.base_url="http://127.0.0.1:8377/v1"' -c 'model_providers.corollary_local.wire_api="responses"'
+```
+
 The reply's `content` is the engine's rendered answer verbatim — the skin
 has zero rendering freedom — and everything else (route, status, receipt,
 what the request asked for and was ignored) rides in an `x_corollary`
@@ -473,8 +490,9 @@ scripts/
                         recheck; radius_blind_control.py 100-shuffle control
   check_report_regeneration.py  do committed ledgers match their writers
                         (declared snapshots reported, not regenerated)
-  serve_chat.py         OpenAI-compatible chat skin over the session engine
-                        (stdlib, loopback, offline boot, capability sheet)
+  serve_chat.py         OpenAI-compatible chat + Responses skins over the
+                        session engine (stdlib, loopback, offline boot,
+                        capability sheet)
   realize_term.py       canonical term -> English sentence, gated by a
                         re-parse through the byte-frozen parser; --census
                         publishes R0's denominator, --term shows a receipt

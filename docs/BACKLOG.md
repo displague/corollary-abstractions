@@ -5,6 +5,15 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Filed at the v0.22 rotation (the two censuses, the drift audit, and the v0.23 course's parks)
 
+- **SHIPPED — current Codex could not attach to the HTTP skin (2026-08-27).**
+  Codex CLI 0.147.0 accepts only the Responses wire API for custom providers,
+  while `scripts/serve_chat.py` exposed only `/v1/chat/completions`; the live
+  failure was an exact `404 /v1/responses`. The skin now maps the text-only
+  Responses subset onto the same `ChatEngine`, ignores and reports Codex's
+  preprompt/tool fields, supports in-process `previous_response_id` replay,
+  and was exercised end-to-end by the unmodified `codex.cmd` binary with no
+  API key or explicit prompt argument in the interactive launch command.
+
 - **The naming-layer question — how does a nameless library get names a person
   can ask by? (2026-08-27, forced by both v0.22 censuses).** A **first-class
   carried lane**, not a park with a trigger: H-P0 measured that only 417 of

@@ -1411,6 +1411,114 @@ class ChatRequest:
         )
 
 
+class ResponsesRequest:
+    """Validated Responses text subset mapped onto :class:`ChatRequest`."""
+
+    _MAPPED_KEYS = frozenset(
+        {"model", "input", "previous_response_id", "stream"}
+    )
+
+    def __init__(self, body: dict, engine: "ChatEngine") -> None:
+        if not isinstance(body, dict):
+            raise ApiError(400, "request body must be a JSON object", "invalid_body")
+
+        previous = body.get("previous_response_id")
+        if previous is not None and (not isinstance(previous, str) or not previous):
+            raise ApiError(
+                400,
+                "'previous_response_id' must be a non-empty string",
+                "invalid_previous_response_id",
+                param="previous_response_id",
+            )
+        prior = engine.response_transcript(previous) if previous else []
+        incoming = self._messages(body.get("input"))
+        if not any(role == "user" and content for role, content in incoming):
+            raise ApiError(
+                400,
+                "Responses input must contribute new, non-empty user text; "
+                "a stored transcript cannot supply the current turn",
+                "missing_user_text",
+                param="input",
+            )
+
+        chat_body = {
+            key: value for key, value in body.items() if key not in self._MAPPED_KEYS
+        }
+        chat_body.update(
+            {
+                "model": body.get("model"),
+                "messages": [
+                    {"role": role, "content": content}
+                    for role, content in (*prior, *incoming)
+                ],
+                "stream": bool(body.get("stream")),
+            }
+        )
+        self.chat = ChatRequest(chat_body)
+        self.stream = self.chat.stream
+
+    @classmethod
+    def _messages(cls, value) -> list[tuple[str, str]]:
+        if isinstance(value, str):
+            return [("user", value)]
+        if not isinstance(value, list) or not value:
+            raise ApiError(
+                400,
+                "'input' must be a string or a non-empty array of message items",
+                "missing_input",
+                param="input",
+            )
+
+        messages = []
+        for index, item in enumerate(value):
+            if not isinstance(item, dict) or item.get("type", "message") != "message":
+                raise ApiError(
+                    400,
+                    f"input[{index}] must be a message item; this server does "
+                    "not invent meanings for tool, reasoning, or multimodal items",
+                    "invalid_input_item",
+                    param="input",
+                )
+            role = item.get("role")
+            if not isinstance(role, str):
+                raise ApiError(
+                    400,
+                    f"input[{index}].role must be a string",
+                    "invalid_input_item",
+                    param="input",
+                )
+            messages.append((role, cls._content(item.get("content"), index)))
+        return messages
+
+    @staticmethod
+    def _content(value, index: int) -> str:
+        if isinstance(value, str):
+            return value
+        if not isinstance(value, list) or not value:
+            raise ApiError(
+                400,
+                f"input[{index}].content must be text or a non-empty text-part array",
+                "invalid_input_item",
+                param="input",
+            )
+        chunks = []
+        for part_index, part in enumerate(value):
+            if (
+                not isinstance(part, dict)
+                or part.get("type") not in {"input_text", "output_text"}
+                or not isinstance(part.get("text"), str)
+            ):
+                raise ApiError(
+                    400,
+                    f"input[{index}].content[{part_index}] must be an "
+                    "input_text or output_text part",
+                    "invalid_input_item",
+                    param="input",
+                )
+            chunks.append(part["text"])
+        return "".join(chunks)
+
+
 def _check_divergence(claimed: str, produced: str | None) -> None:
     """§4's divergence check, exactly as defined there and no wider."""
 
@@ -1603,6 +1711,10 @@ class ChatEngine:
         self._lock = threading.Lock()
         self._cache: "OrderedDict[str, _CacheEntry]" = OrderedDict()
         self._cache_size = cache_size
+        self._response_lock = threading.Lock()
+        self._response_transcripts: "OrderedDict[str, list[tuple[str, str]]]" = (
+            OrderedDict()
+        )
         self._warm_index = None
         self._matrix = None
         self.created = int(time.time())
@@ -1797,6 +1909,38 @@ class ChatEngine:
                 ).content
             elif role == "assistant":
                 _check_divergence(content, last_produced)
+
+    # -- §4.2 Responses replay handles ----------------------------------
+
+    def response_transcript(self, response_id: str) -> list[tuple[str, str]]:
+        """Return the in-process transcript named by ``previous_response_id``."""
+
+        with self._response_lock:
+            transcript = self._response_transcripts.get(response_id)
+            if transcript is None:
+                raise ApiError(
+                    404,
+                    f"previous response {response_id!r} is not available in "
+                    "this process",
+                    "previous_response_not_found",
+                    param="previous_response_id",
+                )
+            return list(transcript)
+
+    def remember_response(
+        self, response_id: str, request: ChatRequest, rendered: Rendered
+    ) -> None:
+        """Keep only replay material; no engine authority or durable state."""
+
+        transcript = [
+            *request.messages[: request.final_user_index + 1],
+            ("assistant", rendered.content),
+        ]
+        with self._response_lock:
+            self._response_transcripts[response_id] = transcript
+            self._response_transcripts.move_to_end(response_id)
+            while len(self._response_transcripts) > self._cache_size:
+                self._response_transcripts.popitem(last=False)
 
     # -- §7 the capability sheet -----------------------------------------
 
@@ -1995,6 +2139,118 @@ def stream_chunks(
     return chunks
 
 
+def _response_id() -> str:
+    return "resp_" + uuid.uuid4().hex
+
+
+def _response_usage(usage: dict | None) -> dict | None:
+    if usage is None:
+        return None
+    prompt = usage["prompt_tokens"]
+    completion = usage["completion_tokens"]
+    return {
+        "input_tokens": prompt,
+        "input_tokens_details": {"cached_tokens": 0},
+        "output_tokens": completion,
+        "output_tokens_details": {"reasoning_tokens": 0},
+        "total_tokens": prompt + completion,
+    }
+
+
+def response_body(
+    request: ChatRequest,
+    rendered: Rendered,
+    usage: dict | None,
+    *,
+    response_id: str | None = None,
+) -> dict:
+    """§6 Responses representation of the same completed engine turn."""
+
+    part = {
+        "type": "output_text",
+        "text": rendered.content,
+        "annotations": [],
+        "logprobs": [],
+    }
+    item = {
+        "id": "msg_" + uuid.uuid4().hex,
+        "type": "message",
+        "status": "completed",
+        "role": "assistant",
+        "content": [part],
+    }
+    body = {
+        "id": response_id or _response_id(),
+        "object": "response",
+        "created_at": int(time.time()),
+        "status": "completed",
+        "error": None,
+        "incomplete_details": None,
+        "model": request.model,
+        "output": [item],
+        "parallel_tool_calls": True,
+        "tool_choice": "auto",
+        "tools": [],
+        "x_corollary": rendered.x_corollary,
+    }
+    mapped_usage = _response_usage(usage)
+    if mapped_usage is not None:
+        body["usage"] = mapped_usage
+    return body
+
+
+def response_events(body: dict) -> list[tuple[str, dict]]:
+    """§8 named Responses SSE lifecycle, with one exact text delta."""
+
+    completed_item = body["output"][0]
+    completed_part = completed_item["content"][0]
+    created = {**body, "status": "in_progress", "output": []}
+    created.pop("usage", None)
+    in_progress_item = {**completed_item, "status": "in_progress", "content": []}
+    empty_part = {**completed_part, "text": ""}
+    raw = [
+        ("response.created", {"response": created}),
+        (
+            "response.output_item.added",
+            {"output_index": 0, "item": in_progress_item},
+        ),
+        (
+            "response.content_part.added",
+            {"output_index": 0, "content_index": 0, "part": empty_part},
+        ),
+        (
+            "response.output_text.delta",
+            {
+                "output_index": 0,
+                "content_index": 0,
+                "item_id": completed_item["id"],
+                "delta": completed_part["text"],
+                "logprobs": [],
+            },
+        ),
+        (
+            "response.output_text.done",
+            {
+                "output_index": 0,
+                "content_index": 0,
+                "item_id": completed_item["id"],
+                "text": completed_part["text"],
+                "logprobs": [],
+            },
+        ),
+        (
+            "response.content_part.done",
+            {"output_index": 0, "content_index": 0, "part": completed_part},
+        ),
+        ("response.output_item.done", {"output_index": 0, "item": completed_item}),
+        ("response.completed", {"response": body}),
+    ]
+    return [
+        (name, {"type": name, "sequence_number": sequence, **payload})
+        for sequence, (name, payload) in enumerate(raw)
+    ]
+
+
 # --------------------------------------------------------------------------
 # The HTTP surface (§2)
 # --------------------------------------------------------------------------
@@ -2031,7 +2287,8 @@ class ChatHandler(BaseHTTPRequestHandler):
             ApiError(
                 404,
                 f"unknown path {path!r}; this server serves "
-                "/v1/chat/completions, /v1/models and /v1/capabilities",
+                "/v1/chat/completions, /v1/responses, /v1/models and "
+                "/v1/capabilities",
                 "not_found",
             )
         )
@@ -2090,18 +2347,32 @@ class ChatHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = self.path.split("?", 1)[0].rstrip("/") or "/"
-        if path != "/v1/chat/completions":
+        if path not in {"/v1/chat/completions", "/v1/responses"}:
             self._not_found(self.path)
             return
         try:
             body = self._read_body()
-            request = ChatRequest(body)
+            if path == "/v1/chat/completions":
+                request = ChatRequest(body)
+            else:
+                responses_request = ResponsesRequest(body, self.engine)
+                request = responses_request.chat
             rendered = self.engine.serve(request)
         except ApiError as error:
             self._send_error_object(error)
             return
         usage = self.engine.tokens.usage(request.prompt_text, rendered.content)
-        if request.stream:
+        if path == "/v1/responses":
+            response_id = _response_id()
+            response = response_body(
+                request, rendered, usage, response_id=response_id
+            )
+            self.engine.remember_response(response_id, request, rendered)
+            if responses_request.stream:
+                self._send_response_stream(response_events(response))
+            else:
+                self._send_json(200, response)
+        elif request.stream:
             self._send_stream(stream_chunks(request, rendered, usage))
         else:
             self._send_json(200, completion_body(request, rendered, usage))
@@ -2127,6 +2398,24 @@ class ChatHandler(BaseHTTPRequestHandler):
             # terminating zero-length chunk arrives. The turn is already
             # delivered in full, so this is a closed socket, not a failure to
             # answer; keeping the connection is what would be wrong.
+            self.close_connection = True
+
+    def _send_response_stream(self, events: list[tuple[str, dict]]) -> None:
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Transfer-Encoding", "chunked")
+        self.end_headers()
+        try:
+            for name, event in events:
+                payload = (
+                    f"event: {name}\n"
+                    f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+                ).encode("utf-8")
+                self._write_chunk(payload)
+            self.wfile.write(b"0\r\n\r\n")
+            self.wfile.flush()
+        except (BrokenPipeError, ConnectionError, OSError):
             self.close_connection = True
 
     def _write_chunk(self, payload: bytes) -> None:

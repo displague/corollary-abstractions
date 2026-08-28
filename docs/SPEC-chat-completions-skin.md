@@ -14,6 +14,13 @@ are **recorded corrections to the governing designs**, marked ¶DEV-1 and
 ¶DEV-2 below, because a deviation without a record is the drift this
 repository exists to catch.
 
+**2026-08-27 compatibility amendment, recorded before implementation.**
+Codex CLI 0.147.0 no longer accepts a `chat_completions` provider wire API;
+its only custom-provider protocol is Responses. The amendment below adds a
+second protocol renderer over the same `ChatEngine`. It is not a new engine,
+does not consume `instructions` or tools, and must return the same rendered
+answer bytes and `x_corollary` record as chat completions for the same input.
+
 ## 1. What the engine actually is (two session objects, one engine)
 
 The repository ships one session engine with **two session objects**, and
@@ -64,6 +71,7 @@ single-session contract; multi-tenant auth is a stated non-goal).
 | Method & path | Purpose |
 |---|---|
 | `POST /v1/chat/completions` | the OpenAI-compatible subset (§4–§6) |
+| `POST /v1/responses` | Responses-compatible text subset for current Codex CLI (§4.2, §6, §8) |
 | `GET /v1/models` | lists the two profiles as models (stock clients probe it) |
 | `GET /v1/capabilities` | the **capability sheet** (§7), vendor extension |
 
@@ -156,6 +164,22 @@ same serialization discipline (call it **canonical-JSON/compact**) is
 used everywhere this spec says "canonical": `json.dumps(value,
 ensure_ascii=False, sort_keys=True, separators=(",", ":"))`, encoded
 UTF-8.
+
+### 4.2 Responses request mapping
+
+The Responses skin accepts `input` as either one string (one `user` turn) or
+an array of message items. A message item has `role` and text-only `content`;
+content may be a string or an array of `input_text`/`output_text` parts. The
+skin converts those messages to §4's request mapping and calls the same
+`ChatEngine.serve` method. Multimodal parts and non-message input items are
+refused rather than guessed.
+
+`instructions`, tool declarations, reasoning controls, sampling controls, and
+other Responses fields are accepted but ignored and named in
+`x_corollary.ignored`. In particular, this deterministic engine neither needs
+nor uses a preprompt and never emits a tool call. `previous_response_id`
+resumes only an in-process replay transcript produced by this server; an
+unknown id is refused. Nothing durable is restored, preserving ¶DEV-1.
 
 ## 5. The registered line grammar is the request surface (kernel profile)
 
@@ -480,6 +504,13 @@ rendering, so time-to-first-useful-token ≈ time-to-completion; streaming
 here is protocol fidelity, not a latency claim, and T4's TTFT leg is
 expected to be won by being fast, not by streaming early.
 
+The Responses endpoint emits the standard named SSE lifecycle through
+`response.completed`: created, output-item added, content-part added, text
+delta/done, content-part done, output-item done, completed. Text deltas
+concatenate byte-for-byte to the same engine rendering. The completed
+response carries `x_corollary`; no synthetic tool or reasoning item is
+introduced.
+
 ## 9. Wiring steps, declared before the task book
 
 Two engine capabilities exist but have no typed-line form. Each gets a
@@ -561,6 +592,8 @@ profile has no TTY loop to inherit anything; §1).
 
 - Malformed JSON, missing `messages`, no user turn, `n != 1` → `400`,
   OpenAI error shape. (An empty-string user turn is served; §4.)
+- Responses input with no user text, a non-text part, or a non-message item →
+  `400`; unknown `previous_response_id` → `404`.
 - Unknown `model` → `404`.
 - Conversation-profile cross-slot `ValueError`
   (`scripts/conversation.py:291`, `:302`) → `409`, code

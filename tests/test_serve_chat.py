@@ -2192,6 +2192,155 @@ class UsageWithAStubbedTokenizer(ServedSkin):
 
 
 # --------------------------------------------------------------------------
+# §4.2 — Responses compatibility (current Codex custom-provider protocol)
+# --------------------------------------------------------------------------
+
+
+class ResponsesCompatibility(ServedSkin):
+    def response(self, **payload):
+        import httpx
+
+        return httpx.post(f"{self.base_url}/responses", json=payload, timeout=30)
+
+    @staticmethod
+    def response_text(body: dict) -> str:
+        return body["output"][0]["content"][0]["text"]
+
+    def test_responses_string_input_is_the_same_engine_answer(self):
+        chat = self.one(KERNEL, OWNS_LINE)
+        response = self.response(model=KERNEL, input=OWNS_LINE, stream=False)
+        self.assertEqual(response.status_code, 200, response.text)
+        body = response.json()
+        self.assertEqual(body["object"], "response")
+        self.assertEqual(body["status"], "completed")
+        self.assertEqual(self.response_text(body), self.content(chat))
+        self.assertEqual(body["x_corollary"], self.x(chat))
+
+    def test_responses_codex_shape_streams_named_events_without_a_preprompt(self):
+        import httpx
+
+        chat = self.one(KERNEL, OWNS_LINE)
+        payload = {
+            "model": KERNEL,
+            "instructions": "ignored by the deterministic harness",
+            "input": [
+                {
+                    "type": "message",
+                    "role": "user",
+                    "content": [{"type": "input_text", "text": OWNS_LINE}],
+                }
+            ],
+            "tools": [
+                {
+                    "type": "function",
+                    "name": "unused",
+                    "description": "must not become an engine path",
+                    "parameters": {"type": "object", "properties": {}},
+                }
+            ],
+            "tool_choice": "auto",
+            "parallel_tool_calls": True,
+            "store": False,
+            "stream": True,
+        }
+        with httpx.stream(
+            "POST", f"{self.base_url}/responses", json=payload, timeout=30
+        ) as response:
+            wire = "".join(response.iter_text())
+            self.assertEqual(response.status_code, 200, wire)
+
+        events = []
+        for block in wire.split("\n\n"):
+            lines = block.splitlines()
+            event_line = next(
+                (line for line in lines if line.startswith("event: ")), None
+            )
+            data_line = next(
+                (line for line in lines if line.startswith("data: ")), None
+            )
+            if event_line and data_line:
+                events.append(
+                    (event_line[len("event: ") :], json.loads(data_line[6:]))
+                )
+
+        self.assertEqual(
+            [name for name, _event in events],
+            [
+                "response.created",
+                "response.output_item.added",
+                "response.content_part.added",
+                "response.output_text.delta",
+                "response.output_text.done",
+                "response.content_part.done",
+                "response.output_item.done",
+                "response.completed",
+            ],
+        )
+        deltas = [
+            event["delta"]
+            for name, event in events
+            if name == "response.output_text.delta"
+        ]
+        self.assertEqual("".join(deltas), self.content(chat))
+        completed = events[-1][1]["response"]
+        self.assertEqual(self.response_text(completed), self.content(chat))
+        completed_x = dict(completed["x_corollary"])
+        completed_x.pop("ignored")
+        chat_x = dict(self.x(chat))
+        chat_x.pop("ignored")
+        self.assertEqual(completed_x, chat_x)
+        for ignored in (
+            "instructions",
+            "parallel_tool_calls",
+            "store",
+            "tool_choice",
+            "tools",
+        ):
+            self.assertIn(ignored, completed["x_corollary"]["ignored"])
+
+    def test_responses_previous_id_replays_the_same_stateful_session(self):
+        first = self.response(model=KERNEL, input=RESOLVER_ASK_LINE, stream=False)
+        self.assertEqual(first.status_code, 200, first.text)
+        first_body = first.json()
+        self.assertEqual(first_body["x_corollary"]["status"], "waiting")
+
+        second = self.response(
+            model=KERNEL,
+            previous_response_id=first_body["id"],
+            input=NARROW_LINE,
+            stream=False,
+        )
+        self.assertEqual(second.status_code, 200, second.text)
+        second_body = second.json()
+        self.assertEqual(second_body["x_corollary"]["route"], "resolver_context")
+        self.assertEqual(second_body["x_corollary"]["status"], "found")
+
+    def test_responses_requires_new_nonempty_user_text(self):
+        empty = self.response(model=KERNEL, input="", stream=False)
+        self.assertEqual(empty.status_code, 400, empty.text)
+        self.assertEqual(empty.json()["error"]["code"], "missing_user_text")
+
+        first = self.response(model=KERNEL, input=OWNS_LINE, stream=False)
+        self.assertEqual(first.status_code, 200, first.text)
+        assistant_only = self.response(
+            model=KERNEL,
+            previous_response_id=first.json()["id"],
+            input=[
+                {
+                    "type": "message",
+                    "role": "assistant",
+                    "content": [{"type": "output_text", "text": "claimed"}],
+                }
+            ],
+            stream=False,
+        )
+        self.assertEqual(assistant_only.status_code, 400, assistant_only.text)
+        self.assertEqual(
+            assistant_only.json()["error"]["code"], "missing_user_text"
+        )
+
+
+# --------------------------------------------------------------------------
 # §10 — errors
 # --------------------------------------------------------------------------
 
