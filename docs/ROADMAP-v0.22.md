@@ -32,9 +32,10 @@
 > - **§4.2–§4.4 carried/parked lanes** → migrated to
 >   **[ROADMAP-v0.23](ROADMAP-v0.23.md) §4** with dependants named; new parks
 >   filed in [BACKLOG](BACKLOG.md).
-> - **Release gate `[SUITE-GATE-V22]`** → open in RELEASE-v0.22.0 until the gate
->   runs on the frozen tip; the third consecutive unresolved suite-gate
->   placeholder, named in the drift audit rather than hidden.
+> - **Release gate `[SUITE-GATE-V22]`** → **closed**: the full suite ran green
+>   on the first attempt at the frozen tip `85515e9` (2,789 OK, skipped=5,
+>   6 h 12 m; receipts `reports/test_gate_v022/`), and RELEASE-v0.22.0 carries
+>   the verdict.
 
 # Roadmap v0.22 — how a question finds a statement, and whether the evidence outlives the program
 

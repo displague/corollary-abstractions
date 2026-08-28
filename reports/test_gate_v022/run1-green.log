@@ -1,0 +1,212 @@
+105 modules; tip 85515e9; start 15:41:05
+REFUSING to write: scripts/conform.py already exists. E7 freezes these digests BEFORE the compiler is written, and a freeze recorded after the thing it constrains is not a freeze.
+REFUSING to write: scripts/conform.py exists. E0c freezes the register before the first verdict, and a register frozen after the compiler can be shaped by what the compiler found.
+C:\Users\displ\Documents\corollary-abstractions\experiments\train_analogy.py:199: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(enc_layer, n_layers)
+C:\Users\displ\Documents\corollary-abstractions\experiments\train_analogy.py:199: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(enc_layer, n_layers)
+run refused: B7 VOID: scripts/external_verifier.py is 36f6ad64d06deb5d… and the preregistration recorded 0db59b36f2a5db6b…. If the change was needed to make the oracle agree, the independence claim is void and the change needs its own review naming the reason. No rate is published.
+PILOT REFUSED: the pinned toolchain 'leanprover/lean4:v4.32.2' is NOT INSTALLED. This writer refuses to download it (the hermetic rule, docs/DESIGN-external-verifier.md) and refuses to skip quietly: a gate artifact written without its checker would record absence as if it were a reading. Install the toolchain or read this refusal as the result.
+----------------------------------------------------------------------
+Ran 2789 tests in 22307.802s
+
+OK (skipped=5)
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+ok: root_node
+ok: closure
+ok: closure_order
+ok: closure_size
+ok: depth_histogram
+ok: inferred_edges_excluded
+ok: recheck_seconds 0.003 of 600 allowed
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+ok: root_node
+MISMATCH: closure expected node claim.release.v015 at depth 3, which is reachable from ledger.compression over emitted derived_from edges; the certificate does not list it
+ok: recheck_seconds 0.002 of 600 allowed
+ok: certificate_schema
+MISMATCH: graph_sha256 expected f112db180819eb7b92e14f19e109729d687a6b2c1089a5269fe60dedd1486b7f, found b83e4c246968d93c72a280cf570eb37390cdf8627b1a90b004d085087a2392c1; refusing to re-derive from a graph this certificate was not computed against
+ok: recheck_seconds 0.001 of 600 allowed
+ok: certificate_schema
+ok: graph_sha256
+ok: graph_schema
+ok: root_node
+ok: closure
+ok: closure_order
+ok: closure_size
+ok: depth_histogram
+MISMATCH: inferred_edges_excluded expected edge e14 to land on a closure member, found to_node corpus.beta outside the closure; it would not have joined this closure had it been scored
+ok: recheck_seconds 0.002 of 600 allowed
+
+blind-control smoke (3 seeds): satisfying_shuffles 0/3
+
+node counts by kind: {'analysis_claim': 187, 'corpus_file': 29, 'external_source': 18, 'ledger_section': 0, 'release_claim': 1367, 'report_ledger': 5, 'seed_script': 25}
+
+R1 = 469/469 = 1.0000
+edges by relation: {'derived_from': 1127, 'pinned_from': 6}
+edges by emitter:  {'provenance_graph.py/citation-scan/R-a': 79, 'provenance_graph.py/citation-scan/R-b': 24, 'provenance_graph.py/citation-scan/R-c': 147, 'provenance_graph.py/citation-scan/R-d': 131, 'provenance_graph.py/citation-scan/R-e': 123, 'provenance_graph.py/citation-scan/R-f': 473, 'provenance_graph.py/reconstructed': 27, 'provenance_graph.py/structure': 21, 'scripts/match_signatures.py': 27, 'scripts/measure_compression.py': 27, 'scripts/proof_correspondence.py': 27, 'scripts/specialize.py': 27}
+
+root A dev closure_size = 54, depths {'0': 1, '1': 53}, unprovenanced 736, inferred excluded 0
+reports/signature_matches.json clean
+reports/specializations.json clean
+reports/compression.json clean
+reports/decompositions.json declared_divergence (declared pre-scale snapshot; TRIAGE-v0.11 gate table row 6 and section 5 — live analysis is the pin source)
+
+root A dev R2: covered 11/11, closure 54 (cap 33), superset_ok=True ratio_ok=False
+
+2789 tests in 22307.8s (OK)
+
+timed tests: 19145.6s; fixtures/runner overhead: 3162.2s
+
+timed test bodies by module (fixtures excluded):
+   12513.7s   56.1%  tests.test_write_stage
+    4410.7s   19.8%  tests.test_corpus_analogy_split
+     372.2s    1.7%  tests.test_handles_census
+     354.5s    1.6%  tests.test_harness_line
+     308.1s    1.4%  tests.test_corpus_analogy
+     291.5s    1.3%  tests.test_retraction_closure
+     194.1s    0.9%  tests.test_onestep_census
+      90.0s    0.4%  tests.test_foreign_voice
+      86.5s    0.4%  tests.test_serve_chat
+      80.8s    0.4%  tests.test_address_space_probe
+      53.8s    0.2%  tests.test_plain_input
+      51.7s    0.2%  tests.test_when_to_ask_prereg
+      51.1s    0.2%  tests.test_session_prereqs
+      36.6s    0.2%  tests.test_cold_receipt
+      19.9s    0.1%  tests.test_proof_correspondence
+      18.3s    0.1%  tests.test_wordnet_retrieval
+      16.8s    0.1%  tests.test_wiring_routes
+      16.4s    0.1%  tests.test_block_mdl
+      16.0s    0.1%  tests.test_retrieval
+      13.1s    0.1%  tests.test_measure_realization
+      12.4s    0.1%  tests.test_probes
+      11.1s    0.0%  tests.test_measure_throughput
+      10.4s    0.0%  tests.test_external_verifier
+      10.0s    0.0%  tests.test_session_dispatcher
+       9.9s    0.0%  tests.test_measurement_tools
+       9.7s    0.0%  tests.test_programming_discipline
+       8.6s    0.0%  tests.test_retrieval_tools
+       8.2s    0.0%  tests.test_foreign_voice_oracle
+       6.8s    0.0%  tests.test_proof_curve
+       5.4s    0.0%  tests.test_grouping_agreement
+       5.2s    0.0%  tests.test_conform_ce3_supplement
+       5.0s    0.0%  tests.test_session_ledger
+       4.4s    0.0%  tests.test_session_durability
+       4.4s    0.0%  tests.test_verified_by
+       4.3s    0.0%  tests.test_wold_ingest
+       3.4s    0.0%  tests.test_conform
+       3.3s    0.0%  tests.test_lean_workbook_ingest
+       2.4s    0.0%  tests.test_throughput_tasks
+       2.3s    0.0%  tests.test_gloss
+       2.3s    0.0%  tests.test_decompose_channels
+       2.1s    0.0%  tests.test_foreign_voice_register
+       1.9s    0.0%  tests.test_depth_consumer_analysis
+       1.8s    0.0%  tests.test_measure_foreign_voice
+       1.4s    0.0%  tests.test_convention_probe
+       1.2s    0.0%  tests.test_foreign_voice_lexicon
+       1.0s    0.0%  tests.test_grouping_canonical
+       1.0s    0.0%  tests.test_depth_consumers
+       1.0s    0.0%  tests.test_session_run
+       0.9s    0.0%  tests.test_session_offline
+       0.8s    0.0%  tests.test_minif2f_ingest
+       0.8s    0.0%  tests.test_bounded_closure
+       0.7s    0.0%  tests.test_cv4_replay
+       0.7s    0.0%  tests.test_visual_oracle
+       0.7s    0.0%  tests.test_foreign_voice_b0d
+       0.6s    0.0%  tests.test_witness
+       0.6s    0.0%  tests.test_erratum_probe
+       0.6s    0.0%  tests.test_matcher_mirror
+       0.5s    0.0%  tests.test_answers
+       0.3s    0.0%  tests.test_verdict_rule
+       0.2s    0.0%  tests.test_depth_interface
+       0.2s    0.0%  tests.test_prose_authoring
+       0.2s    0.0%  tests.test_realize_term
+       0.2s    0.0%  tests.test_radius_recheck
+       0.2s    0.0%  tests.test_depth_consumer_runner
+       0.1s    0.0%  tests.test_transliteration
+       0.1s    0.0%  tests.test_coverage_holdout3
+       0.1s    0.0%  tests.test_closure_query
+       0.1s    0.0%  tests.test_langgen_roundtrip
+       0.1s    0.0%  tests.test_corpus_analogy_model_arm
+       0.1s    0.0%  tests.test_grounded_admission
+       0.1s    0.0%  tests.test_realization_lexicon
+       0.1s    0.0%  tests.test_controller
+       0.1s    0.0%  tests.test_machine_reader
+       0.1s    0.0%  tests.test_source_manifest
+       0.0s    0.0%  tests.test_conversation_runtime
+       0.0s    0.0%  tests.test_self_grounding
+       0.0s    0.0%  tests.test_readiness
+       0.0s    0.0%  tests.test_resolver
+       0.0s    0.0%  tests.test_request_grammar
+       0.0s    0.0%  tests.test_conform_prereg
+       0.0s    0.0%  tests.test_live_lean_search
+       0.0s    0.0%  tests.test_narrative_realize
+       0.0s    0.0%  tests.test_ask
+       0.0s    0.0%  tests.test_goedel_pset
+       0.0s    0.0%  tests.test_frames
+       0.0s    0.0%  tests.test_story
+       0.0s    0.0%  tests.test_conform_register
+       0.0s    0.0%  tests.test_evaluate
+       0.0s    0.0%  tests.test_search_controller
+       0.0s    0.0%  tests.test_emit_skeleton
+       0.0s    0.0%  tests.test_when_to_ask_candidate
+       0.0s    0.0%  tests.test_theory_of_mind
+       0.0s    0.0%  tests.test_tactic_policy
+       0.0s    0.0%  tests.test_algorithms_ingest
+       0.0s    0.0%  tests.test_preference
+       0.0s    0.0%  tests.test_discourse
+       0.0s    0.0%  tests.test_ambiguity
+       0.0s    0.0%  tests.test_belief
+       0.0s    0.0%  tests.test_entailment
+       0.0s    0.0%  tests.test_index_language
+       0.0s    0.0%  tests.test_compose_assert_frames
+       0.0s    0.0%  tests.test_deixis
+       0.0s    0.0%  tests.test_item4_operator_bag
+       0.0s    0.0%  tests.test_legality_strata
+       0.0s    0.0%  tests.test_context_narrowing
+
+slowest 40 tests:
+   4130.72s  tests.test_corpus_analogy_split.ControlTests.test_no_blind_control_can_see_the_answer
+    812.74s  tests.test_write_stage.TrustedAppendTests.test_seed_plus_append_reproduces_the_applied_corpus
+    809.79s  tests.test_write_stage.TrustedAppendTests.test_append_one_node_accepts_without_rewriting_the_seed
+    611.43s  tests.test_write_stage.TrustedAppendTests.test_two_node_append_is_confined_to_those_ids
+    492.48s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_then_refuse_end_to_end
+    419.02s  tests.test_write_stage.TrustedAppendTests.test_undeclared_delta_is_still_refused_on_the_append_lane
+    414.22s  tests.test_write_stage.WorkingTreeIntegrityTests.test_the_digest_ignores_this_gates_own_receipts
+    411.36s  tests.test_write_stage.AcceptedCandidateTests.test_receipt_is_written_and_deterministic
+    411.14s  tests.test_write_stage.ProofGateTests.test_two_candidates_differing_only_in_rationale_get_two_receipts
+    410.17s  tests.test_write_stage.AcceptedWriteApplicationTests.test_committed_seed_reproduces_the_applied_corpus
+    409.09s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_is_written_and_records_the_transition
+    409.09s  tests.test_write_stage.AcceptedWriteApplicationTests.test_other_corpora_are_byte_identical_after_acceptance
+    408.57s  tests.test_write_stage.AcceptedWriteApplicationTests.test_whole_tree_delta_catches_an_undeclared_change
+    408.35s  tests.test_write_stage.AcceptedWriteApplicationTests.test_receipt_failure_rolls_the_application_back
+    408.14s  tests.test_write_stage.TrustedAppendTests.test_python_is_not_an_append
+    407.60s  tests.test_write_stage.AcceptedWriteApplicationTests.test_matcher_delta_reverified_against_the_applied_data
+    406.13s  tests.test_write_stage.TrustedAppendTests.test_colliding_id_is_refused_and_tree_is_identical
+    403.88s  tests.test_write_stage.AcceptedWriteApplicationTests.test_accept_applies_seed_and_regenerates_corpus
+    285.20s  tests.test_retraction_closure.GateRegenerationCheckRuns.test_the_regeneration_check_reports_the_live_drifts
+    225.58s  tests.test_write_stage.ValidationAndDeltaTests.test_the_receipt_carries_the_declared_delta_beside_the_measured_one
+    223.45s  tests.test_write_stage.AcceptedCandidateTests.test_nothing_is_promoted_into_the_mini_repo_corpus
+    223.36s  tests.test_write_stage.ControllerAdapterTests.test_a_controller_run_stages_then_refuses_without_losing_state
+    222.67s  tests.test_write_stage.ValidationAndDeltaTests.test_the_declared_delta_is_recorded_even_when_it_is_wrong
+    215.92s  tests.test_corpus_analogy.CorpusAnalogyTests.test_baselines_are_computed_on_the_live_targets
+    212.43s  tests.test_write_stage.ControllerAdapterTests.test_staged_candidate_advances_only_a_receipt_ledger
+    212.30s  tests.test_write_stage.AcceptedWriteApplicationTests.test_mid_corpus_write_failure_leaves_tree_byte_identical
+    211.94s  tests.test_write_stage.AcceptedCandidateTests.test_canonical_envelope_round_trips_any_valid_json_string
+    210.88s  tests.test_write_stage.AcceptedCandidateTests.test_correspondence_route_is_recorded
+    210.22s  tests.test_write_stage.MaliciousPathTests.test_a_contained_seed_script_is_actually_read
+    210.21s  tests.test_harness_line.TypedPathReachesTheWriteGate.test_no_file_changes_and_no_staging_receipt_is_written
+    209.72s  tests.test_write_stage.AcceptedWriteApplicationTests.test_failed_post_application_verification_rolls_back
+    209.54s  tests.test_write_stage.AcceptedCandidateTests.test_cli_default_staging_follows_alternate_repo_root
+    209.33s  tests.test_write_stage.AcceptedCandidateTests.test_proven_correspondent_candidate_stages
+    209.10s  tests.test_write_stage.ValidationAndDeltaTests.test_wrong_matcher_delta_is_refused_though_everything_else_passes
+    208.60s  tests.test_write_stage.AcceptedCandidateTests.test_preplanted_predictable_temp_link_is_never_opened
+    208.06s  tests.test_write_stage.AcceptedCandidateTests.test_matcher_delta_is_measured_and_recorded
+    207.83s  tests.test_write_stage.AcceptedCandidateTests.test_staged_record_carries_proof_identity_and_trace
+    207.51s  tests.test_write_stage.ValidationAndDeltaTests.test_an_undeclared_slot_schema_gap_is_refused
+    207.12s  tests.test_write_stage.AcceptedCandidateTests.test_receipt_replaces_a_hardlink_instead_of_overwriting_its_target
+    206.51s  tests.test_write_stage.AcceptedCandidateTests.test_every_pipeline_stage_is_recorded_in_order
+gate exit 0

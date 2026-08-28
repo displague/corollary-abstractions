@@ -473,13 +473,16 @@ behaviour, and narrowing or widening a served route at a rotation remains a
 behaviour change owing its own evidence. It carries, parked, with its two
 admissible discharges intact.
 
-### `[SUITE-GATE-V22]` is the third consecutive unresolved suite-gate placeholder
+### `[SUITE-GATE-V22]` resolved at the tag, as V20 and V21 were
 
-`[SUITE-GATE-V20]` and `[SUITE-GATE-V21]` were both left permanently unresolved,
-recorded as such in [BACKLOG](BACKLOG.md) and RELEASE-v0.21.0. `[SUITE-GATE-V22]`
-in this document and in the README is written knowing that — a placeholder is a
-promise somebody has to come back for, and this is the third rotation to make it.
-It is named, not hidden.
+The drafter's caution was misplaced and is corrected here rather than shipped:
+`[SUITE-GATE-V20]` and `[SUITE-GATE-V21]` were **not** left unresolved — both
+carry their run tables and committed receipts (`reports/test_gate_v020/`,
+`reports/test_gate_v021/`, each with the red runs retained). `[SUITE-GATE-V22]`
+is resolved the same way: the placeholder existed only in the drafted notes
+between the rotation and the frozen-tip gate, and the gate ran green on the
+first attempt (above). It is named through its lifecycle and then closed, not
+carried.
 
 None of the previous two closed documents is edited: a closed roadmap and a
 shipped release are the record of what was written.
@@ -520,31 +523,40 @@ planning the work, not only the measurements.
 
 ## The release refresh
 
-`[SUITE-GATE-V22]` covers the full-suite verdict; the generated-state chain is
-reported here.
+The full-suite verdict is in *The suite at the tip* below; the generated-state
+chain is reported here, all of it run at rotation start.
 
 - `validate_nodes.py` — **12,777 statement nodes across 27 corpora**, green.
 - `check_regeneration.py` — seeds regenerate committed data byte-identically,
   exit 0.
 - `signature_matches`, `specializations`, `compression` — regenerated at
   rotation start byte-identical to the committed reports, exit 0.
-- `ingest_wold.py reach` — [SUITE-GATE-V22]: to be run or reported as *cannot
-  verify* at the frozen tip; it **refuses** without the pinned gitignored
-  WordNet archive rather than undercounting, and that refusal is *cannot
-  verify*, never *skipped*.
-- `check_report_regeneration.py` — [SUITE-GATE-V22]: its verdicts land at the
-  frozen tip.
+- `ingest_wold.py reach` — **ran, exit 0**: WordNet reach **1,394/1,460 =
+  95.5%** against the pinned gitignored archive present on this machine. A
+  contributor without the archive gets the refusal, which is *cannot verify*,
+  never *skipped*.
+- `check_report_regeneration.py` — **ran, exit 0**: `signature_matches` /
+  `specializations` / `compression` clean, `decompositions` **declared_divergence**
+  with its TRIAGE-v0.11 citation — the full chain green in one pass at rotation
+  start, the two-cycle pending streak closed at v0.21 and held here.
 
-A refresh step reported without its exit status is a step nobody checked.
+A refresh step reported without its exit status is a step nobody checked; every
+step above carries one.
 
 ## The suite at the tip
 
-`[SUITE-GATE-V22]` — the full `unittest discover -s tests` verdict on the frozen
-tip, with its wall-clock and any red runs retained in `reports/test_gate_v022/`,
-lands here. This cycle added new modules (`test_handles_census`, the cold-receipt
-harness tests, `test_onestep_census`, `test_erratum_probe`) whose assertions
-include the **absence** of the un-built table, pilot and Q60. A targeted suite
-proves the surfaces you listed; the full gate proves the ones you forgot.
+**Green on the first run: 2,789 tests, OK (skipped=5), 22,307.8 s (6 h 12 m)
+at the frozen tip `85515e9`.** The log is in `reports/test_gate_v022/`
+(`run1-green.log`, `runs.md`) — one run, no reds, unlike v0.20 (two) and v0.21
+(three); the freeze discipline that caught those cross-lane pin drifts had
+nothing to catch this cycle because both item lanes were censuses, not
+witnessed-module edits. Up from v0.21.0's 2,632 by this cycle's new modules —
+`test_handles_census`, `test_onestep_census`, `test_erratum_probe`,
+`test_cold_receipt` — whose assertions include the **absence** of the un-built
+handle table, pilot and Q60, and the cold harness's tree-restore proof. The
+five skips are the standing set. A targeted suite proves the surfaces you
+listed; the full gate proves the ones you forgot — and this time there were
+none forgotten.
 
 ## Assets
 

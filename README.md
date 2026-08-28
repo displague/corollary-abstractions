@@ -6,10 +6,11 @@ and an experiment suite showing that a **~2 MB neural model does genuinely
 compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
-interface. <!-- [SUITE-GATE-V22] the full-suite verdict, its wall-clock and any red runs
-     land at the frozen tip in docs/RELEASE-v0.22.0.md and reports/test_gate_v022/;
-     this placeholder is the third consecutive unresolved suite-gate token (V20,
-     V21, V22) and is named in RELEASE-v0.22.0's drift audit rather than hidden. -->
+interface.
+<!-- Suite gate v0.22.0: 2,789 tests OK (skipped=5), 22,307.8s (6h12m) at
+     tip 85515e9, green on the first run; receipts reports/test_gate_v022/.
+     Prior gates: v0.21 green on run 3 (2 reds), v0.20 green on run 2 (1 red),
+     v0.19 green first run. -->
 Latest release: [v0.22.0](docs/RELEASE-v0.22.0.md) — **two censuses, two
 findings: the library is nameless and its evidence is program-bound.** Asked how
 much of the corpus a person could reach by name rather than by title, the census
