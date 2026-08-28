@@ -410,6 +410,13 @@ PROFILE_DESCRIPTIONS = {
     ),
 }
 
+CODEX_REASONING_LEVELS = [
+    {
+        "effort": "medium",
+        "description": "The deterministic harness ignores reasoning effort",
+    }
+]
+
 HONESTY_LINE = (
     "offline boot; unregistered paths abstain (P-IH4); no generative path"
 )
@@ -2028,17 +2035,50 @@ class ChatEngine:
         return sheet
 
     def model_list(self) -> dict:
+        standard_models = [
+            {
+                "id": model,
+                "object": "model",
+                "created": self.created,
+                "owned_by": "corollary",
+                "description": PROFILE_DESCRIPTIONS[model],
+            }
+            for model in (KERNEL_MODEL, CONVERSATION_MODEL)
+        ]
         models = {
             "object": "list",
-            "data": [
+            "data": standard_models,
+            # Codex CLI probes the provider's /models route for its richer
+            # local catalog.  Keeping both keys makes the same endpoint useful
+            # to stock OpenAI clients and Codex without user-agent branching.
+            "models": [
                 {
-                    "id": model,
-                    "object": "model",
-                    "created": self.created,
-                    "owned_by": "corollary",
+                    "slug": model,
+                    "display_name": model,
                     "description": PROFILE_DESCRIPTIONS[model],
+                    "default_reasoning_level": "medium",
+                    "supported_reasoning_levels": CODEX_REASONING_LEVELS,
+                    "shell_type": "disabled",
+                    "visibility": "list",
+                    "supported_in_api": True,
+                    "priority": priority,
+                    "model_messages": {
+                        "instructions_template": "",
+                        "instructions_variables": None,
+                    },
+                    "include_skills_usage_instructions": False,
+                    "include_plugin_usage_instructions": False,
+                    "include_apps_usage_instructions": False,
+                    "support_verbosity": False,
+                    "truncation_policy": {"mode": "tokens", "limit": 10000},
+                    "supports_parallel_tool_calls": False,
+                    "context_window": 32768,
+                    "experimental_supported_tools": [],
+                    "input_modalities": ["text"],
                 }
-                for model in (KERNEL_MODEL, CONVERSATION_MODEL)
+                for priority, model in enumerate(
+                    (KERNEL_MODEL, CONVERSATION_MODEL), start=1
+                )
             ],
         }
         assert_no_demo_name(models, "GET /v1/models")

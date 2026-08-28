@@ -109,8 +109,14 @@ harness accepts Codex's `instructions` and tool declarations but ignores and
 reports them; it has no preprompt or generative tool-call path.
 
 ```powershell
-codex.cmd -m "corollary/kernel" -c 'model_provider="corollary_local"' -c 'model_providers.corollary_local.name="Corollary Local"' -c 'model_providers.corollary_local.base_url="http://127.0.0.1:8377/v1"' -c 'model_providers.corollary_local.wire_api="responses"'
+codex.cmd --disable apps --disable plugins -m "corollary/kernel" -c 'model_provider="corollary_local"' -c 'model_providers.corollary_local.name="Corollary Local"' -c 'model_providers.corollary_local.base_url="http://127.0.0.1:8377/v1"' -c 'model_providers.corollary_local.wire_api="responses"'
 ```
+
+`--disable apps --disable plugins` keeps this standalone text-only session
+from waiting for the host-owned `codex_apps` MCP server or loading plugin
+instructions it cannot use. The two local profiles are also published in
+Codex's model-catalog shape alongside the standard OpenAI `data` list, so the
+CLI does not need fallback metadata.
 
 The reply's `content` is the engine's rendered answer verbatim — the skin
 has zero rendering freedom — and everything else (route, status, receipt,

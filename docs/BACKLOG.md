@@ -12,7 +12,13 @@ or commit history. Each item names the evidence that motivated it.
   Responses subset onto the same `ChatEngine`, ignores and reports Codex's
   preprompt/tool fields, supports in-process `previous_response_id` replay,
   and was exercised end-to-end by the unmodified `codex.cmd` binary with no
-  API key or explicit prompt argument in the interactive launch command.
+  API key or explicit prompt argument in the interactive launch command. A
+  2026-08-28 TUI replay exposed two host-integration frictions after that
+  transport shipped: inherited `codex_apps` startup blocked the first turn,
+  and Codex's model probe expected its additive catalog rather than only the
+  standard OpenAI `data` list. The documented launch now disables Apps and
+  plugins for the standalone text-only session, and `/v1/models` serves both
+  catalog shapes.
 
 - **The naming-layer question — how does a nameless library get names a person
   can ask by? (2026-08-27, forced by both v0.22 censuses).** A **first-class

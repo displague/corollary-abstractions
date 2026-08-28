@@ -1342,6 +1342,51 @@ class CapabilitySheet(ServedSkin):
             for name in serve_chat.DEMO_NAMES:
                 self.assertNotIn(name, served)
 
+    def test_model_list_serves_standard_and_codex_catalogs(self):
+        """Stock clients and Codex can probe the same additive endpoint."""
+
+        import httpx
+
+        body = httpx.get(f"{self.base_url}/models").json()
+        self.assertEqual(
+            [model["id"] for model in body["data"]],
+            [serve_chat.KERNEL_MODEL, serve_chat.CONVERSATION_MODEL],
+        )
+        self.assertEqual(
+            [model["slug"] for model in body["models"]],
+            [serve_chat.KERNEL_MODEL, serve_chat.CONVERSATION_MODEL],
+        )
+        expected_catalog_keys = {
+            "slug",
+            "display_name",
+            "description",
+            "default_reasoning_level",
+            "supported_reasoning_levels",
+            "shell_type",
+            "visibility",
+            "supported_in_api",
+            "priority",
+            "model_messages",
+            "include_skills_usage_instructions",
+            "include_plugin_usage_instructions",
+            "include_apps_usage_instructions",
+            "support_verbosity",
+            "truncation_policy",
+            "supports_parallel_tool_calls",
+            "context_window",
+            "experimental_supported_tools",
+            "input_modalities",
+        }
+        for model in body["models"]:
+            self.assertEqual(set(model), expected_catalog_keys)
+            self.assertEqual(model["shell_type"], "disabled")
+            self.assertEqual(model["input_modalities"], ["text"])
+            self.assertEqual(model["model_messages"]["instructions_template"], "")
+            self.assertFalse(model["support_verbosity"])
+            self.assertFalse(model["supports_parallel_tool_calls"])
+            self.assertFalse(model["include_apps_usage_instructions"])
+            self.assertEqual(model["experimental_supported_tools"], [])
+
     def test_the_capability_sheet_publishes_the_foreign_voice_row(self):
         """§7: the row is present and CONSISTENT with the arming state.
 

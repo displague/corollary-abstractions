@@ -72,7 +72,7 @@ single-session contract; multi-tenant auth is a stated non-goal).
 |---|---|
 | `POST /v1/chat/completions` | the OpenAI-compatible subset (§4–§6) |
 | `POST /v1/responses` | Responses-compatible text subset for current Codex CLI (§4.2, §6, §8) |
-| `GET /v1/models` | lists the two profiles as models (stock clients probe it) |
+| `GET /v1/models` | lists the two profiles in the standard `data` list and the additive Codex `models` catalog |
 | `GET /v1/capabilities` | the **capability sheet** (§7), vendor extension |
 
 Anything else: `404` with a JSON error object in the OpenAI error shape.
@@ -180,6 +180,33 @@ other Responses fields are accepted but ignored and named in
 nor uses a preprompt and never emits a tool call. `previous_response_id`
 resumes only an in-process replay transcript produced by this server; an
 unknown id is refused. Nothing durable is restored, preserving ¶DEV-1.
+
+> **¶AMD-2 — Codex model discovery is additive (2026-08-28).** A live
+> Codex CLI 0.150.1 TUI replay reached `/v1/responses` but first warned that
+> `corollary/kernel` had no metadata; its `/v1/models` probe rejected the
+> standard OpenAI `{object, data}` list because it expected a top-level
+> `models` array. The endpoint therefore keeps the standard list byte-for-byte
+> in `data` and adds the catalog Codex reads. Each catalog item is deliberately
+> text-only and non-agentic: `slug`, `display_name`, `description`, one inert
+> `medium` reasoning level, `shell_type: "disabled"`, `visibility`,
+> `supported_in_api`, `priority`, an
+> empty instruction template, all three usage-instruction switches false,
+> `support_verbosity: false`, a token truncation policy,
+> `supports_parallel_tool_calls: false`,
+> `experimental_supported_tools: []`,
+> `input_modalities: ["text"]`, and the transport budget `context_window`.
+> No executable shell, apply-patch, search, image, or tool-mode metadata is
+> published.
+> `tests/test_serve_chat.py::CapabilitySheet::test_model_list_serves_standard_and_codex_catalogs`
+> pins the complete key set so a capability claim cannot enter quietly.
+>
+> The client-side launch also uses `--disable apps --disable plugins`: this
+> standalone model cannot consume their instructions or calls, and a host-owned
+> `codex_apps` MCP startup was the measured 13.5-second block before the user
+> interrupted the first TUI turn. With the amendment and those switches, the
+> unmodified CLI completed `hello` in 3.1 seconds with no provider, metadata,
+> MCP, or skill-budget warning. These are compatibility observations, not a
+> claim that the harness implements Codex's agent tools.
 
 ## 5. The registered line grammar is the request surface (kernel profile)
 
