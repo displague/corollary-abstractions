@@ -6478,3 +6478,29 @@ derivable, and all three were derived wrongly or not at all. Where a
 sentence in this cycle now carries a number, the number is assembled from
 the data — P1's finding, P2's answer, the seal's delta — and that habit
 started because of misses like these rather than in spite of them.
+
+# Early v0.24 design course -- protocol uptake, no empirical result (2026-08-28)
+
+This is a design-process record, not an experiment result. The triggering live
+observation was the first ordinary turn through the new Codex-compatible skin:
+`hello` reached the ungrounded-proposition refusal path. The course asked what
+boundary should move; it did not score that anecdote as a population.
+
+Receipt: `reports/design-direction-v0.24.json`; dialect-free brief:
+`reports/design-direction-v0.24-brief.txt`. Three isolated Claude Opus 5
+contexts ran three rounds each from an empty non-git directory under the full
+tool denylist: **nine rounds, fifteen round-one directions, $2.797487**.
+
+| series | final lead | runner-up | pressure-test correction |
+|---|---|---|---|
+| external evidence | **DEPUTY, transport tier** | SIEVE | maintainer-authored Python proves transport only; shell, hostile code, and composition were refused |
+| person/system relationship | **DUTY repaired to protocol uptake** | BLAST RADIUS | dispatcher events alone were vacuous; context position plus corpus witnesses replaced keyword and internal-event triggers |
+| cross-artifact meaning | **SHADOW** | WARRANT | abstraction must run without the concrete evaluator and score mainly where that evaluator declines |
+
+Repository-aware selection:
+[DESIGN-protocol-uptake](../docs/DESIGN-protocol-uptake.md). It is design-only,
+not scheduled, and displaces no v0.24 incumbent. DEPUTY contributes only the
+transport-versus-composition and Python-versus-shell separations; SHADOW
+contributes only the rule that unresolved alternatives remain explicit. There
+is no protocol score, prompt-tool result, execution result, or abstraction
+result yet.

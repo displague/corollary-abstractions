@@ -3,6 +3,47 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed after the v0.23 Codex harness trial (early v0.24 design input)
+
+- **PROTOCOL UPTAKE -- design-only candidate, reviewed, not scheduled
+  (2026-08-28).** The first ordinary input through the shipped Responses skin,
+  `hello`, reached the proposition/corpus refusal path. The new design does not
+  promote `hello` to a command: a builder-generated protocol vocabulary
+  (`protocol/protocols.json`, deliberately outside `data/` and every existing
+  corpus glob) and exact
+  session signals jointly license uptake, served on a new `corollary/protocol`
+  profile so neither shipped surface is widened; materially different surviving
+  transitions reuse signed `ASK -> WAITING -> reply`; nested uptake resumes the
+  exact parent. The Responses prompt-tool claim is separately gated and remains
+  UNTESTED if the installed Codex host advertises no compatible tool schema.
+  Evidence and the full 15-direction funnel:
+  [DESIGN-protocol-uptake](DESIGN-protocol-uptake.md),
+  `reports/design-direction-v0.24.json`.
+
+- **DEPUTY -- live execution transport, parked behind its own design and
+  STRANGER-GATE (2026-08-28).** The series-1 finalist survived only after shell,
+  hostile input, and composition claims were removed. Its first admissible slice
+  is maintainer-authored Python with pinned inputs, budgets, stdout/stderr/exit
+  receipts, and no path to the PROVEN write gate. A reproducible run of the wrong
+  program is its named residual risk. Unpark only through a separate design that
+  checks semantic correspondence and keeps Python and shell authority distinct.
+
+- **SHADOW -- exact abstraction with a loss ledger, parked as an answer-type
+  candidate (2026-08-28).** The series-3 finalist evaluates formal syntax in one
+  hand-authored abstract domain without calling the concrete evaluator, scores
+  primarily where that evaluator declines, and refuses a new epistemic label.
+  Unpark requires a rule-coverage prerequisite: its frozen proposal can ship an
+  unexercised wrong rule green, the residual risk its own gate did not price.
+
+- **The remaining early-course directions keep their folds.** OSTENSION and
+  ABSENCE route to the naming-layer/separability question; CONTRAST to a future
+  consequential-ambiguity experiment; INSTRUMENT to scoped observations;
+  SCOREBOARD to the existing journal and the parked exact blast-radius
+  question; UNSAY to dependency closure; NO, BECAUSE to refusal lifts;
+  HANDSHAKE to naming; MIRROR to realization/ECHO; TWO CLOCKS to the independent
+  second reader; GRAFT behind premise necessity; HALF-LIFE to ORPHAN. None is a
+  floating roadmap promise.
+
 ## Filed at the v0.22 rotation (the two censuses, the drift audit, and the v0.23 course's parks)
 
 - **SHIPPED — current Codex could not attach to the HTTP skin (2026-08-27).**

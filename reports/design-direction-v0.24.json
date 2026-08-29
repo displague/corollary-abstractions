@@ -1,0 +1,117 @@
+{
+  "schema": "design_direction_receipt.v1",
+  "cycle": "v0.24-early",
+  "status": "complete",
+  "requested_utc": "2026-08-28",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless) cwd C:/Users/displ/AppData/Local/Temp/f24-9d7c -- empty non-git dir, no project name in path",
+    "denylist": "strict-mcp-config with empty MCP config plus disallowedTools over file, shell, network, agent, notebook, and skill tools",
+    "residual_gap": "tools existed in the host but were blocked by denylist and permission mode rather than absent"
+  },
+  "brief_sha256_canonical_lf": "2f5e70c4ff356b5b5e9514db48f7dcb32b9a1401fd912d53c89c0564edc0d8e1",
+  "brief_on_file": "reports/design-direction-v0.24-brief.txt",
+  "round_prompt_sha256_canonical_lf": {
+    "series_1": {
+      "r1": "2f5e70c4ff356b5b5e9514db48f7dcb32b9a1401fd912d53c89c0564edc0d8e1",
+      "r2": "955c482f0c2e05f5bddbc14e8c22e6843acfe69a902f82266323b4cc6e4c97af",
+      "r3": "409262f8f9b21eec9ef02076f7bd3060a2a4ed7a976794738cef907f23e50f2a"
+    },
+    "series_2": {
+      "r1": "0de92c7b1d5685ad6ba21be6ca9f4823692b783876ac592680c770101afd2f39",
+      "r2": "9b2e40cf3cb67a10d10b052459748c614aa43b86bc62b65e79ac0deec4220189",
+      "r3": "f95e0c16ec1b17779ad7f5473523f31dc0749c48301cfc626d5efffaff18980d"
+    },
+    "series_3": {
+      "r1": "3def42fc0f806ff522828e5178e3c68a62b4db6c3da0a0be539dc2e6ed23025d",
+      "r2": "a1a6ab9e0e6bff34ae411d74eb520687dd5e38cc53e196958d186d78f349d64c",
+      "r3": "8fce7d13f557f4deedc135fb99739bfac488900889da87182c00e2f371ebc6c5"
+    },
+    "note": "series_1.r1 equals brief_sha256_canonical_lf by construction"
+  },
+  "exclusion_card_sha256_canonical_lf": {
+    "for_series_2": "dae45dcc7ddd79bac400d0a00082d37f9d9fb3f92ddc8111ecc587530e050ba2",
+    "for_series_3": "db344b55c240295c5c5caf1a557739052d22d3ccec9d57665fc20b1138606e4d"
+  },
+  "exclusion_cards_on_file": "not committed; the hashes above pin the cards handed to series 2 and series 3, and the receipt intentionally stores no model responses",
+  "exclusion_note": "series 2 excluded all five series-1 round-one territories; series 3 excluded all ten prior round-one territories. Incumbents, spent instruments, and parked lanes were disclosed only at round two.",
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "7e8cb6b4-b491-4781-af63-0cc735c07376",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 1.197585
+    },
+    {
+      "series": 2,
+      "session_id": "19a6cb3f-79bb-40aa-8104-bc4f0b748d2d",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.739759
+    },
+    {
+      "series": 3,
+      "session_id": "24285017-012f-4a74-a501-2d63313154f2",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.860143
+    }
+  ],
+  "total_cost_usd": 2.797487,
+  "round_one_funnel": {
+    "series_1": [
+      "OSTENSION -- address a relation by showing",
+      "CONTRAST -- disambiguate by computed stake",
+      "INSTRUMENT -- observation as expiring premise",
+      "DEPUTY -- authored computation with receipts",
+      "ABSENCE -- certify a bounded edge"
+    ],
+    "series_2": [
+      "SCOREBOARD -- deontic conversational record",
+      "STANDING ORDERS -- obligations the person installs",
+      "UNSAY -- amendment with exact blast radius",
+      "NO, BECAUSE -- refusal as navigable content",
+      "HANDSHAKE -- jointly fixed revocable reference"
+    ],
+    "series_3": [
+      "MIRROR -- representation round-trip certificates",
+      "TWO CLOCKS -- corroboration and disagreement",
+      "SHADOW -- exact abstraction with loss ledger",
+      "GRAFT -- composition of hypothetical worlds",
+      "HALF-LIFE -- evidence identity across regeneration"
+    ]
+  },
+  "outcomes": {
+    "series_1": {
+      "lead": "DEPUTY transport tier",
+      "runner_up": "SIEVE, merging OSTENSION and bounded ABSENCE",
+      "changed_under_pressure": "shell was refused; hostile and session-composed code were refused; maintainer-authored Python proves transport and reproduction only",
+      "residual_risk": "a perfectly reproducible receipt can run a program that computes the wrong thing"
+    },
+    "series_2": {
+      "lead": "DUTY repaired into protocol uptake from interaction position",
+      "runner_up": "BLAST RADIUS",
+      "changed_under_pressure": "typed dispatcher events alone were admitted as vacuous; corpus witnesses and exact interaction position replace lexical or internal-event triggers",
+      "residual_risk": "one maintainer may encode the controller's own prompting habits and misdescribe them as human convention"
+    },
+    "series_3": {
+      "lead": "SHADOW",
+      "runner_up": "WARRANT",
+      "changed_under_pressure": "the abstraction must run without the concrete evaluator and score mainly where that evaluator declines",
+      "residual_risk": "an unexercised abstraction rule can be wrong while every frozen instance stays green"
+    }
+  },
+  "selection": {
+    "selected": "docs/DESIGN-protocol-uptake.md -- context and corpus witnessed interaction uptake, exact ASK on materially different transitions, and exact parent resume",
+    "reason": "the new live Codex-compatible surface exposed the concrete hello failure; protocol uptake changes the human boundary without opening execution or writes",
+    "imported_lessons": [
+      "DEPUTY: later execution separates transport from composition and Python from shell",
+      "SHADOW: unresolved alternatives remain explicit in the receipt rather than being hidden by one label"
+    ],
+    "incumbent_disposition": "no v0.24 incumbent is displaced; protocol uptake is reviewed but unadjudicated input to the v0.24 course",
+    "residual_risk": "the fixture and transition vocabulary are authored by the same maintainer, so the gate can prove conformity to a self-authored interaction world rather than human convention"
+  }
+}

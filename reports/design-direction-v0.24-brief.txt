@@ -1,0 +1,44 @@
+You are an outside advisor to a small research program you have never seen.
+Everything you know about it is in this message; no code or data will be
+provided. Your value here is precisely that you are outside it.
+
+The program is building an inspectable system that lets a person work across
+mathematics, logic, language, physical relations, and programming without
+hiding exact operations inside a large learned model. It holds a generated
+library of formal statements, exact matchers and checkers, scoped hypothetical
+worlds, a persistent conversation, and a small amount of learned machinery for
+the residual choices that cannot be decided exactly. A person should eventually
+be able to speak naturally, introduce assumptions, obtain conditional answers,
+ask the running environment for observations, and continue a conversation whose
+claims remain auditable.
+
+The library already contains far more relations than a person can name or reach:
+only a small named fraction can currently be requested. Its conversation can
+remember assumptions and can pause for missing information, but open wording is
+often underdetermined and a prior plain-question chooser failed to establish
+useful selection. It can render a bounded formal subset into checked English and
+can evaluate some pinned numeric substitutions, but it does not yet participate
+fluidly in ordinary social or task conventions, invoke general programming
+work, or use environmental observations as live input. A recent compatibility
+surface can be driven by an existing command-line chat client, but the surface
+does not by itself add reasoning or tool capability.
+
+Exact work must remain ordinary code: parsing, equality, scope, provenance,
+authorization, resource limits, process results, status, and durable receipts.
+A small learned component may rank or compose only among legal alternatives;
+it cannot declare truth, authorize side effects, manufacture missing user input,
+or turn an observation into a library fact. Generated library files come only
+from committed sources. New behavior must have a first-class inspectable
+artifact, a capability-blind control, corruption and vacuity checks, frozen
+gates before measurement, honest negative results, and a smallest slice that
+one maintainer can finish in one release. More library entries, more matches,
+or placing a model on an exact operation are suspended proxies, not directions.
+
+Propose FIVE distinct forward directions. For each, in under 150 words:
+(a) the new kind of claim it would make true; (b) why the current shape
+cannot make that claim today; (c) a falsifiable construction gate -- what,
+decided in advance, would count as the idea failing; (d) the cheapest honest
+failure. Do not propose more entries, more matches, or a model trained on an
+exactly computable capability. Range widely; at least one should feel risky to
+you. The five must not be five flavors of one idea. Number them with short
+memorable names.

@@ -266,7 +266,20 @@ The rule, unchanged: **every carried lane names its dependant, or it parks.**
 | **CROSSING, LONG CON, BITROT** | Parked unchanged (probes and stop rules recorded in ROADMAP-v0.22 §4.3) |
 | **C-V3 (human) — the determinacy sheet; canonical-bracketing-load-bearing; STRANGER; UNSAY/RECALL; VERDICT, DEBT NOTES, COURIER, WORD OF HONOR (standalone probes, still unrun); ATLAS, ABSENCE, RATCHET, GRAFT, IF, TRANSPLANT, BORROWED PREMISES, and the v0.19/v0.20 catch-alls** | Parked unchanged with the triggers recorded in `reports/design-direction-v0.19/20/21/22.json`. IF's second reason stands (WITNESS's 0-of-6 is its empirical form); BORROWED PREMISES' next look is due now the supposition object has matured into GUEST AXIOM |
 
-### 4.4 New parks from the v0.23 course
+### 4.4 Early v0.24 input, not unparked
+
+**PROTOCOL UPTAKE** is a design-only input to the v0.24 course, reviewed,
+not scheduled, and displacing no incumbent. Its trigger is already observed:
+the first ordinary turn through the shipped Codex-compatible surface treated
+`hello` as an ungrounded proposition. [DESIGN-protocol-uptake](DESIGN-protocol-uptake.md)
+specifies an honest (not force-balanced) context/corpus table whose
+blind-control ceilings are computed from the U-P0 seal, a third served
+profile `corollary/protocol`, the exact ASK boundary, bounded nested
+resume, and a separately licensed Codex prompt-tool result. Execution
+remains a separate parked design. The v0.24 course, not this fired
+trigger, decides whether it outranks the incumbent queue.
+
+### 4.5 New parks from the v0.23 course
 
 Every declined direction carries its disposition, quoted from
 `reports/design-direction-v0.23.json` and filed in [BACKLOG](BACKLOG.md):
