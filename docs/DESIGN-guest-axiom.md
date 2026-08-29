@@ -1,12 +1,22 @@
 # The guest axiom
 
-**Status: design only.** Nothing here is implemented. This is the v0.23
-course's selected direction (receipt:
-`reports/design-direction-v0.23.json`, three isolated series, nine
-rounds, fifteen directions). It is the maintainer's own long-recorded
-goal, arrived at independently by an outside advisor and then chosen
-over the metric-leading alternative by explicit orchestrator ruling —
-the ruling and its cost are §2.
+**Status: measured as the recast-yield census; no guest sessions ran.**
+G-P0 (`experiments/guest_hypotheses.json`) recast the 30 sealed
+maintainer questions against the voice's 2,313 covered set: **0 of 21**
+non-exhaust questions named a unique covered id; the 20 person-wrong
+corrections are **BLOCKED_NO_LOG**. B3's licensed alternative fired:
+the lane reports that census rather than a 40% floor over an empty
+remainder. G-P1's planted-write fence is caught 1/1. ECHO stopped
+before the pilot, so B5's ask-arm remains unlicensed. Nothing here is
+a served implication. This remains the v0.23 course's selected
+direction (receipt: `reports/design-direction-v0.23.json`). It is the
+maintainer's own long-recorded goal, arrived at independently by an
+outside advisor and then chosen over the metric-leading alternative by
+explicit orchestrator ruling — the ruling and its cost are §2. The
+unpark is a new sealed question set whose targets actually sit in the
+2,313, or a dated amendment of the target constructor; plus an
+externally-sourced correction log whose commit is an ancestor of a
+later draw.
 
 ## 1. The boundary being moved, and the person it is for
 

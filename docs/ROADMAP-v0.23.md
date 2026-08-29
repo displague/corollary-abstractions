@@ -1,3 +1,25 @@
+> **CLOSED at v0.23.0.** This plan is the historical plan-of-record; it is not
+> edited except for this banner. The headline was a construction census that
+> returned a finding rather than an inbound implication, adjudicated against
+> a stop clause frozen before the draw. Where each item went:
+>
+> - **§1 GUEST AXIOM** → **RELEASE-v0.23.0** headline. G-P0 recast yield
+>   **0/21** into the 2,313; person-wrong **BLOCKED_NO_LOG**; no fifty
+>   sessions; no `guest_dispositions.json`. B3's alternative fired. Unpark
+>   conditions → [ROADMAP-v0.24](ROADMAP-v0.24.md) §2 and BACKLOG.
+> - **§1 G-P1** → **SHIPPED.** Planted write caught 1/1 on a throwaway tree.
+> - **§2 ECHO** → **RELEASE-v0.23.0**. Construction stop: native 8,584 /
+>   second 2,313 / overlap 0; B3/B4 miss on native; **0/50** and **0/500**
+>   rendered. No collision result. Native-instrument amendment → v0.24 §2.
+> - **§3 R-NF** → **SHIPPED.** 0/220 rendered-answer digest regressions;
+>   controls 2/2, 0/2, 2/2+220/220.
+> - **§3 HANDBACK** → **PARKED** for v0.24 (BACKLOG). Always-conditional
+>   never-ask is the recorded B5 fallback.
+> - **PROTOCOL UPTAKE** → reviewed design, **ROADMAP-v0.24** incumbent
+>   against STRANGER-GATE; not implemented this cycle.
+>
+> Session-level GUEST AXIOM gates did not run and are not claimed.
+
 # Roadmap v0.23 — the person supplies the premise, and the answer is an honest if-then
 
 v0.22 registered two censuses and both came back findings rather than
@@ -31,12 +53,22 @@ framing constraints"* — arrived at independently by the course's third series.
 
 **The boundary being moved.** Today a person may **select** a statement the
 library holds but never **supply** a premise it lacks, so every question turning
-on an unstated assumption ends in refusal. GUEST AXIOM serves a **machine-checked
-implication** instead — *if what you assumed holds, this follows* — with the
-guest hypothesis named, undischarged, and explicitly **not believed**; or a
-typed refusal. Ignorance about a premise becomes an answer conditioned on that
-premise, checkable by a stranger, that can never be mistaken for a claim the
-system endorses.
+on an unstated assumption ends in refusal. GUEST AXIOM would serve a
+**machine-checked implication** instead — *if what you assumed holds, this
+follows* — with the guest hypothesis named, undischarged, and explicitly **not
+believed**; or a typed refusal.
+
+**SHIPPED as the recast-yield finding (2026-08-29), not as that implication.**
+B3 already licensed the alternative: if the restricted population is below 15,
+the lane reports the recast-yield census rather than a rate. G-P0 measured
+**0 of 21** non-exhaust questions landing in the voice's 2,313 covered set;
+person-wrong is **BLOCKED_NO_LOG**; ECHO stopped before the pilot, so B5's
+ask-arm is unlicensed. No `guest_dispositions.json`, no 50 sessions, no
+elaboration floor, no person-wrong score. The implication object does not
+exist. The census is the result. Unpark needs a question set whose targets
+actually sit in the 2,313 (or a dated amendment of the target constructor)
+and an externally-sourced correction log whose commit is an ancestor of a
+later draw.
 
 **Not greenfield.** The frame is built and served: `scripts/supposition.py`
 opens a `FrameExecutor` with `on_exit="conjectured"` (anything leaving a
@@ -44,8 +76,8 @@ supposition frame leaves as conjecture), and `scripts/serve_chat.py` freezes a
 `conditional` status **outside** `ANSWERING_STATUSES`, so a conditional answer
 scores zero useful throughput tokens by construction — the incentive that would
 corrupt it is removed, not policed. What does not exist is the frame turned
-inbound: a person-supplied hypothesis, elaborated and checked, driving a served
-implication. This cycle builds only that.
+inbound. This cycle measured why that inbound turn could not start on the
+sealed question set it inherited.
 
 ### 1.1 Why this direction, over the metric leader — recorded as a decision
 
@@ -223,12 +255,13 @@ always-changed 2/2 plants and 220/220 false positives on self-pairs.
 Answer-loss class empty. Two live pins moved and are disclosed. Zero is
 published as B7 requires, never as “answers cannot regress.”
 
-**R-HANDBACK — the separator object.** Typed non-answer turns emit an
-admitted-command separator or unlock (the fold of TWO-KEY BIND and WANT-LIST into
-one object type). It **upgrades GUEST AXIOM's decision rule next cycle**: with no
-ECHO collision result and no HANDBACK separator, GUEST AXIOM's B5 fallback is
-frozen **always-conditional, never-ask**, and the contrast is itself a recorded
-finding. HANDBACK parks as the rider that makes the ask-arm reachable in v0.24.
+**R-HANDBACK — PARKED for v0.24 (2026-08-29).** Typed non-answer turns would
+emit an admitted-command separator or unlock (the fold of TWO-KEY BIND and
+WANT-LIST). It was never a v0.23 capability: with ECHO stopped before the
+pilot, GUEST AXIOM's B5 fallback is frozen **always-conditional, never-ask**,
+and that contrast is the recorded finding. HANDBACK unparks when GUEST AXIOM
+has a restricted population ≥15 **and** a collision or separator result
+licenses the ask-arm.
 
 ## 4. Carried, with dependants named
 
@@ -248,7 +281,7 @@ The rule, unchanged: **every carried lane names its dependant, or it parks.**
 
 | lane | named dependant | disposition |
 |---|---|---|
-| **G-P0 / G-P1** | **§1 — this cycle** | **both SHIPPED.** G-P0 is the recast-yield census (0/21 into the 2,313; correction arm BLOCKED_NO_LOG). G-P1's planted write is caught 1/1. The guest slice still does not begin: B3 has no restricted population ≥15, and ECHO stopped before producing the collision result B5 requires |
+| **G-P0 / G-P1** | **§1 — this cycle** | **both SHIPPED, and they are the item.** G-P0 is the recast-yield census (0/21 into the 2,313; correction arm BLOCKED_NO_LOG). G-P1's planted write is caught 1/1. No guest sessions. B5 remains unlicensed |
 | **ECHO's collision result** | **§1's B5 ask-arm** | **UNAVAILABLE: construction stop.** ECHO rendered 0 pilot and 0 registered items; no collision result exists. Unpark only after the dated amendment named in DESIGN-echo §8 |
 
 ### 4.3 Parked, with triggers
@@ -267,7 +300,7 @@ The rule, unchanged: **every carried lane names its dependant, or it parks.**
 | **DEMAND** — an obstruction ledger against an externally-sourced question distribution | **Parked, now with TRIPLE convergence.** The v0.22 supplementary series' programme-level blind spot (no prospectively sampled, externally sourced task distribution) was convergent evidence for it; the v0.23 course's **STRANGER'S EXAM folds into it as its calibration upgrade — the third independent arrival** (`reports/design-direction-v0.23.json`, `outcomes.series_1.folds`). Unpark needs a population of askers this repository did not author; still the missing-population problem behind STRANGER and C-V3 |
 | **The resolver's pre-emptive binding** (v0.21's G9, NOT MET) | Parked with its 13 committed fixtures; **no v0.23 headline item depends on it**, and GUEST AXIOM touches no resolver score. Unpark needs its own prereg, its own capability-blind control, and a K re-measurement. THE MEANING HANDSHAKE's `UNNAMED_SCOPE` typed refusal and person-confirmation-subsuming-resolver-pre-emption lessons are recorded against it in BACKLOG |
 | **The `conform` route advertises the asker's numbers and does not use them** | Parked unchanged from ROADMAP-v0.22 §4.3, verified not-patched this cycle; two admissible discharges intact (consume the bindings with a served diff and control, or correct the sheet/example/docstring). No v0.23 headline item depends on it |
-| **The G5-metric successor** | Parked with its rule written down; the correction is already at work (GUEST AXIOM's person-wrong control scores a correct refusal, R-NF scores regression by outcome). Unpark when a proposer lane is scheduled again |
+| **The G5-metric successor** | Parked with its rule written down. R-NF now scores regression by outcome (0/220). GUEST AXIOM's person-wrong arm is **unfilled** (`BLOCKED_NO_LOG`), not a scored refusal. Unpark when a proposer lane is scheduled again |
 | **TWO WITNESSES + the independent second reading** (with the parked conformance successor) | Parked together as item-candidates; the **BOUNDED OMNISCIENCE × SPLIT-SEMANTICS** strengthened unpark formulation from the v0.22 supplementary series stands, TWO JUDGES behind it. Fragment growth alone does not unpark WITNESS — the divergent class is reachable but non-linear |
 | **The cost ledger** (answers per joule and per dollar) | **SEVENTH cycle parked**, counting basis unchanged (rotations since `DESIGN-grounded-throughput` §10: v0.17–v0.23). Still parked, still designing nothing for it this cycle — but its metrology **TOLL** now has an instrument (§2) and a denominator path (ORPHAN), which is the shift RELEASE-v0.22.0's drift audit records |
 | **Ledger-first claims** (v0.17 course, gate L1–L13, hardened) — named dependant: ***none this cycle*** | **Seventh pass-over.** Trigger restored in wording: *it **became** a headline candidate the first cycle after the throughput readout* (a fired event at v0.17, receipt `reports/design-direction-v0.17.json`). v0.22 produced no throughput readout — `experiments/throughput_tasks.json` did not change at all. Load-bearing / premise-necessity travels with it and unparks with it |
@@ -364,37 +397,35 @@ Every declined direction carries its disposition, quoted from
 v0.23 is ready only if:
 
 - **G-P0 and G-P1 are committed in order** (drawing rule, then draw, then
-  planted-write control). G-P0 sealed 30 recasts, **0/21** in the 2,313, and
-  **BLOCKED_NO_LOG** for the 20 person-wrong corrections (the CROSSING log
-  was never sealed; it was not invented). G-P1's planted write is caught 1/1.
-  The guest slice still does not begin: B3 has no restricted population ≥15;
-- **B1's quarantine holds for 100% of the 50 sessions** — one digest mismatch
-  fails the lane as a containment defect — and **G-P1's planted-write control is
-  caught 1/1** before any real session runs;
-- **the elaboration pilot's floor is frozen from the pilot by dated amendment**
-  before the remaining hypotheses run, and if the reading is below 40% the lane
-  **stops with the elaboration census as its finding** rather than shipping a
-  rate over a tiny remainder;
-- **the person-wrong control is scored**, and if the two-sample test at α = 0.05
-  cannot reject, the person-wrong claim is published **UNDERPOWERED, not made**;
-  a perfect control score is a **positive void**;
-- **no `CONDITIONAL` record is served with `consumed == false`** — a vacuous
-  implication is refused `GUEST_UNCONSUMED`, never served;
-- **ECHO ships before item 1**, with `reparser_sha256`'s import closure audited
-  disjoint from the render/inverse pair at registration (an import voids the run
-  before rendering), the scramble arm run, and collisions published
-  falsification-only; **no injectivity rate is a capability**;
-- **the guest hypothesis text never enters the committed library** — B1 is the
-  proof, tested not asserted;
+  planted-write control). **MET.** G-P0 sealed 30 recasts, **0/21** in the
+  2,313, and **BLOCKED_NO_LOG** for the 20 person-wrong corrections. G-P1's
+  planted write is caught 1/1. B3's licensed alternative fired: the
+  recorded-question arm is that census, not a 40% floor.
+- **B1's 50-session quarantine, the elaboration-pilot floor, person-wrong
+  scoring, and the no-vacuous-CONDITIONAL clause did not run.** They are
+  **not claimed**. There were no guest sessions. Publishing a 50/50
+  quarantine over an empty remainder would be the rate-over-nothing B3
+  exists to forbid. G-P1 remains the only executed fence (1/1, throwaway
+  tree).
+- **ECHO shipped before item 1 as a construction stop**, not as a collision
+  result. Native B3/B4 miss; **0/50** and **0/500** rendered. No injectivity
+  rate. Item 1's ask-arm stays unlicensed.
+- **the guest hypothesis text never entered the committed library** — no
+  guest session ran, and G-P1's plant is the fence that can go red. Not a
+  50-session proof.
 - **no premise-necessity claim, no prose-understanding claim, and no
-  stranger-usability claim** is made anywhere; G-P0's authorship contamination
-  travels with every number;
-- `check_report_regeneration.py` runs in the release refresh **with its verdicts
-  in the notes**, and `ingest_wold.py reach` either runs or is reported as
-  *cannot verify* rather than as a skip;
+  stranger-usability claim** is made anywhere; G-P0's authorship
+  contamination travels with the 0/21.
+- **R-NF shipped** 0/220 with hostile controls that can go red; **HANDBACK
+  is parked** for v0.24 in writing.
+- `check_report_regeneration.py` runs in the release refresh **with its
+  verdicts in the notes**, and `ingest_wold.py reach` either runs or is
+  reported as *cannot verify* rather than as a skip;
 - the full suite is green on a frozen tip with retained receipts, and
-  `[SUITE-GATE-V22]`/`[SUITE-GATE-V23]` are resolved rather than left as a fourth
-  unresolved placeholder;
+  `[SUITE-GATE-V23]` is resolved rather than left as a placeholder;
 - every unfinished item ships or parks **in writing**;
-- the outside design inquiry is **invoked** for v0.24 with the receipt named, and
-  the v0.24 brief carries this cycle's readouts **including any stop**.
+- the outside design inquiry for v0.24 is **named**:
+  `reports/design-direction-v0.24.json`, reviewed DESIGN-protocol-uptake,
+  reaffirmed (not re-run) as the incumbent against STRANGER-GATE. The brief
+  already exists; this cycle's stops (G-P0 0/21, ECHO 0/50 and 0/500, R-NF
+  0/220) travel with it.

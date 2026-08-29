@@ -3,6 +3,26 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.23 cycle close (2026-08-29)
+
+- **HANDBACK — parked for v0.24 (2026-08-29).** The separator/unlock object
+  was a v0.23 rider only to make GUEST AXIOM's ask-arm reachable. ECHO
+  stopped before the pilot (0/50, 0/500), so there is no collision result
+  to attach a separator to. Unpark when GUEST AXIOM has a restricted
+  population ≥15 **and** a collision or separator result licenses the
+  ask-arm. Not a silent descope: the always-conditional never-ask fallback
+  is the recorded finding.
+
+- **GUEST AXIOM inbound slice — unpark behind a new sealed population
+  (2026-08-29).** The implication object was not built. G-P0's recast yield
+  into the 2,313 is 0/21; CROSSING's correction log was never sealed;
+  ECHO did not license B5. Unpark needs (1) a drawing rule committed
+  before a draw whose non-exhaust targets actually sit in
+  `measure_foreign_voice.covered_rows`, or a dated amendment of that
+  constructor, and (2) an externally-sourced correction log whose commit
+  is an ancestor of that draw. Do not author 20 objections in the draw
+  commit.
+
 ## Filed at ECHO's construction stop (2026-08-28)
 
 - **The native served voice has no code-disjoint reader or external identity

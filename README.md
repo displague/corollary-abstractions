@@ -11,7 +11,18 @@ interface.
      tip 85515e9, green on the first run; receipts reports/test_gate_v022/.
      Prior gates: v0.21 green on run 3 (2 reds), v0.20 green on run 2 (1 red),
      v0.19 green first run. -->
-Latest release: [v0.22.0](docs/RELEASE-v0.22.0.md) — **two censuses, two
+Latest release: [v0.23.0](docs/RELEASE-v0.23.0.md) — **the inbound turn had
+no population.** A person-supplied premise was scheduled; the sealed
+maintainer questions recast against the speakable remainder landed **0 of
+21** in the voice's 2,313 covered statements, the correction log was never
+sealed, and the native voice is not an echo instrument (**0/50** and
+**0/500** rendered). The implication object does not exist; the recast-yield
+census is the result. A third measurement, the regression residue of an
+overruled plan, published **0/220** rendered-answer digest regressions in
+the recorded answering window — a count, not a proof that answers cannot
+regress. See [the inbound turn had no
+population](docs/blog/the-inbound-turn-had-no-population.md).
+[v0.22.0](docs/RELEASE-v0.22.0.md) is the floor under it — **two censuses, two
 findings: the library is nameless and its evidence is program-bound.** Asked how
 much of the corpus a person could reach by name rather than by title, the census
 came back **417 of 12,777 statements (3.26%)** with a specific typable handle and
