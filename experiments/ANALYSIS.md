@@ -1,3 +1,24 @@
+# ECHO construction gate: the two served voices do not share a reader or an external adjudicator (2026-08-28)
+
+`experiments/echo_population_audit.json`, preregistration
+`experiments/echo_prereg.json`, reader `scripts/echo_reparse.py`. Design:
+`docs/DESIGN-echo.md` §8.
+
+The frozen population prediction fired exactly: **8,584 native** statement
+ids and **2,313 second-voice** statement ids, overlap **0**, with **13 resolver
+question fixtures** proven members of the sealed question set and kept outside
+the statement addend. B1 therefore fires; the two statement universes are
+reported separately rather than pooled into a rate.
+
+The instrument stopped before sampling. The second voice has the construction
+ECHO expected: `echo_reparse.py` shares no repository module with its renderer,
+and the pinned Lean 4.32.2 checker accepted the frozen `1 = 1` probe. The native
+voice does not: its reader and renderer share the same five-module closure and
+its identity gate is the repository-authored matcher parser, not an external
+checker. B3 and B4 both miss; result **STOP_BEFORE_PILOT**. Pilot rendered
+**0/50** and registered run rendered **0/500**. No recovery denominator, no
+scramble comparison, no collision ledger, and no injectivity claim exist.
+
 # HANDLES / H-P0: the ingested library is effectively nameless (2026-08-27)
 
 `experiments/handles_census.json`, writer `scripts/handles_census.py`, id→skeleton
