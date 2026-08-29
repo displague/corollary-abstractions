@@ -3,6 +3,33 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at G-P0 (the guest-hypothesis seal, 2026-08-29)
+
+- **G-P0 recast yield into the 2,313 is 0/21 (2026-08-29).** The drawing
+  rule recasts `experiments/plain_question_set.json` by exact membership of
+  statement ids the sealed `why` already named, against
+  `measure_foreign_voice.covered_rows` (the voice's 2,313). Nine questions
+  are exhaust by authorship. Of the remaining 21, the named ids are either
+  register-blocked (`graphtheory.enumeration.complete_graph_edge_count`,
+  `programming.factorial.iterative`, `graphtheory.trees.tree_edge_count`,
+  `programming.binexp.recursive`) or not oracle-accepted at all (the
+  trigonometry/number-theory names). Zero unique covered-set hits. DESIGN-
+  guest-axiom §6 B3's restricted population is therefore 0, below the ≥15
+  floor, so the recorded-question arm reports this census rather than a
+  rate. Unpark of a 40% elaboration floor needs a question set whose
+  targets actually live in the 2,313, or a dated amendment of the target
+  constructor. Artifact: `experiments/guest_hypotheses.json`.
+
+- **CROSSING's 20-real-corrections log was named and never sealed
+  (2026-08-29).** ROADMAP-v0.22 §4.3 parked CROSSING *with* its 20-real-
+  corrections probe so the probe could not be read after the fact.
+  G-P0's drawing rule named `experiments/crossing_corrections.json` as
+  that log, predicted `BLOCKED_NO_LOG` because the path is absent, and
+  refused to author 20 objection texts in the same commit as the draw.
+  Person-wrong (§7) is unfilled, not UNDERPOWERED-from-a-sample: there
+  is no sample. Unblock requires an externally-sourced log whose commit
+  is an ancestor of a later draw.
+
 ## Filed after the v0.23 Codex harness trial (early v0.24 design input)
 
 - **PROTOCOL UPTAKE -- design-only candidate, reviewed, not scheduled

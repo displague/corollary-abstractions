@@ -1,0 +1,382 @@
+{
+  "schema": "corollary.guest-hypotheses/1",
+  "design": "docs/DESIGN-guest-axiom.md",
+  "draw_rule": "experiments/guest_axiom_draw_rule.json",
+  "draw_rule_sha256_lf": "c40e31172a8a2623474493b2e0fc57f4f8ba8d67d28d3093b50bceef4d142665",
+  "correction_arm": "BLOCKED_NO_LOG",
+  "correction_arm_reason": "experiments/crossing_corrections.json is absent; the sealed rule predicted BLOCKED_NO_LOG and forbids inventing the pool.",
+  "correction_pool_size": 0,
+  "hypotheses": [
+    {
+      "hypothesis_id": "gp0-rq-g1-01",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what does the corpus say about de morgan's laws",
+      "hypothesis_normal_form": "what does the corpus say about de morgan's laws",
+      "target_statement_id": null,
+      "question_id": "g1-01",
+      "authors_prior": "ask",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-02",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "how do you compute the greatest common divisor recursively",
+      "hypothesis_normal_form": "how do you compute the greatest common divisor recursively",
+      "target_statement_id": null,
+      "question_id": "g1-02",
+      "authors_prior": "conditional",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-03",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the cosine of a double angle",
+      "hypothesis_normal_form": "what is the cosine of a double angle",
+      "target_statement_id": null,
+      "question_id": "g1-03",
+      "authors_prior": "conditional",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-04",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is two to the tenth",
+      "hypothesis_normal_form": "what is two to the tenth",
+      "target_statement_id": null,
+      "question_id": "g1-04",
+      "authors_prior": "conditional",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-05",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "tell me the pythagorean identity",
+      "hypothesis_normal_form": "tell me the pythagorean identity",
+      "target_statement_id": null,
+      "question_id": "g1-05",
+      "authors_prior": "conditional",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-06",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "how many edges does a complete graph have",
+      "hypothesis_normal_form": "how many edges does a complete graph have",
+      "target_statement_id": null,
+      "question_id": "g1-06",
+      "authors_prior": "conditional",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-07",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the handshake lemma",
+      "hypothesis_normal_form": "what is the handshake lemma",
+      "target_statement_id": null,
+      "question_id": "g1-07",
+      "authors_prior": "conditional",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-08",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "is x squared bigger than x",
+      "hypothesis_normal_form": "is x squared bigger than x",
+      "target_statement_id": null,
+      "question_id": "g1-08",
+      "authors_prior": "exhaust",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-09",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what does the corpus say about factorials",
+      "hypothesis_normal_form": "what does the corpus say about factorials",
+      "target_statement_id": null,
+      "question_id": "g1-09",
+      "authors_prior": "ask",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-10",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the quadratic formula",
+      "hypothesis_normal_form": "what is the quadratic formula",
+      "target_statement_id": null,
+      "question_id": "g1-10",
+      "authors_prior": "conditional",
+      "pilot": true,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-11",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is three plus four",
+      "hypothesis_normal_form": "what is three plus four",
+      "target_statement_id": null,
+      "question_id": "g1-11",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-12",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what does absorption mean in boolean algebra",
+      "hypothesis_normal_form": "what does absorption mean in boolean algebra",
+      "target_statement_id": null,
+      "question_id": "g1-12",
+      "authors_prior": "ask",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-13",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "how do you compute a factorial iteratively",
+      "hypothesis_normal_form": "how do you compute a factorial iteratively",
+      "target_statement_id": null,
+      "question_id": "g1-13",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-14",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the tangent of an angle defined as",
+      "hypothesis_normal_form": "what is the tangent of an angle defined as",
+      "target_statement_id": null,
+      "question_id": "g1-14",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-15",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is cayley's formula",
+      "hypothesis_normal_form": "what is cayley's formula",
+      "target_statement_id": null,
+      "question_id": "g1-15",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-16",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what happens when you double an even number",
+      "hypothesis_normal_form": "what happens when you double an even number",
+      "target_statement_id": null,
+      "question_id": "g1-16",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-17",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the sine of a sum of two angles",
+      "hypothesis_normal_form": "what is the sine of a sum of two angles",
+      "target_statement_id": null,
+      "question_id": "g1-17",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-18",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "how many edges does a tree have",
+      "hypothesis_normal_form": "how many edges does a tree have",
+      "target_statement_id": null,
+      "question_id": "g1-18",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-19",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is double negation",
+      "hypothesis_normal_form": "what is double negation",
+      "target_statement_id": null,
+      "question_id": "g1-19",
+      "authors_prior": "ask",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-20",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is five times six",
+      "hypothesis_normal_form": "what is five times six",
+      "target_statement_id": null,
+      "question_id": "g1-20",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-21",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the binary method for exponentiation",
+      "hypothesis_normal_form": "what is the binary method for exponentiation",
+      "target_statement_id": null,
+      "question_id": "g1-21",
+      "authors_prior": "conditional",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-22",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what does the corpus say about the distributive law",
+      "hypothesis_normal_form": "what does the corpus say about the distributive law",
+      "target_statement_id": null,
+      "question_id": "g1-22",
+      "authors_prior": "ask",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-23",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what will the weather be tomorrow",
+      "hypothesis_normal_form": "what will the weather be tomorrow",
+      "target_statement_id": null,
+      "question_id": "g1-23",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-24",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "who wrote the iliad",
+      "hypothesis_normal_form": "who wrote the iliad",
+      "target_statement_id": null,
+      "question_id": "g1-24",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-25",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the capital city of australia",
+      "hypothesis_normal_form": "what is the capital city of australia",
+      "target_statement_id": null,
+      "question_id": "g1-25",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-26",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "how do i change a tyre",
+      "hypothesis_normal_form": "how do i change a tyre",
+      "target_statement_id": null,
+      "question_id": "g1-26",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-27",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what is the best programming language",
+      "hypothesis_normal_form": "what is the best programming language",
+      "target_statement_id": null,
+      "question_id": "g1-27",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-28",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "should i buy this stock",
+      "hypothesis_normal_form": "should i buy this stock",
+      "target_statement_id": null,
+      "question_id": "g1-28",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-29",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "what did i ask you before",
+      "hypothesis_normal_form": "what did i ask you before",
+      "target_statement_id": null,
+      "question_id": "g1-29",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    },
+    {
+      "hypothesis_id": "gp0-rq-g1-30",
+      "source_stratum": "nameless_probe",
+      "hypothesis_text": "prove the riemann hypothesis",
+      "hypothesis_normal_form": "prove the riemann hypothesis",
+      "target_statement_id": null,
+      "question_id": "g1-30",
+      "authors_prior": "exhaust",
+      "pilot": false,
+      "named_covered_ids_in_why": []
+    }
+  ],
+  "counts": {
+    "total": 30,
+    "recorded_question": 0,
+    "maintainer_correction": 0,
+    "nameless_probe": 30,
+    "pilot": 10,
+    "non_nameless_in_covered_set": 0,
+    "covered_set_size": 2313,
+    "recast_yield": {
+      "non_exhaust_questions": 21,
+      "exhaust_questions": 9,
+      "landed_in_covered_set": 0,
+      "nameless_because_exhaust": 9,
+      "nameless_because_no_unique_covered_id": 21,
+      "why_the_yield_can_be_zero": "the sealed questions name curated-library ids; the 2,313 covered set is the voice's oracle-accepted minus register-blocked ids, 99.87% lean_workbook. Membership in that set is the design's target rule, not a resolver bind."
+    }
+  },
+  "counts_note": "computed from hypotheses[], not typed beside them. correction_arm BLOCKED_NO_LOG means the 50-set is the 30 recasts only; person-wrong is unfilled, not faked.",
+  "provenance": {
+    "writer": "scripts/guest_axiom_draw.py",
+    "writer_sha256_lf": "025da2cf69784132b2b222d202c11d6648fe10a92fbf7f8d9fadb61e7010649d",
+    "inputs": [
+      {
+        "path": "data/foreign_voice/eligibility_preview.json",
+        "sha256_lf": "31dca78a064815f6ceb94cc3d4f0fa4e56a5bc37da293e1bea0c209230c7ba3f"
+      },
+      {
+        "path": "data/foreign_voice/register.json",
+        "sha256_lf": "1b8d5c2dbc221df1b4c6894a0e7e4a8bc558182cba655f9dbdddaa6b11e3f857"
+      },
+      {
+        "path": "experiments/guest_axiom_draw_rule.json",
+        "sha256_lf": "c40e31172a8a2623474493b2e0fc57f4f8ba8d67d28d3093b50bceef4d142665"
+      },
+      {
+        "path": "experiments/plain_question_set.json",
+        "sha256_lf": "a11766c47a50367d71a75b82ed193ba250e4bc603ddb36abd96d0fb8638ae174"
+      }
+    ],
+    "emitted_at_generation": true
+  }
+}

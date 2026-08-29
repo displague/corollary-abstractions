@@ -6504,3 +6504,20 @@ transport-versus-composition and Python-versus-shell separations; SHADOW
 contributes only the rule that unresolved alternatives remain explicit. There
 is no protocol score, prompt-tool result, execution result, or abstraction
 result yet.
+# G-P0 -- recast-yield census, no elaboration (2026-08-29)
+
+Construction prerequisite, not a guest-axiom result. Drawing rule committed
+first (xperiments/guest_axiom_draw_rule.json, commit ancestor of this
+artifact). The draw recast all 30 sealed maintainer questions by exact
+membership in the voice covered set (measure_foreign_voice.covered_rows,
+2,313). Counts from xperiments/guest_hypotheses.json:
+
+- 9 exhaust-prior questions: nameless_probe by authorship
+- 21 non-exhaust: 0 unique covered-set ids in the sealed why (named ids are
+  register-blocked or never oracle-accepted)
+- landed_in_covered_set: 0
+- maintainer_correction: 0, correction_arm BLOCKED_NO_LOG (CROSSING log
+  absent; not invented)
+
+B3's restricted population is 0, below the >=15 floor, so the recorded-question
+arm is this census rather than a 40% elaboration rate. No guest session ran.

@@ -69,15 +69,16 @@ The NO-FLIP ranking becomes rider **R-NF** (§3), not a discard.
 
 ### 1.2 Construction prerequisites, ordered before any elaboration
 
-- **G-P0 — the sealed hypothesis set, 50 hypotheses**, committed before any
-  elaboration runs (review G3-followup: the person-wrong control needs 20 real
-  corrections for power, so the set is 30 + 20, not 40). The **30** recorded
-  natural questions (`experiments/plain_question_set.json`) recast as hypotheses
-  about their round-trippable targets, plus **20** sampled from the parked
-  two-way-correction lane's **real maintainer corrections** (externally sourced,
-  not author-invented — the denominator-provenance constraint; these 20 are also
-  §7's person-wrong sample). Every non-`nameless_probe` target must be in the
-  2,313 set; sealed with a drawing rule committed before the draw.
+- **G-P0 — SHIPPED as the recast-yield census (2026-08-29).** Drawing rule
+  committed first (`experiments/guest_axiom_draw_rule.json`). The draw
+  (`experiments/guest_hypotheses.json`) recast all 30 sealed questions by
+  exact membership in the voice's 2,313 covered set: **0 of 21** non-exhaust
+  questions named a unique covered id (the sealed `why` fields name curated-
+  library ids the voice register blocks or never accepted). The 20 person-wrong
+  corrections are **BLOCKED_NO_LOG** — `experiments/crossing_corrections.json`
+  is absent; the rule predicted that and forbade inventing the pool. B3's
+  restricted population is 0 (<15), so this cycle's recorded-question arm is
+  the yield census, not a 40% floor over a remainder.
 - **G-P1 — the quarantine harness.** The digest-before/after machinery proven to
   fire: a deliberately-writing control session must move the working-tree digest
   over `data/` and be caught, before any real guest session runs. *A fence that
@@ -236,7 +237,7 @@ The rule, unchanged: **every carried lane names its dependant, or it parks.**
 
 | lane | named dependant | disposition |
 |---|---|---|
-| **G-P0 / G-P1** | **§1 — this cycle** | not carried, **scheduled and ordered first**; the slice does not begin until both are committed |
+| **G-P0 / G-P1** | **§1 — this cycle** | **G-P0 SHIPPED** as the recast-yield census (0/21 into the 2,313; correction arm BLOCKED_NO_LOG). **G-P1 still first** before any real guest session |
 | **ECHO's collision result** | **§1's B5 ask-arm** | not carried, **it is item 2**, scheduled before item 1 |
 
 ### 4.3 Parked, with triggers
