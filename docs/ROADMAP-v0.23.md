@@ -79,11 +79,11 @@ The NO-FLIP ranking becomes rider **R-NF** (§3), not a discard.
   is absent; the rule predicted that and forbade inventing the pool. B3's
   restricted population is 0 (<15), so this cycle's recorded-question arm is
   the yield census, not a 40% floor over a remainder.
-- **G-P1 — the quarantine harness.** The digest-before/after machinery proven to
-  fire: a deliberately-writing control session must move the working-tree digest
-  over `data/` and be caught, before any real guest session runs. *A fence that
-  cannot catch a planted write is no fence* — the v0.21 session-ledger B-control
-  precedent.
+- **G-P1 — SHIPPED (2026-08-29).** `scripts/guest_quarantine.py` plants a
+  write under a throwaway `data/` tree; `write_stage.durable_digest` moves
+  and the plant is caught 1/1 (`tests/test_guest_quarantine.py`). The real
+  repository `data/` is not the plant target. Real guest sessions still
+  have not run.
 
 ### 1.3 The slice, the gate, the person-wrong disposition
 
@@ -237,7 +237,7 @@ The rule, unchanged: **every carried lane names its dependant, or it parks.**
 
 | lane | named dependant | disposition |
 |---|---|---|
-| **G-P0 / G-P1** | **§1 — this cycle** | **G-P0 SHIPPED** as the recast-yield census (0/21 into the 2,313; correction arm BLOCKED_NO_LOG). **G-P1 still first** before any real guest session |
+| **G-P0 / G-P1** | **§1 — this cycle** | **both SHIPPED.** G-P0 is the recast-yield census (0/21 into the 2,313; correction arm BLOCKED_NO_LOG). G-P1's planted write is caught 1/1. The guest slice still does not begin: B3 has no restricted population ≥15, and ECHO still licenses B5 |
 | **ECHO's collision result** | **§1's B5 ask-arm** | not carried, **it is item 2**, scheduled before item 1 |
 
 ### 4.3 Parked, with triggers
@@ -352,9 +352,11 @@ Every declined direction carries its disposition, quoted from
 
 v0.23 is ready only if:
 
-- **G-P0 and G-P1 are committed in order, before the slice begins**, with G-P0's
-  50 hypotheses sealed under a drawing rule committed before the draw, and the 20
-  person-wrong corrections externally sourced;
+- **G-P0 and G-P1 are committed in order** (drawing rule, then draw, then
+  planted-write control). G-P0 sealed 30 recasts, **0/21** in the 2,313, and
+  **BLOCKED_NO_LOG** for the 20 person-wrong corrections (the CROSSING log
+  was never sealed; it was not invented). G-P1's planted write is caught 1/1.
+  The guest slice still does not begin: B3 has no restricted population ≥15;
 - **B1's quarantine holds for 100% of the 50 sessions** — one digest mismatch
   fails the lane as a containment defect — and **G-P1's planted-write control is
   caught 1/1** before any real session runs;
