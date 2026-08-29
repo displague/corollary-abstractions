@@ -6542,3 +6542,19 @@ membership in the voice covered set (measure_foreign_voice.covered_rows,
 
 B3's restricted population is 0, below the >=15 floor, so the recorded-question
 arm is this census rather than a 40% elaboration rate. No guest session ran.
+
+# R-NF -- 0/220 rendered-answer digest regressions (2026-08-29)
+
+Rider census, not a capability. Registration commit 7573a6b; result artifact
+experiments/no_flip_census.json written once from that clean tip.
+
+- Population: 60 journals, 410 turns, 220 answering (160 solved + 60 found),
+  190 excluded and served for session state only
+- Outcome: 220 DIGEST_MATCH, 0 DIGEST_MISMATCH, 0 ANSWER_LOST
+- Controls: exact plants 2/2, shape-only 0/2, always-changed 2/2 and 220/220
+  false positives on identical self-pairs
+- Disclosures: live pins that moved are rendering_module_digests and
+  capability_sheet_digest; MACs unverified; SHA-256 match is not
+  collision-free proof
+- B7 sentence: 0/220 rendered-answer digest regressions in this recorded
+  window. Zero is not a proof that answers cannot regress.

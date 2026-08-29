@@ -13,6 +13,22 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## 0/220 rendered-answer digest regressions in the recorded window (2026-08-29)
+
+**Claim.** Replaying the 220 recorded answering turns (`160 solved + 60
+found`) through today's program yields byte-identical rendered-answer
+SHA-256 digests. That is a measured zero, not a proof that answers cannot
+regress.
+
+**Evidence.** `experiments/no_flip_census.json`: digest_matches 220,
+digest_mismatches 0, answers_lost 0. Exact plants 2/2, shape-only 0/2,
+always-changed 2/2 plus 220/220 false positives on identical self-pairs.
+B1–B6 FIRES. Live pins that moved: `rendering_module_digests`,
+`capability_sheet_digest`. MACs unverified.
+
+**Status.** Rider R-NF outcome. Detector retained for the erratum lane's
+future window.
+
 ## A served voice is not one instrument just because both outputs are English (2026-08-28)
 
 **Claim.** ECHO's proposed population contains two disjoint statement

@@ -216,14 +216,12 @@ arm remains unlicensed.
 
 ## 3. Riders — two, each with a floor and a stop rule
 
-**R-NF — NO-FLIP's regression census.** Instrument registered, census not
-yet run (`docs/DESIGN-no-flip.md`). Frozen to 220 recorded answering turns;
-primary comparator is exact rendered-answer SHA-256; shape-only and
-always-changed are the hostile controls. The improvement half is dead this
-cycle (R3's zero-growth window). The named residual risk is recorded: a
-canonicalizing comparator can score two equally-valid answers identical
-while both mutation limbs still flip. The census publishes whichever way
-it reads.
+**R-NF — SHIPPED (2026-08-29).** **0/220** rendered-answer digest
+regressions over the recorded answering turns
+(`experiments/no_flip_census.json`). Controls: exact 2/2, shape-only 0/2,
+always-changed 2/2 plants and 220/220 false positives on self-pairs.
+Answer-loss class empty. Two live pins moved and are disclosed. Zero is
+published as B7 requires, never as “answers cannot regress.”
 
 **R-HANDBACK — the separator object.** Typed non-answer turns emit an
 admitted-command separator or unlock (the fold of TWO-KEY BIND and WANT-LIST into

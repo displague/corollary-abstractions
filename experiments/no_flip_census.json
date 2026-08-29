@@ -1,0 +1,2799 @@
+{
+ "accounting": {
+  "answers_lost": 0,
+  "denominator": 220,
+  "digest_matches": 220,
+  "digest_mismatches": 0,
+  "receipt_rows": [
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "2 + 3",
+    "live_digest": "ab0d740b954222d066da2a71bae98eda3ec520c330bd358c1d3b1dce5bbc9700",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ab0d740b954222d066da2a71bae98eda3ec520c330bd358c1d3b1dce5bbc9700",
+    "recorded_kind": "solved",
+    "session_id": "v021-s01",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "2 ^ 3",
+    "live_digest": "79584d9d9ac398fd0f282b1d0dcce9e94e459daf71d542711fa618c16e6ee458",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "79584d9d9ac398fd0f282b1d0dcce9e94e459daf71d542711fa618c16e6ee458",
+    "recorded_kind": "solved",
+    "session_id": "v021-s01",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s01",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "2 * 3 = 6",
+    "live_digest": "ed5f0bd2c54bdb359877ca918c23b55087a7461b8dba9aef7260ec697077f192",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ed5f0bd2c54bdb359877ca918c23b55087a7461b8dba9aef7260ec697077f192",
+    "recorded_kind": "solved",
+    "session_id": "v021-s01",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s02",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "e34cb0d6b071d2fb6a97882dea6f7ef72411bf1e1127338d14787003f16e3de3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "e34cb0d6b071d2fb6a97882dea6f7ef72411bf1e1127338d14787003f16e3de3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s02",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 4",
+    "live_digest": "fe738cb5e096ca80895b30a62a8b5e902bd76df2d2c09b869fc0371fc20a50b1",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "fe738cb5e096ca80895b30a62a8b5e902bd76df2d2c09b869fc0371fc20a50b1",
+    "recorded_kind": "solved",
+    "session_id": "v021-s02",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "8a9fd7110e85f29b8ab40262bb48d1643a40ff0cf6599e1e28a481081278fed7",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "8a9fd7110e85f29b8ab40262bb48d1643a40ff0cf6599e1e28a481081278fed7",
+    "recorded_kind": "solved",
+    "session_id": "v021-s02",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s02",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "recorded_kind": "solved",
+    "session_id": "v021-s03",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "0e9059fb8955848b890e17626d005b9fcd730a9ba4215c491111ae005bd990cc",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0e9059fb8955848b890e17626d005b9fcd730a9ba4215c491111ae005bd990cc",
+    "recorded_kind": "solved",
+    "session_id": "v021-s03",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "c3593e8195fe7c7434a248d5f13586b7ea18d3d7d15e17fb2fcb6730145f3f5e",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c3593e8195fe7c7434a248d5f13586b7ea18d3d7d15e17fb2fcb6730145f3f5e",
+    "recorded_kind": "solved",
+    "session_id": "v021-s03",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "13a55c0ef5c9f9ced156d54d0be2dc6660ab430bd88df08c23c0e475ec2ea991",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "13a55c0ef5c9f9ced156d54d0be2dc6660ab430bd88df08c23c0e475ec2ea991",
+    "recorded_kind": "solved",
+    "session_id": "v021-s04",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s04",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "0656c71d0b0a5507b09f0f303e09fe1f5df97f40a5ec2f45b2d7e7f1692f1630",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0656c71d0b0a5507b09f0f303e09fe1f5df97f40a5ec2f45b2d7e7f1692f1630",
+    "recorded_kind": "solved",
+    "session_id": "v021-s04",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "a0f194cfdc1a003f4d7b7deeeb780843ff77e7fa111b66860153bd46cfda492b",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a0f194cfdc1a003f4d7b7deeeb780843ff77e7fa111b66860153bd46cfda492b",
+    "recorded_kind": "solved",
+    "session_id": "v021-s04",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "c2f841dbf83326f12eb8a4fa3801c9b63ffdb72b65e49a0d8a1f14c81cfe94cc",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c2f841dbf83326f12eb8a4fa3801c9b63ffdb72b65e49a0d8a1f14c81cfe94cc",
+    "recorded_kind": "solved",
+    "session_id": "v021-s05",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 7",
+    "live_digest": "b1e38a9d09b8fa5b80427fd45538bb2a63c5ca11a527ab45b6f913ec92d41dbd",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b1e38a9d09b8fa5b80427fd45538bb2a63c5ca11a527ab45b6f913ec92d41dbd",
+    "recorded_kind": "solved",
+    "session_id": "v021-s05",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s05",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s06",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 3",
+    "live_digest": "ebdcf5105bcd369cce59b8e97aa771505ff54f913a24cf377ef9fdc7b3f06830",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ebdcf5105bcd369cce59b8e97aa771505ff54f913a24cf377ef9fdc7b3f06830",
+    "recorded_kind": "solved",
+    "session_id": "v021-s06",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s06",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "8 + 4",
+    "live_digest": "87cc0a41ccc6d9519faa17947bf0fcdc482a67eded8f3324f172593eb6cad86b",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "87cc0a41ccc6d9519faa17947bf0fcdc482a67eded8f3324f172593eb6cad86b",
+    "recorded_kind": "solved",
+    "session_id": "v021-s07",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "8 ^ 3",
+    "live_digest": "96c6bffa9cb9473414961f432d40beb7e08b6ee1685f805cd13772515bf87df8",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "96c6bffa9cb9473414961f432d40beb7e08b6ee1685f805cd13772515bf87df8",
+    "recorded_kind": "solved",
+    "session_id": "v021-s07",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s07",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "8 * 4 = 32",
+    "live_digest": "3f36c0f952d0e33a7c3350e030f31f1e8d91541a88dc54d6caf8db03a64e0962",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "3f36c0f952d0e33a7c3350e030f31f1e8d91541a88dc54d6caf8db03a64e0962",
+    "recorded_kind": "solved",
+    "session_id": "v021-s07",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s08",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "959b10a3177b1c491f45bff6ab76e080c2bb15053f6356527cb1834c5c57ccca",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "959b10a3177b1c491f45bff6ab76e080c2bb15053f6356527cb1834c5c57ccca",
+    "recorded_kind": "solved",
+    "session_id": "v021-s08",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 5",
+    "live_digest": "6eedd1f1c9e9146f2b2d0a0d1b4783e7b850c5e2edffba311ba8b3b7c0cb76f3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "6eedd1f1c9e9146f2b2d0a0d1b4783e7b850c5e2edffba311ba8b3b7c0cb76f3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s08",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "36e8a4740a5c5bf9cb409ed75de034e967617f9f4ccd71c45b29f07f03feff1c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "36e8a4740a5c5bf9cb409ed75de034e967617f9f4ccd71c45b29f07f03feff1c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s08",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s08",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s09",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "dcfa0426d4ac8981bba6ba5efc01b37aef7712b10986a6fabf10c6c84689f1d3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "dcfa0426d4ac8981bba6ba5efc01b37aef7712b10986a6fabf10c6c84689f1d3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s09",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "f1e269d38619fe9da8cf38792ef565c5067802fb8a901489a4d7e327258d1a3b",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "f1e269d38619fe9da8cf38792ef565c5067802fb8a901489a4d7e327258d1a3b",
+    "recorded_kind": "solved",
+    "session_id": "v021-s09",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "8037bc14eecf3209785bcd80cf96b013225ed46c4424160f8a0c67d7833c9d58",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "8037bc14eecf3209785bcd80cf96b013225ed46c4424160f8a0c67d7833c9d58",
+    "recorded_kind": "solved",
+    "session_id": "v021-s10",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s10",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "267b6d0558c09cffba2ee688a703e4a5e8a9be71156ac2948cd7780227b0bb0c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "267b6d0558c09cffba2ee688a703e4a5e8a9be71156ac2948cd7780227b0bb0c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s10",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "ab345537815e69b0e82e47902d13a68cea88a4ef622e8392fea298e5ed3e69b2",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ab345537815e69b0e82e47902d13a68cea88a4ef622e8392fea298e5ed3e69b2",
+    "recorded_kind": "solved",
+    "session_id": "v021-s10",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "3c8cd47912d4fe19d259fb318dd6cace63644c083ace964d4155c36a3754c174",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "3c8cd47912d4fe19d259fb318dd6cace63644c083ace964d4155c36a3754c174",
+    "recorded_kind": "solved",
+    "session_id": "v021-s11",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 3",
+    "live_digest": "838df43713356f076a0b519130f73491aae73471c6a59c26ee26af6cd4e4a416",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "838df43713356f076a0b519130f73491aae73471c6a59c26ee26af6cd4e4a416",
+    "recorded_kind": "solved",
+    "session_id": "v021-s11",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s11",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "recorded_kind": "solved",
+    "session_id": "v021-s12",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 4",
+    "live_digest": "58f58b122f41e6b57624f393bb16898eefd8d7530870a39010f96d04ed5286c0",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "58f58b122f41e6b57624f393bb16898eefd8d7530870a39010f96d04ed5286c0",
+    "recorded_kind": "solved",
+    "session_id": "v021-s12",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s12",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "7 + 5",
+    "live_digest": "a9de3457f79dce8c99534e0933bf79e1ff17e5589a41d99e170b70e6fdf53950",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a9de3457f79dce8c99534e0933bf79e1ff17e5589a41d99e170b70e6fdf53950",
+    "recorded_kind": "solved",
+    "session_id": "v021-s13",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "7 ^ 3",
+    "live_digest": "cfc23749848b134824bd531c60f629d5321529f2fda99b66d76dceb884cb1dab",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "cfc23749848b134824bd531c60f629d5321529f2fda99b66d76dceb884cb1dab",
+    "recorded_kind": "solved",
+    "session_id": "v021-s13",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s13",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "7 * 5 = 35",
+    "live_digest": "7ef5666bd616aab12ac1475b77f5b048d9ac3a6ba6eac88fdd73a947f821a224",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "7ef5666bd616aab12ac1475b77f5b048d9ac3a6ba6eac88fdd73a947f821a224",
+    "recorded_kind": "solved",
+    "session_id": "v021-s13",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s14",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "5292c6a6b0cad66ef63a72aa4459621e1594432986bff6cbc736e8961b4325e0",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "5292c6a6b0cad66ef63a72aa4459621e1594432986bff6cbc736e8961b4325e0",
+    "recorded_kind": "solved",
+    "session_id": "v021-s14",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 6",
+    "live_digest": "f1700fb331d0806e047404fdd1f8bebedcf4cd0e92b405b2ffb110ac67e20288",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "f1700fb331d0806e047404fdd1f8bebedcf4cd0e92b405b2ffb110ac67e20288",
+    "recorded_kind": "solved",
+    "session_id": "v021-s14",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "419e5c0ef92dcc32c5722590c35eb3f651e3d6a1235bc51f1c11ae5b5e1fbe51",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "419e5c0ef92dcc32c5722590c35eb3f651e3d6a1235bc51f1c11ae5b5e1fbe51",
+    "recorded_kind": "solved",
+    "session_id": "v021-s14",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s14",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "bd16e16254af09ec72d3d23b0889ad011c5520b4c01b2b33d5a68a91f2ac68df",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "bd16e16254af09ec72d3d23b0889ad011c5520b4c01b2b33d5a68a91f2ac68df",
+    "recorded_kind": "solved",
+    "session_id": "v021-s15",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "c3aed4ad0b8a263956d816f69b2dfae5cb2d8f88c45b1345f2ffcdaa83d4724e",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c3aed4ad0b8a263956d816f69b2dfae5cb2d8f88c45b1345f2ffcdaa83d4724e",
+    "recorded_kind": "solved",
+    "session_id": "v021-s15",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "e263611f5a16fa547ddb88ae5c38e4f80d25d363f6a54809af1ea290e1c47965",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "e263611f5a16fa547ddb88ae5c38e4f80d25d363f6a54809af1ea290e1c47965",
+    "recorded_kind": "solved",
+    "session_id": "v021-s15",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "eac7062c4f512f208ae6d32130bf3466a9812f64fb94cfd625678e52730b3a54",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "eac7062c4f512f208ae6d32130bf3466a9812f64fb94cfd625678e52730b3a54",
+    "recorded_kind": "solved",
+    "session_id": "v021-s16",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s16",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "e4b3d233c4eaba41f37948d7323b0b17fd2713afd167ac54937073f3f5c1b168",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "e4b3d233c4eaba41f37948d7323b0b17fd2713afd167ac54937073f3f5c1b168",
+    "recorded_kind": "solved",
+    "session_id": "v021-s16",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "a86208b4e09c91e8fddb9a89d74130865d07bbfbd3934738f6354605bcc27b36",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a86208b4e09c91e8fddb9a89d74130865d07bbfbd3934738f6354605bcc27b36",
+    "recorded_kind": "solved",
+    "session_id": "v021-s16",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "aef43d08579323b7a5936ef32ac53a63bd3073d4f004dab31b94fd1c66cb5d0d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "aef43d08579323b7a5936ef32ac53a63bd3073d4f004dab31b94fd1c66cb5d0d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s17",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 4",
+    "live_digest": "375107c9f41c656df9fcaebca8c54374e9527048100e4b4f6ca68c5d56faa711",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "375107c9f41c656df9fcaebca8c54374e9527048100e4b4f6ca68c5d56faa711",
+    "recorded_kind": "solved",
+    "session_id": "v021-s17",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s17",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "b223a1672a95ce5c8c66ddad1d04886ab0835f918d506aab31e8fff5a82be956",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b223a1672a95ce5c8c66ddad1d04886ab0835f918d506aab31e8fff5a82be956",
+    "recorded_kind": "solved",
+    "session_id": "v021-s18",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 5",
+    "live_digest": "0f82c634a938621f46339ad3d9aa73817f6f4cfb07a95748f5d73a72afcad8f3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0f82c634a938621f46339ad3d9aa73817f6f4cfb07a95748f5d73a72afcad8f3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s18",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s18",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "6 + 6",
+    "live_digest": "292003c2f944e06fef62d91f5a1e6ff8e2fda255476a4e00d8913cb3535772f0",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "292003c2f944e06fef62d91f5a1e6ff8e2fda255476a4e00d8913cb3535772f0",
+    "recorded_kind": "solved",
+    "session_id": "v021-s19",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "6 ^ 3",
+    "live_digest": "138a3e1f503964fdaed221ff2477d94d4c5c43d0c0aa3753b965e2ef304020b2",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "138a3e1f503964fdaed221ff2477d94d4c5c43d0c0aa3753b965e2ef304020b2",
+    "recorded_kind": "solved",
+    "session_id": "v021-s19",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s19",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "6 * 6 = 36",
+    "live_digest": "12e3729d094e0f70b05d577c215e32bf10a34edd95b987aaf8f6cbaffd797495",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "12e3729d094e0f70b05d577c215e32bf10a34edd95b987aaf8f6cbaffd797495",
+    "recorded_kind": "solved",
+    "session_id": "v021-s19",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s20",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "722c3f27e942b60f5d253a5c028d1f748955e2ac3496ed8be3ee0cf0606bf495",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "722c3f27e942b60f5d253a5c028d1f748955e2ac3496ed8be3ee0cf0606bf495",
+    "recorded_kind": "solved",
+    "session_id": "v021-s20",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 7",
+    "live_digest": "7df1a9b029037e0bc86a413b452e3d849a7d10d94ab39f97ef792bb7ee97bc91",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "7df1a9b029037e0bc86a413b452e3d849a7d10d94ab39f97ef792bb7ee97bc91",
+    "recorded_kind": "solved",
+    "session_id": "v021-s20",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "d3a5b9da491c59950334ae4d64b465abd95a7c4c4ee6397f6e25e3e21e44c7b4",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "d3a5b9da491c59950334ae4d64b465abd95a7c4c4ee6397f6e25e3e21e44c7b4",
+    "recorded_kind": "solved",
+    "session_id": "v021-s20",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s20",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "5f07984aee7fbd9c4054b86e05e3e7332dd1528de63d8cc15e573309269ed0c6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "5f07984aee7fbd9c4054b86e05e3e7332dd1528de63d8cc15e573309269ed0c6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s21",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "c4eb6315ba9241bc7a8d6a84bd4ca1ba250eb22235061ed36b7a56c8b0a27d52",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c4eb6315ba9241bc7a8d6a84bd4ca1ba250eb22235061ed36b7a56c8b0a27d52",
+    "recorded_kind": "solved",
+    "session_id": "v021-s21",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "204b1a43dbfd736ce49550b0a1b86ced17813db837aae38a920acf5463893d15",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "204b1a43dbfd736ce49550b0a1b86ced17813db837aae38a920acf5463893d15",
+    "recorded_kind": "solved",
+    "session_id": "v021-s21",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "2d006de738a0356c58893fc39720ebc8aedd0467f8662a91492bdc62a0b51b7a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "2d006de738a0356c58893fc39720ebc8aedd0467f8662a91492bdc62a0b51b7a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s22",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s22",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "768139c8c5ee96aa378cc0b4f650231950102e9c120f56d31489a966800d776f",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "768139c8c5ee96aa378cc0b4f650231950102e9c120f56d31489a966800d776f",
+    "recorded_kind": "solved",
+    "session_id": "v021-s22",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "b9b246e30352585b1a7556e4ae9980404deca638cbf41fb58fc33ed03f45c999",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b9b246e30352585b1a7556e4ae9980404deca638cbf41fb58fc33ed03f45c999",
+    "recorded_kind": "solved",
+    "session_id": "v021-s22",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "149bd6d2203251c3e03b1f5ae1f8cc55f560bf3d0e95f2f0fdb05ef538dd632f",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "149bd6d2203251c3e03b1f5ae1f8cc55f560bf3d0e95f2f0fdb05ef538dd632f",
+    "recorded_kind": "solved",
+    "session_id": "v021-s23",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 5",
+    "live_digest": "3ca4d9d78735c8dfb09f3f02611b677f66570467ed2f573493b28ace94b686f8",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "3ca4d9d78735c8dfb09f3f02611b677f66570467ed2f573493b28ace94b686f8",
+    "recorded_kind": "solved",
+    "session_id": "v021-s23",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s23",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "c0fbbf3968255bab18e9f46461475c72a44b9f676284f6434b045aac23e2e057",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c0fbbf3968255bab18e9f46461475c72a44b9f676284f6434b045aac23e2e057",
+    "recorded_kind": "solved",
+    "session_id": "v021-s24",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 6",
+    "live_digest": "7cf67ccfbe838ecf932052857cf88b19e292e1b5c74f4398463624f850d6ea2d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "7cf67ccfbe838ecf932052857cf88b19e292e1b5c74f4398463624f850d6ea2d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s24",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s24",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "5 + 7",
+    "live_digest": "d6ffa824918be49faa94d2aeba71d977bbb80bfbfe1d67ee12ae12eeca762d70",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "d6ffa824918be49faa94d2aeba71d977bbb80bfbfe1d67ee12ae12eeca762d70",
+    "recorded_kind": "solved",
+    "session_id": "v021-s25",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "5 ^ 3",
+    "live_digest": "a6ab8567d20f0d4e04820ca091f10fa329a7729c659bd4bf898c4a11ad42854a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a6ab8567d20f0d4e04820ca091f10fa329a7729c659bd4bf898c4a11ad42854a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s25",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s25",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "5 * 7 = 35",
+    "live_digest": "151dce3caec4c0ee0f243b0d3a3cc45f9d8fe34af7c6d1a7ddbc29f6db19f87a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "151dce3caec4c0ee0f243b0d3a3cc45f9d8fe34af7c6d1a7ddbc29f6db19f87a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s25",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s26",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "9f5a5a34c8772a5e2b951996e59e289ba9a1992404f765810cc7aad9c534a75a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "9f5a5a34c8772a5e2b951996e59e289ba9a1992404f765810cc7aad9c534a75a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s26",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 3",
+    "live_digest": "1c7ff0ba30a2240a3bbd1c731b0a0254ddc1bb3459f1c6800d7fe2f5a67dba1c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "1c7ff0ba30a2240a3bbd1c731b0a0254ddc1bb3459f1c6800d7fe2f5a67dba1c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s26",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "0d54b00da1b0180f5359d59bb4bd4fe16b45024704a2faf2db4abc34bf9c6a04",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0d54b00da1b0180f5359d59bb4bd4fe16b45024704a2faf2db4abc34bf9c6a04",
+    "recorded_kind": "solved",
+    "session_id": "v021-s26",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s26",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "861b69e5848ad25557af30e62d28eacbf25072b6c74bfa12f7c30fae6e37ab5d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "861b69e5848ad25557af30e62d28eacbf25072b6c74bfa12f7c30fae6e37ab5d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s27",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "68e3e7ad40cf6ee18be2266b82b0a890ee082d64f04516c5851b98551b23d3c6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "68e3e7ad40cf6ee18be2266b82b0a890ee082d64f04516c5851b98551b23d3c6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s27",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "f32b5bd648d3e9a04eeea433559f6949b09b69228179626e6c9a5dd16ae5d94b",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "f32b5bd648d3e9a04eeea433559f6949b09b69228179626e6c9a5dd16ae5d94b",
+    "recorded_kind": "solved",
+    "session_id": "v021-s27",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "267b6d0558c09cffba2ee688a703e4a5e8a9be71156ac2948cd7780227b0bb0c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "267b6d0558c09cffba2ee688a703e4a5e8a9be71156ac2948cd7780227b0bb0c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s28",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s28",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "7ad991b1d46b1f91f595b01de8a7e0f2cb71d1d68a08ffc9265319cd7b4ac76e",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "7ad991b1d46b1f91f595b01de8a7e0f2cb71d1d68a08ffc9265319cd7b4ac76e",
+    "recorded_kind": "solved",
+    "session_id": "v021-s28",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "621dcc899274a39b7ef4ab1f6b841aa055800b2533e11f6d0c937ca84e9fb1d4",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "621dcc899274a39b7ef4ab1f6b841aa055800b2533e11f6d0c937ca84e9fb1d4",
+    "recorded_kind": "solved",
+    "session_id": "v021-s28",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "eea073c7d787103d0f3544c6ed0033d872da6599721c2389e484cea47e0bb9ea",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "eea073c7d787103d0f3544c6ed0033d872da6599721c2389e484cea47e0bb9ea",
+    "recorded_kind": "solved",
+    "session_id": "v021-s29",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 6",
+    "live_digest": "88f6f0f81d2607d53c2114aa47124dfafc76c0021a7c55732d4b0c1addef55c3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "88f6f0f81d2607d53c2114aa47124dfafc76c0021a7c55732d4b0c1addef55c3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s29",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s29",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "861b69e5848ad25557af30e62d28eacbf25072b6c74bfa12f7c30fae6e37ab5d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "861b69e5848ad25557af30e62d28eacbf25072b6c74bfa12f7c30fae6e37ab5d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s30",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 7",
+    "live_digest": "62a79998730fd0eaa5223eeb81254d0d465e1f38f3f02cfecefe94f7d336e104",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "62a79998730fd0eaa5223eeb81254d0d465e1f38f3f02cfecefe94f7d336e104",
+    "recorded_kind": "solved",
+    "session_id": "v021-s30",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s30",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "4 + 3",
+    "live_digest": "adf98b64b84598cb56b812280e74a732a665c6d7fc14b86b14ca30255bc675dd",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "adf98b64b84598cb56b812280e74a732a665c6d7fc14b86b14ca30255bc675dd",
+    "recorded_kind": "solved",
+    "session_id": "v021-s31",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "4 ^ 3",
+    "live_digest": "59338dfd81ab213afe54c9ef54b189efe1e24cab89f39f98868260ccb42e2371",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "59338dfd81ab213afe54c9ef54b189efe1e24cab89f39f98868260ccb42e2371",
+    "recorded_kind": "solved",
+    "session_id": "v021-s31",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s31",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "4 * 3 = 12",
+    "live_digest": "a8c27d108487cbcf9994f226cf05bbfe198a2851042d329ef7a0b2cfcf00c49a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a8c27d108487cbcf9994f226cf05bbfe198a2851042d329ef7a0b2cfcf00c49a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s31",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s32",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "c24c85ffb4ba3d87c617a2996cb47ae5f54b2c097122f63cfaebae3ad0e37bd0",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c24c85ffb4ba3d87c617a2996cb47ae5f54b2c097122f63cfaebae3ad0e37bd0",
+    "recorded_kind": "solved",
+    "session_id": "v021-s32",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 4",
+    "live_digest": "ee6f66be7aaddf673d467576c020252bc3ca3097e0c93e4cadcfc670d90e564a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ee6f66be7aaddf673d467576c020252bc3ca3097e0c93e4cadcfc670d90e564a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s32",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "ebd8561de035d22651644bb97d158b343aabe81159f95f2e4ef730df61573383",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ebd8561de035d22651644bb97d158b343aabe81159f95f2e4ef730df61573383",
+    "recorded_kind": "solved",
+    "session_id": "v021-s32",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s32",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "c0fbbf3968255bab18e9f46461475c72a44b9f676284f6434b045aac23e2e057",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c0fbbf3968255bab18e9f46461475c72a44b9f676284f6434b045aac23e2e057",
+    "recorded_kind": "solved",
+    "session_id": "v021-s33",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "0e9059fb8955848b890e17626d005b9fcd730a9ba4215c491111ae005bd990cc",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0e9059fb8955848b890e17626d005b9fcd730a9ba4215c491111ae005bd990cc",
+    "recorded_kind": "solved",
+    "session_id": "v021-s33",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "8214533999afe07e97b34ee6c2331dac0a36420ecd32bcd3e84e4e3aa5b6f87c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "8214533999afe07e97b34ee6c2331dac0a36420ecd32bcd3e84e4e3aa5b6f87c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s33",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "e4b3d233c4eaba41f37948d7323b0b17fd2713afd167ac54937073f3f5c1b168",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "e4b3d233c4eaba41f37948d7323b0b17fd2713afd167ac54937073f3f5c1b168",
+    "recorded_kind": "solved",
+    "session_id": "v021-s34",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s34",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "d762be6eae465eb5b184b6255d3ca2856d5b8c61e2351f16133ad57029bb9645",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "d762be6eae465eb5b184b6255d3ca2856d5b8c61e2351f16133ad57029bb9645",
+    "recorded_kind": "solved",
+    "session_id": "v021-s34",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "05e03620dd13dd7c60783df2372b3659a279ca456152468ad860548218189cb3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "05e03620dd13dd7c60783df2372b3659a279ca456152468ad860548218189cb3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s34",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "62cf36c047380bb8925df0ddab56d7f581e29eb57257e3fff02f4498aecdbfb5",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "62cf36c047380bb8925df0ddab56d7f581e29eb57257e3fff02f4498aecdbfb5",
+    "recorded_kind": "solved",
+    "session_id": "v021-s35",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 7",
+    "live_digest": "e3438d87d74db8ec6dad9c94086254014c51516e64fabcc97f733d82e07bbe2c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "e3438d87d74db8ec6dad9c94086254014c51516e64fabcc97f733d82e07bbe2c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s35",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s35",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s36",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 3",
+    "live_digest": "ebdcf5105bcd369cce59b8e97aa771505ff54f913a24cf377ef9fdc7b3f06830",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ebdcf5105bcd369cce59b8e97aa771505ff54f913a24cf377ef9fdc7b3f06830",
+    "recorded_kind": "solved",
+    "session_id": "v021-s36",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s36",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "3 + 4",
+    "live_digest": "ea8853bce769bbf803123dcb90d772f0b6fe8a177069219b5e2aa92e5ce0706a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ea8853bce769bbf803123dcb90d772f0b6fe8a177069219b5e2aa92e5ce0706a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s37",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "3 ^ 3",
+    "live_digest": "9e36178f11b24bce84ad7a72768bfa9959c26f80ec23b604c2c531d379647c3a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "9e36178f11b24bce84ad7a72768bfa9959c26f80ec23b604c2c531d379647c3a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s37",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s37",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "3 * 4 = 12",
+    "live_digest": "9a1b7474cf89c9b68cb68ef8397e98faea4f5ea1508f4c182d0916c9d1f5bcc9",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "9a1b7474cf89c9b68cb68ef8397e98faea4f5ea1508f4c182d0916c9d1f5bcc9",
+    "recorded_kind": "solved",
+    "session_id": "v021-s37",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s38",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "1dc5d9c86747ddf675a3ecce90068d474af447eab873f9fa09ee15e5d351169a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "1dc5d9c86747ddf675a3ecce90068d474af447eab873f9fa09ee15e5d351169a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s38",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 5",
+    "live_digest": "eed60950d5bfd9505ee80922cf503cedaf6f886a80de3bdb7e7d30d5886f18f2",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "eed60950d5bfd9505ee80922cf503cedaf6f886a80de3bdb7e7d30d5886f18f2",
+    "recorded_kind": "solved",
+    "session_id": "v021-s38",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "83418a71bfea8dcc6eac79a43bbf23af48403cad696b0fe1d75b50169af221ab",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "83418a71bfea8dcc6eac79a43bbf23af48403cad696b0fe1d75b50169af221ab",
+    "recorded_kind": "solved",
+    "session_id": "v021-s38",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s38",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "b223a1672a95ce5c8c66ddad1d04886ab0835f918d506aab31e8fff5a82be956",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b223a1672a95ce5c8c66ddad1d04886ab0835f918d506aab31e8fff5a82be956",
+    "recorded_kind": "solved",
+    "session_id": "v021-s39",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "dcfa0426d4ac8981bba6ba5efc01b37aef7712b10986a6fabf10c6c84689f1d3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "dcfa0426d4ac8981bba6ba5efc01b37aef7712b10986a6fabf10c6c84689f1d3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s39",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "918f3842186cda31330b2173a88a02d99f4dec7400e97a38d307435e8f99bd02",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "918f3842186cda31330b2173a88a02d99f4dec7400e97a38d307435e8f99bd02",
+    "recorded_kind": "solved",
+    "session_id": "v021-s39",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "768139c8c5ee96aa378cc0b4f650231950102e9c120f56d31489a966800d776f",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "768139c8c5ee96aa378cc0b4f650231950102e9c120f56d31489a966800d776f",
+    "recorded_kind": "solved",
+    "session_id": "v021-s40",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s40",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "12752852b8d56290958e785720289d4817b93880a58c09a10eaeda321ed1c46e",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "12752852b8d56290958e785720289d4817b93880a58c09a10eaeda321ed1c46e",
+    "recorded_kind": "solved",
+    "session_id": "v021-s40",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "a50b9658a3b795decfc027fdfb59da3f3376c23a9853324453fb29edcaa8249f",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a50b9658a3b795decfc027fdfb59da3f3376c23a9853324453fb29edcaa8249f",
+    "recorded_kind": "solved",
+    "session_id": "v021-s40",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "21f54d1908c99e06e89092686b447c3d048a7347befcc8c3b4cf80241743bf28",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "21f54d1908c99e06e89092686b447c3d048a7347befcc8c3b4cf80241743bf28",
+    "recorded_kind": "solved",
+    "session_id": "v021-s41",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 3",
+    "live_digest": "1af10879736859dffb274bbf6b9abcb67e6b42791ef0a0850ef24f83e1fb1683",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "1af10879736859dffb274bbf6b9abcb67e6b42791ef0a0850ef24f83e1fb1683",
+    "recorded_kind": "solved",
+    "session_id": "v021-s41",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s41",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "recorded_kind": "solved",
+    "session_id": "v021-s42",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 4",
+    "live_digest": "58f58b122f41e6b57624f393bb16898eefd8d7530870a39010f96d04ed5286c0",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "58f58b122f41e6b57624f393bb16898eefd8d7530870a39010f96d04ed5286c0",
+    "recorded_kind": "solved",
+    "session_id": "v021-s42",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s42",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "2 + 5",
+    "live_digest": "a1f195d99174892f31e9d514ca61d05ebcd2ca238604185a1fc7aa6c34d7091b",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a1f195d99174892f31e9d514ca61d05ebcd2ca238604185a1fc7aa6c34d7091b",
+    "recorded_kind": "solved",
+    "session_id": "v021-s43",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "2 ^ 3",
+    "live_digest": "79584d9d9ac398fd0f282b1d0dcce9e94e459daf71d542711fa618c16e6ee458",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "79584d9d9ac398fd0f282b1d0dcce9e94e459daf71d542711fa618c16e6ee458",
+    "recorded_kind": "solved",
+    "session_id": "v021-s43",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s43",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "2 * 5 = 10",
+    "live_digest": "978b374719efa05dbd96c350641bdae1524f6034b83e2bf38f45ab9d35c79f62",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "978b374719efa05dbd96c350641bdae1524f6034b83e2bf38f45ab9d35c79f62",
+    "recorded_kind": "solved",
+    "session_id": "v021-s43",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s44",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "e34cb0d6b071d2fb6a97882dea6f7ef72411bf1e1127338d14787003f16e3de3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "e34cb0d6b071d2fb6a97882dea6f7ef72411bf1e1127338d14787003f16e3de3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s44",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 6",
+    "live_digest": "5804e098f72667615605e4c4c84f333347ab25acbafe0d13bccdd4dadadce690",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "5804e098f72667615605e4c4c84f333347ab25acbafe0d13bccdd4dadadce690",
+    "recorded_kind": "solved",
+    "session_id": "v021-s44",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "8a9fd7110e85f29b8ab40262bb48d1643a40ff0cf6599e1e28a481081278fed7",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "8a9fd7110e85f29b8ab40262bb48d1643a40ff0cf6599e1e28a481081278fed7",
+    "recorded_kind": "solved",
+    "session_id": "v021-s44",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s44",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b5a2131bcd7f08046b0dd168fb61440f4605f54e001be20793c1d70391254591",
+    "recorded_kind": "solved",
+    "session_id": "v021-s45",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "c3aed4ad0b8a263956d816f69b2dfae5cb2d8f88c45b1345f2ffcdaa83d4724e",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c3aed4ad0b8a263956d816f69b2dfae5cb2d8f88c45b1345f2ffcdaa83d4724e",
+    "recorded_kind": "solved",
+    "session_id": "v021-s45",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "f7224b8f7f322ab45538e284bdee36318e77516d3007226d3b953afaa1d5f090",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "f7224b8f7f322ab45538e284bdee36318e77516d3007226d3b953afaa1d5f090",
+    "recorded_kind": "solved",
+    "session_id": "v021-s45",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "13a55c0ef5c9f9ced156d54d0be2dc6660ab430bd88df08c23c0e475ec2ea991",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "13a55c0ef5c9f9ced156d54d0be2dc6660ab430bd88df08c23c0e475ec2ea991",
+    "recorded_kind": "solved",
+    "session_id": "v021-s46",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s46",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "0656c71d0b0a5507b09f0f303e09fe1f5df97f40a5ec2f45b2d7e7f1692f1630",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0656c71d0b0a5507b09f0f303e09fe1f5df97f40a5ec2f45b2d7e7f1692f1630",
+    "recorded_kind": "solved",
+    "session_id": "v021-s46",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "a0f194cfdc1a003f4d7b7deeeb780843ff77e7fa111b66860153bd46cfda492b",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a0f194cfdc1a003f4d7b7deeeb780843ff77e7fa111b66860153bd46cfda492b",
+    "recorded_kind": "solved",
+    "session_id": "v021-s46",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "c2f841dbf83326f12eb8a4fa3801c9b63ffdb72b65e49a0d8a1f14c81cfe94cc",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c2f841dbf83326f12eb8a4fa3801c9b63ffdb72b65e49a0d8a1f14c81cfe94cc",
+    "recorded_kind": "solved",
+    "session_id": "v021-s47",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 4",
+    "live_digest": "39ddecf6e493563a00b2cd6b3852e8e0fbbe1a62274c649568c051529b7d2cb6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "39ddecf6e493563a00b2cd6b3852e8e0fbbe1a62274c649568c051529b7d2cb6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s47",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s47",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "b223a1672a95ce5c8c66ddad1d04886ab0835f918d506aab31e8fff5a82be956",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "b223a1672a95ce5c8c66ddad1d04886ab0835f918d506aab31e8fff5a82be956",
+    "recorded_kind": "solved",
+    "session_id": "v021-s48",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 5",
+    "live_digest": "0f82c634a938621f46339ad3d9aa73817f6f4cfb07a95748f5d73a72afcad8f3",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0f82c634a938621f46339ad3d9aa73817f6f4cfb07a95748f5d73a72afcad8f3",
+    "recorded_kind": "solved",
+    "session_id": "v021-s48",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s48",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "8 + 6",
+    "live_digest": "47a24c8decc75ddbf87b3c831532467861d5b301fd2ded3701f98d09d5f42efd",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "47a24c8decc75ddbf87b3c831532467861d5b301fd2ded3701f98d09d5f42efd",
+    "recorded_kind": "solved",
+    "session_id": "v021-s49",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "8 ^ 3",
+    "live_digest": "96c6bffa9cb9473414961f432d40beb7e08b6ee1685f805cd13772515bf87df8",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "96c6bffa9cb9473414961f432d40beb7e08b6ee1685f805cd13772515bf87df8",
+    "recorded_kind": "solved",
+    "session_id": "v021-s49",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s49",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "8 * 6 = 48",
+    "live_digest": "2f59ea003fb39e860f770234a24a679d3f9d5d4d4304b628134ccd2ab40e3a3a",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "2f59ea003fb39e860f770234a24a679d3f9d5d4d4304b628134ccd2ab40e3a3a",
+    "recorded_kind": "solved",
+    "session_id": "v021-s49",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s50",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "959b10a3177b1c491f45bff6ab76e080c2bb15053f6356527cb1834c5c57ccca",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "959b10a3177b1c491f45bff6ab76e080c2bb15053f6356527cb1834c5c57ccca",
+    "recorded_kind": "solved",
+    "session_id": "v021-s50",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 7",
+    "live_digest": "2054189287aae9bbaf34f1605e084469837168fc6df725720dd0d5c60522db1d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "2054189287aae9bbaf34f1605e084469837168fc6df725720dd0d5c60522db1d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s50",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "36e8a4740a5c5bf9cb409ed75de034e967617f9f4ccd71c45b29f07f03feff1c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "36e8a4740a5c5bf9cb409ed75de034e967617f9f4ccd71c45b29f07f03feff1c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s50",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s50",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "0a3e63bfe4b3deb85dc5b70b7ef3b165056cf6b7db762c74eb3af9354e6440b6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s51",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "c4eb6315ba9241bc7a8d6a84bd4ca1ba250eb22235061ed36b7a56c8b0a27d52",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c4eb6315ba9241bc7a8d6a84bd4ca1ba250eb22235061ed36b7a56c8b0a27d52",
+    "recorded_kind": "solved",
+    "session_id": "v021-s51",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "a5896a632fc57e3e3ef3141da58b95667dee8a4954a79cb362b777deb2be2044",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a5896a632fc57e3e3ef3141da58b95667dee8a4954a79cb362b777deb2be2044",
+    "recorded_kind": "solved",
+    "session_id": "v021-s51",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "8037bc14eecf3209785bcd80cf96b013225ed46c4424160f8a0c67d7833c9d58",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "8037bc14eecf3209785bcd80cf96b013225ed46c4424160f8a0c67d7833c9d58",
+    "recorded_kind": "solved",
+    "session_id": "v021-s52",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s52",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "267b6d0558c09cffba2ee688a703e4a5e8a9be71156ac2948cd7780227b0bb0c",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "267b6d0558c09cffba2ee688a703e4a5e8a9be71156ac2948cd7780227b0bb0c",
+    "recorded_kind": "solved",
+    "session_id": "v021-s52",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "ab345537815e69b0e82e47902d13a68cea88a4ef622e8392fea298e5ed3e69b2",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "ab345537815e69b0e82e47902d13a68cea88a4ef622e8392fea298e5ed3e69b2",
+    "recorded_kind": "solved",
+    "session_id": "v021-s52",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "3c8cd47912d4fe19d259fb318dd6cace63644c083ace964d4155c36a3754c174",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "3c8cd47912d4fe19d259fb318dd6cace63644c083ace964d4155c36a3754c174",
+    "recorded_kind": "solved",
+    "session_id": "v021-s53",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 5",
+    "live_digest": "02c70c61060ed52900042a3424d4062ae8ab31b841f0c3f2871db7a62292c85f",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "02c70c61060ed52900042a3424d4062ae8ab31b841f0c3f2871db7a62292c85f",
+    "recorded_kind": "solved",
+    "session_id": "v021-s53",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s53",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "c0fbbf3968255bab18e9f46461475c72a44b9f676284f6434b045aac23e2e057",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "c0fbbf3968255bab18e9f46461475c72a44b9f676284f6434b045aac23e2e057",
+    "recorded_kind": "solved",
+    "session_id": "v021-s54",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 6",
+    "live_digest": "7cf67ccfbe838ecf932052857cf88b19e292e1b5c74f4398463624f850d6ea2d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "7cf67ccfbe838ecf932052857cf88b19e292e1b5c74f4398463624f850d6ea2d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s54",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s54",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "7 + 7",
+    "live_digest": "303facab0a1fd6dd9ba37cef6433e887555da4c9821083580813ece24d92a689",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "303facab0a1fd6dd9ba37cef6433e887555da4c9821083580813ece24d92a689",
+    "recorded_kind": "solved",
+    "session_id": "v021-s55",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "7 ^ 3",
+    "live_digest": "cfc23749848b134824bd531c60f629d5321529f2fda99b66d76dceb884cb1dab",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "cfc23749848b134824bd531c60f629d5321529f2fda99b66d76dceb884cb1dab",
+    "recorded_kind": "solved",
+    "session_id": "v021-s55",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.euclid.recursive",
+    "live_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864",
+    "recorded_kind": "found",
+    "session_id": "v021-s55",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "7 * 7 = 49",
+    "live_digest": "9da90563bc13ba61db3c0bd737f143a1fd04b7060e1f1aab51047b0d700b59ea",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "9da90563bc13ba61db3c0bd737f143a1fd04b7060e1f1aab51047b0d700b59ea",
+    "recorded_kind": "solved",
+    "session_id": "v021-s55",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "quadratic formula",
+    "live_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "5801a33fefff153330a390d03e117945772b562e16d12081bf56e7fd8a355908",
+    "recorded_kind": "found",
+    "session_id": "v021-s56",
+    "turn_index": 0
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y ^ 2",
+    "live_digest": "5292c6a6b0cad66ef63a72aa4459621e1594432986bff6cbc736e8961b4325e0",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "5292c6a6b0cad66ef63a72aa4459621e1594432986bff6cbc736e8961b4325e0",
+    "recorded_kind": "solved",
+    "session_id": "v021-s56",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y + 3",
+    "live_digest": "dffcffdf9e4b097b276059a9f6e83875cfa310286c496cba601d02e3fa4134c0",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "dffcffdf9e4b097b276059a9f6e83875cfa310286c496cba601d02e3fa4134c0",
+    "recorded_kind": "solved",
+    "session_id": "v021-s56",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "y * y",
+    "live_digest": "419e5c0ef92dcc32c5722590c35eb3f651e3d6a1235bc51f1c11ae5b5e1fbe51",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "419e5c0ef92dcc32c5722590c35eb3f651e3d6a1235bc51f1c11ae5b5e1fbe51",
+    "recorded_kind": "solved",
+    "session_id": "v021-s56",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin trigonometry.identities.double_angle_cosine",
+    "live_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "5ca3a9dc443aeb02e36934e67dba4632bf94582ac94611494d95a1f03c0f1798",
+    "recorded_kind": "found",
+    "session_id": "v021-s56",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "bd16e16254af09ec72d3d23b0889ad011c5520b4c01b2b33d5a68a91f2ac68df",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "bd16e16254af09ec72d3d23b0889ad011c5520b4c01b2b33d5a68a91f2ac68df",
+    "recorded_kind": "solved",
+    "session_id": "v021-s57",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "t ^ 2",
+    "live_digest": "68e3e7ad40cf6ee18be2266b82b0a890ee082d64f04516c5851b98551b23d3c6",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "68e3e7ad40cf6ee18be2266b82b0a890ee082d64f04516c5851b98551b23d3c6",
+    "recorded_kind": "solved",
+    "session_id": "v021-s57",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + t",
+    "live_digest": "963d574bd360e92758dfc401f55a88deff5cdb2209fa1bcccb5d896da296df4d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "963d574bd360e92758dfc401f55a88deff5cdb2209fa1bcccb5d896da296df4d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s57",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "eac7062c4f512f208ae6d32130bf3466a9812f64fb94cfd625678e52730b3a54",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "eac7062c4f512f208ae6d32130bf3466a9812f64fb94cfd625678e52730b3a54",
+    "recorded_kind": "solved",
+    "session_id": "v021-s58",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.factorial.recursive",
+    "live_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "39a3aeb6498c1e5ace795823098c5c0c4546eafd2bbb5bc07f45ad528a8eea91",
+    "recorded_kind": "found",
+    "session_id": "v021-s58",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k ^ 2",
+    "live_digest": "e4b3d233c4eaba41f37948d7323b0b17fd2713afd167ac54937073f3f5c1b168",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "e4b3d233c4eaba41f37948d7323b0b17fd2713afd167ac54937073f3f5c1b168",
+    "recorded_kind": "solved",
+    "session_id": "v021-s58",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "k + 1",
+    "live_digest": "a86208b4e09c91e8fddb9a89d74130865d07bbfbd3934738f6354605bcc27b36",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "a86208b4e09c91e8fddb9a89d74130865d07bbfbd3934738f6354605bcc27b36",
+    "recorded_kind": "solved",
+    "session_id": "v021-s58",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m ^ 2",
+    "live_digest": "aef43d08579323b7a5936ef32ac53a63bd3073d4f004dab31b94fd1c66cb5d0d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "aef43d08579323b7a5936ef32ac53a63bd3073d4f004dab31b94fd1c66cb5d0d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s59",
+    "turn_index": 1
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "m + 6",
+    "live_digest": "78a11015635150a9400dffee2085093c4ed5d0a1839d868ca1bba5acbfae80c4",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "78a11015635150a9400dffee2085093c4ed5d0a1839d868ca1bba5acbfae80c4",
+    "recorded_kind": "solved",
+    "session_id": "v021-s59",
+    "turn_index": 2
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "pythagorean identity",
+    "live_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "live_route": "resolver",
+    "live_status": "found",
+    "recorded_digest": "980794bfadd1cbe14d2e4ff19de2253c7c7c35ab602a8ae0d4660930d2704955",
+    "recorded_kind": "found",
+    "session_id": "v021-s59",
+    "turn_index": 5
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n ^ 2",
+    "live_digest": "861b69e5848ad25557af30e62d28eacbf25072b6c74bfa12f7c30fae6e37ab5d",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "861b69e5848ad25557af30e62d28eacbf25072b6c74bfa12f7c30fae6e37ab5d",
+    "recorded_kind": "solved",
+    "session_id": "v021-s60",
+    "turn_index": 3
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "n + 7",
+    "live_digest": "62a79998730fd0eaa5223eeb81254d0d465e1f38f3f02cfecefe94f7d336e104",
+    "live_route": "evaluate",
+    "live_status": "solved",
+    "recorded_digest": "62a79998730fd0eaa5223eeb81254d0d465e1f38f3f02cfecefe94f7d336e104",
+    "recorded_kind": "solved",
+    "session_id": "v021-s60",
+    "turn_index": 4
+   },
+   {
+    "classification": "DIGEST_MATCH",
+    "input_bytes": "twin programming.binexp.recursive",
+    "live_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "live_route": "twin",
+    "live_status": "found",
+    "recorded_digest": "9bdb0b3f02627141cb0d6a86e6875ae11bd0f8b8a6c18d328248c672b5bc4e2b",
+    "recorded_kind": "found",
+    "session_id": "v021-s60",
+    "turn_index": 5
+   }
+  ],
+  "red_rows": [],
+  "regression_candidates": 0
+ },
+ "controls": {
+  "always_changed_detected": 2,
+  "always_changed_false_positives_on_identical_self_pairs": 220,
+  "exact_detected": 2,
+  "identical_self_pairs": 220,
+  "plants": [
+   {
+    "always_changed_detected": true,
+    "equivalence_gate": "FIRES",
+    "exact_detected": true,
+    "mutated_digest": "fb39c749eda9220eb6fa7b825e919e945972be26b9ffdfcfc65f2eb98fe8cdfd",
+    "mutation": "MEMBER_ORDER",
+    "shape_only_detected": false,
+    "source_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864"
+   },
+   {
+    "always_changed_detected": true,
+    "equivalence_gate": "FIRES",
+    "exact_detected": true,
+    "mutated_digest": "1771af103965224968b935ad99ec8fc39351ad7b091860e686daec896ea69417",
+    "mutation": "LEDGER_POSITION",
+    "shape_only_detected": false,
+    "source_digest": "be06b1177476b9f126a9b54ef0afc1a2b2eadfd5f70ed226082c4a4f2652a864"
+   }
+  ],
+  "shape_only_detected": 0
+ },
+ "design": "docs/DESIGN-no-flip.md",
+ "gates": {
+  "B1_population": "FIRES",
+  "B2_exact_sensitivity": "FIRES",
+  "B3_hostile_controls": "FIRES",
+  "B4_accounting": "FIRES",
+  "B5_no_hidden_canonicalizer": "FIRES",
+  "B6_publication_completeness": "FIRES"
+ },
+ "method_disclosures": {
+  "genuine_pins_that_moved": [
+   "rendering_module_digests",
+   "capability_sheet_digest"
+  ],
+  "macs_verified": false,
+  "recorded_pin_bypass": "the replay rebuilds the recorded assumptions and serves the line directly; genuine live pin drift is reported separately",
+  "sha256_match_is_collision_free_proof": false
+ },
+ "non_claims": [
+  "no semantic-correctness or mathematical-equivalence claim",
+  "no claim about recorded non-answer turns or unrecorded sessions",
+  "no corpus-improvement, authentication, forgery, or future-stability claim"
+ ],
+ "outcome": {
+  "denominator": 220,
+  "regression_candidates": 0,
+  "sentence": "0/220 rendered-answer digest regressions in this recorded window"
+ },
+ "pins": [
+  {
+   "agrees": true,
+   "expected": "b7e4c19d38a6097746c1788cb60e8529bb5137afe83321c7a0843bd9b57154a1",
+   "group": "census_instrument",
+   "members": [
+    {
+     "path": "scripts/no_flip_census.py",
+     "sha256_lf": "ea0d12c2f081ded150902180186d440101c5b7b59264d69cacb8056d90ad7a4d"
+    }
+   ],
+   "observed": "b7e4c19d38a6097746c1788cb60e8529bb5137afe83321c7a0843bd9b57154a1"
+  },
+  {
+   "agrees": true,
+   "expected": "1602971dcb302f5dc24e0781e5950d7e529f03910f0bf3f00859545588c40a85",
+   "group": "journal_population",
+   "members": [
+    {
+     "path": "experiments/sessions/v021-s01.json",
+     "sha256_lf": "e971db7d3436b85201f0d8d34a3f86b4cea847ba2577ee9ba30c19e1fdb6ba00"
+    },
+    {
+     "path": "experiments/sessions/v021-s02.json",
+     "sha256_lf": "f5d28aeeaf1376c92e43f7126ed052e2b958558813830fd9b2e5f13003e4014f"
+    },
+    {
+     "path": "experiments/sessions/v021-s03.json",
+     "sha256_lf": "5168bb47af845ca6ad5828b1a8b4e098dbd817172d0cb0e7d1ab375cdf7adce7"
+    },
+    {
+     "path": "experiments/sessions/v021-s04.json",
+     "sha256_lf": "ca50ca33e2f8d81a99a1262c443d7bdc9f65ba6c56d5f6b131b985a6538b2fc6"
+    },
+    {
+     "path": "experiments/sessions/v021-s05.json",
+     "sha256_lf": "51f76ae2011d6c6ea1b79331e0f15d560356d4683216fff64975181a66c0a2b1"
+    },
+    {
+     "path": "experiments/sessions/v021-s06.json",
+     "sha256_lf": "a56d1ee9b5081f7f252bb72e3e068aa6837b4924efebc148376c9ab4ad0ba1b7"
+    },
+    {
+     "path": "experiments/sessions/v021-s07.json",
+     "sha256_lf": "b0c30c0e0d74cebd35a24750940fb464116b9f35bd5b44279b492e4013dbc4ca"
+    },
+    {
+     "path": "experiments/sessions/v021-s08.json",
+     "sha256_lf": "f21da04f7f92590bf32a9e73af00e790d8f2765e2d967ffc18a1ddc7a59c8b60"
+    },
+    {
+     "path": "experiments/sessions/v021-s09.json",
+     "sha256_lf": "f6a44d83cf3f8aa4b10baea3be4b8ea1d2eeb20c9b44414645c45e3425c4b526"
+    },
+    {
+     "path": "experiments/sessions/v021-s10.json",
+     "sha256_lf": "d875f5e176ac4f0c53c67f64da99e2c50c7e2465b7a7d8947b3bb584348a3fc0"
+    },
+    {
+     "path": "experiments/sessions/v021-s11.json",
+     "sha256_lf": "358ad768f8bacff33d4d4c2b27abbe14ff3b7b1adee3eaf86e5c6aec1a37a5db"
+    },
+    {
+     "path": "experiments/sessions/v021-s12.json",
+     "sha256_lf": "dd72492684c6a7f71ed32145cf54b76a77129bdf5d9de22bdfef447427ccb6ec"
+    },
+    {
+     "path": "experiments/sessions/v021-s13.json",
+     "sha256_lf": "90a2cf7db4eb456002aaf4042218687993537f25080e6fe37b1252e81990c005"
+    },
+    {
+     "path": "experiments/sessions/v021-s14.json",
+     "sha256_lf": "4a199072ca8465a92eecb4df89c156221e2cf459588c98a5e8aaf40c5e7aba93"
+    },
+    {
+     "path": "experiments/sessions/v021-s15.json",
+     "sha256_lf": "2aec714a16aab2b79dab86ac6b5c83ee67cc72fe76cf411efee8329620d0a44d"
+    },
+    {
+     "path": "experiments/sessions/v021-s16.json",
+     "sha256_lf": "8732d08bdeb6a6009b6292307529cf8ca356c63ee894d318f5860ef7d3fd2f88"
+    },
+    {
+     "path": "experiments/sessions/v021-s17.json",
+     "sha256_lf": "f36cfb934d39f2800aed7f8aea18eedef4e799225ec493b2e1dcb82fece8857a"
+    },
+    {
+     "path": "experiments/sessions/v021-s18.json",
+     "sha256_lf": "cf845e40853d1baff44beda8a6e77b1e6443662a1eb8d20b986448ad98abaad2"
+    },
+    {
+     "path": "experiments/sessions/v021-s19.json",
+     "sha256_lf": "1ee3a4c1351d8e095d452dd59148f651830e136ea6c5b793ae6c890cd998ab5f"
+    },
+    {
+     "path": "experiments/sessions/v021-s20.json",
+     "sha256_lf": "7695dc769e239c722101a1e37066e63dfe2a9523f3ff02517dbe67b3f0d45cd0"
+    },
+    {
+     "path": "experiments/sessions/v021-s21.json",
+     "sha256_lf": "721f0d5a5a97f8c96fcf55868ff3303fd9fd9f3909b419a31f1c75a6ef4072f4"
+    },
+    {
+     "path": "experiments/sessions/v021-s22.json",
+     "sha256_lf": "02ee115d5c3a53571d5f071da4ef53a14e2a47a233eea1187b2482bb93001c13"
+    },
+    {
+     "path": "experiments/sessions/v021-s23.json",
+     "sha256_lf": "d81515570638a31cf7c3ca158a458a37adfa8e4cad7f44d2c440c9d642080f06"
+    },
+    {
+     "path": "experiments/sessions/v021-s24.json",
+     "sha256_lf": "51b476e0b852c6cbf496f01692e7a83145f9000f2b27463f40ecd493b2e810a6"
+    },
+    {
+     "path": "experiments/sessions/v021-s25.json",
+     "sha256_lf": "91f05b7d78220831d912f750efc9f1b3b48ad5ac946fce1a535925c24be6a986"
+    },
+    {
+     "path": "experiments/sessions/v021-s26.json",
+     "sha256_lf": "6120022e3e9d705ccaf88728721e2095a3fabcba2f140d11d2af1deb0c59a20c"
+    },
+    {
+     "path": "experiments/sessions/v021-s27.json",
+     "sha256_lf": "eb553802fe7f88244f44db6934bc310df7510f0d64b491fce1743a8d470ca290"
+    },
+    {
+     "path": "experiments/sessions/v021-s28.json",
+     "sha256_lf": "965800d6810d680517d2b71935e40aa20579235c4b55106fa6adb6ef5df5bbe5"
+    },
+    {
+     "path": "experiments/sessions/v021-s29.json",
+     "sha256_lf": "d06e805fd044e4b68f18c058c08d8ad4946678d3e0fbf2549cd6654b72ff7c4d"
+    },
+    {
+     "path": "experiments/sessions/v021-s30.json",
+     "sha256_lf": "c9954f1629eb51ca8833189b92152da007031cc129d298ee5f6eb957dca6a8da"
+    },
+    {
+     "path": "experiments/sessions/v021-s31.json",
+     "sha256_lf": "b33dbb16a7500e4647de9adcd2b2ff3436421b112481457c731efff1a6d070b1"
+    },
+    {
+     "path": "experiments/sessions/v021-s32.json",
+     "sha256_lf": "457dcce553058c71b7fe461c4319aea01b68fc1f868a72ec4051704921f6b399"
+    },
+    {
+     "path": "experiments/sessions/v021-s33.json",
+     "sha256_lf": "a6216b86b4ea5986c1ba6906b9bdd84d41a19907506b295e8ceeeaf6bf2cd240"
+    },
+    {
+     "path": "experiments/sessions/v021-s34.json",
+     "sha256_lf": "463fd149b3d847a5539af18af1ee556e7acf96e0c855a2cbd5d3f29bf633445b"
+    },
+    {
+     "path": "experiments/sessions/v021-s35.json",
+     "sha256_lf": "a76aa5c02a290e545f44f78e46e4013550aa77d8ac0ee3eb90d1f889cee71157"
+    },
+    {
+     "path": "experiments/sessions/v021-s36.json",
+     "sha256_lf": "3a16ea6aaa7dc0c864eb3f1f3c211af06912d4a972e1494d95f70365a84a87a8"
+    },
+    {
+     "path": "experiments/sessions/v021-s37.json",
+     "sha256_lf": "2edcb6148c37683b624ee543395bbfa193b0d04b37a488c9b5816fce4be43b9b"
+    },
+    {
+     "path": "experiments/sessions/v021-s38.json",
+     "sha256_lf": "7a8662e83615fa6564d340070ab8109319a4451b3da2d423edcf69bbc6da72ec"
+    },
+    {
+     "path": "experiments/sessions/v021-s39.json",
+     "sha256_lf": "c421d1cf149cd5a84752e97e05385f567d26e8f158511ec900c87b3bea7cc5b8"
+    },
+    {
+     "path": "experiments/sessions/v021-s40.json",
+     "sha256_lf": "57f24dc4ab61330b1905c496e341c4d8eedada9855829935a6da6989d8b2cecd"
+    },
+    {
+     "path": "experiments/sessions/v021-s41.json",
+     "sha256_lf": "f4ca63bdf669027711207d2ff47a704b358771a5769938ae2a65940054d3e6a7"
+    },
+    {
+     "path": "experiments/sessions/v021-s42.json",
+     "sha256_lf": "559fb6549d8305af9cba379e034a51e9ada052e63cf4ac1d1224948afed489f5"
+    },
+    {
+     "path": "experiments/sessions/v021-s43.json",
+     "sha256_lf": "d8d1e3ccb84ab7cc48cfea27563bbbb37317eec8e5553bf3928d0ca6dd26d58e"
+    },
+    {
+     "path": "experiments/sessions/v021-s44.json",
+     "sha256_lf": "6bffc8daeeab07fe2b055871e2eb9fa922e6974ce84b21d6cb8aa7c36998eba9"
+    },
+    {
+     "path": "experiments/sessions/v021-s45.json",
+     "sha256_lf": "a8c71e624231bf2fca9a4d7cb6d203954e3206d035b2c511d97145c3dd6d5735"
+    },
+    {
+     "path": "experiments/sessions/v021-s46.json",
+     "sha256_lf": "5be29ee13e8e133694ae067017631d238111e0b747bb8101157e36fcc7f24186"
+    },
+    {
+     "path": "experiments/sessions/v021-s47.json",
+     "sha256_lf": "195c8633522316a71b8803b1cac75662b2044bbbab82e4b851e0bb783266cd8e"
+    },
+    {
+     "path": "experiments/sessions/v021-s48.json",
+     "sha256_lf": "6633a66de644c6b4150839a0f58484115b2393fe55143635568efeecfd6f7ce4"
+    },
+    {
+     "path": "experiments/sessions/v021-s49.json",
+     "sha256_lf": "76b273e484397239354a6435e1b27d20a57edc05d2fc2ac42c563c066e874003"
+    },
+    {
+     "path": "experiments/sessions/v021-s50.json",
+     "sha256_lf": "13516e71da8504cc93592fb0c48c81c2f9d7b9bd7e93d8b00d3a4c543b62eadf"
+    },
+    {
+     "path": "experiments/sessions/v021-s51.json",
+     "sha256_lf": "7ff610b99dd5e00f9f222f42a11f583033fb50cadb86ca85f6cbd4d522532775"
+    },
+    {
+     "path": "experiments/sessions/v021-s52.json",
+     "sha256_lf": "ae65adce046b1805f2575a845febec59f6a0b1c591439bd0db5b64f76cc153ba"
+    },
+    {
+     "path": "experiments/sessions/v021-s53.json",
+     "sha256_lf": "59f290f08a3bc5d1d9c3abec3026fd56796afad2182a80fb7826bf56e28920e1"
+    },
+    {
+     "path": "experiments/sessions/v021-s54.json",
+     "sha256_lf": "dfc82c66716c72862fbe2b68c404aeee1c68ee985995c8fea26bd2ab264b9c72"
+    },
+    {
+     "path": "experiments/sessions/v021-s55.json",
+     "sha256_lf": "96fef0960a8afc8b7640dc1d9ff7a1c9b395f5b181faa44ad00b9ca5aa7a311d"
+    },
+    {
+     "path": "experiments/sessions/v021-s56.json",
+     "sha256_lf": "4369ee3e57642bbc8a6ea8e53cb936d36c3bd94cb9a598f75c7f182016f295b2"
+    },
+    {
+     "path": "experiments/sessions/v021-s57.json",
+     "sha256_lf": "30645b9d8351436c5c63013dbfa76f11876ab5bc64285e84f976cbc8c8089636"
+    },
+    {
+     "path": "experiments/sessions/v021-s58.json",
+     "sha256_lf": "1d9bfc18a1d3779064dd9d7392eb86731476c7ad60a757e7ca5c79da64b9f7b0"
+    },
+    {
+     "path": "experiments/sessions/v021-s59.json",
+     "sha256_lf": "db846124cbb71fa352f1cd39c9f42a447cbd7be4acb4597964b73b9a1cdd84a0"
+    },
+    {
+     "path": "experiments/sessions/v021-s60.json",
+     "sha256_lf": "a33b0d740720827e7968b6427bad0e155352beab6d4b253dae1b98c3dcd4b804"
+    }
+   ],
+   "observed": "1602971dcb302f5dc24e0781e5950d7e529f03910f0bf3f00859545588c40a85"
+  },
+  {
+   "agrees": true,
+   "expected": "520f4879be2fd4fd0ca23b680ae9655492c08fe1640901c7409e6858704f7497",
+   "group": "replay_path",
+   "members": [
+    {
+     "path": "scripts/harness.py",
+     "sha256_lf": "9dc6e660d02cd188a3903f7c8e40b4914a2eaa7a29e54352662ad4611c68c9f1"
+    },
+    {
+     "path": "scripts/replay_session.py",
+     "sha256_lf": "a6aa8481ade68c6c9b5235c679e679272ce156978679b9e87414889c627c88bc"
+    },
+    {
+     "path": "scripts/resolver.py",
+     "sha256_lf": "c4f58106857db272a10b709c46fef0c678a9f7aa18d2402c066266d73d69fa48"
+    },
+    {
+     "path": "scripts/serve_chat.py",
+     "sha256_lf": "44bc49b56e52e2d05e53ba808c074858cb17cb50a0a1af97bc3886bf1348c2b0"
+    },
+    {
+     "path": "scripts/session_ledger.py",
+     "sha256_lf": "079d9aea5fd71c2382e8eecbd95522723640c3ffd2438ac59a607d0d56b91318"
+    }
+   ],
+   "observed": "520f4879be2fd4fd0ca23b680ae9655492c08fe1640901c7409e6858704f7497"
+  }
+ ],
+ "population": {
+  "answering_by_kind": {
+   "found": 60,
+   "solved": 160
+  },
+  "answering_total": 220,
+  "excluded_by_kind": {
+   "canceled": 10,
+   "exhausted": 10,
+   "refused": 60,
+   "waiting": 110
+  },
+  "excluded_total": 190,
+  "journals": 60,
+  "turns": 410
+ },
+ "preregistration": "experiments/no_flip_prereg.json",
+ "preregistration_sha256": "56b6ea122fcf3e7a1e718f71c703e07acb024e2db1ad1dcb3b02fac85b3d2a65",
+ "registration_commit": "7573a6b808b2cf7c9f15d456428f09141fd1400f",
+ "roadmap": "docs/ROADMAP-v0.23.md",
+ "roadmap_item": "R-NF -- NO-FLIP's regression census",
+ "schema": "no_flip.census.v1"
+}

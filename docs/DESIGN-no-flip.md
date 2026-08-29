@@ -1,9 +1,14 @@
 # NO-FLIP — served-answer regression census
 
-**Status: design, instrument registered; census not yet run.** This is v0.23
-rider R-NF, the regression-only residue of NO-FLIP. It does not reopen
-ERRATUM's improvement arm: R3 measured a byte-identical corpus window, so
-there is no new library growth to credit.
+**Status: measured.** `experiments/no_flip_census.json`: **0/220**
+rendered-answer digest regressions in the recorded answering window.
+B1–B6 FIRES; B7 is the outcome, not a pass. Two live pins moved
+(`rendering_module_digests`, `capability_sheet_digest`) and are
+disclosed; MACs were not verified. This is v0.23 rider R-NF, the
+regression-only residue of NO-FLIP. It does not reopen ERRATUM's
+improvement arm: R3 measured a byte-identical corpus window, so there
+is no new library growth to credit. Zero is not a proof that answers
+cannot regress.
 
 ## 1. Question
 
