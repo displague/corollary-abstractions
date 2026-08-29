@@ -1,8 +1,9 @@
 # NO-FLIP — served-answer regression census
 
-**Status: design draft.** This is v0.23 rider R-NF, the regression-only
-residue of NO-FLIP. It does not reopen ERRATUM's improvement arm: R3 measured
-a byte-identical corpus window, so there is no new library growth to credit.
+**Status: design, instrument registered; census not yet run.** This is v0.23
+rider R-NF, the regression-only residue of NO-FLIP. It does not reopen
+ERRATUM's improvement arm: R3 measured a byte-identical corpus window, so
+there is no new library growth to credit.
 
 ## 1. Question
 
@@ -73,8 +74,10 @@ combines them.
 
 The plant source is the live answer to
 `twin programming.euclid.recursive`, whose answer contains two member lines and
-one ledger line. The source must still answer and must contain exactly those
-three semantic rows before either mutation is accepted.
+one ledger line (and may prefix non-semantic rows such as `level`). The source
+must still answer and must contain those three semantic rows, consecutive as
+member-member-ledger, before either mutation is accepted. Extra rows stay
+put; only the two members or the one ledger move.
 
 The two deterministic mutations preserve the same members and ledger:
 

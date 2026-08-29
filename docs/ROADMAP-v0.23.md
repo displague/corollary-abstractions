@@ -216,14 +216,14 @@ arm remains unlicensed.
 
 ## 3. Riders — two, each with a floor and a stop rule
 
-**R-NF — NO-FLIP's regression census.** A day-probe, red-capable: a served-answer
-regression census over the recorded window, seeding a sensitivity-proven detector
-for the erratum lane's future. Its improvement half is dead this cycle (R3's
-zero-growth window), and its named residual risk is recorded: a canonicalizing
-comparator can score two equally-valid answers identical while both mutation
-limbs still flip, so *"stable"* may mean *"the comparator cannot see the
-instability a person would notice."* The regression half is the part that can go
-red; the census publishes whichever way it reads.
+**R-NF — NO-FLIP's regression census.** Instrument registered, census not
+yet run (`docs/DESIGN-no-flip.md`). Frozen to 220 recorded answering turns;
+primary comparator is exact rendered-answer SHA-256; shape-only and
+always-changed are the hostile controls. The improvement half is dead this
+cycle (R3's zero-growth window). The named residual risk is recorded: a
+canonicalizing comparator can score two equally-valid answers identical
+while both mutation limbs still flip. The census publishes whichever way
+it reads.
 
 **R-HANDBACK — the separator object.** Typed non-answer turns emit an
 admitted-command separator or unlock (the fold of TWO-KEY BIND and WANT-LIST into

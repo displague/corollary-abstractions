@@ -1,0 +1,75 @@
+{
+  "preregistration_id": "no-flip.regression-census.v1",
+  "registered_date": "2026-08-28",
+  "status": "REGISTERED",
+  "design": "docs/DESIGN-no-flip.md",
+  "registered_before": [
+    "experiments/no_flip_census.json",
+    "the 220-turn registered replay"
+  ],
+  "population": {
+    "journals": 60,
+    "turns": 410,
+    "answering_by_kind": {
+      "solved": 160,
+      "found": 60
+    },
+    "answering_total": 220,
+    "excluded_by_kind": {
+      "waiting": 110,
+      "refused": 60,
+      "exhausted": 10,
+      "canceled": 10
+    },
+    "excluded_total": 190
+  },
+  "recorded_answering_kinds": ["solved", "found"],
+  "live_answering_statuses": ["solved", "found", "held", "PROVEN", "VERIFIED"],
+  "mutation_source": "twin programming.euclid.recursive",
+  "mutations": ["MEMBER_ORDER", "LEDGER_POSITION"],
+  "comparators": {
+    "primary": "literal inequality of two lowercase SHA-256 digests",
+    "shape_only_control": "inequality of (route, status)",
+    "always_changed_control": "always true"
+  },
+  "expected_controls": {
+    "exact_detected": 2,
+    "shape_only_detected": 0,
+    "always_changed_detected": 2,
+    "always_changed_false_positives_on_identical_self_pairs": 220
+  },
+  "freeze_groups": {
+    "census_instrument": {
+      "patterns": ["scripts/no_flip_census.py"],
+      "expected_digest": "b7e4c19d38a6097746c1788cb60e8529bb5137afe83321c7a0843bd9b57154a1"
+    },
+    "journal_population": {
+      "patterns": ["experiments/sessions/v021-s[0-9][0-9].json"],
+      "expected_digest": "1602971dcb302f5dc24e0781e5950d7e529f03910f0bf3f00859545588c40a85"
+    },
+    "replay_path": {
+      "patterns": [
+        "scripts/harness.py",
+        "scripts/replay_session.py",
+        "scripts/resolver.py",
+        "scripts/serve_chat.py",
+        "scripts/session_ledger.py"
+      ],
+      "expected_digest": "520f4879be2fd4fd0ca23b680ae9655492c08fe1640901c7409e6858704f7497"
+    }
+  },
+  "gates": {
+    "B1": "population exactly 60 journals, 410 turns, 220 answers",
+    "B2": "equivalence gate fires and exact comparator detects 2/2",
+    "B3": "shape-only detects 0/2; always-changed detects 2/2 and falsely flags 220/220 self-pairs",
+    "B4": "three live outcome classes partition 220 receipts",
+    "B5": "primary comparator accepts only two digests",
+    "B6": "every regression candidate has a complete published red row",
+    "B7": "zero and nonzero both publish"
+  },
+  "non_claims": [
+    "commit ordering does not prove an absence of private exploration",
+    "digest equality is not collision-free proof of byte identity",
+    "the census does not score semantic correctness"
+  ]
+}
