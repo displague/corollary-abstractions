@@ -131,7 +131,7 @@
     "note": "a vocabulary, never a kind list: LINE_GRAMMAR enumerates serving routes, and a serving route is not a receipt kind"
   },
   "counts": {
-    "program_tree_files_scanned": 178,
+    "program_tree_files_scanned": 183,
     "receipt_marked_sites": 37,
     "kinds": 19,
     "excluded_sites": 10,
@@ -1161,21 +1161,21 @@
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1080,
+          "line": 1087,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1084,
+          "line": 1091,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1085,
+          "line": 1092,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1183,8 +1183,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1080,
-            1080
+            1087,
+            1087
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1196,8 +1196,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1084,
-            1084
+            1091,
+            1091
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1208,8 +1208,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1085,
-            1089
+            1092,
+            1096
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1269,21 +1269,21 @@
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1023,
+          "line": 1030,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1029,
+          "line": 1036,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1031,
+          "line": 1038,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1291,8 +1291,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1023,
-            1023
+            1030,
+            1030
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1301,8 +1301,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1029,
-            1029
+            1036,
+            1036
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1311,8 +1311,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1031,
-            1034
+            1038,
+            1041
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1371,7 +1371,7 @@
           "route_id": "serve_chat._story_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_story_receipt",
-          "line": 1099,
+          "line": 1106,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1379,8 +1379,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1099,
-            1102
+            1106,
+            1109
           ],
           "rule": "RM-B",
           "symbol": "_story_receipt",
@@ -1430,28 +1430,28 @@
           "route_id": "belief",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1143,
+          "line": 1150,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "supposition",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1143,
+          "line": 1150,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "write_gate",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1145,
+          "line": 1152,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "serve_chat.kernel_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1149,
+          "line": 1156,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1459,8 +1459,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1143,
-            1143
+            1150,
+            1150
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1471,8 +1471,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1145,
-            1145
+            1152,
+            1152
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1483,8 +1483,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1149,
-            1149
+            1156,
+            1156
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1654,12 +1654,12 @@
       "kind_id_candidate": "serve_chat:_ownership_receipt",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1060,
-        1060
+        1067,
+        1067
       ],
       "enclosing_line_range": [
-        1060,
-        1060
+        1067,
+        1067
       ],
       "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
     },
@@ -1668,12 +1668,12 @@
       "kind_id_candidate": "serve_chat:render_conversation_turn",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1255,
-        1255
+        1262,
+        1262
       ],
       "enclosing_line_range": [
-        1249,
-        1256
+        1256,
+        1263
       ],
       "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
     },
@@ -1727,12 +1727,12 @@
       "kind_id_candidate": "serve_chat:render_kernel_turn",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1206,
-        1208
+        1213,
+        1215
       ],
       "enclosing_line_range": [
-        1199,
-        1210
+        1206,
+        1217
       ],
       "member_expression": "IfExp",
       "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
@@ -1811,8 +1811,8 @@
   },
   "recall_probe": {
     "substring_regex": "(?i)receipt|certificate|verdict|journal",
-    "wider_net_sites": 151,
-    "uncovered_site_count": 135,
+    "wider_net_sites": 156,
+    "uncovered_site_count": 140,
     "uncovered_sites": [
       {
         "path": "scripts/build_throughput_tasks.py",
@@ -2054,6 +2054,39 @@
         "symbol": "build",
         "matched_keys": [
           "no_verdict_moved"
+        ]
+      },
+      {
+        "path": "scripts/echo_population_audit.py",
+        "line_range": [
+          214,
+          218
+        ],
+        "symbol": "derive_gates",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/echo_population_audit.py",
+        "line_range": [
+          219,
+          219
+        ],
+        "symbol": "derive_gates",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/echo_population_audit.py",
+        "line_range": [
+          220,
+          220
+        ],
+        "symbol": "derive_gates",
+        "matched_keys": [
+          "verdict"
         ]
       },
       {
@@ -2574,6 +2607,28 @@
         "symbol": "revalidate_prereg",
         "matched_keys": [
           "verdict"
+        ]
+      },
+      {
+        "path": "scripts/no_flip_census.py",
+        "line_range": [
+          103,
+          110
+        ],
+        "symbol": "population",
+        "matched_keys": [
+          "journals"
+        ]
+      },
+      {
+        "path": "scripts/no_flip_census.py",
+        "line_range": [
+          289,
+          297
+        ],
+        "symbol": "validate_accounting",
+        "matched_keys": [
+          "receipt_rows"
         ]
       },
       {
@@ -3203,8 +3258,8 @@
       {
         "path": "scripts/serve_chat.py",
         "line_range": [
-          578,
-          588
+          585,
+          595
         ],
         "symbol": "foreign_voice_row",
         "matched_keys": [
@@ -3439,7 +3494,7 @@
     "fired": false,
     "b1_unmapped_emitting_routes": 0
   },
-  "census_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+  "census_seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
   "provenance": {
     "writer": "scripts/cold_registry_census.py",
     "writer_sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb",
@@ -3573,6 +3628,14 @@
         "sha256_lf": "74e7da77ece28f925e7513a178818dcef20a1a759910e7dc976bde9ee7b1a22b"
       },
       {
+        "path": "scripts/echo_population_audit.py",
+        "sha256_lf": "b557ea6dfcd3383f9c7bdcee495cbf2c0ec422c233b2bcd1d6827b272eb36782"
+      },
+      {
+        "path": "scripts/echo_reparse.py",
+        "sha256_lf": "f81638afdfb68f34a85444352daa80ff4adc6adaa8cf2951e7928992094794d4"
+      },
+      {
         "path": "scripts/emit_skeleton.py",
         "sha256_lf": "ec44e78381d6440d6844ff17c68957eda3da53bb52482ce1f6f075ef39c49f74"
       },
@@ -3651,6 +3714,14 @@
       {
         "path": "scripts/grouping_canonical_probe.py",
         "sha256_lf": "b097ae66890b30a2af3394a3927e0512d8a0aed9addfdad8cd540b5c62f41b9b"
+      },
+      {
+        "path": "scripts/guest_axiom_draw.py",
+        "sha256_lf": "025da2cf69784132b2b222d202c11d6648fe10a92fbf7f8d9fadb61e7010649d"
+      },
+      {
+        "path": "scripts/guest_quarantine.py",
+        "sha256_lf": "a221744324223f4d66bb1353dccd2d8b367dfa162a61be6bdd8fedfcf3f46d16"
       },
       {
         "path": "scripts/handles_census.py",
@@ -3815,6 +3886,10 @@
       {
         "path": "scripts/narrative_realize.py",
         "sha256_lf": "90c6b266c2ec90c232e4127872b1a95ddaa95aec9fcc14921b25aeea78f5e16c"
+      },
+      {
+        "path": "scripts/no_flip_census.py",
+        "sha256_lf": "ea0d12c2f081ded150902180186d440101c5b7b59264d69cacb8056d90ad7a4d"
       },
       {
         "path": "scripts/numeral_words.py",
@@ -4050,7 +4125,7 @@
       },
       {
         "path": "scripts/serve_chat.py",
-        "sha256_lf": "c07d878767ff40efcff5be47f8b8e3a765a653239ea65173e574ffd1b751d74d"
+        "sha256_lf": "44bc49b56e52e2d05e53ba808c074858cb17cb50a0a1af97bc3886bf1348c2b0"
       },
       {
         "path": "scripts/session_keys.py",
@@ -4172,11 +4247,16 @@
       "the route resolution rule"
     ],
     "previous_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
-    "new_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+    "new_seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
     "diff_shape": {
       "kinds_added": [],
       "kinds_removed": [],
-      "counts_moved": {},
+      "counts_moved": {
+        "program_tree_files_scanned": [
+          178,
+          183
+        ]
+      },
       "declared_recheck_procedure_moved": []
     }
   }

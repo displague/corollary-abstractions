@@ -3,6 +3,29 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.23 suite gate (2026-08-29)
+
+- **CR-P0 registry census was stale against the tree the cycle already
+  shipped (2026-08-29).** `[SUITE-GATE-V23]` run 1 at `5984f27` went red
+  on `test_cold_receipt.TheCensusRecomputes`: committed seal
+  `9aa301b7…` vs live `e8fabc6f…`. Kinds stayed 19, sites 37, excluded
+  10. What moved: `program_tree_files_scanned` 178→183 (the five v0.23
+  scripts) and three `serve_chat.py` exclusion line-ranges shifted by
+  seven. The rule was not amended; the committed artifact was not
+  re-sealed at rotation. The live pin chain (`cold/census_run2.json`
+  provenance, ANALYSIS recall prose) follows the registry. Evidence:
+  run 1 log `reports/test_gate_v023/run1-red.log`.
+
+- **A verbose suite log under `reports/test_gate_*` is self-contamination
+  (2026-08-29).** `working_tree_digest` hashes that path. Run 1 used
+  `unittest discover -v` appending to `reports/test_gate_v023/run1.log`,
+  so every `WriteStageTestCase.tearDownClass` saw the tree move (11
+  errors, one per subclass). v0.22 avoided it because `time_tests.py` is
+  quiet during WRITE. Do not "fix" this by excluding suite receipts from
+  the digest — log outside the hashed tree (or keep the log static
+  during WRITE). Confirmed: appending one byte to the log moves the
+  digest; a static log does not.
+
 ## Filed at the v0.23 cycle close (2026-08-29)
 
 - **HANDBACK — parked for v0.24 (2026-08-29).** The separator/unlock object
