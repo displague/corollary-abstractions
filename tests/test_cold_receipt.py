@@ -655,6 +655,21 @@ class TheResultGateLicensesOneSentenceAndNothingWider(unittest.TestCase):
         self.assertEqual(attached["needs_program_kinds_published_by_name"], needs)
 
 
+class TheScramblePathDoesNotNameAMissingGlobal(unittest.TestCase):
+    """Run 2 of the v0.23 suite-gate re-seal crashed here.
+
+    `run_scramble` looked up `EXECUTABLE_KIND`, a name the harness has
+    never bound. Live run 2 always passed `--reuse-scramble`, so the
+    branch never executed until a registry re-seal tried to run B6.
+    The kind is discovered in `main` and passed in; a global of that
+    name must not return.
+    """
+
+    def test_the_harness_does_not_name_EXECUTABLE_KIND(self) -> None:
+        source = (REPO / "harness" / "cold_harness.py").read_text(encoding="utf-8")
+        self.assertNotIn("EXECUTABLE_KIND", source)
+
+
 class TheColdArtifactsCarryTheirProvenance(unittest.TestCase):
     """PROVENANCED_LEDGERS' pattern for the harness's own three artifacts.
 

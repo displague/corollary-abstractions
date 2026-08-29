@@ -1402,12 +1402,13 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
                 .as_posix(),
                 "artifact_sha256": sha256_file(args.reuse_scramble),
                 "why_not_re_run": (
-                    "amendment 2 repairs the REMOVAL arm. B6 scrambles the "
-                    "C-E3 bundle and invokes the pinned checker; nothing the "
-                    "amendment changes touches it, its rule is seeded from the "
-                    "kind_id, and the run is deterministic. Re-running 10,000 "
-                    "invocations to reproduce a number the fix cannot move "
-                    "would be an hour spent proving determinism."
+                    "B6 scrambles the C-E3 bundle and invokes the pinned "
+                    "checker; its rule is seeded from the kind_id, and the "
+                    "run is deterministic. This run does not change the "
+                    "scramble rule, the bundle contents, the reconstruction "
+                    "rule, or the checker pin. Re-running 10,000 invocations "
+                    "to reproduce a number this run cannot move would be an "
+                    "hour spent proving determinism."
                 ),
                 "what_would_invalidate_this": (
                     "any change to the scramble rule, the bundle contents, the "
@@ -1426,6 +1427,7 @@ def main(argv: list[str] | None = None) -> int:  # noqa: PLR0915
                 census,
                 real_argv,
                 evidence,
+                executable_kind,
             )
 
         # -- H1: the arms' results, written INTO the kind they ran on ----
@@ -1689,13 +1691,14 @@ def run_scramble(
     census: dict,
     real_argv: list[str],
     evidence: Path,
+    executable_kind: str,
 ) -> dict:
     """B6, the vacuity control, budgeted and published whichever way it reads."""
 
     kind = next(
         record
         for record in census["kinds"]
-        if record["kind_id"] == EXECUTABLE_KIND
+        if record["kind_id"] == executable_kind
     )
     scramble_rule = kind["scramble_rule"]
     started = time.time()

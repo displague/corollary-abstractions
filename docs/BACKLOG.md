@@ -16,6 +16,13 @@ or commit history. Each item names the evidence that motivated it.
   provenance, ANALYSIS recall prose) follows the registry. Evidence:
   run 1 log `reports/test_gate_v023/run1-red.log`.
 
+- **`run_scramble` named a global the harness never bound (2026-08-29).**
+  Re-running COLD RECEIPT without `--reuse-scramble` after the registry
+  re-seal raised `NameError: EXECUTABLE_KIND`. Live run 2 always reused
+  B6, so the branch was unexecuted. The kind is discovered in `main`;
+  pass it in. Evidence: the crash, then
+  `tests.test_cold_receipt.TheScramblePathDoesNotNameAMissingGlobal`.
+
 - **A verbose suite log under `reports/test_gate_*` is self-contamination
   (2026-08-29).** `working_tree_digest` hashes that path. Run 1 used
   `unittest discover -v` appending to `reports/test_gate_v023/run1.log`,
