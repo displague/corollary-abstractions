@@ -13,6 +13,24 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## A served voice is not one instrument just because both outputs are English (2026-08-28)
+
+**Claim.** ECHO's proposed population contains two disjoint statement
+universes with different readers and different adjudicators. The second voice
+has a code-disjoint reader and external Lean checker; the native voice has
+neither. Calling both surfaces “the voice” hid the construction boundary.
+
+**Evidence.** `experiments/echo_population_audit.json`: native **8,584**,
+second **2,313**, statement-id overlap **0**; B1 FIRES, B3 MISSES, B4 MISSES.
+The second reader/renderer module intersection is empty and its checker probe
+passes. The native reader and renderer share five modules, including
+`realize_term.py` and `match_signatures.py`, and no external probe exists.
+
+**Status.** Construction stop before pilot: 0/50 reserve and 0/500 registered
+items rendered. No collision result exists to license GUEST AXIOM's ask arm.
+Unpark only by adding the missing native instruments or by a dated scope
+amendment that retracts the all-committed-speaking-set claim.
+
 ## The ingested library is effectively nameless — 417 of 12,777 statements can be named specifically enough to ask for (2026-08-27)
 
 **Claim.** Reachability by name, not by title, is a property the whole

@@ -3,6 +3,25 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at ECHO's construction stop (2026-08-28)
+
+- **The native served voice has no code-disjoint reader or external identity
+  adjudicator.** ECHO's registered audit measured native 8,584 and second voice
+  2,313 with zero statement-id overlap. The second voice satisfies the
+  construction shape; native reuses `realize_term.py` and the matcher parser on
+  both sides. B3 and B4 miss, so the 50-item pilot and 500-item run did not
+  begin. Unblock by either (1) supplying a native-dialect reader whose import
+  closure is disjoint from the renderer plus an external checker for native
+  matcher terms, or (2) a dated DESIGN-echo B1 amendment explicitly narrowing
+  the claim. Evidence: `experiments/echo_population_audit.json`.
+
+- **ECHO produced no collision result.** This is not a zero-collision finding:
+  zero sentences were sampled. GUEST AXIOM B5's ask arm remains unlicensed,
+  and the guest slice is independently blocked by G-P0's empty restricted
+  population. Do not substitute the already-committed 2,313 self-round trips
+  or run collisions on only that convenient stratum without the dated scope
+  amendment above.
+
 ## Filed at G-P0 (the guest-hypothesis seal, 2026-08-29)
 
 - **G-P0 recast yield into the 2,313 is 0/21 (2026-08-29).** The drawing

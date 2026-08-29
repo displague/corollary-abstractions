@@ -147,7 +147,7 @@ result, not a gap); no prose-understanding claim (the atomizer is
 negation-marker only); the guest text never enters the committed library and B1
 is the proof.
 
-## 2. Item 2 — ECHO: is the served voice injective?
+## 2. Item 2 — ECHO: STOPPED at construction before the pilot
 
 [DESIGN-echo](DESIGN-echo.md) is series 1's lead, scheduled **before** item 1
 because its collision result licenses GUEST AXIOM's clarify-vs-conditional B5
@@ -201,6 +201,19 @@ but **ontology-shared**, searching a closed ~8,500-term universe, so ECHO can
 clear every clause and license nothing about a stranger — the decoy-population
 arm is a stated hole with no generator, priced by naming it.
 
+**SHIPPED as a construction finding (2026-08-28).** The preregistration and
+instruments landed before the once-only audit. The observed population matched
+the frozen prediction exactly: native **8,584**, second voice **2,313**, overlap
+**0**, union-of-the-two-sets **10,897**, with the resolver's **13 question
+fixtures reported separately**. B1 fires. B3 and B4 miss on the native stratum:
+its identity gate is the repository-authored matcher parser, not an external
+checker, and its reader is its renderer (the same five-module closure). The
+second voice alone has both a live external Lean adjudicator and an
+import-disjoint reader. The gate therefore reads **STOP_BEFORE_PILOT**;
+**0/50** pilot items and **0/500** registered items were rendered. No recovery,
+scramble, collision, or injectivity result exists. Item 1's ECHO-dependent ask
+arm remains unlicensed.
+
 ## 3. Riders — two, each with a floor and a stop rule
 
 **R-NF — NO-FLIP's regression census.** A day-probe, red-capable: a served-answer
@@ -237,8 +250,8 @@ The rule, unchanged: **every carried lane names its dependant, or it parks.**
 
 | lane | named dependant | disposition |
 |---|---|---|
-| **G-P0 / G-P1** | **§1 — this cycle** | **both SHIPPED.** G-P0 is the recast-yield census (0/21 into the 2,313; correction arm BLOCKED_NO_LOG). G-P1's planted write is caught 1/1. The guest slice still does not begin: B3 has no restricted population ≥15, and ECHO still licenses B5 |
-| **ECHO's collision result** | **§1's B5 ask-arm** | not carried, **it is item 2**, scheduled before item 1 |
+| **G-P0 / G-P1** | **§1 — this cycle** | **both SHIPPED.** G-P0 is the recast-yield census (0/21 into the 2,313; correction arm BLOCKED_NO_LOG). G-P1's planted write is caught 1/1. The guest slice still does not begin: B3 has no restricted population ≥15, and ECHO stopped before producing the collision result B5 requires |
+| **ECHO's collision result** | **§1's B5 ask-arm** | **UNAVAILABLE: construction stop.** ECHO rendered 0 pilot and 0 registered items; no collision result exists. Unpark only after the dated amendment named in DESIGN-echo §8 |
 
 ### 4.3 Parked, with triggers
 

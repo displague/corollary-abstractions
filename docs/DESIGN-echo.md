@@ -1,6 +1,8 @@
 # Echo — the voice read back
 
-**Status: design only.** Nothing here is implemented. This is v0.23's
+**Status: construction-stopped before pilot (2026-08-28).** The registered
+population/disjointness audit is implemented and measured; the 50-item pilot
+and 500-item run did not begin. This is v0.23's
 **item 2**, the lead of the course's first series (receipt:
 `reports/design-direction-v0.23.json`). It is scheduled ahead of item 1
 because its result licenses item 1's clarify-vs-conditional decision
@@ -224,3 +226,25 @@ The missing arm is a decoy population of checker-valid statements never
 ingested; it is absent because the program has no generator for it, and
 this design states that hole rather than pricing it with an instrument
 that does not exist.
+
+## 8. Registered construction adjudication (2026-08-28)
+
+`experiments/echo_prereg.json` and the instruments landed together at
+`d4c4131` before `experiments/echo_population_audit.json` existed. The
+once-only audit then ran from that clean commit. Its population prediction
+fired exactly: **8,584 native** statement ids, **2,313 second-voice** statement
+ids, **0 overlap**, **10,897 in the two explicitly separate statement
+universes**, and **13 resolver question fixtures** reported separately rather
+than added to either statement denominator.
+
+The construction gate **STOPPED BEFORE PILOT**. B1 fires. B3 misses because
+the second voice's pinned Lean checker is live but the native voice has no
+external identity adjudicator. B4 misses because `echo_reparse.py` is disjoint
+from `foreign_voice.py` (empty shared module closure), while the native reader
+and renderer are the same five-module closure. This falsifies §3's claim that
+one already-shipped checker makes B3 meetable over the whole B1
+population. The audit rendered **0 of 50** reserve items and **0 of 500**
+registered items. Therefore there is no recovery rate, no scramble result, no
+collision result, and no injectivity sentence. A dated amendment must supply
+the native stratum's disjoint reader and external adjudicator, or narrow B1 and
+explicitly retract the all-committed-speaking-set claim.
