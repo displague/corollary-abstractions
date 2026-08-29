@@ -1,0 +1,81 @@
+{
+  "schema": "corollary.guest-axiom-draw-rule/1",
+  "design": "docs/DESIGN-guest-axiom.md",
+  "design_clause": "§5 G-P0 — the sealed hypothesis set, 50 hypotheses. Sealed with a drawing rule committed before the draw.",
+  "roadmap": "docs/ROADMAP-v0.23.md",
+  "frozen_at": "2026-08-29",
+  "frozen_before": "any recast, any correction sample, any guest_hypotheses.json, any elaboration, any guest session, and any G-P1 planted-write run. This file's commit must be a strict ancestor of the draw artifact's commit; a test asks git.",
+  "what_this_freezes": "the recast algorithm for the 30 recorded questions, the covered-set constructor, the correction-pool source and the draw if that pool exists, the pilot reservation of the first 10 question_ids, and the predicted construction outcomes if the correction log is absent.",
+
+  "covered_set": {
+    "name": "the 2,313 round-trippable statements",
+    "constructor": "scripts/measure_foreign_voice.py:covered_rows",
+    "preview": "data/foreign_voice/eligibility_preview.json",
+    "register": "data/foreign_voice/register.json",
+    "rule": "eligible accepted rows whose statement_id is not in any register.entries[].statement_ids. Recomputed at draw time from those two committed files; not copied into this rule.",
+    "why_this_constructor": "it is the same covered set the voice already measured (DESIGN-guest-axiom §5; handles_census S3 coverage). G-P0 may not mint a second 2,313."
+  },
+
+  "recorded_question_recast": {
+    "source": "experiments/plain_question_set.json",
+    "source_schema": "corollary.plain-question-set/1",
+    "n": 30,
+    "hypothesis_text": "the question field verbatim. No paraphrase, no suppose-prefix, no invented English. Recast means retyping the sealed question as a guest hypothesis, not rewriting it.",
+    "hypothesis_id": "gp0-rq-{question_id}",
+    "normal_form": "supposition._atom(hypothesis_text)[0] — the inherited negation-marker atomizer, not a parser.",
+    "target_rule": [
+      "If authors_prior == exhaust: source_stratum = nameless_probe, target_statement_id = null. The nine exhaust questions are outside the corpus by authorship; they do not get a guessed target.",
+      "Else collect every token in `why` that is an exact member of the covered set (full statement_id equality, not a substring of a longer id, not a resolver bind).",
+      "If that collection has size exactly 1: source_stratum = recorded_question, target_statement_id = that id.",
+      "If that collection has size 0 or size > 1: source_stratum = nameless_probe, target_statement_id = null. Zero is a missing target; more than one is rival targets. Neither is silently bound."
+    ],
+    "why_not_the_resolver": "a resolver bind would be the silent-bind defect GUEST AXIOM exists to replace. The recast is exact membership of ids the sealed why already named.",
+    "pilot_reservation": {
+      "question_ids": ["g1-01", "g1-02", "g1-03", "g1-04", "g1-05", "g1-06", "g1-07", "g1-08", "g1-09", "g1-10"],
+      "why": "DESIGN-guest-axiom §6 B3: G-P0's first 10 recast questions, committed before the elaboration floor freezes. Reserved by sealed question_id order, not by expected yield."
+    }
+  },
+
+  "maintainer_correction_draw": {
+    "n_requested": 20,
+    "why_20": "DESIGN-guest-axiom §5 G3-followup and §7: the person-wrong control needs 20 real corrections for power, so the set is 30 + 20, not 40.",
+    "denominator_constraint": "externally sourced, not author-invented. Authored against served answers, not invented for this test.",
+    "named_source": {
+      "path": "experiments/crossing_corrections.json",
+      "why_this_path": "ROADMAP-v0.22 §4.3 CROSSING parks with its 20-real-corrections probe so the probe cannot be read after the fact. DESIGN-guest-axiom §5 samples from that parked two-way-correction lane's log. This is the only path the rule will read.",
+      "required_fields_if_present": ["correction_id", "hypothesis_text", "served_answer_ref", "target_statement_id"]
+    },
+    "draw_if_the_source_exists": [
+      "Load the JSON array of correction records.",
+      "Keep a record only if target_statement_id is in the covered set.",
+      "Sort remaining records by correction_id (UTF-8 byte order).",
+      "Take the first 20. If fewer than 20 remain, take all and mark the arm UNDERFILLED with the actual count. Do not author replacements."
+    ],
+    "if_the_source_is_absent_at_this_commit": {
+      "prediction": "BLOCKED_NO_LOG",
+      "why_this_is_registered_before_the_draw": "the named path is not in the tree this rule is committed against. Sampling 20 items that do not exist would be inventing the denominator. The draw still runs; it must report an empty pool and must not fill it.",
+      "what_G-P0_then_seals": "the 30 recast questions only, plus correction_arm = BLOCKED_NO_LOG. The person-wrong sample is unfilled. Unblock requires a separately committed, externally-sourced log whose commit is an ancestor of a later draw — not a file authored in the same commit as the draw.",
+      "what_this_does_not_license": "authoring 20 objection texts in this cycle and calling them maintainer corrections."
+    }
+  },
+
+  "hypothesis_record_fields_the_draw_must_emit": [
+    "hypothesis_id",
+    "source_stratum",
+    "hypothesis_text",
+    "hypothesis_normal_form",
+    "target_statement_id",
+    "question_id",
+    "authors_prior",
+    "pilot"
+  ],
+
+  "source_stratum": ["recorded_question", "maintainer_correction", "nameless_probe"],
+
+  "non_claims": [
+    "no stranger-usability claim: the 30 are maintainer-authored questions about this corpus (plain_question_set.json warning, inherited).",
+    "no claim the recast yield into the 2,313 is 21/30: nine are exhaust by authorship and the remaining twenty-one only land if their why named a unique covered id.",
+    "no person-wrong claim from an empty correction pool.",
+    "the drawing rule is not an elaboration and licenses no CONDITIONAL."
+  ]
+}
