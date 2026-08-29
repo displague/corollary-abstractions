@@ -1,0 +1,90 @@
+{
+  "design": "docs/DESIGN-echo.md",
+  "freeze_groups": {
+    "audit_instrument": {
+      "expected_digest": "0298dc2e440fbe6bb6bb0c2ab4b13378e7fa6f1890680fc4b98687de45064a0f",
+      "patterns": ["scripts/echo_population_audit.py"]
+    },
+    "native_population": {
+      "expected_digest": "cb3ab7fe365490e42f0206ee5405a1de98daea808521b430b20d64d58dac240c",
+      "patterns": [
+        "data/*/nodes.json",
+        "data/realization/lexicon.json",
+        "scripts/match_signatures.py",
+        "scripts/measure_realization.py",
+        "scripts/numeral_words.py",
+        "scripts/realization_lexicon.py",
+        "scripts/realize_term.py"
+      ]
+    },
+    "resolver_fixtures": {
+      "expected_digest": "3738fe536eb7780d0112acd17a9e726d97ca3e09ed3feef1ba80928469b94b16",
+      "patterns": [
+        "experiments/plain_input_corpus_seal.json",
+        "experiments/plain_question_set.json"
+      ]
+    },
+    "second_voice_population": {
+      "expected_digest": "e392e672995c52ddaa719b6c6d4936648cf8938edaeea364e65d8d583dd2554d",
+      "patterns": [
+        "data/foreign_voice/lexicon.json",
+        "experiments/foreign_voice_rate2.json",
+        "scripts/echo_reparse.py",
+        "scripts/foreign_voice.py",
+        "scripts/foreign_voice_oracle.py"
+      ]
+    }
+  },
+  "instrument_map": {
+    "native": {
+      "checker_external": false,
+      "checker_path": "scripts/match_signatures.py",
+      "checker_probe_term": null,
+      "reader_lexicon": "data/realization/lexicon.json",
+      "reader_path": "scripts/realize_term.py",
+      "renderer_path": "scripts/realize_term.py",
+      "unit": "statement_id"
+    },
+    "second": {
+      "checker_external": true,
+      "checker_path": "scripts/foreign_voice_oracle.py",
+      "checker_probe_term": "1 = 1",
+      "reader_lexicon": "data/foreign_voice/lexicon.json",
+      "reader_path": "scripts/echo_reparse.py",
+      "renderer_path": "scripts/foreign_voice.py",
+      "unit": "statement_id"
+    }
+  },
+  "preregistration_id": "echo.construction.v1",
+  "registered_before": [
+    "experiments/echo_population_audit.json",
+    "the 50-item reserve pilot",
+    "the 500-item registered render"
+  ],
+  "registered_date": "2026-08-28",
+  "status": "REGISTERED",
+  "predictions": {
+    "population": {
+      "native_served": 8584,
+      "resolver_found_fixture_keys": 13,
+      "resolver_keys_are_an_addend": false,
+      "second_voice_served": 2313,
+      "statement_id_overlap": 0,
+      "statement_id_union": 10897
+    },
+    "construction_gate": {
+      "expected": "STOP_BEFORE_PILOT",
+      "legal_next_move": "A dated amendment must either supply a code-disjoint external adjudicator and reader for the native stratum, or narrow B1 and explicitly retract the all-committed-speaking-set claim. The audit may not make that choice."
+    }
+  },
+  "sequence": [
+    "Commit this preregistration, echo_reparse, and the audit instrument without an audit result.",
+    "Run the population/disjointness audit only at that clean registration commit.",
+    "If and only if B1, B3, and B4 all fire, draw the disjoint 50-item reserve and freeze M before rendering the 500."
+  ],
+  "non_claims": [
+    "The known 2,313/2,313 foreign-voice round trip is not an ECHO result.",
+    "A parser-authored native round trip is not relabelled as external checker adjudication.",
+    "No injectivity rate is computed by this construction audit."
+  ]
+}
