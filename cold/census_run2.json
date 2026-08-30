@@ -9,9 +9,9 @@
         "conformance_ce3_supplement:decide_both_directions"
       ]
     },
-    "started_utc_epoch": 1787854470,
-    "elapsed_seconds": 107.0,
-    "bundle_root": "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36",
+    "started_utc_epoch": 1788097475,
+    "elapsed_seconds": 184.6,
+    "bundle_root": "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr",
     "platform": "win32"
   },
   "scope": {
@@ -38,8 +38,8 @@
     ],
     "working_tree": {
       "digest_before_rename": {
-        "files": 1208,
-        "digest": "ee13f590eb893ad2913c883a6056f7fd4e10f591305807486c1400f5bf55e539",
+        "files": 1249,
+        "digest": "46c50aa46b6bcf7effdaf0c37f21a6ad15594c923d93df13041e2433245f1d0a",
         "excluded_top_level": [
           ".git",
           ".venv",
@@ -54,8 +54,8 @@
         "manifest_file": "cold/evidence_run2/tree_manifest_before.json"
       },
       "digest_after_restore": {
-        "files": 1208,
-        "digest": "ee13f590eb893ad2913c883a6056f7fd4e10f591305807486c1400f5bf55e539",
+        "files": 1249,
+        "digest": "46c50aa46b6bcf7effdaf0c37f21a6ad15594c923d93df13041e2433245f1d0a",
         "excluded_top_level": [
           ".git",
           ".venv",
@@ -74,7 +74,7 @@
       "program_tree_restored": true
     }
   },
-  "census_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
+  "census_seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
   "pin_table_ref": {
     "artifact": "experiments/cold_registry_census.json",
     "field": "pin_table",
@@ -188,9 +188,9 @@
     },
     "B10": {
       "clause": "census_seal fixed before the harness runs",
-      "seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
-      "sealed_at_commit": "d2ac619a097a698964627880277c4641eb74b713",
-      "harness_first_commit": "d4b47538714ca089f6f5b8ce544aa54afb8ad571",
+      "seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
+      "sealed_at_commit": "4243a9832ba90fe443e4ab88f5d0ec300d2080af",
+      "harness_first_commit": "fb8376995c693ad258583f835720e7032ea88f7e",
       "registry_uncommitted_at_run": false,
       "how_checked": "the seal the harness read is the committed one, and the registry had no uncommitted modification when the run began",
       "w0_ordering_at_first_seal": {
@@ -618,8 +618,8 @@
         },
         {
           "path": "census.json",
-          "sha256": "8030419ab33171eaa6b9d651a7f80060a4d4594ee3f17e762204007632ebf1cc",
-          "size_bytes": 134300
+          "sha256": "e02298008d7bebff895b8c3d541b8d14516f7f41eb74439cf5c2b96420965c76",
+          "size_bytes": 136337
         }
       ],
       "external_deps": [
@@ -701,18 +701,18 @@
           "-I",
           "<repo>\\harness\\probe_recheck.py",
           "--bundle",
-          "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\good",
+          "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\good",
           "--checker-argv",
           "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
           "--out",
           "<repo>\\cold\\evidence_run2\\recheck_good.json"
         ],
         "exit_code": 0,
-        "stdout_head": "PASS rows 25/25 invocations 50 elapsed 17.06s",
+        "stdout_head": "PASS rows 25/25 invocations 50 elapsed 38.658s",
         "rows_ok": 25,
         "rows_evaluated": 25,
         "checker_invocations": 50,
-        "elapsed_seconds": 17.06,
+        "elapsed_seconds": 38.658,
         "evidence_file": "cold/evidence/recheck_good.json"
       }
     },
@@ -1383,21 +1383,21 @@
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1080,
+          "line": 1087,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1084,
+          "line": 1091,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1085,
+          "line": 1092,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1499,21 +1499,21 @@
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1023,
+          "line": 1030,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1029,
+          "line": 1036,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1031,
+          "line": 1038,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1615,7 +1615,7 @@
           "route_id": "serve_chat._story_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_story_receipt",
-          "line": 1099,
+          "line": 1106,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1651,28 +1651,28 @@
           "route_id": "belief",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1143,
+          "line": 1150,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "supposition",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1143,
+          "line": 1150,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "write_gate",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1145,
+          "line": 1152,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "serve_chat.kernel_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1149,
+          "line": 1156,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1859,7 +1859,7 @@
           "discarded": false,
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 17.061s",
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 20.07s",
           "failed_checks": [
             {
               "row_index": 0,
@@ -1891,7 +1891,7 @@
           "discarded": false,
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 16.956s",
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 23.781s",
           "failed_checks": [
             {
               "row_index": 0,
@@ -1919,7 +1919,7 @@
           "discarded": false,
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 23/25 invocations 50 elapsed 17.174s",
+          "stdout_head": "FAIL rows 23/25 invocations 50 elapsed 22.025s",
           "failed_checks": [
             {
               "row_index": 0,
@@ -1956,15 +1956,15 @@
     "omission": {
       "design": "§7 B4 — FAIL LOUD naming the missing dependency; a silent pass voids THE HARNESS, not the kind",
       "removed_dependency": "lean.exe",
-      "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\emptied_deps\\lean.exe",
+      "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\emptied_deps\\lean.exe",
       "exit_code": 2,
-      "stdout_head": "FAIL-LOUD: missing dependency lean.exe (resolved to ~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\emptied_deps\\lean.exe); the procedure cannot run",
+      "stdout_head": "FAIL-LOUD: missing dependency lean.exe (resolved to ~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\emptied_deps\\lean.exe); the procedure cannot run",
       "report": {
         "outcome": "MISSING_DEPENDENCY",
         "missing_dependency": {
           "name": "lean.exe",
           "role": "the pinned external checker this procedure invokes by path",
-          "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\emptied_deps\\lean.exe",
+          "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\emptied_deps\\lean.exe",
           "error": "the listed dependency is not present at the path the procedure resolves it to"
         }
       },
@@ -1993,7 +1993,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\good",
+            "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\good",
             "--checker-argv",
             "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
             "--out",
@@ -2001,7 +2001,7 @@
           ],
           "outcome": "PASS",
           "exit_code": 0,
-          "stdout_head": "PASS rows 25/25 invocations 50 elapsed 16.998s",
+          "stdout_head": "PASS rows 25/25 invocations 50 elapsed 23.473s",
           "evidence_file": "cold/evidence/sham_real_checker_good_bundle.json"
         },
         "real_checker_known_bad_bundle": {
@@ -2011,7 +2011,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\known_bad",
+            "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\known_bad",
             "--checker-argv",
             "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
             "--out",
@@ -2019,7 +2019,7 @@
           ],
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 17.076s",
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 23.385s",
           "evidence_file": "cold/evidence/sham_real_checker_known_bad_bundle.json"
         },
         "sham_checker_good_bundle": {
@@ -2029,7 +2029,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\good",
+            "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\good",
             "--checker-argv",
             "[\"~\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\python.exe\", \"-S\", \"-I\", \"<repo>\\\\harness\\\\sham_lean.py\"]",
             "--out",
@@ -2037,7 +2037,7 @@
           ],
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.778s",
+          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 1.19s",
           "evidence_file": "cold/evidence/sham_sham_checker_good_bundle.json"
         },
         "sham_checker_known_bad_bundle": {
@@ -2047,7 +2047,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-f22ota36\\known_bad",
+            "~\\AppData\\Local\\Temp\\cold-receipt-jkv83iyr\\known_bad",
             "--checker-argv",
             "[\"~\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\python.exe\", \"-S\", \"-I\", \"<repo>\\\\harness\\\\sham_lean.py\"]",
             "--out",
@@ -2055,7 +2055,7 @@
           ],
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.767s",
+          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 1.144s",
           "evidence_file": "cold/evidence/sham_sham_checker_known_bad_bundle.json"
         }
       },
@@ -3931,7 +3931,7 @@
       "carried_forward": {
         "from_artifact": "cold/scramble_baseline.json",
         "artifact_sha256": "23e8c8fec605d2851f66fc4481f664fb7e6ad81a4e95a6be943e17593c889af6",
-        "why_not_re_run": "amendment 2 repairs the REMOVAL arm. B6 scrambles the C-E3 bundle and invokes the pinned checker; nothing the amendment changes touches it, its rule is seeded from the kind_id, and the run is deterministic. Re-running 10,000 invocations to reproduce a number the fix cannot move would be an hour spent proving determinism.",
+        "why_not_re_run": "B6 scrambles the C-E3 bundle and invokes the pinned checker; its rule is seeded from the kind_id, and the run is deterministic. This run does not change the scramble rule, the bundle contents, the reconstruction rule, or the checker pin. Re-running 10,000 invocations to reproduce a number this run cannot move would be an hour spent proving determinism.",
         "what_would_invalidate_this": "any change to the scramble rule, the bundle contents, the reconstruction rule, or the checker pin"
       }
     },
@@ -4029,11 +4029,11 @@
     ],
     "registry_amendment": 2,
     "registry_seal_run_one": "6c575c70dbbdd7f79245a90902b84b0d1dd74e13176e2f878ece4f1b91b00ded",
-    "registry_seal_this_run": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c"
+    "registry_seal_this_run": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb"
   },
   "provenance": {
     "writer": "harness/cold_harness.py",
-    "writer_sha256_lf": "368be7d62f3af80a80284cbb34c9a4e72d9d3079bd7507e2dc69a6313a482fb8",
+    "writer_sha256_lf": "e2adbe8b24bc59e342b537d127c3d1c571afd54c35b82da96e610971fd967851",
     "inputs": [
       {
         "path": "cold/reconstruction_rule.json",
@@ -4041,7 +4041,7 @@
       },
       {
         "path": "experiments/cold_registry_census.json",
-        "sha256_lf": "e5c7d4436fd89e292acfdb5fd0a35a75ba0f9f06c82c9ce8d3c6ab1a65d18844"
+        "sha256_lf": "9137c2d21b2b2f75f87fa240d027328b1b04441fdfe10c60160cbf180d661a16"
       },
       {
         "path": "experiments/conformance_ce3_supplement.json",
