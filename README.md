@@ -7,10 +7,11 @@ compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
 interface.
-<!-- Suite gate v0.22.0: 2,789 tests OK (skipped=5), 22,307.8s (6h12m) at
-     tip 85515e9, green on the first run; receipts reports/test_gate_v022/.
-     Prior gates: v0.21 green on run 3 (2 reds), v0.20 green on run 2 (1 red),
-     v0.19 green first run. -->
+<!-- Suite gate v0.23.0: 2,852 tests OK (skipped=5), 32,646.0s (9h04m) at
+     tip 867ad5c, green on run 2 (run 1 red: stale CR-P0 seal + verbose
+     log in working_tree_digest); receipts reports/test_gate_v023/.
+     Prior gates: v0.22 green first run, v0.21 green on run 3 (2 reds),
+     v0.20 green on run 2 (1 red). -->
 Latest release: [v0.23.0](docs/RELEASE-v0.23.0.md) — **the inbound turn had
 no population.** A person-supplied premise was scheduled; the sealed
 maintainer questions recast against the speakable remainder landed **0 of

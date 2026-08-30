@@ -199,6 +199,26 @@ a new sealed population.
   (`rendering_module_digests`, `capability_sheet_digest`).
 - Protocol uptake is not implemented. Kernel `hello` remains refusal.
 
+## The suite at the tip
+
+**Green on run 2: 2,852 tests, OK (skipped=5), 32,646.0 s (9 h 4 m) at
+the frozen tip `867ad5c`.** Receipts in `reports/test_gate_v023/`
+(`run1-red.log`, `run2-green.log`, `runs.md`).
+
+Run 1 at the rotation tip `5984f27` was red: 2,851 ran, FAILED
+(failures=1, errors=11, skipped=5), 32,932.9 s (9 h 9 m). The failure
+was a stale CR-P0 seal (`program_tree_files_scanned` 178→183; kinds
+stayed 19). The eleven errors were a growing `unittest -v` log inside
+`working_tree_digest`. Both are retained. The registry was re-sealed
+at `4243a98`; the live cold reading was regenerated at `867ad5c`
+(1,249-file clone-shaped digest). Run 2 used `time_tests.py` with the
+log outside that digest.
+
+The five skips are the standing set. Up from v0.22.0's 2,789 by this
+cycle's new modules (`test_guest_axiom_draw`, `test_guest_quarantine`,
+`test_echo_population_audit`, `test_no_flip_census`), growth in
+`test_serve_chat`, and the harness `EXECUTABLE_KIND` guard.
+
 ## Assets
 
 No new checkpoint, and the existing ones are not re-shipped. `data/` was
@@ -217,10 +237,12 @@ PYTHONIOENCODING=utf-8 python -m unittest tests.test_guest_axiom_draw tests.test
 PYTHONIOENCODING=utf-8 python -c "import json; print(json.load(open('experiments/guest_hypotheses.json',encoding='utf-8'))['counts']['recast_yield']['landed_in_covered_set'])"
 ```
 
-`ingest_wold.py reach` **cannot verify** on this machine: the pinned
-WordNet archive is absent (`scripts/fetch_sources.py --fetch wordnet-2025-json`).
-That is a cannot-verify, not a skip.
+`ingest_wold.py reach` **ran, exit 0**: WordNet reach **1,394/1,460 =
+95.5%** against the pinned gitignored archive present on this machine,
+byte-identical to the committed `experiments/wold_reach.json`. A
+contributor without the archive gets the refusal, which is *cannot
+verify*, never *skipped*.
 
-`[SUITE-GATE-V23]` is recorded in `reports/test_gate_v023/` when the frozen-tip
-full discover finishes. Do not read this file as claiming the suite is green
-until that receipt exists.
+`[SUITE-GATE-V23]` is resolved: run 2 green at `867ad5c`, receipts in
+`reports/test_gate_v023/`. The rotation placeholder above is closed
+with those numbers, not carried.

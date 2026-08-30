@@ -17,6 +17,10 @@
 >   never-ask is the recorded B5 fallback.
 > - **PROTOCOL UPTAKE** → reviewed design, **ROADMAP-v0.24** incumbent
 >   against STRANGER-GATE; not implemented this cycle.
+> - **Release gate `[SUITE-GATE-V23]`** → **closed**: run 1 red at
+>   `5984f27` (stale CR-P0 seal + verbose log in `working_tree_digest`);
+>   run 2 green at `867ad5c` (2,852 OK, skipped=5, 9 h 4 m; receipts
+>   `reports/test_gate_v023/`). RELEASE-v0.23.0 carries the verdict.
 >
 > Session-level GUEST AXIOM gates did not run and are not claimed.
 
