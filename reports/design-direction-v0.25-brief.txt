@@ -1,0 +1,57 @@
+You are an outside advisor to a small research program you have never seen.
+Everything you know about it is in this message; no code or data will be
+provided. Your value here is precisely that you are outside it.
+
+The program is building an inspectable system that lets a person work across
+mathematics, logic, language, physical relations, and programming without
+hiding exact operations inside a large learned model. It holds a generated
+library of formal statements, exact matchers and checkers, scoped hypothetical
+worlds, a persistent conversation, and a small amount of learned machinery for
+the residual choices that cannot be decided exactly. A person should eventually
+be able to speak naturally, introduce assumptions, obtain conditional answers,
+ask the running environment for observations, and continue a conversation whose
+claims remain auditable.
+
+The library already contains far more relations than a person can name or
+reach: only a small named fraction can currently be requested, and the bulk
+shares a handful of boilerplate glossary words. The conversation can remember
+assumptions, pause for missing information over a signed question channel, and
+resume exactly. It can render a bounded formal subset into checked English and
+evaluate some pinned numeric substitutions. It now also takes a small set of
+ordinary conversational turns - a greeting, a liveness reply, a quoted datum,
+an expected program output - as verified interaction moves on a dedicated
+served surface: the same short utterance takes different moves depending on
+exact session context and exact vocabulary evidence, and when more than one
+materially different move survives, the system pauses and asks instead of
+guessing; nested episodes suspend and resume exactly, with a depth cap. But
+that move vocabulary is small and authored by the program itself, and
+conformance to its transition rules does not establish that the rules model
+human convention. The system still does not invoke general programming work,
+use environmental observations as live input, certify which assumptions an
+answer actually needed, or let a person reach the unnamed bulk of the library.
+An attempt to bridge its pause-and-ask channel into an existing command-line
+chat client's structured prompting tool failed honestly and is recorded: the
+client advertises a prompting tool its own policy refuses to execute in the
+mode people actually use, and it replays message shapes the surface refuses;
+a plain-text pause remains the working path.
+
+Exact work must remain ordinary code: parsing, equality, scope, provenance,
+authorization, resource limits, process results, status, and durable receipts.
+A small learned component may rank or compose only among legal alternatives;
+it cannot declare truth, authorize side effects, manufacture missing user
+input, or turn an observation into a library fact. Generated library files
+come only from committed sources. New behavior must have a first-class
+inspectable artifact, a capability-blind control, corruption and vacuity
+checks, frozen gates before measurement, honest negative results, and a
+smallest slice that one maintainer can finish in one release. More library
+entries, more matches, or placing a model on an exact operation are suspended
+proxies, not directions.
+
+Propose FIVE distinct forward directions. For each, in under 150 words:
+(a) the new kind of claim it would make true; (b) why the current shape
+cannot make that claim today; (c) a falsifiable construction gate -- what,
+decided in advance, would count as the idea failing; (d) the cheapest honest
+failure. Do not propose more entries, more matches, or a model trained on an
+exactly computable capability. Range widely; at least one should feel risky to
+you. The five must not be five flavors of one idea. Number them with short
+memorable names.

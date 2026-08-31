@@ -1,0 +1,133 @@
+{
+  "schema": "design_direction_receipt.v1",
+  "cycle": "v0.25",
+  "status": "complete",
+  "requested_utc": "2026-08-31",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless) cwd C:/Users/displ/AppData/Local/Temp/f25-4c1e -- empty non-git dir, no project name in path",
+    "denylist": "strict-mcp-config with empty MCP config plus disallowedTools over file, shell, network, agent, notebook, and skill tools",
+    "residual_gap": "tools existed in the host but were blocked by denylist and permission mode rather than absent"
+  },
+  "brief_sha256_canonical_lf": "f6036e9aee9b137df73c3befcd5954453537484e49bb3b20c686e4c9103e5054",
+  "brief_on_file": "reports/design-direction-v0.25-brief.txt",
+  "round_prompt_sha256_canonical_lf": {
+    "series_1": {
+      "r1": "f6036e9aee9b137df73c3befcd5954453537484e49bb3b20c686e4c9103e5054",
+      "r2": "c809292925b4b1aefc88b56f3eef590c278954777228d0ca32d5d148e4b02bd2",
+      "r3": "30f88a7dfba84896c71c83bf328bed04606aea76370d34abb6137902cb243ac2"
+    },
+    "series_2": {
+      "r1": "aabaebe768292216d8eb3f2ff9f5c587e517e0ed29017cc931026f3e247b03c8",
+      "r2": "ca6a8475652fd907b30a25a6f0b50e30a87723d4d50506bdd72b1a8882a0e710",
+      "r3": "eb030216d31330d75bfd4a08573281a8fb435bf952d6943bc18f17e64f0c4a5d"
+    },
+    "series_3": {
+      "r1": "da81edf61cbdfa171fda9835ffd8837b1a6ae9327607629ef98eee2744262134",
+      "r2": "3f5e57fd1336e3e191f8d3b7d7e9dddd7f03a26993be13e4c3a32e6edd23847c",
+      "r3": "c56a02abce7cb22bdc5f853675e99ca323a2a8fd745239e7e71618d87fad11db"
+    },
+    "note": "series_1.r1 equals brief_sha256_canonical_lf by construction; series_2.r1 and series_3.r1 are the brief concatenated with the exclusion card(s)"
+  },
+  "exclusion_card_sha256_canonical_lf": {
+    "for_series_2": "f2d005aa2824debb47a2bc2618b54dd2b9241c66098759d846cc30aa0e10f4c0",
+    "for_series_3": "f449348340ff5a7f5aca8ff4928b76837c485a81c8246f6edb5a29090b5fc4ac"
+  },
+  "exclusion_cards_on_file": "not committed; the hashes above pin the cards handed to series 2 and series 3",
+  "exclusion_note": "series 2 excluded all five series-1 round-one territories; series 3 excluded all ten from series 1 and 2",
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "74b5ce1b-7cbb-4158-b932-ed16d06ef609",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.762465
+    },
+    {
+      "series": 2,
+      "session_id": "60f4cd28-ceb3-4ef5-b2fc-ed3c522a42b2",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.793899
+    },
+    {
+      "series": 3,
+      "session_id": "be873178-bdad-45db-a8d8-9aacf920e185",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.970102
+    }
+  ],
+  "total_cost_usd": 2.526466,
+  "round_one_funnel": {
+    "series_1": [
+      "NEEDED-BY: minimality certificates for assumptions by replay-ablation (folded into the carried PREMISE LEDGER incumbent as its measurement arm; independent convergence recorded)",
+      "ERRAND: general program runs as authorized quarantined session evidence (collided with the parked DEPUTY outline and the STRANGER-GATE prohibition; survived round 2 only as CHOKE)",
+      "LAPSE: observation-backed claims that expire and re-open exactly (parked: no observation channel exists; its replay harness noted as shared machinery)",
+      "HANDLE: total canonical addresses for the unnamed bulk, decidable and injective (survived to round 2 rank 3; a genuinely new mechanism against the carried naming-layer lane)",
+      "FOREIGN EAR: audit the authored move vocabulary against outside judges (became the series lead STRANGER)"
+    ],
+    "series_2": [
+      "COUNTERMODEL: witnessed no via finite countermodels (mechanism convergent with PREMISE LEDGER - second independent arrival; survived as WITNESSED-NO, the constructor plus the new answer kind, rank 3)",
+      "TAKEOUT: portable certificates plus a standalone verifier (independently reinvented the cold-census successor; survived as THIN-VERIFIER, rank 2 and series runner-up)",
+      "SAY-BACK: nothing enters unrendered (folded: at ~18% renderable the fail-closed invariant would be non-binding scoped or library-parking unscoped)",
+      "DIMENSION: quantities with dimensions and outward-rounded enclosures (became the series lead)",
+      "ATLAS: total typing of non-answers (folded: independently reinvented the v0.21-parked obstruction map - convergent evidence for that park)"
+    ],
+    "series_3": [
+      "SHARP ASK: every minted question provably discriminating (reframed under pressure into EARNED ASK, a per-question minting precondition with no denominator problem; rank 3)",
+      "MIRROR FRAGMENT: parse(render(e)) == e through the person's own input path, exact grammar, no learned parser (rank 2 and series runner-up)",
+      "HOUSE RULES: the person declares a new relation symbol, axiomatized in the shipped scoped world, quarantined (became the series lead)",
+      "PRICE FIRST: pre-committed cost bounds with calibration (folded into the parked cost lane / TOLL as its candidate mechanism, with the deciding log-probe named)",
+      "TWO KILNS: a second independently written generator corroborates the library (folded: third independent arrival at the parked two-witnesses / independent-second-reading shape)"
+    ]
+  },
+  "outcomes": {
+    "series_1": {
+      "lead": "STRANGER - provisioned outside judges audit the authored move vocabulary",
+      "runner_up": "CHOKE - the static quarantine check plus the red-team that discharges or confirms the write-gate prohibition",
+      "changed_under_pressure": "human labelers were replaced by machine strangers with the weakening stated; the claim ceiling was cut to agreement-outside-the-authoring-context; NEEDED-BY folded into the incumbent and LAPSE parked",
+      "residual_risk": "the strangers are not strangers: system and judges may share one prior lineage, and a clean run is consistent with external validation of a mirror; only a second model family would begin to price it"
+    },
+    "series_2": {
+      "lead": "DIMENSION - dimensioned quantities with guaranteed outward-rounded enclosures and typed dimensional refusals",
+      "runner_up": "THIN-VERIFIER - a <=500-line stdlib-only verifier converting one program-dependent receipt kind",
+      "changed_under_pressure": "ATLAS and SAY-BACK folded on disclosed ground; COUNTERMODEL narrowed to the constructor the incumbent lacks; the ranking was defended as information-per-effort with the inversion condition stated in writing",
+      "residual_risk": "a dimensionally degenerate family yields a coherent provenance-clean table whose mismatch gates are never exercised; internal consistency is what the numbers buy, correspondence is not on the ledger"
+    },
+    "series_3": {
+      "lead": "HOUSE RULES - the person as bounded author of vocabulary: one fresh relation symbol, quarantined axiom, refusal-default totality",
+      "runner_up": "MIRROR FRAGMENT - an exact-grammar English reader that is provably not the renderer's sibling",
+      "changed_under_pressure": "SHARP ASK's rate became a per-question minting precondition after the denominator objection; TWO KILNS and PRICE FIRST folded into their parked convergents; HOUSE RULES was cut to one verdict kind with conservativity refused in writing",
+      "residual_risk": "the frozen corpus records a different speech act: inbound hypotheses were collected when declaration did not exist, so B6's refusal ceiling measures demand that predates the capability; the only honest declaration corpus is the one the slice would produce"
+    }
+  },
+  "synthesis": {
+    "selected": "HOUSE RULES (series 3) -> docs/DESIGN-house-rules.md",
+    "post_review": {
+      "verdict_on_first_draft": "REWORK - adversarial review falsified three of the draft's reuse claims against the code: frames.close_frame refuses owned frames (the demotion the draft relied on is unreachable), FrameSpec.declarations cannot hold an arity-n premise, and the shipped template grammar cannot express a relational axiom at all - which tripped the draft's own stop-before-implementation clause",
+      "rework": "the shipped design sheds frames and premises entirely: one verdict kind ADMITTED_DECLARED_SYMBOL over a new session-scoped symbol ledger in AssumptionSet's discipline, with an exact use-side arity check on supposition atoms and an eight-part collision census that names the parser's silent prefix-capture hazard (sum_total -> aggregate) as a refusal; axioms are the recorded next askable question, not this slice",
+      "review_finds_kept": "the census gloss correction (0-of-21 is a rendering-coverage fact, not a vocabulary-gap measurement) and the sum_total silent-capture hazard are recorded in the design and land in DISCOVERIES-shaped form"
+    },
+    "selection_grounds": [
+      "it changes what a person can do on the program's own goal axis: the person's side of the conversation has vocabulary the program never authored, and today every use of it is an opaque atom - the census's 0-of-21 (G-P0) is cited only as the adjacent coverage wall, not as demand for declarations",
+      "the trust boundary is exact and narrower than the claim: session-scoped, refusal-default-total, no truth or consistency claim, no byte toward the write gate - the STRANGER-GATE prohibition is untouched",
+      "it reuses substance that actually exists (the supposition ledger's declaration discipline, the registered line grammar, the schema's category enum) and names its new trusted code as new",
+      "it can be defeated before implementation (the H-PRE fixture-seal stop, B7's adversarial enumeration sweep) and after (B3 mutants, B9's held-out blind admitter)"
+    ],
+    "declined": {
+      "STRANGER": "declined as headline: its own residual risk caps the claim at agreement-inside-one-model-lineage, and an instrument-first headline repeats the drift the v0.17 redirect corrected; its provisioning pattern is retained as the named mechanism for any later unrehearsed-input or outside-judge arm",
+      "DIMENSION": "declined as headline: a discipline upgrade on an already-exact path moves the boundary least; parked as a strong rider candidate with its degenerate-family risk recorded",
+      "CHOKE": "second independent arrival at STRANGER-GATE's own shape - recorded as convergent evidence hardening that park's priority; unpark unchanged (before any untrusted stream reaches the write gate)",
+      "THIN-VERIFIER": "convergent with the parked ORPHAN successor; its 500-line stdlib-only verifier and TCB.md shape are recorded against that park",
+      "MIRROR FRAGMENT": "the highest-ceiling decline: parks behind its own pre-gate (>=300 renderable entries each carrying >=2 content lemmas outside the nine boilerplate glossary words, and >=40 distinct content lemmas overall) as the named successor to the plain-input lane"
+    },
+    "imported_lessons": [
+      "from STRANGER: the corpus-of-a-different-speech-act risk is a handled construction fact - the census arm is a reported number with no threshold (R-H2), never a gate, because the only honest corpus of declaration requests is the one the capability creates; and any outside-judge arm names its lineage ceiling",
+      "from DIMENSION: verdicts certify ledger-groundedness, never correspondence - internal consistency is what the checks buy, and the design says that sentence",
+      "from EARNED ASK: any question the admissibility path mints must carry a partition witness; no fallback question on precondition failure"
+    ]
+  }
+}
