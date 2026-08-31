@@ -7,13 +7,32 @@ compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
 interface.
-<!-- Suite gate v0.23.0: 2,852 tests OK (skipped=5), 32,646.0s (9h04m) at
-     tip 867ad5c, green on run 2 (run 1 red: stale CR-P0 seal + verbose
-     log in working_tree_digest); receipts reports/test_gate_v023/.
-     Prior gates: v0.22 green first run, v0.21 green on run 3 (2 reds),
-     v0.20 green on run 2 (1 red). -->
-Latest release: [v0.23.0](docs/RELEASE-v0.23.0.md) — **the inbound turn had
-no population.** A person-supplied premise was scheduled; the sealed
+<!-- Suite gate v0.24.0: [SUITE-GATE-V24] — NOT YET RUN at the rotation.
+     Resolved before the tag with counts, wall-clock, and receipts under
+     reports/test_gate_v024/, or the notes refuse the sentence and the tag
+     waits. Last resolved gate, v0.23.0: 2,852 tests OK (skipped=5),
+     32,646.0s (9h04m) at tip 867ad5c, green on run 2 (run 1 red: stale
+     CR-P0 seal + verbose log in working_tree_digest); receipts
+     reports/test_gate_v023/. Prior gates: v0.22 green first run, v0.21
+     green on run 3 (2 reds), v0.20 green on run 2 (1 red). -->
+Latest release: [v0.24.0](docs/RELEASE-v0.24.0.md) — **the ordinary turn
+became an uptake, and the tool bridge failed honestly.** `hello` on
+`corollary/kernel` is still a refusal, and that is still that profile's
+honest answer; the same four bytes addressed to a new third profile,
+`corollary/protocol`, are a verified greeting `ENTER` — and under a live
+probe they are a `probe_reply` instead, decided by a sealed corpus witness
+and a context predicate, never by the letters. **32 of 32** sealed
+context/corpus cells reproduced, **nine** scored gates green over **87**
+receipts, and both capability-blind controls scored *exactly* their frozen
+ceilings (**21, 21, 17** — equality is what a non-leaking runtime looks
+like). In the same run the one bridge to an unmodified outside program went
+**RED**: codex-cli 0.150.1 bound a reply to the exact pending request id and
+the payload it bound was its own router's refusal, *"request_user_input is
+unavailable in Default mode."* **No Codex prompt-tool support is claimed**;
+the pause is still delivered as text. See [the question it bound and would
+not ask](docs/blog/the-question-it-bound-and-would-not-ask.md).
+[v0.23.0](docs/RELEASE-v0.23.0.md) is the floor under it — **the inbound turn
+had no population.** A person-supplied premise was scheduled; the sealed
 maintainer questions recast against the speakable remainder landed **0 of
 21** in the voice's 2,313 covered statements, the correction log was never
 sealed, and the native voice is not an echo instrument (**0/50** and
@@ -97,14 +116,56 @@ grammar, the way it reads a tool schema:
 ```
 $ python scripts/serve_chat.py          # in one shell; 127.0.0.1:8377, no flags
 $ curl -s http://127.0.0.1:8377/v1/capabilities | python -m json.tool
-{ "schema": "corollary.capabilities/1",
-  "profiles": { "corollary/kernel": ..., "corollary/conversation": ... },
+{ "schema": "corollary.capabilities/2",
+  "profiles": { "corollary/kernel": ..., "corollary/conversation": ...,
+                "corollary/protocol": ... },
   "line_grammar": [ { "form": "owns <template-expr>", "route": "ownership",
                       "example": "owns x ^ 2", "served": true }, ... ],
+  "protocol_grammar": { "served": true, "corpus_path": "protocol/protocols.json",
+                        "families": ["greeting","probe_reply","quoted_datum",
+                                     "expected_output"], ... },
   "honesty": "offline boot; unregistered paths abstain (P-IH4); no generative path" }
 
 $ curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' \
     -d '{"model":"corollary/kernel","messages":[{"role":"user","content":"owns x ^ 2"}]}'
+```
+
+**Three profiles, and the contrast between two of them is the v0.24 story.**
+Send the *same four bytes* to `corollary/kernel` and to `corollary/protocol`:
+
+```
+$ curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' \
+    -d '{"model":"corollary/kernel","messages":[{"role":"user","content":"hello"}]}'
+… "content": "the corpus does not ground this, and nothing here will pretend otherwise.
+              to hold it as conjecture instead, type:  suppose hello"
+… "route": "dispatcher", "status": "exhausted",
+   "detail": "routed to 'tool.freeform_answer', which the boot matrix did not register;
+              abstaining rather than inventing a path (P-IH4: registered paths only)"
+
+$ curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' \
+    -d '{"model":"corollary/protocol","messages":[{"role":"user","content":"hello"}]}'
+… "content": "disposition: ENTER\nfamily     : greeting\nprotocol   : protocol.greeting.a\nmove       : greet"
+… "route": "protocol", "status": "found", "detail": "ADMITTED",
+   "receipt": { "corpus_path": "protocol/protocols.json",
+                "protocol_witnesses": ["protocol.greeting.a"],
+                "grounding": "protocol-corpus" }
+```
+
+The kernel refusal is **not a bug that got fixed** — it is that profile's
+published promise about what it will and will not ground, and it still
+holds. The protocol profile is a different door: the utterance reaches a
+sealed corpus of interaction patterns (four families, seven nodes, thirteen
+moves, 18 normalized keys) as an exact lookup key, and a move is admitted
+only from the returned witnesses plus the declared context signals. A lookup
+miss licenses nothing. Under a live probe the same `hello` is a
+`probe_reply` instead; where two moves stay admissible the turn pauses:
+
+```
+$ curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' \
+    -d '{"model":"corollary/protocol","messages":[{"role":"user","content":"hi"}]}'
+… "status": "waiting", "detail": "MATERIAL_AMBIGUITY",
+   "need": { "slot": "protocol_uptake.candidate_move",
+             "options": ["acknowledge", "greet"] }
 ```
 
 Current Codex CLI uses the Responses protocol for custom providers. On
@@ -126,9 +187,20 @@ codex.cmd --disable apps --disable plugins -m "corollary/kernel" -c 'model_provi
 
 `--disable apps --disable plugins` keeps this standalone text-only session
 from waiting for the host-owned `codex_apps` MCP server or loading plugin
-instructions it cannot use. The two local profiles are also published in
-Codex's model-catalog shape alongside the standard OpenAI `data` list, so the
-CLI does not need fallback metadata.
+instructions it cannot use. All **three** local profiles are also published
+in Codex's model-catalog shape alongside the standard OpenAI `data` list, so
+the CLI does not need fallback metadata. Switch `-m "corollary/kernel"` for
+`-m "corollary/protocol"` to run the same durable command against the
+protocol door.
+
+When a protocol turn cannot decide, it pauses as **text**. The server can
+also emit the host's own `request_user_input` tool call, but the live round
+trip is **RED**: codex-cli 0.150.1 bound its reply to the exact pending
+request id and the payload it bound was its router's refusal,
+*"request_user_input is unavailable in Default mode."*
+**No prompt-tool support is claimed** — see
+[RELEASE-v0.24.0](docs/RELEASE-v0.24.0.md) and
+`experiments/protocol_uptake_b7.json`.
 
 The reply's `content` is the engine's rendered answer verbatim — the skin
 has zero rendering freedom — and everything else (route, status, receipt,
@@ -477,6 +549,9 @@ data/<discipline>/      statement corpora (27 corpora, 12,777 nodes)
 data_holdout/<name>/    quarantined holdouts (miniF2F 157, Goedel-Pset 1,896)
                         committed and byte-reproducible, invisible to the
                         merged graph — a holdout inside data/ is not held out
+protocol/protocols.json the sealed interaction-protocol corpus, deliberately
+                        OUTSIDE data/ (4 families, 7 nodes, 13 moves, 18
+                        normalized keys); generated, with its own checker
 scripts/
   validate_nodes.py     schema + link-reciprocity validation (merged graph)
   match_signatures.py   twins plus a separate time-reversal mirror relation
@@ -510,7 +585,16 @@ scripts/
                         (declared snapshots reported, not regenerated)
   serve_chat.py         OpenAI-compatible chat + Responses skins over the
                         session engine (stdlib, loopback, offline boot,
-                        capability sheet)
+                        capability sheet); three profiles since ¶AMD-3
+  build_protocol_corpus.py / check_protocol_regeneration.py  the generated
+                        protocol corpus and the checker that owns it
+  protocol_runtime.py   the uptake session: episode stack, one pending need,
+                        append-only ProtocolUptake receipts; a move is
+                        admitted only from corpus witnesses + context signals
+  protocol_controls.py / check_protocol_receipts.py / run_protocol_gates.py
+                        the capability-blind controls, the receipt-replay
+                        checker, and the registered-run writer (refuses an
+                        existing output path or a dirty/wrong-tip tree)
   realize_term.py       canonical term -> English sentence, gated by a
                         re-parse through the byte-frozen parser; --census
                         publishes R0's denominator, --term shows a receipt
@@ -621,10 +705,19 @@ python scripts/measure_realization.py --out realization_rate.repro.json
                                             # to experiments/realization_rate.json;
                                             # exit 3 and writes nothing if any of
                                             # the five preregistered digests moved
+python scripts/check_protocol_regeneration.py  # the protocol corpus regenerates
+                                            # byte-identically (into a temp dir,
+                                            # never into the repo) and every
+                                            # frozen prereg digest still holds
 python scripts/serve_chat.py                # the chat endpoint on 127.0.0.1:8377
 curl -s http://127.0.0.1:8377/v1/capabilities            # the capability sheet
 curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' `
     -d '{"model":"corollary/kernel","messages":[{"role":"user","content":"owns x ^ 2"}]}'
+curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' `
+    -d '{"model":"corollary/protocol","messages":[{"role":"user","content":"hello"}]}'
+                                            # the same four bytes: refused on
+                                            # corollary/kernel, a verified
+                                            # greeting ENTER on the protocol door
 python scripts/measure_throughput.py --system kernel --url http://127.0.0.1:8377 `
     --half A --out halfA.repro.json         # the stopwatch on the development half
                                             # (half B is sealed and refuses without
@@ -673,6 +766,23 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # adds five wholly new modules -- test_conform_ce3_supplement,
 # test_plain_input, test_session_ledger, test_session_prereqs,
 # test_witness -- and grows several existing ones.
+# 2,789 tests, 0 failures, 5 skipped at v0.22.0 -- 6h12m serial
+# (22,307.8s) at tip 85515e9, green on the first run. Receipts:
+# reports/test_gate_v022/.
+# 2,852 tests, OK (skipped=5) at v0.23.0 -- 9h04m serial (32,646.0s) at
+# tip 867ad5c, green on run 2. Run 1 was red on a stale CR-P0 seal plus
+# eleven errors from a verbose suite log written INSIDE the tree
+# working_tree_digest hashes -- log outside the hashed tree. Receipts:
+# reports/test_gate_v023/ (runs.md, run1-red.log, run2-green.log).
+# [SUITE-GATE-V24] -- v0.24.0's gate is NOT YET RUN at the rotation.
+# It is resolved before the tag with its counts, wall-clock and receipts
+# under reports/test_gate_v024/, or the notes refuse the sentence and
+# the tag waits. v0.24 adds four wholly new modules --
+# test_protocol_corpus, test_protocol_runtime, test_protocol_controls,
+# test_protocol_gates -- and grows test_serve_chat and
+# test_cold_receipt. Known-red until the post-rotation cold re-read:
+# cold/census_run2.json's provenance pin still names the pre-re-seal
+# registry bytes (deliberate ordering, RELEASE-v0.24.0).
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

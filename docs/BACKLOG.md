@@ -3,6 +3,130 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.24 rotation (the uptake, and the v0.25 course's parks)
+
+- **The shipped template parser silently rewrites `sum_total(x)` into the
+  aggregate head, with no refusal (2026-08-31).** `scripts/match_signatures.py`
+  rewrites any identifier beginning `sum_ / prod_ / lim_ / max_ / min_` into a
+  corpus aggregate head (`HEAD_ALIASES`, `BIG_OP_PREFIXES`), so a term written
+  `sum_total(x)` is reinterpreted as `aggregate` and nothing anywhere says so.
+  Found by the v0.25 adversarial review of a design for code that does not
+  exist yet — a live hazard of code that ships today. Acceptance for the fix:
+  **a refusal or a disclosure, never a silent rewrite** — either the parser
+  refuses the capture by name, or the rewrite rides the term's own receipt
+  where a reader can see it — plus a test that goes red on today's behaviour.
+  **It does not ride H-P0.** HOUSE RULES' census carries the reserved
+  prefixes as a declaration-time prefix guard, which converts the hazard only
+  at the declaration boundary; the parser keeps rewriting, and "declaring
+  `sum_total` is refused" must not be allowed to read as "the parser no longer
+  rewrites `sum_total`." Evidence: `docs/DESIGN-house-rules.md` §4 and the
+  v0.25 course receipt's `post_review.review_finds_kept`. Ordered in
+  [ROADMAP-v0.25](ROADMAP-v0.25.md) §2 as its own lane.
+
+- **MIRROR FRAGMENT — parked behind an exact pre-gate (2026-08-31).** An
+  exact-grammar English reader provably disjoint from the renderer's module
+  closure: `parse(render(e)) == e` through the person's own input path, no
+  learned parser. The highest-ceiling decline of the v0.25 course and the
+  **named successor to the plain-input lane**. Unpark only above its own
+  pre-gate, stated exactly so it cannot be softened later: **≥300 renderable
+  entries each carrying ≥2 content lemmas outside the nine boilerplate
+  glossary words, and ≥40 distinct content lemmas overall.** Below that the
+  reader has nothing to read that is not boilerplate — the v0.22 nameless
+  census is why the pre-gate is written in content lemmas rather than in
+  entries. Evidence: `reports/design-direction-v0.25.json`,
+  `synthesis.declined.MIRROR FRAGMENT`.
+
+- **DIMENSION — parked as a strong RIDER candidate, not a headline
+  (2026-08-31).** Dimensioned quantities with guaranteed outward-rounded
+  enclosures and typed dimensional refusals. Declined as headline because a
+  discipline upgrade on an already-exact path moves the person-facing
+  boundary least. Unpark as a rider on a cycle whose headline touches
+  evaluation. **Residual risk carried with it, in its own words:** a
+  dimensionally degenerate family yields a coherent, provenance-clean table
+  whose mismatch gates are never exercised — internal consistency is what the
+  numbers buy, and correspondence is not on the ledger. Its honesty sentence
+  is already imported into DESIGN-house-rules (verdicts certify
+  ledger-groundedness, never correspondence).
+
+- **CHOKE — folded into STRANGER-GATE as a SECOND INDEPENDENT ARRIVAL
+  (2026-08-31).** Series 1's ERRAND (general program runs as authorized
+  quarantined session evidence) collided with the parked DEPUTY outline and
+  survived round two only as CHOKE: the static quarantine check plus the
+  red-team that discharges or confirms the write-gate prohibition. An
+  isolated context that had never seen STRANGER-GATE re-derived its shape.
+  Convergence **hardens the park's priority; it is not a trigger.** Unpark
+  unchanged: STRANGER-GATE MUST run before any untrusted stream reaches the
+  write gate, and its residual risk stands (one head authors the attacks, the
+  twins and the gate, so it measures whether the gate DISCRIMINATES, never
+  whether the corpus is ADEQUATE).
+
+- **THIN-VERIFIER — folded into the ORPHAN successor, with its verifier shape
+  (2026-08-31).** Series 2's TAKEOUT (portable certificates plus a standalone
+  verifier) independently reinvented the cold-census successor and survived as
+  its runner-up. The shape it contributes and that the park now carries: a
+  **≤500-line, stdlib-only verifier** converting **one** program-dependent
+  receipt kind, with a `TCB.md` naming what must be trusted. That is a
+  concrete first slice against the v0.22 partition (1 SURVIVES / 10
+  NEEDS-PROGRAM / 8 UNTESTED). Unpark still needs the cold census's own
+  recorded next question answered: *which single pinned dependency converts
+  the most NEEDS-PROGRAM kinds?* ORPHAN remains the path to TOLL's n=1
+  denominator.
+
+- **EARNED ASK — a constraint on any future ASK arm, not a lane
+  (2026-08-31).** Series 3's SHARP ASK was reframed under the denominator
+  objection into a per-question minting precondition, and is recorded as a
+  binding constraint rather than scheduled: **any question the admissibility
+  path mints must carry a partition witness, and precondition failure returns
+  the ambiguity rather than a fallback question.** It binds the next lane that
+  mints questions. HOUSE RULES mints none, and says so.
+
+- **LAPSE — observation-backed claims that expire and re-open exactly
+  (2026-08-31).** Parked at round one: **no observation channel exists**, so
+  there is nothing for a claim to be backed by or to expire against. Noted
+  because its replay harness is machinery already shared with the
+  erratum/no-flip lane; if an observation channel ever lands, this is the
+  first thing to re-read.
+
+- **HANDLE — parked behind the naming-layer question, with its anti-vacuity
+  lesson (2026-08-31).** Total canonical addresses for the unnamed bulk,
+  decidable and injective; survived to round two at rank 3 and is the first
+  genuinely **new mechanism** the carried naming-layer lane has had. The
+  lesson that parks with it, so a later slice cannot bank the construction
+  proof alone: **an address scheme that is total and injective can still be
+  unaskable.** Totality and injectivity are properties of the scheme, not of
+  a person's ability to reach a statement by typing something. A HANDLE slice
+  owes a person-side reachability arm alongside its construction proof, or it
+  reproduces v0.22's 417-of-12,777 finding with longer names. HANDLEBAR parks
+  behind it, as before.
+
+- **PREMISE LEDGER gains two convergent arrivals in one course
+  (2026-08-31).** NEEDED-BY (minimality certificates for assumptions by
+  replay-ablation) folds in as its **measurement arm**; COUNTERMODEL /
+  WITNESSED-NO folds in as the **countermodel constructor the incumbent still
+  lacks**, plus a new answer kind. Both arrived in isolated contexts. The
+  necessity claim is still explicitly **not taken** — third cycle. What moved
+  is the park's completeness, not its schedule.
+
+- **TOLL gains a deciding mechanism; the cost ledger enters its NINTH parked
+  cycle (2026-08-31).** PRICE FIRST (pre-committed cost bounds with
+  calibration) folds into the cost lane's metrology with its **log-probe**
+  named. TOLL now has an instrument (the v0.22 cold-census harness), a
+  denominator path (ORPHAN), and a deciding probe — and still an n=1
+  denominator. Counting basis unchanged (rotations since
+  `DESIGN-grounded-throughput` §10: v0.17–v0.25). Filed so the ninth
+  pass-over is a decision on the record and not attrition.
+
+- **TWO WITNESSES gains a THIRD independent arrival (2026-08-31).** Series
+  2's TWO KILNS (a second, independently written generator corroborating the
+  library) folded into the parked two-witnesses / independent-second-reading
+  shape. Unpark formulation unchanged (BOUNDED OMNISCIENCE × SPLIT-SEMANTICS,
+  TWO JUDGES behind it); fragment growth alone still does not unpark it.
+
+- **ATLAS reconfirmed as a convergent park (2026-08-31).** Series 2's ATLAS
+  (total typing of non-answers) independently reinvented the v0.21-parked
+  obstruction map. Recorded as convergent evidence for that park; trigger
+  unchanged.
+
 ## Filed at the v0.23 suite gate (2026-08-29)
 
 - **CR-P0 registry census was stale against the tree the cycle already
@@ -100,12 +224,6 @@ or commit history. Each item names the evidence that motivated it.
   is an ancestor of a later draw.
 
 ## Filed after the v0.23 Codex harness trial (early v0.24 design input)
-
-- **PROTOCOL UPTAKE -- SHIPPED as the v0.24 headline (2026-08-31; scheduled
-  by the recorded course adjudication, ROADMAP-v0.24 §1.1).** R-U1 GREEN on
-  the registered run (`experiments/protocol_uptake_run.json`, 87 receipts,
-  no blind control fired); B7 RED with both mechanisms named, R-U2 not
-  licensed, no Codex prompt-tool support claimed. Prune at release rotation.
 
 - **B7 successors -- two named probes, neither taken in v0.24 (2026-08-31).**
   (1) Plan-mode router probe: the host advertises `request_user_input` in

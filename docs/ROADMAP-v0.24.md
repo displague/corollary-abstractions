@@ -1,3 +1,48 @@
+> **CLOSED at v0.24.0.** This plan is the historical plan-of-record; it is not
+> edited except for this banner. The headline shipped as a capability *and* a
+> first-class negative: the ordinary turn became a verified uptake, and the one
+> bridge to an unmodified outside program failed honestly. Where each item went:
+>
+> - **§1 PROTOCOL UPTAKE** → **RELEASE-v0.24.0** headline. All nine scored
+>   gates green over **87** receipts; 32/32 sealed cells; blind controls at
+>   exactly their frozen ceilings (**21 / 21 / 17**, under the 24/32 bound);
+>   voiding sentence unfired; **R-U1 LICENSED**. `registered_before_the_run`
+>   true by git ancestry (`d954114` a strict ancestor of `4d44b43`).
+> - **§1 U-PRE** → **SHIPPED.** 7 of 9 candidate inputs survive; `prior_move`
+>   and `source_seed` DELETED before a schema could carry them.
+> - **§1 U-P0** → **SHIPPED.** Sealed corpus `protocol/protocols.json`
+>   **outside** `data/`; honest 8×4 table; ceilings 21/21/17 predicted then
+>   confirmed; 56 fixtures + 7 B9 mutants.
+> - **§1 U-P1** → **SHIPPED.** codex-cli 0.150.1 capture; `request_user_input`
+>   at parameters digest `23ee6f1a…`; Plan-mode caveat recorded **in advance**.
+> - **§1 AMD-3** → **SHIPPED.** Third profile `corollary/protocol`; spec
+>   sentences amended one at a time; `corollary.capabilities` stays **/2** in
+>   writing; adapter bound to the exact captured digest. 236 tests green.
+> - **§1 B7** → **RELEASE-v0.24.0**, **shipped as a negative: RED**, three
+>   steps of four, both mechanisms named. R-U2 not licensed; no Codex
+>   prompt-tool support claimed; text `WAITING` is the shipped path. Two
+>   successor probes → [ROADMAP-v0.25](ROADMAP-v0.25.md) §2 and BACKLOG.
+> - **§1 R-U3** → **not licensed either**: nothing failed and no control fired.
+> - **§1.1 the course's selection** → **RECORDED as a decision** with a
+>   disposition per incumbent; STRANGER-GATE not displaced; cost ledger's
+>   **eighth** parked cycle.
+> - **§2 prerequisites** (GUEST AXIOM inbound / ECHO amendment / HANDBACK) →
+>   **untouched as designed**; no dependant was named. Triggers unchanged →
+>   [ROADMAP-v0.25](ROADMAP-v0.25.md) §2.
+> - **§3 carried lanes** → [ROADMAP-v0.25](ROADMAP-v0.25.md) §3, each with its
+>   trigger. STRANGER-GATE gains CHOKE's second arrival; PREMISE LEDGER gains
+>   two; TOLL gains PRICE FIRST's log-probe; ORPHAN gains THIN-VERIFIER's
+>   shape. New parks (MIRROR FRAGMENT, DIMENSION rider, LAPSE, HANDLE,
+>   EARNED ASK) → BACKLOG.
+> - **CR-P0 re-seal** (the v0.23 suite gate's own filing) → **SHIPPED**:
+>   183→190 files, 37→43 sites, 19→22 kinds, seal `8aed3282…`. The live cold
+>   re-read is scheduled **after** this rotation, by design.
+> - **Release gate `[SUITE-GATE-V24]`** → **OPEN at rotation**, carried as a
+>   placeholder in RELEASE-v0.24.0 and README, to be resolved before the tag.
+>
+> No Codex prompt-tool support is claimed anywhere. The protocol fixtures are
+> construction fixtures and license no claim about human convention.
+
 # Roadmap v0.24 — an ordinary turn is an uptake, not a keyword
 
 v0.23 scheduled a person-supplied premise and got three construction
