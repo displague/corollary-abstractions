@@ -129,5 +129,22 @@
       "from DIMENSION: verdicts certify ledger-groundedness, never correspondence - internal consistency is what the checks buy, and the design says that sentence",
       "from EARNED ASK: any question the admissibility path mints must carry a partition witness; no fallback question on precondition failure"
     ]
+  },
+  "refinement_supplement": {
+    "date": "2026-08-31",
+    "reason": "maintainer-directed: after the v0.24 deep triage corrected the recorded state of the v0.22 and v0.23 cycles, one focused isolated round checked whether the corrected state changes the selected design, its gates, or its priority",
+    "isolation": "same channel as the three series: claude -p, empty non-git cwd, strict MCP config, full tool denylist, fresh session",
+    "session_id": "d9a9cbe3-534b-4b7d-8612-32331fa29520",
+    "model": "claude-opus-5",
+    "cost_usd": 0.144192,
+    "prompt_sha256_canonical_lf": "49f36ccc8ef1394fc6e5968c84d298a07c7778e602d446c098422800c6e99c43",
+    "verdict": "one gate should change; priority does not flip",
+    "adopted": [
+      "B12 round-trip identity gate: an admitted name must survive parsing byte-identically from ledger key to use-side resolution, with mutants seeded at reserved-prefix-adjacent names - the ordered parser fix is necessary but not sufficient without a standing detector",
+      "B9's majority-class baseline is computed over a self-authored corpus, so the class balance is sealed at H-PRE and reported beside the agreement figure",
+      "B5's non-persistence verdict travels with its harness scope (no-writes-observed-under-this-harness, never cannot-write)",
+      "R-H2's reading is pre-committed before the run: approximately zero is neither failure nor demand evidence"
+    ],
+    "priority": "unchanged: DIMENSION untouched by all four corrections and stays declined; STRANGER re-scoped rather than promoted - its provisioning value is now the external question POPULATION (the multi-lane bottleneck the triage confirmed), which is DEMAND's territory, so the re-scope lands on the DEMAND/STRANGER parks as an optional latency-bound parallel lane, not on the schedule"
   }
 }

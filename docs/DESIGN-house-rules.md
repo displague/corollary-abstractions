@@ -364,6 +364,9 @@ split:
   name (swept over the run's full output tree); `session_state.encode`
   refuses both record types; a fresh session's use of an admitted
   fixture symbol takes the opaque-atom path (the declaration is gone).
+  The verdict travels with its scope: this evidences *no writes observed
+  under this harness*, never *cannot write* — the standing
+  SURVIVES-with-scope rule from the v0.24 deep triage applies here too.
 - **B6 — the use-side check is live and fenced.** Every fixture use of a
   declared symbol with wrong arity refuses `USE_ARITY_MISMATCH` naming
   the declaration; every fixture use of an *undeclared* applied atom
@@ -387,7 +390,11 @@ split:
   is fitted on a **held-out half** of the fixture corpus and scored on
   the other half, on the 2-valued verdict. The threshold is anchored to
   the scored half's majority-class rate, with a declared ten-point
-  margin (a bound, not a measurement). **Voiding sentence, frozen:**
+  margin (a bound, not a measurement). Because the fixture corpus is
+  self-authored, that majority-class rate is a number the author
+  influences: the class balance is **sealed at H-PRE and reported beside
+  the agreement figure**, so the void condition is not tunable after the
+  fact. **Voiding sentence, frozen:**
   *if the surface-only admitter's out-of-half agreement with the checker
   exceeds the scored half's majority-class rate by more than ten points,
   the verdict is separable from every ledger and schema input, the
@@ -397,6 +404,15 @@ split:
   commit; a dirty or wrong-tip tree refuses.
 - **B11 — no learned path.** The import-closure assertion over the
   checker and ledger, in the `echo_population_audit` pattern.
+- **B12 — round-trip identity (added by the post-triage refinement round,
+  2026-08-31).** The census and the sweep test *refusal*; this gate tests
+  that an *admitted* name survives parsing unchanged: for every admitted
+  fixture symbol, declare then use, and assert the surface the use-side
+  checker resolves is byte-identical to the ledger key. Mutants for this
+  gate are seeded specifically at reserved-prefix-adjacent names. The
+  ordered parser fix (the `sum_total` lane) is necessary but not
+  sufficient — without this gate there is no standing detector for the
+  regression, only a one-time fix.
 
 ## 8. Result gates and licensed sentences
 
@@ -408,7 +424,11 @@ split:
   library."*
 - **R-H2 — the demand census, reported regardless:** the count of the 30
   sealed inbound hypotheses that parse as declarations, any nonzero rows
-  quoted verbatim. No threshold; no claim.
+  quoted verbatim. No threshold; no claim. **The reading is pre-committed
+  here, before any run:** approximately zero is the expected result and is
+  neither a failure (the capability never claimed to serve those
+  questions) nor evidence of demand — the number may not be read either
+  way after the fact.
 - **R-H3 — negative.** Any failed construction gate B1-B8/B10/B11 or a
   fired B9 licenses the bounded negative with its verdict table; it does
   not license loosening a clause after the score.

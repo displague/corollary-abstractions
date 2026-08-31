@@ -203,6 +203,24 @@ except the second, which is scheduled on its own terms and says why.
   **and** a collision or separator result licenses the ask-arm. Third
   cycle parked, trigger unchanged.
 
+### 2.1 Post-triage refinement round (2026-08-31)
+
+After the deep triage corrected the recorded state, one focused isolated
+round (receipt: `refinement_supplement` in
+`reports/design-direction-v0.25.json`, $0.14) adjudicated whether the
+corrections change the selection. They do not flip it. Four outcomes were
+adopted into [DESIGN-house-rules](DESIGN-house-rules.md): a new **B12
+round-trip identity gate** (an admitted name must survive parsing
+byte-identically, mutants seeded at reserved-prefix-adjacent names — the
+§2 parser-fix lane is necessary but not sufficient without a standing
+detector), the B9 class-balance seal, the B5 harness-scope sentence, and
+R-H2's pre-committed reading. One re-scope was recorded on the parks
+rather than the schedule: STRANGER's provisioning value, post-triage, is
+the external question **population** — the bottleneck now blocking
+several lanes at once — which is DEMAND's territory; procuring that
+population is latency-bound, may run alongside any headline, and licenses
+nothing by itself.
+
 ## 3. Carried, with dependants named
 
 The rule is unchanged: **every carried lane names its dependant, or it
