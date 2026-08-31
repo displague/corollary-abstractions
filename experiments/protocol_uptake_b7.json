@@ -1,0 +1,59 @@
+{
+  "schema": "corollary.protocol-uptake-b7/1",
+  "gate": "B7",
+  "design": "docs/DESIGN-protocol-uptake.md",
+  "design_clause": "§7 B7 — tool-wire round trip: function-call item -> host result -> function-call-output input -> exact request resume, served on corollary/protocol",
+  "spec": "docs/SPEC-chat-completions-skin.md",
+  "spec_clause": "¶AMD-3 (§4.2, §8)",
+  "instrument": "scripts/run_b7_roundtrip.py",
+  "profile": "corollary/protocol",
+  "verdict": "RED",
+  "green": false,
+  "why": "recorded as RED by the operator who ran the live round trip; the self-check passed, so the server's half is not the cause",
+  "self_check": {
+    "passed": true,
+    "surface": "hi",
+    "profile": "corollary/protocol",
+    "steps": [
+      {
+        "step": "function_call item",
+        "call_id": "519b3f4361e71918f7f1e40770031f510c54c6c9d3f92d602c11168fdf39b543",
+        "options": [
+          "acknowledge",
+          "greet"
+        ],
+        "ok": true
+      },
+      {
+        "step": "stale call_id refused",
+        "ok": true
+      },
+      {
+        "step": "function_call_output resumed the exact request",
+        "selected_move_id": "acknowledge",
+        "uptake_id": "614dad44f646ab9fa8bc498351cc3029015de81c8fd7796c919af5d202d24cb0",
+        "ok": true
+      }
+    ],
+    "registration": {
+      "name": "request_user_input",
+      "parameters_sha256": "397049a79df1d508170bd969f8652bef0a3920498182098f12a2fd0ad1e24de2",
+      "provenance": "scripts/run_b7_roundtrip.py self-check stand-in: U-P1's capture records the installed host's schema DIGEST and keeps the raw request outside this repository, so no in-tree schema can hash to it. This registration exercises the adapter's code path and attests nothing about a host."
+    },
+    "attests": "the server's half of B7: the AMD-3 wire shapes over loopback. It attests nothing about the installed host, because the schema digest registered here is a stand-in."
+  },
+  "live_codex_log": {
+    "path": "reports\\b7-codex-session.log",
+    "bytes": 1819,
+    "sha256": "3712aad3774a3d8847eb2800418b6d6b9024d366684e2190159b8667601a1596",
+    "mentions_prompt_tool": true,
+    "mentions_function_call_output": true,
+    "mentions_protocol_profile": true,
+    "scan_note": "a mechanical scan of the operator-supplied log, not a parse of a format this repository controls. It can refuse a GREEN verdict; it cannot license one on its own."
+  },
+  "host_capture": "experiments/protocol_uptake_host_capture.json",
+  "non_claims": [
+    "a green self-check is not B7: §7 forbids reporting B7 green from anything but a live host round trip",
+    "the text WAITING fallback cannot license B7 or R-U2"
+  ]
+}

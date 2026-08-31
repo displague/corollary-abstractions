@@ -1,0 +1,9 @@
+B7 live evidence extract - 2026-08-31 - codex-cli 0.150.1, exec (Default) mode
+source rollout: ~/.codex/sessions/2026/08/31/rollout-2026-08-31T01-44-45-01a05659-43e8-7fe3-b091-3c6bf1a9f2f9.jsonl (outside the repository, like U-P1's raw capture)
+served profile: corollary/protocol at http://127.0.0.1:8377/v1 (AMD-3 tip 44015c1); turn surface: 'hi'
+
+{"type": "function_call", "id": "fc_2cafc17de4264ff7936713b0e977aa20", "name": "request_user_input", "arguments": "{\"questions\": [{\"id\": \"protocol_uptake.candidate_move\", \"header\": \"protocol\", \"question\": \"More than one registered protocol transition remains admissible for this turn, and they lead to materially different next states. Name the candidate move to take; nothing proceeds until one is named.\", \"options\": [{\"label\": \"acknowledge\", \"description\": \"take the registered move 'acknowledge'; nothing else in the session changes\"}, {\"label\": \"greet\", \"description\": \"take the registered move 'greet'; nothing else in the session changes\"}]}]}", "call_id": "0f8dfb2294fe438db17b186fdeebfd5e7e66b6ef03be7be3ba1eee3bfd150cab"}
+{"type": "function_call_output", "id": "fco_01a05659-4b58-73b2-be4b-c6830474c01f", "call_id": "0f8dfb2294fe438db17b186fdeebfd5e7e66b6ef03be7be3ba1eee3bfd150cab", "output": "request_user_input is unavailable in Default mode"}
+
+host stderr: ERROR codex_core::tools::router: error=request_user_input is unavailable in Default mode
+server refusal of the follow-up request: {"error": {"message": "input[3] must be a message item; this server does not invent meanings for tool, reasoning, or multimodal items", "type": "invalid_request_error", "param": "input", "code": "invalid_input_item"}} - input[3] is the host's echoed function_call item (store:false replay), the wire shape AMD-3 recorded as its one risk
