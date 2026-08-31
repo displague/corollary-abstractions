@@ -38,6 +38,19 @@ never reinterpreted (negative (b), §10).
 inconsistent casing included. The one skin-assigned status is `abstained`,
 conversation profile only, for the branch that runs no turn.
 
+**¶AMD-3 (2026-08-31) registers a third profile**, `corollary/protocol`, whose
+request surface is the protocol runtime (`scripts/protocol_runtime.py`) over a
+fresh session type — DESIGN-protocol-uptake §4. Three things in this file
+change shape for it and nowhere else: `_fresh`/`_render` become explicit
+three-way dispatches (the old else-branch handed every non-kernel model to the
+slot-filling session, so an allowlist edit alone would have served the new
+profile as the demo); §4.1's prefix hash gains an additive typed serialization
+for admitted tool-result items; and one `function_call` output item may be
+emitted on the Responses path, for an already-approved need, when the request
+advertises a tool whose name AND parameters-schema digest are the pair U-P1
+captured. Everything the two shipped profiles serve is byte-unchanged, which
+the suite asserts rather than assumes.
+
 Two places where this file makes a judgement the spec left to the
 implementation, recorded here rather than left for a reader to discover:
 
@@ -95,6 +108,12 @@ from harness import (  # noqa: E402
     pending_need,
     route_line,
 )
+from protocol_runtime import (  # noqa: E402
+    ASK as PROTOCOL_ASK,
+    NEED_SLOT as PROTOCOL_NEED_SLOT,
+    ProtocolSession,
+    load_corpus as read_protocol_corpus,
+)
 from session_keys import SessionKeyRing  # noqa: E402
 
 # --------------------------------------------------------------------------
@@ -126,10 +145,43 @@ CHAT_SCHEMA = "corollary.chat/1"
 #: The trigger is recorded so the debt cannot be forgotten: **the day the
 #: proposer is attached to a session this skin serves, `corollary.chat/2`
 #: is owed**, and the spec's §5 amendment says so too.
+#:
+#: **¶AMD-3 read this trigger and did NOT bump it (2026-08-31), in writing.**
+#: The recorded trigger above is *widening the published status alphabet*:
+#: the sheet is what publishes the alphabet, so a new status changes the
+#: sheet's contract. AMD-3 registers a third profile and publishes no new
+#: status — `corollary/protocol` transports `found`, `waiting` and `refused`,
+#: all already in §5's frozen closed set (see
+#: :data:`PROTOCOL_DISPOSITION_STATUS`). Its additions to the sheet are new
+#: keys (`profiles["corollary/protocol"]`, `protocol_grammar`,
+#: `prompt_tool_adapters`), which is the additive shape the /2 contract has
+#: already carried three times without a bump — `realization`, `conformance`
+#: and `foreign_voice` all entered that way — and no byte of the kernel's
+#: `line_grammar`, the conversation's `request_grammar`, or the `honesty`
+#: line moves. A client that enumerated the alphabet learns nothing new; a
+#: client that enumerates `profiles` reads one more key. Bumping on an
+#: additive key would spend the version number on the case the trigger was
+#: written to exclude, and would leave nothing to say the day the alphabet
+#: really does widen.
 CAPABILITIES_SCHEMA = "corollary.capabilities/2"
 
 KERNEL_MODEL = "corollary/kernel"
 CONVERSATION_MODEL = "corollary/conversation"
+
+#: SPEC ¶AMD-3 (2026-08-31), DESIGN-protocol-uptake §4. The third profile: the
+#: protocol runtime over a **fresh session type**. Neither shipped profile can
+#: host it honestly — the kernel's registered line grammar and the
+#: conversation's two-slot request grammar are both sheet-published claims —
+#: so the uptake path gets its own model name rather than widening either.
+PROTOCOL_MODEL = "corollary/protocol"
+
+#: The three profiles, in listing order. `/v1/models`, the sheet, the
+#: unknown-model 404 and `ChatEngine._fresh`'s dispatch all read THIS tuple, so
+#: a fourth profile cannot be half-registered: an entry here with no `_fresh`
+#: branch raises rather than falling through to a demo session, which is
+#: exactly the bug ¶AMD-3 repairs (every non-kernel model used to construct the
+#: two-slot session).
+PROFILES = (KERNEL_MODEL, CONVERSATION_MODEL, PROTOCOL_MODEL)
 
 #: §6, the single skin-authored string in the serving path. A ``Turn`` with
 #: ``abstained=True`` carries no text at all (``conversation.py:278-281``), so
@@ -408,7 +460,81 @@ PROFILE_DESCRIPTIONS = {
     CONVERSATION_MODEL: (
         "signed slot-filling with minted clarification questions"
     ),
+    PROTOCOL_MODEL: (
+        "an ordinary turn taken as a registered interaction move, licensed "
+        "together by declared context signals and sealed corpus witnesses; "
+        "materially different transitions pause instead of guessing"
+    ),
 }
+
+# --------------------------------------------------------------------------
+# ¶AMD-3: the protocol profile's constants
+# --------------------------------------------------------------------------
+
+#: The generated protocol corpus, deliberately outside `data/` (DESIGN §3) so
+#: it joins no boot corpus count and no merged resolver graph.
+PROTOCOL_CORPUS = "protocol/protocols.json"
+
+#: U-P1's committed host capture. The prompt adapter is registered from THIS
+#: file and from nowhere else: the design forbids a guessed adapter, and a
+#: digest pasted into this module would be a second copy of a number that can
+#: rot away from the capture it claims to quote.
+HOST_CAPTURE = "experiments/protocol_uptake_host_capture.json"
+
+#: §6's `route` for this profile. One route, because the profile has one
+#: request surface: the protocol runtime.
+PROTOCOL_ROUTE = "protocol"
+
+#: Dispositions to §5's frozen status alphabet. ¶AMD-3 widens NOTHING here:
+#: every value on the right is already in the closed set, which is why the
+#: capability schema does not bump (see :data:`CAPABILITIES_SCHEMA`).
+#: An admitted transition is `found` rather than `solved` because what
+#: licensed it is a corpus witness plus a position, the same shape as the
+#: resolver route's `found`, not a computation.
+PROTOCOL_DISPOSITION_STATUS = {
+    "ENTER": "found",
+    "SUSPEND": "found",
+    "CONTINUE": "found",
+    "RESUME": "found",
+    "EXIT": "found",
+    "ASK": "waiting",
+    "REFUSED": "refused",
+}
+
+#: DESIGN §3's absence sentinel. Absence is a VALUE, not a missing key.
+PROTOCOL_ABSENT = "ABSENT"
+
+#: Where each served context signal comes from on this profile. Two are
+#: derived from real session state; three have **no HTTP source event in this
+#: slice** and are honestly `ABSENT` rather than quietly invented. The receipt
+#: carries the source-event id, so a reader can see which is which without
+#: consulting this table.
+PROTOCOL_SIGNAL_SOURCES = {
+    "pending_need": "evt-http-session-root",
+    "quote_boundary": "evt-http-no-source",
+    "expected_output_slot": "evt-http-no-source",
+    "active_task": "evt-http-no-source",
+}
+PROTOCOL_PENDING_NEED_EVENT = "evt-http-pending-need"
+PROTOCOL_STACK_EVENT = "evt-http-protocol-stack"
+PROTOCOL_SIGNALS_WITHOUT_AN_HTTP_SOURCE = (
+    "quote_boundary",
+    "expected_output_slot",
+    "active_task",
+)
+
+#: Responses body keys this profile ACTS on, so §4's ignored list must not
+#: name them (¶AMD-3). `tools` decides whether the registered prompt adapter
+#: fires; `tool_choice: "none"` suppresses the call. `parallel_tool_calls` is
+#: deliberately NOT here: the client's value changes nothing, because this
+#: profile emits at most one call whatever it says — and the body publishes
+#: `false`, which is what the catalog publishes too.
+PROTOCOL_HANDLED_RESPONSES_KEYS = frozenset({"tools", "tool_choice"})
+
+#: The one name §8 permits in an output item on this profile, filled from the
+#: capture at boot. `{}` means no adapter is registered and every ASK takes
+#: the text WAITING fallback.
+PROMPT_TOOL_ADAPTERS: dict[str, dict] = {}
 
 CODEX_REASONING_LEVELS = [
     {
@@ -774,12 +900,406 @@ def canonical_bytes(value) -> bytes:
     return canonical(value).encode("utf-8")
 
 
-def prefix_hash(prefix: list[tuple[str, str]]) -> str:
-    """§4.1. sha256 over canonical-JSON/compact of ``[[role, content], …]``."""
+def prefix_item(role: str, content) -> list:
+    """§4.1's per-item serialization — ¶AMD-3's extension, and it is ADDITIVE.
+
+    A message item serializes to ``[role, content]``, exactly as it always
+    has, so a prefix of only role/content pairs hashes to the byte it hashed
+    to before this function existed and every kernel and conversation replay
+    test stays green.
+
+    An admitted tool-result item serializes to its **type token and its typed
+    payload** — ``["function_call_output", {"call_id": …, "output": …}]`` —
+    rather than to some flattened string. Two transcripts differing only in a
+    tool result's payload therefore hash differently, which is what makes the
+    divergence check of §4 able to see a tampered tool result at all. That
+    property is tested, not assumed.
+    """
+
+    if role == "tool":
+        return [
+            "function_call_output",
+            {"call_id": content["call_id"], "output": content["output"]},
+        ]
+    return [role, content]
+
+
+def prefix_hash(prefix) -> str:
+    """§4.1. sha256 over canonical-JSON/compact of the serialized prefix."""
 
     return hashlib.sha256(
-        canonical_bytes([[role, content] for role, content in prefix])
+        canonical_bytes([prefix_item(role, content) for role, content in prefix])
     ).hexdigest()
+
+
+# --------------------------------------------------------------------------
+# ¶AMD-3: the registered prompt adapter (DESIGN §4, U-P1)
+# --------------------------------------------------------------------------
+
+
+def tool_schema_digest(parameters) -> str:
+    """The capture's own `digest_rule`, implemented verbatim.
+
+    ``sha256`` of ``json.dumps(obj, sort_keys=True, separators=(',',':'))``
+    encoded UTF-8. Deliberately NOT :func:`canonical`, which passes
+    ``ensure_ascii=False``: the two agree on every ASCII schema, and the
+    registration rule is the capture's, not this module's.
+    """
+
+    return hashlib.sha256(
+        json.dumps(parameters, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def register_prompt_tool(name: str, parameters_sha256: str, provenance: str) -> None:
+    """Register one prompt adapter for exactly one (name, schema digest) pair.
+
+    ``provenance`` is required and is **published in the capability sheet**.
+    The capture's registration rule allows no guessed adapter, so a reader has
+    to be able to see where each registered digest came from — and a
+    stand-in registered by an instrument (`scripts/run_b7_roundtrip.py`'s
+    self-check arm) has to be distinguishable, on the wire, from the digest
+    U-P1 actually captured from the installed host.
+    """
+
+    if not name or not parameters_sha256 or not provenance:
+        raise ValueError("a prompt adapter needs a name, a digest and a provenance")
+    PROMPT_TOOL_ADAPTERS[name] = {
+        "name": name,
+        "parameters_sha256": parameters_sha256,
+        "provenance": provenance,
+    }
+
+
+def load_captured_prompt_tools(repo_root: Path) -> None:
+    """Register the adapter U-P1 captured, if the capture names one.
+
+    No capture, an unreadable one, or `host_prompt_status` other than
+    `captured` registers nothing at all: the design's rule is that no suitable
+    tool means the Codex-prompt result is UNTESTED, never a guessed adapter.
+    """
+
+    capture, _error = _read_json(Path(repo_root) / HOST_CAPTURE)
+    if not isinstance(capture, dict):
+        return
+    tool = capture.get("prompt_tool")
+    if not isinstance(tool, dict):
+        return
+    if tool.get("host_prompt_status") != "captured":
+        return
+    name, digest = tool.get("name"), tool.get("parameters_sha256")
+    if not isinstance(name, str) or not isinstance(digest, str):
+        return
+    register_prompt_tool(
+        name,
+        digest,
+        f"{HOST_CAPTURE} (U-P1, {capture.get('captured_date')})",
+    )
+
+
+def match_prompt_tool(tools) -> dict | None:
+    """The advertised declaration this server is registered to answer, or None.
+
+    Exactly the capture's `adapter_registration_rule`: the pair
+    ``(name, parameters_sha256)``. A request advertising `request_user_input`
+    with any other parameters digest matches nothing and takes the text
+    WAITING fallback — it does not get a guessed adapter.
+    """
+
+    if not isinstance(tools, list):
+        return None
+    for declaration in tools:
+        if not isinstance(declaration, dict):
+            continue
+        registered = PROMPT_TOOL_ADAPTERS.get(declaration.get("name"))
+        if registered is None:
+            continue
+        if "parameters" not in declaration:
+            continue
+        if tool_schema_digest(declaration["parameters"]) != registered[
+            "parameters_sha256"
+        ]:
+            continue
+        return {**registered, "declaration": declaration}
+    return None
+
+
+# --------------------------------------------------------------------------
+# ¶AMD-3: the protocol profile's session type
+# --------------------------------------------------------------------------
+
+
+@lru_cache(maxsize=4)
+def protocol_corpus(corpus_path_str: str) -> dict:
+    """The sealed corpus, read once. Never mutated by the serving path."""
+
+    return read_protocol_corpus(corpus_path_str)
+
+
+class ProtocolProfileSession:
+    """A fresh :class:`protocol_runtime.ProtocolSession`, plus its HTTP context.
+
+    This is the **fresh session type** ¶AMD-3 registers. It is not
+    `golden_chicken_revision_session` and it is not kernel line routing: the
+    two shipped profiles' request surfaces are untouched by this file's
+    changes, and this class is the whole of the third one.
+
+    The context signals it supplies are derived from real session state or
+    are honestly absent, and nothing in between:
+
+    * ``pending_need`` — the session's own pending need: its slot while one is
+      open, the absence sentinel when none is. **A reply reports the need it
+      binds as no longer outstanding**, which is not a special case bolted on
+      but the signal's own meaning — the need this result answers is not a
+      need outstanding *for* this result — and it is what the sealed
+      reply-turn fixtures record too;
+    * ``protocol_stack`` — the session's own stack, through the runtime's top
+      summary (the runtime refuses a supplied summary contradicting its own
+      derivation, so this can only ever agree);
+    * ``quote_boundary``, ``expected_output_slot``, ``active_task`` — **no
+      HTTP source event exists for these in this slice**, so they carry the
+      absence sentinel under the `evt-http-no-source` event id. Inventing a
+      quote boundary from, say, a quoted-looking user line would be the
+      lexical trigger this whole design abolishes.
+
+    A rendered phrase never enters the admission predicate: the only things
+    this class hands the runtime are the user's surface bytes (which reach the
+    corpus through the exact-lookup channel and nowhere else), the tool
+    result's `call_id`/`output`, and the signal rows above.
+    """
+
+    __slots__ = ("session",)
+
+    def __init__(self, repo_root: Path, session_id: str) -> None:
+        self.session = ProtocolSession(
+            session_id, protocol_corpus(str(Path(repo_root) / PROTOCOL_CORPUS))
+        )
+
+    def context_rows(self, binding: str | None = None) -> list[dict]:
+        pending = self.session.pending
+        if pending is not None and binding is not None and pending["request_id"] == binding:
+            pending = None
+        rows = [
+            {
+                "signal_id": signal_id,
+                "value": PROTOCOL_ABSENT,
+                "source_event_id": source,
+            }
+            for signal_id, source in PROTOCOL_SIGNAL_SOURCES.items()
+        ]
+        if pending is not None:
+            rows[0] = {
+                "signal_id": "pending_need",
+                # The pending need's identity: the slot the verifier minted
+                # it for. It is deliberately NOT the fixtures' `probe` value —
+                # this profile opens no probe, and borrowing that value would
+                # make a clarification look like one.
+                "value": PROTOCOL_NEED_SLOT,
+                "source_event_id": PROTOCOL_PENDING_NEED_EVENT,
+            }
+        rows.append(
+            {
+                "signal_id": "protocol_stack",
+                "value": self.session.top_summary(),
+                "source_event_id": PROTOCOL_STACK_EVENT,
+            }
+        )
+        return rows
+
+    def submit(self, line: str, source: str) -> dict:
+        return self.session.submit_utterance(
+            line, self.context_rows(), source=source
+        )
+
+    def resume(self, call_id: str, output: str, source: str) -> dict:
+        return self.session.submit_reply(
+            call_id,
+            protocol_tool_answer(output, self.session.pending),
+            self.context_rows(binding=call_id),
+            source=source,
+        )
+
+
+def protocol_tool_answer(output: str, pending: dict | None) -> dict:
+    """Map a host's `function_call_output` payload onto the need's answer schema.
+
+    The wording of what a host sends back is outside the scored claim; what is
+    inside it is that **nothing is invented**. This function only ever returns
+    a `{protocol_id, move_id}` pair drawn from the *pending* candidate set, or
+    an empty dict — and an empty dict is refused by the runtime as
+    `UNBOUND_ANSWER` with the session still WAITING. A cancelled prompt, an
+    empty string, a free-form "Other", and a move name that was never a
+    candidate all land there together, which is the correct place for them:
+    no value is invented for a slot the person did not fill.
+    """
+
+    if pending is None:
+        return {}
+    token = output.strip() if isinstance(output, str) else ""
+    named_protocol: str | None = None
+    if token.startswith("{") or token.startswith("["):
+        try:
+            parsed = json.loads(token)
+        except ValueError:
+            parsed = None
+        if isinstance(parsed, dict):
+            answers = parsed.get("answers")
+            if isinstance(answers, list) and answers and isinstance(answers[0], dict):
+                parsed = answers[0]
+            if isinstance(parsed.get("protocol_id"), str):
+                named_protocol = parsed["protocol_id"]
+            for key in ("move_id", "value", "answer", "label", "text", "option"):
+                candidate = parsed.get(key)
+                if isinstance(candidate, str) and candidate.strip():
+                    token = candidate.strip()
+                    break
+            else:
+                token = ""
+    if "/" in token:
+        head, _, tail = token.partition("/")
+        named_protocol, token = head.strip(), tail.strip()
+    for candidate in pending["candidates"]:
+        if candidate["move_id"] != token:
+            continue
+        if named_protocol is not None and candidate["protocol_id"] != named_protocol:
+            continue
+        return dict(candidate)
+    return {}
+
+
+# --------------------------------------------------------------------------
+# ¶AMD-3: rendering one protocol turn
+# --------------------------------------------------------------------------
+
+
+def protocol_selection(receipt: dict) -> tuple[str, str, str] | None:
+    """``(protocol_id, move_id, family)`` of the selected move, or None.
+
+    Read off the receipt's own `candidates[]` and `protocol_witnesses[]`
+    rather than parsed out of `verifier_evidence` prose: a renderer that
+    scraped an evidence string would break the moment the runtime reworded
+    one, and the record already carries the facts.
+    """
+
+    move_id = receipt["selected_move_id"]
+    if move_id is None:
+        return None
+    protocol_ids = sorted(
+        candidate["protocol_id"]
+        for candidate in receipt["candidates"]
+        if candidate["move_id"] == move_id
+    )
+    if not protocol_ids:
+        return None
+    protocol_id = protocol_ids[0]
+    family = next(
+        (
+            witness["relation"]
+            for witness in receipt["protocol_witnesses"]
+            if witness["protocol_node_id"] == protocol_id
+        ),
+        "",
+    )
+    return protocol_id, move_id, family
+
+
+def protocol_content(receipt: dict) -> str:
+    """§6 for this profile: the minted question, or a mechanical receipt summary.
+
+    An ASK renders the verifier's own minted prompt, exactly as the
+    conversation profile does — a WAITING turn is a complete assistant turn
+    that asks a question.
+
+    Every other disposition renders four (or two) label-aligned fields read
+    straight out of the uptake receipt. This is an **inspectable rendering,
+    not conversational prose**: there is no sentence bank, no template store,
+    and no phrase whose wording could carry information the record does not.
+    And the direction matters — a rendered phrase never travels back into the
+    admission predicate. The engine's replay reads user turns and admitted
+    tool results; the assistant text it produced is compared for divergence
+    and is never an input to a transition.
+    """
+
+    if receipt["disposition"] == PROTOCOL_ASK:
+        return receipt["need"]["prompt"]
+    lines = [f"disposition: {receipt['disposition']}"]
+    selection = protocol_selection(receipt)
+    if selection is None:
+        lines.append(f"verdict    : {receipt['verifier_verdict']}")
+        return "\n".join(lines)
+    protocol_id, move_id, family = selection
+    lines.append(f"family     : {family}")
+    lines.append(f"protocol   : {protocol_id}")
+    lines.append(f"move       : {move_id}")
+    return "\n".join(lines)
+
+
+def protocol_receipt(receipt: dict) -> dict:
+    """§6.1's `protocol` row, keyed on (route, answered?) like every other.
+
+    An answering turn cites the committed corpus and the witnesses the
+    selected move rested on, so a client can recheck the claim against
+    `protocol/protocols.json`. A non-answering turn — `waiting` or `refused` —
+    claims no grounding and carries `{}`, exactly as §6.1 requires. The uptake
+    record itself is NOT this receipt: it rides in `x_corollary.uptake` on
+    every turn including those two, because DESIGN §3's `authority_delta` must
+    be a present, plaintext, empty field on the ASK and REFUSED paths.
+    """
+
+    if PROTOCOL_DISPOSITION_STATUS[receipt["disposition"]] not in ANSWERING_STATUSES:
+        return {}
+    return {
+        "uptake_id": receipt["uptake_id"],
+        "corpus_path": PROTOCOL_CORPUS,
+        "protocol_witnesses": [
+            witness["protocol_node_id"] for witness in receipt["protocol_witnesses"]
+        ],
+        "grounding": "protocol-corpus",
+    }
+
+
+def render_protocol_turn(
+    profile_session: ProtocolProfileSession,
+    role: str,
+    content,
+    *,
+    source: str,
+    with_receipt: bool = True,
+) -> Rendered:
+    """One protocol-profile input item, admitted and rendered (¶AMD-3)."""
+
+    if role == "tool":
+        receipt = profile_session.resume(
+            content["call_id"], content["output"], source
+        )
+    else:
+        receipt = profile_session.submit(content, source)
+
+    extension = {
+        "schema": CHAT_SCHEMA,
+        "profile": PROTOCOL_MODEL,
+        "route": PROTOCOL_ROUTE,
+        "status": PROTOCOL_DISPOSITION_STATUS[receipt["disposition"]],
+        # Engine vocabulary, verbatim: the verifier names WHICH rule admitted
+        # or refused, which is what makes a refusal readable at all.
+        "detail": receipt["verifier_verdict"],
+        "receipt": protocol_receipt(receipt) if with_receipt else {},
+        # The ProtocolUptake record, verbatim (A-IH6: the skin renders the
+        # engine's record, it does not rewrite it).
+        "uptake": receipt,
+    }
+    if receipt["disposition"] == PROTOCOL_ASK:
+        need = receipt["need"]
+        extension["need"] = {
+            "slot": need["slot"],
+            "prompt": need["prompt"],
+            # The two fields §6.2's conversation shape has no use for and this
+            # profile cannot work without: the id a `call_id` binds to, and
+            # the unresolved candidates the question is between.
+            "request_id": need["request_id"],
+            "options": list(receipt["unresolved_move_ids"]),
+        }
+    return Rendered(protocol_content(receipt), extension)
 
 
 # --------------------------------------------------------------------------
@@ -1290,7 +1810,7 @@ def render_conversation_turn(session, utterance: str) -> Rendered:
 class ChatRequest:
     """One validated request: the turns, the prefix, and what was ignored."""
 
-    def __init__(self, body: dict) -> None:
+    def __init__(self, body: dict, *, handled_extra=frozenset()) -> None:
         if not isinstance(body, dict):
             raise ApiError(400, "request body must be a JSON object", "invalid_body")
 
@@ -1300,11 +1820,12 @@ class ChatRequest:
                 400, "'model' is required and must be a string", "missing_model",
                 param="model",
             )
-        if model not in (KERNEL_MODEL, CONVERSATION_MODEL):
+        if model not in PROFILES:
             raise ApiError(
                 404,
                 f"model {model!r} does not exist; this server serves "
-                f"{KERNEL_MODEL!r} and {CONVERSATION_MODEL!r}",
+                + ", ".join(repr(name) for name in PROFILES[:-1])
+                + f" and {PROFILES[-1]!r}",
                 "model_not_found",
                 param="model",
             )
@@ -1335,7 +1856,7 @@ class ChatRequest:
         # message strictly before the final user turn", which includes the
         # ignored ones: a system turn changes the canonical prefix and so the
         # conversation's identity, even though it changes no served token.
-        self.messages: list[tuple[str, str]] = []
+        self.messages: list[tuple[str, object]] = []
         ignored: list[str] = []
         for index, message in enumerate(messages):
             if not isinstance(message, dict):
@@ -1354,6 +1875,12 @@ class ChatRequest:
                     "invalid_message",
                     param="messages",
                 )
+            if role == "tool":
+                # ¶AMD-3: the one admitted non-message item, and only on the
+                # profile that has a pending request for it to bind to. On
+                # every other profile this is the same 400 it always was.
+                self.messages.append(("tool", self._tool_result(message, index, model)))
+                continue
             if not isinstance(content, str):
                 raise ApiError(
                     400,
@@ -1380,41 +1907,93 @@ class ChatRequest:
                 "missing_user_turn",
                 param="messages",
             )
-        self.final_user_index = user_indices[-1]
-        self.final_user_content = self.messages[self.final_user_index][1]
+        # The served turn is the last **input item**, which is a user turn on
+        # every profile and may also be an admitted tool result on
+        # `corollary/protocol` (¶AMD-3). Before AMD-3 the two were the same
+        # index by construction, and on the two shipped profiles they still
+        # are: `role == "tool"` cannot reach `self.messages` there.
+        input_indices = [
+            i for i, (role, _) in enumerate(self.messages) if role in ("user", "tool")
+        ]
+        self.final_input_index = input_indices[-1]
+        self.final_input = self.messages[self.final_input_index]
+        self.final_user_index = self.final_input_index
 
         # §4: sampling parameters (and anything else this skin does not act
         # on) are accepted, ignored, and listed. Keys this server *enforces*
-        # are excluded: see :data:`ENFORCED_BODY_KEYS`.
+        # are excluded: see :data:`ENFORCED_BODY_KEYS`. `handled_extra` is
+        # ¶AMD-3's addition: the Responses path on `corollary/protocol` ACTS
+        # on `tools` and `tool_choice`, and a response that called a field it
+        # acted on "ignored" would be describing itself wrongly.
+        handled = HANDLED_BODY_KEYS | frozenset(handled_extra)
         ignored.extend(
             sorted(
                 key
                 for key in body
-                if key not in HANDLED_BODY_KEYS and key not in ENFORCED_BODY_KEYS
+                if key not in handled and key not in ENFORCED_BODY_KEYS
             )
         )
         self.ignored = ignored
 
-        self.prefix = self.messages[: self.final_user_index]
+        self.prefix = self.messages[: self.final_input_index]
         self.prefix_hash = prefix_hash(self.prefix)
-        self.tail = self.messages[self.final_user_index + 1 :]
+        self.tail = self.messages[self.final_input_index + 1 :]
+        # ¶AMD-3. The protocol runtime derives its `request_id` from its own
+        # session id, so a `call_id` can only survive ¶DEV-1's replay if that
+        # id is the SAME on every request of one conversation. The §4.1 prefix
+        # hash is not: it grows with the transcript. The canonical hash of the
+        # conversation's FIRST item is — it is the one part of a transcript
+        # replay cannot change — so that is this profile's session identity.
+        # The wire field `session.profile_session_id` is unchanged on all
+        # three profiles: it stays the §4.1 prefix hash.
+        self.protocol_session_id = prefix_hash(self.messages[:1])
 
         self.stream = bool(body.get("stream"))
         options = body.get("stream_options")
         self.include_usage = bool(
             isinstance(options, dict) and options.get("include_usage")
         )
-        self.prompt_text = "\n".join(content for _role, content in self.messages)
+        self.prompt_text = "\n".join(
+            content if isinstance(content, str) else canonical(content)
+            for _role, content in self.messages
+        )
+
+    @staticmethod
+    def _tool_result(message: dict, index: int, model: str) -> dict:
+        """§4.2's one admitted non-message item, validated rather than guessed."""
+
+        if model != PROTOCOL_MODEL:
+            raise ApiError(
+                400,
+                f"messages[{index}] is a tool result, which only "
+                f"{PROTOCOL_MODEL!r} admits; no other profile has a pending "
+                "request for one to bind to",
+                "invalid_message",
+                param="messages",
+            )
+        call_id = message.get("call_id")
+        output = message.get("output")
+        if not isinstance(call_id, str) or not call_id:
+            raise ApiError(
+                400,
+                f"messages[{index}].call_id must be a non-empty string",
+                "invalid_message",
+                param="messages",
+            )
+        if not isinstance(output, str):
+            raise ApiError(
+                400,
+                f"messages[{index}].output must be a string",
+                "invalid_message",
+                param="messages",
+            )
+        return {"call_id": call_id, "output": output}
 
     def next_prefix_hash(self, content: str) -> str:
         """The prefix hash of the transcript a client continuing from here sends."""
 
         return prefix_hash(
-            [
-                *self.prefix,
-                ("user", self.final_user_content),
-                ("assistant", content),
-            ]
+            [*self.prefix, self.final_input, ("assistant", content)]
         )
 
 
@@ -1437,9 +2016,25 @@ class ResponsesRequest:
                 "invalid_previous_response_id",
                 param="previous_response_id",
             )
+        model = body.get("model")
+        # ¶AMD-3. The adapter registers for exactly one (name, schema digest)
+        # pair, on exactly one profile. `tool_choice: "none"` suppresses the
+        # call the way the Responses contract says it should — the need is
+        # still opened, it is simply presented as text.
+        self.tool_choice = body.get("tool_choice")
+        self.prompt_tool = (
+            match_prompt_tool(body.get("tools"))
+            if model == PROTOCOL_MODEL and self.tool_choice != "none"
+            else None
+        )
+
         prior = engine.response_transcript(previous) if previous else []
-        incoming = self._messages(body.get("input"))
-        if not any(role == "user" and content for role, content in incoming):
+        incoming = self._messages(body.get("input"), model)
+        has_user_text = any(
+            role == "user" and content for role, content in incoming
+        )
+        has_tool_result = any(role == "tool" for role, _ in incoming)
+        if not has_user_text and not has_tool_result:
             raise ApiError(
                 400,
                 "Responses input must contribute new, non-empty user text; "
@@ -1453,19 +2048,42 @@ class ResponsesRequest:
         }
         chat_body.update(
             {
-                "model": body.get("model"),
+                "model": model,
                 "messages": [
-                    {"role": role, "content": content}
+                    self._chat_message(role, content)
                     for role, content in (*prior, *incoming)
                 ],
                 "stream": bool(body.get("stream")),
             }
         )
-        self.chat = ChatRequest(chat_body)
+        self.chat = ChatRequest(
+            chat_body,
+            handled_extra=(
+                PROTOCOL_HANDLED_RESPONSES_KEYS
+                if model == PROTOCOL_MODEL
+                else frozenset()
+            ),
+        )
         self.stream = self.chat.stream
 
+    @property
+    def admitted_tools(self) -> list:
+        """Exactly the declarations this profile took up — never a blanket echo."""
+
+        return [self.prompt_tool["declaration"]] if self.prompt_tool else []
+
+    @staticmethod
+    def _chat_message(role: str, content) -> dict:
+        if role == "tool":
+            return {
+                "role": "tool",
+                "call_id": content["call_id"],
+                "output": content["output"],
+            }
+        return {"role": role, "content": content}
+
     @classmethod
-    def _messages(cls, value) -> list[tuple[str, str]]:
+    def _messages(cls, value, model=None) -> list[tuple[str, object]]:
         if isinstance(value, str):
             return [("user", value)]
         if not isinstance(value, list) or not value:
@@ -1476,9 +2094,22 @@ class ResponsesRequest:
                 param="input",
             )
 
-        messages = []
+        messages: list[tuple[str, object]] = []
         for index, item in enumerate(value):
-            if not isinstance(item, dict) or item.get("type", "message") != "message":
+            item_type = item.get("type", "message") if isinstance(item, dict) else None
+            if (
+                item_type == "function_call_output"
+                and isinstance(item, dict)
+                and model == PROTOCOL_MODEL
+            ):
+                # ¶AMD-3 amends §4.2's non-message refusal for EXACTLY this
+                # item type, on exactly this profile. Every other non-message
+                # item — a reasoning item, a `function_call` echo, a
+                # multimodal part — still refuses below rather than being
+                # guessed at.
+                messages.append(("tool", cls._function_call_output(item, index)))
+                continue
+            if not isinstance(item, dict) or item_type != "message":
                 raise ApiError(
                     400,
                     f"input[{index}] must be a message item; this server does "
@@ -1496,6 +2127,27 @@ class ResponsesRequest:
                 )
             messages.append((role, cls._content(item.get("content"), index)))
         return messages
+
+    @staticmethod
+    def _function_call_output(item: dict, index: int) -> dict:
+        call_id = item.get("call_id")
+        output = item.get("output")
+        if not isinstance(call_id, str) or not call_id:
+            raise ApiError(
+                400,
+                f"input[{index}].call_id must be a non-empty string: a tool "
+                "result with no call id binds to no pending request",
+                "invalid_input_item",
+                param="input",
+            )
+        if not isinstance(output, str):
+            raise ApiError(
+                400,
+                f"input[{index}].output must be a string",
+                "invalid_input_item",
+                param="input",
+            )
+        return {"call_id": call_id, "output": output}
 
     @staticmethod
     def _content(value, index: int) -> str:
@@ -1715,6 +2367,10 @@ class ChatEngine:
     ) -> None:
         self.repo_root = repo_root
         self.tokens = TokenCounter(repo_root)
+        # ¶AMD-3: the adapter U-P1 captured, registered from the capture and
+        # from nowhere else. Idempotent, so a second engine re-reads rather
+        # than duplicating.
+        load_captured_prompt_tools(repo_root)
         self._lock = threading.Lock()
         self._cache: "OrderedDict[str, _CacheEntry]" = OrderedDict()
         self._cache_size = cache_size
@@ -1819,24 +2475,69 @@ class ChatEngine:
             keyring=SessionKeyRing.ephemeral(),
         )
 
+    def _protocol_session(self, session_id: str) -> ProtocolProfileSession:
+        """¶AMD-3: the fresh session type, mounted over the protocol runtime.
+
+        Not `golden_chicken_revision_session` and not kernel line routing —
+        which is the whole point of replacing the else-branch below.
+        """
+
+        return ProtocolProfileSession(self.repo_root, session_id)
+
     def _fresh(self, model: str, request: ChatRequest):
+        """¶AMD-3: an explicit three-way dispatch, with no fall-through.
+
+        Until AMD-3 this read `if kernel: … else: conversation`, so every
+        non-kernel model — including one the model list had not registered —
+        constructed the two-slot demo session. An allowlist edit alone would
+        therefore have served `corollary/protocol` as the conversation
+        profile. The dispatch is now exhaustive over :data:`PROFILES` and
+        raises on anything else, so a fourth profile cannot be half-added.
+        """
+
         if model == KERNEL_MODEL:
             return self._kernel_session(request.prefix_hash)
-        return self._conversation_session(request.prefix_hash)
+        if model == CONVERSATION_MODEL:
+            return self._conversation_session(request.prefix_hash)
+        if model == PROTOCOL_MODEL:
+            return self._protocol_session(request.protocol_session_id)
+        raise ApiError(  # pragma: no cover - ChatRequest 404s first
+            404,
+            f"model {model!r} has no registered session object",
+            "model_not_found",
+            param="model",
+        )
 
     def _render(
-        self, model: str, session, line: str, *, with_receipt: bool = True
+        self, model: str, session, role: str, content, *, with_receipt: bool = True
     ) -> Rendered:
         if model == KERNEL_MODEL:
             return render_kernel_turn(
-                self.repo_root, session, line, with_receipt=with_receipt
+                self.repo_root, session, content, with_receipt=with_receipt
             )
-        try:
-            return render_conversation_turn(session, line)
-        except ValueError as exc:
-            # §10: the engine's own message, under a code distinct from
-            # transcript_divergence so a client can tell them apart.
-            raise ApiError(409, str(exc), "slot_conflict", param="messages") from None
+        if model == PROTOCOL_MODEL:
+            return render_protocol_turn(
+                session,
+                role,
+                content,
+                source=f"http:{PROTOCOL_MODEL}",
+                with_receipt=with_receipt,
+            )
+        if model == CONVERSATION_MODEL:
+            try:
+                return render_conversation_turn(session, content)
+            except ValueError as exc:
+                # §10: the engine's own message, under a code distinct from
+                # transcript_divergence so a client can tell them apart.
+                raise ApiError(
+                    409, str(exc), "slot_conflict", param="messages"
+                ) from None
+        raise ApiError(  # pragma: no cover - ChatRequest 404s first
+            404,
+            f"model {model!r} has no registered renderer",
+            "model_not_found",
+            param="model",
+        )
 
     # -- §4 replay --------------------------------------------------------
 
@@ -1871,7 +2572,7 @@ class ChatEngine:
             session = self._fresh(request.model, request)
             self._replay_prefix(request, session)
 
-        rendered = self._render(request.model, session, request.final_user_content)
+        rendered = self._render(request.model, session, *request.final_input)
 
         for role, content in request.tail:
             if role == "assistant":
@@ -1910,9 +2611,9 @@ class ChatEngine:
 
         last_produced: str | None = None
         for role, content in request.prefix:
-            if role == "user":
+            if role in ("user", "tool"):
                 last_produced = self._render(
-                    request.model, session, content, with_receipt=False
+                    request.model, session, role, content, with_receipt=False
                 ).content
             elif role == "assistant":
                 _check_divergence(content, last_produced)
@@ -1940,7 +2641,7 @@ class ChatEngine:
         """Keep only replay material; no engine authority or durable state."""
 
         transcript = [
-            *request.messages[: request.final_user_index + 1],
+            *request.messages[: request.final_input_index + 1],
             ("assistant", rendered.content),
         ]
         with self._response_lock:
@@ -1991,6 +2692,41 @@ class ChatEngine:
                     "description": PROFILE_DESCRIPTIONS[CONVERSATION_MODEL],
                     "resume": "the next user message is the reply",
                 },
+                # ¶AMD-3. A block of its own; neither shipped block above
+                # moves by a byte.
+                PROTOCOL_MODEL: {
+                    "session_object": "protocol_runtime.ProtocolSession",
+                    "boot": (
+                        "a fresh protocol session over the sealed protocol "
+                        "corpus; an episode stack, one pending need, no "
+                        "durable state"
+                    ),
+                    "grammar": (
+                        "no line grammar and no request grammar: the request "
+                        "surface is the protocol runtime, which takes the "
+                        "utterance as an exact lookup key into the sealed "
+                        "corpus and admits a transition only from witnesses "
+                        "and declared context signals"
+                    ),
+                    "description": PROFILE_DESCRIPTIONS[PROTOCOL_MODEL],
+                    "resume": (
+                        "a registered function_call_output whose call_id is "
+                        "the pending request_id, or the next user message "
+                        "under the text WAITING fallback"
+                    ),
+                    "honesty": (
+                        "uptake is this system's own, not a claim about "
+                        "private human intent; exact conformance to the "
+                        "sealed transition table does not establish that the "
+                        "table describes human convention"
+                    ),
+                    "tool_capability": (
+                        "this profile emits at most ONE function call per "
+                        "turn, so the catalog's supports_parallel_tool_calls "
+                        "and the Responses body's parallel_tool_calls both "
+                        "read false and agree"
+                    ),
+                },
             },
             "line_grammar": rows,
             "request_grammar": {
@@ -2018,6 +2754,11 @@ class ChatEngine:
                 "write_gate": list(WRITE_GATE_STATUSES),
                 "skin_assigned": list(SKIN_ASSIGNED_STATUSES),
             },
+            "protocol_grammar": self.protocol_grammar_block(),
+            "prompt_tool_adapters": [
+                dict(adapter)
+                for _name, adapter in sorted(PROMPT_TOOL_ADAPTERS.items())
+            ],
             "realization": realization_row(str(self.repo_root)),
             "conformance": conformance_row(str(self.repo_root)),
             "foreign_voice": foreign_voice_row(str(self.repo_root)),
@@ -2034,6 +2775,83 @@ class ChatEngine:
         assert_no_demo_name(sheet, "GET /v1/capabilities")
         return sheet
 
+    def protocol_grammar_block(self) -> dict:
+        """¶AMD-3's generated sheet block, read from the live sealed corpus.
+
+        Generated, never copied — §7's rule for every other block. A row here
+        that disagreed with `protocol/protocols.json` would be the sheet
+        rotting in its first field, and the moves are enumerated from the
+        corpus's own nodes so a regenerated corpus republishes itself.
+
+        A row this profile cannot reach is published rather than hidden, the
+        way the gloss row is: the three context signals with no HTTP source
+        event are named here with the reason, so a client can see that a
+        `quoted_datum` move is unreachable over HTTP in this slice instead of
+        discovering it from an unexplained refusal.
+        """
+
+        corpus, error = _read_json(self.repo_root / PROTOCOL_CORPUS)
+        if not isinstance(corpus, dict):
+            return {
+                "served": False,
+                "corpus_path": PROTOCOL_CORPUS,
+                "reason": f"no readable protocol corpus at {PROTOCOL_CORPUS}: {error}",
+            }
+        moves = [
+            {
+                "protocol_id": node["protocol_id"],
+                "family": node["family"],
+                "move_id": move["move_id"],
+                "kind": move["kind"],
+                "requires": {
+                    predicate["signal_id"]: predicate["required_value"]
+                    for predicate in move["required_signal_predicates"]
+                },
+            }
+            for node in corpus["nodes"]
+            for move in node["moves"]
+        ]
+        return {
+            "served": True,
+            "corpus_path": PROTOCOL_CORPUS,
+            "corpus_schema": corpus["schema"],
+            "generator": corpus["generator"],
+            "runtime_module": corpus["runtime_module"],
+            "normalization": corpus["normalization"],
+            "predicate_language": corpus["predicate_language"],
+            "absence_sentinel": corpus["absence_sentinel"],
+            "families": list(corpus["families"]),
+            "move_kinds": list(corpus["move_kinds"]),
+            "context_signal_ids": list(corpus["context_signal_ids"]),
+            "stack_depth_cap": corpus["stack_depth_cap"],
+            "moves": moves,
+            "statuses": sorted(set(PROTOCOL_DISPOSITION_STATUS.values())),
+            "dispositions": dict(PROTOCOL_DISPOSITION_STATUS),
+            "served_context_signals": {
+                "pending_need": (
+                    "derived from this session's own pending need: the slot "
+                    "the verifier minted it for, or the absence sentinel"
+                ),
+                "protocol_stack": (
+                    "derived from this session's own episode stack, through "
+                    "the runtime's top summary"
+                ),
+                **{
+                    signal: (
+                        "no HTTP source event exists for this signal in this "
+                        "slice, so it carries the absence sentinel; it is "
+                        "published rather than hidden"
+                    )
+                    for signal in PROTOCOL_SIGNALS_WITHOUT_AN_HTTP_SOURCE
+                },
+            },
+            "no_authority": (
+                "no protocol move may authorize WRITE, process creation, "
+                "filesystem, shell, or network access; authority_delta is a "
+                "present, plaintext, empty field on every served receipt"
+            ),
+        }
+
     def model_list(self) -> dict:
         standard_models = [
             {
@@ -2043,7 +2861,7 @@ class ChatEngine:
                 "owned_by": "corollary",
                 "description": PROFILE_DESCRIPTIONS[model],
             }
-            for model in (KERNEL_MODEL, CONVERSATION_MODEL)
+            for model in PROFILES
         ]
         models = {
             "object": "list",
@@ -2071,14 +2889,30 @@ class ChatEngine:
                     "include_apps_usage_instructions": False,
                     "support_verbosity": False,
                     "truncation_policy": {"mode": "tokens", "limit": 10000},
+                    # ¶AMD-3 reconciles this key with the Responses body on
+                    # the protocol profile: false here, false there, because
+                    # the profile emits at most one call. The two shipped
+                    # profiles keep the values (and the pre-existing
+                    # body/catalog disagreement) they shipped with; that
+                    # contradiction is out of this slice's scope and is
+                    # deliberately not copied onto the new row.
                     "supports_parallel_tool_calls": False,
                     "context_window": 32768,
-                    "experimental_supported_tools": [],
+                    # Exactly the captured supported tool, on exactly the
+                    # profile that answers it (DESIGN §12). The KEY SET stays
+                    # identical across all three rows on purpose: Codex
+                    # deserializes this catalog, and a key present on one row
+                    # only is a compatibility risk taken for nothing. The
+                    # reconciliation note lives in the capability sheet's
+                    # profile block instead.
+                    "experimental_supported_tools": (
+                        sorted(PROMPT_TOOL_ADAPTERS)
+                        if model == PROTOCOL_MODEL
+                        else []
+                    ),
                     "input_modalities": ["text"],
                 }
-                for priority, model in enumerate(
-                    (KERNEL_MODEL, CONVERSATION_MODEL), start=1
-                )
+                for priority, model in enumerate(PROFILES, start=1)
             ],
         }
         assert_no_demo_name(models, "GET /v1/models")
@@ -2197,12 +3031,72 @@ def _response_usage(usage: dict | None) -> dict | None:
     }
 
 
+def prompt_call_item(rendered: Rendered, tool: dict) -> dict | None:
+    """§8/¶AMD-3: ONE `function_call` output item for an approved need.
+
+    Returns None unless this turn actually opened a need — the adapter
+    represents an **already-approved** need and never manufactures one, so a
+    turn that selected a move or refused emits the ordinary message item.
+
+    The arguments are the capture's own `mapping_to_need`, followed literally:
+    one question, `id` = the need's slot, `header` = the fixed literal
+    `protocol`, `question` = the verifier-minted prompt, and one
+    `{label, description}` option per unresolved candidate move id in
+    canonical order. Question wording is outside the scored claim (DESIGN §4);
+    the typed need and its exact binding are what count.
+
+    One recorded caveat: the captured tool's description says `id` should be
+    snake_case, and the mapping says `id` is the slot, which is
+    `protocol_uptake.candidate_move` — snake_case but for the dotted
+    namespace. The mapping is the committed registration record, so it is
+    followed literally rather than sanitized into something the capture does
+    not say; whether the installed host accepts it is exactly what B7
+    measures.
+    """
+
+    need = rendered.x_corollary.get("need")
+    if not need:
+        return None
+    arguments = {
+        "questions": [
+            {
+                "id": need["slot"],
+                "header": "protocol",
+                "question": need["prompt"],
+                "options": [
+                    {
+                        "label": move_id,
+                        "description": (
+                            f"take the registered move {move_id!r}; nothing "
+                            "else in the session changes"
+                        ),
+                    }
+                    for move_id in need["options"]
+                ],
+            }
+        ]
+    }
+    return {
+        "id": "fc_" + uuid.uuid4().hex,
+        "type": "function_call",
+        "status": "completed",
+        "name": tool["name"],
+        # The binding: the host's result must come back on this exact id, and
+        # the runtime resumes only the request that minted it.
+        "call_id": need["request_id"],
+        "arguments": json.dumps(arguments, ensure_ascii=False),
+    }
+
+
 def response_body(
     request: ChatRequest,
     rendered: Rendered,
     usage: dict | None,
     *,
     response_id: str | None = None,
+    function_call: dict | None = None,
+    admitted_tools: list | None = None,
+    tool_choice: str | None = None,
 ) -> dict:
     """§6 Responses representation of the same completed engine turn."""
 
@@ -2219,6 +3113,7 @@ def response_body(
         "role": "assistant",
         "content": [part],
     }
+    protocol = request.model == PROTOCOL_MODEL
     body = {
         "id": response_id or _response_id(),
         "object": "response",
@@ -2227,10 +3122,20 @@ def response_body(
         "error": None,
         "incomplete_details": None,
         "model": request.model,
-        "output": [item],
-        "parallel_tool_calls": True,
-        "tool_choice": "auto",
-        "tools": [],
+        "output": [function_call] if function_call is not None else [item],
+        # ¶AMD-3: false on the protocol profile, where it AGREES with the
+        # catalog's `supports_parallel_tool_calls: false` because the profile
+        # emits at most one call. The two shipped profiles keep the value
+        # they shipped with, contradiction and all — repairing that is out of
+        # this slice's scope, and copying it onto the new profile was the
+        # thing the design forbade.
+        "parallel_tool_calls": not protocol,
+        "tool_choice": (
+            tool_choice
+            if protocol and isinstance(tool_choice, str) and tool_choice
+            else "auto"
+        ),
+        "tools": list(admitted_tools or []),
         "x_corollary": rendered.x_corollary,
     }
     mapped_usage = _response_usage(usage)
@@ -2240,12 +3145,22 @@ def response_body(
 
 
 def response_events(body: dict) -> list[tuple[str, dict]]:
-    """§8 named Responses SSE lifecycle, with one exact text delta."""
+    """§8 named Responses SSE lifecycle, with one exact text delta.
+
+    ¶AMD-3 adds the second shape: when the one output item is the protocol
+    profile's `function_call`, the lifecycle is the function-call one —
+    created, output-item added (empty arguments), one arguments delta,
+    arguments done, output-item done, completed. There are no content-part
+    events, because a function-call item has no content parts; inventing a
+    text part around it would be exactly the synthetic item §8 refuses.
+    """
 
     completed_item = body["output"][0]
-    completed_part = completed_item["content"][0]
     created = {**body, "status": "in_progress", "output": []}
     created.pop("usage", None)
+    if completed_item["type"] == "function_call":
+        return _sequenced(_function_call_events(body, created, completed_item))
+    completed_part = completed_item["content"][0]
     in_progress_item = {**completed_item, "status": "in_progress", "content": []}
     empty_part = {**completed_part, "text": ""}
     raw = [
@@ -2285,9 +3200,46 @@ def response_events(body: dict) -> list[tuple[str, dict]]:
         ("response.output_item.done", {"output_index": 0, "item": completed_item}),
         ("response.completed", {"response": body}),
     ]
+    return _sequenced(raw)
+
+
+def _sequenced(raw: list[tuple[str, dict]]) -> list[tuple[str, dict]]:
     return [
         (name, {"type": name, "sequence_number": sequence, **payload})
         for sequence, (name, payload) in enumerate(raw)
+    ]
+
+
+def _function_call_events(
+    body: dict, created: dict, completed_item: dict
+) -> list[tuple[str, dict]]:
+    """¶AMD-3's §8 lifecycle for the one function-call item this skin emits."""
+
+    in_progress_item = {**completed_item, "status": "in_progress", "arguments": ""}
+    return [
+        ("response.created", {"response": created}),
+        (
+            "response.output_item.added",
+            {"output_index": 0, "item": in_progress_item},
+        ),
+        (
+            "response.function_call_arguments.delta",
+            {
+                "output_index": 0,
+                "item_id": completed_item["id"],
+                "delta": completed_item["arguments"],
+            },
+        ),
+        (
+            "response.function_call_arguments.done",
+            {
+                "output_index": 0,
+                "item_id": completed_item["id"],
+                "arguments": completed_item["arguments"],
+            },
+        ),
+        ("response.output_item.done", {"output_index": 0, "item": completed_item}),
+        ("response.completed", {"response": body}),
     ]
 
 
@@ -2404,8 +3356,20 @@ class ChatHandler(BaseHTTPRequestHandler):
         usage = self.engine.tokens.usage(request.prompt_text, rendered.content)
         if path == "/v1/responses":
             response_id = _response_id()
+            # ¶AMD-3. Only a digest-exact registered tool, only on the
+            # protocol profile, and only for a need this turn actually
+            # opened; every other combination is the text WAITING fallback
+            # with `x_corollary.need`, unchanged.
+            tool = responses_request.prompt_tool
+            call = prompt_call_item(rendered, tool) if tool is not None else None
             response = response_body(
-                request, rendered, usage, response_id=response_id
+                request,
+                rendered,
+                usage,
+                response_id=response_id,
+                function_call=call,
+                admitted_tools=responses_request.admitted_tools,
+                tool_choice=responses_request.tool_choice,
             )
             self.engine.remember_response(response_id, request, rendered)
             if responses_request.stream:

@@ -866,10 +866,41 @@ def score_b6(run: Pass) -> dict[str, Any]:
 # --------------------------------------------------------------------------
 
 
+#: The artifact `scripts/run_b7_roundtrip.py` writes after the orchestrator's
+#: live Codex round trip. It does not exist until that run happens, and this
+#: runner never writes it: B7 is the one gate this repository cannot score
+#: from its own code, so the verdict is READ from the instrument that measured
+#: it rather than computed here from something that did not.
+B7_ARTIFACT = "experiments/protocol_uptake_b7.json"
+
+
 def report_b7(prereg: dict[str, Any]) -> dict[str, Any]:
     capture_path = REPO / HOST_CAPTURE
     capture = json.loads(capture_path.read_text(encoding="utf-8")) if capture_path.exists() else {}
     tool = capture.get("prompt_tool", {})
+
+    recorded_path = REPO / B7_ARTIFACT
+    if recorded_path.exists():
+        recorded = json.loads(recorded_path.read_text(encoding="utf-8"))
+        verdict = recorded["verdict"]
+        return {
+            "verdict": verdict,
+            "green": verdict == "GREEN",
+            "clause": prereg["gates"]["B7"],
+            "why": recorded.get("why", ""),
+            "recorded_by": recorded.get("instrument"),
+            "recorded_in": B7_ARTIFACT,
+            "recorded_sha256": sha256_lf(recorded_path),
+            "self_check_passed": bool(recorded.get("self_check", {}).get("passed")),
+            "live_codex_log": recorded.get("live_codex_log"),
+            "u_p1_host_prompt_status": tool.get("host_prompt_status"),
+            "u_p1_prompt_tool": tool.get("name"),
+            "u_p1_parameters_sha256": tool.get("parameters_sha256"),
+            "blocks": "R-U2",
+            "does_not_block": "R-U1, which §9 gates on B1-B6 and B8-B10",
+            "misses": list(recorded.get("misses", [])),
+        }
+
     return {
         "verdict": "PENDING_AMD3",
         "green": False,
@@ -1184,7 +1215,11 @@ def run(
         "construction_gate": gate,
         "gate_greens": greens,
         "gate_reds": reds,
-        "gates_pending": list(PENDING_GATES),
+        "gates_pending": [
+            name
+            for name in PENDING_GATES
+            if gate[name].get("verdict") == "PENDING_AMD3"
+        ],
         "voiding_sentence": {
             "text": prereg["control_labels"]["voiding_sentence"],
             "evaluation": voiding,
@@ -1211,9 +1246,20 @@ def run(
             },
             "R-U2": {
                 "requires": "B7 runs and passes",
-                "green": False,
-                "licensed_sentence": None,
-                "why_not": "B7 is PENDING_AMD3; text WAITING cannot license R-U2",
+                "green": gate["B7"].get("verdict") == "GREEN",
+                "licensed_sentence": (
+                    "The installed Codex host presented a verifier-approved need "
+                    "as a structured prompt tool, returned its result, and "
+                    "resumed the exact pending request."
+                )
+                if gate["B7"].get("verdict") == "GREEN"
+                else None,
+                "why_not": None
+                if gate["B7"].get("verdict") == "GREEN"
+                else (
+                    f"B7 is {gate['B7'].get('verdict')}; text WAITING cannot "
+                    "license R-U2"
+                ),
             },
             "R-U3": {
                 "requires": "a failed B2/B3 or a fired blind control",

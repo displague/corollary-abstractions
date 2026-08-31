@@ -21,10 +21,72 @@ second protocol renderer over the same `ChatEngine`. It is not a new engine,
 does not consume `instructions` or tools, and must return the same rendered
 answer bytes and `x_corollary` record as chat completions for the same input.
 
-## 1. What the engine actually is (two session objects, one engine)
+> **¶AMD-3 — a third profile, and the tool call it can make (2026-08-31).**
+> `docs/DESIGN-protocol-uptake.md` §4 needs a served surface for protocol
+> uptake, and neither shipped profile can host it honestly: the kernel
+> profile's registered line grammar (§5) and abstention are published claims,
+> and the conversation profile's closed two-slot request grammar (§3) declares
+> any widening an engine change. This amendment therefore **registers a third
+> profile, `corollary/protocol`**, whose request surface is the protocol
+> runtime (`scripts/protocol_runtime.py`) over a **fresh session type** — not
+> the slot-filling session, not kernel line routing.
+>
+> **What it amends, sentence by sentence:** §1's "two session objects" and "no
+> third path"; §2's `/v1/models` row; §3's profile table and the unknown-model
+> refusal; §4's request mapping (the served turn is the last *input item*) and
+> §4.1's canonical prefix hash (extended with a typed serialization of every
+> admitted tool-result item, **additively**); §4.2's refusal of non-message
+> input items, for **exactly** the `function_call_output` type on **this**
+> profile; §6, §6.1 and §6.2 for this profile's content rule, receipt row and
+> need shape; §7 for the generated protocol block; §8's "no synthetic tool or
+> reasoning item is introduced", plus the SSE lifecycle of the one
+> function-call item; and §10's error list.
+>
+> **What it does not amend, and this is the load-bearing half:** the kernel
+> profile's §5 line-grammar claim, the conversation profile's §3
+> request-grammar claim, and those two profiles' generated capability-sheet
+> blocks. `line_grammar`, `request_grammar` and the `honesty` string are
+> byte-unchanged, asserted in `tests/test_serve_chat.py`. The `hello` turn
+> that forced the protocol design reached the kernel profile, and **refusal
+> is still that profile's honest answer**; the repaired entrance is the same
+> bytes addressed to `corollary/protocol`.
+>
+> **`corollary.capabilities/2` does NOT bump, and here is the trigger being
+> read rather than waved past.** ¶AMD-1 records the trigger exactly: *"the
+> sheet is what publishes the alphabet, so widening the alphabet changes the
+> sheet's contract."* AMD-3 widens nothing. The protocol profile transports
+> `found`, `waiting` and `refused` — three statuses already in §5's frozen
+> closed set — because its dispositions map onto them
+> (`ENTER`/`SUSPEND`/`CONTINUE`/`RESUME`/`EXIT` → `found`, `ASK` → `waiting`,
+> `REFUSED` → `refused`). What the sheet gains is *keys*:
+> `profiles["corollary/protocol"]`, `protocol_grammar`, and
+> `prompt_tool_adapters`. That is the additive shape /2 has already carried
+> three times without a bump — `realization`, `conformance` and
+> `foreign_voice` all entered that way. A client that enumerated the alphabet
+> learns nothing new; a client that enumerates `profiles` reads one more key.
+> Bumping here would spend the version number on the case the trigger was
+> written to exclude and leave nothing to say the day the alphabet really does
+> widen. **`corollary.chat` also stays at /1**: no status reachable on that
+> wire changed, and ¶AMD-1's separate debt (the day a proposer is attached to
+> a session this skin serves) is untouched by this amendment. Everything AMD-3
+> adds to `x_corollary` is profile-scoped and optional — `uptake` on
+> `corollary/protocol`, two extra keys inside that profile's `need` — and no
+> byte of a kernel or conversation response moves.
+>
+> **One risk, recorded rather than discovered later.** §4.2's amendment is for
+> exactly `function_call_output`, as the design's bullet list says. A host that
+> replays its own `function_call` item back in `input` — which a Codex CLI
+> running with `store: false` may do rather than using
+> `previous_response_id` — is therefore still refused with `400
+> invalid_input_item`. If B7's live round trip fails on that wire shape, it is
+> a red or `UNTESTED` result and a further amendment's problem, not something
+> this one may quietly widen to avoid.
 
-The repository ships one session engine with **two session objects**, and
-this spec serves both rather than pretending they are one:
+## 1. What the engine actually is (three session objects, one engine)
+
+The repository ships one session engine with **three session objects** — two
+from the first cycle and one registered by ¶AMD-3 — and this spec serves all
+three rather than pretending they are one:
 
 - **`CoreSession`** (`scripts/harness.py:533`) — boots the capability
   matrix and routes the **registered line grammar** through
@@ -40,11 +102,24 @@ this spec serves both rather than pretending they are one:
   key-signed, owner-private slot-filling session:
   `say(utterance) -> Turn` (`scripts/conversation.py:253`) over the
   bounded request grammar (`scripts/request_grammar.py`).
+- **`ProtocolSession`** (`scripts/protocol_runtime.py:276`) — ¶AMD-3's
+  addition: the protocol runtime's uptake session, owning an episode stack,
+  one pending need, and an append-only list of `ProtocolUptake` receipts.
+  `submit_utterance(surface, context_signals)` and
+  `submit_reply(request_id, answer, context_signals)` are its whole input
+  surface. The utterance reaches the sealed protocol corpus
+  (`protocol/protocols.json`) as an exact normalized lookup key and by no
+  other channel; the returned witnesses, never the surface bytes, enter the
+  admission predicate beside the context signals.
 
-Both drive the same `Controller`/verifier machinery
-(`scripts/controller.py`); the skin adds **no third path**. A chat
-conversation selects which object serves it via the request's `model`
-field (§3). The TTY is today the interactive skin over `CoreSession`
+The first two drive the same `Controller`/verifier machinery
+(`scripts/controller.py`); the third drives the protocol runtime's own
+verifier over the sealed protocol corpus. **The skin still adds no path of
+its own** — that is what "no third path" was always about, and it remains
+true of a three-profile server: ¶AMD-3 registers a third *engine* object and
+renders it, exactly as A-IH6 requires, rather than inventing a surface inside
+this file. A chat conversation selects which object serves it via the
+request's `model` field (§3). The TTY is today the interactive skin over `CoreSession`
 (`harness.main()`, `scripts/harness.py:2411`); `ConversationSession` has
 so far been driven by tests and a scripted demo printer, so HTTP is the
 **first interactive skin** over that object — which is why its mapping
@@ -72,7 +147,7 @@ single-session contract; multi-tenant auth is a stated non-goal).
 |---|---|
 | `POST /v1/chat/completions` | the OpenAI-compatible subset (§4–§6) |
 | `POST /v1/responses` | Responses-compatible text subset for current Codex CLI (§4.2, §6, §8) |
-| `GET /v1/models` | lists the two profiles in the standard `data` list and the additive Codex `models` catalog |
+| `GET /v1/models` | lists the three profiles (¶AMD-3) in the standard `data` list and the additive Codex `models` catalog |
 | `GET /v1/capabilities` | the **capability sheet** (§7), vendor extension |
 
 Anything else: `404` with a JSON error object in the OpenAI error shape.
@@ -83,8 +158,32 @@ Anything else: `404` with a JSON error object in the OpenAI error shape.
 |---|---|---|---|
 | `corollary/kernel` | `CoreSession.boot(repo_root, offline=True, session_id=…)` | registered line grammar (§5) | corpus answers, exact evaluation, ownership, belief, story, refusals |
 | `corollary/conversation` | the slot-filling session (`scripts/conversation.py:439`, `keyring=` an ephemeral per-conversation ring) | `request_grammar.parse_request` | signed slot-filling with minted clarification questions |
+| `corollary/protocol` (¶AMD-3) | a **fresh** `protocol_runtime.ProtocolSession` over the sealed protocol corpus — *not* the slot-filling session and *not* kernel line routing | none: the request surface **is the protocol runtime**, which takes the normalized utterance as an exact corpus lookup key and admits a transition only from the returned witnesses and the declared context signals | an ordinary turn taken as a registered interaction move; materially different transitions pause instead of guessing |
 
-Unknown `model` → `404` (error shape, code `model_not_found`).
+Unknown `model` → `404` (error shape, code `model_not_found`), and the
+refusal names all three profiles.
+
+**¶AMD-3 replaced a fall-through, not an allowlist.** Until this amendment
+`ChatEngine._fresh` read *"kernel, else the slot-filling session"*, so every
+non-kernel model — registered or not — constructed the conversation profile's
+demo session. Adding `corollary/protocol` to the model list alone would
+therefore have served the new profile as the two-slot demo. `_fresh` and
+`_render` are now explicit three-way dispatches over `serve_chat.PROFILES`
+that raise rather than fall through, so a fourth profile cannot be
+half-registered.
+
+The protocol profile's context signals are derived from real session state or
+are honestly absent, and nothing in between. `pending_need` is the session's
+own pending need (its slot while one is open, the absence sentinel `ABSENT`
+otherwise — and a reply reports the need it binds as no longer outstanding,
+because the need a result answers is not a need outstanding *for* that
+result); `protocol_stack` is the session's own stack through the runtime's
+top summary. `quote_boundary`, `expected_output_slot` and `active_task` have
+**no HTTP source event in this slice**: they carry `ABSENT` under the event
+id `evt-http-no-source`, and the capability sheet publishes that fact rather
+than hiding it, on the gloss row's precedent. Deriving a quote boundary from a
+quoted-looking user line would be exactly the lexical trigger the protocol
+design abolishes.
 
 `corollary/kernel` uses the offline **boot**: the three optional probes
 are forced OFF, so the served routes are the offline-registered ones and
@@ -114,7 +213,12 @@ Chat completions is stateless per request; the engine is stateful per
 session. The mapping rule:
 
 - The `messages` array's **user turns, in order**, are the session's
-  input lines. Turn *n*'s response is computed by replaying user turns
+  input lines — and on `corollary/protocol`, so are its admitted
+  tool-result items (¶AMD-3), which is the one place this sentence widens.
+  Call the two together the **input items**; the served turn is the last of
+  them, which on the two shipped profiles is the last user turn exactly as it
+  always was, because a tool-result item cannot reach those profiles at all.
+  Turn *n*'s response is computed by replaying input items
   1…*n* into a fresh session object and rendering the last result.
   Replay is deterministic: the kernel profile passes
   `session_id=sha256(prefix)` (the canonical message-prefix hash,
@@ -149,6 +253,24 @@ session. The mapping rule:
   accepted and ignored, listed in `x_corollary.ignored`. There is
   nothing to sample: no token in the serving path is drawn from a
   generative model.
+- **Tool-result items (¶AMD-3), `corollary/protocol` only.** A message
+  `{"role": "tool", "call_id": …, "output": …}` — the chat-completions
+  spelling of the Responses `function_call_output` item of §4.2 — is an input
+  item, replayed through `ProtocolSession.submit_reply`. Its `call_id` binds
+  to the pending `request_id` and **to nothing else**: an unknown, stale,
+  cross-request, cancelled or repeated result is refused, the session stays
+  WAITING where it was waiting, no stack mutation occurs, and no value is
+  invented for the slot. On every other profile the item is a `400
+  invalid_message`, unchanged, because no other profile has a pending request
+  for one to bind to.
+- **The protocol profile's session identity (¶AMD-3).** The runtime derives
+  its `request_id` from its own session id, so a `call_id` can survive ¶DEV-1's
+  replay only if that id is the same on every request of one conversation. The
+  §4.1 prefix hash is not — it grows with the transcript — so this profile
+  threads the canonical hash of the conversation's **first message item**, the
+  one part of a transcript replay cannot change. The wire field
+  `x_corollary.session.profile_session_id` is unchanged on all three profiles:
+  it stays the §4.1 prefix hash of the current request.
 - `stream: true` is supported (§8). `n != 1` → `400`. A request with no
   `messages` array or no user turn → `400`. An empty-string user turn is
   **served**, not rejected: it is the engine's registered empty line
@@ -157,13 +279,28 @@ session. The mapping rule:
 ### 4.1 Canonical prefix hash
 
 `sha256` over the UTF-8 bytes of
-`json.dumps([[role, content] for each message in the prefix],
+`json.dumps([<serialized item> for each item in the prefix],
 ensure_ascii=False, sort_keys=True, separators=(",", ":"))`. The prefix
-for turn *n* is every message strictly before the final user turn. The
+for turn *n* is every message strictly before the final input item. The
 same serialization discipline (call it **canonical-JSON/compact**) is
 used everywhere this spec says "canonical": `json.dumps(value,
 ensure_ascii=False, sort_keys=True, separators=(",", ":"))`, encoded
 UTF-8.
+
+**¶AMD-3 extends the per-item serialization, and the extension is additive.**
+A message item serializes to `[role, content]`, exactly as it always did, so
+a prefix of only role/content pairs hashes to the byte it hashed to before —
+which is why every kernel and conversation replay test stays green and is
+asserted to, against §4.1's rule written out independently in the suite. An
+admitted tool-result item serializes to its **type token and its typed
+payload**: `["function_call_output", {"call_id": …, "output": …}]`. Flattening
+it into a string would have made two transcripts differing only in a tool
+result's payload hash identically — so a tampered result would have been
+served out of the untampered one's cache entry, and §4's divergence check
+could never have seen it. Two such transcripts therefore hash differently and
+the one whose assistant claim no longer matches the turn its own tool result
+produces is refused with `409 transcript_divergence`; that pair is a test, not
+a promise.
 
 ### 4.2 Responses request mapping
 
@@ -172,14 +309,56 @@ an array of message items. A message item has `role` and text-only `content`;
 content may be a string or an array of `input_text`/`output_text` parts. The
 skin converts those messages to §4's request mapping and calls the same
 `ChatEngine.serve` method. Multimodal parts and non-message input items are
-refused rather than guessed.
+refused rather than guessed — **with exactly one amended exception, below**.
 
 `instructions`, tool declarations, reasoning controls, sampling controls, and
 other Responses fields are accepted but ignored and named in
 `x_corollary.ignored`. In particular, this deterministic engine neither needs
-nor uses a preprompt and never emits a tool call. `previous_response_id`
-resumes only an in-process replay transcript produced by this server; an
-unknown id is refused. Nothing durable is restored, preserving ¶DEV-1.
+nor uses a preprompt and never emits a tool call **except on
+`corollary/protocol`'s one registered prompt path (¶AMD-3, §8)**.
+`previous_response_id` resumes only an in-process replay transcript produced
+by this server; an unknown id is refused. Nothing durable is restored,
+preserving ¶DEV-1.
+
+> **¶AMD-3, §4.2's amended refusal — exactly one item type, exactly one
+> profile.** On `corollary/protocol`, an input item
+> `{"type": "function_call_output", "call_id": …, "output": …}` is **admitted**
+> and mapped onto §4's tool-result item. `call_id` and `output` must both be
+> strings; a missing or empty `call_id` is a `400 invalid_input_item`, because
+> a tool result with no call id binds to no pending request. Every other
+> non-message item — a `reasoning` item, a `function_call` echo, a multimodal
+> part — still refuses with `400`, on this profile and on every other, and a
+> `function_call_output` on either shipped profile refuses too.
+>
+> The `output` string is mapped onto the pending need's `answer_schema` and
+> **nothing is invented**: the result is a `{protocol_id, move_id}` pair drawn
+> from the *pending candidate set*, or nothing at all. A bare move id, a
+> `protocol_id/move_id` pair, and a JSON object carrying `move_id` (or the
+> host's `value`/`answer`/`label`/`text`, including inside a single-element
+> `answers` array) all resolve; an empty string, a cancellation, a free-form
+> "Other", and a move that was never a candidate all resolve to nothing and are
+> refused as `UNBOUND_ANSWER` with the session still WAITING. That is the
+> design's rule that cancellation or an unavailable UI remains WAITING.
+>
+> A request whose `input` contributes only a `function_call_output` — the
+> resume turn, with `previous_response_id` supplying the transcript — is
+> accepted on this profile; the `missing_user_text` refusal still applies
+> everywhere else.
+>
+> On this profile the Responses body keys `tools` and `tool_choice` are
+> **acted on** and therefore do **not** appear in `x_corollary.ignored`:
+> `tools` decides whether the registered adapter fires, and
+> `tool_choice: "none"` suppresses the call (the need is still opened, and is
+> presented as text). `parallel_tool_calls` stays in the ignored list, and
+> honestly so — the client's value changes nothing, because this profile emits
+> at most one call whatever it says — while the response body publishes
+> `parallel_tool_calls: false`, which **agrees** with the catalog's
+> `supports_parallel_tool_calls: false` for this profile. The shipped
+> profiles' pre-existing disagreement between those two keys is out of this
+> amendment's scope and is deliberately not copied here. The body's `tools`
+> key echoes **exactly the declarations this profile took up** — the one
+> registered adapter, or an empty list — rather than the client's whole
+> advertisement, so a client can read what was and was not taken up.
 
 > **¶AMD-2 — Codex model discovery is additive (2026-08-28).** A live
 > Codex CLI 0.150.1 TUI replay reached `/v1/responses` but first warned that
@@ -348,6 +527,43 @@ freedom:
   `status == "abstained"` as zero useful tokens**, and the same rule
   covers every clarification turn via `status == "waiting"`.
 
+- **Protocol profile (¶AMD-3):** an `ASK` turn's `content` is the verifier's
+  own minted prompt — a WAITING turn is a complete assistant turn that asks a
+  question, exactly as on the conversation profile. Every other disposition
+  renders a **minimal mechanical receipt summary**, read field by field out of
+  the `ProtocolUptake` record:
+
+  ```text
+  disposition: ENTER
+  family     : greeting
+  protocol   : protocol.greeting.a
+  move       : greet
+  ```
+
+  and, where no move was selected, `disposition` plus the verifier verdict
+  that names which rule refused. This is an **inspectable rendering, not
+  conversational prose**: no sentence bank, no stored templates (DESIGN §10's
+  stop condition), and no phrase carrying information the record does not.
+  The direction matters as much as the shape — **a rendered phrase never
+  enters the admission predicate.** Replay reads user turns and admitted tool
+  results; the assistant text this skin produced is compared for divergence
+  and is never an input to a transition, which the suite asserts by feeding a
+  served summary back as a user turn and getting a `REFUSED` lookup miss.
+
+  This profile's `x_corollary` fields: `route` = `protocol`; `status` ∈
+  {`found`, `waiting`, `refused`}, mapped from the disposition
+  (`ENTER`/`SUSPEND`/`CONTINUE`/`RESUME`/`EXIT` → `found`, `ASK` → `waiting`,
+  `REFUSED` → `refused`) and all three already in §5's frozen alphabet;
+  `detail` = the verifier's own verdict (`ADMITTED`, `MATERIAL_AMBIGUITY`,
+  `UNLICENSED`, `WAITING_LOCK`, `UNKNOWN_REQUEST`, `CONSUMED_REQUEST`,
+  `UNBOUND_ANSWER`, `INVALID_INPUT`, `STACK_DEPTH_CAP`), which is what makes a
+  refusal readable; and **`uptake`** = the `ProtocolUptake` record verbatim,
+  present on *every* turn including `waiting` and `refused` ones, because
+  DESIGN §3 requires `authority_delta` to be a present, plaintext, empty field
+  on the ASK and REFUSED paths rather than something inferred from a digest.
+  `uptake` is deliberately not the §6.1 receipt: the record is not a grounding
+  claim.
+
 Two scoring notes restated from the design so no implementer rediscovers
 them: refusal and clarification turns contribute **zero** useful tokens
 whatever their `content` length (so the dispatcher's echo of the user's
@@ -433,6 +649,7 @@ client-side revalidation against committed artifacts:
 | `belief`, `supposition` | `derivation: "session"` — derived entirely from the conversation's own typed narration or owned frame, no external artifact claimed |
 | `write_gate` (`PROVEN`/`VERIFIED`) | `grounding: "working-tree"` — the gate's own `evidence` lines already ride in `x_corollary.evidence` (`scripts/harness.py:846`) and are the record |
 | `conversation` (`solved`) | `binding: {slot, value, lifetime}`, `derivation: "user-frame"` |
+| `protocol` (`found`) — ¶AMD-3 | `uptake_id`, `corpus_path` (`protocol/protocols.json`), `protocol_witnesses` (the node ids the selected move rested on), `grounding: "protocol-corpus"` — recheckable against the committed corpus |
 
 A receipt never claims an artifact the answer did not rest on; routes
 with no artifact say so (`"computed"` / `"session"`) instead of citing
@@ -466,6 +683,19 @@ Two WAITING shapes exist and the spec refuses to blur them:
   — mirroring
   `tests/test_ask.py::test_signed_reply_resumes_same_session_and_binds_user_frame`
   across the transport.
+- **Protocol profile (¶AMD-3):** a turn that asks carries
+  `x_corollary.need` = `{slot, prompt, request_id, options}`. The two extra
+  fields are not decoration and are not available to the conversation
+  profile's shape: `request_id` is what a `call_id` binds to, and `options`
+  is the unresolved candidate move ids in canonical order — the same list the
+  function-call arguments carry. Resumption has **two** channels and they are
+  the same fact in two representations: a registered `function_call_output`
+  whose `call_id` is that `request_id` (§4.2, §8), or, under the text
+  fallback, the next tool-result item in the transcript. There is no
+  "the next user message is the reply" rule here — a bare user turn while a
+  need is pending is refused as `WAITING_LOCK`, because a protocol move is
+  not a slot value and guessing which candidate a sentence meant is the thing
+  the ASK exists to avoid.
 
 **T1's WAITING leg is adjudicated on `corollary/conversation`**, the
 profile that carries a need record; the spec says so here so the gate
@@ -503,6 +733,9 @@ way it reads a tool schema:
   "boot_matrix": [ { "subsystem": "corpus.nodes", "liveness": "OK",
                      "optional": false, "detail": "…" }, … ],
   "statuses": { … the frozen closed alphabet of §5 … },
+  "protocol_grammar": { … ¶AMD-3, generated from protocol/protocols.json … },
+  "prompt_tool_adapters": [ { "name": …, "parameters_sha256": …,
+                              "provenance": … } ],
   "honesty": "offline boot; unregistered paths abstain (P-IH4); no generative path"
 }
 ```
@@ -513,6 +746,24 @@ table) — never a hand-maintained copy that can rot. Rows the profile
 cannot serve (gloss under offline boot) appear with `"served": false`
 rather than disappearing. No demo name appears anywhere in the sheet
 (P-IH3).
+
+**¶AMD-3's two new blocks, and the three rows that did not move.**
+`protocol_grammar` is generated from the sealed corpus itself — schema,
+generator, normalization rule, predicate language, absence sentinel,
+families, move kinds, context-signal ids, stack depth cap, and one row per
+corpus move with its required signal-value predicates — so a regenerated
+corpus republishes itself instead of disagreeing with a copy. It also
+publishes `served_context_signals`: which signals this profile derives from
+session state, and which three carry `ABSENT` because **no HTTP source event
+exists for them in this slice**. That is the gloss row's precedent applied to
+a signal: a client can see that a `quoted_datum` move is unreachable over
+HTTP here, rather than discovering it from an unexplained refusal.
+`prompt_tool_adapters` publishes every registered prompt adapter with its
+**provenance**, because a registered adapter a reader cannot trace back to
+U-P1's capture is indistinguishable from the guessed adapter the design
+forbids. The kernel's `line_grammar` rows, the conversation's
+`request_grammar`, and the `honesty` string are **byte-unchanged**, and the
+suite asserts that positively rather than by omission.
 
 ## 8. Streaming
 
@@ -535,8 +786,57 @@ The Responses endpoint emits the standard named SSE lifecycle through
 `response.completed`: created, output-item added, content-part added, text
 delta/done, content-part done, output-item done, completed. Text deltas
 concatenate byte-for-byte to the same engine rendering. The completed
-response carries `x_corollary`; no synthetic tool or reasoning item is
-introduced.
+response carries `x_corollary`; **no synthetic tool or reasoning item is
+introduced — and ¶AMD-3 does not introduce one either.** The one function-call
+item this skin can emit is not synthetic: it is a verifier-minted, already
+approved `ClarificationRequest` in the host's own representation, emitted only
+on `corollary/protocol`, only for a need the turn actually opened, and only
+when the request advertises a tool whose **name and parameters-schema digest
+are both the registered pair**. No reasoning item is introduced anywhere, on
+any profile.
+
+> **¶AMD-3 — the registered prompt path and its SSE lifecycle.**
+> The adapter registers for exactly the `(name, parameters_sha256)` pair
+> recorded in `experiments/protocol_uptake_host_capture.json` (U-P1), read
+> from that artifact rather than restated in code. A request advertising the
+> right name with any other schema digest matches nothing and takes the text
+> WAITING fallback of §6.2 — never a guessed adapter.
+>
+> When it fires, the response carries **exactly one output item** and it
+> replaces the message item:
+>
+> ```jsonc
+> { "id": "fc_…", "type": "function_call", "status": "completed",
+>   "name": "request_user_input",
+>   "call_id": "<the pending request_id>",
+>   "arguments": "{\"questions\":[{\"id\":…,\"header\":\"protocol\",…}]}" }
+> ```
+>
+> The arguments follow the capture's own `mapping_to_need` field by field: one
+> question, `id` = the need's slot, `header` = the fixed literal `protocol`,
+> `question` = the verifier-minted prompt, and one `{label, description}`
+> option per unresolved candidate move id in canonical order. Question wording
+> is outside the scored claim (DESIGN §4); the typed need and its exact
+> binding are what count. One caveat is recorded rather than silently
+> resolved: the captured tool's description asks for a snake_case `id`, and
+> the mapping makes `id` the slot — `protocol_uptake.candidate_move`, dotted.
+> The committed mapping is followed literally rather than sanitized into
+> something the capture does not say; whether the installed host accepts it is
+> exactly what B7 measures.
+>
+> **Its streaming lifecycle** is the function-call one, not the text one:
+>
+> `response.created` → `response.output_item.added` (the item with empty
+> `arguments` and `status: "in_progress"`) → `response.function_call_arguments.delta`
+> (the whole arguments string, in one delta) → `response.function_call_arguments.done`
+> → `response.output_item.done` (the completed item) → `response.completed`.
+>
+> There are **no content-part events**, because a function-call item has no
+> content parts; wrapping one in a synthetic text part is precisely the
+> synthetic item the paragraph above refuses. Deltas concatenate
+> byte-for-byte to the completed item's `arguments`, the same discipline the
+> text lifecycle keeps, and the completed response carries `x_corollary`
+> including `need`.
 
 ## 9. Wiring steps, declared before the task book
 
@@ -620,8 +920,12 @@ profile has no TTY loop to inherit anything; §1).
 - Malformed JSON, missing `messages`, no user turn, `n != 1` → `400`,
   OpenAI error shape. (An empty-string user turn is served; §4.)
 - Responses input with no user text, a non-text part, or a non-message item →
-  `400`; unknown `previous_response_id` → `404`.
-- Unknown `model` → `404`.
+  `400`; unknown `previous_response_id` → `404`. ¶AMD-3's one exception: a
+  `function_call_output` item on `corollary/protocol` (§4.2), which may also
+  be the request's only new input.
+- A tool-result item on any profile but `corollary/protocol`, or one with a
+  missing or non-string `call_id`/`output` → `400` (¶AMD-3).
+- Unknown `model` → `404`, naming all three profiles.
 - Conversation-profile cross-slot `ValueError`
   (`scripts/conversation.py:291`, `:302`) → `409`, code
   `slot_conflict`, the engine's message as the error string (distinct
@@ -630,9 +934,12 @@ profile has no TTY loop to inherit anything; §1).
 - **Never:** a token in `content` that is not a rendering of accepted
   engine output — with §6's abstention acknowledgement as the single
   named exception; a slot filled with a value the user did not send; a
-  sampled token; a route not in §5's table; a second engine; a durable
-  session resumed over HTTP (¶DEV-1 — replay only, restore stays
-  unshipped and unclaimed this cycle).
+  sampled token; a route not in §5's table **or §3's protocol row**; a second
+  engine; a durable session resumed over HTTP (¶DEV-1 — replay only, restore
+  stays unshipped and unclaimed this cycle); and, ¶AMD-3: a protocol move
+  selected by a rendered phrase, a `call_id` bound to any request but the
+  pending one, or an authority opened by a protocol transition —
+  `authority_delta` is present and empty on every served uptake receipt.
 
 ## 11. Adjudication hooks
 
@@ -646,3 +953,18 @@ replay-equivalence of §4 (identical bodies modulo `id` and `created`);
 the capability sheet's liveness (generated, not copied) and its
 demo-name lint (P-IH3); and W1/W2's statuses if wired. The full-suite
 release gate runs it like every other test.
+
+**¶AMD-3's hooks** live in the same file, in `ProtocolProfile`: the greeting
+uptake summary; the ambiguous turn's text WAITING with `x_corollary.need`;
+the registered tool's single function-call item and its arguments mapping; the
+wrong-digest fallback, run against the **real** registration read from U-P1's
+capture; the `function_call_output` resume and the four ways it is refused
+(unknown, stale, cross-request, repeated) with the session still WAITING; the
+cancelled result that invents no value; the §8 function-call SSE lifecycle;
+and §4.1's two hash properties — additive for message-only prefixes, and
+divergent for two transcripts differing only in a tool-result payload. The
+positive tool arms register a **stand-in schema digest** through the same
+registry the capture fills, with its own provenance, because the captured
+schema's bytes are deliberately outside this repository (the capture records
+digests, not requests); the live digest is exercised by B7 and by
+`scripts/run_b7_roundtrip.py`, not by the suite.

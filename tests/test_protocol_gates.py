@@ -71,11 +71,34 @@ class GreenArmTests(GateRunTestCase):
             self.assertEqual(row["verdict"], "GREEN", f"{name}: {row.get('misses')}")
         self.assertEqual(self.payload["gate_reds"], [])
 
-    def test_b7_is_pending_amd3_and_not_fabricated(self) -> None:
+    def test_b7_is_read_from_its_instrument_and_never_fabricated(self) -> None:
+        """B7 is reported, not scored — and reported from what measured it.
+
+        AMD-3 (2026-08-31) gave the field one source: the artifact
+        `scripts/run_b7_roundtrip.py` writes after the orchestrator's live
+        Codex round trip. Until that artifact exists the verdict stays
+        `PENDING_AMD3` — not green, not red, and not invented from the text
+        WAITING fallback. Once it exists the verdict is the recorded one, and
+        this runner still computes nothing: that is what the two arms below
+        assert, so the test cannot go red for the system working.
+        """
+
         b7 = self.payload["construction_gate"]["B7"]
-        self.assertEqual(b7["verdict"], "PENDING_AMD3")
-        self.assertFalse(b7["green"])
-        self.assertFalse(self.payload["gate_greens"]["B7"])
+        recorded = REPO / gates.B7_ARTIFACT
+        if recorded.exists():
+            artifact = json.loads(recorded.read_text(encoding="utf-8"))
+            self.assertEqual(b7["verdict"], artifact["verdict"])
+            self.assertEqual(b7["green"], artifact["verdict"] == "GREEN")
+            self.assertEqual(b7["recorded_in"], gates.B7_ARTIFACT)
+            # Nothing licenses B7 green from the text fallback: a green
+            # verdict must carry the live host's log.
+            if b7["green"]:
+                self.assertTrue(b7["live_codex_log"])
+                self.assertTrue(b7["self_check_passed"])
+        else:
+            self.assertEqual(b7["verdict"], "PENDING_AMD3")
+            self.assertFalse(b7["green"])
+            self.assertFalse(self.payload["gate_greens"]["B7"])
         self.assertEqual(self.payload["gates_pending"], ["B7"])
         self.assertFalse(self.payload["result_gates"]["R-U2"]["green"])
         self.assertIsNone(self.payload["result_gates"]["R-U2"]["licensed_sentence"])

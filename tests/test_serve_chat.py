@@ -27,6 +27,7 @@ none can be, because the book is not read at all.
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import sys
@@ -47,6 +48,8 @@ from harness import CoreSession, route_line  # noqa: E402
 
 KERNEL = serve_chat.KERNEL_MODEL
 CONVERSATION = serve_chat.CONVERSATION_MODEL
+#: ¶AMD-3's third profile (`docs/DESIGN-protocol-uptake.md` §4).
+PROTOCOL = serve_chat.PROTOCOL_MODEL
 
 #: Cheap kernel lines with committed answers, used everywhere a test needs a
 #: turn rather than a particular route.
@@ -1343,18 +1346,34 @@ class CapabilitySheet(ServedSkin):
                 self.assertNotIn(name, served)
 
     def test_model_list_serves_standard_and_codex_catalogs(self):
-        """Stock clients and Codex can probe the same additive endpoint."""
+        """Stock clients and Codex can probe the same additive endpoint.
+
+        ¶AMD-3 edit (2026-08-31): the listing pinned exactly two profiles, and
+        the design names that pin an AMD-3 edit rather than a frozen one — an
+        allowlist-only change would have served the new profile as the two-slot
+        demo session. The catalog KEY SET stays identical across all three rows
+        on purpose (Codex deserializes this catalog); what differs per row is
+        the value of `experimental_supported_tools`.
+        """
 
         import httpx
 
         body = httpx.get(f"{self.base_url}/models").json()
         self.assertEqual(
             [model["id"] for model in body["data"]],
-            [serve_chat.KERNEL_MODEL, serve_chat.CONVERSATION_MODEL],
+            [
+                serve_chat.KERNEL_MODEL,
+                serve_chat.CONVERSATION_MODEL,
+                serve_chat.PROTOCOL_MODEL,
+            ],
         )
         self.assertEqual(
             [model["slug"] for model in body["models"]],
-            [serve_chat.KERNEL_MODEL, serve_chat.CONVERSATION_MODEL],
+            [
+                serve_chat.KERNEL_MODEL,
+                serve_chat.CONVERSATION_MODEL,
+                serve_chat.PROTOCOL_MODEL,
+            ],
         )
         expected_catalog_keys = {
             "slug",
@@ -1385,7 +1404,29 @@ class CapabilitySheet(ServedSkin):
             self.assertFalse(model["support_verbosity"])
             self.assertFalse(model["supports_parallel_tool_calls"])
             self.assertFalse(model["include_apps_usage_instructions"])
-            self.assertEqual(model["experimental_supported_tools"], [])
+        rows = {model["slug"]: model for model in body["models"]}
+        # The two shipped profiles publish no supported tool, exactly as
+        # ¶AMD-2 pinned it.
+        for shipped in (serve_chat.KERNEL_MODEL, serve_chat.CONVERSATION_MODEL):
+            self.assertEqual(rows[shipped]["experimental_supported_tools"], [])
+        # The protocol profile publishes exactly the captured tool — read
+        # from the capture, not restated here, so a drifting registration
+        # fails rather than agreeing with a copy of itself.
+        capture = json.loads(
+            (REPO / "experiments" / "protocol_uptake_host_capture.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(
+            rows[serve_chat.PROTOCOL_MODEL]["experimental_supported_tools"],
+            [capture["prompt_tool"]["name"]],
+        )
+        # Reconciled, and the design forbade copying the shipped profiles'
+        # contradiction here: the catalog says no parallel tool calls and the
+        # Responses body agrees (asserted over the wire in ProtocolProfile).
+        self.assertFalse(
+            rows[serve_chat.PROTOCOL_MODEL]["supports_parallel_tool_calls"]
+        )
 
     def test_the_capability_sheet_publishes_the_foreign_voice_row(self):
         """§7: the row is present and CONSISTENT with the arming state.
@@ -1919,10 +1960,91 @@ class CapabilitySheet(ServedSkin):
         self.assertEqual(verdict["route"], "closure")
         self.assertIn(verdict["status"], rows["closure"]["statuses"])
 
-    def test_models_endpoint_lists_the_two_profiles(self):
+    def test_models_endpoint_lists_the_three_profiles(self):
+        """¶AMD-3 edit: `/v1/models` lists all three profiles the server serves."""
+
         models = self.client.models.list()
         self.assertEqual(
-            [model.id for model in models.data], [KERNEL, CONVERSATION]
+            [model.id for model in models.data], [KERNEL, CONVERSATION, PROTOCOL]
+        )
+
+    def test_the_sheet_publishes_a_generated_protocol_block(self):
+        """¶AMD-3: generated from the live sealed corpus, never a copy.
+
+        And the two shipped blocks are byte-unchanged, which is asserted
+        positively rather than hoped for: the kernel's `line_grammar` rows,
+        the conversation's `request_grammar`, and the `honesty` string are
+        compared against the same live objects they were generated from
+        before AMD-3 existed.
+        """
+
+        sheet, _text = self.served_sheet()
+        corpus = json.loads(
+            (REPO / "protocol" / "protocols.json").read_text(encoding="utf-8")
+        )
+        block = sheet["protocol_grammar"]
+        self.assertTrue(block["served"])
+        self.assertEqual(block["corpus_path"], "protocol/protocols.json")
+        self.assertEqual(block["families"], corpus["families"])
+        self.assertEqual(block["context_signal_ids"], corpus["context_signal_ids"])
+        self.assertEqual(block["absence_sentinel"], corpus["absence_sentinel"])
+        self.assertEqual(block["stack_depth_cap"], corpus["stack_depth_cap"])
+        self.assertEqual(
+            len(block["moves"]),
+            sum(len(node["moves"]) for node in corpus["nodes"]),
+        )
+        # Every status this profile can publish is in §5's frozen alphabet.
+        frozen = set(sum(sheet["statuses"].values(), []))
+        for status in block["statuses"]:
+            self.assertIn(status, frozen)
+        # The three signals with no HTTP source event are PUBLISHED, not
+        # hidden — the gloss row's precedent.
+        for signal in ("quote_boundary", "expected_output_slot", "active_task"):
+            self.assertIn("no HTTP source event", block["served_context_signals"][signal])
+
+        # The profile block, and the two that must not have moved.
+        profiles = sheet["profiles"]
+        self.assertEqual(
+            profiles[PROTOCOL]["session_object"], "protocol_runtime.ProtocolSession"
+        )
+        self.assertNotIn("golden", json.dumps(profiles[PROTOCOL]).lower())
+        self.assertEqual(
+            profiles[KERNEL],
+            {
+                "session_object": "harness.CoreSession",
+                "boot": "offline",
+                "grammar": "registered line grammar",
+                "description": serve_chat.PROFILE_DESCRIPTIONS[KERNEL],
+                "resume": "narrow <kind> <value> / cancel",
+            },
+        )
+        self.assertEqual(
+            profiles[CONVERSATION]["grammar"], "request_grammar.parse_request"
+        )
+        self.assertEqual(
+            sheet["honesty"],
+            "offline boot; unregistered paths abstain (P-IH4); no generative path",
+        )
+
+    def test_the_sheet_publishes_every_registered_prompt_adapter_with_provenance(self):
+        """A registered adapter a reader cannot trace is a guessed adapter."""
+
+        sheet, _text = self.served_sheet()
+        capture = json.loads(
+            (REPO / "experiments" / "protocol_uptake_host_capture.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        adapters = {row["name"]: row for row in sheet["prompt_tool_adapters"]}
+        captured = capture["prompt_tool"]
+        self.assertIn(captured["name"], adapters)
+        self.assertEqual(
+            adapters[captured["name"]]["parameters_sha256"],
+            captured["parameters_sha256"],
+        )
+        self.assertIn(
+            "protocol_uptake_host_capture.json",
+            adapters[captured["name"]]["provenance"],
         )
 
 
@@ -2386,6 +2508,623 @@ class ResponsesCompatibility(ServedSkin):
 
 
 # --------------------------------------------------------------------------
+# ¶AMD-3 — the protocol profile (docs/DESIGN-protocol-uptake.md §4, §7 B7)
+# --------------------------------------------------------------------------
+
+
+#: A schema this repository can hash, standing in for the captured one.
+#:
+#: The capture records the installed host's `request_user_input` **digest**
+#: and deliberately keeps the raw request outside the repository (its
+#: `secrets` clause). So no test in this tree can build a schema that hashes
+#: to `23ee6f1a…`, and the positive arm registers the digest of its own schema
+#: through :func:`serve_chat.register_prompt_tool` — the same registry, the
+#: same code path, a different provenance, which the capability sheet
+#: publishes. The negative arm below runs against the REAL registration and
+#: proves that a non-matching digest gets the text fallback; the live digest
+#: is exercised by B7, not by this file.
+STAND_IN_PROMPT_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["questions"],
+    "properties": {
+        "questions": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+                "type": "object",
+                "required": ["id", "header", "question", "options"],
+                "properties": {
+                    "id": {"type": "string"},
+                    "header": {"type": "string"},
+                    "question": {"type": "string"},
+                    "options": {"type": "array"},
+                },
+            },
+        }
+    },
+}
+
+
+@contextlib.contextmanager
+def stand_in_prompt_tool(schema=None):
+    """Register a stand-in adapter for the captured tool's NAME, then undo it."""
+
+    schema = STAND_IN_PROMPT_SCHEMA if schema is None else schema
+    saved = {name: dict(row) for name, row in serve_chat.PROMPT_TOOL_ADAPTERS.items()}
+    serve_chat.register_prompt_tool(
+        "request_user_input",
+        serve_chat.tool_schema_digest(schema),
+        "tests/test_serve_chat.py stand-in: the captured schema's bytes are "
+        "outside this repository, so the suite registers its own digest",
+    )
+    try:
+        yield [
+            {
+                "type": "function",
+                "name": "request_user_input",
+                "description": "ask the person a structured question",
+                "parameters": schema,
+            }
+        ]
+    finally:
+        serve_chat.PROMPT_TOOL_ADAPTERS.clear()
+        serve_chat.PROMPT_TOOL_ADAPTERS.update(saved)
+
+
+class ProtocolProfile(ServedSkin):
+    """The third profile, over the wire.
+
+    Every test here addresses `corollary/protocol`. The kernel and
+    conversation profiles are not touched by any of them, which is the
+    design's condition for AMD-3: the triggering `hello` turn's honest answer
+    on `corollary/kernel` is still refusal, and the repaired entrance is the
+    same bytes addressed to the profile that can host them.
+    """
+
+    # -- helpers ----------------------------------------------------------
+
+    def chat(self, messages, **payload) -> "object":
+        """POST to /v1/chat/completions with httpx.
+
+        The stock `openai` client is used everywhere its message shapes
+        cover the request; a tool-result item is not one of its shapes, so
+        these go over plain HTTP rather than through a patched client.
+        """
+
+        import httpx
+
+        return httpx.post(
+            f"{self.base_url}/chat/completions",
+            json={"model": PROTOCOL, "messages": messages, **payload},
+            timeout=30,
+        )
+
+    def responses(self, **payload):
+        import httpx
+
+        return httpx.post(
+            f"{self.base_url}/responses",
+            json={"model": PROTOCOL, **payload},
+            timeout=30,
+        )
+
+    def turn(self, messages, **payload) -> dict:
+        response = self.chat(messages, **payload)
+        self.assertEqual(response.status_code, 200, response.text)
+        return response.json()
+
+    def line(self, text: str) -> dict:
+        return self.turn([{"role": "user", "content": text}])
+
+    @staticmethod
+    def tool_item(call_id: str, output: str) -> dict:
+        return {"role": "tool", "call_id": call_id, "output": output}
+
+    # -- the turn the design was forced by --------------------------------
+
+    def test_protocol_hello_is_taken_up_as_a_greeting(self):
+        """The turn that forced this design, on the profile that can host it.
+
+        `hello` is witnessed by two corpus nodes — a greeting entry and a
+        probe reply — and the fresh-root position licenses exactly one of
+        them, because greeting requires the probe/quote/output signals to be
+        ABSENT. So the served summary is mechanical and complete: the
+        disposition, the family, and the protocol/move the transition
+        entered.
+        """
+
+        body = self.line("hello")
+        extension = self.x(body)
+        self.assertEqual(extension["profile"], PROTOCOL)
+        self.assertEqual(extension["route"], "protocol")
+        self.assertEqual(extension["status"], "found")
+        self.assertEqual(extension["detail"], "ADMITTED")
+        self.assertEqual(
+            self.content(body),
+            "disposition: ENTER\n"
+            "family     : greeting\n"
+            "protocol   : protocol.greeting.a\n"
+            "move       : greet",
+        )
+        self.assertEqual(body["choices"][0]["finish_reason"], "stop")
+
+        uptake = extension["uptake"]
+        self.assertEqual(uptake["schema"], "corollary.protocol-uptake/1")
+        self.assertEqual(uptake["disposition"], "ENTER")
+        self.assertEqual(uptake["selected_move_id"], "greet")
+        # DESIGN §3/§5: a plaintext, present, empty field — never inferred
+        # from a digest, and never opened by a served move.
+        self.assertEqual(uptake["authority_delta"], [])
+        self.assertEqual(uptake["stack_before"], [])
+        self.assertEqual(len(uptake["stack_after"]), 1)
+        # B2's shape: a selected move cites at least one protocol witness.
+        self.assertTrue(uptake["protocol_witnesses"])
+        # §6.1: an answering turn cites the committed corpus it rested on.
+        self.assertEqual(
+            extension["receipt"]["corpus_path"], "protocol/protocols.json"
+        )
+        self.assertEqual(extension["receipt"]["uptake_id"], uptake["uptake_id"])
+
+    def test_protocol_context_signals_are_derived_or_honestly_absent(self):
+        """Two signals come from real session state; three have no HTTP source.
+
+        A quote boundary invented from a quoted-looking line would be exactly
+        the lexical trigger this design abolishes, so the three signals with
+        no HTTP source event carry the absence sentinel under an event id
+        that says so — in the receipt, where a reader sees it.
+        """
+
+        uptake = self.x(self.line("hello"))["uptake"]
+        rows = {row["signal_id"]: row for row in uptake["context_signals"]}
+        self.assertEqual(
+            set(rows),
+            {
+                "pending_need",
+                "quote_boundary",
+                "expected_output_slot",
+                "active_task",
+                "protocol_stack",
+            },
+        )
+        for signal in ("quote_boundary", "expected_output_slot", "active_task"):
+            self.assertEqual(rows[signal]["value"], "ABSENT")
+            self.assertEqual(rows[signal]["source_event_id"], "evt-http-no-source")
+        self.assertEqual(rows["pending_need"]["value"], "ABSENT")
+        self.assertEqual(rows["protocol_stack"]["value"], "empty")
+        self.assertEqual(
+            rows["protocol_stack"]["source_event_id"], "evt-http-protocol-stack"
+        )
+
+    def test_protocol_a_rendered_phrase_carries_no_authority(self):
+        """The summary is a rendering, not an input the predicate can read.
+
+        Feeding the served summary back as a user turn licenses nothing: the
+        surface reaches the corpus through exact lookup and misses, so the
+        turn is REFUSED with no candidate and no stack mutation.
+        """
+
+        summary = self.content(self.line("hello"))
+        body = self.turn([{"role": "user", "content": summary}])
+        extension = self.x(body)
+        self.assertEqual(extension["status"], "refused")
+        self.assertEqual(extension["detail"], "UNLICENSED")
+        self.assertEqual(extension["uptake"]["candidates"], [])
+        self.assertEqual(extension["uptake"]["stack_after"], [])
+        self.assertEqual(extension["receipt"], {})
+
+    def test_protocol_equivalent_names_proceed_without_asking(self):
+        """DESIGN §4: one next state, so the canonical lowest id is taken."""
+
+        extension = self.x(self.line("hey"))
+        self.assertEqual(extension["status"], "found")
+        self.assertEqual(extension["uptake"]["selected_move_id"], "acknowledge")
+        self.assertEqual(extension["uptake"]["unresolved_move_ids"], ["greet_back"])
+
+    # -- the ASK, in both host representations ----------------------------
+
+    def test_protocol_ambiguous_turn_without_the_tool_is_text_waiting(self):
+        """No compatible tool advertised: the shipped text WAITING path."""
+
+        body = self.line("hi")
+        extension = self.x(body)
+        self.assertEqual(extension["status"], "waiting")
+        self.assertEqual(extension["detail"], "MATERIAL_AMBIGUITY")
+        need = extension["need"]
+        self.assertEqual(set(need), {"slot", "prompt", "request_id", "options"})
+        self.assertEqual(need["slot"], "protocol_uptake.candidate_move")
+        self.assertEqual(need["options"], ["acknowledge", "greet"])
+        # A WAITING turn is a COMPLETE assistant turn that asks a question.
+        self.assertEqual(self.content(body), need["prompt"])
+        self.assertEqual(body["choices"][0]["finish_reason"], "stop")
+        # §6.1: a non-answering status claims no grounding.
+        self.assertEqual(extension["receipt"], {})
+        self.assertIsNone(extension["uptake"]["selected_move_id"])
+        self.assertEqual(extension["uptake"]["authority_delta"], [])
+        self.assertEqual(extension["uptake"]["stack_after"], [])
+
+    def test_protocol_a_wrong_schema_digest_gets_the_text_fallback(self):
+        """The adapter binds to (name, parameters_sha256) and nothing looser.
+
+        This arm runs against the REAL registration read from U-P1's capture,
+        so it is the honest negative: the right tool name with the wrong
+        schema digest is not a registered adapter.
+        """
+
+        response = self.responses(
+            input="hi",
+            tools=[
+                {
+                    "type": "function",
+                    "name": "request_user_input",
+                    "parameters": {"type": "object", "properties": {}},
+                }
+            ],
+            stream=False,
+        )
+        self.assertEqual(response.status_code, 200, response.text)
+        body = response.json()
+        self.assertEqual(body["output"][0]["type"], "message")
+        self.assertEqual(body["x_corollary"]["status"], "waiting")
+        self.assertIn("need", body["x_corollary"])
+        # Nothing was taken up, and the body says so rather than echoing.
+        self.assertEqual(body["tools"], [])
+
+    def test_protocol_registered_tool_emits_one_function_call_item(self):
+        with stand_in_prompt_tool() as tools:
+            response = self.responses(input="hi", tools=tools, stream=False)
+            self.assertEqual(response.status_code, 200, response.text)
+            body = response.json()
+
+        self.assertEqual(len(body["output"]), 1)
+        item = body["output"][0]
+        self.assertEqual(item["type"], "function_call")
+        self.assertEqual(item["name"], "request_user_input")
+        # The binding: call_id IS the pending request id.
+        need = body["x_corollary"]["need"]
+        self.assertEqual(item["call_id"], need["request_id"])
+
+        # The capture's mapping_to_need, followed field by field.
+        arguments = json.loads(item["arguments"])
+        self.assertEqual(len(arguments["questions"]), 1)
+        question = arguments["questions"][0]
+        self.assertEqual(question["id"], need["slot"])
+        self.assertEqual(question["header"], "protocol")
+        self.assertEqual(question["question"], need["prompt"])
+        self.assertEqual(
+            [option["label"] for option in question["options"]],
+            need["options"],
+        )
+        self.assertEqual(need["options"], sorted(need["options"]))
+
+        # Reconciled tool-capability keys: the body agrees with the catalog.
+        self.assertFalse(body["parallel_tool_calls"])
+        self.assertEqual([tool["name"] for tool in body["tools"]], ["request_user_input"])
+        # Fields this profile ACTS on are not called ignored.
+        for handled in ("tools", "tool_choice"):
+            self.assertNotIn(handled, body["x_corollary"]["ignored"])
+
+    def test_protocol_tool_choice_none_suppresses_the_call(self):
+        with stand_in_prompt_tool() as tools:
+            response = self.responses(
+                input="hi", tools=tools, tool_choice="none", stream=False
+            )
+            self.assertEqual(response.status_code, 200, response.text)
+            body = response.json()
+        self.assertEqual(body["output"][0]["type"], "message")
+        self.assertEqual(body["tool_choice"], "none")
+        self.assertEqual(body["x_corollary"]["status"], "waiting")
+
+    def test_protocol_a_selected_turn_emits_no_call_even_with_the_tool(self):
+        """The adapter represents an approved need; it never manufactures one."""
+
+        with stand_in_prompt_tool() as tools:
+            response = self.responses(input="hello", tools=tools, stream=False)
+            body = response.json()
+        self.assertEqual(body["output"][0]["type"], "message")
+        self.assertNotIn("need", body["x_corollary"])
+
+    def test_protocol_function_call_streams_its_own_named_events(self):
+        """¶AMD-3's §8 lifecycle: no content-part events, one arguments delta."""
+
+        import httpx
+
+        with stand_in_prompt_tool() as tools:
+            with httpx.stream(
+                "POST",
+                f"{self.base_url}/responses",
+                json={
+                    "model": PROTOCOL,
+                    "input": "hi",
+                    "tools": tools,
+                    "stream": True,
+                },
+                timeout=30,
+            ) as response:
+                wire = "".join(response.iter_text())
+                self.assertEqual(response.status_code, 200, wire)
+
+        events = []
+        for block in wire.split("\n\n"):
+            lines = block.splitlines()
+            name = next((l[len("event: ") :] for l in lines if l.startswith("event: ")), None)
+            data = next((l[len("data: ") :] for l in lines if l.startswith("data: ")), None)
+            if name and data:
+                events.append((name, json.loads(data)))
+
+        self.assertEqual(
+            [name for name, _event in events],
+            [
+                "response.created",
+                "response.output_item.added",
+                "response.function_call_arguments.delta",
+                "response.function_call_arguments.done",
+                "response.output_item.done",
+                "response.completed",
+            ],
+        )
+        deltas = [
+            event["delta"]
+            for name, event in events
+            if name == "response.function_call_arguments.delta"
+        ]
+        completed = events[-1][1]["response"]
+        self.assertEqual("".join(deltas), completed["output"][0]["arguments"])
+        self.assertEqual(completed["output"][0]["call_id"],
+                         completed["x_corollary"]["need"]["request_id"])
+
+    # -- the resume, and the four ways it is refused ----------------------
+
+    def ask(self, surface: str) -> tuple[dict, str, str]:
+        """One ASK turn: its body, its rendered question, and its request id."""
+
+        body = self.line(surface)
+        need = self.x(body)["need"]
+        return body, self.content(body), need["request_id"]
+
+    def test_protocol_function_call_output_resumes_the_exact_request(self):
+        _body, prompt, request_id = self.ask("hi")
+        resumed = self.turn(
+            [
+                {"role": "user", "content": "hi"},
+                {"role": "assistant", "content": prompt},
+                self.tool_item(request_id, "acknowledge"),
+            ]
+        )
+        extension = self.x(resumed)
+        self.assertEqual(extension["status"], "found")
+        self.assertEqual(extension["detail"], "ADMITTED")
+        self.assertEqual(extension["uptake"]["selected_move_id"], "acknowledge")
+        self.assertIn(f"bound_request:{request_id}", extension["uptake"]["verifier_evidence"])
+        self.assertEqual(
+            self.content(resumed),
+            "disposition: ENTER\n"
+            "family     : greeting\n"
+            "protocol   : protocol.greeting.b\n"
+            "move       : acknowledge",
+        )
+
+    def test_protocol_the_same_round_trip_over_the_responses_wire(self):
+        """B7's wire shape end to end, with the stand-in registration."""
+
+        with stand_in_prompt_tool() as tools:
+            first = self.responses(input="hi", tools=tools, stream=False).json()
+            call_id = first["output"][0]["call_id"]
+            second = self.responses(
+                previous_response_id=first["id"],
+                input=[
+                    {
+                        "type": "function_call_output",
+                        "call_id": call_id,
+                        "output": "greet",
+                    }
+                ],
+                tools=tools,
+                stream=False,
+            )
+        self.assertEqual(second.status_code, 200, second.text)
+        body = second.json()
+        self.assertEqual(body["output"][0]["type"], "message")
+        self.assertEqual(body["x_corollary"]["status"], "found")
+        self.assertEqual(body["x_corollary"]["uptake"]["selected_move_id"], "greet")
+
+    def test_protocol_an_unknown_or_stale_output_is_refused_and_stays_waiting(self):
+        _body, prompt, request_id = self.ask("greetings")
+        refused = self.turn(
+            [
+                {"role": "user", "content": "greetings"},
+                {"role": "assistant", "content": prompt},
+                self.tool_item("not-a-request-id", "greet"),
+            ]
+        )
+        extension = self.x(refused)
+        self.assertEqual(extension["status"], "refused")
+        self.assertEqual(extension["detail"], "UNKNOWN_REQUEST")
+        self.assertIsNone(extension["uptake"]["selected_move_id"])
+        self.assertEqual(extension["uptake"]["stack_after"], [])
+        self.assertIn("no_stack_mutation", extension["uptake"]["verifier_evidence"])
+
+        # And the session is STILL waiting: the right id, sent after the
+        # wrong one, still resumes the exact request.
+        resumed = self.turn(
+            [
+                {"role": "user", "content": "greetings"},
+                {"role": "assistant", "content": prompt},
+                self.tool_item("not-a-request-id", "greet"),
+                {"role": "assistant", "content": self.content(refused)},
+                self.tool_item(request_id, "greet"),
+            ]
+        )
+        self.assertEqual(self.x(resumed)["status"], "found")
+        self.assertEqual(self.x(resumed)["uptake"]["selected_move_id"], "greet")
+
+    def test_protocol_a_cross_request_output_does_not_bind(self):
+        """A call_id minted in another conversation is not this one's."""
+
+        _hi, _hi_prompt, other_request = self.ask("hi")
+        _body, prompt, request_id = self.ask("greetings")
+        self.assertNotEqual(other_request, request_id)
+        refused = self.turn(
+            [
+                {"role": "user", "content": "greetings"},
+                {"role": "assistant", "content": prompt},
+                self.tool_item(other_request, "greet"),
+            ]
+        )
+        self.assertEqual(self.x(refused)["status"], "refused")
+        self.assertEqual(self.x(refused)["detail"], "UNKNOWN_REQUEST")
+
+    def test_protocol_a_repeated_output_is_refused(self):
+        _body, prompt, request_id = self.ask("hi")
+        repeated = self.turn(
+            [
+                {"role": "user", "content": "hi"},
+                {"role": "assistant", "content": prompt},
+                self.tool_item(request_id, "greet"),
+                {
+                    "role": "assistant",
+                    "content": (
+                        "disposition: ENTER\n"
+                        "family     : greeting\n"
+                        "protocol   : protocol.greeting.a\n"
+                        "move       : greet"
+                    ),
+                },
+                self.tool_item(request_id, "greet"),
+            ]
+        )
+        self.assertEqual(self.x(repeated)["status"], "refused")
+        self.assertEqual(self.x(repeated)["detail"], "CONSUMED_REQUEST")
+
+    def test_protocol_a_cancelled_or_unanswered_prompt_invents_no_value(self):
+        """DESIGN §4: cancellation remains WAITING; no value is invented."""
+
+        _body, prompt, request_id = self.ask("hi")
+        for output in ("", "cancelled", "some other option entirely"):
+            with self.subTest(output=output):
+                refused = self.turn(
+                    [
+                        {"role": "user", "content": "hi"},
+                        {"role": "assistant", "content": prompt},
+                        self.tool_item(request_id, output),
+                    ]
+                )
+                extension = self.x(refused)
+                self.assertEqual(extension["status"], "refused")
+                self.assertEqual(extension["detail"], "UNBOUND_ANSWER")
+                self.assertIsNone(extension["uptake"]["selected_move_id"])
+
+    # -- §4/§4.1's extended prefix hash -----------------------------------
+
+    def test_prefix_hash_extension_is_additive_for_message_only_prefixes(self):
+        """A prefix of only [role, content] pairs hashes as it always did.
+
+        Computed here from §4.1's rule written out, not from the server's
+        own helper, so this is an oracle rather than a tautology.
+        """
+
+        prefix = [("user", "hi"), ("assistant", "a claimed turn")]
+        expected = hashlib.sha256(
+            json.dumps(
+                [["user", "hi"], ["assistant", "a claimed turn"]],
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+        self.assertEqual(serve_chat.prefix_hash(prefix), expected)
+        # And a tool-result item serializes as its TYPE and typed payload.
+        self.assertEqual(
+            serve_chat.prefix_item("tool", {"call_id": "c", "output": "o"}),
+            ["function_call_output", {"call_id": "c", "output": "o"}],
+        )
+
+    def test_a_tool_result_payload_changes_the_prefix_hash_and_diverges(self):
+        """Two transcripts differing ONLY in a tool result's payload.
+
+        They hash differently — so neither can be served out of the other's
+        cache entry — and the one whose assistant claim no longer matches the
+        turn its own tool result produces is refused as a transcript
+        divergence rather than continued.
+        """
+
+        _body, prompt, request_id = self.ask("hi")
+        greet_summary = (
+            "disposition: ENTER\n"
+            "family     : greeting\n"
+            "protocol   : protocol.greeting.a\n"
+            "move       : greet"
+        )
+
+        def transcript(output: str) -> list[dict]:
+            return [
+                {"role": "user", "content": "hi"},
+                {"role": "assistant", "content": prompt},
+                self.tool_item(request_id, output),
+                {"role": "assistant", "content": greet_summary},
+                {"role": "user", "content": "goodbye"},
+            ]
+
+        def prefix_of(messages) -> str:
+            return serve_chat.prefix_hash(
+                [
+                    ("tool", {"call_id": m["call_id"], "output": m["output"]})
+                    if m["role"] == "tool"
+                    else (m["role"], m["content"])
+                    for m in messages[:-1]
+                ]
+            )
+
+        self.assertNotEqual(
+            prefix_of(transcript("greet")), prefix_of(transcript("acknowledge"))
+        )
+
+        truthful = self.chat(transcript("greet"))
+        self.assertEqual(truthful.status_code, 200, truthful.text)
+
+        tampered = self.chat(transcript("acknowledge"))
+        self.assertEqual(tampered.status_code, 409, tampered.text)
+        self.assertEqual(
+            tampered.json()["error"]["code"], "transcript_divergence"
+        )
+
+    # -- the two shipped profiles keep their refusals ---------------------
+
+    def test_a_tool_result_is_refused_on_the_two_shipped_profiles(self):
+        for model in (KERNEL, CONVERSATION):
+            with self.subTest(model=model):
+                import httpx
+
+                response = httpx.post(
+                    f"{self.base_url}/chat/completions",
+                    json={
+                        "model": model,
+                        "messages": [
+                            {"role": "user", "content": TWIN_LINE},
+                            self.tool_item("c", "o"),
+                        ],
+                    },
+                    timeout=30,
+                )
+                self.assertEqual(response.status_code, 400, response.text)
+                self.assertEqual(
+                    response.json()["error"]["code"], "invalid_message"
+                )
+
+    def test_a_non_message_input_item_other_than_the_one_is_still_refused(self):
+        """§4.2's refusal is amended for EXACTLY function_call_output."""
+
+        response = self.responses(
+            input=[{"type": "reasoning", "summary": []}], stream=False
+        )
+        self.assertEqual(response.status_code, 400, response.text)
+        self.assertEqual(
+            response.json()["error"]["code"], "invalid_input_item"
+        )
+
+
+# --------------------------------------------------------------------------
 # §10 — errors
 # --------------------------------------------------------------------------
 
@@ -2397,6 +3136,10 @@ class Errors(ServedSkin):
         )
         self.assertEqual(status, 404)
         self.assertEqual(error["code"], "model_not_found")
+        # ¶AMD-3 edit: the refusal names every profile this server serves, so
+        # a client that mistyped one is told what the three are.
+        for name in (KERNEL, CONVERSATION, PROTOCOL):
+            self.assertIn(name, error["message"])
 
     def test_errors_n_two_is_400(self):
         status, error = self.status_error(
