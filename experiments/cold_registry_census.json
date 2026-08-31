@@ -514,7 +514,7 @@
           "route_id": "run_protocol_gates.run",
           "writer_file": "scripts/run_protocol_gates.py",
           "writer_symbol": "run",
-          "line": 1151,
+          "line": 1157,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -522,8 +522,8 @@
         {
           "path": "scripts/run_protocol_gates.py",
           "line_range": [
-            1151,
-            1168
+            1157,
+            1174
           ],
           "rule": "RM-A",
           "symbol": "run",
@@ -1245,14 +1245,14 @@
           "route_id": "run_protocol_gates.run",
           "writer_file": "scripts/run_protocol_gates.py",
           "writer_symbol": "run",
-          "line": 1151,
+          "line": 1157,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "run_protocol_gates.run",
           "writer_file": "scripts/run_protocol_gates.py",
           "writer_symbol": "run",
-          "line": 1151,
+          "line": 1157,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1260,8 +1260,8 @@
         {
           "path": "scripts/run_protocol_gates.py",
           "line_range": [
-            1151,
-            1168
+            1157,
+            1174
           ],
           "rule": "RM-B",
           "symbol": "run",
@@ -1282,8 +1282,8 @@
         {
           "path": "scripts/run_protocol_gates.py",
           "line_range": [
-            1151,
-            1168
+            1157,
+            1174
           ],
           "rule": "RM-C",
           "symbol": "run",
@@ -2901,8 +2901,8 @@
       {
         "path": "scripts/no_flip_census.py",
         "line_range": [
-          103,
-          110
+          125,
+          132
         ],
         "symbol": "population",
         "matched_keys": [
@@ -2912,8 +2912,8 @@
       {
         "path": "scripts/no_flip_census.py",
         "line_range": [
-          289,
-          297
+          311,
+          319
         ],
         "symbol": "validate_accounting",
         "matched_keys": [
@@ -3370,8 +3370,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          344,
-          353
+          350,
+          359
         ],
         "symbol": "score_b1",
         "matched_keys": [
@@ -3381,8 +3381,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          451,
-          462
+          457,
+          468
         ],
         "symbol": "score_b2",
         "matched_keys": [
@@ -3392,8 +3392,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          479,
-          489
+          485,
+          495
         ],
         "symbol": "score_b3",
         "matched_keys": [
@@ -3403,8 +3403,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          526,
-          537
+          532,
+          543
         ],
         "symbol": "score_b3",
         "matched_keys": [
@@ -3414,8 +3414,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          562,
-          569
+          568,
+          575
         ],
         "symbol": "score_b4",
         "matched_keys": [
@@ -3425,8 +3425,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          642,
-          649
+          648,
+          655
         ],
         "symbol": "score_b5",
         "matched_keys": [
@@ -3436,8 +3436,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          672,
-          679
+          678,
+          685
         ],
         "symbol": "score_b5",
         "matched_keys": [
@@ -3447,8 +3447,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          694,
-          701
+          700,
+          707
         ],
         "symbol": "score_b5",
         "matched_keys": [
@@ -3458,8 +3458,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          797,
-          808
+          803,
+          814
         ],
         "symbol": "score_b6",
         "matched_keys": [
@@ -3469,8 +3469,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          835,
-          861
+          841,
+          867
         ],
         "symbol": "score_b6",
         "matched_keys": [
@@ -3480,8 +3480,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          886,
-          902
+          892,
+          908
         ],
         "symbol": "report_b7",
         "matched_keys": [
@@ -3491,8 +3491,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          904,
-          922
+          910,
+          928
         ],
         "symbol": "report_b7",
         "matched_keys": [
@@ -3502,8 +3502,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          955,
-          978
+          961,
+          984
         ],
         "symbol": "score_b8",
         "matched_keys": [
@@ -3514,8 +3514,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          1024,
-          1029
+          1030,
+          1035
         ],
         "symbol": "score_b9",
         "matched_keys": [
@@ -3525,8 +3525,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          1052,
-          1057
+          1058,
+          1063
         ],
         "symbol": "score_b9",
         "matched_keys": [
@@ -3536,8 +3536,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          1090,
-          1102
+          1096,
+          1108
         ],
         "symbol": "score_b10",
         "matched_keys": [
@@ -3548,8 +3548,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          1190,
-          1277
+          1196,
+          1283
         ],
         "symbol": "run",
         "matched_keys": [
@@ -3559,8 +3559,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          1202,
-          1209
+          1208,
+          1215
         ],
         "symbol": "run",
         "matched_keys": [
@@ -3570,8 +3570,8 @@
       {
         "path": "scripts/run_protocol_gates.py",
         "line_range": [
-          1210,
-          1214
+          1216,
+          1220
         ],
         "symbol": "run",
         "matched_keys": [
@@ -4016,7 +4016,7 @@
     "fired": false,
     "b1_unmapped_emitting_routes": 0
   },
-  "census_seal": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581",
+  "census_seal": "d3d9bdc6eae689a120eed1dbcede8f8052405cf91711356aea299243f1c7fd33",
   "provenance": {
     "writer": "scripts/cold_registry_census.py",
     "writer_sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb",
@@ -4423,7 +4423,7 @@
       },
       {
         "path": "scripts/no_flip_census.py",
-        "sha256_lf": "ea0d12c2f081ded150902180186d440101c5b7b59264d69cacb8056d90ad7a4d"
+        "sha256_lf": "856093f3e1bcfad13856c13b93b8ac5a6b726c6b372bb15948a15ae60f1e209b"
       },
       {
         "path": "scripts/numeral_words.py",
@@ -4563,7 +4563,7 @@
       },
       {
         "path": "scripts/run_protocol_gates.py",
-        "sha256_lf": "77badce9f4d384bcf619dea54996dfa31d77feb1eb278edba430ee680602b00d"
+        "sha256_lf": "1ad07ca057f864d2caa61ae366904edf6c66f0ffb16ec8e4a5107bc9cb302b51"
       },
       {
         "path": "scripts/run_session_gate.py",
@@ -4796,37 +4796,13 @@
       "the site-side recall probe",
       "the route resolution rule"
     ],
-    "previous_seal": "8aed3282665097a7f4af0f44a41d520b1b945c6d5cafd375a2fd20119430ad51",
-    "new_seal": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581",
+    "previous_seal": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581",
+    "new_seal": "d3d9bdc6eae689a120eed1dbcede8f8052405cf91711356aea299243f1c7fd33",
     "diff_shape": {
       "kinds_added": [],
       "kinds_removed": [],
-      "counts_moved": {
-        "declared_none": [
-          10,
-          8
-        ],
-        "declared_program_replay": [
-          11,
-          13
-        ],
-        "kinds_with_committed_instances": [
-          12,
-          14
-        ]
-      },
-      "declared_recheck_procedure_moved": [
-        {
-          "kind_id": "corollary.protocol-uptake-receipts/1",
-          "from": "none",
-          "to": "program_replay"
-        },
-        {
-          "kind_id": "run_protocol_gates:run",
-          "from": "none",
-          "to": "program_replay"
-        }
-      ]
+      "counts_moved": {},
+      "declared_recheck_procedure_moved": []
     }
   }
 }
