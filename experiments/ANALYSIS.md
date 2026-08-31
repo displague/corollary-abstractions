@@ -177,8 +177,8 @@ stronger arm is not run and is not claimed.
    leaves step 4 unchanged and only the digest comparison can catch it. The hour
    bought a control whose second half was structurally idle — measured in the
    artifact, not noticed after.
-4. **Both recall probes are numbers now.** Site side: a wider net reaches 156
-   receipt-vocabulary sites and the rule admits 16 of them, so 140 uncovered
+4. **Both recall probes are numbers now.** Site side: a wider net reaches 179
+   receipt-vocabulary sites and the rule admits 18 of them, so 161 uncovered
    sites are published as candidate B10 misses. Instance side (added by
    amendment 2): the exact key-set rule read **0** committed instances for two
    kinds the tree holds **160** and **2,313** instances of. Instance brittleness

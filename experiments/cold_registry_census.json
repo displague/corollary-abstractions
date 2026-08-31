@@ -131,14 +131,14 @@
     "note": "a vocabulary, never a kind list: LINE_GRAMMAR enumerates serving routes, and a serving route is not a receipt kind"
   },
   "counts": {
-    "program_tree_files_scanned": 183,
-    "receipt_marked_sites": 37,
-    "kinds": 19,
-    "excluded_sites": 10,
+    "program_tree_files_scanned": 190,
+    "receipt_marked_sites": 43,
+    "kinds": 22,
+    "excluded_sites": 11,
     "kinds_with_committed_instances": 12,
     "declared_raw_checker_invocation": 1,
     "declared_program_replay": 11,
-    "declared_none": 7
+    "declared_none": 10
   },
   "kinds": [
     {
@@ -490,6 +490,85 @@
         "recheck_descriptor_fields": [
           "binary_sha256"
         ]
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "corollary.protocol-uptake-receipts/1",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2089497943,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [
+        "corollary.protocol-uptake-receipts/1"
+      ],
+      "marking_rules": [
+        "RM-A"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "run_protocol_gates.run",
+          "writer_file": "scripts/run_protocol_gates.py",
+          "writer_symbol": "run",
+          "line": 1151,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/run_protocol_gates.py",
+          "line_range": [
+            1151,
+            1168
+          ],
+          "rule": "RM-A",
+          "symbol": "run",
+          "key_set": [
+            "design",
+            "emitted_by",
+            "pass_definition",
+            "preregistration",
+            "preregistration_sha256",
+            "receipt_count",
+            "receipts",
+            "registered_before_the_run",
+            "registration_commit",
+            "runtime_module",
+            "schema"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "design",
+        "emitted_by",
+        "pass_definition",
+        "preregistration",
+        "preregistration_sha256",
+        "receipt_count",
+        "receipts",
+        "registered_before_the_run",
+        "registration_commit",
+        "runtime_module",
+        "schema"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
       },
       "canonicalization_is_program_defined": false
     },
@@ -1143,6 +1222,113 @@
       "canonicalization_is_program_defined": false
     },
     {
+      "kind_id": "run_protocol_gates:run",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 3055312886,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B",
+        "RM-C"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "run_protocol_gates.run",
+          "writer_file": "scripts/run_protocol_gates.py",
+          "writer_symbol": "run",
+          "line": 1151,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "run_protocol_gates.run",
+          "writer_file": "scripts/run_protocol_gates.py",
+          "writer_symbol": "run",
+          "line": 1151,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/run_protocol_gates.py",
+          "line_range": [
+            1151,
+            1168
+          ],
+          "rule": "RM-B",
+          "symbol": "run",
+          "key_set": [
+            "design",
+            "emitted_by",
+            "pass_definition",
+            "preregistration",
+            "preregistration_sha256",
+            "receipt_count",
+            "receipts",
+            "registered_before_the_run",
+            "registration_commit",
+            "runtime_module",
+            "schema"
+          ]
+        },
+        {
+          "path": "scripts/run_protocol_gates.py",
+          "line_range": [
+            1151,
+            1168
+          ],
+          "rule": "RM-C",
+          "symbol": "run",
+          "key_set": [
+            "design",
+            "emitted_by",
+            "pass_definition",
+            "preregistration",
+            "preregistration_sha256",
+            "receipt_count",
+            "receipts",
+            "registered_before_the_run",
+            "registration_commit",
+            "runtime_module",
+            "schema"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "design",
+        "emitted_by",
+        "pass_definition",
+        "preregistration",
+        "preregistration_sha256",
+        "receipt_count",
+        "receipts",
+        "registered_before_the_run",
+        "registration_commit",
+        "runtime_module",
+        "schema"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
       "kind_id": "serve_chat:_evaluate_receipt",
       "scramble_rule": {
         "type": "permute_instances_within_artifact",
@@ -1161,21 +1347,21 @@
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1087,
+          "line": 1607,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1091,
+          "line": 1611,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1092,
+          "line": 1612,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1183,8 +1369,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1087,
-            1087
+            1607,
+            1607
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1196,8 +1382,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1091,
-            1091
+            1611,
+            1611
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1208,8 +1394,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1092,
-            1096
+            1612,
+            1616
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1269,21 +1455,21 @@
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1030,
+          "line": 1550,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1036,
+          "line": 1556,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1038,
+          "line": 1558,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1291,8 +1477,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1030,
-            1030
+            1550,
+            1550
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1301,8 +1487,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1036,
-            1036
+            1556,
+            1556
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1311,8 +1497,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1038,
-            1041
+            1558,
+            1561
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1371,7 +1557,7 @@
           "route_id": "serve_chat._story_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_story_receipt",
-          "line": 1106,
+          "line": 1626,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1379,8 +1565,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1106,
-            1109
+            1626,
+            1629
           ],
           "rule": "RM-B",
           "symbol": "_story_receipt",
@@ -1430,28 +1616,28 @@
           "route_id": "belief",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1150,
+          "line": 1670,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "supposition",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1150,
+          "line": 1670,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "write_gate",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1152,
+          "line": 1672,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "serve_chat.kernel_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1156,
+          "line": 1676,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1459,8 +1645,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1150,
-            1150
+            1670,
+            1670
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1471,8 +1657,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1152,
-            1152
+            1672,
+            1672
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1483,8 +1669,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1156,
-            1156
+            1676,
+            1676
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1521,6 +1707,86 @@
           "experiments/throughput_trial_c2_halfA.json",
           "experiments/throughput_trial_kernel_halfA.json"
         ],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "serve_chat:protocol_receipt",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 2943758541,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": false,
+        "why_not_applicable": "a permutation needs at least two records to reassign between"
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "serve_chat.protocol_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "protocol_receipt",
+          "line": 1250,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "serve_chat.protocol_receipt",
+          "writer_file": "scripts/serve_chat.py",
+          "writer_symbol": "protocol_receipt",
+          "line": 1251,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1250,
+            1250
+          ],
+          "rule": "RM-B",
+          "symbol": "protocol_receipt",
+          "key_set": []
+        },
+        {
+          "path": "scripts/serve_chat.py",
+          "line_range": [
+            1251,
+            1258
+          ],
+          "rule": "RM-B",
+          "symbol": "protocol_receipt",
+          "key_set": [
+            "corpus_path",
+            "grounding",
+            "protocol_witnesses",
+            "uptake_id"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "corpus_path",
+        "grounding",
+        "protocol_witnesses",
+        "uptake_id"
+      ],
+      "declared_recheck_procedure": {
+        "type": "none",
+        "basis": "the rule found no committed instance of this kind"
+      },
+      "committed_instances": {
+        "count": 0,
+        "exact_count": 0,
+        "superset_only_count": 0,
+        "resolved_by": [],
+        "sample_paths": [],
+        "superset_sample_paths": [],
         "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
         "recheck_descriptor_fields": []
@@ -1654,12 +1920,12 @@
       "kind_id_candidate": "serve_chat:_ownership_receipt",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1067,
-        1067
+        1587,
+        1587
       ],
       "enclosing_line_range": [
-        1067,
-        1067
+        1587,
+        1587
       ],
       "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
     },
@@ -1668,12 +1934,12 @@
       "kind_id_candidate": "serve_chat:render_conversation_turn",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1262,
-        1262
+        1782,
+        1782
       ],
       "enclosing_line_range": [
-        1256,
-        1263
+        1776,
+        1783
       ],
       "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
     },
@@ -1724,15 +1990,30 @@
     },
     {
       "rule_id": "X2",
+      "kind_id_candidate": "serve_chat:render_protocol_turn",
+      "path": "scripts/serve_chat.py",
+      "line_range": [
+        1286,
+        1286
+      ],
+      "enclosing_line_range": [
+        1278,
+        1290
+      ],
+      "member_expression": "IfExp",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
       "kind_id_candidate": "serve_chat:render_kernel_turn",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1213,
-        1215
+        1733,
+        1735
       ],
       "enclosing_line_range": [
-        1206,
-        1217
+        1726,
+        1737
       ],
       "member_expression": "IfExp",
       "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
@@ -1811,8 +2092,8 @@
   },
   "recall_probe": {
     "substring_regex": "(?i)receipt|certificate|verdict|journal",
-    "wider_net_sites": 156,
-    "uncovered_site_count": 140,
+    "wider_net_sites": 179,
+    "uncovered_site_count": 161,
     "uncovered_sites": [
       {
         "path": "scripts/build_throughput_tasks.py",
@@ -2799,6 +3080,17 @@
         ]
       },
       {
+        "path": "scripts/protocol_runtime.py",
+        "line_range": [
+          929,
+          952
+        ],
+        "symbol": "ProtocolSession._emit",
+        "matched_keys": [
+          "verifier_verdict"
+        ]
+      },
+      {
         "path": "scripts/realize_term.py",
         "line_range": [
           659,
@@ -2832,6 +3124,17 @@
         "matched_keys": [
           "journal",
           "journal_digest"
+        ]
+      },
+      {
+        "path": "scripts/run_b7_roundtrip.py",
+        "line_range": [
+          341,
+          365
+        ],
+        "symbol": "artifact",
+        "matched_keys": [
+          "verdict"
         ]
       },
       {
@@ -3057,6 +3360,217 @@
         ]
       },
       {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          344,
+          353
+        ],
+        "symbol": "score_b1",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          451,
+          462
+        ],
+        "symbol": "score_b2",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          479,
+          489
+        ],
+        "symbol": "score_b3",
+        "matched_keys": [
+          "verifier_verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          526,
+          537
+        ],
+        "symbol": "score_b3",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          562,
+          569
+        ],
+        "symbol": "score_b4",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          642,
+          649
+        ],
+        "symbol": "score_b5",
+        "matched_keys": [
+          "verifier_verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          672,
+          679
+        ],
+        "symbol": "score_b5",
+        "matched_keys": [
+          "verifier_verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          694,
+          701
+        ],
+        "symbol": "score_b5",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          797,
+          808
+        ],
+        "symbol": "score_b6",
+        "matched_keys": [
+          "grouping_recorded_in_the_receipt"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          835,
+          861
+        ],
+        "symbol": "score_b6",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          886,
+          902
+        ],
+        "symbol": "report_b7",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          904,
+          922
+        ],
+        "symbol": "report_b7",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          955,
+          978
+        ],
+        "symbol": "score_b8",
+        "matched_keys": [
+          "verdict",
+          "verifier_verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          1024,
+          1029
+        ],
+        "symbol": "score_b9",
+        "matched_keys": [
+          "verifier_verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          1052,
+          1057
+        ],
+        "symbol": "score_b9",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          1090,
+          1102
+        ],
+        "symbol": "score_b10",
+        "matched_keys": [
+          "receipts_artifact",
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          1190,
+          1277
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "receipts_artifact"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          1202,
+          1209
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "receipt_count"
+        ]
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "line_range": [
+          1210,
+          1214
+        ],
+        "symbol": "run",
+        "matched_keys": [
+          "receipts_emitted"
+        ]
+      },
+      {
         "path": "scripts/run_session_gate.py",
         "line_range": [
           158,
@@ -3258,8 +3772,8 @@
       {
         "path": "scripts/serve_chat.py",
         "line_range": [
-          585,
-          595
+          711,
+          721
         ],
         "symbol": "foreign_voice_row",
         "matched_keys": [
@@ -3426,7 +3940,7 @@
         "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
       },
       "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
-      "capability_sheet_digest": "78854fd1241df616f0fe7d4f6ec27e2141c57648a734cc8df70cb25034431a62"
+      "capability_sheet_digest": "74da3ec858209a407944c981e76716dfc76ada5c4de0fa6d8d40e8fd828eb572"
     },
     "status": "captured"
   },
@@ -3494,7 +4008,7 @@
     "fired": false,
     "b1_unmapped_emitting_routes": 0
   },
-  "census_seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
+  "census_seal": "8aed3282665097a7f4af0f44a41d520b1b945c6d5cafd375a2fd20119430ad51",
   "provenance": {
     "writer": "scripts/cold_registry_census.py",
     "writer_sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb",
@@ -3524,6 +4038,10 @@
         "sha256_lf": "6a4541729bcd633e3355474056de1a2875cee1563154a9e418a84a38f2e0c465"
       },
       {
+        "path": "scripts/build_protocol_corpus.py",
+        "sha256_lf": "cbeb826555f9c86bd6a99c6e80b263da4ebc56c23f432855eae8b7a474adcde5"
+      },
+      {
         "path": "scripts/build_throughput_tasks.py",
         "sha256_lf": "c63b12943e4b64d3852df6ee6436cecfeab080ea1d9b360f65922a1320d805bd"
       },
@@ -3534,6 +4052,14 @@
       {
         "path": "scripts/check_proposer_determinism.py",
         "sha256_lf": "3f4fbf19fb3720bfcb8e5cacd0698f819a33f4ee8a64cfc679a042c103669d9f"
+      },
+      {
+        "path": "scripts/check_protocol_receipts.py",
+        "sha256_lf": "5d637f73b9b1a8a19dfc1b1ec6b3a7af06ab962082ee61ebe3a09b85133e776d"
+      },
+      {
+        "path": "scripts/check_protocol_regeneration.py",
+        "sha256_lf": "3573445decbc12212b9a7d70d0e9ef4d791e08edac2e2e9e479ecb0811866e04"
       },
       {
         "path": "scripts/check_regeneration.py",
@@ -3956,6 +4482,14 @@
         "sha256_lf": "486b059cdd6e19f7db305b16489bb068a462e6f7ab6dfcf3aea6ff0d3de39f6b"
       },
       {
+        "path": "scripts/protocol_controls.py",
+        "sha256_lf": "03c5d173648ef164030285acad2850b2a7b7b6b4c9bf8bccf26ce207f9927b8e"
+      },
+      {
+        "path": "scripts/protocol_runtime.py",
+        "sha256_lf": "aa3f0f752c00df11a774cf0380542d3c7b9244a2fb334f1f728a19969d927e3a"
+      },
+      {
         "path": "scripts/provenance_graph.py",
         "sha256_lf": "71929ed86d71595a5c93edf80e2bfbe7aa233b0ce2bb8fd91e07bf350de618d2"
       },
@@ -4012,8 +4546,16 @@
         "sha256_lf": "8c1f413c0c881cab604fb6654c2dec86045244250a7e4a1e71e4a6074fec6fed"
       },
       {
+        "path": "scripts/run_b7_roundtrip.py",
+        "sha256_lf": "9a35964b374cd60315028d8addb87f1a42dd4f99b842776b7895de3def80f21f"
+      },
+      {
         "path": "scripts/run_plain_gate.py",
         "sha256_lf": "4a411c7415b57b9e14811a3df9bdd43ea548c7a7909f7c8278a5178b26741981"
+      },
+      {
+        "path": "scripts/run_protocol_gates.py",
+        "sha256_lf": "77badce9f4d384bcf619dea54996dfa31d77feb1eb278edba430ee680602b00d"
       },
       {
         "path": "scripts/run_session_gate.py",
@@ -4125,7 +4667,7 @@
       },
       {
         "path": "scripts/serve_chat.py",
-        "sha256_lf": "44bc49b56e52e2d05e53ba808c074858cb17cb50a0a1af97bc3886bf1348c2b0"
+        "sha256_lf": "6faf22fdd33878666f6d30f9b5692472b06023451b04df85a4fb8c7afecba6fd"
       },
       {
         "path": "scripts/session_keys.py",
@@ -4246,15 +4788,35 @@
       "the site-side recall probe",
       "the route resolution rule"
     ],
-    "previous_seal": "9aa301b76d0260658dfcc989249eb161cec796f1e52362f53dbe16f642f0b34c",
-    "new_seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
+    "previous_seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
+    "new_seal": "8aed3282665097a7f4af0f44a41d520b1b945c6d5cafd375a2fd20119430ad51",
     "diff_shape": {
-      "kinds_added": [],
+      "kinds_added": [
+        "corollary.protocol-uptake-receipts/1",
+        "run_protocol_gates:run",
+        "serve_chat:protocol_receipt"
+      ],
       "kinds_removed": [],
       "counts_moved": {
+        "declared_none": [
+          7,
+          10
+        ],
+        "excluded_sites": [
+          10,
+          11
+        ],
+        "kinds": [
+          19,
+          22
+        ],
         "program_tree_files_scanned": [
-          178,
-          183
+          183,
+          190
+        ],
+        "receipt_marked_sites": [
+          37,
+          43
         ]
       },
       "declared_recheck_procedure_moved": []
