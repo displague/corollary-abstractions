@@ -1,0 +1,73 @@
+{
+  "schema": "protocol_uptake_upre/1",
+  "stage": "U-PRE",
+  "date": "2026-08-31",
+  "design": "docs/DESIGN-protocol-uptake.md",
+  "scope_note": "Schema audit, not a run. No runtime exists; nothing is executed. The candidate schema is DESIGN-protocol-uptake section 3's ProtocolUptake record. The audited set is exactly the nine semantic INPUT fields the design names as candidates: six context_signal ids and three protocol_witness fields. Next-state projection fields (protocol_id, stack_after, pending_request_id, authority_delta) are outputs; they are outside this audit and are not B9 mutants — their necessity is the section 4 equivalence rule (B6) and the empty-authority_delta predicate (B3). Necessity arguments name transition rules only; fixtures do not exist yet and no argument below cites a fixture family. B9's mutants are later drawn at U-P0 from exactly the fields verdicted SURVIVES here.",
+  "audit": [
+    {
+      "field": "pending_need",
+      "class": "context_signal",
+      "verdict": "SURVIVES",
+      "necessity": "The probe_reply family's required signal predicate holds only when pending_need carries a live probe-type need's identity, and the resume rule binds a reply only to the request whose identity matches; change the value (absence sentinel, different identity, non-probe type) and the admission outcome changes from a selected probe_reply to refusal or a different selected move."
+    },
+    {
+      "field": "quote_boundary",
+      "class": "context_signal",
+      "verdict": "SURVIVES",
+      "necessity": "The quoted_datum family's required predicate is quote_boundary set, and the greeting family's required-absence predicate includes it; flipping the value flips which of those two admission rules can hold, changing the selected move or producing refusal."
+    },
+    {
+      "field": "expected_output_slot",
+      "class": "context_signal",
+      "verdict": "SURVIVES",
+      "necessity": "The expected_output family's required predicate conjoins a set expected_output_slot, and greeting's required-absence predicate includes it; clearing the value removes the only rule that can admit an expected_output move, changing the outcome to refusal or another family."
+    },
+    {
+      "field": "active_task",
+      "class": "context_signal",
+      "verdict": "SURVIVES",
+      "necessity": "The expected_output family's required predicate conjoins a live active_task with the slot, because an output slot can go stale after its task exits; with the slot set and active_task absent the conjunction fails and the admission outcome changes from a selected expected_output move to refusal."
+    },
+    {
+      "field": "prior_move",
+      "class": "context_signal",
+      "verdict": "DELETED",
+      "necessity_absent": "No transition rule reads it. Family admission is decided by the four families' required signal-value predicates, none of which names prior_move; suspension and resumption are decided by protocol_stack, and reply binding by pending_need's identity. There is no rule whose outcome any value of prior_move changes, so under the U-PRE criterion the field is deleted, not retained as inert provenance."
+    },
+    {
+      "field": "protocol_stack",
+      "class": "context_signal",
+      "verdict": "SURVIVES",
+      "necessity": "The stack rules read its value directly: the depth cap refuses a push when the stack already holds eight episodes, RESUME/EXIT legality depends on which episode is on top, and a reply for a suspended child may not bind in its parent; change the stack value and each of those outcomes changes."
+    },
+    {
+      "field": "protocol_witnesses[].protocol_node_id",
+      "class": "protocol_witness",
+      "verdict": "SURVIVES",
+      "necessity": "The candidate set is built from witnessed protocol nodes and protocol_id is inside the four-field next-state projection; a different node id yields a different candidate protocol (or a dangling reference that fails validation), changing the selected move, the ASK partition by next_state_sha256, or the verdict."
+    },
+    {
+      "field": "protocol_witnesses[].relation",
+      "class": "protocol_witness",
+      "verdict": "SURVIVES",
+      "necessity": "The relation names which move family the sealed corpus witnesses the normalized surface under, and the admission predicate pairs exactly that family's required signal predicates with the position; a different relation value consults a different family's rule and the admission outcome changes."
+    },
+    {
+      "field": "protocol_witnesses[].source_seed",
+      "class": "protocol_witness",
+      "verdict": "DELETED",
+      "necessity_absent": "Not a semantic input: no admission, stack, or binding rule's outcome changes with its value. B1's witness-to-builder resolution goes through protocol_node_id to the generated node and its single committed builder (scripts/build_protocol_corpus.py), so provenance survives the deletion. A surviving source_seed would owe a B9 mutant that cannot change any outcome, which B9 forbids."
+    }
+  ],
+  "survivors": {
+    "context_signals": ["pending_need", "quote_boundary", "expected_output_slot", "active_task", "protocol_stack"],
+    "protocol_witness_fields": ["protocol_node_id", "relation"],
+    "count": 7
+  },
+  "consequences": [
+    "U-P0's prereg records exactly the five surviving context_signal ids and two surviving protocol_witness fields; the ProtocolUptake schema is frozen without prior_move and without source_seed.",
+    "B9 seals exactly seven mutants, one per survivor, each naming its target fixture at U-P0.",
+    "No schema field may be removed after U-P0; this audit is the only pruning stage."
+  ]
+}
