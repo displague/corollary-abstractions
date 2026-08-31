@@ -135,10 +135,10 @@
     "receipt_marked_sites": 43,
     "kinds": 22,
     "excluded_sites": 11,
-    "kinds_with_committed_instances": 12,
+    "kinds_with_committed_instances": 14,
     "declared_raw_checker_invocation": 1,
-    "declared_program_replay": 11,
-    "declared_none": 10
+    "declared_program_replay": 13,
+    "declared_none": 8
   },
   "kinds": [
     {
@@ -556,15 +556,19 @@
         "schema"
       ],
       "declared_recheck_procedure": {
-        "type": "none",
-        "basis": "the rule found no committed instance of this kind"
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
       },
       "committed_instances": {
-        "count": 0,
-        "exact_count": 0,
+        "count": 1,
+        "exact_count": 1,
         "superset_only_count": 0,
-        "resolved_by": [],
-        "sample_paths": [],
+        "resolved_by": [
+          "I1"
+        ],
+        "sample_paths": [
+          "experiments/protocol_uptake_receipts.json"
+        ],
         "superset_sample_paths": [],
         "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
@@ -1312,15 +1316,19 @@
         "schema"
       ],
       "declared_recheck_procedure": {
-        "type": "none",
-        "basis": "the rule found no committed instance of this kind"
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
       },
       "committed_instances": {
-        "count": 0,
-        "exact_count": 0,
+        "count": 1,
+        "exact_count": 1,
         "superset_only_count": 0,
-        "resolved_by": [],
-        "sample_paths": [],
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "experiments/protocol_uptake_receipts.json"
+        ],
         "superset_sample_paths": [],
         "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
         "destination_constants": [],
@@ -3884,7 +3892,7 @@
     "means": "each uncovered site is a mapping whose key names mention this program's evidence vocabulary and that the census rule did not admit. They are candidate census misses under B10 — computed by the probe, not remembered by a maintainer — and the census claims no coverage over them."
   },
   "instance_recall_probe": {
-    "exact_instances": 512,
+    "exact_instances": 514,
     "superset_only_instances": 2639,
     "kinds_the_exact_rule_alone_would_have_read_as_none": [
       {
@@ -4008,7 +4016,7 @@
     "fired": false,
     "b1_unmapped_emitting_routes": 0
   },
-  "census_seal": "8aed3282665097a7f4af0f44a41d520b1b945c6d5cafd375a2fd20119430ad51",
+  "census_seal": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581",
   "provenance": {
     "writer": "scripts/cold_registry_census.py",
     "writer_sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb",
@@ -4788,38 +4796,37 @@
       "the site-side recall probe",
       "the route resolution rule"
     ],
-    "previous_seal": "e8fabc6f290c94deead4b0768698b343b0db2bf2cc984d9ad7cc7db06f4db8bb",
-    "new_seal": "8aed3282665097a7f4af0f44a41d520b1b945c6d5cafd375a2fd20119430ad51",
+    "previous_seal": "8aed3282665097a7f4af0f44a41d520b1b945c6d5cafd375a2fd20119430ad51",
+    "new_seal": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581",
     "diff_shape": {
-      "kinds_added": [
-        "corollary.protocol-uptake-receipts/1",
-        "run_protocol_gates:run",
-        "serve_chat:protocol_receipt"
-      ],
+      "kinds_added": [],
       "kinds_removed": [],
       "counts_moved": {
         "declared_none": [
-          7,
-          10
-        ],
-        "excluded_sites": [
           10,
-          11
+          8
         ],
-        "kinds": [
-          19,
-          22
+        "declared_program_replay": [
+          11,
+          13
         ],
-        "program_tree_files_scanned": [
-          183,
-          190
-        ],
-        "receipt_marked_sites": [
-          37,
-          43
+        "kinds_with_committed_instances": [
+          12,
+          14
         ]
       },
-      "declared_recheck_procedure_moved": []
+      "declared_recheck_procedure_moved": [
+        {
+          "kind_id": "corollary.protocol-uptake-receipts/1",
+          "from": "none",
+          "to": "program_replay"
+        },
+        {
+          "kind_id": "run_protocol_gates:run",
+          "from": "none",
+          "to": "program_replay"
+        }
+      ]
     }
   }
 }
