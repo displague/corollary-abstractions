@@ -178,7 +178,13 @@ def scoring_tree(allow_dirty: bool) -> dict[str, Any]:
         ),
         "allow_dirty": allow_dirty,
     }
-    tree["registered_before_the_run"] = not tree["dirty"] and not tree["wrong_tip"]
+    # A rehearsal never counts as registered, even on a tree that happens to
+    # be clean: the module docstring promises --allow-dirty "records
+    # registered_before_the_run: false", and the v0.24 suite gate's run 1
+    # caught this line computing it from tree state alone.
+    tree["registered_before_the_run"] = (
+        not tree["dirty"] and not tree["wrong_tip"] and not allow_dirty
+    )
     if not tree["registered_before_the_run"] and not allow_dirty:
         if tree["dirty"]:
             raise RunRefusal(

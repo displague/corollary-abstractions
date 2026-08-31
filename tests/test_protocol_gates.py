@@ -99,9 +99,17 @@ class GreenArmTests(GateRunTestCase):
             self.assertEqual(b7["verdict"], "PENDING_AMD3")
             self.assertFalse(b7["green"])
             self.assertFalse(self.payload["gate_greens"]["B7"])
-        self.assertEqual(self.payload["gates_pending"], ["B7"])
-        self.assertFalse(self.payload["result_gates"]["R-U2"]["green"])
-        self.assertIsNone(self.payload["result_gates"]["R-U2"]["licensed_sentence"])
+        # Pending only while nothing has measured B7; once the live
+        # instrument's artifact is committed the gate is reported from it
+        # (the v0.24 suite gate's run 1 caught this asserting the
+        # pre-artifact shape on a tip where B7 had already been measured).
+        expected_pending = [] if (REPO / gates.B7_ARTIFACT).exists() else ["B7"]
+        self.assertEqual(self.payload["gates_pending"], expected_pending)
+        self.assertEqual(self.payload["result_gates"]["R-U2"]["green"], b7["green"])
+        if not b7["green"]:
+            self.assertIsNone(
+                self.payload["result_gates"]["R-U2"]["licensed_sentence"]
+            )
 
     def test_b1_recomputes_the_frozen_numbers(self) -> None:
         b1 = self.payload["construction_gate"]["B1"]

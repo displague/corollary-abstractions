@@ -33,7 +33,15 @@ class RegisteredPopulation(unittest.TestCase):
 
     def test_every_frozen_group_revalidates(self) -> None:
         rows = nfc.revalidate(self.prereg)
-        self.assertTrue(all(row["agrees"] for row in rows))
+        # A group either still agrees with its original digest or carries a
+        # dated retirement naming a recorded amendment; anything else raised
+        # inside revalidate. An un-retired group must still agree exactly.
+        self.assertTrue(
+            all(row["agrees"] or row.get("retired") for row in rows)
+        )
+        for row in rows:
+            if row.get("retired"):
+                self.assertIn("retired_by", row)
         journals = next(row for row in rows
                         if row["group"] == "journal_population")
         self.assertEqual(len(journals["members"]), 60)

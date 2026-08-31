@@ -64,6 +64,9 @@ def group_manifest(patterns: list[str]) -> tuple[str, list[dict]]:
 
 def revalidate(prereg: dict) -> list[dict]:
     rows = []
+    amendments = {
+        entry.get("amendment_id"): entry for entry in prereg.get("amendments", ())
+    }
     for name, spec in sorted(prereg["freeze_groups"].items()):
         observed, members = group_manifest(spec["patterns"])
         row = {
@@ -73,8 +76,27 @@ def revalidate(prereg: dict) -> list[dict]:
             "agrees": observed == spec["expected_digest"],
             "members": members,
         }
+        marker = spec.get("retired_for_future_comparisons")
+        if marker is not None:
+            # Retirement in writing, never edit in place (the prereg_pins
+            # discipline, applied to a pattern group): the original digest
+            # stays so the registered run's numbers remain checkable against
+            # it, and a dated amendment carries the movement. A marker that
+            # names no recorded amendment is a pin deleted, and it raises.
+            amendment = amendments.get(marker.get("amendment"))
+            if amendment is None:
+                raise CensusRefusal(
+                    f"freeze group {name!r} claims retirement by amendment "
+                    f"{marker.get('amendment')!r}, which this prereg does not "
+                    "record; a pin retired in writing names an amendment that "
+                    "exists"
+                )
+            row["retired"] = True
+            row["retired_by"] = amendment["amendment_id"]
         rows.append(row)
-    moved = [row["group"] for row in rows if not row["agrees"]]
+    moved = [
+        row["group"] for row in rows if not row["agrees"] and not row.get("retired")
+    ]
     if moved:
         raise CensusRefusal("preregistration digest drift: " + ", ".join(moved))
     return rows

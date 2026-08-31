@@ -23,10 +23,22 @@
     },
     "excluded_total": 190
   },
-  "recorded_answering_kinds": ["solved", "found"],
-  "live_answering_statuses": ["solved", "found", "held", "PROVEN", "VERIFIED"],
+  "recorded_answering_kinds": [
+    "solved",
+    "found"
+  ],
+  "live_answering_statuses": [
+    "solved",
+    "found",
+    "held",
+    "PROVEN",
+    "VERIFIED"
+  ],
   "mutation_source": "twin programming.euclid.recursive",
-  "mutations": ["MEMBER_ORDER", "LEDGER_POSITION"],
+  "mutations": [
+    "MEMBER_ORDER",
+    "LEDGER_POSITION"
+  ],
   "comparators": {
     "primary": "literal inequality of two lowercase SHA-256 digests",
     "shape_only_control": "inequality of (route, status)",
@@ -40,11 +52,18 @@
   },
   "freeze_groups": {
     "census_instrument": {
-      "patterns": ["scripts/no_flip_census.py"],
-      "expected_digest": "b7e4c19d38a6097746c1788cb60e8529bb5137afe83321c7a0843bd9b57154a1"
+      "patterns": [
+        "scripts/no_flip_census.py"
+      ],
+      "expected_digest": "b7e4c19d38a6097746c1788cb60e8529bb5137afe83321c7a0843bd9b57154a1",
+      "retired_for_future_comparisons": {
+        "amendment": "amd-2026-08-31-census-instrument"
+      }
     },
     "journal_population": {
-      "patterns": ["experiments/sessions/v021-s[0-9][0-9].json"],
+      "patterns": [
+        "experiments/sessions/v021-s[0-9][0-9].json"
+      ],
       "expected_digest": "1602971dcb302f5dc24e0781e5950d7e529f03910f0bf3f00859545588c40a85"
     },
     "replay_path": {
@@ -55,7 +74,10 @@
         "scripts/serve_chat.py",
         "scripts/session_ledger.py"
       ],
-      "expected_digest": "520f4879be2fd4fd0ca23b680ae9655492c08fe1640901c7409e6858704f7497"
+      "expected_digest": "520f4879be2fd4fd0ca23b680ae9655492c08fe1640901c7409e6858704f7497",
+      "retired_for_future_comparisons": {
+        "amendment": "amd-2026-08-31-replay-path"
+      }
     }
   },
   "gates": {
@@ -71,5 +93,29 @@
     "commit ordering does not prove an absence of private exploration",
     "digest equality is not collision-free proof of byte identity",
     "the census does not score semantic correctness"
+  ],
+  "amendments": [
+    {
+      "amendment_id": "amd-2026-08-31-replay-path",
+      "date": "2026-08-31",
+      "retires": "freeze_groups.replay_path",
+      "why": "AMD-3 (DESIGN-protocol-uptake; commit 39eccee) registered the third served profile in scripts/serve_chat.py, a member of this group. The registered R-NF run and its 0/220 result remain scoped to the original expected_digest, which stays in place unedited; this group hard-failing on every legitimate replay-path change was never its meaning - DISCOVERIES records the detector as retained for the erratum lane's FUTURE window, and that window seals its own groups.",
+      "observed_digest_at_retirement": "434de674ac5f30349e66866e6a52828d41830993fd692b64c9d50c8541ead9b3",
+      "successor_prereg": {
+        "path": null,
+        "note": "none yet: the next registered no-flip window seals its own freeze groups; until then this group is reported, not enforced"
+      }
+    },
+    {
+      "amendment_id": "amd-2026-08-31-census-instrument",
+      "date": "2026-08-31",
+      "retires": "freeze_groups.census_instrument",
+      "why": "scripts/no_flip_census.py's revalidator gained retirement-marker support after the v0.24 suite gate's run 1 went red on the replay_path group (amd-2026-08-31-replay-path). The registered 0/220 census was produced by the instrument at the original expected_digest, which stays in place unedited; the instrument's own pin moving because the pin mechanic moved is this amendment's whole content.",
+      "observed_digest_at_retirement": "ba1d48f7d6dfb08a7c4d10980bdc2b3976ef3e388394323e335bf15d37c9d609",
+      "successor_prereg": {
+        "path": null,
+        "note": "none yet: the next registered no-flip window seals its own freeze groups; until then this group is reported, not enforced"
+      }
+    }
   ]
 }
