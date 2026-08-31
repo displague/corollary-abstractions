@@ -1,0 +1,471 @@
+{
+  "preregistration_id": "protocol-uptake.u-p0.source-and-fixture-seal.v1",
+  "schema": "corollary.protocol-uptake-prereg/1",
+  "status": "REGISTERED",
+  "registered_date": "2026-08-31",
+  "stage": "U-P0",
+  "design": "docs/DESIGN-protocol-uptake.md",
+  "design_clause": "§6 step 2 — U-P0, the source and fixture seal.",
+  "roadmap": "docs/ROADMAP-v0.24.md#1",
+  "upre": "experiments/protocol_uptake_upre.json",
+  "scope_note": "No runtime exists and nothing here is executed against one. U-P0 commits the builder, its generated corpus, the dedicated regeneration checker, and the generated fixtures, and records the digests, the sealed table, the two computed view-ceilings, the position-switch control's frozen table-agreement, and each B9 mutant's target fixture. The fixtures are construction fixtures authored by this repository; they license no population claim about human conventions.",
+  "registered_before": [
+    "scripts/protocol_runtime.py — the module that will own the protocol stack; it does not exist at this commit",
+    "any ProtocolUptake receipt, raw or compact",
+    "any AMD-3 edit to SPEC-chat-completions-skin.md, its tests, or the capability catalog",
+    "any U-P1 host-tool capture",
+    "the B10 receipt-replay checker and the deliberately broken controls"
+  ],
+  "frozen": [
+    {
+      "path": "scripts/build_protocol_corpus.py",
+      "role": "corpus_and_fixture_builder",
+      "sha256_lf": "cbeb826555f9c86bd6a99c6e80b263da4ebc56c23f432855eae8b7a474adcde5"
+    },
+    {
+      "path": "protocol/protocols.json",
+      "role": "generated_protocol_corpus",
+      "sha256_lf": "c5d530a9fea804d4830ab4ae35249a22d550eca7f0eb2e916dfa3ef966a93c64"
+    },
+    {
+      "path": "scripts/check_protocol_regeneration.py",
+      "role": "protocol_regeneration_checker",
+      "sha256_lf": "3573445decbc12212b9a7d70d0e9ef4d791e08edac2e2e9e479ecb0811866e04"
+    },
+    {
+      "path": "experiments/protocol_uptake_fixtures.json",
+      "role": "generated_fixtures",
+      "sha256_lf": "d5530676349249441caf562c275904521aa0685cde60adeed702a4d7d023d6b0"
+    },
+    {
+      "path": "experiments/protocol_uptake_upre.json",
+      "role": "schema_audit",
+      "sha256_lf": "332fe439c11c9f720fe1a8fe90d31834799f7572b7c014e66eb5bad979c0c9b0"
+    }
+  ],
+  "corpus_location_note": "protocol/protocols.json is deliberately OUTSIDE data/. A node file under data/*/nodes.json would silently join the boot corpus count, the merged resolver graph, and every census over that graph; protocol nodes under data/ is a construction refusal (ROADMAP-v0.24 §1 acceptance).",
+  "surviving_context_signal_ids": [
+    "pending_need",
+    "quote_boundary",
+    "expected_output_slot",
+    "active_task",
+    "protocol_stack"
+  ],
+  "surviving_protocol_witness_fields": [
+    "protocol_node_id",
+    "relation"
+  ],
+  "survivor_note": "Exactly the survivors of experiments/protocol_uptake_upre.json. Two candidate input fields were DELETED there; they are named in that audit and appear in no schema this stage seals, so they are not repeated here. B9's mutants below are drawn one per survivor — five context signals and two witness fields, seven mutants.",
+  "normalization": "NFC + casefold + strip; every lookup key stored here is already normalized",
+  "absence_sentinel": "ABSENT",
+  "predicate_language": "exact value equality on signal values, with named absence sentinel ABSENT; protocol_stack's predicate value is the top-summary token",
+  "signal_value_domains": {
+    "pending_need": [
+      "ABSENT",
+      "probe"
+    ],
+    "quote_boundary": [
+      "ABSENT",
+      "SET"
+    ],
+    "expected_output_slot": [
+      "ABSENT",
+      "SET"
+    ],
+    "active_task": [
+      "ABSENT",
+      "SET"
+    ],
+    "protocol_stack": [
+      "empty",
+      "top:<protocol_id>:active",
+      "top:<protocol_id>:suspended"
+    ]
+  },
+  "protocol_stack_note": "The full stack is receipt state, not a predicate value; only the top-summary token enters an admission predicate.",
+  "positions": [
+    {
+      "position_id": "fresh_root",
+      "gloss": "no pending need, no quote boundary, no expected-output slot, empty protocol stack",
+      "signals": {
+        "pending_need": "ABSENT",
+        "quote_boundary": "ABSENT",
+        "expected_output_slot": "ABSENT",
+        "active_task": "ABSENT",
+        "protocol_stack": "empty"
+      }
+    },
+    {
+      "position_id": "probe_outstanding",
+      "gloss": "a live probe need",
+      "signals": {
+        "pending_need": "probe",
+        "quote_boundary": "ABSENT",
+        "expected_output_slot": "ABSENT",
+        "active_task": "ABSENT",
+        "protocol_stack": "empty"
+      }
+    },
+    {
+      "position_id": "literal_slot",
+      "gloss": "quote boundary set",
+      "signals": {
+        "pending_need": "ABSENT",
+        "quote_boundary": "SET",
+        "expected_output_slot": "ABSENT",
+        "active_task": "ABSENT",
+        "protocol_stack": "empty"
+      }
+    },
+    {
+      "position_id": "programming_task",
+      "gloss": "expected-output slot and active task set",
+      "signals": {
+        "pending_need": "ABSENT",
+        "quote_boundary": "ABSENT",
+        "expected_output_slot": "SET",
+        "active_task": "SET",
+        "protocol_stack": "empty"
+      }
+    }
+  ],
+  "position_note": "The four context positions are DESIGN §6's, named there rather than deferred. The protocol stack is empty in all four. In a multi-turn fixture a position id names only the four non-stack signal values; protocol_stack is derived from the trajectory.",
+  "move_kinds": [
+    "entry",
+    "continuation",
+    "resume",
+    "exit"
+  ],
+  "move_kind_note": "Entry-move predicates read only the four non-stack signals; continuation, resume, and exit predicates read only protocol_stack's top summary.",
+  "runtime_module": "scripts/protocol_runtime.py",
+  "runtime_module_note": "The module that will own the interaction-control stack. It lives beside session state, never inside an epistemic frame, and it is not FrameExecutor.open_nested. It is not written at U-P0.",
+  "stack_depth_cap": 8,
+  "stack_depth_cap_note": "A declared resource bound, not a measured number: four times the deepest of the eight nested fixtures, which reach depth two. A ninth push is REFUSED before mutation. The depth-nine plant fills the cap itself and does not raise it.",
+  "next_state_projection": [
+    "protocol_id",
+    "stack_after",
+    "pending_request_id",
+    "authority_delta"
+  ],
+  "next_state_projection_note": "move_id is deliberately OUTSIDE this projection: a projection that digested a move's name could never certify two names as one transition, and DESIGN §4's equivalence rule would be dead code.",
+  "next_state_sha256_rule": "sha256 of the canonical JSON (sorted keys, comma/colon separators, UTF-8, no whitespace) of the four-field projection",
+  "episode_id_rule": "ep-<turn_index>-<protocol_id>, turn_index 1-based within a session",
+  "table_generation_rule": "cell(surface, position) = the unique family F such that the corpus witnesses the normalized surface under F via an ENTRY move and the position satisfies F's entry predicate; zero matches = REFUSED",
+  "expected_uptake": {
+    "cells": 32,
+    "rows": [
+      {
+        "row": 1,
+        "surface": "hello",
+        "labels": [
+          "greeting",
+          "probe_reply",
+          "REFUSED",
+          "REFUSED"
+        ],
+        "selected": [
+          {
+            "protocol_id": "protocol.greeting.a",
+            "move_id": "greet"
+          },
+          {
+            "protocol_id": "protocol.probe_reply.a",
+            "move_id": "confirm_alive"
+          },
+          null,
+          null
+        ]
+      },
+      {
+        "row": 2,
+        "surface": "good morning",
+        "labels": [
+          "greeting",
+          "REFUSED",
+          "REFUSED",
+          "REFUSED"
+        ],
+        "selected": [
+          {
+            "protocol_id": "protocol.greeting.a",
+            "move_id": "greet"
+          },
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 3,
+        "surface": "still here",
+        "labels": [
+          "REFUSED",
+          "probe_reply",
+          "REFUSED",
+          "REFUSED"
+        ],
+        "selected": [
+          null,
+          {
+            "protocol_id": "protocol.probe_reply.a",
+            "move_id": "confirm_alive"
+          },
+          null,
+          null
+        ]
+      },
+      {
+        "row": 4,
+        "surface": "ready",
+        "labels": [
+          "REFUSED",
+          "probe_reply",
+          "REFUSED",
+          "expected_output"
+        ],
+        "selected": [
+          null,
+          {
+            "protocol_id": "protocol.probe_reply.a",
+            "move_id": "confirm_alive"
+          },
+          null,
+          {
+            "protocol_id": "protocol.expected_output.a",
+            "move_id": "match_output"
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "surface": "hello world",
+        "labels": [
+          "REFUSED",
+          "REFUSED",
+          "quoted_datum",
+          "expected_output"
+        ],
+        "selected": [
+          null,
+          null,
+          {
+            "protocol_id": "protocol.quoted_datum.a",
+            "move_id": "accept_datum"
+          },
+          {
+            "protocol_id": "protocol.expected_output.a",
+            "move_id": "match_output"
+          }
+        ]
+      },
+      {
+        "row": 6,
+        "surface": "forty-two",
+        "labels": [
+          "REFUSED",
+          "REFUSED",
+          "quoted_datum",
+          "REFUSED"
+        ],
+        "selected": [
+          null,
+          null,
+          {
+            "protocol_id": "protocol.quoted_datum.a",
+            "move_id": "accept_datum"
+          },
+          null
+        ]
+      },
+      {
+        "row": 7,
+        "surface": "ok",
+        "labels": [
+          "REFUSED",
+          "REFUSED",
+          "REFUSED",
+          "expected_output"
+        ],
+        "selected": [
+          null,
+          null,
+          null,
+          {
+            "protocol_id": "protocol.expected_output.a",
+            "move_id": "match_output"
+          }
+        ]
+      },
+      {
+        "row": 8,
+        "surface": "done",
+        "labels": [
+          "REFUSED",
+          "REFUSED",
+          "REFUSED",
+          "expected_output"
+        ],
+        "selected": [
+          null,
+          null,
+          null,
+          {
+            "protocol_id": "protocol.expected_output.a",
+            "move_id": "match_output"
+          }
+        ]
+      }
+    ],
+    "columns": [
+      "fresh_root",
+      "probe_outstanding",
+      "literal_slot",
+      "programming_task"
+    ]
+  },
+  "frozen_numbers": {
+    "c_surface": 21,
+    "c_position": 21,
+    "position_switch_agreement": 17
+  },
+  "frozen_numbers_note": "Computed by scripts/build_protocol_corpus.py from the sealed table, not chosen. c_surface is the number of the 32 cells the best function of surface alone matches; c_position the number the best function of position alone matches; position_switch_agreement is the agreement of the control 'fresh_root -> greeting, else REFUSED' with the sealed table. B1 recomputes all three from the committed sealed table and a mismatch is a construction bug, not a leak.",
+  "degeneracy_bounds": {
+    "vacuous_at": "either ceiling = 32/32 — that view is a sufficient statistic: BLOCKED CONSTRUCTION, no runtime",
+    "insufficiently_joint_at": "either ceiling >= 24/32 — at least as separable as the exclusive-home shape: BLOCKED CONSTRUCTION",
+    "observed": "both ceilings are 21/32 and 21/32"
+  },
+  "control_labels": {
+    "surface_only": "the best function of surface alone, fitted to the sealed table; ceiling c_surface. Equivalently witness-only: under exact lookup the witness set is a function of the surface, so there is no third independent factor.",
+    "position_only": "the best function of position alone, fitted to the sealed table; ceiling c_position",
+    "position_switch": "select greeting at fresh_root and REFUSED elsewhere; frozen table-agreement above",
+    "host_control": "render every need as ordinary assistant text; a perfect transcript under it establishes no tool support",
+    "voiding_sentence": "If the best surface-only classifier of the runtime's selected moves, or the best position-only classifier of those moves, agrees with the runtime on more than c_surface or c_position cells of the sealed 32, the runtime leaked labels into that view and the protocol uptake claim is void. The claim is void also if the runtime's agreement with the position-switch control exceeds that control's frozen table-agreement."
+  },
+  "fixture_counts": {
+    "product": 32,
+    "refusal": 8,
+    "ask": 4,
+    "equivalence": 2,
+    "nested": 8,
+    "depth_cap_plant": 1,
+    "authority_plant": 1,
+    "b9_mutants": 7,
+    "total_fixtures": 56
+  },
+  "structural_invariants": [
+    "(a) each product surface matches at most one node per family",
+    "(b) ASK and equivalence lookup keys are disjoint from the eight product surfaces",
+    "(c) entry predicates are pairwise exclusive across families on the four positions",
+    "(d) at least two product surfaces take two different selected (non-REFUSED) moves across positions",
+    "(e) both view-ceilings are below 24 and below 32",
+    "(f) at least two ASK fixtures exist, and all four expect WAITING",
+    "(g) the deepest depth the eight nested fixtures reach is exactly two",
+    "(h) the equivalence pair's four-field projections coincide on one next_state_sha256",
+    "(i) the two input fields U-PRE deleted appear in no artifact this stage seals"
+  ],
+  "b9_mutants": [
+    {
+      "mutant_id": "b9-pending_need",
+      "field": "pending_need",
+      "field_class": "context_signal",
+      "target_fixture": "ctx-3-2",
+      "target_cell": {
+        "surface": "still here",
+        "position_id": "probe_outstanding"
+      },
+      "transformation": "pending_need: probe -> ABSENT",
+      "expected_effect": "REFUSED"
+    },
+    {
+      "mutant_id": "b9-quote_boundary",
+      "field": "quote_boundary",
+      "field_class": "context_signal",
+      "target_fixture": "ctx-6-3",
+      "target_cell": {
+        "surface": "forty-two",
+        "position_id": "literal_slot"
+      },
+      "transformation": "quote_boundary: SET -> ABSENT",
+      "expected_effect": "REFUSED"
+    },
+    {
+      "mutant_id": "b9-expected_output_slot",
+      "field": "expected_output_slot",
+      "field_class": "context_signal",
+      "target_fixture": "ctx-8-4",
+      "target_cell": {
+        "surface": "done",
+        "position_id": "programming_task"
+      },
+      "transformation": "expected_output_slot: SET -> ABSENT",
+      "expected_effect": "REFUSED"
+    },
+    {
+      "mutant_id": "b9-active_task",
+      "field": "active_task",
+      "field_class": "context_signal",
+      "target_fixture": "ctx-8-4",
+      "target_cell": {
+        "surface": "done",
+        "position_id": "programming_task"
+      },
+      "transformation": "active_task: SET -> ABSENT with expected_output_slot kept SET — the stale-slot case the conjunction exists for",
+      "expected_effect": "REFUSED"
+    },
+    {
+      "mutant_id": "b9-protocol_stack",
+      "field": "protocol_stack",
+      "field_class": "context_signal",
+      "target_fixture": "nested-resume-d1-a",
+      "target_turn_index": 4,
+      "transformation": "top summary top:protocol.greeting.a:suspended -> top:protocol.greeting.a:active",
+      "expected_effect": "selected-move change: pick_up -> smalltalk, RESUME -> CONTINUE; or validation failure"
+    },
+    {
+      "mutant_id": "b9-protocol_node_id",
+      "field": "protocol_witnesses[].protocol_node_id",
+      "field_class": "protocol_witness",
+      "target_fixture": "ctx-1-1",
+      "target_cell": {
+        "surface": "hello",
+        "position_id": "fresh_root"
+      },
+      "transformation": "witness protocol_node_id protocol.greeting.a -> dangling protocol.greeting.zz",
+      "expected_effect": "validation failure"
+    },
+    {
+      "mutant_id": "b9-relation",
+      "field": "protocol_witnesses[].relation",
+      "field_class": "protocol_witness",
+      "target_fixture": "ctx-1-1",
+      "target_cell": {
+        "surface": "hello",
+        "position_id": "fresh_root"
+      },
+      "transformation": "witness relation greeting -> probe_reply",
+      "expected_effect": "REFUSED or validation failure"
+    }
+  ],
+  "b9_note": "One mutant per surviving semantic input field, each naming its target fixture. Next-state projection fields are outputs and are not in this set: their necessity is DESIGN §4's equivalence rule (B6) and the empty-authority_delta predicate (B3). No schema field may be removed after U-P0; inert-field pruning belonged only to the U-PRE audit.",
+  "gates": {
+    "B1": "source truth — the dedicated protocol-corpus regeneration check passes byte-identically, schema validation and link checks pass, every witness resolves to a generated protocol node and its builder source, data/*/nodes.json and the merged resolver graph and the boot corpus count remain byte-identical, one orphan or direct generated-file edit stops the slice, and recomputing c_surface and c_position from the sealed table reproduces the frozen prereg numbers — a mismatch is a construction bug, not a leak.",
+    "B2": "context and corpus change uptake — all 32/32 context-swap fixtures produce their sealed-table move and transition, the same surface bytes reach different selected moves solely through declared context signals and corpus witnesses where the table says they do, every selected move cites at least one protocol witness in its receipt, and the construction check that at least two surfaces take two different selected moves is part of this gate.",
+    "B3": "ambiguity never guesses — all 8/8 refusal fixtures end in REFUSED and all 4/4 ASK fixtures end in ASK as preregistered, with no selected move, no protocol-stack mutation, and no authority delta on those paths; authority_delta is present and empty as a plaintext receipt field rather than inferred from a digest, and the ASK branch's only writes are its own artifacts — the signed request, the WAITING state, and the uptake receipt.",
+    "B4": "lexical control loses — two capability-blind controls run over the sealed 32, a surface-only guesser (equivalently witness-only) and a position-only guesser; c_surface and c_position remain the best restricted-view fits to the sealed table, frozen here and recomputed by B1, and B4 re-fits each restricted-view classifier on the runtime's selected moves and scores that in-sample agreement, where equality with a frozen ceiling is not a firing but agreement above one means the runtime's labels are a function of that view more than the table is and voids the fixture set.",
+    "B5": "exact nesting — all 8/8 trajectories reproduce stack_after and resume the exact parent episode, three arrival-order replays per trajectory produce byte-identical uptake order, a reply for the suspended child may not bind in its parent, and the depth-nine plant is REFUSED without changing the stack.",
+    "B6": "ask only for material ambiguity — every fixture with more than one distinct candidate next_state_sha256 stops WAITING and every fixture whose candidates share one digest proceeds without asking; the four ASK fixtures must stop WAITING, the two sealed equivalence fixtures must proceed, select the canonical lowest move identifier, and record that the candidates grouped to one digest; the candidate set is committed in the receipt as candidates[] and the equivalence partition is derived at check time and is not a schema field.",
+    "B7": "tool-wire round trip — if U-P1 registered a compatible prompt tool, an unmodified Codex CLI must complete function-call item to host result to function-call-output input to exact request resume, served on corollary/protocol, with unknown, stale, cross-request, canceled, and repeated outputs remaining unbound; if U-P1 found no tool, B7 is UNTESTED and may not be reported green from the text fallback, and the AMD-3 spec, catalog, and ignored-field tests are part of this gate.",
+    "B8": "phrases carry no authority — a planted prompt string naming WRITE, Python, and shell capabilities must open none of them, and zero process starts, zero stage records, and zero data-tree byte changes are required.",
+    "B9": "corruption fires — U-P0 seals one mutant per semantic input field that survived U-PRE, each mutant names the fixture it is applied to, and every sealed mutant must change the selected move, move the receipt to ASK/REFUSED, or fail validation; next-state projection fields are outputs and are not in this set, and no schema field may be removed after U-P0.",
+    "B10": "replay — the checker regenerates every receipt from the sealed input and obtains byte-identical records, and missing and extra uptake records fail set equality, so the checker may not validate only records the runtime chose to emit."
+  },
+  "non_claims": [
+    "no claim of English understanding",
+    "no claim to recover private human intent — this is the system's uptake, which a person may repair",
+    "no claim of general social competence",
+    "no claim about protocol behavior outside the sealed families",
+    "no claim about learned policy quality — the candidate proposer in this slice is closed-form",
+    "no Python or shell capability, and no WRITE, process, filesystem, or network authority",
+    "exact conformance to a transition table does not establish that the table correctly describes human convention"
+  ]
+}

@@ -1,0 +1,504 @@
+{
+  "schema": "corollary.protocol-corpus/1",
+  "design": "docs/DESIGN-protocol-uptake.md",
+  "roadmap": "docs/ROADMAP-v0.24.md#1",
+  "stage": "U-P0",
+  "generator": "scripts/build_protocol_corpus.py",
+  "generated_note": "Generated artifact. The seed in the generator is source truth; a direct edit of this file is a DESIGN §10 stop condition. Deliberately outside data/ so it joins no boot corpus count and no merged resolver graph.",
+  "runtime_module": "scripts/protocol_runtime.py",
+  "normalization": "NFC + casefold + strip; every lookup key stored here is already normalized",
+  "predicate_language": "exact value equality on signal values, with named absence sentinel ABSENT; protocol_stack's predicate value is the top-summary token",
+  "absence_sentinel": "ABSENT",
+  "context_signal_ids": [
+    "pending_need",
+    "quote_boundary",
+    "expected_output_slot",
+    "active_task",
+    "protocol_stack"
+  ],
+  "protocol_witness_fields": [
+    "protocol_node_id",
+    "relation"
+  ],
+  "upre_note": "the context signal ids and witness fields above are exactly U-PRE's survivors; the two fields U-PRE deleted are named there and appear nowhere here, not even as a list of what was removed",
+  "move_kinds": [
+    "entry",
+    "continuation",
+    "resume",
+    "exit"
+  ],
+  "families": [
+    "greeting",
+    "probe_reply",
+    "quoted_datum",
+    "expected_output"
+  ],
+  "stack_depth_cap": 8,
+  "stack_top_summary_forms": [
+    "empty",
+    "top:<protocol_id>:active",
+    "top:<protocol_id>:suspended"
+  ],
+  "nodes": [
+    {
+      "protocol_id": "protocol.greeting.a",
+      "family": "greeting",
+      "moves": [
+        {
+          "move_id": "greet",
+          "kind": "entry",
+          "keys": [
+            "hello",
+            "good morning",
+            "hi",
+            "greetings"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "pending_need",
+              "required_value": "ABSENT"
+            },
+            {
+              "signal_id": "quote_boundary",
+              "required_value": "ABSENT"
+            },
+            {
+              "signal_id": "expected_output_slot",
+              "required_value": "ABSENT"
+            }
+          ]
+        },
+        {
+          "move_id": "smalltalk",
+          "kind": "continuation",
+          "keys": [
+            "how are you"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "protocol_stack",
+              "required_value": "top:protocol.greeting.a:active"
+            }
+          ]
+        },
+        {
+          "move_id": "pick_up",
+          "kind": "resume",
+          "keys": [
+            "how are you"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "protocol_stack",
+              "required_value": "top:protocol.greeting.a:suspended"
+            }
+          ]
+        },
+        {
+          "move_id": "farewell",
+          "kind": "exit",
+          "keys": [
+            "goodbye"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "protocol_stack",
+              "required_value": "top:protocol.greeting.a:active"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "protocol.greeting.b",
+      "family": "greeting",
+      "moves": [
+        {
+          "move_id": "acknowledge",
+          "kind": "entry",
+          "keys": [
+            "hi",
+            "greetings",
+            "hey",
+            "welcome"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "pending_need",
+              "required_value": "ABSENT"
+            },
+            {
+              "signal_id": "quote_boundary",
+              "required_value": "ABSENT"
+            },
+            {
+              "signal_id": "expected_output_slot",
+              "required_value": "ABSENT"
+            }
+          ]
+        },
+        {
+          "move_id": "greet_back",
+          "kind": "entry",
+          "keys": [
+            "hey",
+            "welcome"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "pending_need",
+              "required_value": "ABSENT"
+            },
+            {
+              "signal_id": "quote_boundary",
+              "required_value": "ABSENT"
+            },
+            {
+              "signal_id": "expected_output_slot",
+              "required_value": "ABSENT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "protocol.probe_reply.a",
+      "family": "probe_reply",
+      "moves": [
+        {
+          "move_id": "confirm_alive",
+          "kind": "entry",
+          "keys": [
+            "hello",
+            "still here",
+            "ready",
+            "yes"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "pending_need",
+              "required_value": "probe"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "protocol.probe_reply.b",
+      "family": "probe_reply",
+      "moves": [
+        {
+          "move_id": "confirm_alive_alt",
+          "kind": "entry",
+          "keys": [
+            "yes"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "pending_need",
+              "required_value": "probe"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "protocol.quoted_datum.a",
+      "family": "quoted_datum",
+      "moves": [
+        {
+          "move_id": "accept_datum",
+          "kind": "entry",
+          "keys": [
+            "hello world",
+            "forty-two",
+            "null"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "quote_boundary",
+              "required_value": "SET"
+            }
+          ]
+        },
+        {
+          "move_id": "close_quote",
+          "kind": "exit",
+          "keys": [
+            "end quote"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "protocol_stack",
+              "required_value": "top:protocol.quoted_datum.a:active"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "protocol.quoted_datum.b",
+      "family": "quoted_datum",
+      "moves": [
+        {
+          "move_id": "accept_datum_alt",
+          "kind": "entry",
+          "keys": [
+            "null"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "quote_boundary",
+              "required_value": "SET"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "protocol.expected_output.a",
+      "family": "expected_output",
+      "moves": [
+        {
+          "move_id": "match_output",
+          "kind": "entry",
+          "keys": [
+            "ready",
+            "hello world",
+            "ok",
+            "done"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "expected_output_slot",
+              "required_value": "SET"
+            },
+            {
+              "signal_id": "active_task",
+              "required_value": "SET"
+            }
+          ]
+        },
+        {
+          "move_id": "finish_task",
+          "kind": "exit",
+          "keys": [
+            "that is all"
+          ],
+          "required_signal_predicates": [
+            {
+              "signal_id": "protocol_stack",
+              "required_value": "top:protocol.expected_output.a:active"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lookup": {
+    "done": [
+      {
+        "protocol_node_id": "protocol.expected_output.a",
+        "relation": "expected_output",
+        "move_id": "match_output",
+        "move_kind": "entry"
+      }
+    ],
+    "end quote": [
+      {
+        "protocol_node_id": "protocol.quoted_datum.a",
+        "relation": "quoted_datum",
+        "move_id": "close_quote",
+        "move_kind": "exit"
+      }
+    ],
+    "forty-two": [
+      {
+        "protocol_node_id": "protocol.quoted_datum.a",
+        "relation": "quoted_datum",
+        "move_id": "accept_datum",
+        "move_kind": "entry"
+      }
+    ],
+    "good morning": [
+      {
+        "protocol_node_id": "protocol.greeting.a",
+        "relation": "greeting",
+        "move_id": "greet",
+        "move_kind": "entry"
+      }
+    ],
+    "goodbye": [
+      {
+        "protocol_node_id": "protocol.greeting.a",
+        "relation": "greeting",
+        "move_id": "farewell",
+        "move_kind": "exit"
+      }
+    ],
+    "greetings": [
+      {
+        "protocol_node_id": "protocol.greeting.a",
+        "relation": "greeting",
+        "move_id": "greet",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.greeting.b",
+        "relation": "greeting",
+        "move_id": "acknowledge",
+        "move_kind": "entry"
+      }
+    ],
+    "hello": [
+      {
+        "protocol_node_id": "protocol.greeting.a",
+        "relation": "greeting",
+        "move_id": "greet",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.probe_reply.a",
+        "relation": "probe_reply",
+        "move_id": "confirm_alive",
+        "move_kind": "entry"
+      }
+    ],
+    "hello world": [
+      {
+        "protocol_node_id": "protocol.expected_output.a",
+        "relation": "expected_output",
+        "move_id": "match_output",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.quoted_datum.a",
+        "relation": "quoted_datum",
+        "move_id": "accept_datum",
+        "move_kind": "entry"
+      }
+    ],
+    "hey": [
+      {
+        "protocol_node_id": "protocol.greeting.b",
+        "relation": "greeting",
+        "move_id": "acknowledge",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.greeting.b",
+        "relation": "greeting",
+        "move_id": "greet_back",
+        "move_kind": "entry"
+      }
+    ],
+    "hi": [
+      {
+        "protocol_node_id": "protocol.greeting.a",
+        "relation": "greeting",
+        "move_id": "greet",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.greeting.b",
+        "relation": "greeting",
+        "move_id": "acknowledge",
+        "move_kind": "entry"
+      }
+    ],
+    "how are you": [
+      {
+        "protocol_node_id": "protocol.greeting.a",
+        "relation": "greeting",
+        "move_id": "pick_up",
+        "move_kind": "resume"
+      },
+      {
+        "protocol_node_id": "protocol.greeting.a",
+        "relation": "greeting",
+        "move_id": "smalltalk",
+        "move_kind": "continuation"
+      }
+    ],
+    "null": [
+      {
+        "protocol_node_id": "protocol.quoted_datum.a",
+        "relation": "quoted_datum",
+        "move_id": "accept_datum",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.quoted_datum.b",
+        "relation": "quoted_datum",
+        "move_id": "accept_datum_alt",
+        "move_kind": "entry"
+      }
+    ],
+    "ok": [
+      {
+        "protocol_node_id": "protocol.expected_output.a",
+        "relation": "expected_output",
+        "move_id": "match_output",
+        "move_kind": "entry"
+      }
+    ],
+    "ready": [
+      {
+        "protocol_node_id": "protocol.expected_output.a",
+        "relation": "expected_output",
+        "move_id": "match_output",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.probe_reply.a",
+        "relation": "probe_reply",
+        "move_id": "confirm_alive",
+        "move_kind": "entry"
+      }
+    ],
+    "still here": [
+      {
+        "protocol_node_id": "protocol.probe_reply.a",
+        "relation": "probe_reply",
+        "move_id": "confirm_alive",
+        "move_kind": "entry"
+      }
+    ],
+    "that is all": [
+      {
+        "protocol_node_id": "protocol.expected_output.a",
+        "relation": "expected_output",
+        "move_id": "finish_task",
+        "move_kind": "exit"
+      }
+    ],
+    "welcome": [
+      {
+        "protocol_node_id": "protocol.greeting.b",
+        "relation": "greeting",
+        "move_id": "acknowledge",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.greeting.b",
+        "relation": "greeting",
+        "move_id": "greet_back",
+        "move_kind": "entry"
+      }
+    ],
+    "yes": [
+      {
+        "protocol_node_id": "protocol.probe_reply.a",
+        "relation": "probe_reply",
+        "move_id": "confirm_alive",
+        "move_kind": "entry"
+      },
+      {
+        "protocol_node_id": "protocol.probe_reply.b",
+        "relation": "probe_reply",
+        "move_id": "confirm_alive_alt",
+        "move_kind": "entry"
+      }
+    ]
+  }
+}
