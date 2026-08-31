@@ -13,6 +13,47 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## The host bound the exact request and refused the tool in the same breath (2026-08-31)
+
+**Claim.** codex-cli 0.150.1's tool wire and its tool policy are separate
+machines with opposite answers. Given the one emitted `request_user_input`
+function-call item, the host constructed a `function_call_output` whose
+`call_id` is the exact pending verifier request id — the binding half of B7
+worked unmodified — while the output payload it bound was its own router's
+refusal, "request_user_input is unavailable in Default mode." The
+declaration's Plan-mode caveat (captured at U-P1) governs execution, not
+advertisement: the host advertises in every mode a tool it will execute in
+one.
+
+**Evidence.** `reports/b7-codex-session.log` (rollout extract);
+`experiments/protocol_uptake_b7.json` verdict RED with the scripted
+self-check green, so the server half is excluded as the cause. Second
+independent mechanism in the same run: the host replayed its `function_call`
+item inside the follow-up input (store:false), the exact wire shape ¶AMD-3
+recorded in advance as its one risk.
+
+**Status.** near-miss, kept deliberately. R-U2 unlicensed; the recorded next
+probes (Plan-mode router behavior; a registered test for admitting the
+echoed item) are in the B7 commit, not taken this cycle.
+
+## An audit that names the forbidden name carries it (2026-08-31)
+
+**Claim.** U-P0's invariant (i) — the two U-PRE-deleted input fields appear
+nowhere in the sealed artifacts — cannot be enforced by code that searches
+for those field names, because the enforcing code then contains the names
+and trips its own check. The honest form is positive: every signal id must
+be a survivor, and the checker derives the deleted names from the audit
+artifact at run time.
+
+**Evidence.** `scripts/build_protocol_corpus.py` (positive survivor check),
+`scripts/check_protocol_regeneration.py` (names derived from
+`experiments/protocol_uptake_upre.json`); the first drafts tripped invariant
+(i) on themselves before the rewrite.
+
+**Status.** near-miss (instrument), kept deliberately — the same shape as
+v0.22's removal arm that could not go red: an enforcement that contains its
+own violation.
+
 ## 0/220 rendered-answer digest regressions in the recorded window (2026-08-29)
 
 **Claim.** Replaying the 220 recorded answering turns (`160 solved + 60

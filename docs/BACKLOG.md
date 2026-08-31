@@ -101,20 +101,22 @@ or commit history. Each item names the evidence that motivated it.
 
 ## Filed after the v0.23 Codex harness trial (early v0.24 design input)
 
-- **PROTOCOL UPTAKE -- design-only candidate, reviewed, not scheduled
-  (2026-08-28).** The first ordinary input through the shipped Responses skin,
-  `hello`, reached the proposition/corpus refusal path. The new design does not
-  promote `hello` to a command: a builder-generated protocol vocabulary
-  (`protocol/protocols.json`, deliberately outside `data/` and every existing
-  corpus glob) and exact
-  session signals jointly license uptake, served on a new `corollary/protocol`
-  profile so neither shipped surface is widened; materially different surviving
-  transitions reuse signed `ASK -> WAITING -> reply`; nested uptake resumes the
-  exact parent. The Responses prompt-tool claim is separately gated and remains
-  UNTESTED if the installed Codex host advertises no compatible tool schema.
-  Evidence and the full 15-direction funnel:
-  [DESIGN-protocol-uptake](DESIGN-protocol-uptake.md),
-  `reports/design-direction-v0.24.json`.
+- **PROTOCOL UPTAKE -- SHIPPED as the v0.24 headline (2026-08-31; scheduled
+  by the recorded course adjudication, ROADMAP-v0.24 §1.1).** R-U1 GREEN on
+  the registered run (`experiments/protocol_uptake_run.json`, 87 receipts,
+  no blind control fired); B7 RED with both mechanisms named, R-U2 not
+  licensed, no Codex prompt-tool support claimed. Prune at release rotation.
+
+- **B7 successors -- two named probes, neither taken in v0.24 (2026-08-31).**
+  (1) Plan-mode router probe: the host advertises `request_user_input` in
+  every mode but its router executes it only in Plan mode, and no exec-mode
+  flag reaches that switch; whether Plan mode completes the round trip is
+  unmeasured. (2) The echoed-`function_call` admission question: a
+  store:false host replays its own function_call item in `input`, which
+  ¶AMD-3's deliberately narrow §4.2 scope refuses; admitting it is a wire
+  question owing its own registered test and dated amendment, never a
+  widening after the red. Evidence: `experiments/protocol_uptake_b7.json`,
+  `reports/b7-codex-session.log`.
 
 - **DEPUTY -- live execution transport, parked behind its own design and
   STRANGER-GATE (2026-08-28).** The series-1 finalist survived only after shell,

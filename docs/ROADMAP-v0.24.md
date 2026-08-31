@@ -22,6 +22,22 @@ release: [RELEASE-v0.23.0](RELEASE-v0.23.0.md) · incumbent design:
 
 ## 1. Headline — PROTOCOL UPTAKE, if the course keeps it
 
+**STATUS (2026-08-31): SHIPPED, R-U1 GREEN; B7 RED, R-U2 not licensed.**
+The course kept it (§1.1). Construction ran in the design's order — U-PRE
+(7 of 9 inputs survive; `prior_move` and `source_seed` deleted), U-P0
+(ceilings computed 21/21, switch 17, all under the 24/32 bound), U-P1
+(request_user_input captured with its Plan-mode caveat), AMD-3 (three
+profiles, adapter bound to the captured digest) — and the registered run
+passed all nine scored gates with no blind control fired:
+`experiments/protocol_uptake_run.json`, 87 receipts. B7's live round trip
+is RED with both mechanisms named (`experiments/protocol_uptake_b7.json`):
+the host bound the exact request id but its router refuses the tool in
+Default mode, and its store:false echo of the function_call item hits
+¶AMD-3's deliberately narrow §4.2 scope. The release claims no Codex
+prompt-tool support; text WAITING is the shipped path. None of the three
+construction refusals (Latin-rectangle balance, kernel/conversation path,
+protocol nodes under `data/`) occurred.
+
 The course (not this file) decides whether protocol uptake outranks
 STRANGER-GATE. If it does, the slice is the reviewed design: a third
 served profile `corollary/protocol`, an honest 8×4 context/corpus table

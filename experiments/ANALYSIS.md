@@ -1,3 +1,58 @@
+# PROTOCOL UPTAKE / R-U1: the same utterance takes different verified moves, and hello is not a command (2026-08-31)
+
+`experiments/protocol_uptake_run.json` (gate verdicts),
+`experiments/protocol_uptake_receipts.json` (87 raw receipts, landed before
+these compact numbers), corpus `protocol/protocols.json` from
+`scripts/build_protocol_corpus.py`, runtime `scripts/protocol_runtime.py`.
+Design: `docs/DESIGN-protocol-uptake.md`. Prereg:
+`experiments/protocol_uptake_prereg.json` (commit d954114, a proven ancestor
+of the run). Course funnel: three series, fifteen directions, DUTY selected
+after its round-one form STANDING ORDERS was repaired at the grounding round;
+receipt `reports/design-direction-v0.24.json`.
+
+**The readout.** All nine scored gates green on the registered pass. 32/32
+sealed context-swap cells reproduce their table move: `hello` is a greeting
+at `fresh_root` and a probe reply under a live probe — by corpus witness and
+position predicate, never by surface bytes (a lookup miss licenses nothing).
+Three of the eight product surfaces take two different selected moves across
+positions. 8/8 corruption fixtures refuse; 4/4 material ambiguities stop
+`WAITING` behind a deterministically minted need; the two equivalence
+fixtures proceed without asking on the canonical lowest move name with the
+one-digest grouping recorded; 8/8 nested trajectories replay byte-identically
+three times each; the depth-nine plant is refused at the declared cap of 8;
+the authority plant opens nothing (zero process starts, `data/`
+byte-identical); all 7 sealed B9 mutants fire; B10 regenerates all 87
+receipts byte-identically under set equality.
+
+**The controls did not fire, and equality is not a firing.** The frozen
+view-ceilings — computed at U-P0 from the honest table, not chosen — are
+`c_surface` 21/32 and `c_position` 21/32, both under the 24/32
+exclusive-home degeneracy bound. Re-fit on the runtime's selected moves,
+both restricted views score exactly their ceilings, and the position-switch
+control scores exactly its frozen 17/32. **R-U1's licensed sentence** is in
+the artifact; it claims uptake on the sealed families only — no English
+understanding, no private-intent recovery, no population claim about human
+convention.
+
+**B7 is RED, three steps out of four, both mechanisms named**
+(`experiments/protocol_uptake_b7.json`, evidence
+`reports/b7-codex-session.log`). The unmodified codex-cli 0.150.1 received
+the one emitted `request_user_input` function-call item and bound a
+`function_call_output` to the *exact* pending request id — and its output was
+the host router's own refusal, "request_user_input is unavailable in Default
+mode"; the host also replayed the `function_call` item inside its follow-up
+input (the store:false wire habit ¶AMD-3 recorded in advance as its one
+risk), which the amendment's deliberately narrow §4.2 scope refuses. Either
+mechanism alone kills the resume. R-U2 is not licensed; the text WAITING
+fallback remains the shipped path; the release claims no Codex prompt-tool
+support.
+
+**What this does NOT say.** The fixtures are construction fixtures authored
+by this repository; exact conformance to the transition table does not
+establish that the table describes human convention. No authority of any
+kind opened: `authority_delta` is present and empty on every one of the 87
+receipts, read as a field, not inferred from a digest.
+
 # ECHO construction gate: the two served voices do not share a reader or an external adjudicator (2026-08-28)
 
 `experiments/echo_population_audit.json`, preregistration
