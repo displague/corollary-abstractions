@@ -9,7 +9,7 @@ Two assertions therefore, not one.
 repository root : <repo>
 program tree    : renamed to scripts.renamed-away-by-cold-harness
 scripts/ exists : False
-cwd             : ~\AppData\Local\Temp\cold-receipt-okefirlu\good (inside repo: False)
+cwd             : ~\AppData\Local\Temp\cold-receipt-6dzqxu1w\good (inside repo: False)
 
 interpreter
 -----------

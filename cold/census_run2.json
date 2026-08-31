@@ -9,9 +9,9 @@
         "conformance_ce3_supplement:decide_both_directions"
       ]
     },
-    "started_utc_epoch": 1788171483,
-    "elapsed_seconds": 3541.9,
-    "bundle_root": "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu",
+    "started_utc_epoch": 1788197656,
+    "elapsed_seconds": 3577.4,
+    "bundle_root": "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w",
     "platform": "win32"
   },
   "scope": {
@@ -38,8 +38,8 @@
     ],
     "working_tree": {
       "digest_before_rename": {
-        "files": 1269,
-        "digest": "d9950c92de93938da318aaab99711a8492e7f310e81da5205da5cd97bb04df84",
+        "files": 1270,
+        "digest": "c44ed81c4991d4d3b530079fefc24bcbb18f992e8a5412a3b94977c0d2700047",
         "excluded_top_level": [
           ".git",
           ".venv",
@@ -54,8 +54,8 @@
         "manifest_file": "cold/evidence_run2/tree_manifest_before.json"
       },
       "digest_after_restore": {
-        "files": 1269,
-        "digest": "d9950c92de93938da318aaab99711a8492e7f310e81da5205da5cd97bb04df84",
+        "files": 1270,
+        "digest": "c44ed81c4991d4d3b530079fefc24bcbb18f992e8a5412a3b94977c0d2700047",
         "excluded_top_level": [
           ".git",
           ".venv",
@@ -74,7 +74,7 @@
       "program_tree_restored": true
     }
   },
-  "census_seal": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581",
+  "census_seal": "d3d9bdc6eae689a120eed1dbcede8f8052405cf91711356aea299243f1c7fd33",
   "pin_table_ref": {
     "artifact": "experiments/cold_registry_census.json",
     "field": "pin_table",
@@ -188,8 +188,8 @@
     },
     "B10": {
       "clause": "census_seal fixed before the harness runs",
-      "seal": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581",
-      "sealed_at_commit": "6d9b443de6f1b3fd8026fcc88dea364eec947856",
+      "seal": "d3d9bdc6eae689a120eed1dbcede8f8052405cf91711356aea299243f1c7fd33",
+      "sealed_at_commit": "be21a4090d52e1f4d3748bd6fb31d82ed43aaf7f",
       "harness_first_commit": "fb8376995c693ad258583f835720e7032ea88f7e",
       "registry_uncommitted_at_run": false,
       "how_checked": "the seal the harness read is the committed one, and the registry had no uncommitted modification when the run began",
@@ -618,8 +618,8 @@
         },
         {
           "path": "census.json",
-          "sha256": "3ae1c7f36c7220020a18354ce48bc904cf89ca09dbeb670ce2cb846c126b3788",
-          "size_bytes": 152554
+          "sha256": "14afb04697cf8a0774163b53bd7fd1634e974f8154030cf667950d14d8e705dc",
+          "size_bytes": 152029
         }
       ],
       "external_deps": [
@@ -701,18 +701,18 @@
           "-I",
           "<repo>\\harness\\probe_recheck.py",
           "--bundle",
-          "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\good",
+          "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\good",
           "--checker-argv",
           "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
           "--out",
           "<repo>\\cold\\evidence_run2\\recheck_good.json"
         ],
         "exit_code": 0,
-        "stdout_head": "PASS rows 25/25 invocations 50 elapsed 16.94s",
+        "stdout_head": "PASS rows 25/25 invocations 50 elapsed 18.709s",
         "rows_ok": 25,
         "rows_evaluated": 25,
         "checker_invocations": 50,
-        "elapsed_seconds": 16.94,
+        "elapsed_seconds": 18.709,
         "evidence_file": "cold/evidence/recheck_good.json"
       }
     },
@@ -723,7 +723,7 @@
           "route_id": "run_protocol_gates.run",
           "writer_file": "scripts/run_protocol_gates.py",
           "writer_symbol": "run",
-          "line": 1151,
+          "line": 1157,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1485,14 +1485,14 @@
           "route_id": "run_protocol_gates.run",
           "writer_file": "scripts/run_protocol_gates.py",
           "writer_symbol": "run",
-          "line": 1151,
+          "line": 1157,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "run_protocol_gates.run",
           "writer_file": "scripts/run_protocol_gates.py",
           "writer_symbol": "run",
-          "line": 1151,
+          "line": 1157,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -2113,7 +2113,7 @@
           "discarded": false,
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 16.884s",
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 17.065s",
           "failed_checks": [
             {
               "row_index": 0,
@@ -2145,7 +2145,7 @@
           "discarded": false,
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 16.768s",
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 17.626s",
           "failed_checks": [
             {
               "row_index": 0,
@@ -2173,7 +2173,7 @@
           "discarded": false,
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 23/25 invocations 50 elapsed 16.877s",
+          "stdout_head": "FAIL rows 23/25 invocations 50 elapsed 17.117s",
           "failed_checks": [
             {
               "row_index": 0,
@@ -2210,15 +2210,15 @@
     "omission": {
       "design": "§7 B4 — FAIL LOUD naming the missing dependency; a silent pass voids THE HARNESS, not the kind",
       "removed_dependency": "lean.exe",
-      "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\emptied_deps\\lean.exe",
+      "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\emptied_deps\\lean.exe",
       "exit_code": 2,
-      "stdout_head": "FAIL-LOUD: missing dependency lean.exe (resolved to ~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\emptied_deps\\lean.exe); the procedure cannot run",
+      "stdout_head": "FAIL-LOUD: missing dependency lean.exe (resolved to ~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\emptied_deps\\lean.exe); the procedure cannot run",
       "report": {
         "outcome": "MISSING_DEPENDENCY",
         "missing_dependency": {
           "name": "lean.exe",
           "role": "the pinned external checker this procedure invokes by path",
-          "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\emptied_deps\\lean.exe",
+          "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\emptied_deps\\lean.exe",
           "error": "the listed dependency is not present at the path the procedure resolves it to"
         }
       },
@@ -2247,7 +2247,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\good",
+            "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\good",
             "--checker-argv",
             "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
             "--out",
@@ -2255,7 +2255,7 @@
           ],
           "outcome": "PASS",
           "exit_code": 0,
-          "stdout_head": "PASS rows 25/25 invocations 50 elapsed 16.908s",
+          "stdout_head": "PASS rows 25/25 invocations 50 elapsed 17.109s",
           "evidence_file": "cold/evidence/sham_real_checker_good_bundle.json"
         },
         "real_checker_known_bad_bundle": {
@@ -2265,7 +2265,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\known_bad",
+            "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\known_bad",
             "--checker-argv",
             "[\"~\\\\.elan\\\\toolchains\\\\leanprover--lean4---v4.32.2\\\\bin\\\\lean.exe\"]",
             "--out",
@@ -2273,7 +2273,7 @@
           ],
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 16.777s",
+          "stdout_head": "FAIL rows 24/25 invocations 50 elapsed 17.083s",
           "evidence_file": "cold/evidence/sham_real_checker_known_bad_bundle.json"
         },
         "sham_checker_good_bundle": {
@@ -2283,7 +2283,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\good",
+            "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\good",
             "--checker-argv",
             "[\"~\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\python.exe\", \"-S\", \"-I\", \"<repo>\\\\harness\\\\sham_lean.py\"]",
             "--out",
@@ -2291,7 +2291,7 @@
           ],
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.754s",
+          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.771s",
           "evidence_file": "cold/evidence/sham_sham_checker_good_bundle.json"
         },
         "sham_checker_known_bad_bundle": {
@@ -2301,7 +2301,7 @@
             "-I",
             "<repo>\\harness\\probe_recheck.py",
             "--bundle",
-            "~\\AppData\\Local\\Temp\\cold-receipt-okefirlu\\known_bad",
+            "~\\AppData\\Local\\Temp\\cold-receipt-6dzqxu1w\\known_bad",
             "--checker-argv",
             "[\"~\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\python.exe\", \"-S\", \"-I\", \"<repo>\\\\harness\\\\sham_lean.py\"]",
             "--out",
@@ -2309,7 +2309,7 @@
           ],
           "outcome": "FAIL",
           "exit_code": 1,
-          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.738s",
+          "stdout_head": "FAIL rows 0/25 invocations 50 elapsed 0.773s",
           "evidence_file": "cold/evidence/sham_sham_checker_known_bad_bundle.json"
         }
       },
@@ -2356,7 +2356,7 @@
       "bundles_run": 200,
       "bundles_passed": 0,
       "checker_invocations": 10000,
-      "elapsed_seconds": 3419.4,
+      "elapsed_seconds": 3466.3,
       "budget": {
         "design_estimate_minutes": "59 at the mean, 63 at the observed max",
         "overrun_threshold_minutes": 90,
@@ -2380,7 +2380,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.842
+          "elapsed_seconds": 17.106
         },
         {
           "bundle": 1,
@@ -2389,7 +2389,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.005
+          "elapsed_seconds": 17.17
         },
         {
           "bundle": 2,
@@ -2398,7 +2398,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.863
+          "elapsed_seconds": 17.169
         },
         {
           "bundle": 3,
@@ -2407,7 +2407,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.747
+          "elapsed_seconds": 17.231
         },
         {
           "bundle": 4,
@@ -2416,7 +2416,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.955
+          "elapsed_seconds": 17.098
         },
         {
           "bundle": 5,
@@ -2425,7 +2425,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.82
+          "elapsed_seconds": 17.077
         },
         {
           "bundle": 6,
@@ -2434,7 +2434,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.893
+          "elapsed_seconds": 17.258
         },
         {
           "bundle": 7,
@@ -2443,7 +2443,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.874
+          "elapsed_seconds": 17.13
         },
         {
           "bundle": 8,
@@ -2452,7 +2452,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.942
+          "elapsed_seconds": 17.023
         },
         {
           "bundle": 9,
@@ -2461,7 +2461,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.938
+          "elapsed_seconds": 17.114
         },
         {
           "bundle": 10,
@@ -2470,7 +2470,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.819
+          "elapsed_seconds": 17.131
         },
         {
           "bundle": 11,
@@ -2479,7 +2479,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.94
+          "elapsed_seconds": 17.073
         },
         {
           "bundle": 12,
@@ -2488,7 +2488,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.9
+          "elapsed_seconds": 17.089
         },
         {
           "bundle": 13,
@@ -2497,7 +2497,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.765
+          "elapsed_seconds": 17.206
         },
         {
           "bundle": 14,
@@ -2506,7 +2506,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.809
+          "elapsed_seconds": 17.02
         },
         {
           "bundle": 15,
@@ -2515,7 +2515,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.965
+          "elapsed_seconds": 17.015
         },
         {
           "bundle": 16,
@@ -2524,7 +2524,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.883
+          "elapsed_seconds": 17.127
         },
         {
           "bundle": 17,
@@ -2533,7 +2533,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.844
+          "elapsed_seconds": 17.088
         },
         {
           "bundle": 18,
@@ -2542,7 +2542,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.869
+          "elapsed_seconds": 17.12
         },
         {
           "bundle": 19,
@@ -2551,7 +2551,7 @@
           "outcome": "FAIL",
           "rows_ok": 4,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.989
+          "elapsed_seconds": 17.177
         },
         {
           "bundle": 20,
@@ -2560,7 +2560,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.776
+          "elapsed_seconds": 17.276
         },
         {
           "bundle": 21,
@@ -2569,7 +2569,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.785
+          "elapsed_seconds": 17.021
         },
         {
           "bundle": 22,
@@ -2578,7 +2578,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.906
+          "elapsed_seconds": 17.088
         },
         {
           "bundle": 23,
@@ -2587,7 +2587,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.896
+          "elapsed_seconds": 17.112
         },
         {
           "bundle": 24,
@@ -2596,7 +2596,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.894
+          "elapsed_seconds": 17.124
         },
         {
           "bundle": 25,
@@ -2605,7 +2605,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.769
+          "elapsed_seconds": 17.107
         },
         {
           "bundle": 26,
@@ -2614,7 +2614,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.081
+          "elapsed_seconds": 17.115
         },
         {
           "bundle": 27,
@@ -2623,7 +2623,7 @@
           "outcome": "FAIL",
           "rows_ok": 4,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.951
+          "elapsed_seconds": 17.226
         },
         {
           "bundle": 28,
@@ -2632,7 +2632,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.901
+          "elapsed_seconds": 17.038
         },
         {
           "bundle": 29,
@@ -2641,7 +2641,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.015
+          "elapsed_seconds": 17.135
         },
         {
           "bundle": 30,
@@ -2650,7 +2650,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.958
+          "elapsed_seconds": 18.158
         },
         {
           "bundle": 31,
@@ -2659,7 +2659,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.879
+          "elapsed_seconds": 17.436
         },
         {
           "bundle": 32,
@@ -2668,7 +2668,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.011
+          "elapsed_seconds": 17.205
         },
         {
           "bundle": 33,
@@ -2677,7 +2677,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.912
+          "elapsed_seconds": 17.137
         },
         {
           "bundle": 34,
@@ -2686,7 +2686,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.801
+          "elapsed_seconds": 17.43
         },
         {
           "bundle": 35,
@@ -2695,7 +2695,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.739
+          "elapsed_seconds": 17.114
         },
         {
           "bundle": 36,
@@ -2704,7 +2704,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.018
+          "elapsed_seconds": 17.088
         },
         {
           "bundle": 37,
@@ -2713,7 +2713,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.833
+          "elapsed_seconds": 17.295
         },
         {
           "bundle": 38,
@@ -2722,7 +2722,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.733
+          "elapsed_seconds": 17.095
         },
         {
           "bundle": 39,
@@ -2731,7 +2731,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.841
+          "elapsed_seconds": 17.511
         },
         {
           "bundle": 40,
@@ -2740,7 +2740,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.932
+          "elapsed_seconds": 17.153
         },
         {
           "bundle": 41,
@@ -2749,7 +2749,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.744
+          "elapsed_seconds": 17.307
         },
         {
           "bundle": 42,
@@ -2758,7 +2758,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.77
+          "elapsed_seconds": 17.049
         },
         {
           "bundle": 43,
@@ -2767,7 +2767,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.048
+          "elapsed_seconds": 17.03
         },
         {
           "bundle": 44,
@@ -2776,7 +2776,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.847
+          "elapsed_seconds": 17.324
         },
         {
           "bundle": 45,
@@ -2785,7 +2785,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.884
+          "elapsed_seconds": 17.124
         },
         {
           "bundle": 46,
@@ -2794,7 +2794,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.749
+          "elapsed_seconds": 17.154
         },
         {
           "bundle": 47,
@@ -2803,7 +2803,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.919
+          "elapsed_seconds": 17.177
         },
         {
           "bundle": 48,
@@ -2812,7 +2812,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.825
+          "elapsed_seconds": 17.253
         },
         {
           "bundle": 49,
@@ -2821,7 +2821,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.793
+          "elapsed_seconds": 17.085
         },
         {
           "bundle": 50,
@@ -2830,7 +2830,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.887
+          "elapsed_seconds": 17.07
         },
         {
           "bundle": 51,
@@ -2839,7 +2839,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.78
+          "elapsed_seconds": 17.245
         },
         {
           "bundle": 52,
@@ -2848,7 +2848,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.853
+          "elapsed_seconds": 17.218
         },
         {
           "bundle": 53,
@@ -2857,7 +2857,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.767
+          "elapsed_seconds": 17.248
         },
         {
           "bundle": 54,
@@ -2866,7 +2866,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.891
+          "elapsed_seconds": 17.09
         },
         {
           "bundle": 55,
@@ -2875,7 +2875,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.728
+          "elapsed_seconds": 17.363
         },
         {
           "bundle": 56,
@@ -2884,7 +2884,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.681
+          "elapsed_seconds": 17.122
         },
         {
           "bundle": 57,
@@ -2893,7 +2893,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.783
+          "elapsed_seconds": 17.083
         },
         {
           "bundle": 58,
@@ -2902,7 +2902,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.984
+          "elapsed_seconds": 17.226
         },
         {
           "bundle": 59,
@@ -2911,7 +2911,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.758
+          "elapsed_seconds": 17.177
         },
         {
           "bundle": 60,
@@ -2920,7 +2920,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.845
+          "elapsed_seconds": 17.048
         },
         {
           "bundle": 61,
@@ -2929,7 +2929,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.971
+          "elapsed_seconds": 17.069
         },
         {
           "bundle": 62,
@@ -2938,7 +2938,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.83
+          "elapsed_seconds": 17.139
         },
         {
           "bundle": 63,
@@ -2947,7 +2947,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.806
+          "elapsed_seconds": 17.107
         },
         {
           "bundle": 64,
@@ -2956,7 +2956,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.85
+          "elapsed_seconds": 17.126
         },
         {
           "bundle": 65,
@@ -2965,7 +2965,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.907
+          "elapsed_seconds": 17.266
         },
         {
           "bundle": 66,
@@ -2974,7 +2974,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.792
+          "elapsed_seconds": 17.061
         },
         {
           "bundle": 67,
@@ -2983,7 +2983,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.679
+          "elapsed_seconds": 17.028
         },
         {
           "bundle": 68,
@@ -2992,7 +2992,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.878
+          "elapsed_seconds": 17.099
         },
         {
           "bundle": 69,
@@ -3001,7 +3001,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.772
+          "elapsed_seconds": 17.138
         },
         {
           "bundle": 70,
@@ -3010,7 +3010,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.815
+          "elapsed_seconds": 17.135
         },
         {
           "bundle": 71,
@@ -3019,7 +3019,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.733
+          "elapsed_seconds": 17.377
         },
         {
           "bundle": 72,
@@ -3028,7 +3028,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.905
+          "elapsed_seconds": 17.193
         },
         {
           "bundle": 73,
@@ -3037,7 +3037,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.819
+          "elapsed_seconds": 17.104
         },
         {
           "bundle": 74,
@@ -3046,7 +3046,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.83
+          "elapsed_seconds": 17.053
         },
         {
           "bundle": 75,
@@ -3055,7 +3055,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.901
+          "elapsed_seconds": 17.084
         },
         {
           "bundle": 76,
@@ -3064,7 +3064,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.93
+          "elapsed_seconds": 17.171
         },
         {
           "bundle": 77,
@@ -3073,7 +3073,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.764
+          "elapsed_seconds": 17.209
         },
         {
           "bundle": 78,
@@ -3082,7 +3082,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.751
+          "elapsed_seconds": 17.349
         },
         {
           "bundle": 79,
@@ -3091,7 +3091,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.948
+          "elapsed_seconds": 18.009
         },
         {
           "bundle": 80,
@@ -3100,7 +3100,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.818
+          "elapsed_seconds": 17.099
         },
         {
           "bundle": 81,
@@ -3109,7 +3109,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.825
+          "elapsed_seconds": 17.293
         },
         {
           "bundle": 82,
@@ -3118,7 +3118,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.866
+          "elapsed_seconds": 17.235
         },
         {
           "bundle": 83,
@@ -3127,7 +3127,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.808
+          "elapsed_seconds": 17.18
         },
         {
           "bundle": 84,
@@ -3136,7 +3136,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.863
+          "elapsed_seconds": 17.137
         },
         {
           "bundle": 85,
@@ -3145,7 +3145,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.752
+          "elapsed_seconds": 17.098
         },
         {
           "bundle": 86,
@@ -3154,7 +3154,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.88
+          "elapsed_seconds": 17.286
         },
         {
           "bundle": 87,
@@ -3163,7 +3163,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.838
+          "elapsed_seconds": 17.166
         },
         {
           "bundle": 88,
@@ -3172,7 +3172,7 @@
           "outcome": "FAIL",
           "rows_ok": 7,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.888
+          "elapsed_seconds": 17.076
         },
         {
           "bundle": 89,
@@ -3181,7 +3181,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.822
+          "elapsed_seconds": 17.197
         },
         {
           "bundle": 90,
@@ -3190,7 +3190,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.871
+          "elapsed_seconds": 17.14
         },
         {
           "bundle": 91,
@@ -3199,7 +3199,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.831
+          "elapsed_seconds": 17.315
         },
         {
           "bundle": 92,
@@ -3208,7 +3208,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.775
+          "elapsed_seconds": 17.138
         },
         {
           "bundle": 93,
@@ -3217,7 +3217,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.862
+          "elapsed_seconds": 17.267
         },
         {
           "bundle": 94,
@@ -3226,7 +3226,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.777
+          "elapsed_seconds": 17.122
         },
         {
           "bundle": 95,
@@ -3235,7 +3235,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.804
+          "elapsed_seconds": 17.078
         },
         {
           "bundle": 96,
@@ -3244,7 +3244,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.773
+          "elapsed_seconds": 17.179
         },
         {
           "bundle": 97,
@@ -3253,7 +3253,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.933
+          "elapsed_seconds": 17.016
         },
         {
           "bundle": 98,
@@ -3262,7 +3262,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.859
+          "elapsed_seconds": 17.153
         },
         {
           "bundle": 99,
@@ -3271,7 +3271,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.846
+          "elapsed_seconds": 17.038
         },
         {
           "bundle": 100,
@@ -3280,7 +3280,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.955
+          "elapsed_seconds": 17.208
         },
         {
           "bundle": 101,
@@ -3289,7 +3289,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.814
+          "elapsed_seconds": 17.117
         },
         {
           "bundle": 102,
@@ -3298,7 +3298,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.722
+          "elapsed_seconds": 17.119
         },
         {
           "bundle": 103,
@@ -3307,7 +3307,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.775
+          "elapsed_seconds": 17.097
         },
         {
           "bundle": 104,
@@ -3316,7 +3316,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.912
+          "elapsed_seconds": 17.066
         },
         {
           "bundle": 105,
@@ -3325,7 +3325,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.851
+          "elapsed_seconds": 17.059
         },
         {
           "bundle": 106,
@@ -3334,7 +3334,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.812
+          "elapsed_seconds": 17.054
         },
         {
           "bundle": 107,
@@ -3343,7 +3343,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.857
+          "elapsed_seconds": 17.327
         },
         {
           "bundle": 108,
@@ -3352,7 +3352,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.791
+          "elapsed_seconds": 17.125
         },
         {
           "bundle": 109,
@@ -3361,7 +3361,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.908
+          "elapsed_seconds": 17.113
         },
         {
           "bundle": 110,
@@ -3370,7 +3370,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.854
+          "elapsed_seconds": 17.126
         },
         {
           "bundle": 111,
@@ -3379,7 +3379,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.883
+          "elapsed_seconds": 17.101
         },
         {
           "bundle": 112,
@@ -3388,7 +3388,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.815
+          "elapsed_seconds": 17.019
         },
         {
           "bundle": 113,
@@ -3397,7 +3397,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.85
+          "elapsed_seconds": 17.043
         },
         {
           "bundle": 114,
@@ -3406,7 +3406,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.884
+          "elapsed_seconds": 17.219
         },
         {
           "bundle": 115,
@@ -3415,7 +3415,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.79
+          "elapsed_seconds": 17.051
         },
         {
           "bundle": 116,
@@ -3424,7 +3424,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.881
+          "elapsed_seconds": 17.076
         },
         {
           "bundle": 117,
@@ -3433,7 +3433,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.715
+          "elapsed_seconds": 17.089
         },
         {
           "bundle": 118,
@@ -3442,7 +3442,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.921
+          "elapsed_seconds": 17.032
         },
         {
           "bundle": 119,
@@ -3451,7 +3451,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.889
+          "elapsed_seconds": 17.065
         },
         {
           "bundle": 120,
@@ -3460,7 +3460,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.791
+          "elapsed_seconds": 17.046
         },
         {
           "bundle": 121,
@@ -3469,7 +3469,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.941
+          "elapsed_seconds": 17.457
         },
         {
           "bundle": 122,
@@ -3478,7 +3478,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.934
+          "elapsed_seconds": 17.345
         },
         {
           "bundle": 123,
@@ -3487,7 +3487,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.856
+          "elapsed_seconds": 17.124
         },
         {
           "bundle": 124,
@@ -3496,7 +3496,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.776
+          "elapsed_seconds": 17.255
         },
         {
           "bundle": 125,
@@ -3505,7 +3505,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.938
+          "elapsed_seconds": 17.108
         },
         {
           "bundle": 126,
@@ -3514,7 +3514,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.847
+          "elapsed_seconds": 17.069
         },
         {
           "bundle": 127,
@@ -3523,7 +3523,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.916
+          "elapsed_seconds": 17.105
         },
         {
           "bundle": 128,
@@ -3532,7 +3532,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.871
+          "elapsed_seconds": 17.119
         },
         {
           "bundle": 129,
@@ -3541,7 +3541,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.039
+          "elapsed_seconds": 17.156
         },
         {
           "bundle": 130,
@@ -3550,7 +3550,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.92
+          "elapsed_seconds": 17.191
         },
         {
           "bundle": 131,
@@ -3559,7 +3559,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.811
+          "elapsed_seconds": 17.25
         },
         {
           "bundle": 132,
@@ -3568,7 +3568,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.796
+          "elapsed_seconds": 17.069
         },
         {
           "bundle": 133,
@@ -3577,7 +3577,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.839
+          "elapsed_seconds": 17.064
         },
         {
           "bundle": 134,
@@ -3586,7 +3586,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.844
+          "elapsed_seconds": 17.156
         },
         {
           "bundle": 135,
@@ -3595,7 +3595,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.736
+          "elapsed_seconds": 17.133
         },
         {
           "bundle": 136,
@@ -3604,7 +3604,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.894
+          "elapsed_seconds": 17.055
         },
         {
           "bundle": 137,
@@ -3613,7 +3613,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.742
+          "elapsed_seconds": 17.173
         },
         {
           "bundle": 138,
@@ -3622,7 +3622,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.777
+          "elapsed_seconds": 17.456
         },
         {
           "bundle": 139,
@@ -3631,7 +3631,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.887
+          "elapsed_seconds": 17.179
         },
         {
           "bundle": 140,
@@ -3640,7 +3640,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.797
+          "elapsed_seconds": 17.057
         },
         {
           "bundle": 141,
@@ -3649,7 +3649,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.747
+          "elapsed_seconds": 17.184
         },
         {
           "bundle": 142,
@@ -3658,7 +3658,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.828
+          "elapsed_seconds": 17.161
         },
         {
           "bundle": 143,
@@ -3667,7 +3667,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.066
+          "elapsed_seconds": 17.137
         },
         {
           "bundle": 144,
@@ -3676,7 +3676,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.851
+          "elapsed_seconds": 17.616
         },
         {
           "bundle": 145,
@@ -3685,7 +3685,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.749
+          "elapsed_seconds": 17.341
         },
         {
           "bundle": 146,
@@ -3694,7 +3694,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.901
+          "elapsed_seconds": 17.098
         },
         {
           "bundle": 147,
@@ -3703,7 +3703,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.874
+          "elapsed_seconds": 17.075
         },
         {
           "bundle": 148,
@@ -3712,7 +3712,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.748
+          "elapsed_seconds": 17.284
         },
         {
           "bundle": 149,
@@ -3721,7 +3721,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.868
+          "elapsed_seconds": 17.087
         },
         {
           "bundle": 150,
@@ -3730,7 +3730,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.913
+          "elapsed_seconds": 17.093
         },
         {
           "bundle": 151,
@@ -3739,7 +3739,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.89
+          "elapsed_seconds": 17.199
         },
         {
           "bundle": 152,
@@ -3748,7 +3748,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.85
+          "elapsed_seconds": 17.228
         },
         {
           "bundle": 153,
@@ -3757,7 +3757,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.845
+          "elapsed_seconds": 17.149
         },
         {
           "bundle": 154,
@@ -3766,7 +3766,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.821
+          "elapsed_seconds": 17.097
         },
         {
           "bundle": 155,
@@ -3775,7 +3775,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 18.362
+          "elapsed_seconds": 17.179
         },
         {
           "bundle": 156,
@@ -3784,7 +3784,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 31.724
+          "elapsed_seconds": 17.169
         },
         {
           "bundle": 157,
@@ -3793,7 +3793,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 18.033
+          "elapsed_seconds": 17.063
         },
         {
           "bundle": 158,
@@ -3802,7 +3802,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 19.183
+          "elapsed_seconds": 17.113
         },
         {
           "bundle": 159,
@@ -3811,7 +3811,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.966
+          "elapsed_seconds": 17.219
         },
         {
           "bundle": 160,
@@ -3820,7 +3820,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.958
+          "elapsed_seconds": 17.105
         },
         {
           "bundle": 161,
@@ -3829,7 +3829,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.876
+          "elapsed_seconds": 17.129
         },
         {
           "bundle": 162,
@@ -3838,7 +3838,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.046
+          "elapsed_seconds": 17.233
         },
         {
           "bundle": 163,
@@ -3847,7 +3847,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.128
+          "elapsed_seconds": 17.184
         },
         {
           "bundle": 164,
@@ -3856,7 +3856,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.805
+          "elapsed_seconds": 17.137
         },
         {
           "bundle": 165,
@@ -3865,7 +3865,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.028
+          "elapsed_seconds": 17.199
         },
         {
           "bundle": 166,
@@ -3874,7 +3874,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.005
+          "elapsed_seconds": 17.306
         },
         {
           "bundle": 167,
@@ -3883,7 +3883,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.865
+          "elapsed_seconds": 17.153
         },
         {
           "bundle": 168,
@@ -3892,7 +3892,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.901
+          "elapsed_seconds": 17.122
         },
         {
           "bundle": 169,
@@ -3901,7 +3901,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.88
+          "elapsed_seconds": 17.162
         },
         {
           "bundle": 170,
@@ -3910,7 +3910,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.989
+          "elapsed_seconds": 17.097
         },
         {
           "bundle": 171,
@@ -3919,7 +3919,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.859
+          "elapsed_seconds": 17.109
         },
         {
           "bundle": 172,
@@ -3928,7 +3928,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.932
+          "elapsed_seconds": 17.093
         },
         {
           "bundle": 173,
@@ -3937,7 +3937,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.171
+          "elapsed_seconds": 17.206
         },
         {
           "bundle": 174,
@@ -3946,7 +3946,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.973
+          "elapsed_seconds": 17.159
         },
         {
           "bundle": 175,
@@ -3955,7 +3955,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.921
+          "elapsed_seconds": 17.186
         },
         {
           "bundle": 176,
@@ -3964,7 +3964,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.866
+          "elapsed_seconds": 17.286
         },
         {
           "bundle": 177,
@@ -3973,7 +3973,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.894
+          "elapsed_seconds": 17.078
         },
         {
           "bundle": 178,
@@ -3982,7 +3982,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.862
+          "elapsed_seconds": 17.048
         },
         {
           "bundle": 179,
@@ -3991,7 +3991,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.911
+          "elapsed_seconds": 17.085
         },
         {
           "bundle": 180,
@@ -4000,7 +4000,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 17.021
+          "elapsed_seconds": 17.298
         },
         {
           "bundle": 181,
@@ -4009,7 +4009,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.797
+          "elapsed_seconds": 17.199
         },
         {
           "bundle": 182,
@@ -4018,7 +4018,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.805
+          "elapsed_seconds": 17.03
         },
         {
           "bundle": 183,
@@ -4027,7 +4027,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.904
+          "elapsed_seconds": 17.308
         },
         {
           "bundle": 184,
@@ -4036,7 +4036,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.923
+          "elapsed_seconds": 17.174
         },
         {
           "bundle": 185,
@@ -4045,7 +4045,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.913
+          "elapsed_seconds": 17.014
         },
         {
           "bundle": 186,
@@ -4054,7 +4054,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.85
+          "elapsed_seconds": 17.174
         },
         {
           "bundle": 187,
@@ -4063,7 +4063,7 @@
           "outcome": "FAIL",
           "rows_ok": 3,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.876
+          "elapsed_seconds": 17.291
         },
         {
           "bundle": 188,
@@ -4072,7 +4072,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.996
+          "elapsed_seconds": 17.055
         },
         {
           "bundle": 189,
@@ -4081,7 +4081,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.885
+          "elapsed_seconds": 17.132
         },
         {
           "bundle": 190,
@@ -4090,7 +4090,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.984
+          "elapsed_seconds": 17.202
         },
         {
           "bundle": 191,
@@ -4099,7 +4099,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.874
+          "elapsed_seconds": 17.104
         },
         {
           "bundle": 192,
@@ -4108,7 +4108,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.909
+          "elapsed_seconds": 17.132
         },
         {
           "bundle": 193,
@@ -4117,7 +4117,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.895
+          "elapsed_seconds": 17.124
         },
         {
           "bundle": 194,
@@ -4126,7 +4126,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.891
+          "elapsed_seconds": 17.13
         },
         {
           "bundle": 195,
@@ -4135,7 +4135,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.922
+          "elapsed_seconds": 17.065
         },
         {
           "bundle": 196,
@@ -4144,7 +4144,7 @@
           "outcome": "FAIL",
           "rows_ok": 2,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.887
+          "elapsed_seconds": 17.193
         },
         {
           "bundle": 197,
@@ -4153,7 +4153,7 @@
           "outcome": "FAIL",
           "rows_ok": 0,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.853
+          "elapsed_seconds": 17.28
         },
         {
           "bundle": 198,
@@ -4162,7 +4162,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.99
+          "elapsed_seconds": 17.151
         },
         {
           "bundle": 199,
@@ -4171,7 +4171,7 @@
           "outcome": "FAIL",
           "rows_ok": 1,
           "checker_invocations": 50,
-          "elapsed_seconds": 16.866
+          "elapsed_seconds": 17.11
         }
       ],
       "gate": {
@@ -4277,7 +4277,7 @@
     ],
     "registry_amendment": 2,
     "registry_seal_run_one": "6c575c70dbbdd7f79245a90902b84b0d1dd74e13176e2f878ece4f1b91b00ded",
-    "registry_seal_this_run": "2593bc75803bc38f88a30013785492105e3ebd0d75c2cd1be71c6c60c69f0581"
+    "registry_seal_this_run": "d3d9bdc6eae689a120eed1dbcede8f8052405cf91711356aea299243f1c7fd33"
   },
   "provenance": {
     "writer": "harness/cold_harness.py",
@@ -4289,7 +4289,7 @@
       },
       {
         "path": "experiments/cold_registry_census.json",
-        "sha256_lf": "e7a842214410b03f3b3ee5229dff9fb631d87a2b6b4980995797615b81d99529"
+        "sha256_lf": "33bd9eac65fca67c089ec31e836d46b0c873c10c1ab67239b3661a8426d0f799"
       },
       {
         "path": "experiments/conformance_ce3_supplement.json",
