@@ -1,0 +1,67 @@
+{
+  "schema": "corollary.protocol-uptake-host-capture/1",
+  "stage": "U-P1",
+  "captured_date": "2026-08-31",
+  "design": "docs/DESIGN-protocol-uptake.md",
+  "design_clause": "section 6 step 3: record the tool names and schema digests from one unmodified codex.cmd request, with values/secrets absent; register a prompt adapter only for an exact captured schema",
+  "host": {
+    "cli": "codex-cli",
+    "version": "0.150.1",
+    "command_shape": "codex.cmd exec --skip-git-repo-check --disable apps --disable plugins -m corollary/protocol -c model_provider=... -c model_providers....base_url=http://127.0.0.1:<port>/v1 -c model_providers....wire_api=responses <prompt>",
+    "note": "Captured against a loopback stub serving only the /v1/models catalog shape and a minimal Responses SSE stream; no corollary machinery was involved. The CLI was not modified. Two locally configured host extensions (a namespace tool and an MCP server) appear in the declaration list because the capture records the installed host as configured; their schemas are not registered by this repository."
+  },
+  "digest_rule": "sha256 of json.dumps(obj, sort_keys=True, separators=(',',':')) UTF-8; parameters_sha256 digests the tool's parameters JSON-schema alone, declaration_sha256 the whole tool declaration object",
+  "requests_observed": [
+    {
+      "path": "/v1/responses",
+      "role": "first request of the exec session",
+      "tools_declared": 0,
+      "tool_choice": "auto",
+      "parallel_tool_calls": false,
+      "store": false
+    },
+    {
+      "path": "/v1/responses",
+      "role": "the conversational turn",
+      "tools_declared": 14,
+      "tool_choice": "auto",
+      "parallel_tool_calls": true,
+      "store": false,
+      "tool_names": [
+        "exec_command",
+        "write_stdin",
+        "list_mcp_resources",
+        "list_mcp_resource_templates",
+        "read_mcp_resource",
+        "update_plan",
+        "request_user_input",
+        "view_image",
+        "multi_agent_v1 (type namespace, host-local)",
+        "mcp__node_repl (type namespace, host-local MCP)",
+        "get_goal",
+        "create_goal",
+        "update_goal",
+        "web_search (type-only, no name)"
+      ]
+    }
+  ],
+  "prompt_tool": {
+    "name": "request_user_input",
+    "type": "function",
+    "strict": false,
+    "parameters_sha256": "23ee6f1a8cd81c9d2491cbd33a3cb09d755e6c85d368f3beb346753cfd4558a3",
+    "declaration_sha256": "d966b55e964da3155fb6956528a375b7cea02b3fc189086b7d9225f4d025fa6c",
+    "shape": "one required array `questions` (1-3 items), each with required id (snake_case), header (<=12 chars), question (one sentence), and options (2-3 {label, description} choices; the client adds a free-form Other automatically)",
+    "declaration_caveat": "The captured description states the tool 'is only available in Plan mode.' The declaration nevertheless arrived in an ordinary exec-mode request; whether the installed host will execute a server-emitted request_user_input call outside Plan mode is exactly what B7 measures. If the host declines the call, B7 is a red or UNTESTED result, not a construction excuse.",
+    "host_prompt_status": "captured"
+  },
+  "adapter_registration_rule": "The prompt adapter registers for exactly the captured (name, parameters_sha256) pair. A request advertising request_user_input with any other parameters digest gets the text WAITING fallback, never a guessed adapter.",
+  "mapping_to_need": {
+    "questions[0].id": "the pending ClarificationRequest's slot",
+    "questions[0].header": "fixed literal 'protocol' (12-char budget)",
+    "questions[0].question": "the verifier-minted prompt",
+    "questions[0].options": "one {label, description} per unresolved candidate move, labels from move_id, canonical order; wording is outside the scored claim",
+    "call_id": "binds to the pending request_id; the function_call_output input item resumes only that request"
+  },
+  "secrets": "No credential, header value, instruction text, or user input is recorded in this artifact; raw capture files remain outside the repository."
+}
