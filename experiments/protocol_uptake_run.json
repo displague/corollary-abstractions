@@ -1,0 +1,1468 @@
+{
+  "schema": "corollary.protocol-uptake-run/1",
+  "design": "docs/DESIGN-protocol-uptake.md",
+  "design_clause": "§7 construction gates, §8 blind controls, §9 result gates",
+  "stage": "U-R1",
+  "preregistration": "experiments/protocol_uptake_prereg.json",
+  "preregistration_id": "protocol-uptake.u-p0.source-and-fixture-seal.v1",
+  "preregistration_sha256": "fa95d11931ac34d637014eb0481c1f5ed50c50edf3d5ea144b0e8bc01eae2dca",
+  "registration_commit": "d954114806b47763348a1426ae331ecced71e113",
+  "registered_before_the_run": true,
+  "scoring_tree": {
+    "head_commit": "4d44b439c96b91bcbdc66a2801d69af26e828382",
+    "dirty": false,
+    "dirty_entries": [],
+    "uncommitted_registration_inputs": [],
+    "first_commit_of": {
+      "experiments/protocol_uptake_prereg.json": "d954114806b47763348a1426ae331ecced71e113",
+      "experiments/protocol_uptake_fixtures.json": "d954114806b47763348a1426ae331ecced71e113",
+      "protocol/protocols.json": "d954114806b47763348a1426ae331ecced71e113",
+      "scripts/build_protocol_corpus.py": "d954114806b47763348a1426ae331ecced71e113",
+      "scripts/check_protocol_regeneration.py": "d954114806b47763348a1426ae331ecced71e113",
+      "scripts/check_protocol_receipts.py": "e637a12c9cc91aa314e3d7bb43f0049d7f683cb5",
+      "scripts/protocol_controls.py": "e637a12c9cc91aa314e3d7bb43f0049d7f683cb5",
+      "scripts/protocol_runtime.py": "66cec41abbdff384cbc496c919a68ea70bc3f0af",
+      "scripts/run_protocol_gates.py": "66cec41abbdff384cbc496c919a68ea70bc3f0af"
+    },
+    "instrument_committed_before_the_runtime": true,
+    "wrong_tip": false,
+    "how_checked": "git status --porcelain for dirty; the commits that INTRODUCED the B10 checker, the controls, and the runtime, compared with git merge-base --is-ancestor, for the construction order DESIGN §6 step 4 requires",
+    "allow_dirty": false,
+    "registered_before_the_run": true
+  },
+  "runtime_module": "scripts/protocol_runtime.py",
+  "receipts_artifact": {
+    "path": "experiments/protocol_uptake_receipts.json",
+    "receipt_count": 87,
+    "sha256_lf": "095c9a684a26de2bd5bde48ababca11270ad4b3c4cc550da72c98a741975b484",
+    "note": "raw uptake receipts land before compact metrics (DESIGN §12)"
+  },
+  "counts": {
+    "product": 32,
+    "refusal": 8,
+    "ask": 4,
+    "equivalence": 2,
+    "nested": 8,
+    "depth_cap_plant": 1,
+    "authority_plant": 1,
+    "b9_mutants": 7,
+    "total_fixtures": 56,
+    "receipts_emitted": 87,
+    "sessions": 63
+  },
+  "construction_gate": {
+    "B1": {
+      "verdict": "GREEN",
+      "clause": "source truth — the dedicated protocol-corpus regeneration check passes byte-identically, schema validation and link checks pass, every witness resolves to a generated protocol node and its builder source, data/*/nodes.json and the merged resolver graph and the boot corpus count remain byte-identical, one orphan or direct generated-file edit stops the slice, and recomputing c_surface and c_position from the sealed table reproduces the frozen prereg numbers — a mismatch is a construction bug, not a leak.",
+      "regeneration_checker": "scripts/check_protocol_regeneration.py",
+      "regeneration_checker_exit": 0,
+      "regeneration_checker_tail": [
+        "protocol regeneration: OK"
+      ],
+      "recomputed_from_the_sealed_table": {
+        "c_surface": 21,
+        "c_position": 21,
+        "position_switch_agreement": 17
+      },
+      "frozen_in_the_prereg": {
+        "c_surface": 21,
+        "c_position": 21,
+        "position_switch_agreement": 17
+      },
+      "misses": []
+    },
+    "B2": {
+      "verdict": "GREEN",
+      "clause": "cell(surface, position) = the unique family F such that the corpus witnesses the normalized surface under F via an ENTRY move and the position satisfies F's entry predicate; zero matches = REFUSED",
+      "cells": 32,
+      "cells_matching_the_sealed_table": 32,
+      "of": 32,
+      "surfaces_taking_two_different_selected_moves": [
+        "hello",
+        "ready",
+        "hello world"
+      ],
+      "table": [
+        {
+          "fixture_id": "ctx-1-1",
+          "surface": "hello",
+          "position_id": "fresh_root",
+          "sealed_label": "greeting",
+          "runtime_label": "greeting",
+          "disposition": "ENTER",
+          "selected_move_id": "greet",
+          "selected_protocol_id": "protocol.greeting.a",
+          "stack_after": [
+            "ep-1-protocol.greeting.a"
+          ],
+          "witnesses": [
+            "protocol.greeting.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-1-2",
+          "surface": "hello",
+          "position_id": "probe_outstanding",
+          "sealed_label": "probe_reply",
+          "runtime_label": "probe_reply",
+          "disposition": "ENTER",
+          "selected_move_id": "confirm_alive",
+          "selected_protocol_id": "protocol.probe_reply.a",
+          "stack_after": [
+            "ep-1-protocol.probe_reply.a"
+          ],
+          "witnesses": [
+            "protocol.probe_reply.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-1-3",
+          "surface": "hello",
+          "position_id": "literal_slot",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-1-4",
+          "surface": "hello",
+          "position_id": "programming_task",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-2-1",
+          "surface": "good morning",
+          "position_id": "fresh_root",
+          "sealed_label": "greeting",
+          "runtime_label": "greeting",
+          "disposition": "ENTER",
+          "selected_move_id": "greet",
+          "selected_protocol_id": "protocol.greeting.a",
+          "stack_after": [
+            "ep-1-protocol.greeting.a"
+          ],
+          "witnesses": [
+            "protocol.greeting.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-2-2",
+          "surface": "good morning",
+          "position_id": "probe_outstanding",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-2-3",
+          "surface": "good morning",
+          "position_id": "literal_slot",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-2-4",
+          "surface": "good morning",
+          "position_id": "programming_task",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-3-1",
+          "surface": "still here",
+          "position_id": "fresh_root",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-3-2",
+          "surface": "still here",
+          "position_id": "probe_outstanding",
+          "sealed_label": "probe_reply",
+          "runtime_label": "probe_reply",
+          "disposition": "ENTER",
+          "selected_move_id": "confirm_alive",
+          "selected_protocol_id": "protocol.probe_reply.a",
+          "stack_after": [
+            "ep-1-protocol.probe_reply.a"
+          ],
+          "witnesses": [
+            "protocol.probe_reply.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-3-3",
+          "surface": "still here",
+          "position_id": "literal_slot",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-3-4",
+          "surface": "still here",
+          "position_id": "programming_task",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-4-1",
+          "surface": "ready",
+          "position_id": "fresh_root",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-4-2",
+          "surface": "ready",
+          "position_id": "probe_outstanding",
+          "sealed_label": "probe_reply",
+          "runtime_label": "probe_reply",
+          "disposition": "ENTER",
+          "selected_move_id": "confirm_alive",
+          "selected_protocol_id": "protocol.probe_reply.a",
+          "stack_after": [
+            "ep-1-protocol.probe_reply.a"
+          ],
+          "witnesses": [
+            "protocol.probe_reply.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-4-3",
+          "surface": "ready",
+          "position_id": "literal_slot",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-4-4",
+          "surface": "ready",
+          "position_id": "programming_task",
+          "sealed_label": "expected_output",
+          "runtime_label": "expected_output",
+          "disposition": "ENTER",
+          "selected_move_id": "match_output",
+          "selected_protocol_id": "protocol.expected_output.a",
+          "stack_after": [
+            "ep-1-protocol.expected_output.a"
+          ],
+          "witnesses": [
+            "protocol.expected_output.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-5-1",
+          "surface": "hello world",
+          "position_id": "fresh_root",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-5-2",
+          "surface": "hello world",
+          "position_id": "probe_outstanding",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-5-3",
+          "surface": "hello world",
+          "position_id": "literal_slot",
+          "sealed_label": "quoted_datum",
+          "runtime_label": "quoted_datum",
+          "disposition": "ENTER",
+          "selected_move_id": "accept_datum",
+          "selected_protocol_id": "protocol.quoted_datum.a",
+          "stack_after": [
+            "ep-1-protocol.quoted_datum.a"
+          ],
+          "witnesses": [
+            "protocol.quoted_datum.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-5-4",
+          "surface": "hello world",
+          "position_id": "programming_task",
+          "sealed_label": "expected_output",
+          "runtime_label": "expected_output",
+          "disposition": "ENTER",
+          "selected_move_id": "match_output",
+          "selected_protocol_id": "protocol.expected_output.a",
+          "stack_after": [
+            "ep-1-protocol.expected_output.a"
+          ],
+          "witnesses": [
+            "protocol.expected_output.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-6-1",
+          "surface": "forty-two",
+          "position_id": "fresh_root",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-6-2",
+          "surface": "forty-two",
+          "position_id": "probe_outstanding",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-6-3",
+          "surface": "forty-two",
+          "position_id": "literal_slot",
+          "sealed_label": "quoted_datum",
+          "runtime_label": "quoted_datum",
+          "disposition": "ENTER",
+          "selected_move_id": "accept_datum",
+          "selected_protocol_id": "protocol.quoted_datum.a",
+          "stack_after": [
+            "ep-1-protocol.quoted_datum.a"
+          ],
+          "witnesses": [
+            "protocol.quoted_datum.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-6-4",
+          "surface": "forty-two",
+          "position_id": "programming_task",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-7-1",
+          "surface": "ok",
+          "position_id": "fresh_root",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-7-2",
+          "surface": "ok",
+          "position_id": "probe_outstanding",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-7-3",
+          "surface": "ok",
+          "position_id": "literal_slot",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-7-4",
+          "surface": "ok",
+          "position_id": "programming_task",
+          "sealed_label": "expected_output",
+          "runtime_label": "expected_output",
+          "disposition": "ENTER",
+          "selected_move_id": "match_output",
+          "selected_protocol_id": "protocol.expected_output.a",
+          "stack_after": [
+            "ep-1-protocol.expected_output.a"
+          ],
+          "witnesses": [
+            "protocol.expected_output.a"
+          ]
+        },
+        {
+          "fixture_id": "ctx-8-1",
+          "surface": "done",
+          "position_id": "fresh_root",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-8-2",
+          "surface": "done",
+          "position_id": "probe_outstanding",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-8-3",
+          "surface": "done",
+          "position_id": "literal_slot",
+          "sealed_label": "REFUSED",
+          "runtime_label": "REFUSED",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "selected_protocol_id": null,
+          "stack_after": [],
+          "witnesses": []
+        },
+        {
+          "fixture_id": "ctx-8-4",
+          "surface": "done",
+          "position_id": "programming_task",
+          "sealed_label": "expected_output",
+          "runtime_label": "expected_output",
+          "disposition": "ENTER",
+          "selected_move_id": "match_output",
+          "selected_protocol_id": "protocol.expected_output.a",
+          "stack_after": [
+            "ep-1-protocol.expected_output.a"
+          ],
+          "witnesses": [
+            "protocol.expected_output.a"
+          ]
+        }
+      ],
+      "misses": []
+    },
+    "B3": {
+      "verdict": "GREEN",
+      "refusals": "8/8",
+      "asks": "4/4",
+      "authority_delta_is_a_plaintext_field": true,
+      "refusal_rows": [
+        {
+          "fixture_id": "refusal-fresh_root-remove_witness",
+          "corruption": "remove_witness",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "UNLICENSED"
+        },
+        {
+          "fixture_id": "refusal-fresh_root-remove_context_event",
+          "corruption": "remove_context_event",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "INVALID_INPUT"
+        },
+        {
+          "fixture_id": "refusal-probe_outstanding-remove_witness",
+          "corruption": "remove_witness",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "UNLICENSED"
+        },
+        {
+          "fixture_id": "refusal-probe_outstanding-remove_context_event",
+          "corruption": "remove_context_event",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "INVALID_INPUT"
+        },
+        {
+          "fixture_id": "refusal-literal_slot-remove_witness",
+          "corruption": "remove_witness",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "UNLICENSED"
+        },
+        {
+          "fixture_id": "refusal-literal_slot-remove_context_event",
+          "corruption": "remove_context_event",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "INVALID_INPUT"
+        },
+        {
+          "fixture_id": "refusal-programming_task-remove_witness",
+          "corruption": "remove_witness",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "UNLICENSED"
+        },
+        {
+          "fixture_id": "refusal-programming_task-remove_context_event",
+          "corruption": "remove_context_event",
+          "disposition": "REFUSED",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "INVALID_INPUT"
+        }
+      ],
+      "ask_rows": [
+        {
+          "fixture_id": "ask-hi-fresh_root",
+          "corruption": null,
+          "disposition": "ASK",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "MATERIAL_AMBIGUITY",
+          "need": {
+            "request_id": "033af86c07dc1c94197f5b5afd1168a7f46e11f718471756ef5984302e95a87e",
+            "slot": "protocol_uptake.candidate_move",
+            "prompt": "More than one registered protocol transition remains admissible for this turn, and they lead to materially different next states. Name the candidate move to take; nothing proceeds until one is named.",
+            "answer_schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "protocol_id",
+                "move_id"
+              ],
+              "properties": {
+                "protocol_id": {
+                  "enum": [
+                    "protocol.greeting.a",
+                    "protocol.greeting.b"
+                  ]
+                },
+                "move_id": {
+                  "enum": [
+                    "acknowledge",
+                    "greet"
+                  ]
+                }
+              }
+            }
+          },
+          "waiting": true
+        },
+        {
+          "fixture_id": "ask-greetings-fresh_root",
+          "corruption": null,
+          "disposition": "ASK",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "MATERIAL_AMBIGUITY",
+          "need": {
+            "request_id": "8f0a8dda5edc6be4550798d8796e3e5bea6dedbca02d28a2c0142cfe3ed5ce97",
+            "slot": "protocol_uptake.candidate_move",
+            "prompt": "More than one registered protocol transition remains admissible for this turn, and they lead to materially different next states. Name the candidate move to take; nothing proceeds until one is named.",
+            "answer_schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "protocol_id",
+                "move_id"
+              ],
+              "properties": {
+                "protocol_id": {
+                  "enum": [
+                    "protocol.greeting.a",
+                    "protocol.greeting.b"
+                  ]
+                },
+                "move_id": {
+                  "enum": [
+                    "acknowledge",
+                    "greet"
+                  ]
+                }
+              }
+            }
+          },
+          "waiting": true
+        },
+        {
+          "fixture_id": "ask-yes-probe_outstanding",
+          "corruption": null,
+          "disposition": "ASK",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "MATERIAL_AMBIGUITY",
+          "need": {
+            "request_id": "10ff664ebfd35c4e222641c18897cf2331beb5348eab4e032c7c32cd8edfb4d2",
+            "slot": "protocol_uptake.candidate_move",
+            "prompt": "More than one registered protocol transition remains admissible for this turn, and they lead to materially different next states. Name the candidate move to take; nothing proceeds until one is named.",
+            "answer_schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "protocol_id",
+                "move_id"
+              ],
+              "properties": {
+                "protocol_id": {
+                  "enum": [
+                    "protocol.probe_reply.a",
+                    "protocol.probe_reply.b"
+                  ]
+                },
+                "move_id": {
+                  "enum": [
+                    "confirm_alive",
+                    "confirm_alive_alt"
+                  ]
+                }
+              }
+            }
+          },
+          "waiting": true
+        },
+        {
+          "fixture_id": "ask-null-literal_slot",
+          "corruption": null,
+          "disposition": "ASK",
+          "selected_move_id": null,
+          "stack_before": [],
+          "stack_after": [],
+          "authority_delta_present": true,
+          "authority_delta": [],
+          "verifier_verdict": "MATERIAL_AMBIGUITY",
+          "need": {
+            "request_id": "604adb2866876f09cc0c198b0688f0a9901c1de1a1ce63792d04141c0c243295",
+            "slot": "protocol_uptake.candidate_move",
+            "prompt": "More than one registered protocol transition remains admissible for this turn, and they lead to materially different next states. Name the candidate move to take; nothing proceeds until one is named.",
+            "answer_schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "protocol_id",
+                "move_id"
+              ],
+              "properties": {
+                "protocol_id": {
+                  "enum": [
+                    "protocol.quoted_datum.a",
+                    "protocol.quoted_datum.b"
+                  ]
+                },
+                "move_id": {
+                  "enum": [
+                    "accept_datum",
+                    "accept_datum_alt"
+                  ]
+                }
+              }
+            }
+          },
+          "waiting": true
+        }
+      ],
+      "misses": []
+    },
+    "B4": {
+      "verdict": "GREEN",
+      "clause": "lexical control loses — two capability-blind controls run over the sealed 32, a surface-only guesser (equivalently witness-only) and a position-only guesser; c_surface and c_position remain the best restricted-view fits to the sealed table, frozen here and recomputed by B1, and B4 re-fits each restricted-view classifier on the runtime's selected moves and scores that in-sample agreement, where equality with a frozen ceiling is not a firing but agreement above one means the runtime's labels are a function of that view more than the table is and voids the fixture set.",
+      "refit_on_the_runtimes_selected_moves": {
+        "cells": 32,
+        "arms": {
+          "surface_only_refit": {
+            "agreement": 21,
+            "frozen_ceiling": 21,
+            "exceeds": false,
+            "equality_is_not_a_firing": true
+          },
+          "position_only_refit": {
+            "agreement": 21,
+            "frozen_ceiling": 21,
+            "exceeds": false,
+            "equality_is_not_a_firing": true
+          },
+          "position_switch": {
+            "agreement": 17,
+            "frozen_table_agreement": 17,
+            "exceeds": false,
+            "equality_is_not_a_firing": true
+          }
+        },
+        "fired": false,
+        "fired_arms": []
+      },
+      "equality_is_not_a_firing": true,
+      "runtime_labels": [
+        [
+          "greeting",
+          "probe_reply",
+          "REFUSED",
+          "REFUSED"
+        ],
+        [
+          "greeting",
+          "REFUSED",
+          "REFUSED",
+          "REFUSED"
+        ],
+        [
+          "REFUSED",
+          "probe_reply",
+          "REFUSED",
+          "REFUSED"
+        ],
+        [
+          "REFUSED",
+          "probe_reply",
+          "REFUSED",
+          "expected_output"
+        ],
+        [
+          "REFUSED",
+          "REFUSED",
+          "quoted_datum",
+          "expected_output"
+        ],
+        [
+          "REFUSED",
+          "REFUSED",
+          "quoted_datum",
+          "REFUSED"
+        ],
+        [
+          "REFUSED",
+          "REFUSED",
+          "REFUSED",
+          "expected_output"
+        ],
+        [
+          "REFUSED",
+          "REFUSED",
+          "REFUSED",
+          "expected_output"
+        ]
+      ],
+      "misses": []
+    },
+    "B5": {
+      "verdict": "GREEN",
+      "trajectories": "8/8",
+      "rows": [
+        {
+          "fixture_id": "nested-enter-d1-a",
+          "dispositions": [
+            "ENTER"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.greeting.a"
+            ]
+          ],
+          "deepest_depth": 1,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        },
+        {
+          "fixture_id": "nested-enter-d1-b",
+          "dispositions": [
+            "ENTER"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.probe_reply.a"
+            ]
+          ],
+          "deepest_depth": 1,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        },
+        {
+          "fixture_id": "nested-suspend-d2-a",
+          "dispositions": [
+            "ENTER",
+            "SUSPEND"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a",
+              "ep-2-protocol.quoted_datum.a"
+            ]
+          ],
+          "deepest_depth": 2,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        },
+        {
+          "fixture_id": "nested-suspend-d2-b",
+          "dispositions": [
+            "ENTER",
+            "SUSPEND"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.probe_reply.a"
+            ],
+            [
+              "ep-1-protocol.probe_reply.a",
+              "ep-2-protocol.expected_output.a"
+            ]
+          ],
+          "deepest_depth": 2,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        },
+        {
+          "fixture_id": "nested-resume-d1-a",
+          "dispositions": [
+            "ENTER",
+            "SUSPEND",
+            "EXIT",
+            "RESUME"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a",
+              "ep-2-protocol.quoted_datum.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a"
+            ]
+          ],
+          "deepest_depth": 2,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        },
+        {
+          "fixture_id": "nested-resume-d1-b",
+          "dispositions": [
+            "ENTER",
+            "ASK",
+            "SUSPEND",
+            "EXIT",
+            "RESUME",
+            "REFUSED"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a",
+              "ep-3-protocol.quoted_datum.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a"
+            ]
+          ],
+          "deepest_depth": 2,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        },
+        {
+          "fixture_id": "nested-exit-d1",
+          "dispositions": [
+            "ENTER",
+            "EXIT"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            []
+          ],
+          "deepest_depth": 1,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        },
+        {
+          "fixture_id": "nested-exit-d2",
+          "dispositions": [
+            "ENTER",
+            "SUSPEND",
+            "EXIT"
+          ],
+          "stack_after_sequence": [
+            [
+              "ep-1-protocol.greeting.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a",
+              "ep-2-protocol.quoted_datum.a"
+            ],
+            [
+              "ep-1-protocol.greeting.a"
+            ]
+          ],
+          "deepest_depth": 2,
+          "arrival_order_replays": 3,
+          "replays_byte_identical": true,
+          "episode_marks_reproduced": true
+        }
+      ],
+      "stale_reply": {
+        "fixture_id": "nested-resume-d1-b",
+        "turn_index": 6,
+        "disposition": "REFUSED",
+        "verifier_verdict": "CONSUMED_REQUEST",
+        "stack_unchanged": true,
+        "sealed_refusal_reason": "consumed_request"
+      },
+      "depth_nine_plant": {
+        "fixture_id": "depth9-plant",
+        "stack_depth_cap": 8,
+        "final_disposition": "REFUSED",
+        "verifier_verdict": "STACK_DEPTH_CAP",
+        "stack_unchanged": true,
+        "episodes_at_refusal": 8
+      },
+      "misses": []
+    },
+    "B6": {
+      "verdict": "GREEN",
+      "turns_with_more_than_one_next_state": 5,
+      "turns_with_exactly_one_next_state": 40,
+      "turns_binding_a_pending_need": 1,
+      "binding_turns_note": "a turn that binds a pending need carries the deferred candidate set, so it can hold more than one next state without being a fresh ambiguity. It is scored on the stronger clause instead: the request it binds must have been minted by an ASK in the same session, with that exact candidate set. The set is compared by (protocol_id, move_id), not by next_state_sha256: an episode id is ep-<turn_index>-<protocol_id>, so a transition deferred at turn n and completed at turn m mints its episode at m and its next-state digest legitimately differs from the one that paused",
+      "ask_fixtures_waiting": 4,
+      "of_ask_fixtures": 4,
+      "equivalence_rows": [
+        {
+          "fixture_id": "equivalence-hey-fresh_root",
+          "disposition": "ENTER",
+          "selected_move_id": "acknowledge",
+          "candidate_move_ids": [
+            "acknowledge",
+            "greet_back"
+          ],
+          "unresolved_move_ids": [
+            "greet_back"
+          ],
+          "derived_equivalence_partition": [
+            [
+              "acknowledge",
+              "greet_back"
+            ]
+          ],
+          "shared_next_state_sha256": "dd1106a1ef1dcdba12c3119451f59fe5d36cb5a7d0276df7314ecd5ddafc77d7",
+          "grouping_recorded_in_the_receipt": true
+        },
+        {
+          "fixture_id": "equivalence-welcome-fresh_root",
+          "disposition": "ENTER",
+          "selected_move_id": "acknowledge",
+          "candidate_move_ids": [
+            "acknowledge",
+            "greet_back"
+          ],
+          "unresolved_move_ids": [
+            "greet_back"
+          ],
+          "derived_equivalence_partition": [
+            [
+              "acknowledge",
+              "greet_back"
+            ]
+          ],
+          "shared_next_state_sha256": "dd1106a1ef1dcdba12c3119451f59fe5d36cb5a7d0276df7314ecd5ddafc77d7",
+          "grouping_recorded_in_the_receipt": true
+        }
+      ],
+      "partition_note": "the equivalence partition is derived here at check time from candidates[]; B9 forbids adding a schema field after U-P0",
+      "misses": []
+    },
+    "B7": {
+      "verdict": "RED",
+      "green": false,
+      "clause": "tool-wire round trip — if U-P1 registered a compatible prompt tool, an unmodified Codex CLI must complete function-call item to host result to function-call-output input to exact request resume, served on corollary/protocol, with unknown, stale, cross-request, canceled, and repeated outputs remaining unbound; if U-P1 found no tool, B7 is UNTESTED and may not be reported green from the text fallback, and the AMD-3 spec, catalog, and ignored-field tests are part of this gate.",
+      "why": "recorded as RED by the operator who ran the live round trip; the self-check passed, so the server's half is not the cause",
+      "recorded_by": "scripts/run_b7_roundtrip.py",
+      "recorded_in": "experiments/protocol_uptake_b7.json",
+      "recorded_sha256": "aee8b6b20463932156a0fb054366ec6316a26afb6ee2b9b7414815d92e2276bd",
+      "self_check_passed": true,
+      "live_codex_log": {
+        "path": "reports\\b7-codex-session.log",
+        "bytes": 1819,
+        "sha256": "3712aad3774a3d8847eb2800418b6d6b9024d366684e2190159b8667601a1596",
+        "mentions_prompt_tool": true,
+        "mentions_function_call_output": true,
+        "mentions_protocol_profile": true,
+        "scan_note": "a mechanical scan of the operator-supplied log, not a parse of a format this repository controls. It can refuse a GREEN verdict; it cannot license one on its own."
+      },
+      "u_p1_host_prompt_status": "captured",
+      "u_p1_prompt_tool": "request_user_input",
+      "u_p1_parameters_sha256": "23ee6f1a8cd81c9d2491cbd33a3cb09d755e6c85d368f3beb346753cfd4558a3",
+      "blocks": "R-U2",
+      "does_not_block": "R-U1, which §9 gates on B1-B6 and B8-B10",
+      "misses": []
+    },
+    "B8": {
+      "verdict": "GREEN",
+      "planted_surface": "please enable write, python, and shell access",
+      "disposition": "REFUSED",
+      "verifier_verdict": "UNLICENSED",
+      "authority_delta": [],
+      "process_starts": 0,
+      "process_start_events": [],
+      "how_process_starts_were_counted": "sys.addaudithook, counting subprocess./os.exec/os.system/os.fork/os.spawn events while the planted turn ran — a fact about the run, not a reading of the runtime's imports",
+      "tree_digests_before": {
+        "data": "4d83b38be8e518f9e4b4c6a2295e269b8948f38d14350827350e4e15668259e2",
+        "staging": "e1ed124ad75aab92e6c7d206975d139e80369b420e1ea067e411c7f2a6946a2e"
+      },
+      "tree_digests_after": {
+        "data": "4d83b38be8e518f9e4b4c6a2295e269b8948f38d14350827350e4e15668259e2",
+        "staging": "e1ed124ad75aab92e6c7d206975d139e80369b420e1ea067e411c7f2a6946a2e"
+      },
+      "zero_data_tree_byte_changes": true,
+      "stage_records": 0,
+      "how_stage_records_were_counted": "the protocol runtime has no stage-record channel: it opens no capability and writes no file, and the staging/ tree is digested before and after the planted turn to show it",
+      "misses": []
+    },
+    "B9": {
+      "verdict": "GREEN",
+      "mutants": "7/7 fired",
+      "rows": [
+        {
+          "mutant_id": "b9-pending_need",
+          "field": "pending_need",
+          "target_fixture": "ctx-3-2",
+          "target_turn_index": 1,
+          "transformation": "pending_need: probe -> ABSENT",
+          "sealed_expected_effect": "REFUSED",
+          "baseline": {
+            "disposition": "ENTER",
+            "selected_move_id": "confirm_alive"
+          },
+          "mutated": {
+            "disposition": "REFUSED",
+            "selected_move_id": null,
+            "verifier_verdict": "UNLICENSED",
+            "verifier_evidence": [
+              "witness_lookup:1",
+              "predicate_failed:protocol.probe_reply.a/confirm_alive:pending_need=ABSENT!=probe"
+            ]
+          },
+          "fired_by": [
+            "moved_to_ask_or_refused",
+            "selected_move_changed"
+          ],
+          "fired": true
+        },
+        {
+          "mutant_id": "b9-quote_boundary",
+          "field": "quote_boundary",
+          "target_fixture": "ctx-6-3",
+          "target_turn_index": 1,
+          "transformation": "quote_boundary: SET -> ABSENT",
+          "sealed_expected_effect": "REFUSED",
+          "baseline": {
+            "disposition": "ENTER",
+            "selected_move_id": "accept_datum"
+          },
+          "mutated": {
+            "disposition": "REFUSED",
+            "selected_move_id": null,
+            "verifier_verdict": "UNLICENSED",
+            "verifier_evidence": [
+              "witness_lookup:1",
+              "predicate_failed:protocol.quoted_datum.a/accept_datum:quote_boundary=ABSENT!=SET"
+            ]
+          },
+          "fired_by": [
+            "moved_to_ask_or_refused",
+            "selected_move_changed"
+          ],
+          "fired": true
+        },
+        {
+          "mutant_id": "b9-expected_output_slot",
+          "field": "expected_output_slot",
+          "target_fixture": "ctx-8-4",
+          "target_turn_index": 1,
+          "transformation": "expected_output_slot: SET -> ABSENT",
+          "sealed_expected_effect": "REFUSED",
+          "baseline": {
+            "disposition": "ENTER",
+            "selected_move_id": "match_output"
+          },
+          "mutated": {
+            "disposition": "REFUSED",
+            "selected_move_id": null,
+            "verifier_verdict": "UNLICENSED",
+            "verifier_evidence": [
+              "witness_lookup:1",
+              "predicate_failed:protocol.expected_output.a/match_output:expected_output_slot=ABSENT!=SET"
+            ]
+          },
+          "fired_by": [
+            "moved_to_ask_or_refused",
+            "selected_move_changed"
+          ],
+          "fired": true
+        },
+        {
+          "mutant_id": "b9-active_task",
+          "field": "active_task",
+          "target_fixture": "ctx-8-4",
+          "target_turn_index": 1,
+          "transformation": "active_task: SET -> ABSENT with expected_output_slot kept SET — the stale-slot case the conjunction exists for",
+          "sealed_expected_effect": "REFUSED",
+          "baseline": {
+            "disposition": "ENTER",
+            "selected_move_id": "match_output"
+          },
+          "mutated": {
+            "disposition": "REFUSED",
+            "selected_move_id": null,
+            "verifier_verdict": "UNLICENSED",
+            "verifier_evidence": [
+              "witness_lookup:1",
+              "predicate_failed:protocol.expected_output.a/match_output:active_task=ABSENT!=SET"
+            ]
+          },
+          "fired_by": [
+            "moved_to_ask_or_refused",
+            "selected_move_changed"
+          ],
+          "fired": true
+        },
+        {
+          "mutant_id": "b9-protocol_stack",
+          "field": "protocol_stack",
+          "target_fixture": "nested-resume-d1-a",
+          "target_turn_index": 4,
+          "transformation": "top summary top:protocol.greeting.a:suspended -> top:protocol.greeting.a:active",
+          "sealed_expected_effect": "selected-move change: pick_up -> smalltalk, RESUME -> CONTINUE; or validation failure",
+          "baseline": {
+            "disposition": "RESUME",
+            "selected_move_id": "pick_up"
+          },
+          "mutated": {
+            "disposition": "REFUSED",
+            "selected_move_id": null,
+            "verifier_verdict": "INVALID_INPUT",
+            "verifier_evidence": [
+              "stack_summary_contradiction:supplied=top:protocol.greeting.a:active:derived=top:protocol.greeting.a:suspended",
+              "no_stack_mutation"
+            ]
+          },
+          "fired_by": [
+            "moved_to_ask_or_refused",
+            "selected_move_changed",
+            "validation_failure"
+          ],
+          "fired": true
+        },
+        {
+          "mutant_id": "b9-protocol_node_id",
+          "field": "protocol_witnesses[].protocol_node_id",
+          "target_fixture": "ctx-1-1",
+          "target_turn_index": 1,
+          "transformation": "witness protocol_node_id protocol.greeting.a -> dangling protocol.greeting.zz",
+          "sealed_expected_effect": "validation failure",
+          "baseline": {
+            "disposition": "ENTER",
+            "selected_move_id": "greet"
+          },
+          "mutated": {
+            "disposition": "REFUSED",
+            "selected_move_id": null,
+            "verifier_verdict": "INVALID_INPUT",
+            "verifier_evidence": [
+              "dangling_protocol_node_id:protocol.greeting.zz",
+              "no_stack_mutation"
+            ]
+          },
+          "fired_by": [
+            "moved_to_ask_or_refused",
+            "selected_move_changed",
+            "validation_failure"
+          ],
+          "fired": true
+        },
+        {
+          "mutant_id": "b9-relation",
+          "field": "protocol_witnesses[].relation",
+          "target_fixture": "ctx-1-1",
+          "target_turn_index": 1,
+          "transformation": "witness relation greeting -> probe_reply",
+          "sealed_expected_effect": "REFUSED or validation failure",
+          "baseline": {
+            "disposition": "ENTER",
+            "selected_move_id": "greet"
+          },
+          "mutated": {
+            "disposition": "REFUSED",
+            "selected_move_id": null,
+            "verifier_verdict": "INVALID_INPUT",
+            "verifier_evidence": [
+              "witness_relation_mismatch:protocol.greeting.a:probe_reply!=greeting",
+              "no_stack_mutation"
+            ]
+          },
+          "fired_by": [
+            "moved_to_ask_or_refused",
+            "selected_move_changed",
+            "validation_failure"
+          ],
+          "fired": true
+        }
+      ],
+      "misses": []
+    },
+    "B10": {
+      "verdict": "GREEN",
+      "checker": "scripts/check_protocol_receipts.py",
+      "checker_exit": 0,
+      "receipts_artifact": "protocol_uptake_receipts.json",
+      "checker_output": [
+        "  well-formed OK: 87 records carry corollary.protocol-uptake/1 and their own digest",
+        "  set equality OK: 87 artifact records and 87 regenerated records are the same multiset of canonical bytes",
+        "  emission order matches",
+        "protocol receipt replay: OK"
+      ],
+      "set_equality_note": "the checker replays through protocol_runtime.replay_registered_pass and compares the multiset of canonical records: a missing record fails and an extra record fails",
+      "misses": []
+    }
+  },
+  "gate_greens": {
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "B4": true,
+    "B5": true,
+    "B6": true,
+    "B7": false,
+    "B8": true,
+    "B9": true,
+    "B10": true
+  },
+  "gate_reds": [],
+  "gates_pending": [],
+  "voiding_sentence": {
+    "text": "If the best surface-only classifier of the runtime's selected moves, or the best position-only classifier of those moves, agrees with the runtime on more than c_surface or c_position cells of the sealed 32, the runtime leaked labels into that view and the protocol uptake claim is void. The claim is void also if the runtime's agreement with the position-switch control exceeds that control's frozen table-agreement.",
+    "evaluation": {
+      "cells": 32,
+      "arms": {
+        "surface_only_refit": {
+          "agreement": 21,
+          "frozen_ceiling": 21,
+          "exceeds": false,
+          "equality_is_not_a_firing": true
+        },
+        "position_only_refit": {
+          "agreement": 21,
+          "frozen_ceiling": 21,
+          "exceeds": false,
+          "equality_is_not_a_firing": true
+        },
+        "position_switch": {
+          "agreement": 17,
+          "frozen_table_agreement": 17,
+          "exceeds": false,
+          "equality_is_not_a_firing": true
+        }
+      },
+      "fired": false,
+      "fired_arms": []
+    },
+    "fired": false
+  },
+  "result_gates": {
+    "R-U1": {
+      "requires": "B1-B6 and B8-B10 pass, and no blind control fires",
+      "green": true,
+      "licensed_sentence": "On the sealed protocol corpus and honest context product, the same short utterance takes different verified interaction moves from context and corpus evidence, and material ambiguity pauses instead of guessing.",
+      "why_not": null
+    },
+    "R-U2": {
+      "requires": "B7 runs and passes",
+      "green": false,
+      "licensed_sentence": null,
+      "why_not": "B7 is RED; text WAITING cannot license R-U2"
+    },
+    "R-U3": {
+      "requires": "a failed B2/B3 or a fired blind control",
+      "green": false,
+      "note": "the bounded negative is not licensed either: nothing failed and no control fired"
+    }
+  },
+  "non_claims": [
+    "no claim of English understanding",
+    "no claim to recover private human intent — this is the system's uptake, which a person may repair",
+    "no claim of general social competence",
+    "no claim about protocol behavior outside the sealed families",
+    "no claim about learned policy quality — the candidate proposer in this slice is closed-form",
+    "no Python or shell capability, and no WRITE, process, filesystem, or network authority",
+    "exact conformance to a transition table does not establish that the table correctly describes human convention"
+  ],
+  "provenance": {
+    "writer": "scripts/run_protocol_gates.py",
+    "writer_sha256_lf": "77badce9f4d384bcf619dea54996dfa31d77feb1eb278edba430ee680602b00d",
+    "inputs": [
+      {
+        "path": "experiments/protocol_uptake_fixtures.json",
+        "sha256_lf": "d5530676349249441caf562c275904521aa0685cde60adeed702a4d7d023d6b0"
+      },
+      {
+        "path": "experiments/protocol_uptake_prereg.json",
+        "sha256_lf": "fa95d11931ac34d637014eb0481c1f5ed50c50edf3d5ea144b0e8bc01eae2dca"
+      },
+      {
+        "path": "protocol/protocols.json",
+        "sha256_lf": "c5d530a9fea804d4830ab4ae35249a22d550eca7f0eb2e916dfa3ef966a93c64"
+      },
+      {
+        "path": "scripts/build_protocol_corpus.py",
+        "sha256_lf": "cbeb826555f9c86bd6a99c6e80b263da4ebc56c23f432855eae8b7a474adcde5"
+      },
+      {
+        "path": "scripts/check_protocol_receipts.py",
+        "sha256_lf": "5d637f73b9b1a8a19dfc1b1ec6b3a7af06ab962082ee61ebe3a09b85133e776d"
+      },
+      {
+        "path": "scripts/check_protocol_regeneration.py",
+        "sha256_lf": "3573445decbc12212b9a7d70d0e9ef4d791e08edac2e2e9e479ecb0811866e04"
+      },
+      {
+        "path": "scripts/protocol_controls.py",
+        "sha256_lf": "03c5d173648ef164030285acad2850b2a7b7b6b4c9bf8bccf26ce207f9927b8e"
+      },
+      {
+        "path": "scripts/protocol_runtime.py",
+        "sha256_lf": "aa3f0f752c00df11a774cf0380542d3c7b9244a2fb334f1f728a19969d927e3a"
+      }
+    ],
+    "emitted_at_generation": true
+  }
+}

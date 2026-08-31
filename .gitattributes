@@ -62,3 +62,7 @@ experiments/protocol_uptake_fixtures.json text eol=lf
 experiments/protocol_uptake_prereg.json text eol=lf
 experiments/protocol_uptake_upre.json text eol=lf
 experiments/protocol_uptake_host_capture.json text eol=lf
+experiments/protocol_uptake_receipts.json text eol=lf
+experiments/protocol_uptake_run.json text eol=lf
+experiments/protocol_uptake_b7.json text eol=lf
+experiments/protocol_uptake_host_capture.json text eol=lf
