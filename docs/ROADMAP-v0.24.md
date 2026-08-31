@@ -35,8 +35,10 @@
 >   shape. New parks (MIRROR FRAGMENT, DIMENSION rider, LAPSE, HANDLE,
 >   EARNED ASK) → BACKLOG.
 > - **CR-P0 re-seal** (the v0.23 suite gate's own filing) → **SHIPPED**:
->   183→190 files, 37→43 sites, 19→22 kinds, seal `8aed3282…`. The live cold
->   re-read is scheduled **after** this rotation, by design.
+>   183→190 files, 37→43 sites, 19→22 kinds; sealed twice (final seal
+>   `2593bc75…` after the registered run's receipts joined the instance
+>   counts). The live cold re-read then ran in v0.23's order: partition
+>   1/12/9 over 22 kinds, R-C green.
 > - **Release gate `[SUITE-GATE-V24]`** → **OPEN at rotation**, carried as a
 >   placeholder in RELEASE-v0.24.0 and README, to be resolved before the tag.
 >

@@ -147,7 +147,7 @@ Per B9, this publication decides R3's v0.23 candidacy by the count, not by
 re-running — folded into v0.23's rider R-NF. No forgery claim (MACs are not
 verified on this path).
 
-# COLD RECEIPT: 1 of 19 receipt kinds survives the program's deletion (2026-08-27)
+# COLD RECEIPT: 1 of 22 receipt kinds survives the program's deletion (2026-08-27; re-read 2026-08-31 against the v0.24 twice-re-sealed registry)
 
 `cold/census_run2.json`, harness `harness/cold_harness.py`, registry
 `experiments/cold_registry_census.json` (sealed before the harness existed),
@@ -169,8 +169,8 @@ tree renamed away and no `sys.path` entry resolving inside the repository:
 | verdict | kinds | what it means |
 |---|---|---|
 | **SURVIVES** | **1** | `conformance_ce3_supplement:decide_both_directions` — 25 rows, 50 checker invocations, re-checked from the bundle and a `third_party_pinned` binary alone |
-| **NEEDS-PROGRAM** | **10** | for each: the *same* import, *same* argv, *same* `PYTHONPATH`, SUCCEEDED with `scripts/` present and FAILED with it renamed away |
-| **UNTESTED** | **8** | 7 with no committed instance and no published reconstruction rule; 1 (`retraction_radius:certify`) blocked by a dependency that is not the program |
+| **NEEDS-PROGRAM** | **12** | for each: the *same* import, *same* argv, *same* `PYTHONPATH`, SUCCEEDED with `scripts/` present and FAILED with it renamed away. The v0.24 re-read moved two v0.24 protocol kinds here (`corollary.protocol-uptake-receipts/1`, `run_protocol_gates:run`): they gained committed instances, so the removal arm could finally test them, and they need the program |
+| **UNTESTED** | **9** | 8 with no committed instance or no published reconstruction rule (`serve_chat:protocol_receipt` among them); 1 (`retraction_radius:certify`) blocked by a dependency that is not the program |
 
 The ten NEEDS-PROGRAM kinds, published by name because B7 scores a correct one
 as a hit: `build_throughput_tasks:exact_value_task`, `closure-receipt/1`,

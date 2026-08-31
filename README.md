@@ -52,8 +52,8 @@ design's stop clause **fired**, and firing it is the result: *the ingested
 library is effectively nameless; the naming layer must be built, not indexed.*
 The sharpest overlay: of the **9,048** statements the engine can consume in one
 step, **125** are nameable — the library computes far more than anyone can ask it
-for. Separately, of 19 kinds of receipt this program emits, **1 survives** the
-program's deletion, **10 need the program**, and **8 could not be re-checked at
+for. Separately, of 22 kinds of receipt this program emits, **1 survives** the
+program's deletion, **12 need the program**, and **9 could not be re-checked at
 all** — offline-checkability is earned by naming an adjudicator that is not the
 program, not by carrying a digest of your own work. Both are published stops
 against clauses frozen before the numbers were known. See [the library that had
@@ -780,9 +780,9 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # the tag waits. v0.24 adds four wholly new modules --
 # test_protocol_corpus, test_protocol_runtime, test_protocol_controls,
 # test_protocol_gates -- and grows test_serve_chat and
-# test_cold_receipt. Known-red until the post-rotation cold re-read:
-# cold/census_run2.json's provenance pin still names the pre-re-seal
-# registry bytes (deliberate ordering, RELEASE-v0.24.0).
+# test_cold_receipt. The post-rotation cold re-read is done:
+# cold/census_run2.json pins the final registry seal 2593bc75 and
+# test_cold_receipt passes at the frozen tip (RELEASE-v0.24.0).
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

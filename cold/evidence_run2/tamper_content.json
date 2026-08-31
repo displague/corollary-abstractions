@@ -3,7 +3,7 @@
   "rows_evaluated": 25,
   "rows_ok": 24,
   "checker_invocations": 50,
-  "elapsed_seconds": 20.07,
+  "elapsed_seconds": 16.884,
   "first_failures": [
     {
       "row_index": 0,

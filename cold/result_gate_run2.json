@@ -3,10 +3,10 @@
   "design": "docs/DESIGN-cold-receipt.md §13",
   "registered_before_the_run": true,
   "counts": {
-    "kinds": 19,
+    "kinds": 22,
     "SURVIVES": 1,
-    "NEEDS-PROGRAM": 10,
-    "UNTESTED": 8
+    "NEEDS-PROGRAM": 12,
+    "UNTESTED": 9
   },
   "verdicts": {
     "SURVIVES": [
@@ -16,10 +16,12 @@
       "build_throughput_tasks:exact_value_task",
       "closure-receipt/1",
       "closure_query:query",
+      "corollary.protocol-uptake-receipts/1",
       "external_verifier:main",
       "foreign_voice:receipt",
       "harness:_route_twin",
       "measure_when_to_ask:_oewn_samples",
+      "run_protocol_gates:run",
       "serve_chat:_evaluate_receipt",
       "serve_chat:_resolution_receipt",
       "serve_chat:kernel_receipt"
@@ -31,6 +33,7 @@
       "plain_router:_conditional",
       "retraction_radius:certify",
       "serve_chat:_story_receipt",
+      "serve_chat:protocol_receipt",
       "write_stage:accept_write",
       "write_stage:stage_write"
     ],
@@ -54,7 +57,7 @@
   "ordering": {
     "cr_p0_first_commit": "d93015000d057f06e301c4bb146ec3cf1047b7cd",
     "cr_p1_first_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
-    "cr_p0_latest_commit": "4243a9832ba90fe443e4ab88f5d0ec300d2080af",
+    "cr_p0_latest_commit": "6d9b443de6f1b3fd8026fcc88dea364eec947856",
     "cr_p1_latest_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
     "cr_p0_precedes_cr_p1": true,
     "how_checked": "git merge-base --is-ancestor over the commits that INTRODUCED each artifact; the latest commits are recorded beside them so a later amendment stays visible without falsifying an ordering that did hold"
@@ -74,10 +77,12 @@
       "build_throughput_tasks:exact_value_task",
       "closure-receipt/1",
       "closure_query:query",
+      "corollary.protocol-uptake-receipts/1",
       "external_verifier:main",
       "foreign_voice:receipt",
       "harness:_route_twin",
       "measure_when_to_ask:_oewn_samples",
+      "run_protocol_gates:run",
       "serve_chat:_evaluate_receipt",
       "serve_chat:_resolution_receipt",
       "serve_chat:kernel_receipt"
@@ -99,7 +104,7 @@
     "inputs": [
       {
         "path": "cold/census_run2.json",
-        "sha256_lf": "e118ba7d01f1fa304bb9a6d8299b48d47395b695c8e97e820ba28c3ebb92c6b2"
+        "sha256_lf": "6347c58f4f856a26db363c3c6395f58ba72fa390ddf2e504814a5bdf7725abce"
       }
     ],
     "emitted_at_generation": true

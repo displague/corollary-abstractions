@@ -145,7 +145,7 @@ neither happened.
 | **§1 R-U3** | **NOT LICENSED** either. The bounded negative requires a failed B2/B3 or a fired blind control; nothing failed and nothing fired |
 | **§2 prerequisites** (GUEST AXIOM inbound / ECHO amendment / HANDBACK) | **UNTOUCHED, as designed.** §2 says they do not start unless §1's course names them as dependants. It did not. All three stay parked behind their unchanged triggers |
 | **§3 carried lanes** | **CARRIED** to [ROADMAP-v0.25](ROADMAP-v0.25.md) §3, each with its trigger. STRANGER-GATE now carries a **second independent arrival** (CHOKE); PREMISE LEDGER carries **two** new convergent arrivals; MIRROR FRAGMENT and the DIMENSION rider candidate are new parks |
-| **CR-P0 registry re-seal** | **SHIPPED** (the v0.23 suite gate's own filing). Census 183 → **190** files, 37 → **43** receipt-marked sites, 19 → **22** kinds, 10 → **11** exclusions; seal **`8aed3282…`** |
+| **CR-P0 registry re-seal + live cold re-read** | **SHIPPED, twice-sealed.** Census 183 → **190** files, 37 → **43** receipt-marked sites, 19 → **22** kinds, 10 → **11** exclusions. The seal moved a second time (`8aed3282…` → **`2593bc75…`**) when the registered run's own receipts joined the instance counts — a re-seal belongs after the last artifact the cycle commits. The ~1 h live re-read then ran against the committed registry: partition **1 SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED** over 22 kinds, R-C green, and the harness's own B10 first caught an uncommitted-registry attempt and refused it |
 | **§4 `[SUITE-GATE-V24]`** | **OPEN at rotation.** See the placeholder section below |
 
 ### The negative, in full, because it is a first-class result
@@ -267,16 +267,21 @@ imports — and **zero** `data/`-tree byte changes.
 filing said the artifact had not been re-sealed at rotation. This cycle
 added eight scripts, so the same staleness would have recurred.
 
-**Now.** Re-sealed against the tree this release actually ships:
-`program_tree_files_scanned` **183 → 190**, receipt-marked sites **37 →
-43**, kinds **19 → 22** (the `ProtocolUptake` receipt family and
-`serve_chat`'s protocol receipt are receipt-marked program text now),
-excluded sites **10 → 11**, seal **`8aed3282…`**. The ANALYSIS recall prose
-follows the probe rather than leading it: wider-net sites **179**,
-uncovered **161**, admitted **18**.
+**Now.** Re-sealed against the tree this release actually ships — twice,
+because the registered run's own receipts joined the census after the
+first seal: `program_tree_files_scanned` **183 → 190**, receipt-marked
+sites **37 → 43**, kinds **19 → 22** (the `ProtocolUptake` receipt family
+and `serve_chat`'s protocol receipt are receipt-marked program text now),
+excluded sites **10 → 11**, instance-bearing kinds **12 → 14**, final seal
+**`2593bc75…`**. The ANALYSIS recall prose follows the probe rather than
+leading it: wider-net sites **179**, uncovered **161**, admitted **18**.
+The live cold re-read then ran against the committed registry: **1
+SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED** over 22 kinds — the two new
+protocol kinds with committed instances were actually *tested* and read
+NEEDS-PROGRAM — with R-C green (`cold/result_gate_run2.json`).
 
 **Demonstrate.** `experiments/cold_registry_census.json`,
-`counts.program_tree_files_scanned: 190`, `census_seal: "8aed3282…"`;
+`counts.program_tree_files_scanned: 190`, `census_seal: "2593bc75…"`;
 `tests/test_cold_receipt.py::TheCensusRecomputes`.
 
 ### SPEC ¶AMD-3
@@ -485,10 +490,12 @@ receipts under `reports/test_gate_v024/`, exactly as `[SUITE-GATE-V23]`
 was closed with 2,852 tests OK (skipped=5), 32,646.0 s (9 h 4 m) at
 `867ad5c` — or the notes refuse the sentence and the tag waits.
 
-One gate state is already known and disclosed rather than discovered by the
-run: **the live cold reading is scheduled after this rotation.**
-`cold/census_run2.json` still pins the previous registry bytes, so its
-provenance test is red until the re-read. That is a deliberate ordering
-recorded at the CR-P0 re-seal commit — the ~1 h cold act runs at the end of
-the cycle so it reads the tree the release actually ships, in v0.23's
-order.
+One prior gate obligation is already discharged rather than discovered by
+the run: **the live cold reading ran after this rotation, in v0.23's
+order**, against the twice-re-sealed committed registry.
+`cold/census_run2.json` now pins seal `2593bc75…`, the partition is 1/12/9
+over 22 kinds, R-C is green, and `tests/test_cold_receipt.py` passes on
+this tip. The harness's B10 earned its keep on the way: a re-read taken
+while the re-sealed registry sat uncommitted came back red on exactly
+`registry_uncommitted_at_run`, and that run was discarded for the properly
+ordered one.

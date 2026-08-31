@@ -1,48 +1,48 @@
 {
   "outcome": "FAIL",
   "rows_evaluated": 25,
-  "rows_ok": 0,
+  "rows_ok": 1,
   "checker_invocations": 50,
-  "elapsed_seconds": 0.754,
+  "elapsed_seconds": 16.866,
   "first_failures": [
     {
       "row_index": 0,
       "statement_id": "leanworkbook.skel.lean_workbook_10096",
       "failed_checks": [
-        "positive_exit_code",
-        "verdict"
+        "negative_digest",
+        "positive_digest"
       ]
     },
     {
       "row_index": 1,
       "statement_id": "leanworkbook.skel.lean_workbook_10197",
       "failed_checks": [
-        "positive_exit_code",
-        "verdict"
+        "negative_digest",
+        "positive_digest"
       ]
     },
     {
       "row_index": 2,
       "statement_id": "leanworkbook.skel.lean_workbook_1032",
       "failed_checks": [
-        "positive_exit_code",
-        "verdict"
+        "negative_digest",
+        "positive_digest"
       ]
     },
     {
       "row_index": 3,
       "statement_id": "leanworkbook.skel.lean_workbook_10425",
       "failed_checks": [
-        "positive_exit_code",
-        "verdict"
+        "negative_digest",
+        "positive_digest"
       ]
     },
     {
       "row_index": 4,
       "statement_id": "leanworkbook.skel.lean_workbook_10482",
       "failed_checks": [
-        "positive_exit_code",
-        "verdict"
+        "negative_digest",
+        "positive_digest"
       ]
     }
   ],
@@ -53,18 +53,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f",
-          "recorded": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f",
-          "ok": true
+          "recorded": "52cc032dadfa5db4f1c89eda3d11c207af6335d695aa9394b76b6abddf0a7498",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "f249eaea9ccfae4d1d643ec72113b0afe89ef8e27fdab6ebac8334f21a30f4d6",
-          "recorded": "f249eaea9ccfae4d1d643ec72113b0afe89ef8e27fdab6ebac8334f21a30f4d6",
-          "ok": true
+          "recorded": "0d315f08216a614a8cdac8223d27b05d15412df96337de67c10f7fa995c430b3",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -72,9 +72,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -85,18 +85,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f",
-          "recorded": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f",
-          "ok": true
+          "recorded": "e10b0a28696cf496d5249585877363d0554702bad66b2840d0210cb4a77b68df",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "04d2df4523a2beb12f34016084296ae53281ef137dd6c4a0165a39e31053ce52",
-          "recorded": "04d2df4523a2beb12f34016084296ae53281ef137dd6c4a0165a39e31053ce52",
-          "ok": true
+          "recorded": "f46ab2382d042681d89aa158b4bfa83e69300a4778bbc1e9d0bdc23ac7feb4df",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -104,9 +104,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -117,18 +117,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "eecaae562274263a3f9319dd9512a5b90adc8067b2044809881f9b2ad0df165b",
-          "recorded": "eecaae562274263a3f9319dd9512a5b90adc8067b2044809881f9b2ad0df165b",
-          "ok": true
+          "recorded": "4d593cb4cba6961c9e76362a4844fef2f1002d9f1e6771803bd9399acd44e806",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "bd8ced8242ffda6aded97330177707e90583d8d4d666e6b419b49618bcf10a45",
-          "recorded": "bd8ced8242ffda6aded97330177707e90583d8d4d666e6b419b49618bcf10a45",
-          "ok": true
+          "recorded": "52dc4dad29756774556060ddd4bcbd4dac148c7f31fd24d023b942195c974f8e",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -136,9 +136,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -149,18 +149,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "d68d50aa4cffeb193b54a8d8f8683e7649de29264176f995950d5d4c9ad6842d",
-          "recorded": "d68d50aa4cffeb193b54a8d8f8683e7649de29264176f995950d5d4c9ad6842d",
-          "ok": true
+          "recorded": "ddd1fb5449c7c98f0dc1d3905dd6f89e09e3826537cc0298bc157af9f7b070f0",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "1b7ef824d57fa5e8c5a7105344c8e9ec5bea6130828d8034b39eda4a1e82847d",
-          "recorded": "1b7ef824d57fa5e8c5a7105344c8e9ec5bea6130828d8034b39eda4a1e82847d",
-          "ok": true
+          "recorded": "90fda4989731db365e233bf9347c592e8ea96b2c439e2f8ae99c51e0bbbd4ff0",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -168,9 +168,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -181,18 +181,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "a1e12ad31e8b7e4a38c9f03af01559236bd48fee58a7e44277733fb17a3f907d",
-          "recorded": "a1e12ad31e8b7e4a38c9f03af01559236bd48fee58a7e44277733fb17a3f907d",
-          "ok": true
+          "recorded": "25d88b935bdfeca27c542b731df8cdbdd6744f35864351dd97339d94213d098e",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "64cc4e175759826ce8b743849665dc171e9abccd560086e32e938bafd53be032",
-          "recorded": "64cc4e175759826ce8b743849665dc171e9abccd560086e32e938bafd53be032",
-          "ok": true
+          "recorded": "87feaa54c9830ebbd1aa8d16681699daaca139c665212bc494c01d7453a182d2",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -200,9 +200,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -213,18 +213,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "c16478fec40e8359bbf1fbf5035890dc3362fff03939bc8bd00357e6a95fa2ac",
-          "recorded": "c16478fec40e8359bbf1fbf5035890dc3362fff03939bc8bd00357e6a95fa2ac",
-          "ok": true
+          "recorded": "169ec5cc7b4a252f9dc95d38b3cf2b9a8dd89d50216211fd5b65060275072aeb",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "391798beb93bdbe46dbb785cd853535bbc0349c7aba8de0c49980812d58a7a34",
-          "recorded": "391798beb93bdbe46dbb785cd853535bbc0349c7aba8de0c49980812d58a7a34",
-          "ok": true
+          "recorded": "7ab0b36b16e8d1a7688afefbf11868f5eb20623c851d912c5cc1404e1abbb3aa",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -232,9 +232,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -245,18 +245,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "8850d13ef31411148044dae981749d4806086f17b4b5b90db2ad41b96289413d",
-          "recorded": "8850d13ef31411148044dae981749d4806086f17b4b5b90db2ad41b96289413d",
-          "ok": true
+          "recorded": "2162d5b2d4190e67eeffc3a313169e5220241218748167951613899592592c2f",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "7df2062508095b93030850eb000fadc83609522b1707c9055c7c4d4a23f46ff6",
-          "recorded": "7df2062508095b93030850eb000fadc83609522b1707c9055c7c4d4a23f46ff6",
-          "ok": true
+          "recorded": "04d2df4523a2beb12f34016084296ae53281ef137dd6c4a0165a39e31053ce52",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -264,9 +264,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -277,18 +277,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "3fa01fc49e77311f6cd47d7acdc4402636b56080e1ad313168d9c60d09068bbd",
-          "recorded": "3fa01fc49e77311f6cd47d7acdc4402636b56080e1ad313168d9c60d09068bbd",
-          "ok": true
+          "recorded": "4c9e7a828751d556374dfbe73ee8d3947a0a9550699cc627184b254cda202694",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "c7688d6be0ce8295987d13d12c6229cff9db6554c2dce8e581bb1ed78f39433e",
-          "recorded": "c7688d6be0ce8295987d13d12c6229cff9db6554c2dce8e581bb1ed78f39433e",
-          "ok": true
+          "recorded": "dbeaa97a8b197a95b3373a3ed4f3824e83d2e7fefcc20569328ee2544318ca70",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -296,9 +296,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -309,18 +309,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "365cb9d1bed2a66208d4c3b157c9fabc2937a8b17ac91afb54efc4fbb847c00f",
-          "recorded": "365cb9d1bed2a66208d4c3b157c9fabc2937a8b17ac91afb54efc4fbb847c00f",
-          "ok": true
+          "recorded": "7f9df9c298bed167a7032c84e6436699ae84098dfb4bdede9cdd520bd34817ae",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "ec06ad12910f78bbc5882154b651c0b244b717d8080f3150e65d6dc9651a956f",
-          "recorded": "ec06ad12910f78bbc5882154b651c0b244b717d8080f3150e65d6dc9651a956f",
-          "ok": true
+          "recorded": "df3dd13b91b02edb6968cf078babaec65a0eed500b8e6fa9d1e31b8daa45aadd",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -328,9 +328,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -341,18 +341,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "d45559c0333cea6ad09fe00c6dc683d8b1022829d1cfea460da3eb19569444aa",
-          "recorded": "d45559c0333cea6ad09fe00c6dc683d8b1022829d1cfea460da3eb19569444aa",
-          "ok": true
+          "recorded": "a1e12ad31e8b7e4a38c9f03af01559236bd48fee58a7e44277733fb17a3f907d",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "e2417dfa6d1095886553152837aa743d713188816bb2381dd1b04bbcc1ec6665",
-          "recorded": "e2417dfa6d1095886553152837aa743d713188816bb2381dd1b04bbcc1ec6665",
-          "ok": true
+          "recorded": "64cc4e175759826ce8b743849665dc171e9abccd560086e32e938bafd53be032",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -360,9 +360,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -373,18 +373,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "169ec5cc7b4a252f9dc95d38b3cf2b9a8dd89d50216211fd5b65060275072aeb",
-          "recorded": "169ec5cc7b4a252f9dc95d38b3cf2b9a8dd89d50216211fd5b65060275072aeb",
-          "ok": true
+          "recorded": "d68d50aa4cffeb193b54a8d8f8683e7649de29264176f995950d5d4c9ad6842d",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "7ab0b36b16e8d1a7688afefbf11868f5eb20623c851d912c5cc1404e1abbb3aa",
-          "recorded": "7ab0b36b16e8d1a7688afefbf11868f5eb20623c851d912c5cc1404e1abbb3aa",
-          "ok": true
+          "recorded": "1b7ef824d57fa5e8c5a7105344c8e9ec5bea6130828d8034b39eda4a1e82847d",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -392,9 +392,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -405,18 +405,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "397fc5c6ab65029889cb8dc5ddea64efd32a57b8654f3cce2cd1c7c500113619",
-          "recorded": "397fc5c6ab65029889cb8dc5ddea64efd32a57b8654f3cce2cd1c7c500113619",
-          "ok": true
+          "recorded": "365cb9d1bed2a66208d4c3b157c9fabc2937a8b17ac91afb54efc4fbb847c00f",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "a680902116a87f6c98d1536e447adba760000e867f729f0cdc78cad200aeccfa",
-          "recorded": "a680902116a87f6c98d1536e447adba760000e867f729f0cdc78cad200aeccfa",
-          "ok": true
+          "recorded": "ec06ad12910f78bbc5882154b651c0b244b717d8080f3150e65d6dc9651a956f",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -424,9 +424,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -437,18 +437,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "3ef65e4bfff2bf4b2daf110eda80def4c823c4138bf04f0cf8a3f5bcd8c39fff",
-          "recorded": "3ef65e4bfff2bf4b2daf110eda80def4c823c4138bf04f0cf8a3f5bcd8c39fff",
-          "ok": true
+          "recorded": "c16478fec40e8359bbf1fbf5035890dc3362fff03939bc8bd00357e6a95fa2ac",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "91ac28f6fba89be3b558526834ba87116b6ea8c8043b63953b35f9073bbcda8a",
-          "recorded": "91ac28f6fba89be3b558526834ba87116b6ea8c8043b63953b35f9073bbcda8a",
-          "ok": true
+          "recorded": "391798beb93bdbe46dbb785cd853535bbc0349c7aba8de0c49980812d58a7a34",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -456,9 +456,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -473,9 +473,9 @@
           "ok": true
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "ce1aee7415e375feca1028a8db01568aeeaf2a44061f459a5c59dd64cc4e8089",
@@ -488,12 +488,12 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
-      "ok": false
+      "ok": true
     },
     {
       "row_index": 14,
@@ -501,18 +501,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "68d55666b30c9e3408cd63783108c3597049f75fb135b52071f8b4f4c4e19f09",
-          "recorded": "68d55666b30c9e3408cd63783108c3597049f75fb135b52071f8b4f4c4e19f09",
-          "ok": true
+          "recorded": "d45559c0333cea6ad09fe00c6dc683d8b1022829d1cfea460da3eb19569444aa",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "e01c3a06b81d18d5e70aa9a25d2922d17da1fb9e22d7dd64180576a853fd3ab0",
-          "recorded": "e01c3a06b81d18d5e70aa9a25d2922d17da1fb9e22d7dd64180576a853fd3ab0",
-          "ok": true
+          "recorded": "e2417dfa6d1095886553152837aa743d713188816bb2381dd1b04bbcc1ec6665",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -520,9 +520,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -533,18 +533,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "ddd1fb5449c7c98f0dc1d3905dd6f89e09e3826537cc0298bc157af9f7b070f0",
-          "recorded": "ddd1fb5449c7c98f0dc1d3905dd6f89e09e3826537cc0298bc157af9f7b070f0",
-          "ok": true
+          "recorded": "164b693518c039cfe3233075945c14bf8958da72a107517950315e1aeb2938cf",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "90fda4989731db365e233bf9347c592e8ea96b2c439e2f8ae99c51e0bbbd4ff0",
-          "recorded": "90fda4989731db365e233bf9347c592e8ea96b2c439e2f8ae99c51e0bbbd4ff0",
-          "ok": true
+          "recorded": "484cff560a359b2286abf8beccfec72cb7f8f31c857b4f1a2f2b3f7f502ab58b",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -552,9 +552,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -565,18 +565,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "4c9e7a828751d556374dfbe73ee8d3947a0a9550699cc627184b254cda202694",
-          "recorded": "4c9e7a828751d556374dfbe73ee8d3947a0a9550699cc627184b254cda202694",
-          "ok": true
+          "recorded": "3ef65e4bfff2bf4b2daf110eda80def4c823c4138bf04f0cf8a3f5bcd8c39fff",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "dbeaa97a8b197a95b3373a3ed4f3824e83d2e7fefcc20569328ee2544318ca70",
-          "recorded": "dbeaa97a8b197a95b3373a3ed4f3824e83d2e7fefcc20569328ee2544318ca70",
-          "ok": true
+          "recorded": "91ac28f6fba89be3b558526834ba87116b6ea8c8043b63953b35f9073bbcda8a",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -584,9 +584,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -597,18 +597,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "52cc032dadfa5db4f1c89eda3d11c207af6335d695aa9394b76b6abddf0a7498",
-          "recorded": "52cc032dadfa5db4f1c89eda3d11c207af6335d695aa9394b76b6abddf0a7498",
-          "ok": true
+          "recorded": "8850d13ef31411148044dae981749d4806086f17b4b5b90db2ad41b96289413d",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "0d315f08216a614a8cdac8223d27b05d15412df96337de67c10f7fa995c430b3",
-          "recorded": "0d315f08216a614a8cdac8223d27b05d15412df96337de67c10f7fa995c430b3",
-          "ok": true
+          "recorded": "7df2062508095b93030850eb000fadc83609522b1707c9055c7c4d4a23f46ff6",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -616,9 +616,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -629,18 +629,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "2065f135337caf144e0e84004033844800205127ecb0d97bd6baaaac6184a41d",
-          "recorded": "2065f135337caf144e0e84004033844800205127ecb0d97bd6baaaac6184a41d",
-          "ok": true
+          "recorded": "66af4f1d4b0a714f4a0b052a6314839a26fe8d3c2e4c9e81e6535423a9721579",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "71bdea3a3a9f9d7df3cc63f41badd73bb8cba68dff874a49073dbfa25f0e7dd8",
-          "recorded": "71bdea3a3a9f9d7df3cc63f41badd73bb8cba68dff874a49073dbfa25f0e7dd8",
-          "ok": true
+          "recorded": "c8dc5deae7633e97e3801f7f62e57862f41f5369b8b52b73a14537a3e651e008",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -648,9 +648,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -661,18 +661,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "164b693518c039cfe3233075945c14bf8958da72a107517950315e1aeb2938cf",
-          "recorded": "164b693518c039cfe3233075945c14bf8958da72a107517950315e1aeb2938cf",
-          "ok": true
+          "recorded": "eecaae562274263a3f9319dd9512a5b90adc8067b2044809881f9b2ad0df165b",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "484cff560a359b2286abf8beccfec72cb7f8f31c857b4f1a2f2b3f7f502ab58b",
-          "recorded": "484cff560a359b2286abf8beccfec72cb7f8f31c857b4f1a2f2b3f7f502ab58b",
-          "ok": true
+          "recorded": "bd8ced8242ffda6aded97330177707e90583d8d4d666e6b419b49618bcf10a45",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -680,9 +680,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -693,18 +693,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "4d593cb4cba6961c9e76362a4844fef2f1002d9f1e6771803bd9399acd44e806",
-          "recorded": "4d593cb4cba6961c9e76362a4844fef2f1002d9f1e6771803bd9399acd44e806",
-          "ok": true
+          "recorded": "68d55666b30c9e3408cd63783108c3597049f75fb135b52071f8b4f4c4e19f09",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "52dc4dad29756774556060ddd4bcbd4dac148c7f31fd24d023b942195c974f8e",
-          "recorded": "52dc4dad29756774556060ddd4bcbd4dac148c7f31fd24d023b942195c974f8e",
-          "ok": true
+          "recorded": "e01c3a06b81d18d5e70aa9a25d2922d17da1fb9e22d7dd64180576a853fd3ab0",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -712,9 +712,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -725,18 +725,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "e10b0a28696cf496d5249585877363d0554702bad66b2840d0210cb4a77b68df",
-          "recorded": "e10b0a28696cf496d5249585877363d0554702bad66b2840d0210cb4a77b68df",
-          "ok": true
+          "recorded": "2065f135337caf144e0e84004033844800205127ecb0d97bd6baaaac6184a41d",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "f46ab2382d042681d89aa158b4bfa83e69300a4778bbc1e9d0bdc23ac7feb4df",
-          "recorded": "f46ab2382d042681d89aa158b4bfa83e69300a4778bbc1e9d0bdc23ac7feb4df",
-          "ok": true
+          "recorded": "71bdea3a3a9f9d7df3cc63f41badd73bb8cba68dff874a49073dbfa25f0e7dd8",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -744,9 +744,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -757,18 +757,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "66af4f1d4b0a714f4a0b052a6314839a26fe8d3c2e4c9e81e6535423a9721579",
-          "recorded": "66af4f1d4b0a714f4a0b052a6314839a26fe8d3c2e4c9e81e6535423a9721579",
-          "ok": true
+          "recorded": "bdc132dd6d2589c44c0e022400ffc64544a275ec21830a947392e9f471ed270f",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "c8dc5deae7633e97e3801f7f62e57862f41f5369b8b52b73a14537a3e651e008",
-          "recorded": "c8dc5deae7633e97e3801f7f62e57862f41f5369b8b52b73a14537a3e651e008",
-          "ok": true
+          "recorded": "f249eaea9ccfae4d1d643ec72113b0afe89ef8e27fdab6ebac8334f21a30f4d6",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -776,9 +776,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -789,18 +789,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "7f9df9c298bed167a7032c84e6436699ae84098dfb4bdede9cdd520bd34817ae",
-          "recorded": "7f9df9c298bed167a7032c84e6436699ae84098dfb4bdede9cdd520bd34817ae",
-          "ok": true
+          "recorded": "397fc5c6ab65029889cb8dc5ddea64efd32a57b8654f3cce2cd1c7c500113619",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "df3dd13b91b02edb6968cf078babaec65a0eed500b8e6fa9d1e31b8daa45aadd",
-          "recorded": "df3dd13b91b02edb6968cf078babaec65a0eed500b8e6fa9d1e31b8daa45aadd",
-          "ok": true
+          "recorded": "a680902116a87f6c98d1536e447adba760000e867f729f0cdc78cad200aeccfa",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -808,9 +808,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
@@ -821,18 +821,18 @@
       "checks": {
         "positive_digest": {
           "recomputed": "25d88b935bdfeca27c542b731df8cdbdd6744f35864351dd97339d94213d098e",
-          "recorded": "25d88b935bdfeca27c542b731df8cdbdd6744f35864351dd97339d94213d098e",
-          "ok": true
+          "recorded": "3fa01fc49e77311f6cd47d7acdc4402636b56080e1ad313168d9c60d09068bbd",
+          "ok": false
         },
         "positive_exit_code": {
-          "recomputed": 0,
+          "recomputed": 1,
           "recorded": 1,
-          "ok": false
+          "ok": true
         },
         "negative_digest": {
           "recomputed": "87feaa54c9830ebbd1aa8d16681699daaca139c665212bc494c01d7453a182d2",
-          "recorded": "87feaa54c9830ebbd1aa8d16681699daaca139c665212bc494c01d7453a182d2",
-          "ok": true
+          "recorded": "c7688d6be0ce8295987d13d12c6229cff9db6554c2dce8e581bb1ed78f39433e",
+          "ok": false
         },
         "negative_exit_code": {
           "recomputed": 0,
@@ -840,9 +840,9 @@
           "ok": true
         },
         "verdict": {
-          "recomputed": "did_not_reduce",
+          "recomputed": "confirmed_counterexample",
           "recorded": "confirmed_counterexample",
-          "ok": false
+          "ok": true
         }
       },
       "ok": false
