@@ -246,3 +246,15 @@ verify*, never *skipped*.
 `[SUITE-GATE-V23]` is resolved: run 2 green at `867ad5c`, receipts in
 `reports/test_gate_v023/`. The rotation placeholder above is closed
 with those numbers, not carried.
+
+---
+
+**Addendum (2026-08-31, filed by the v0.24 deep triage).** This release's
+own gate required `check_report_regeneration.py` to run in the refresh
+*with its verdicts in the notes*, and these notes never carried them — the
+only break in the chain from v0.16 through v0.24. The omission is recorded
+here rather than papered over (the precedent is RELEASE-v0.21.0 recording
+v0.20's identical miss). The retroactive evidence that nothing drifted:
+the v0.24 rotation ran the checker over the same committed reports, which
+had not changed since this tag, and read three clean plus the declared
+`decompositions` divergence (RELEASE-v0.24.0, ledger-refresh section).

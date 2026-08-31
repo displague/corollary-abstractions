@@ -3,6 +3,89 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed by the v0.24 deep triage (2026-08-31): proposed-vs-delivered over v0.22 and v0.23
+
+Two artifact-verified audits of the agent-managed v0.22 and v0.23 cycles
+(the maintainer's directive; method in RELEASE-v0.24.0's drift-audit
+section). Every prereg→run ancestry and freeze group verified clean; the
+gaps below are documentation-layer, filed here so they stop being gaps.
+
+- **R1 / ONE STEP — the lane-opening decision that resolved to nothing
+  (v0.22 §3).** The frozen stop rule said "census committed, lane opens or
+  closes, nothing else runs"; the census returned INCOMPLETE (statement limb
+  45× floor, question limb deferred — Q60 unsealed and the §1 stop forbade
+  sealing it); ROADMAP-v0.23 §4.1 wrote "lane-opening decision carries
+  below" and carried it nowhere. **Adjudicated now: the lane CLOSES as
+  incomplete-by-construction.** Its floor was a conjunction whose second
+  limb needed a question set the same cycle's stop clause forbade; the
+  9,048 statement-side number stands as a finding. Re-open only with a
+  sealed question distribution that does not consume its population —
+  which is DEMAND's unpark, so the lane folds behind DEMAND.
+- **GUEST AXIOM B6 — the exploratory arm that was never scored
+  (DESIGN-guest-axiom §6).** B6 made the `nameless_probe` stratum
+  exploratory with no floor ("elaboration rate is reported whatever it
+  is"); all 30 drawn hypotheses landed in that stratum, B3's <15 stop is
+  scoped to the restricted population and does not cover it, and no
+  document adjudicated it. Filed: B6 is **unadjudicated, not discharged**.
+  If the GUEST AXIOM lane unparks, its first act is either running B6's
+  reported-rate arm over the 30 or recording in writing why B1's unrun
+  quarantine gate was its prerequisite. Cheap rider recorded at the same
+  time: the draw artifact carries no `restricted_population` field or B3
+  verdict block — the stop is derivable but never declared; emit both.
+- **NO-FLIP's improvement half — dead on a cycle-scoped argument with
+  nothing watching (v0.23 §1.1).** "Dead this cycle by its own logic"
+  because R3 measured a zero-growth window; the regression half shipped as
+  R-NF. Unpark trigger, now written: **the first cycle whose recorded
+  journal window shows non-zero library growth re-checks the improvement
+  channel** (the corpora digest moving between recorded and live is the
+  watchable fact).
+- **The v0.23 course's declined dispositions, backfilled (v0.23 §4.5 said
+  "filed in BACKLOG"; seven of nine were not).** From
+  `reports/design-direction-v0.23.json`: **NO-FLIP** — metric leader,
+  overruled into rider R-NF (shipped 0/220), improvement half above;
+  **TOMORROW'S DIFF** — folded into NO-FLIP, cut to the regression half;
+  **AXIOM-BUDGET** — folded into STRANGER-GATE (the three-axiom PASS
+  whitelist is the attack surface); **THE OBJECTION SLOT** — folded into
+  GUEST AXIOM's person-wrong disposition (REFUTED emits a countermodel);
+  **TWO READINGS** — folded into ECHO (stopped at construction; the fold
+  parks with ECHO's amendment trigger); **TWO-KEY BIND + WANT-LIST** — the
+  two sources of the HANDBACK rider's separator/unlock object, named here
+  so the fold's ancestry survives (HANDBACK's trigger is unchanged).
+- **H-P0's per-statement enumeration — promised, only counts committed
+  (v0.22 §1.2).** The registered deliverable said "per source, exactly
+  which statements it produces handles for"; S-SKEL got its 12,777-row
+  table, S-LEX and S-INV got counts, distributions, and a tested
+  recomputation — not rows. Filed as a small lane: either commit the
+  per-statement S-LEX/S-INV rows (a writer flag plus one artifact) or
+  amend DESIGN-handles §3 in writing to say counts-plus-recomputability
+  was the deliverable. Until one happens, the release sentence "one
+  artifact per source" is weaker than the registered promise.
+- **The cold SURVIVES verdict travels without its isolation scope (v0.22
+  §2).** The registered artifact list said "container recipe"; what ran is
+  a clean-PATH subprocess, deltaed exemplarily in `harness/recipe.json`
+  and `census_run2.scope.weaker_than_a_container` — but RELEASE-v0.22.0's
+  honest limits never carried it. **Standing rule, filed: any document
+  quoting a SURVIVES verdict quotes the scope with it** (`%USERPROFILE%`,
+  registry, ambient DLL paths, and the harness's own interpreter are not
+  excluded). RELEASE-v0.24.0's drift-audit section now carries it; the
+  v0.22 notes are closed and stand corrected by this entry.
+- **Two absolutes in closed docs, correct-by-erratum here (v0.22).**
+  RELEASE-v0.22.0's "no survival rate is published anywhere" is refutable
+  by one grep: `cold/census_run2.json` B8 publishes
+  `survives_fraction: 0.0526` as a gate quantity with a denominator note
+  — a gate quantity, not a claim, and the sentence should have said so.
+  And `BOUNDED OMNISCIENCE × SPLIT-SEMANTICS` / `TWO JUDGES` never reached
+  this file despite §4.4's claim: they are the strengthened unpark
+  formulation of the parked conformance successor (TWO WITNESSES row) and
+  live in `reports/design-direction-v0.22.json`; the TWO WITNESSES entry
+  above is their standing home.
+- **RELEASE-v0.23.0 shipped without its check_report_regeneration
+  verdicts** — the only break in an eight-release chain; a dated addendum
+  in that file now records the omission (the v0.21 precedent for v0.20's
+  identical miss), and the closed ROADMAP-v0.23 banner's "not edited
+  except this banner" sentence is corrected in place, dated, because the
+  rotation had in fact rewritten nine sections of the plan body.
+
 ## Filed at the v0.24 rotation (the uptake, and the v0.25 course's parks)
 
 - **The shipped template parser silently rewrites `sum_total(x)` into the
@@ -286,8 +369,9 @@ or commit history. Each item names the evidence that motivated it.
   naming layer must be built, not indexed.* Candidate material recorded, not
   chosen: **name-derivation from the verified English renderings** the voice
   serves; the **S3 term store** priced at ~223.5 s batched over 2,313 covered
-  statements (`handles_census.json` `s3_price`; the design addendum rounds to
-  ~217 s). Carries to the **v0.24 course** unchanged. HANDLEBAR parks behind it.
+  statements (`handles_census.json` `s3_price`; the design addendum was corrected to
+  223.5 s at 85515e9 — the earlier "rounds to ~217 s" note here described a
+  disagreement that no longer existed, caught by the v0.24 deep triage). Carries to the **v0.24 course** unchanged. HANDLEBAR parks behind it.
 
 - **ORPHAN — receipts that outlive the program (2026-08-27, the cold-census's own
   recorded next question).** Series-1 runner-up of the v0.23 course. The census

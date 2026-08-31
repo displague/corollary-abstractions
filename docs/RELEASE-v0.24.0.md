@@ -148,6 +148,45 @@ neither happened.
 | **CR-P0 registry re-seal + live cold re-read** | **SHIPPED, twice-sealed.** Census 183 → **190** files, 37 → **43** receipt-marked sites, 19 → **22** kinds, 10 → **11** exclusions. The seal moved a second time (`8aed3282…` → **`2593bc75…`**) when the registered run's own receipts joined the instance counts — a re-seal belongs after the last artifact the cycle commits. The ~1 h live re-read then ran against the committed registry: partition **1 SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED** over 22 kinds, R-C green, and the harness's own B10 first caught an uncommitted-registry attempt and refused it |
 | **§4 `[SUITE-GATE-V24]`** | **OPEN at rotation.** See the placeholder section below |
 
+### Drift audit, deep form: v0.22 and v0.23 re-audited on artifacts
+
+The skill's drift audit re-reads the previous two releases; this cycle the
+maintainer ordered the strong form, because v0.22 and v0.23 were
+agent-managed — v0.23 across several out-of-context handoffs — and a
+normal audit takes release prose at face value. Two independent audits
+enumerated every roadmap commitment (items, sub-clauses, riders, floors,
+stop rules, carried-lane triggers), traced each to its release claim, and
+verified the claim on primary artifacts and `git log` between the tags.
+
+**The science held.** Every preregistration→run ancestry verifies by
+`git merge-base --is-ancestor`; every freeze group in `echo_prereg` and
+`no_flip_prereg` revalidates; ECHO's population prediction matched
+field-for-field; R-NF's four controls match `expected_controls` exactly;
+G-P0's floor was adjudicated against the denominator its design promised,
+and its blocked correction arm was *pre-registered* as blocked. Both
+cycles' stop clauses were adjudicated in dated writing.
+
+**The documentation layer leaked**, and every leak is now filed and fixed
+(BACKLOG, "Filed by the v0.24 deep triage"): the v0.22 ONE STEP
+lane-opening decision that resolved to nothing (closed now, folded behind
+DEMAND); GUEST AXIOM's exploratory B6, scored by no document
+(unadjudicated, not discharged — filed on the lane's unpark); NO-FLIP's
+improvement half, dead on a cycle-scoped argument with no re-check trigger
+(one written now); seven of nine v0.23 course dispositions that never
+reached their stated BACKLOG destination (backfilled); the ledger-first
+lane's non-comparability clause dropped at a boundary (restored in
+ROADMAP-v0.25 §3); the v0.23 notes' missing refresh verdicts (dated
+addendum in that file); the closed v0.23 banner's false "not edited"
+sentence (corrected in place, dated); and a receipt-citation chain that
+had dropped two cycles (repaired in ROADMAP-v0.25 §3).
+
+One standing rule comes out of it: **a SURVIVES verdict travels with its
+scope.** The v0.22 cold harness is a clean-PATH subprocess, deliberately
+weaker than the container its draft named — `%USERPROFILE%`, the
+registry, ambient DLL paths, and the harness's own interpreter are not
+excluded (`harness/recipe.json`; `census_run2.scope`). That caveat applies
+to every partition this release quotes, including this cycle's 1/12/9.
+
 ### The negative, in full, because it is a first-class result
 
 B7 asked for four steps: function-call item → host result →

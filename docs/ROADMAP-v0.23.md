@@ -1,5 +1,12 @@
-> **CLOSED at v0.23.0.** This plan is the historical plan-of-record; it is not
-> edited except for this banner. The headline was a construction census that
+> **CLOSED at v0.23.0.** This plan is the historical plan-of-record.
+> *(Correction, dated 2026-08-31, from the v0.24 deep triage: this banner
+> originally said "it is not edited except for this banner," which is false
+> of this file — the rotation commit `5984f27` rewrote nine sections of the
+> plan body, including the release gate, replacing several promised clauses
+> with their outcomes. `git show 7a1bc30:docs/ROADMAP-v0.23.md` is the plan
+> as it stood before the rewrite; read that revision for what was promised,
+> and this file for what the rotation recorded. Later closure banners —
+> v0.24's onward — put verdicts in the banner and leave the body alone.)* The headline was a construction census that
 > returned a finding rather than an inbound implication, adjudicated against
 > a stop clause frozen before the draw. Where each item went:
 >
