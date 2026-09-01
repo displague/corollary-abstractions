@@ -124,25 +124,68 @@ reviewed and unimplemented, and the incumbent queue is unchanged.
   published ¶DEV-1 note; no claim about what people will declare once they
   can.
 
-### 1.1 The course's selection — to be adjudicated, and recorded as a decision
+### 1.1 The course's selection — adjudicated 2026-09-01, and recorded as a decision
 
-**Not yet decided.** v0.24 §1.1 is the shape this section owes: a recorded
-decision with a disposition for **every** incumbent, not a preference. The
-adjudication has two questions this time.
+**Decided: HOUSE RULES is SCHEDULED as §1, with the §2 `sum_total` lane
+ordered before H-P0.** Orchestrator ruling at commission, v0.24 §1.1's
+shape: a recorded decision with a disposition for **every** incumbent.
+The two questions, answered in writing:
 
-- **Does the slice open an untrusted stream toward the write gate?** On the
-  design's own account it does not — no execution, no durable write, no
-  learned component on the admission path (enforced by an import-closure
-  assertion), and B4/B5 are the fences that can go red. If that survives
-  scrutiny, STRANGER-GATE's prohibition is honored rather than displaced,
-  exactly as in v0.24. **CHOKE's second independent arrival at
-  STRANGER-GATE's shape hardens that park's priority and does not schedule
-  it.**
-- **Does any incumbent have a fired trigger this cycle?** The naming-layer
-  question now has a genuinely new candidate mechanism (HANDLE, §3);
-  PREMISE LEDGER has two new independent arrivals; TOLL has a named
-  deciding log-probe. Convergence is evidence *for* a park, not a trigger,
-  and the adjudication must say which of those is which in writing.
+- **Does the slice open an untrusted stream toward the write gate? NO,
+  and the scrutiny is recorded rather than waved past.** The admission
+  path executes nothing, writes nothing durable, and carries no learned
+  component (B11's import-closure assertion is the enforcement, not the
+  promise); the symbol ledger is session-scoped runtime state that
+  `session_state.encode` refuses to serialize; B4 (byte-identical
+  `working_tree_digest` outside exactly two declared output paths) and
+  B5 (no admitted symbol name anywhere in the run's output tree) are
+  fences that can actually go red, and §9 stops the slice on any
+  instance rather than repairing it. The served HTTP profiles replay
+  every request into a fresh session (¶DEV-1), so declared vocabulary
+  cannot even cross an HTTP turn, let alone reach the write gate.
+  **STRANGER-GATE's prohibition is therefore honored, not displaced —
+  third consecutive cycle.** CHOKE's second independent arrival at its
+  shape hardens the park's priority and schedules nothing.
+- **Does any incumbent have a fired trigger this cycle? NO, and each
+  no is itself the disposition.** Row by row:
+  - **Naming-layer question — NOT FIRED.** Its trigger demands *a
+    design* naming the mechanism and its falsifier. HANDLE is a
+    course-surfaced candidate mechanism, not a design; a candidate
+    hardens the lane and does not schedule it. Re-examined at the
+    v0.26 course per §3's own clause once `declare` gives the question
+    a second live surface.
+  - **PREMISE LEDGER — NOT FIRED.** Two new arrivals (NEEDED-BY,
+    COUNTERMODEL) are convergent evidence *for* the park; the trigger
+    is a design that takes the necessity claim, and none was written.
+    Third carried cycle, now with its missing constructor named.
+  - **TOLL — NOT FIRED.** The log-probe names the deciding mechanism,
+    but unpark requires ORPHAN's denominator or the probe run as its
+    own registered lane; neither exists. Carried.
+  - **The cost ledger — NINTH pass-over, decided here, not attrition:**
+    nothing is scheduled for it. What moved is metrology only
+    (instrument + denominator path + deciding probe, all named); the
+    decision to run none of them this cycle is recorded as this
+    sentence, discharging §4's requirement.
+  - **CANARY-CURVE** (no enumeration layer), **ORPHAN** (no
+    dependency-choosing design), **MIRROR FRAGMENT** (pre-gate
+    unmet), **GUEST AXIOM / ECHO / HANDBACK** (§2 triggers unchanged,
+    unfired) — all carried on their recorded triggers, none fired.
+  - **DIMENSION — NOT TAKEN.** Its unpark is a rider on a cycle whose
+    headline touches evaluation; HOUSE RULES touches admission and
+    refusal, not evaluation. Parked unchanged.
+  - **The two B7 successor probes — NOT TAKEN.** §1 names neither as a
+    dependant; both stay filed with their standing arithmetic.
+  - **VERDICT / DEBT NOTES / COURIER / WORD OF HONOR** — already
+    adjudicated to park in §3 this rotation; nothing here reopens them.
+
+**What is scheduled, exactly:** the `sum_total` silent-capture lane
+(§2, refusal-or-disclosure with a test that goes red on current
+behaviour, ordered first so H-P0's prefix guard cannot be read as
+having discharged it); then H-PRE → H-P0 → H-P1 in
+[DESIGN-house-rules](DESIGN-house-rules.md) §6's order with gates
+B1–B12 as frozen in §7. If a construction stop fires, the slice ships
+as the honest negative its gates license, B7-at-v0.24 being the
+precedent.
 
 ## 2. Prerequisites and small lanes that are not this cycle's headline
 
