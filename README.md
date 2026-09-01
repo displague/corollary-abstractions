@@ -7,14 +7,16 @@ compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
 interface.
-<!-- Suite gate v0.24.0: [SUITE-GATE-V24] — NOT YET RUN at the rotation.
-     Resolved before the tag with counts, wall-clock, and receipts under
-     reports/test_gate_v024/, or the notes refuse the sentence and the tag
-     waits. Last resolved gate, v0.23.0: 2,852 tests OK (skipped=5),
-     32,646.0s (9h04m) at tip 867ad5c, green on run 2 (run 1 red: stale
-     CR-P0 seal + verbose log in working_tree_digest); receipts
-     reports/test_gate_v023/. Prior gates: v0.22 green first run, v0.21
-     green on run 3 (2 reds), v0.20 green on run 2 (1 red). -->
+<!-- Suite gate v0.24.0: 2,986 tests OK (skipped=5), 22,504.4s (6h15m)
+     at tip d1e37b9, green on the final launch. Run 1 red by 3 instrument
+     issues (freeze-group drift under a registered edit, --allow-dirty
+     counting as registered, B7-pending assertion in pre-artifact shape),
+     all fixed in cf5cba5 with the registry re-sealed after; one
+     near-green run killed by the operator at 2,950 ok is retained.
+     Receipts: reports/test_gate_v024/ (runs.md, run1-red.log,
+     run2-killed-partial.log, run3-green.log). Prior gates: v0.23 green
+     on run 2, v0.22 green first run, v0.21 green on run 3, v0.20 green
+     on run 2. -->
 Latest release: [v0.24.0](docs/RELEASE-v0.24.0.md) — **the ordinary turn
 became an uptake, and the tool bridge failed honestly.** `hello` on
 `corollary/kernel` is still a refusal, and that is still that profile's
@@ -774,15 +776,20 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # eleven errors from a verbose suite log written INSIDE the tree
 # working_tree_digest hashes -- log outside the hashed tree. Receipts:
 # reports/test_gate_v023/ (runs.md, run1-red.log, run2-green.log).
-# [SUITE-GATE-V24] -- v0.24.0's gate is NOT YET RUN at the rotation.
-# It is resolved before the tag with its counts, wall-clock and receipts
-# under reports/test_gate_v024/, or the notes refuse the sentence and
-# the tag waits. v0.24 adds four wholly new modules --
+# 2,986 tests, OK (skipped=5) at v0.24.0 -- 6h15m serial (22,504.4s)
+# at tip d1e37b9, green on the final launch. Run 1 was red by exactly
+# three, all instrument: a frozen replay_path group drifting under
+# AMD-3's own registered edit (the dated-amendment/retirement mechanic
+# extended from prereg rows to freeze groups), an --allow-dirty
+# rehearsal counting itself as registered, and a B7-pending assertion
+# frozen in pre-artifact shape -- fixed in cf5cba5, registry re-sealed
+# (d3d9bdc6) and the cold reading re-attested BEFORE any re-run. One
+# near-green run killed by the operator at 2,950 ok / 0 reds is
+# retained honestly. v0.24 adds four wholly new modules --
 # test_protocol_corpus, test_protocol_runtime, test_protocol_controls,
 # test_protocol_gates -- and grows test_serve_chat and
-# test_cold_receipt. The post-rotation cold re-read is done:
-# cold/census_run2.json pins the final registry seal 2593bc75 and
-# test_cold_receipt passes at the frozen tip (RELEASE-v0.24.0).
+# test_cold_receipt. Receipts: reports/test_gate_v024/ (runs.md,
+# run1-red.log, run2-killed-partial.log, run3-green.log).
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

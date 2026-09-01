@@ -146,7 +146,7 @@ neither happened.
 | **§2 prerequisites** (GUEST AXIOM inbound / ECHO amendment / HANDBACK) | **UNTOUCHED, as designed.** §2 says they do not start unless §1's course names them as dependants. It did not. All three stay parked behind their unchanged triggers |
 | **§3 carried lanes** | **CARRIED** to [ROADMAP-v0.25](ROADMAP-v0.25.md) §3, each with its trigger. STRANGER-GATE now carries a **second independent arrival** (CHOKE); PREMISE LEDGER carries **two** new convergent arrivals; MIRROR FRAGMENT and the DIMENSION rider candidate are new parks |
 | **CR-P0 registry re-seal + live cold re-read** | **SHIPPED, thrice-sealed.** Census 183 → **190** files, 37 → **43** receipt-marked sites, 19 → **22** kinds, 10 → **11** exclusions. The seal moved twice more after the first re-seal (`8aed3282…` → `2593bc75…` → **`d3d9bdc6…`**): once when the registered run's own receipts joined the instance counts, and once when the suite gate's run-1 fixes shifted line ranges in two receipt-marked scripts — a re-seal belongs after the last artifact the cycle commits, and the gate proved it twice. The ~1 h live re-read then ran against the committed registry: partition **1 SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED** over 22 kinds, R-C green, and the harness's own B10 first caught an uncommitted-registry attempt and refused it |
-| **§4 `[SUITE-GATE-V24]`** | **OPEN at rotation.** See the placeholder section below |
+| **§4 `[SUITE-GATE-V24]`** | **CLOSED GREEN.** 2,986 tests, `OK (skipped=5)`, 22,504.4 s (6 h 15 m) at tip `d1e37b9`, green on the final launch. Run 1 red by exactly three instrument issues, all fixed in `cf5cba5`; a near-green run killed by the operator at 2,950 ok is retained honestly. Receipts: `reports/test_gate_v024/` |
 
 ### Drift audit, deep form: v0.22 and v0.23 re-audited on artifacts
 
@@ -522,13 +522,24 @@ were committed **before** the runtime they measure (`e637a12` before
 
 ## The suite at the tip
 
-`[SUITE-GATE-V24]` — **NOT YET RUN at this rotation.** The full
-`unittest discover -s tests` on the frozen tip is the tag's gate, and the
-skill forbids tagging while it is PARTIAL. This placeholder is resolved
-before the tag with the run's counts, its wall-clock, and its retained
-receipts under `reports/test_gate_v024/`, exactly as `[SUITE-GATE-V23]`
-was closed with 2,852 tests OK (skipped=5), 32,646.0 s (9 h 4 m) at
-`867ad5c` — or the notes refuse the sentence and the tag waits.
+`[SUITE-GATE-V24]` — **CLOSED GREEN before the tag.** The full
+`unittest discover -s tests` at the frozen tip `d1e37b9`:
+**2,986 tests, `OK (skipped=5)`, 22,504.4 s (6 h 15 m)**, green on the
+final launch. It took four launches to get a verdict, and the story is
+retained in full at `reports/test_gate_v024/runs.md`: run 1 went red by
+exactly three — a frozen `replay_path` group drifting under AMD-3's own
+registered edit (answered by extending the dated-amendment/retirement
+mechanic from prereg rows to freeze groups), an `--allow-dirty`
+rehearsal that counted itself as registered (now forced `false` under
+the flag), and a B7-pending test assertion frozen in pre-artifact shape
+(now conditional on the committed artifact) — all fixed in `cf5cba5`,
+after which the CR-P0 registry was re-sealed and the cold reading
+re-attested *before* any re-run. A second run was killed by the
+operator 2,950 green tests in with zero reds; its partial log is
+retained because a killed run has no verdict but 2,986 − 36 green tests
+are still evidence. The green run's 18 `FAIL`-bearing log lines are all
+diagnostics printed by `TheCheckCanGoRed` adversarial tests that
+themselves pass.
 
 One prior gate obligation is already discharged rather than discovered by
 the run: **the live cold reading ran after this rotation, in v0.23's

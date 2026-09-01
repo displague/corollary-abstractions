@@ -39,8 +39,10 @@
 >   `d3d9bdc6…`: the registered run's receipts joined the instance counts,
 >   then the suite-gate fixes shifted receipt-marked line ranges). The live cold re-read then ran in v0.23's order: partition
 >   1/12/9 over 22 kinds, R-C green.
-> - **Release gate `[SUITE-GATE-V24]`** → **OPEN at rotation**, carried as a
->   placeholder in RELEASE-v0.24.0 and README, to be resolved before the tag.
+> - **Release gate `[SUITE-GATE-V24]`** → **CLOSED GREEN before the tag**:
+>   2,986 tests, `OK (skipped=5)`, 6 h 15 m at tip `d1e37b9`, green on the
+>   final launch (run 1 red by three instrument issues, fixed in `cf5cba5`;
+>   receipts `reports/test_gate_v024/`).
 >
 > No Codex prompt-tool support is claimed anywhere. The protocol fixtures are
 > construction fixtures and license no claim about human convention.
