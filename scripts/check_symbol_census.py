@@ -63,6 +63,13 @@ REPO = Path(__file__).resolve().parents[1]
 ARTIFACT = "experiments/symbol_census.json"
 BUILDER = "scripts/build_symbol_census.py"
 SCHEMA = "corollary.symbol-census/1"
+CHECKER = "scripts/check_symbol_census.py"
+
+#: The rule THIS file ran, so a committed artifact claiming a different one is
+#: a mismatch between the census's words and its members.
+NORMALIZATION_RULE = "NFC + casefold"
+NAME_PRODUCTION = "^[a-z][a-z0-9_]*$"
+PREFIX_SEMANTICS = "startswith, against the NORMALIZED declared name"
 
 _NAME = re.compile(r"^[a-z][a-z0-9_]*$")
 _LEAD = re.compile(r"^[a-z][a-z0-9_]*")
@@ -147,6 +154,10 @@ def recompute(repo: Path) -> dict:
     equality = sorted(set().union(*shaped.values()))
 
     return {
+        "input_paths": sorted(
+            [p.relative_to(repo).as_posix() for p in corpus]
+            + ["scripts/match_signatures.py"]
+        ),
         "equality_members": equality,
         "members_by_source": shaped,
         "raw_members_by_source": {
@@ -162,11 +173,7 @@ def compare(committed: dict, fresh: dict) -> list[str]:
     """Every disagreement, named. An empty list is the green."""
 
     problems: list[str] = []
-
-    if committed.get("schema") != SCHEMA:
-        problems.append(
-            f"schema is {committed.get('schema')!r}, expected {SCHEMA!r}"
-        )
+    guard = committed.get("prefix_guard") or {}
 
     for key in ("equality_members",):
         left = list(committed.get(key) or [])
@@ -197,7 +204,6 @@ def compare(committed: dict, fresh: dict) -> list[str]:
                     f"{len(right[source])}"
                 )
 
-    guard = committed.get("prefix_guard") or {}
     if list(guard.get("prefixes") or []) != fresh["prefixes"]:
         problems.append(
             f"prefix_guard.prefixes: committed {guard.get('prefixes')!r}, "
@@ -208,6 +214,123 @@ def compare(committed: dict, fresh: dict) -> list[str]:
         problems.append(
             "prefix_guard.prefixes_that_are_also_equality_members is stale"
         )
+
+    # The fields the artifact's own `generated_note` claims are recomputed.
+    # Before 2026-09-01 this function checked members, prefixes and four
+    # counts, and the H-P0 review's tamper matrix printed CENSUS OK after
+    # rewriting the normalization rule, the leading-identifier rule, the
+    # prefix-guard semantics, deleting the `sources` array and emptying
+    # `provenance`. The note was the honest half; the checker is extended to
+    # meet it rather than the note weakened to meet the checker.
+    for field, expected in (
+        ("schema", SCHEMA),
+        ("generator", BUILDER),
+        ("checker", CHECKER),
+    ):
+        if committed.get(field) != expected:
+            problems.append(
+                f"{field}: committed {committed.get(field)!r}, expected {expected!r}"
+            )
+
+    normalization = committed.get("normalization") or {}
+    if normalization.get("rule") != NORMALIZATION_RULE:
+        problems.append(
+            f"normalization.rule: committed {normalization.get('rule')!r}, "
+            f"expected {NORMALIZATION_RULE!r} — the rule this checker actually "
+            "ran to produce the members above"
+        )
+    if normalization.get("name_production") != NAME_PRODUCTION:
+        problems.append(
+            f"normalization.name_production: committed "
+            f"{normalization.get('name_production')!r}, expected "
+            f"{NAME_PRODUCTION!r}"
+        )
+    for phrase in ("NFC", "casefold"):
+        if phrase not in (normalization.get("order") or ""):
+            problems.append(
+                f"normalization.order does not state {phrase!r}; the ORDER is "
+                "what session hr-fx-s5's fixtures discriminate"
+            )
+
+    rule = committed.get("leading_identifier_rule") or ""
+    if "MAXIMAL" not in rule or "sum_i" not in rule:
+        problems.append(
+            "leading_identifier_rule no longer states the greedy rule this "
+            "checker ran (MAXIMAL match, `sum_i` as the worked case)"
+        )
+    # And the rule is checked by BEHAVIOUR, not only by its words: the
+    # committed members must be what the stated rule produces.
+    if "sum_i" not in (committed.get("members_by_source") or {}).get(
+        "functional_leading_identifiers", []
+    ):
+        problems.append(
+            "leading_identifier_rule claims a greedy match but `sum_i` is not "
+            "among the functional leading identifiers it should have produced"
+        )
+
+    if (guard.get("semantics") or "") != PREFIX_SEMANTICS:
+        problems.append(
+            f"prefix_guard.semantics: committed {guard.get('semantics')!r}, "
+            f"expected {PREFIX_SEMANTICS!r} — a prefix guard read as equality "
+            "would admit `sum_total`"
+        )
+    if guard.get("distinct_from_equality_members") is not True:
+        problems.append(
+            "prefix_guard.distinct_from_equality_members is not true; the "
+            "guard and the members are different tests and the artifact must "
+            "say so"
+        )
+
+    sources = committed.get("sources")
+    if not isinstance(sources, list) or not sources:
+        problems.append(
+            "sources: absent or empty — the per-source provenance DESIGN §4 "
+            "requires (source file + count per source) is the artifact's own "
+            "claim and cannot be dropped"
+        )
+    else:
+        named = {row.get("source") for row in sources}
+        expected_sources = set(fresh["members_by_source"])
+        if named != expected_sources:
+            problems.append(
+                f"sources: rows {sorted(n for n in named if n)} do not match "
+                f"the sources actually extracted {sorted(expected_sources)}"
+            )
+        for row in sources:
+            key = row.get("source")
+            if key not in fresh["raw_members_by_source"]:
+                continue
+            if row.get("raw_member_count") != len(fresh["raw_members_by_source"][key]):
+                problems.append(
+                    f"sources.{key}.raw_member_count: committed "
+                    f"{row.get('raw_member_count')!r}, fresh "
+                    f"{len(fresh['raw_members_by_source'][key])}"
+                )
+            if row.get("name_shaped_member_count") != len(
+                fresh["members_by_source"][key]
+            ):
+                problems.append(
+                    f"sources.{key}.name_shaped_member_count: committed "
+                    f"{row.get('name_shaped_member_count')!r}, fresh "
+                    f"{len(fresh['members_by_source'][key])}"
+                )
+
+    provenance = committed.get("provenance") or {}
+    if not provenance.get("inputs"):
+        problems.append(
+            "provenance.inputs is absent or empty — an artifact that cannot "
+            "say what it read is not reproducible, whatever its members say"
+        )
+    else:
+        recorded = {row.get("path") for row in provenance["inputs"]}
+        for required in fresh["input_paths"]:
+            if required not in recorded:
+                problems.append(
+                    f"provenance.inputs does not record {required}, which the "
+                    "builder must have read to produce these members"
+                )
+    if not provenance.get("writer_sha256_lf"):
+        problems.append("provenance.writer_sha256_lf is absent")
 
     counts = committed.get("counts") or {}
     for key, value in (

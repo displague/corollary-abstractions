@@ -550,6 +550,30 @@ def authored_sessions() -> tuple[dict[str, Any], ...]:
                         "without this slice. No new refusal, no new record."
                     ),
                 ),
+                _decl(
+                    "declare neighbour_of/2 (variable, variable)",
+                    name="neighbour_of", arity=2, categories=("variable", "variable"),
+                    code="COLLIDES_WITH_SESSION_NAME",
+                    also=("SYMBOL_BUDGET",),
+                    subcase="live_non_binding_supposition_head",
+                    why=(
+                        "ADDED 2026-09-01 (see amendments): the c7-before-c8 "
+                        "discriminator, and the ONLY fixture that separates "
+                        "COLLIDES_WITH_SESSION_NAME from SYMBOL_BUDGET. The H-P0 "
+                        "adversarial review found the transposition REACHABLE and "
+                        "undiscriminated: every other fixture that grounds "
+                        "SYMBOL_BUDGET grounds no session-name clause, and the one "
+                        "fixture that grounds both (hr-fx-s2-t05) is decided EARLIER "
+                        "by REDEFINITION_ATTEMPT, so swapping c7 and c8 left the whole "
+                        "sealed corpus green. This line closes that: the head is live "
+                        "in this session as the non-binding supposition at t13, the "
+                        "session is already full at four admissions, and the name was "
+                        "never admitted — so c6 cannot fire, c7 and c8 both ground, and "
+                        "only their ORDER decides the verdict. It is the third "
+                        "session-name sub-case reaching a verdict under its own name "
+                        "rather than under REDEFINITION_ATTEMPT's."
+                    ),
+                ),
             ),
         },
         {
@@ -1402,6 +1426,61 @@ DELETED_CODES: tuple[dict[str, str], ...] = (
 #: H-PRE's own deletion verdict on the eight live codes is computed, not
 #: authored: a code with no fixture would be deleted here with its reason.
 #: All eight fire, so the list below is empty and the builder proves it.
+#: Append-only amendments to a SEALED artifact. The seal's whole value is that
+#: it predates the checker, so a fixture may be ADDED only while no registered
+#: run has scored the corpus, and only with the reason recorded in the bytes.
+#: Nothing is ever edited or removed here; H-PRE's original 59 stand unchanged.
+AMENDMENTS: tuple[dict[str, Any], ...] = (
+    {
+        "amendment": 1,
+        "dated": "2026-09-01",
+        "stage": "H-P0",
+        "authority": (
+            "DESIGN-house-rules §7 B1 — 'exactly one deciding_clause' is a claim "
+            "about the committed ORDER, and an order no fixture can discriminate "
+            "is an order no gate can score."
+        ),
+        "finding": (
+            "The H-P0 adversarial review found the c7/c8 transposition "
+            "(COLLIDES_WITH_SESSION_NAME before SYMBOL_BUDGET) REACHABLE and "
+            "UNDISCRIMINATED by the sealed corpus: transposing the two clauses "
+            "in a scratch copy of the checker left all 38 declaration fixtures "
+            "and all 16 B12 mutants green. Every fixture grounding SYMBOL_BUDGET "
+            "grounded no session-name clause, and hr-fx-s2-t05 — the one line "
+            "grounding both — is decided earlier by REDEFINITION_ATTEMPT."
+        ),
+        "adds": ["hr-fx-s1-t14"],
+        "edits": [],
+        "removes": [],
+        "why_this_is_legitimate": (
+            "It is PRE-RUN. H-P1 has not executed; no verdict has been scored "
+            "against this corpus by any checker. A fixture added now is still a "
+            "fixture the checker was not fitted to, because the checker is not "
+            "being changed to accommodate it — the checker already decides this "
+            "line correctly, and the fixture exists to make that decision "
+            "FALSIFIABLE. After the registered run this addition would be "
+            "inadmissible, and this note says so rather than leaving the window "
+            "implicit."
+        ),
+        "b9_reanchored": (
+            "The declaration population moves 38 -> 39, so B9's split, its "
+            "class balance and its void threshold are RECOMPUTED here and "
+            "re-sealed. This is disclosed rather than silently rewritten: the "
+            "anchor is a number the author influences, and moving it after a "
+            "score would be the tuning B9 exists to prevent. It is moved before "
+            "any score, which is the only time it may move at all. The previous "
+            "anchor is recorded in `superseded_b9` below."
+        ),
+        "superseded_b9": {
+            "n": 38,
+            "admitted": 13,
+            "refused": 25,
+            "scored_half_majority_class_rate": 0.631579,
+            "void_threshold": 0.731579,
+        },
+    },
+)
+
 DELETED_AT_H_PRE: tuple[dict[str, str], ...] = ()
 
 
@@ -1789,6 +1868,14 @@ def build_fixtures(repo: Path) -> dict[str, Any]:
                 f["fixture_id"] for f in declarations if f["order_sensitive"]
             ),
         },
+        "amendments": [dict(row) for row in AMENDMENTS],
+        "amendments_note": (
+            "Append-only, and empty at the original seal. A sealed fixture "
+            "corpus may gain a fixture ONLY while no registered run has scored "
+            "it, and only with the reason in the bytes; it may never lose or "
+            "edit one. Each row names what it adds, why the window was still "
+            "open, and any derived figure it re-anchors."
+        ),
         "deleted_codes": {
             "at_design_time": list(DELETED_CODES),
             "at_h_pre": list(DELETED_AT_H_PRE),

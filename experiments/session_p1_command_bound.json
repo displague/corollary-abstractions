@@ -1,5 +1,5 @@
 {
-  "builder_digest": "ac43af7e1e27034f34b076bbdeda00c0978aa73c8d765faddd50a9f2488fde10",
+  "builder_digest": "3b4e36674c66d72c6f5f56ebdd66b7126d68471b4202836e9212c55986cb2d4d",
   "built_by": "scripts/measure_command_bound.py",
   "classes": [
     {
@@ -67,7 +67,7 @@
     },
     {
       "admitted_commands": null,
-      "answering_note": "a suppose line that binds a variable and computes is routed to evaluate first (harness.py:2312-2320), so this class's *answering* half is evaluate's and is counted there",
+      "answering_note": "a suppose line that binds a variable and computes is routed to evaluate first (harness.py:2506-2514), so this class's *answering* half is evaluate's and is counted there",
       "answering_vocabulary": null,
       "bound_kind": "open",
       "class_index": 3,

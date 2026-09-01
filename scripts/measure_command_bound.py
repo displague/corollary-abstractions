@@ -604,7 +604,7 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         answering_vocabulary=None,
         answering_note=(
             "a suppose line that binds a variable and computes is routed to "
-            "evaluate first (harness.py:2312-2320), so this class's *answering* "
+            "evaluate first (harness.py:2506-2514), so this class's *answering* "
             "half is evaluate's and is counted there"
         ),
     )

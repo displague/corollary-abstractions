@@ -1473,7 +1473,7 @@ def kernel_content(verdict: dict) -> str:
     """§6, verbatim: reading+answer, else answer, else detail.
 
     No selector lives here. The TTY renders both a `reading` and the answer
-    lines (`harness.py:1219-1228`), so the skin must too; adding, dropping,
+    lines (`harness.py:1232-1241`), so the skin must too; adding, dropping,
     reordering or re-parameterizing a line would be the verbosity-inflation
     hole the seal exists to close.
     """

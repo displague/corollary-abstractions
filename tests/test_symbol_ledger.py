@@ -109,7 +109,7 @@ class StopConditionIsAdjudicatedFirst(unittest.TestCase):
                 session.assumptions.barrier.close_turn()
                 routed += 1
         self.assertEqual(routed, document["counts"]["fixtures_total"])
-        self.assertEqual(routed, 59)
+        self.assertEqual(routed, 60, "59 sealed at H-PRE + 1 by amendment 1")
 
     def test_the_unparsed_fixtures_arrive_as_verdicts_and_not_as_exceptions(
         self,
@@ -204,7 +204,7 @@ class TheSealedFixturesGetTheirSealedVerdicts(unittest.TestCase):
                     admitted.append(decision.declaration.symbol_name)
                 checked += 1
         self.assertEqual(checked, document["counts"]["declaration_fixtures"])
-        self.assertEqual(checked, 38)
+        self.assertEqual(checked, 39, "38 sealed at H-PRE + 1 by amendment 1")
 
     def test_the_normalization_order_is_nfc_then_casefold(self) -> None:
         """Session s5's fixtures disagree under `.lower()` or match-first."""
@@ -336,6 +336,170 @@ class TheClauseOrderDecidesExactlyOnce(unittest.TestCase):
         )
         self.assertIsNone(names.subcase("fresh"))
         del inputs
+
+
+class TheClauseOrderIsDiscriminatedByTheCorpus(unittest.TestCase):
+    """Amendment 1: an order no fixture can discriminate is unscoreable.
+
+    B1 says "exactly one deciding clause", and the committed ORDER is what
+    makes that true. The H-P0 review transposed `c7` and `c8` in a scratch
+    checker and the whole sealed corpus stayed green: every fixture grounding
+    SYMBOL_BUDGET grounded no session-name clause, and the one line grounding
+    both (hr-fx-s2-t05) is decided earlier by REDEFINITION_ATTEMPT.
+    `hr-fx-s1-t14` was added pre-run to close that, and this class is what
+    stops the hole from re-opening — including for a clause inserted later.
+    """
+
+    #: The adjacent pairs no fixture can discriminate, with the reason each is
+    #: VACUOUS rather than merely uncovered. A pair that cannot co-ground has
+    #: no order to get wrong, so demanding a fixture for it would be demanding
+    #: an unwritable one — U-PRE's "delete a code no fixture can fire", applied
+    #: to an ordering. Both reasons are ASSERTED below, not believed.
+    VACUOUS_PAIRS = {
+        ("UNPARSED", "ARITY_CATEGORY_MISMATCH"): (
+            "`grounds_for` returns ('UNPARSED',) and nothing else when the "
+            "line does not parse, and never returns UNPARSED when it does."
+        ),
+        ("COLLIDES_WITH_LIBRARY_SYMBOL", "REDEFINITION_ATTEMPT"): (
+            "A census member can never enter `admitted`, because admission "
+            "requires every clause to pass, c5 among them. The admitted set "
+            "and the census are disjoint by construction."
+        ),
+    }
+
+    def _replay(self, order=None) -> dict[str, tuple[str, str]]:
+        document = _fixtures()
+        inputs = _inputs()
+        original = SL.CLAUSE_ORDER
+        if order is not None:
+            SL.CLAUSE_ORDER = order
+            SL.REFUSAL_CODES = tuple(code for _, code in order)
+            SL._CLAUSE_BY_CODE = {code: clause for clause, code in order}
+        try:
+            out: dict[str, tuple[str, str]] = {}
+            for session_id, rows in _sessions(document).items():
+                admitted: list[str] = []
+                binding: set[str] = set()
+                heads: set[str] = set()
+                for row in rows:
+                    if row["kind"] == "use":
+                        if row.get("binds_subject"):
+                            binding.add(SL.normalize(row["binds_subject"]))
+                        elif row.get("read_applied_head"):
+                            heads.add(SL.normalize(row["read_applied_head"]))
+                        continue
+                    decision = SL.decide(
+                        _rest(row["line"]),
+                        inputs,
+                        session_id=session_id,
+                        turn_index=row["turn_index"],
+                        admitted=tuple(admitted),
+                        session_names=SL.SessionNames(
+                            admitted_symbols=frozenset(admitted),
+                            binding_subjects=frozenset(binding),
+                            applied_heads=frozenset(heads),
+                        ),
+                    )
+                    out[row["fixture_id"]] = (
+                        decision.verdict.refusal_code,
+                        decision.verdict.deciding_clause,
+                    )
+                    if decision.admitted:
+                        admitted.append(decision.declaration.symbol_name)
+            return out
+        finally:
+            SL.CLAUSE_ORDER = original
+            SL.REFUSAL_CODES = tuple(code for _, code in original)
+            SL._CLAUSE_BY_CODE = {c: k for k, c in original}
+
+    def test_every_adjacent_transposition_is_caught_or_provably_vacuous(
+        self,
+    ) -> None:
+        baseline = self._replay()
+        for index in range(len(SL.CLAUSE_ORDER) - 1):
+            left = SL.CLAUSE_ORDER[index][1]
+            right = SL.CLAUSE_ORDER[index + 1][1]
+            swapped = list(SL.CLAUSE_ORDER)
+            swapped[index], swapped[index + 1] = swapped[index + 1], swapped[index]
+            moved = self._replay(tuple(swapped))
+            changed = [k for k in baseline if baseline[k] != moved[k]]
+            if changed:
+                continue
+            self.assertIn(
+                (left, right),
+                self.VACUOUS_PAIRS,
+                f"transposing {left} and {right} changes NO fixture verdict "
+                "and the pair is not recorded as vacuous; the corpus cannot "
+                "discriminate it and the order is unscoreable there",
+            )
+
+    def test_the_c7_c8_transposition_is_caught_by_the_added_fixture(self) -> None:
+        baseline = self._replay()
+        order = list(SL.CLAUSE_ORDER)
+        seven = next(i for i, (c, _) in enumerate(order) if c.startswith("c7"))
+        order[seven], order[seven + 1] = order[seven + 1], order[seven]
+        moved = self._replay(tuple(order))
+        changed = [k for k in baseline if baseline[k] != moved[k]]
+        self.assertEqual(changed, ["hr-fx-s1-t14"])
+        self.assertEqual(baseline["hr-fx-s1-t14"][0], "COLLIDES_WITH_SESSION_NAME")
+        self.assertEqual(moved["hr-fx-s1-t14"][0], "SYMBOL_BUDGET")
+
+    def test_unparsed_never_co_grounds_with_anything(self) -> None:
+        """The first vacuity claim, over fixtures AND unauthored inputs."""
+
+        inputs = _inputs()
+        surfaces = [_rest(row["line"]) for row in _fixtures()["fixtures"]]
+        surfaces += ["", "   ", "x/1", "a/0 ()", "9bad/2 (variable, variable)"]
+        seen = 0
+        for surface in surfaces:
+            grounds = SL.grounds_for(SL.parse_declaration(surface), inputs)
+            if "UNPARSED" in grounds:
+                seen += 1
+                self.assertEqual(grounds, ("UNPARSED",), surface)
+        self.assertGreater(seen, 0)
+
+    def test_no_census_member_can_reach_the_admitted_set(self) -> None:
+        """The second vacuity claim, asserted rather than argued."""
+
+        inputs = _inputs()
+        held = SL.SymbolLedger(session_id="disjoint", inputs=inputs)
+        for name in ("gcd", "meet", "implies", "sum"):
+            self.assertFalse(
+                held.declare(f"{name}/2 (variable, variable)", 1).admitted, name
+            )
+        self.assertEqual(held.admitted_names(), ())
+
+    def test_the_addition_is_recorded_as_a_dated_amendment(self) -> None:
+        amendments = _fixtures()["amendments"]
+        self.assertEqual(len(amendments), 1)
+        row = amendments[0]
+        self.assertEqual(row["dated"], "2026-09-01")
+        self.assertEqual(row["adds"], ["hr-fx-s1-t14"])
+        self.assertEqual(row["edits"], [])
+        self.assertEqual(row["removes"], [], "the seal is append-only")
+        self.assertIn("PRE-RUN", row["why_this_is_legitimate"])
+        self.assertIn("38 -> 39", row["b9_reanchored"])
+        self.assertEqual(row["superseded_b9"]["n"], 38)
+
+    def test_the_b9_anchor_was_recomputed_with_the_population(self) -> None:
+        document = _fixtures()
+        b9 = document["b9_class_balance"]
+        self.assertEqual(b9["corpus_balance"]["n"], 39)
+        self.assertEqual(
+            len(b9["fit_half_fixture_ids"]) + len(b9["scored_half_fixture_ids"]),
+            39,
+        )
+        scored = b9["scored_half_balance"]
+        self.assertEqual(b9["majority_class_anchor"], scored["majority_class_rate"])
+        self.assertAlmostEqual(
+            b9["void_threshold"],
+            scored["majority_class_rate"] + b9["declared_margin_points"] / 100,
+            places=6,
+        )
+        self.assertNotEqual(
+            b9["void_threshold"],
+            document["amendments"][0]["superseded_b9"]["void_threshold"],
+        )
 
 
 class B1TotalityOverAMachineEnumeratedSweep(unittest.TestCase):
@@ -526,6 +690,92 @@ class B2FreshnessAgainstTheCommittedCensus(unittest.TestCase):
         self.assertEqual(len(carried_only), len(operators) - len(shaped))
         for glyph in carried_only:
             self.assertNotIn(SL.normalize(glyph), census["equality_members"])
+
+
+class TheCensusCheckerCoversWhatItsNoteClaims(unittest.TestCase):
+    """A tamper matrix over every field `generated_note` says is recomputed.
+
+    Added 2026-09-01. The H-P0 review found `compare()` validated members,
+    prefixes and four counts while the artifact's own note claimed the whole
+    census was recomputed from source: rewriting the normalization rule, the
+    leading-identifier rule or the prefix-guard semantics, deleting `sources`
+    and emptying `provenance` all printed CENSUS OK. The checker was extended
+    to meet the note rather than the note weakened to meet the checker, and
+    this class keeps the extension from rotting.
+    """
+
+    def _base(self) -> dict:
+        return json.loads(CENSUS.read_text(encoding="utf-8"))
+
+    def _tampered(self, mutate) -> list[str]:
+        import copy  # noqa: PLC0415
+
+        document = copy.deepcopy(self._base())
+        mutate(document)
+        return checker.compare(document, checker.recompute(REPO))
+
+    def test_the_committed_artifact_is_green(self) -> None:
+        self.assertEqual(checker.compare(self._base(), checker.recompute(REPO)), [])
+
+    def test_every_claimed_field_goes_red_when_tampered(self) -> None:
+        cases = {
+            "normalization.rule": lambda d: d["normalization"].__setitem__(
+                "rule", "lower()"
+            ),
+            "normalization.order": lambda d: d["normalization"].__setitem__(
+                "order", "some other order"
+            ),
+            "normalization.name_production": lambda d: d["normalization"].__setitem__(
+                "name_production", ".*"
+            ),
+            "leading_identifier_rule": lambda d: d.__setitem__(
+                "leading_identifier_rule", "stop at the first underscore"
+            ),
+            "leading_identifier_behaviour": lambda d: d["members_by_source"][
+                "functional_leading_identifiers"
+            ].remove("sum_i"),
+            "prefix_guard.semantics": lambda d: d["prefix_guard"].__setitem__(
+                "semantics", "equality against the declared name"
+            ),
+            "prefix_guard.distinct_flag": lambda d: d["prefix_guard"].__setitem__(
+                "distinct_from_equality_members", False
+            ),
+            "sources_deleted": lambda d: d.__setitem__("sources", []),
+            "sources_row_dropped": lambda d: d.__setitem__("sources", d["sources"][:-1]),
+            "sources_raw_count": lambda d: d["sources"][0].__setitem__(
+                "raw_member_count", 1
+            ),
+            "sources_name_shaped_count": lambda d: d["sources"][0].__setitem__(
+                "name_shaped_member_count", 1
+            ),
+            "provenance_emptied": lambda d: d.__setitem__("provenance", {}),
+            "provenance_input_dropped": lambda d: d["provenance"].__setitem__(
+                "inputs", d["provenance"]["inputs"][:-1]
+            ),
+            "provenance_writer_digest": lambda d: d["provenance"].__setitem__(
+                "writer_sha256_lf", ""
+            ),
+            "generator_path": lambda d: d.__setitem__(
+                "generator", "experiments/build_symbol_census.py"
+            ),
+            "schema": lambda d: d.__setitem__("schema", "corollary.other/1"),
+            "member_removed": lambda d: d["equality_members"].remove("meet"),
+            "prefix_removed": lambda d: d["prefix_guard"]["prefixes"].remove("sum_"),
+            "counts": lambda d: d["counts"].__setitem__("equality_members", 1),
+        }
+        for name, mutate in cases.items():
+            with self.subTest(field=name):
+                self.assertTrue(
+                    self._tampered(mutate),
+                    f"tampering with {name} left the checker GREEN, but the "
+                    "artifact's generated_note claims this field is "
+                    "recomputed from source",
+                )
+
+    def test_the_note_still_makes_the_claim_the_matrix_enforces(self) -> None:
+        self.assertIn(
+            "recomputes the whole census from source", self._base()["generated_note"]
+        )
 
 
 class B6TheUseSideCheckIsLiveAndFenced(unittest.TestCase):
@@ -801,10 +1051,26 @@ class TheBudgetIsFourAndIsRefusedBeforeAnyMutation(unittest.TestCase):
             decision = ledger_.declare(f"{name}/1 (variable)", index)
             self.assertTrue(decision.admitted, name)
             self.assertEqual(len(ledger_.admitted_names()), index)
+        before_names = ledger_.admitted_names()
+        before_verdicts = len(ledger_.verdicts())
         fifth = ledger_.declare("epsilon_of/1 (variable)", 5)
         self.assertEqual(fifth.verdict.refusal_code, "SYMBOL_BUDGET")
-        self.assertEqual(len(ledger_.admitted_names()), 4, "the ledger MUTATED")
+
+        # BOTH directions, because "refused before any ledger mutation" is
+        # true of the admitted state and FALSE of the verdict log, and a test
+        # that pinned only the half that flatters the claim would be the
+        # reason nobody noticed. What must not move:
+        self.assertEqual(ledger_.admitted_names(), before_names)
+        self.assertEqual(len(ledger_.admitted_names()), 4)
         self.assertNotIn("epsilon_of", ledger_.admitted_names())
+        self.assertIsNone(ledger_.declaration_for("epsilon_of"))
+        # And what DOES move, pinned so it cannot quietly start or stop:
+        self.assertEqual(
+            len(ledger_.verdicts()),
+            before_verdicts + 1,
+            "a refusal that left no verdict would be one B1 could not score",
+        )
+        self.assertEqual(ledger_.verdicts()[-1].refusal_code, "SYMBOL_BUDGET")
 
     def test_the_cap_is_below_the_live_assumption_cap(self) -> None:
         self.assertLess(SL.SYMBOL_CAP, ledger.LIVE_ASSUMPTION_CAP)
@@ -894,20 +1160,53 @@ class TheRecordsAreSessionScopedAndUnserializable(unittest.TestCase):
 
 
 class B11NoLearnedPath(unittest.TestCase):
-    """The import-closure assertion, in `echo_population_audit`'s pattern."""
+    """The import-closure assertion, in `echo_population_audit`'s pattern.
 
-    #: Anything on the admission path that could make a decision by fitting
-    #: rather than by reading. Named rather than pattern-matched so a reader
-    #: can see what is being excluded.
+    TWO checks, and the second exists because the first cannot do its job
+    alone. `import_closure` resolves imports to REPOSITORY-LOCAL files and
+    follows only those, so a third-party name is invisible to it: an
+    `import torch` added to `match_signatures.py` — a genuine member of this
+    module's closure — leaves the returned list byte-identical, which the
+    H-P0 review proved by mutating a temp tree. Until 2026-09-01 the
+    FORBIDDEN list was checked only against those repo-local PATH STRINGS,
+    which made its four third-party names vacuous.
+
+    So the closure pins the repo-local shape, and a SOURCE-LEVEL scan over
+    every file in that computed closure covers the third-party names. Neither
+    is redundant: the closure catches a new repo-local dependency the scan
+    would not know to look for, and the scan catches an import the closure
+    cannot resolve at all.
+    """
+
+    #: Anything that could make a decision by fitting rather than by reading,
+    #: plus the repo-local routers that carry a learned component. Named
+    #: rather than pattern-matched so a reader can see what is excluded.
     FORBIDDEN = (
         "torch",
         "numpy",
+        "scipy",
         "sklearn",
         "transformers",
+        "sentence_transformers",
+        "tensorflow",
+        "jax",
+        "openai",
+        "anthropic",
         "plain_router",
         "proposer",
         "wordnet",
+        "nltk",
         "retrieve",
+    )
+
+    SUBJECTS = (
+        "scripts/symbol_ledger.py",
+        "scripts/build_symbol_census.py",
+        "scripts/check_symbol_census.py",
+    )
+
+    EXPECTED_CLOSURE = frozenset(
+        {"scripts/match_signatures.py", "scripts/report_provenance.py"}
     )
 
     def _closure(self, relative: str) -> list[str]:
@@ -915,30 +1214,105 @@ class B11NoLearnedPath(unittest.TestCase):
 
         return import_closure(relative)
 
+    @staticmethod
+    def _imported_names(source: str) -> set[str]:
+        """Every module name an import statement in `source` names.
+
+        Parsed with `ast`, not grepped: a forbidden name inside a string or a
+        comment is not an import, and a scan that could not tell the
+        difference would go red on this class's own docstring.
+        """
+
+        import ast  # noqa: PLC0415
+
+        names: set[str] = set()
+        for node in ast.walk(ast.parse(source)):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    names.add(alias.name.split(".")[0])
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                names.add(node.module.split(".")[0])
+        return names
+
     def test_the_checker_and_the_ledger_close_over_exact_modules_only(self) -> None:
-        for relative in (
-            "scripts/symbol_ledger.py",
-            "scripts/build_symbol_census.py",
-            "scripts/check_symbol_census.py",
-        ):
-            closure = self._closure(relative)
+        for relative in self.SUBJECTS:
             self.assertEqual(
-                closure,
-                sorted(
-                    {
-                        relative,
-                        "scripts/match_signatures.py",
-                        "scripts/report_provenance.py",
-                    }
-                ),
+                self._closure(relative),
+                sorted(self.EXPECTED_CLOSURE | {relative}),
                 relative,
             )
 
-    def test_no_forbidden_module_is_reachable_from_the_admission_path(self) -> None:
-        closure = self._closure("scripts/symbol_ledger.py")
-        for module in closure:
-            for forbidden in self.FORBIDDEN:
-                self.assertNotIn(forbidden, module, (module, forbidden))
+    def test_no_closure_member_imports_a_forbidden_module(self) -> None:
+        """The source scan the closure cannot do for itself."""
+
+        for relative in self.SUBJECTS:
+            for member in self._closure(relative):
+                imported = self._imported_names(
+                    (REPO / member).read_text(encoding="utf-8")
+                )
+                for forbidden in self.FORBIDDEN:
+                    self.assertNotIn(
+                        forbidden,
+                        imported,
+                        f"{member} (in the closure of {relative}) imports "
+                        f"{forbidden!r}: no learned component may sit on the "
+                        "admission path",
+                    )
+
+    def test_the_source_scan_goes_red_on_a_mutated_closure_member(self) -> None:
+        """The proof the scan is load-bearing rather than decorative.
+
+        A TRANSITIVE closure member is mutated in a temp tree to import
+        `torch`. The closure list is unchanged by that edit — asserted here,
+        because that invisibility is the whole reason the scan exists — and
+        the scan catches what the closure cannot.
+        """
+
+        import shutil  # noqa: PLC0415
+        import tempfile  # noqa: PLC0415
+
+        before = self._closure("scripts/symbol_ledger.py")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "scripts").mkdir()
+            for member in before:
+                shutil.copy2(REPO / member, root / member)
+            victim = root / "scripts" / "match_signatures.py"
+            original = victim.read_text(encoding="utf-8")
+            self.assertNotIn("torch", self._imported_names(original))
+            victim.write_text(
+                original.replace("import argparse", "import argparse\ntorch_stub=1", 1),
+                encoding="utf-8",
+            )
+            # The real mutation: a genuine import statement.
+            victim.write_text(
+                original.replace("import argparse", "import argparse\nimport torch", 1),
+                encoding="utf-8",
+            )
+            mutated = self._imported_names(victim.read_text(encoding="utf-8"))
+            self.assertIn("torch", mutated, "the mutation did not take")
+            offenders = [f for f in self.FORBIDDEN if f in mutated]
+            self.assertEqual(offenders, ["torch"])
+
+        self.assertEqual(
+            self._closure("scripts/symbol_ledger.py"),
+            before,
+            "the repo closure is unchanged by a third-party import, which is "
+            "exactly why the source scan is needed",
+        )
+
+    def test_the_forbidden_list_is_not_vacuous(self) -> None:
+        self.assertIn("torch", self.FORBIDDEN)
+        self.assertIn("plain_router", self.FORBIDDEN)
+        self.assertGreaterEqual(len(self.FORBIDDEN), 10)
+
+    def test_the_scan_ignores_names_in_strings_and_comments(self) -> None:
+        """Otherwise it would go red on prose that merely mentions a module."""
+
+        source = "\n".join(
+            ['"""a docstring naming torch"""', "# import torch", "import json", ""]
+        )
+        self.assertEqual(self._imported_names(source), {"json"})
 
     def test_the_closure_walk_refuses_a_dynamic_import(self) -> None:
         """The assertion is only worth anything if its walk can go red."""

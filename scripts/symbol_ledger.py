@@ -82,9 +82,21 @@ harness*, never *cannot write*.
 
 At most **4** admitted symbols per session. `LIVE_ASSUMPTION_CAP` is 8;
 declarations are heavier objects; the bound is **declared, not measured**.
-The fifth is `SYMBOL_BUDGET`, refused before any ledger mutation — which is
-structural here rather than a promise, because :func:`decide` is pure and
-only :meth:`SymbolLedger.admit` mutates anything.
+The fifth is `SYMBOL_BUDGET`.
+
+§3 words that as "refused before any ledger mutation", and the precise claim
+— the one the tests pin in both directions — is narrower than those words
+read: **the admitted-symbol state is unmoved.** No symbol is admitted, none
+is displaced, and `admitted_names()` is byte-identical across the refusal,
+because :func:`decide` is pure and :meth:`SymbolLedger.declare` appends to
+`_order` only on an admission.
+
+What DOES move is the verdict log: `_verdicts` grows by exactly one, and the
+turn the person spent is spent. That is deliberate rather than overlooked —
+a refusal that left no record would be a refusal nobody could audit, and B1
+scores one verdict per input, which a dropped verdict would falsify. The
+scope is stated here rather than left to the phrase "any mutation", which
+would be false of a ledger that records its own refusals.
 """
 
 from __future__ import annotations
@@ -588,9 +600,13 @@ def decide(
 ) -> Decision:
     """The TOTAL admissibility function. One verdict, one deciding clause.
 
-    Pure: it reads the ledger's state and mutates nothing. That is what makes
-    §3's "SYMBOL_BUDGET is refused before any ledger mutation" structural
-    rather than a promise — there is no mutation in here to be before.
+    Pure: it reads the ledger's state and mutates nothing at all. That is
+    what carries §3's "SYMBOL_BUDGET is refused before any ledger mutation"
+    for the part of it that is exactly true — the ADMITTED state — since
+    there is no mutation in here to be before. The caller
+    (:meth:`SymbolLedger.declare`) still appends the verdict, so the ledger's
+    RECORD moves on a refusal even though its admitted set does not; the
+    module docstring scopes that claim rather than overstating it.
     """
 
     parsed = parse_declaration(source_line)
