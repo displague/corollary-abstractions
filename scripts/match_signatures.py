@@ -46,6 +46,19 @@ hand-assigned `archetype_id`, and vice versa), template slots missing from
 `slot_schema`, and identifiers used as a slot id in one statement and as a call
 head in another (`slot_vs_call_head_collisions`).
 
+One rule in this parser is lossy, and the report says so rather than leaving a
+reader to find out. The big-operator branch reads `sum_i EXPR` by keeping the
+part of the identifier before the first underscore and discarding the rest, so
+`sum_total(x)` parses as a sum over a body and the word `total` is gone. That
+is correct for the seventeen committed templates that use it and wrong-looking
+for anything else, and the parser cannot tell which is which without inventing
+a rule for what a suspicious suffix looks like. So it invents nothing and
+discloses everything: every capture is recorded on the parser (`Parser.rewrites`)
+and republished per statement under `parse_rewrites` — as a section beside
+`parse_problems`, and on the term's own row inside any twin group it joins.
+ROADMAP-v0.25 §2 is the acceptance this discharges: a refusal or a disclosure,
+never a silent rewrite.
+
 Twin proposals are written to a report, never into the corpora: structural
 isomorphism is an analogy relation, not the logical `equivalent_to` captured
 by `inferential_links`.
@@ -418,11 +431,41 @@ def tokenize(text: str) -> list[str]:
 
 
 class Parser:
-    """Pratt-style parser for anonymized templates."""
+    """Pratt-style parser for anonymized templates.
+
+    `rewrites` is the parser's disclosure channel (ROADMAP-v0.25 §2). One
+    branch of `parse_atom` is **lossy**: the big-operator rule turns any
+    identifier whose lowercase starts with a `BIG_OP_PREFIXES` member into a
+    bare operator call and throws the rest of the name away. Until v0.25 it
+    threw it away *silently*, so `sum_total(x)` and `sum_anything(x)` produced
+    one tree with nothing anywhere saying a rewrite had happened — two
+    person-authored names collapsed with no trace. The v0.25 adversarial
+    review found that; the acceptance it was given is *a refusal or a
+    disclosure, never a silent rewrite*, and the corpus census picked the arm:
+    seventeen committed templates depend on the rule (sixteen `sum_i`, one
+    `lim_h`), so refusing would break sealed parses that are not defective.
+
+    So the rewrite still happens and the tree is unchanged — every committed
+    parse regenerates byte-identically — and the parser now keeps a receipt of
+    each capture it performed. The record is **total**: `sum_i` is disclosed
+    exactly as loudly as `sum_total`. That is deliberate. Disclosing only the
+    captures that *look* wrong would need a rule for what looks wrong (a
+    word-shaped suffix? a suffix longer than one character?), and that rule
+    would be a new authored judgement this lane did not price. Recording
+    everything needs no judgement at all, which is what makes it safe to add
+    under a freeze.
+
+    Consumers read the list off the parser instance, so the common
+    `Parser(tokenize(t)).parse()` spelling keeps costing nothing; a caller that
+    publishes a receipt for the term holds the parser instead and reads
+    `.rewrites`. An empty list is written nowhere, so a receipt for a template
+    with no capture in it does not grow a field.
+    """
 
     def __init__(self, tokens: list[str]):
         self.tokens = tokens
         self.i = 0
+        self.rewrites: list[dict] = []
 
     def peek(self) -> str | None:
         return self.tokens[self.i] if self.i < len(self.tokens) else None
@@ -496,9 +539,28 @@ class Parser:
             raise TemplateParseError(f"unexpected token {tok!r}")
 
         # Big operators written as `sum_i EXPR` apply to the following product.
+        # The head keeps only the part before the first underscore, so this is
+        # the one branch that DISCARDS authored characters. It records what it
+        # discarded before it does so — see `Parser.rewrites`. The record is
+        # taken here rather than reconstructed later because only this frame
+        # still knows the token's position in the stream.
         if tok.lower().startswith(BIG_OP_PREFIXES):
+            # The head is lowercased because that is what goes into the tree;
+            # `discarded` keeps the author's own casing, because a record of
+            # what was thrown away that silently alters it is not a record.
+            head = tok.lower().split("_", 1)[0]
+            discarded = tok.split("_", 1)[1]
+            self.rewrites.append(
+                {
+                    "rule": "BIG_OP_PREFIXES",
+                    "token": tok,
+                    "token_index": self.i - 1,
+                    "head": head,
+                    "discarded": discarded,
+                }
+            )
             body = self.parse_product()
-            return ("call", tok.lower().split("_", 1)[0], (body,))
+            return ("call", head, (body,))
 
         if self.peek() == "(":
             self.next()
@@ -992,6 +1054,10 @@ class ParsedNode:
     missing_slots: list[str]
     slot_ids: list[str] = field(default_factory=list)
     call_heads: list[str] = field(default_factory=list)
+    # What the parser had to discard to reach `shape`. Empty for all but
+    # seventeen of the committed corpus's 14,830 templates; see
+    # `Parser.rewrites` for why it is carried at all.
+    parse_rewrites: list[dict] = field(default_factory=list)
 
 
 def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
@@ -1008,7 +1074,11 @@ def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
                 problems.append(f"{sid}: no anonymized_template")
                 continue
             try:
-                tree = canonicalize(Parser(tokenize(template)).parse())
+                # The parser is held rather than discarded so its rewrite
+                # record survives into the node's receipt; the tree it returns
+                # is the same tree the discarded spelling returned.
+                template_parser = Parser(tokenize(template))
+                tree = canonicalize(template_parser.parse())
             except TemplateParseError as exc:
                 problems.append(f"{sid}: cannot parse template `{template}`: {exc}")
                 continue
@@ -1036,6 +1106,7 @@ def load_nodes(data_dir: Path) -> tuple[list[ParsedNode], list[str]]:
                     missing_slots=missing,
                     slot_ids=sorted(template_slots(tree) | set(classes)),
                     call_heads=sorted(template_call_heads(tree)),
+                    parse_rewrites=template_parser.rewrites,
                 )
             )
     return parsed, problems
@@ -1136,6 +1207,27 @@ def slot_vs_call_head_collisions(nodes: list[ParsedNode]) -> list[dict]:
     return collisions
 
 
+def member_row(node: ParsedNode) -> dict:
+    """One term's row inside a twin group.
+
+    A twin group is the place a reader watches two templates collapse into one
+    skeleton, so it is the place the note "one of these got here by a lossy
+    rewrite" has to appear. The field is **omitted when the list is empty** —
+    not written as `[]` — so the 12,760 members whose parse discarded nothing
+    keep the bytes they already had, and the diff this lane produces is exactly
+    the seventeen rows it is about.
+    """
+
+    row = {
+        "statement_id": node.statement_id,
+        "discipline": node.discipline,
+        "template": node.template,
+    }
+    if node.parse_rewrites:
+        row["parse_rewrites"] = node.parse_rewrites
+    return row
+
+
 def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
     shape_groups = group_by(nodes, "shape")
     typed_groups = group_by(nodes, "typed")
@@ -1153,14 +1245,7 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
                     "skeleton": skel,
                     "disciplines": sorted({m.discipline for m in members}),
                     "archetypes": sorted({m.archetype for m in members}),
-                    "members": [
-                        {
-                            "statement_id": m.statement_id,
-                            "discipline": m.discipline,
-                            "template": m.template,
-                        }
-                        for m in members
-                    ],
+                    "members": [member_row(m) for m in members],
                 }
             )
         return entries
@@ -1189,6 +1274,27 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
         for n in nodes
         if n.missing_slots
     ]
+    # The total disclosure, sibling to `parse_problems` — which is already the
+    # section that exists to tell a reader what the parser wants them to know
+    # about a statement. `parse_problems` reports the templates it could not
+    # read; this reports the templates it read only by discarding part of the
+    # name it was given. A term in no twin group appears here and nowhere else,
+    # which is why the section exists as well as the member field: a rewrite
+    # disclosed only when the term happened to have a twin would not be a
+    # disclosure, it would be a coincidence.
+    rewrite_rows = sorted(
+        (
+            {
+                "statement_id": n.statement_id,
+                "discipline": n.discipline,
+                "template": n.template,
+                "rewrites": n.parse_rewrites,
+            }
+            for n in nodes
+            if n.parse_rewrites
+        ),
+        key=lambda row: row["statement_id"],
+    )
 
     # Family twins subsume typed twins by construction (sign absorption only
     # merges groups); report only groups that grew beyond every typed group,
@@ -1246,6 +1352,7 @@ def build_report(nodes: list[ParsedNode], problems: list[str]) -> dict:
         "skeletons_with_split_archetypes": split_labels,
         "slot_schema_gaps": slot_gaps,
         "parse_problems": problems,
+        "parse_rewrites": rewrite_rows,
     }
 
 
@@ -1323,6 +1430,13 @@ def print_report(report: dict) -> None:
         print("## Templates that could not be analyzed")
         for p in report["parse_problems"]:
             print(f"  - {p}")
+        print()
+    if report["parse_rewrites"]:
+        print("## Templates whose parse discarded part of an authored name")
+        for row in report["parse_rewrites"]:
+            for r in row["rewrites"]:
+                print(f"  - {row['statement_id']}: {r['token']} -> "
+                      f"{r['head']} (dropped `{r['discarded']}`)")
         print()
 
 

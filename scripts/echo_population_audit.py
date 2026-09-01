@@ -54,13 +54,50 @@ def group_manifest(patterns: list[str]) -> tuple[str, list[dict]]:
 
 
 def revalidate(prereg: dict) -> list[dict]:
+    """Every freeze group against the tree, honoring retirements in writing.
+
+    The retirement half arrived 2026-09-01 with the `sum_total` disclosure lane
+    (ROADMAP-v0.25 §2), and it is the same half `scripts/no_flip_census.py`
+    gained on 2026-08-31 for the same reason: a group that names a live source
+    file hard-fails on every legitimate change to that file, which was never
+    what freezing it meant. `native_population` pins
+    `scripts/match_signatures.py` because the echo population is the set of
+    terms that parser produces; the v0.25 parser fix moves that file without
+    moving a single one of those terms, and a group that cannot tell those two
+    cases apart can only be retired or lied to.
+
+    So: the original `expected_digest` stays in place unedited — the registered
+    audit's numbers are readings taken under it and must stay checkable against
+    it — and a dated `amendments` entry carries the movement. A marker naming
+    an amendment this prereg does not record is a pin deleted rather than a pin
+    retired, and it raises.
+    """
+
     rows = []
+    amendments = {
+        entry.get("amendment_id"): entry for entry in prereg.get("amendments", ())
+    }
     for name, spec in sorted(prereg["freeze_groups"].items()):
         observed, members = group_manifest(spec["patterns"])
-        rows.append({"group": name, "expected": spec["expected_digest"],
-                     "observed": observed, "agrees": observed == spec["expected_digest"],
-                     "members": members})
-    moved = [row["group"] for row in rows if not row["agrees"]]
+        row = {"group": name, "expected": spec["expected_digest"],
+               "observed": observed, "agrees": observed == spec["expected_digest"],
+               "members": members}
+        marker = spec.get("retired_for_future_comparisons")
+        if marker is not None:
+            amendment = amendments.get(marker.get("amendment"))
+            if amendment is None:
+                raise AuditRefusal(
+                    f"freeze group {name!r} claims retirement by amendment "
+                    f"{marker.get('amendment')!r}, which this prereg does not "
+                    "record; a pin retired in writing names an amendment that "
+                    "exists"
+                )
+            row["retired"] = True
+            row["retired_by"] = amendment["amendment_id"]
+        rows.append(row)
+    moved = [
+        row["group"] for row in rows if not row["agrees"] and not row.get("retired")
+    ]
     if moved:
         raise AuditRefusal("preregistration digest drift: " + ", ".join(moved))
     return rows

@@ -1,7 +1,7 @@
 {
   "provenance": {
     "writer": "scripts/match_signatures.py",
-    "writer_sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
+    "writer_sha256_lf": "77b7a07ac5248a85b1e787887703f2dcdbb9f08eb99bab652b78c61429474869",
     "inputs": [
       {
         "path": "data/algebra/nodes.json",
@@ -7047,12 +7047,30 @@
         {
           "statement_id": "infotheory.entropy.shannon_entropy",
           "discipline": "information_theory",
-          "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))"
+          "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "physics.thermodynamics.gibbs_entropy",
           "discipline": "physics",
-          "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))"
+          "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         }
       ]
     },
@@ -7069,12 +7087,30 @@
         {
           "statement_id": "infotheory.divergence.cross_entropy",
           "discipline": "information_theory",
-          "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))"
+          "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "ml.objective.token_cross_entropy_loss",
           "discipline": "machine_learning",
-          "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))"
+          "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         }
       ]
     },
@@ -7116,22 +7152,58 @@
         {
           "statement_id": "algtop.homology.betti_alternating_sum",
           "discipline": "algebraic_topology",
-          "template": "EULERCHAR = sum_i COEFF_i*BETTI_i"
+          "template": "EULERCHAR = sum_i COEFF_i*BETTI_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
           "discipline": "geometric_modeling",
-          "template": "POINT = sum_i BASIS_i*CONTROL_i"
+          "template": "POINT = sum_i BASIS_i*CONTROL_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
           "discipline": "geometric_modeling",
-          "template": "POINT = sum_i BARY_i*VERTEX_i"
+          "template": "POINT = sum_i BARY_i*VERTEX_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "probstat.probability.total_probability_partition",
           "discipline": "statistics",
-          "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i"
+          "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         }
       ]
     },
@@ -29450,12 +29522,30 @@
         {
           "statement_id": "geomodel.barycentric.barycentric_partition_of_unity",
           "discipline": "geometric_modeling",
-          "template": "sum_i BARY_i = 1"
+          "template": "sum_i BARY_i = 1",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 0,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "probstat.probability.probability_normalization",
           "discipline": "statistics",
-          "template": "sum_i WEIGHT_i = 1"
+          "template": "sum_i WEIGHT_i = 1",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 0,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         }
       ]
     },
@@ -30103,12 +30193,30 @@
         {
           "statement_id": "infotheory.entropy.shannon_entropy",
           "discipline": "information_theory",
-          "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))"
+          "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "physics.thermodynamics.gibbs_entropy",
           "discipline": "physics",
-          "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))"
+          "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         }
       ]
     },
@@ -30125,12 +30233,30 @@
         {
           "statement_id": "infotheory.divergence.cross_entropy",
           "discipline": "information_theory",
-          "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))"
+          "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "ml.objective.token_cross_entropy_loss",
           "discipline": "machine_learning",
-          "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))"
+          "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 6,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         }
       ]
     },
@@ -30172,22 +30298,58 @@
         {
           "statement_id": "algtop.homology.betti_alternating_sum",
           "discipline": "algebraic_topology",
-          "template": "EULERCHAR = sum_i COEFF_i*BETTI_i"
+          "template": "EULERCHAR = sum_i COEFF_i*BETTI_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
           "discipline": "geometric_modeling",
-          "template": "POINT = sum_i BASIS_i*CONTROL_i"
+          "template": "POINT = sum_i BASIS_i*CONTROL_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
           "discipline": "geometric_modeling",
-          "template": "POINT = sum_i BARY_i*VERTEX_i"
+          "template": "POINT = sum_i BARY_i*VERTEX_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         },
         {
           "statement_id": "probstat.probability.total_probability_partition",
           "discipline": "statistics",
-          "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i"
+          "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i",
+          "parse_rewrites": [
+            {
+              "rule": "BIG_OP_PREFIXES",
+              "token": "sum_i",
+              "token_index": 2,
+              "head": "sum",
+              "discarded": "i"
+            }
+          ]
         }
       ]
     },
@@ -72770,5 +72932,245 @@
     }
   ],
   "slot_schema_gaps": [],
-  "parse_problems": []
+  "parse_problems": [],
+  "parse_rewrites": [
+    {
+      "statement_id": "algtop.homology.betti_alternating_sum",
+      "discipline": "algebraic_topology",
+      "template": "EULERCHAR = sum_i COEFF_i*BETTI_i",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 2,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "calculus.limits.derivative_definition",
+      "discipline": "calculus",
+      "template": "D(F) = lim_h (F(VAR + STEP) - F(VAR)) / STEP",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "lim_h",
+          "token_index": 5,
+          "head": "lim",
+          "discarded": "h"
+        }
+      ]
+    },
+    {
+      "statement_id": "difftop.degree.degree_regular_value_count",
+      "discipline": "differential_topology",
+      "template": "DEGREE(SMOOTHMAP) = sum_i SIGN_i",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 5,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "difftop.vectorfields.poincare_hopf_index_theorem",
+      "discipline": "differential_topology",
+      "template": "EULERCHAR(MANIFOLD) = sum_i INDEX_i",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 5,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.barycentric.barycentric_partition_of_unity",
+      "discipline": "geometric_modeling",
+      "template": "sum_i BARY_i = 1",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 0,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.barycentric.barycentric_point_reconstruction",
+      "discipline": "geometric_modeling",
+      "template": "POINT = sum_i BARY_i*VERTEX_i",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 2,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "geomodel.bezier.bernstein_bezier_evaluation",
+      "discipline": "geometric_modeling",
+      "template": "POINT = sum_i BASIS_i*CONTROL_i",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 2,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "graphtheory.degree.handshake_lemma",
+      "discipline": "graph_theory",
+      "template": "sum_i DEGREE_i = 2*EDGES",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 0,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "infotheory.coding.kraft_inequality",
+      "discipline": "information_theory",
+      "template": "sum_i RADIX^(-(CODELENGTH_i)) <= 1",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 0,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "infotheory.divergence.cross_entropy",
+      "discipline": "information_theory",
+      "template": "CROSSINFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(MODELWEIGHT_i))",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 6,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "infotheory.divergence.gibbs_inequality",
+      "discipline": "information_theory",
+      "template": "BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i / MODELWEIGHT_i) >= 0",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 2,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "infotheory.divergence.kl_divergence",
+      "discipline": "information_theory",
+      "template": "DIVERGENCE = BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i / MODELWEIGHT_i)",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 4,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "infotheory.entropy.shannon_entropy",
+      "discipline": "information_theory",
+      "template": "INFORMATION = -(BASESCALE * sum_i WEIGHT_i * LOG(WEIGHT_i))",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 6,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "ml.objective.token_cross_entropy_loss",
+      "discipline": "machine_learning",
+      "template": "LOSS = -(BATCHSCALE * sum_i TARGET_i * LOG(PREDICTED_i))",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 6,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "physics.thermodynamics.gibbs_entropy",
+      "discipline": "physics",
+      "template": "ENTROPY = -(SCALE * sum_i PROBABILITY_i * LOG(PROBABILITY_i))",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 6,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "probstat.probability.probability_normalization",
+      "discipline": "statistics",
+      "template": "sum_i WEIGHT_i = 1",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 0,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    },
+    {
+      "statement_id": "probstat.probability.total_probability_partition",
+      "discipline": "statistics",
+      "template": "MARGINAL = sum_i CONDITIONAL_i*WEIGHT_i",
+      "rewrites": [
+        {
+          "rule": "BIG_OP_PREFIXES",
+          "token": "sum_i",
+          "token_index": 2,
+          "head": "sum",
+          "discarded": "i"
+        }
+      ]
+    }
+  ]
 }

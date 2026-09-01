@@ -3,7 +3,10 @@
   "freeze_groups": {
     "audit_instrument": {
       "expected_digest": "0298dc2e440fbe6bb6bb0c2ab4b13378e7fa6f1890680fc4b98687de45064a0f",
-      "patterns": ["scripts/echo_population_audit.py"]
+      "patterns": ["scripts/echo_population_audit.py"],
+      "retired_for_future_comparisons": {
+        "amendment": "amd-2026-09-01-audit-instrument"
+      }
     },
     "native_population": {
       "expected_digest": "cb3ab7fe365490e42f0206ee5405a1de98daea808521b430b20d64d58dac240c",
@@ -15,7 +18,10 @@
         "scripts/numeral_words.py",
         "scripts/realization_lexicon.py",
         "scripts/realize_term.py"
-      ]
+      ],
+      "retired_for_future_comparisons": {
+        "amendment": "amd-2026-09-01-native-population"
+      }
     },
     "resolver_fixtures": {
       "expected_digest": "3738fe536eb7780d0112acd17a9e726d97ca3e09ed3feef1ba80928469b94b16",
@@ -86,5 +92,29 @@
     "The known 2,313/2,313 foreign-voice round trip is not an ECHO result.",
     "A parser-authored native round trip is not relabelled as external checker adjudication.",
     "No injectivity rate is computed by this construction audit."
+  ],
+  "amendments": [
+    {
+      "amendment_id": "amd-2026-09-01-native-population",
+      "date": "2026-09-01",
+      "retires": "freeze_groups.native_population",
+      "why": "ROADMAP-v0.25 §2's `sum_total` silent-capture lane changed scripts/match_signatures.py, a member of this group. The parser's big-operator branch discarded part of every authored `sum_ / prod_ / lim_ / max_ / min_` identifier with no refusal and no record; it now records each capture and republishes it under `parse_rewrites`. The POPULATION this group exists to fix did not move: every parse tree, skeleton and twin group over the 12,777 committed nodes regenerates byte-identically, verified with scripts/check_report_regeneration.py, and the only ledger bytes that changed are the disclosure itself. A group that cannot tell a population change from a disclosure added to the same file can only be retired or lied to, and this repository retires. The registered audit's counts stay scoped to the original expected_digest, which stays in place unedited.",
+      "observed_digest_at_retirement": "174d528841bec30f8cb62129d3875bc9269c7aa14731337cebe34dee7fbeccb2",
+      "successor_prereg": {
+        "path": null,
+        "note": "none yet: the next registered echo window seals its own freeze groups; until then this group is reported, not enforced. The parser's own successor pin, for the walks that need one, is the `parser` row of experiments/big_op_disclosure_prereg.json."
+      }
+    },
+    {
+      "amendment_id": "amd-2026-09-01-audit-instrument",
+      "date": "2026-09-01",
+      "retires": "freeze_groups.audit_instrument",
+      "why": "scripts/echo_population_audit.py's revalidator gained retirement-marker support so that amd-2026-09-01-native-population could be honored at all — the same port scripts/no_flip_census.py received on 2026-08-31 (amd-2026-08-31-census-instrument), for the same reason and in the same shape. The registered audit was produced by the instrument at the original expected_digest, which stays in place unedited; the instrument's own pin moving because the pin mechanic moved is this amendment's whole content.",
+      "observed_digest_at_retirement": "a624e9707340a719f422c04dd2df9a2293727488e9150803370aedd6e1e97c4b",
+      "successor_prereg": {
+        "path": null,
+        "note": "none yet: the next registered echo window seals its own freeze groups; until then this group is reported, not enforced."
+      }
+    }
   ]
 }

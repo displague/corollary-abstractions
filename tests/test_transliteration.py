@@ -187,6 +187,18 @@ class SuccessorPreregTests(unittest.TestCase):
         whatever the declared chain ends at, and the chain must be complete:
         `resolve_pin` raises on a marker naming an amendment this file does
         not record, so a retirement cannot become a way to stop checking.
+
+        Re-aimed again 2026-09-01 by
+        `exact_literals.prereg.v1.amendment.big-op-disclosure-2026-09-01`
+        (ROADMAP-v0.25 §2, the `sum_total` silent-capture lane), which retired
+        the exact-literals parser row into
+        experiments/big_op_disclosure_prereg.json. THREE cycles have now
+        touched this one file. Only the expected END of the chain moves here;
+        the assertion above it — that the chain's terminal pin equals the tree
+        — is untouched and is what actually does the checking. Re-aiming
+        without an amendment to cite would be a test edited to make a change
+        pass, so the amendment is named in this docstring and exists in that
+        file's `amendments` array.
         """
         import prereg_pins
 
@@ -197,8 +209,10 @@ class SuccessorPreregTests(unittest.TestCase):
         )
         self.assertEqual(_sha256_lf(ROOT / row["path"]), live["sha256_lf"])
         self.assertEqual(
-            live["source"], "experiments/exact_literals_prereg.json",
-            "the parser chain must end at the pin §4b's amendment named",
+            live["source"], "experiments/big_op_disclosure_prereg.json",
+            "the parser chain must end at the pin the LAST amendment named — "
+            "ROADMAP-v0.25 §2's big-op-disclosure-2026-09-01, which retired "
+            "§4b's exact-literals pin in turn",
         )
 
     def test_it_names_the_digest_it_supersedes(self) -> None:
@@ -541,34 +555,61 @@ class RegisteredRunRefusalTests(unittest.TestCase):
         A retired row is checked against the SUCCESSOR pin. So corrupting the
         successor must still refuse — otherwise "retired in writing" would be
         a way to launder a file out of every check it was under.
+
+        Rebuilt 2026-09-01 for the third hop
+        (`exact_literals.prereg.v1.amendment.big-op-disclosure-2026-09-01`).
+        The chain is now transliteration -> exact_literals -> big_op_disclosure,
+        and the pin that DECIDES is the one at the end, so that is the one this
+        fixture corrupts. Corrupting the middle would prove nothing, which is
+        the same reason the lexicon test above says its own row is the live
+        one. Both hops are built inside the temp root, so the walk really
+        walks two of them rather than being cut short.
         """
         import prereg_pins
 
         prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
-        successor = json.loads(
+        middle = json.loads(
             (ROOT / "experiments" / "exact_literals_prereg.json").read_text(
+                encoding="utf-8"))
+        end = json.loads(
+            (ROOT / "experiments" / "big_op_disclosure_prereg.json").read_text(
                 encoding="utf-8"))
         row = {r["role"]: r for r in prereg["frozen"]}["parser"]
         self.assertIn("retired_for_future_comparisons", row)
+        self.assertIn(
+            "retired_for_future_comparisons",
+            {r["role"]: r for r in middle["frozen"]}["parser"],
+            "the middle hop must itself be retired or this fixture is not "
+            "exercising a two-hop walk",
+        )
 
-        # A successor whose parser pin is corrupt. Resolution must follow the
-        # chain TO it, so the tree is then compared against a digest that
-        # cannot match — i.e. the retirement did not stop the check.
-        for live in successor["frozen"]:
+        # A chain whose TERMINAL parser pin is corrupt. Resolution must follow
+        # the chain all the way TO it, so the tree is then compared against a
+        # digest that cannot match — i.e. the retirement did not stop the check.
+        for live in end["frozen"]:
             if live["role"] == "parser":
                 live["sha256_lf"] = "0" * 64
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "experiments").mkdir()
-            (root / "experiments" / "corrupt_successor.json").write_text(
-                json.dumps(successor), encoding="utf-8")
             prereg["amendments"][0]["successor_prereg"]["path"] = (
-                "experiments/corrupt_successor.json")
+                "experiments/corrupt_middle.json")
+            for entry in middle["amendments"]:
+                entry["successor_prereg"]["path"] = "experiments/corrupt_end.json"
+            (root / "experiments" / "corrupt_middle.json").write_text(
+                json.dumps(middle), encoding="utf-8")
+            (root / "experiments" / "corrupt_end.json").write_text(
+                json.dumps(end), encoding="utf-8")
             resolved = prereg_pins.resolve_pin(
                 prereg, row,
                 prereg_path="experiments/transliteration_prereg.json",
                 repo_root=root,
             )
+        self.assertEqual(
+            resolved["hops"],
+            ["experiments/corrupt_middle.json", "experiments/corrupt_end.json"],
+            "the walk must traverse both declared hops, not stop at the first",
+        )
         self.assertEqual(
             resolved["sha256_lf"], "0" * 64,
             "resolution did not follow the retirement to the successor pin",

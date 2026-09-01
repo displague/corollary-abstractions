@@ -47,6 +47,47 @@
         "path": "experiments/exact_literals_prereg.json",
         "recorded_in": "the same gate-repair commit as this amendment"
       }
+    },
+    {
+      "amendment_id": "conformance.prereg.amendment.big-op-disclosure-2026-09-01",
+      "dated": "2026-09-01",
+      "dated_basis": "UTC.",
+      "names": "the ROADMAP-v0.25 §2 `sum_total` silent-capture lane",
+      "ordering": "PROSPECTIVE for the pin, RETROSPECTIVE for nothing.",
+      "ordering_disclosed": "The amendment is written in the same commit that changes scripts/match_signatures.py, before any artifact quotes a number measured through the new parser. No conformance verdict, floor or count is touched, re-read or re-adjudicated by this lane.",
+      "why": [
+        "The v0.25 adversarial design review (docs/DESIGN-house-rules.md §4, docs/ROADMAP-v0.25.md §2) found a silent-capture hazard in this parser. `parse_atom`'s big-operator branch rewrites any identifier whose lowercase begins `sum_ / prod_ / lim_ / max_ / min_` into a bare operator call, keeping only the part before the first underscore. `sum_total(x)` and `sum_anything(x)` therefore produced one identical tree, the authored suffix was discarded, and no refusal or record existed anywhere.",
+        "The acceptance frozen in ROADMAP-v0.25 §2 is `a refusal or a disclosure, never a silent rewrite`. The corpus census decided the arm rather than a preference: 17 of the 14,830 committed anonymized_template strings carry a big-op identifier (16 `sum_i`, 1 `lim_h`, no `prod_`/`max_`/`min_`), so a refusal would break sealed committed parses that are not defective. The lane ships DISCLOSURE.",
+        "The disclosure is total and judgement-free: every capture is recorded, `sum_i` as loudly as `sum_total`. Disclosing only the captures that look wrong would need an authored rule for what looks wrong, which this lane did not price and which DESIGN-house-rules §4 explicitly leaves to H-P0's declaration-boundary prefix guard.",
+        "Not one parse tree moved. Skeletons, shape keys, twin groups, decompositions and specializations are byte-identical across the change; the only ledger bytes that move are the new `parse_rewrites` disclosure and the provenance digest that tracks the writer. That is what makes this a pin movement and not a measurement movement."
+      ],
+      "what_this_retires": [
+        "The `parser` row — role `parser`, scripts/match_signatures.py, LF sha256 26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf — is RETIRED FOR FUTURE COMPARISONS as of this dated amendment. The row keeps its original digest: experiments/conformance_run.json's verdicts were decided under it.",
+        "The `evaluator`, `domain_schema` and `sampler` rows are untouched."
+      ],
+      "why_e7_is_not_voided": "E7 asks that the instrument did not move while the claim was being made. It did not: the conformance run is sealed and this commit re-reads none of it. What this amendment records is that a LATER change to the parser is declared rather than silent — which is E7 working, not E7 waived.",
+      "artifacts_regenerated_because_they_track_the_tree": {
+        "note": "These record the CURRENT writer/source rather than a historical measurement, so they are regenerated in this commit and their digests move to the successor pin.",
+        "paths": [
+          "reports/signature_matches.json (provenance.writer_sha256_lf, plus the new parse_rewrites section and 17 disclosed member rows)",
+          "experiments/ambiguity_rate.json (provenance.resolver_sources and the measurement_inputs_sha256 rollup over it — the same row the 2026-08-24 transliteration amendment regenerated for the same reason; two lines, and no rate moved)",
+          "experiments/convention_pairs_probe.json (provenance.inputs, which pins reports/signature_matches.json — one line)",
+          "experiments/erratum_probe.json (provenance.inputs pins the same ledger). This one was reverted first and then put back, because the revert was WRONG and a test said so: tests.test_retraction_closure's PROVENANCED_LEDGERS guard checks every input digest of every live ledger against the tree, and its own docstring says that guard asks whether an artifact matches what is committed NOW — which makes this a live reading, not a retained record, and regenerating it the required move rather than an optional one. Regenerating also re-records the probe's git window (head, merge base, commit count, shortstat), which is why the revert was tried; the FINDING is unchanged — 0 real flips over 410 replayed turns from 60 committed v0.21 journals, planted flip detected 1/1, 0 statements added in the window — so what moved is the window's endpoint and the input digest, not a result."
+        ]
+      },
+      "artifacts_deliberately_not_regenerated": {
+        "note": "Named here rather than left as silent staleness. Each was tried, reverted, and the reason recorded.",
+        "experiments/cold_registry_census.json": "Its provenance.inputs seal over scripts/**/*.py now records a pre-change digest for scripts/match_signatures.py and scripts/echo_population_audit.py, and the receipt-marked line ranges it holds for the latter are stale by 37 lines. Re-sealing it with its own builder was tried and REVERTED. Nothing enforces those rows — tests.test_cold_receipt checks the first and last input only, and census_seal recomputes UNCHANGED at d3d9bdc6, so no kind, site or exclusion moved — while re-sealing DOES break cold/census_run2.json, every input of which is checked against the live tree. That would force a re-run of a registered cold attestation as a side effect of a parser disclosure. ROADMAP-v0.25 §1 already assigns `the CR-P0 registry re-seal` to H-P0, the slice ordered immediately after this one, so the re-seal and its cold re-attestation happen once, there, covering both changes.",
+        "experiments/echo_population_audit.json": "The registered audit's own reading, taken under the original expected_digest and under the pre-change parser. Left untouched, which is the whole content of amd-2026-09-01-native-population."
+      },
+      "successor_prereg": {
+        "path": "experiments/big_op_disclosure_prereg.json",
+        "recorded_in": "this commit, which is also the commit that changes the parser",
+        "carries": [
+          "the post-amendment LF sha256 of scripts/match_signatures.py",
+          "the corpus census that chose disclosure over refusal, and the byte-identity evidence the choice rests on"
+        ]
+      }
     }
   ],
   "census": {
@@ -177,7 +218,17 @@
       "path": "scripts/match_signatures.py",
       "recorded": "2026-08-25",
       "role": "parser",
-      "sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf"
+      "sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
+      "retired_for_future_comparisons": {
+        "amendment": "big-op-disclosure-2026-09-01",
+        "status": "retired for future comparisons",
+        "dated": "2026-09-01",
+        "read_this_row_as": [
+          "The digest this row records is the parser AS THE v0.21 CONFORMANCE RUN MEASURED IT, and it is left byte-unchanged for exactly that reason: experiments/conformance_run.json quotes verdicts decided through it.",
+          "It is no longer the pin a FUTURE comparison is read against. The successor pin is the `parser` row of experiments/big_op_disclosure_prereg.json.",
+          "E7 is not weakened by this. The sweep still fails on any change past the last amendment; what moved is where `past` starts."
+        ]
+      }
     },
     {
       "path": "scripts/evaluate.py",

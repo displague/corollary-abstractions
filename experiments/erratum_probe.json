@@ -358,7 +358,7 @@
       },
       {
         "path": "reports/signature_matches.json",
-        "sha256_lf": "fc95217d837803a3e6c83b53b54ea583d2dfd8008c5ff1995ace262f38c3339a"
+        "sha256_lf": "10bbe55754cb28d88863552feeeee0282b676bde06200fe4fad897e82ddf36d2"
       }
     ],
     "emitted_at_generation": true
@@ -404,18 +404,18 @@
       "pathspec": "the 60 v021-s*.json journals only, never the sessions directory -- the later p-journals share it and would date this window to their commit",
       "journals_added_at": "a91e39dfdc1da9e0515394fee0c4463522508661 2026-08-25",
       "journals_last_rewritten_at": "641b9972b3b814d05f269b65cfe4d680fd894ce1 2026-08-26",
-      "head": "ffe3083d8150efa5cfb0eb63317b31ce98822636",
-      "merge_base_with_main": "f9536e1452aef33299502827a5ee44177bf3aacb",
+      "head": "d11e3fbffb6a87dd627c81020b849f4cc7996a7a",
+      "merge_base_with_main": "d320fce8049b766f7274ffea8fcac608402195d8",
       "the_named_window": {
         "from": "641b9972b3b814d05f269b65cfe4d680fd894ce1",
-        "to": "f9536e1452aef33299502827a5ee44177bf3aacb",
+        "to": "d320fce8049b766f7274ffea8fcac608402195d8",
         "why_to_the_merge_base_and_not_to_head": "HEAD carries this slice's own commits. Counting them inside the window being measured would be the probe reporting its own footprint as library growth",
-        "commits": "26",
-        "shortstat": "70 files changed, 21844 insertions(+), 113 deletions(-)",
+        "commits": "87",
+        "shortstat": "194 files changed, 290173 insertions(+), 182 deletions(-)",
         "data_dir_numstat": "(no change)"
       },
-      "commits_since_the_journals_were_last_written": "29",
-      "shortstat_over_the_window": "81 files changed, 192627 insertions(+), 113 deletions(-)",
+      "commits_since_the_journals_were_last_written": "88",
+      "shortstat_over_the_window": "194 files changed, 290216 insertions(+), 182 deletions(-)",
       "data_dir_numstat_over_the_window": "(no change)"
     }
   },

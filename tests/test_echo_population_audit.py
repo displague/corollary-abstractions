@@ -30,7 +30,20 @@ class Preregistration(unittest.TestCase):
         rows = epa.revalidate(self.prereg)
         self.assertEqual({row["group"] for row in rows},
                          set(self.prereg["freeze_groups"]))
-        self.assertTrue(all(row["agrees"] for row in rows))
+        # Re-aimed 2026-09-01 by amd-2026-09-01-native-population and
+        # amd-2026-09-01-audit-instrument (ROADMAP-v0.25 §2), in the shape
+        # tests.test_no_flip_census took on 2026-08-31 for the same mechanic.
+        # A group either still agrees with its original digest or carries a
+        # dated retirement naming a recorded amendment; anything else raised
+        # inside revalidate. An un-retired group must still agree EXACTLY, so
+        # this is a weaker assertion only for the two rows an amendment names.
+        self.assertTrue(all(row["agrees"] or row.get("retired") for row in rows))
+        for row in rows:
+            if row.get("retired"):
+                self.assertIn("retired_by", row)
+        live = [row["group"] for row in rows if not row.get("retired")]
+        self.assertEqual(sorted(live),
+                         ["resolver_fixtures", "second_voice_population"])
         native = next(row for row in rows if row["group"] == "native_population")
         self.assertGreater(len(native["members"]), 20)
 
@@ -40,9 +53,35 @@ class Preregistration(unittest.TestCase):
         self.assertNotEqual(digest, narrower)
 
     def test_digest_drift_refuses_before_measurement(self) -> None:
+        """Re-aimed 2026-09-01 onto a group no amendment has retired.
+
+        This forged `native_population` until that group was retired by
+        amd-2026-09-01-native-population, at which point forging it proves
+        nothing — a retired group is reported and not enforced, which is the
+        whole content of the amendment. The check itself is unchanged and is
+        made against a LIVE group, so drift still refuses before measurement.
+        """
         forged = copy.deepcopy(self.prereg)
-        forged["freeze_groups"]["native_population"]["expected_digest"] = "0" * 64
+        group = forged["freeze_groups"]["second_voice_population"]
+        self.assertNotIn("retired_for_future_comparisons", group)
+        group["expected_digest"] = "0" * 64
         with self.assertRaises(epa.AuditRefusal):
+            epa.revalidate(forged)
+
+    def test_retiring_a_group_is_not_a_way_to_stop_checking_it(self) -> None:
+        """The escape hatch the 2026-09-01 amendments must not have opened.
+
+        A retirement is a pin RETIRED, never a pin deleted: the marker has to
+        name an amendment this prereg actually records, or revalidate refuses
+        rather than silently dropping the group. Without this, adding four
+        words to a freeze group would launder any file out of every check it
+        was under.
+        """
+        forged = copy.deepcopy(self.prereg)
+        forged["freeze_groups"]["second_voice_population"]["expected_digest"] = "0" * 64
+        forged["freeze_groups"]["second_voice_population"][
+            "retired_for_future_comparisons"] = {"amendment": "amd-that-does-not-exist"}
+        with self.assertRaisesRegex(epa.AuditRefusal, "does not record"):
             epa.revalidate(forged)
 
     def test_resolver_fixture_ids_belong_to_the_frozen_question_set(self) -> None:

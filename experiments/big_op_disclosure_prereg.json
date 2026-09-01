@@ -1,0 +1,57 @@
+{
+  "prereg_id": "big_op_disclosure.prereg.v1",
+  "registered": "2026-09-01",
+  "roadmap": "docs/ROADMAP-v0.25.md §2 (the `sum_total` silent-capture lane)",
+  "design": "docs/DESIGN-house-rules.md §4 (the collision census that found it)",
+  "digest_algorithm": "sha256 over the file's bytes with CRLF normalised to LF",
+  "what_this_records": [
+    "This file exists for one reason: `prereg_pins.resolve_pin` follows a retirement to a SUCCESSOR pin, and three live rows pinning scripts/match_signatures.py retire into this commit. A retirement with nowhere to land is a pin deleted, which the walk refuses by design.",
+    "It preregisters no experiment and quotes no rate. It is a digest record, recorded in the same commit that changes the parser and before any artifact quotes a number measured through it — which is the whole content of the rule it is obeying."
+  ],
+  "the_change": {
+    "what": "match_signatures.Parser now accumulates a `rewrites` list: one record per big-operator capture, naming the authored token verbatim, the head it became, the characters discarded, the rule, and the token's position. ParsedNode carries it as `parse_rewrites`; build_report republishes it as a total top-level `parse_rewrites` section and on each twin-group member row that has one. An empty record is written nowhere.",
+    "why": "The rewrite was lossy AND silent. Two person-authored identifiers collapsed to one tree with no trace, so a reader could not tell a well-formed big operator from a name the parser ate. The tree stays lossy — 17 committed templates depend on it — and stops being silent.",
+    "scope_verified_not_assumed": {
+      "census": {
+        "committed_anonymized_template_strings": 14830,
+        "distinct": 13950,
+        "carrying_a_big_op_identifier": 17,
+        "tokens": {
+          "sum_i": 16,
+          "lim_h": 1
+        },
+        "suffix_distribution": "single-letter index names, 17 of 17; no prod_, max_ or min_ occurrence exists in the committed corpus",
+        "note": "The suffixes being uniformly single-letter is recorded as a FACT, not used as a rule. A single-letter-versus-word heuristic would be a new authored judgement the design did not price; disclosure is total instead."
+      },
+      "byte_identity": "reports/signature_matches.json regenerates identical to the committed file after stripping the new disclosure, key for key. reports/specializations.json and reports/compression.json regenerate unchanged. Verified with scripts/check_report_regeneration.py."
+    }
+  },
+  "frozen": [
+    {
+      "path": "scripts/match_signatures.py",
+      "role": "parser",
+      "sha256_lf": "77b7a07ac5248a85b1e787887703f2dcdbb9f08eb99bab652b78c61429474869",
+      "recorded": "2026-09-01",
+      "supersedes": {
+        "sha256_lf": "26373234abe61b097f9e2c527a5c79e47f0d70cd79622dcbc3cc26a286eefcdf",
+        "pinned_by": [
+          "experiments/exact_literals_prereg.json (role `parser`)",
+          "experiments/conformance_prereg.json (role `parser`, E7)",
+          "experiments/echo_prereg.json (freeze group `native_population`)"
+        ],
+        "retired_by": "exact_literals.prereg.v1.amendment.big-op-disclosure-2026-09-01 / conformance.prereg.amendment.big-op-disclosure-2026-09-01 / amd-2026-09-01-native-population"
+      },
+      "why": "The post-disclosure parser. Every chain that reached 26373234 now ends here, which is why one row carries three retirements: they all pin the same file for the same role."
+    }
+  ],
+  "non_claims": [
+    "No refusal is claimed. `sum_total(x)` still parses, still becomes a sum, and still loses the word `total` from its tree; what changed is that the loss is now written down where a reader of the term's own receipt sees it.",
+    "No claim that the disclosure reaches every consumer of the parser. It reaches the parser object and the signature-matcher ledger that owns the hazard. A consumer that discards the parser instance discards the record, by construction.",
+    "This does not discharge H-P0's RESERVED_PREFIX guard and H-P0 does not discharge this. The guard converts the hazard at the declaration boundary; this lane converts it in the shipped parser. ROADMAP-v0.25 §2 orders this one first for exactly that reason.",
+    "No measurement is registered here and no floor is frozen."
+  ],
+  "evidence": [
+    "tests/test_big_op_disclosure.py — the red-first test. Against the unmodified parser it ran 12 tests with 19 errors and 1 failure, the failure quoting a real committed term: `infotheory.entropy.shannon_entropy was rewritten with no record`.",
+    "reports/signature_matches.json — the `parse_rewrites` section, 17 rows."
+  ]
+}
