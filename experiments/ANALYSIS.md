@@ -232,9 +232,15 @@ stronger arm is not run and is not claimed.
    leaves step 4 unchanged and only the digest comparison can catch it. The hour
    bought a control whose second half was structurally idle — measured in the
    artifact, not noticed after.
-4. **Both recall probes are numbers now.** Site side: a wider net reaches 179
-   receipt-vocabulary sites and the rule admits 18 of them, so 161 uncovered
-   sites are published as candidate B10 misses. Instance side (added by
+4. **Both recall probes are numbers now.** Site side: a wider net reaches 183
+   receipt-vocabulary sites and the rule admits 18 of them, so 165 uncovered
+   sites are published as candidate B10 misses. (Read 179 / 18 / 161 until
+   the v0.25 H-P0 re-seal on 2026-09-01: the `declare` slice added four files
+   to the program tree, and the wider net's substring rule reaches four more
+   sites in them while the census rule admits none of them — so the admitted
+   count is unmoved and the uncovered count carries the whole difference,
+   which is what a candidate-miss number is supposed to do.) Instance side
+   (added by
    amendment 2): the exact key-set rule read **0** committed instances for two
    kinds the tree holds **160** and **2,313** instances of. Instance brittleness
    was the half that was not priced, and a rule that answers "no committed

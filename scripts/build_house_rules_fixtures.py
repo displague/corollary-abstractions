@@ -68,44 +68,42 @@ DATE = "2026-09-01"
 DESIGN = "docs/DESIGN-house-rules.md"
 DESIGN_CLAUSE = "§6 step 1 — H-PRE, the fixture seal; floors from §6.1, gates from §7 B3/B9/B12."
 ROADMAP = "docs/ROADMAP-v0.25.md#1"
-GENERATOR = "experiments/build_house_rules_fixtures.py"
+GENERATOR = "scripts/build_house_rules_fixtures.py"
 PRECEDENT = "experiments/protocol_uptake_upre.json"
 
-#: WHY THIS BUILDER IS NOT IN `scripts/`, recorded because the U-PRE precedent
-#: (`scripts/build_protocol_corpus.py`) would otherwise put it there.
+#: WHERE THIS BUILDER LIVES, and why it moved at H-P0.
 #:
 #: `scripts/**/*.py` is the COLD program tree — the exact glob
 #: `cold_registry_census.PROGRAM_TREE_GLOB` seals and the cold attestation
-#: attests. Adding one file to it moves `program_tree_files_scanned`, which
-#: `tests.test_cold_receipt` recomputes, so a fixture seal placed there lands
-#: RED. The obvious repair is worse and was measured rather than assumed:
-#: re-sealing the census leaves `census_seal` UNCHANGED at d3d9bdc6 (no kind,
-#: site or exclusion moves) but breaks `cold/census_run2.json`'s provenance —
-#: two failures instead of one — forcing a re-run of a registered cold
-#: attestation as a side effect of committing fixtures. ROADMAP-v0.25 §1
-#: already assigns the CR-P0 registry re-seal to H-P0, and the previous commit
-#: recorded the same revert for the same reason.
+#: attests. At H-PRE this file sat in `experiments/` for a measured reason:
+#: adding one file to that glob moves `program_tree_files_scanned`, which
+#: `tests.test_cold_receipt` recomputes, so a fixture seal placed there would
+#: have landed RED — and the repair was worse, because re-sealing the census
+#: breaks `cold/census_run2.json`'s provenance and forces a re-run of a
+#: registered cold attestation as a side effect of committing fixtures.
 #:
-#: So this builder sits beside the artifact it writes. That is defensible on
-#: its own terms and not only as avoidance: `experiments/` already holds this
-#: repository's generators, H-PRE's builder ships no runtime and sits on no
-#: admission path, and DESIGN §5's "trusted, exact code — new" names the H-P0
-#: census builder and checker, never this one. If H-P0 wants it in the program
-#: tree it moves there for FREE, because H-P0 re-seals the census anyway.
+#: H-P0 pays that bill for its own reasons: it adds `scripts/symbol_ledger.py`,
+#: `scripts/build_symbol_census.py` and `scripts/check_symbol_census.py` to the
+#: program tree, so the census MUST be re-sealed and the cold reading MUST
+#: re-attest whatever else this file does. H-PRE said the move would then cost
+#: nothing, and that turned out to be exactly right: it rides a re-seal that
+#: was already owed. So the builder now sits in the program tree with the rest
+#: of this repository's generators, and the artifact's `generator` field moves
+#: with it — written by the builder, never edited into the artifact by hand.
+#:
+#: What did NOT change: this builder still ships no runtime and still sits on
+#: no admission path. DESIGN §5's "trusted, exact code — new" names the H-P0
+#: census builder and checker, never this one.
 PLACEMENT_NOTE = (
-    "This builder is deliberately outside scripts/**/*.py, the COLD program tree. "
-    "Adding a file there moves cold_registry_census's program_tree_files_scanned and "
-    "reddens tests.test_cold_receipt; re-sealing the census was measured and is worse "
-    "(census_seal is unchanged at d3d9bdc6, but cold/census_run2.json's provenance "
-    "breaks, forcing a re-run of a registered cold attestation). ROADMAP-v0.25 §1 "
-    "assigns the CR-P0 re-seal to H-P0, so this builder may move into scripts/ there "
-    "at no cost. H-PRE's builder ships no runtime and sits on no admission path."
+    "Moved into scripts/**/*.py at H-P0, as H-PRE said it could be. The COLD "
+    "program tree's file count moves when a file is added to it, so H-PRE kept "
+    "this builder outside it rather than redden tests.test_cold_receipt for a "
+    "fixture seal; H-P0 adds three runtime modules to that tree for its own "
+    "reasons, so the CR-P0 re-seal and the cold re-attestation were owed "
+    "anyway and this move rides them at no additional cost. The builder ships "
+    "no runtime and sits on no admission path either way."
 )
 
-#: The tip this seal was authored against. A committed constant, not a
-#: `git rev-parse` — the builder must be readable off a tarball and must not
-#: read the environment. H-P1's registered run cites the commit that carries
-#: this file; this field records what the author had in hand.
 SOURCE_COMMIT = "249f4630fa57c6c42f5f89deebb1bce53b53657c"
 
 SCHEMA_PATH = "schema/equation-node.schema.json"

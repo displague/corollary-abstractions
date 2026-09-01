@@ -91,7 +91,7 @@ three rather than pretending they are one:
 - **`CoreSession`** (`scripts/harness.py:533`) — boots the capability
   matrix and routes the **registered line grammar** through
   `route_line(repo_root, session, line) -> dict`
-  (`scripts/harness.py:2305`). No save/restore. Since v0.21 it also
+  (`scripts/harness.py:2485`). No save/restore. Since v0.21 it also
   carries two optional fields — `assumptions` and, since slice 2,
   `proposer` — **`None` on every session this skin serves**, and
   attached only by the session ledger's recorder and replayer or by a
@@ -120,7 +120,7 @@ true of a three-profile server: ¶AMD-3 registers a third *engine* object and
 renders it, exactly as A-IH6 requires, rather than inventing a surface inside
 this file. A chat conversation selects which object serves it via the
 request's `model` field (§3). The TTY is today the interactive skin over `CoreSession`
-(`harness.main()`, `scripts/harness.py:2411`); `ConversationSession` has
+(`harness.main()`, `scripts/harness.py:2593`); `ConversationSession` has
 so far been driven by tests and a scripted demo printer, so HTTP is the
 **first interactive skin** over that object — which is why its mapping
 (§6.2) carries the P-IH6 adjudication.
@@ -390,11 +390,11 @@ preserving ¶DEV-1.
 ## 5. The registered line grammar is the request surface (kernel profile)
 
 The kernel profile routes exactly `route_line`'s chain
-(`scripts/harness.py:2305-2368`; this citation read `:1393-1437` until
+(`scripts/harness.py:2485-2550`; this citation read `:1393-1437` until
 v0.21, which DESIGN-plain-input §2.2 had already recorded as stale with
 the instruction to correct it whenever a design next touched that file —
 the session ledger did, and slice 2's row-12 pre-router moved it again,
-from `:2272-2335` on 2026-08-26) — first match wins, statuses verbatim:
+from `:2272-2335` on 2026-08-26, and DESIGN-house-rules' `declare` row moved it again from `:2305-2368` on 2026-09-01 — that slice added a `declare` branch to the chain and an optional `symbols` field to `CoreSession`, so every citation into this file below the field list shifted by thirteen lines and is corrected in the same change) — first match wins, statuses verbatim:
 
 | # | line form | route | statuses |
 |---|---|---|---|
@@ -444,7 +444,7 @@ The **status alphabet is frozen as a closed set**, inconsistencies
 included: lowercase `waiting, solved, refused, exhausted, found, held,
 canceled, cycle, hop_ceiling, conditional` plus the write-gate's uppercase
 pass-through, whose reachable values are `PROVEN`, `VERIFIED`, `REFUSED`
-(`scripts/harness.py:841-847`; pinned by
+(`scripts/harness.py:854-860`; pinned by
 `tests/test_harness_line.py:274,301`), plus `abstained` — the one
 skin-assigned status, conversation profile only, declared in §6 for the
 branch that runs no turn. The skin transports the engine's
@@ -496,7 +496,7 @@ freedom:
 
 - Kernel profile: `content` = `"\n".join((*reading, *answer))` when the
   verdict dict carries a `reading` (the `resolver_context` found case,
-  `scripts/harness.py:1219-1228` — the TTY renders both, so the skin
+  `scripts/harness.py:1232-1241` — the TTY renders both, so the skin
   must too); else `"\n".join(answer)` when `answer` is present; else the
   `detail` string. The skin may not add, drop, reorder, re-render, or
   re-parameterize lines; the engine's rendering as committed at the
@@ -567,7 +567,7 @@ freedom:
 Two scoring notes restated from the design so no implementer rediscovers
 them: refusal and clarification turns contribute **zero** useful tokens
 whatever their `content` length (so the dispatcher's echo of the user's
-line, `scripts/harness.py:924-929`, inflates nothing), and the
+line, `scripts/harness.py:937-942`, inflates nothing), and the
 stopwatch counts `content` itself, client-side, with the pinned baseline
 tokenizer — it never reads the server's `usage` block. `usage` is
 **informational only**, counted with the same tokenizer when the pinned
@@ -634,7 +634,7 @@ CORRUPT_TARGET *is* an answer about the target's bytes — it stays a
 refusal for scoring (zero useful tokens) but the wire does not strip
 the certificate. Every other non-answering status gets
 `{"missing_capability": …}` when the engine names one
-(`scripts/harness.py:961-971`, `:1276-1282`, `:1309-1315`) and an empty
+(`scripts/harness.py:974-984`, `:1289-1295`, `:1322-1328`) and an empty
 receipt otherwise. Answering turns populate per route, for T7's
 client-side revalidation against committed artifacts:
 
@@ -647,7 +647,7 @@ client-side revalidation against committed artifacts:
 | `evaluate` | `expression`, `exact` (evaluation turns only — a relation check has no single value and carries `expression` + `grounding` alone), `grounding: "computed"` — plus the engine's own honesty line in `content` ("no corpus statement was consulted") |
 | `story` | `constraint_ids` (= `story.CONSTRAINT_IDS`, `scripts/story.py:57-62`), `corpus_path` (`data/narrative/nodes.json`) — the story's four constraints are committed corpus statements and the receipt says so |
 | `belief`, `supposition` | `derivation: "session"` — derived entirely from the conversation's own typed narration or owned frame, no external artifact claimed |
-| `write_gate` (`PROVEN`/`VERIFIED`) | `grounding: "working-tree"` — the gate's own `evidence` lines already ride in `x_corollary.evidence` (`scripts/harness.py:846`) and are the record |
+| `write_gate` (`PROVEN`/`VERIFIED`) | `grounding: "working-tree"` — the gate's own `evidence` lines already ride in `x_corollary.evidence` (`scripts/harness.py:859`) and are the record |
 | `conversation` (`solved`) | `binding: {slot, value, lifetime}`, `derivation: "user-frame"` |
 | `protocol` (`found`) — ¶AMD-3 | `uptake_id`, `corpus_path` (`protocol/protocols.json`), `protocol_witnesses` (the node ids the selected move rested on), `grounding: "protocol-corpus"` — recheckable against the committed corpus |
 
@@ -668,12 +668,12 @@ Two WAITING shapes exist and the spec refuses to blur them:
 - **Kernel profile:** `route_line` never mints a `Need` — its WAITING
   results carry only `detail` (and sometimes `answer` lines listing
   candidates) and resume via `narrow …` / `cancel` exactly as the TTY
-  does (`scripts/harness.py:1406`). No `need` field is emitted; there is
+  does (`scripts/harness.py:1419`). No `need` field is emitted; there is
   nothing to put in it. The `cycle` and `hop_ceiling` terminators cross
   the wire as ordinary statuses — the server does not exit the way
   `harness.main()` does, but pending state clears exactly as
-  `_route_pending_context` already clears it (`scripts/harness.py:1179,
-  1200, 1232`).
+  `_route_pending_context` already clears it (`scripts/harness.py:1192,
+  1213, 1245`).
 - **Conversation profile:** a turn that asks carries
   `x_corollary.need` = `{slot, prompt}` — the exact two fields the
   `Need` protocol exposes (`scripts/harness.py:329-344`) — with
@@ -850,7 +850,7 @@ correction).** DESIGN-grounded-throughput §3 lists `twin_lookup` as an
 unconditional task kind and §5 lists twins among "what the engine
 already answers"; only `closure_reachability` was marked conditional.
 Verified against the tree: `route_line` never calls
-`CoreSession.retrieve` (`scripts/harness.py:732` has no caller in the
+`CoreSession.retrieve` (`scripts/harness.py:745` has no caller in the
 routing chain), so twin material is line-unreachable over *any* skin —
 the design's assumption was wrong, and this paragraph is the dated
 record of that correction (2026-08-21), not a quiet generalization of
@@ -862,7 +862,7 @@ drops — if drops push the book below 50, that is T3's stop, not a
 relabeling.
 
 - **W1 — `twin <statement-id>`** → `CoreSession.retrieve`
-  (`scripts/harness.py:732`), surfacing the `twin_ledger` material the
+  (`scripts/harness.py:745`), surfacing the `twin_ledger` material the
   miss chain already returns (`source == "twin_ledger"`,
   `scripts/retrieval.py:487-517`; ledger
   `reports/signature_matches.json`). Gated on `corpus.nodes` (the twin
@@ -905,7 +905,7 @@ relabeling.
   with the other head-guarded commands; the path-shaped-line branch
   cannot capture a `reachable …` line anyway, since `_looks_like_path`
   rejects any line containing whitespace and `_existing_file` tests the
-  whole line (`scripts/harness.py:816-828`). Statuses map from the
+  whole line (`scripts/harness.py:829-841`). Statuses map from the
   receipt's `outcome`: `REACHABLE → found`,
   `NOT_REACHABLE_WITHIN_HORIZON → exhausted`, `CORRUPT_TARGET →
   refused`, and every `QueryRefused` subclass → `refused` with the

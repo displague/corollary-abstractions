@@ -583,6 +583,19 @@ class CoreSession:
     #: this module for its rendering, and a type annotation here would be a
     #: cycle bought for nothing.
     assumptions: object | None = None
+    #: DESIGN-house-rules' session symbol ledger, or None.
+    #:
+    #: `None` is the shipped default and it is what makes B6's regression
+    #: fence checkable at all: with no ledger attached, `_route_suppose` runs
+    #: the code it ran before this slice existed — byte for byte — and
+    #: `declare` refuses `no_symbol_ledger` without consulting anything. A
+    #: `symbol_ledger.SymbolLedger` is attached only by a recorder or a gate
+    #: runner, never by `main()` and never by the chat skin, so ¶DEV-1's
+    #: fresh-session rule is untouched and declared vocabulary cannot cross an
+    #: HTTP turn.
+    #:
+    #: Duck-typed for the same reason `assumptions` is.
+    symbols: object | None = None
     #: DESIGN-plain-input's proposer, or None.
     #:
     #: `None` is the shipped default, and it is what makes G4 and G6
@@ -1573,7 +1586,7 @@ def _with_bindings(text: str, bindings: dict) -> str:
 
     Composed rather than injected into `evaluate`'s internals so a session
     binding and a same-line binding are the SAME thing to the evaluator —
-    `harness.py:2312-2320` already routes `suppose x = 5, x ^ 2` this way,
+    `harness.py:2506-2514` already routes `suppose x = 5, x ^ 2` this way,
     and the ledger is that behaviour extended from one line to a session
     rather than a second mechanism beside it. The rendered answer therefore
     carries its `given` line exactly as a typed binding would, which is what
@@ -1711,6 +1724,27 @@ def _route_suppose(claim: str, session: "CoreSession | None" = None) -> dict:
             "status": "refused",
             "detail": f"{SUPPOSE_COMMAND!r} needs a claim after it",
         }
+    # DESIGN-house-rules §3's use-side check, and the whole of it. It sits
+    # BEFORE the ledger mutation below because a refused use must not also
+    # record an assumption, and it returns `None` for every atom whose head
+    # this session did not declare — which is B6's regression fence: with no
+    # symbol ledger attached (every session `main()` boots and every session
+    # this skin serves) `symbols` is None and the lines below run exactly the
+    # code they ran before this slice existed, byte for byte.
+    #
+    # Argument CATEGORIES are deliberately not checked. A supposition
+    # argument is surface text with no category evidence, and inventing one
+    # would be the imputation this repository refuses.
+    symbols = getattr(session, "symbols", None) if session else None
+    if symbols is not None:
+        use = symbols.check_use(claim)
+        if use is not None and use.refused:
+            return {
+                "route": "supposition",
+                "status": "refused",
+                "refusal_type": USE_ARITY_MISMATCH,
+                "detail": use.detail(),
+            }
     live = getattr(session, "assumptions", None) if session else None
     if live is not None:
         declared = live.declare(claim, live.pending_turn_index)
@@ -1747,6 +1781,152 @@ RETRACT_COMMAND = "retract"
 #: when no ledger is attached — which, after the B10 repair, is the case it
 #: must render identically to.
 UNKNOWN_ASSUMPTION = "unknown_assumption"
+
+#: DESIGN-house-rules §3's use-side refusal, named here for the same reason
+#: `UNKNOWN_ASSUMPTION` above is: the route keeps its own vocabulary so it
+#: still has one when no ledger is attached.
+#:
+#: §3 asks for this name in `session_ledger`'s refusal family and the shipped
+#: tree refuses to put it there — that module is byte-frozen by
+#: `recorder_code_digest` while the v0.21 corpus is sealed (prereg amendment
+#: 6, enforced twice by revert). `symbol_ledger.REFUSAL_USE_ARITY_MISMATCH`
+#: carries the canonical spelling instead, `tests/test_symbol_ledger.py`
+#: asserts the two agree AND that the recorder digest did not move, so this
+#: is a second reference rather than a second decision.
+USE_ARITY_MISMATCH = "USE_ARITY_MISMATCH"
+
+#: The command word DESIGN-house-rules §6.2 registers, and the route-level
+#: refusal for a session with no symbol ledger. `no_symbol_ledger` is NOT an
+#: `AdmissibilityVerdict` refusal code — the sealed eight are about a
+#: declaration that reached a checker, and this one is about a turn that
+#: reached no checker at all, the same distinction that keeps
+#: `USE_ARITY_MISMATCH` out of the clause order.
+DECLARE_COMMAND = "declare"
+NO_SYMBOL_LEDGER = "no_symbol_ledger"
+
+
+def _route_declare(session: "CoreSession | None", rest: str) -> dict:
+    """`declare <name>/<arity> (<category>, ...)` — DESIGN-house-rules §6.2.
+
+    The whole decision belongs to `symbol_ledger.decide`, which is total and
+    defaults toward refusal; this route's only jobs are to hand it the line
+    and to render the verdict it returns. In particular this route contains
+    no clause of its own — a second place that could refuse a declaration
+    would be a second clause order, and "exactly one deciding clause" would
+    stop being true the moment one existed.
+
+    A declaring turn holds vocabulary, never a claim. `held` is the status
+    for the same reason `suppose` uses it, and the verdict carries the two
+    digests it was decided against so a reader can reproduce it.
+    """
+
+    ledger = getattr(session, "symbols", None) if session else None
+    if ledger is None:
+        return {
+            "route": "declaration",
+            "status": "refused",
+            "refusal_type": NO_SYMBOL_LEDGER,
+            "detail": (
+                "this session keeps no symbol ledger, so there is nowhere to "
+                "admit a symbol; nothing was held and nothing is claimed"
+            ),
+        }
+
+    decision = ledger.declare(rest.strip(), ledger.pending_turn_index)
+    verdict = decision.verdict
+    evidence = [
+        f"deciding clause: {verdict.deciding_clause}",
+        f"census: {verdict.census_ref['path']} @ {verdict.census_ref['sha256_lf'][:16]}",
+        f"schema: {verdict.schema_digest[:16]}",
+    ]
+    if not decision.admitted:
+        return {
+            "route": "declaration",
+            "status": "refused",
+            "refusal_type": verdict.refusal_code,
+            "detail": _declaration_refusal_detail(decision),
+            "evidence": evidence,
+        }
+
+    declaration = decision.declaration
+    return {
+        "route": "declaration",
+        "status": "held",
+        "detail": (
+            f"{declaration.symbol_name!r} is admitted for this session with "
+            f"arity {declaration.arity}; "
+            f"{len(ledger.admitted_names())} of {ledger.cap} symbols used"
+        ),
+        "evidence": evidence,
+        "answer": [
+            f"{declaration.symbol_name}/{declaration.arity} "
+            f"({', '.join(declaration.argument_categories)})",
+            "admitted as fresh vocabulary for this session only. This says "
+            "the name is well-formed and unused, never that it is true or "
+            "useful, and nothing declared survives the session.",
+        ],
+    }
+
+
+def _declaration_refusal_detail(decision) -> str:
+    """One sentence per refusal code, naming what actually decided."""
+
+    verdict = decision.verdict
+    code = verdict.refusal_code
+    parsed = decision.parsed
+    name = parsed.symbol_name if parsed is not None else None
+    if code == "UNPARSED":
+        return (
+            "this is not a declaration: the registered form is "
+            "`declare <name>/<arity> (<category>, ...)` with a name matching "
+            "[a-z][a-z0-9_]* after NFC and casefold and an arity of at least "
+            "1. Nothing was held and nothing is claimed"
+        )
+    if code == "ARITY_CATEGORY_MISMATCH":
+        return (
+            f"{name!r} declares arity {parsed.arity} and "
+            f"{len(parsed.argument_categories)} argument categories; the "
+            "counts must agree. Nothing was held"
+        )
+    if code == "CATEGORY_NOT_IN_SCHEMA":
+        return (
+            "every argument category must be one of the committed schema's "
+            "nine symbolToken syntactic categories; this line names one that "
+            "is not. Nothing was held"
+        )
+    if code == "RESERVED_PREFIX":
+        return (
+            f"{name!r} starts with a prefix the shipped template parser "
+            "rewrites at tokenization, so the name would not survive being "
+            "read back. Nothing was held"
+        )
+    if code == "COLLIDES_WITH_LIBRARY_SYMBOL":
+        return (
+            f"{name!r} is already a name in the committed corpus, so it is "
+            "not fresh. Nothing was held"
+        )
+    if code == "REDEFINITION_ATTEMPT":
+        return (
+            f"{name!r} was already admitted in this session; a declaration is "
+            "not superseded by a second one. Nothing was held"
+        )
+    if code == "COLLIDES_WITH_SESSION_NAME":
+        return (
+            f"{name!r} is already a name this session is using "
+            f"({decision.session_name_subcase}). Nothing was held"
+        )
+    if code == "SYMBOL_BUDGET":
+        return (
+            f"this session has already admitted its {symbol_cap()} symbols; "
+            "nothing was held and no symbol was displaced"
+        )
+    return "refused. Nothing was held"  # pragma: no cover - the eight are total
+
+
+def symbol_cap() -> int:
+    from symbol_ledger import SYMBOL_CAP  # noqa: PLC0415
+
+    return SYMBOL_CAP
 
 
 def _route_retract(session: "CoreSession | None", assumption_id: str) -> dict:
@@ -2334,6 +2514,8 @@ def route_line(repo_root: Path, session: "CoreSession", line: str | None) -> dic
         return {"line": line, **_route_suppose(rest.strip(), session)}
     if head.lower() == RETRACT_COMMAND:
         return {"line": line, **_route_retract(session, rest.strip())}
+    if head.lower() == DECLARE_COMMAND:
+        return {"line": line, **_route_declare(session, rest)}
     if head.lower() == TWIN_COMMAND:
         return {"line": line, **_route_twin(session, rest.strip())}
     if head.lower() == REACHABLE_COMMAND:

@@ -42,11 +42,11 @@ from collections import Counter
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / "experiments"))
+sys.path.insert(0, str(REPO / "scripts"))
 
 import build_house_rules_fixtures as builder  # noqa: E402
 
-BUILDER = REPO / "experiments" / "build_house_rules_fixtures.py"
+BUILDER = REPO / "scripts" / "build_house_rules_fixtures.py"
 FIXTURES = REPO / "experiments" / "house_rules_fixtures.json"
 SCHEMA = REPO / "schema" / "equation-node.schema.json"
 MATCH_SIGNATURES = REPO / "scripts" / "match_signatures.py"
@@ -116,7 +116,7 @@ class TheArtifactIsItsGeneratorsOutput(unittest.TestCase):
 
     def test_the_artifact_names_its_generator_and_its_source_commit(self) -> None:
         document = _load()
-        self.assertEqual(document["generator"], "experiments/build_house_rules_fixtures.py")
+        self.assertEqual(document["generator"], "scripts/build_house_rules_fixtures.py")
         self.assertEqual(BUILDER, REPO / document["generator"])
         self.assertTrue(document["generator_placement_note"].strip())
         self.assertEqual(document["schema"], "corollary.house-rules-fixtures/1")

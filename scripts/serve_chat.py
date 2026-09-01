@@ -304,7 +304,10 @@ ENFORCED_BODY_KEYS = frozenset({"n"})
 MAX_BODY_BYTES = 10 * 1024 * 1024
 
 #: §7's line-grammar rows, mirroring `harness.route_line`'s chain in order
-#: (`harness.py:1393-1437`). `requires` is what makes `served` a *live* flag
+#: (`harness.py:2485-2550`; this comment read `:1393-1437` until 2026-09-01,
+#: stale since v0.21 under DESIGN-plain-input §2.2's standing instruction to
+#: correct it whenever a design next touches this file — DESIGN-house-rules'
+#: `declare` row is that design). `requires` is what makes `served` a *live* flag
 #: rather than a copied one: it is resolved against the booted matrix at
 #: request time, which is why the gloss row publishes `served: false` under the
 #: offline boot instead of disappearing.
@@ -357,6 +360,33 @@ LINE_GRAMMAR: tuple[dict, ...] = (
             "with `unknown_assumption` in a session that keeps no ledger, "
             "which is every session this skin serves — ¶DEV-1 replays "
             "requests into fresh sessions and attaches no assumption set"
+        ),
+    },
+    {
+        "form": "declare <name>/<arity> (<category>, ...)",
+        "route": "declaration",
+        "example": "declare parent_of/2 (variable, variable)",
+        "statuses": ["held", "refused"],
+        "requires": (),
+        "note": (
+            "DESIGN-house-rules §6.2's row: the person names a fresh relation "
+            "symbol and the system admits it into a session-scoped symbol "
+            "ledger or refuses with exactly one deciding clause, totally and "
+            "by default toward refusal. Disclosed against prior art rather "
+            "than presented as new ground: the `what is X | define X` row "
+            "below is a WordNet gloss lookup — the WORD, not the act — and "
+            "`suppose` above is the discipline precedent (the cap, the "
+            "supersession, the refusal names), not the object. Categories are "
+            "the committed schema's nine symbolToken slot roles, so the check "
+            "they buy is exact role agreement between declaration and use and "
+            "nothing more. An admitted declaration is well-formed and fresh; "
+            "it is never true or useful, and nothing declared reaches a "
+            "generated library file. Refuses `no_symbol_ledger` in a session "
+            "that keeps no symbol ledger, which is every session this skin "
+            "serves — ¶DEV-1 replays requests into fresh sessions and "
+            "attaches none, so declared vocabulary cannot cross an HTTP turn "
+            "here, exactly as the `retract` row above publishes its own "
+            "¶DEV-1 limitation"
         ),
     },
     {

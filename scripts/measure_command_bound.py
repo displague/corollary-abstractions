@@ -365,6 +365,12 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
     from serve_chat import LINE_GRAMMAR  # noqa: PLC0415
     from harness import CONTEXT_KINDS  # noqa: PLC0415
     from session_ledger import LIVE_ASSUMPTION_CAP, TURN_CAP  # noqa: PLC0415
+    from symbol_ledger import SYMBOL_CAP, load_inputs  # noqa: PLC0415
+
+    # The nine categories are READ out of the committed schema, never
+    # transcribed here: a second copy of an enum is a second thing to rot,
+    # and `load_inputs` is the same reader the checker itself decides with.
+    SCHEMA_CATEGORIES = sorted(load_inputs(repo_root).categories)
 
     words = _statement_vocabulary(repo_root)
     owns = _owns_vocabulary(repo_root)
@@ -639,6 +645,56 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
         ),
     )
     _fill(
+        "declaration",
+        bound_kind="open",
+        slots=[
+            {
+                "name": "symbol-name",
+                "kind": "open",
+                "size": None,
+                "why": (
+                    "[a-z][a-z0-9_]* after NFC and casefold is an infinite "
+                    "language; freshness against the committed census removes "
+                    "a finite set from it and leaves it infinite"
+                ),
+            },
+            {
+                "name": "arity",
+                "kind": "open",
+                "size": None,
+                "why": "any integer >= 1",
+            },
+            {
+                "name": "argument-categories",
+                "kind": "closed",
+                "size": len(SCHEMA_CATEGORIES),
+                "vocabulary": "schema_syntactic_categories",
+                "note": (
+                    "the committed schema's nine symbolToken slot roles. The "
+                    "SLOT vocabulary is closed; the class is still open "
+                    "because the LIST length is the arity and the arity is "
+                    "not bounded"
+                ),
+            },
+        ],
+        admitted_commands=None,
+        unbounded_reason=(
+            "the name slot alone is infinite, so no product over the three "
+            "slots is finite"
+        ),
+        answering_vocabulary=SYMBOL_CAP,
+        answering_note=(
+            "only an ADMITTED declaration reaches `held`, and "
+            "DESIGN-house-rules §3 caps a session at "
+            f"{SYMBOL_CAP} admitted symbols; the rest refuse with one of the "
+            "eight sealed codes. Like `retraction` above this ceiling is "
+            "SESSION-scoped rather than corpus-scoped — infinitely many "
+            "distinct names are admissible, but no more than "
+            f"{SYMBOL_CAP} of them in any one session — so the number is a "
+            "per-session ceiling and is not multiplied by anything"
+        ),
+    )
+    _fill(
         "twin",
         bound_kind="closed",
         slots=[
@@ -860,13 +916,22 @@ def _classes(repo_root: Path) -> tuple[list[dict], dict]:
                 "name": "everything else",
                 "kind": "open",
                 "size": None,
-                "why": "the complement of the thirteen rows above",
+                "why": (
+                    f"the complement of the {len(LINE_GRAMMAR) - 1} rows "
+                    "above"
+                ),
             }
         ],
         admitted_commands=None,
         unbounded_reason=(
-            "row 13 is defined as a complement; a complement of finite and "
-            "infinite languages inside an infinite alphabet is infinite"
+            # Derived, not transcribed. This sentence carried a hardcoded
+            # "row 13" that was already off by one before this cycle (the
+            # dispatcher was row 14), and DESIGN-house-rules' `declare` row
+            # would have moved it again. A count that drifts silently is a
+            # count that was never checked, so it is computed.
+            f"row {len(LINE_GRAMMAR) - 1} is defined as a complement; a "
+            "complement of finite and infinite languages inside an infinite "
+            "alphabet is infinite"
         ),
         answering_vocabulary=0,
         answering_note=(
@@ -1045,7 +1110,16 @@ def build(repo_root: Path) -> dict:
             "measured against a grammar that no longer exists would be a "
             "false sentence in a canonical artifact. The first reading and "
             "this one are both in the history, and `line_grammar_digest` "
-            "dates each of them exactly."
+            "dates each of them exactly. It happened a second time on "
+            "2026-09-01: DESIGN-house-rules §6.2's `declare "
+            "<name>/<arity> (<category>, ...)` row was inserted after "
+            "`retract`, which shifted every class index at or above 5 by one "
+            "exactly as the `retract` insertion shifted every index at or "
+            "above 4. That cost was named in the design BEFORE the row was "
+            "written and is paid in the same change as the row, which is the "
+            "only way an index shift is a decision rather than a drift. "
+            "`closed_total` is unmoved: the new class is open, so it adds no "
+            "counted commands and removes none."
         ),
         "classes": rows,
         **extra,
