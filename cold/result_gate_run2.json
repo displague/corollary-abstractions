@@ -57,7 +57,7 @@
   "ordering": {
     "cr_p0_first_commit": "d93015000d057f06e301c4bb146ec3cf1047b7cd",
     "cr_p1_first_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
-    "cr_p0_latest_commit": "be21a4090d52e1f4d3748bd6fb31d82ed43aaf7f",
+    "cr_p0_latest_commit": "c87b0ca73bb4815e252153a627772423f66bd4c9",
     "cr_p1_latest_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
     "cr_p0_precedes_cr_p1": true,
     "how_checked": "git merge-base --is-ancestor over the commits that INTRODUCED each artifact; the latest commits are recorded beside them so a later amendment stays visible without falsifying an ordering that did hold"
@@ -104,7 +104,7 @@
     "inputs": [
       {
         "path": "cold/census_run2.json",
-        "sha256_lf": "baa685439378ed9cd2006cd631a968c7f93bf1a01e27963019d005e555088f46"
+        "sha256_lf": "84ec0358366bb767b22386258577479ada4b5fd9ce7beb0ca7004f23f6a942cf"
       }
     ],
     "emitted_at_generation": true
