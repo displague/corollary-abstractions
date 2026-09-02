@@ -34,6 +34,7 @@ release: [RELEASE-v0.24.0](RELEASE-v0.24.0.md) · incumbent design:
 [DESIGN-house-rules](DESIGN-house-rules.md) · receipt:
 `reports/design-direction-v0.25.json` · this cycle's post:
 [the question it bound and would not ask](blog/the-question-it-bound-and-would-not-ask.md)
+· release-gate triage: [TRIAGE-v0.25](TRIAGE-v0.25.md)
 
 ## 1. Headline — HOUSE RULES, if the course's selection survives the roadmap's own adjudication
 
@@ -187,6 +188,64 @@ B1–B12 as frozen in §7. If a construction stop fires, the slice ships
 as the honest negative its gates license, B7-at-v0.24 being the
 precedent.
 
+### 1.2 Acceptance, closed out — 2026-09-02, after the superseding run
+
+The slice shipped in the design's order and no other: **H-PRE** (`7a47a8a`)
+→ the §2 `sum_total` lane ahead of it (`156e94f`, `249f463`) → **H-P0**
+(`c87b0ca`, with the review fixes at `e3e3980`) → the CR-P0 re-seal and cold
+re-attest that H-P0's row forced (`11d62b8`) → **H-P1** (`27d358d` freeze,
+`2ac8c9f` run 1, `32d505a` fixes, `f9719a2` the superseding run 2). Run 1 is
+retained under `experiments/superseded/` and is never re-scored.
+
+**Twelve green, no negative owed.** B1–B12 GREEN, `gate_reds` empty, the
+voiding sentence unfired, **R-H1 licensed**, R-H3 `licensed: false` because
+no gate in its scope went red. The three construction refusals did not occur:
+one verdict kind shipped, nothing persisted (B5: 0 of the run's documents
+carry an admitted name), and no byte moved toward a generated library file
+(B4: `working_tree_digest` byte-identical, `durable_digest` over `data/`
+unmoved, 0 stage records). The declared floors held: B3's 32 mutants against
+a floor of 30, B7's 8 of 8 codes against a floor of 6, B9's ten-point margin
+unfired. Those floors were **declared construction bounds, not
+measurements**, and this document said so before the run; it says so again
+here, after it.
+
+**Two sentences travel with the result, permanently, and neither is a
+hedge.** They are the honest scope of two greens that read stronger than they
+are, and any document quoting B3 or B9 quotes them:
+
+1. **B3 — "each mapped detector was exercised on live material and fired."**
+   The 32 mutants are **prose sealed at H-PRE**; no mutant is executed by
+   this run or by any program in this repository, and the id-to-detector map
+   is authored in the runner. The word "stopped" in B3's rows means the
+   mapped detector fired on live material — the real repository tree, the
+   bytes the run was about to write, the committed census and schema, live
+   sessions — and nothing more. **No attempt was made and none was
+   repelled.** Containment MEASURED needs executable mutants, which is the
+   standing item this run leaves behind.
+2. **B9 — "the registered control did not separate the verdict."** The
+   registered family's ceiling on the nineteen-row scored half is
+   **0.736842** against a threshold of **0.784211**: *no member of the
+   registered family could have fired the voiding sentence on this corpus*,
+   whatever the fit half selected. B9's green is therefore evidence that the
+   registered control did not separate the verdict, and **not** evidence that
+   no surface-only rule can. The richer family (2,632 rules, fitted on the
+   fit half only with a tie-break declared before the fit) scores 0.684211
+   out of half and does not exceed the threshold either, but its *ceiling* on
+   the scored half is 0.789474 — above the threshold — and the artifact
+   labels that for what it is: selection on the half it is scored on, not a
+   control score.
+
+**R-H2, reported and gating nothing, as pre-committed:** **0 of 30** sealed
+inbound hypotheses parse as declarations, under the more generous of two
+readings so the number can only be too high. Approximately zero was the
+expectation DESIGN §8 pre-committed before any run existed. It is neither a
+failure nor evidence of demand, and it may not be read either way now.
+
+**Non-claims, published with the result:** ledger-groundedness, never
+correspondence — an admitted declaration is well-formed and fresh, never true
+or useful. B5 evidences NO WRITES OBSERVED UNDER THIS HARNESS, never CANNOT
+WRITE.
+
 ## 2. Prerequisites and small lanes that are not this cycle's headline
 
 These do not start unless §1's adjudication names them as dependants —
@@ -323,3 +382,23 @@ v0.25 is ready only if:
 - the outside design inquiry for v0.26 is named with its receipt;
 - the full suite is green on a frozen tip with retained receipts, and
   **`[SUITE-GATE-V25]` is resolved rather than left as a placeholder**.
+
+### 4.1 Gate status at the rotation's first lane — 2026-09-02
+
+Every clause above is adjudicated line by line, on artifacts rather than on
+release prose, in **[TRIAGE-v0.25](TRIAGE-v0.25.md)**. Summary, so the
+roadmap itself carries the state:
+
+| clause | status |
+|---|---|
+| selection adjudicated, every declined disposition recorded | **MET** (§1.1, `d11e3fb`) |
+| slice meets its construction stops, or ships the honest negative | **MET** — twelve green, no negative owed (§1.2) |
+| the three construction refusals did not occur | **MET** — none occurred (§1.2) |
+| `sum_total` hazard discharged in writing, prefix guard not standing in for the parser | **MET** — discharged as *disclosure*; TRIAGE §2 states exactly what `Parser.parse_atom` still does to a big-op suffix and what `RESERVED_PREFIX` does not change |
+| STRANGER-GATE honored or discharged in writing | **HONORED**, third consecutive cycle, now with B4/B5/B11 run evidence (TRIAGE §3) |
+| cost ledger's ninth pass-over recorded as a decision | **RECORDED** (§1.1, §3, and TRIAGE §4 with the counting basis) |
+| `check_report_regeneration.py` verdicts in the notes | **MET** — clean / clean / clean / declared_divergence, exit 0 (TRIAGE §5) |
+| `ingest_wold.py reach` runs or is reported *cannot verify* | **CANNOT VERIFY**, with the exact reason: the manifest-pinned WordNet archive is licensed data, absent by the no-licensed-data-in-git rule, and the stage refuses rather than computing a partial (TRIAGE §6) |
+| every unfinished item ships, carries, or parks in writing | **MET** (TRIAGE §7 for §2, §8 for §3) |
+| the v0.26 outside design inquiry named with its receipt | **OPEN** — owned by the parallel design course |
+| full suite green on a frozen tip, `[SUITE-GATE-V25]` resolved | **OPEN** — runs at the frozen tip after the rotation |

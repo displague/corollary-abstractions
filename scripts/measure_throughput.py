@@ -807,7 +807,8 @@ def score_kernel(task: dict, turns: list[TurnResult]) -> Scored:
     )
     # "correctly-and-receipted" (DESIGN §3): the wire carried a receipt and
     # every key the book pinned matched it. A task that pins nothing still
-    # has to carry one -- SPEC §6.1: the receipt is "always present".
+    # has to carry one -- SPEC §6's `x_corollary` block says the receipt is
+    # "always present", and §6.1 fixes its shape per (route, answered?).
     scored.receipted = bool(receipt) and scored.receipt_ok
 
     if task["kind"] == "refusal_due":
@@ -1364,8 +1365,9 @@ def warm_up(url: str, system: str, baseline: dict, timeout: float) -> dict:
         model = "control/dump" if system == "dump" else "corollary/kernel"
         body = {
             "model": model,
-            # SPEC §5 row 0: "An empty-string user turn is **served**, not
-            # rejected: it is the engine's registered empty line."
+            # SPEC §4, on the request mapping: "An empty-string user turn
+            # is **served**, not rejected: it is the engine's registered
+            # empty line" -- which is the sentence that points at §5 row 0.
             "messages": [{"role": "user", "content": WARMUP_LINE_KERNEL}],
             "stream": True,
         }
