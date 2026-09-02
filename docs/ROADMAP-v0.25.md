@@ -1,12 +1,17 @@
 > **CLOSED at v0.25.0.** This plan is the historical plan-of-record. It is
 > **not** left unedited, and saying so is the point — the v0.24 deep triage
-> found a closed banner claiming "not edited" over a file that had been, so
-> this one names every rotation-time addition instead: §1.2 and §4.1 and the
-> links-row triage link were added by the release triage at `aa721e7`; §3's
-> STRANGER-GATE row carries a dated cycle-count repair (2026-09-02, below);
-> and this banner. Nothing else is edited. The headline shipped as a
-> capability, on a **second** registered run after an adversarial review moved
-> four of the first run's instruments. Where each item went:
+> found a closed banner claiming "not edited" over a file that had been. So
+> this one names every rotation-time edit instead, and there are five:
+> **(1)** §1.2 and **(2)** §4.1 were added by the release triage at
+> `aa721e7`, which also **(3)** added the triage link to the links row;
+> **(4)** §3's STRANGER-GATE row carries a dated cycle-count repair
+> (2026-09-02, and the row states its own evidence); **(5)** one §4.1 row
+> moved at the rotation — the v0.26 outside design inquiry, from OPEN to MET,
+> now that its design and receipt exist. Plus this banner. Nothing else is
+> edited; no clause, floor, threshold or trigger anywhere in this file is
+> touched. The headline shipped as a capability, on a **second** registered
+> run after an adversarial review returned fifteen findings, four of them
+> High, and moved four of the first run's instruments. Where each item went:
 >
 > - **§1 HOUSE RULES** → **RELEASE-v0.25.0** headline. **Twelve** gates green,
 >   `gate_reds: []`, the voiding sentence unfired, **R-H1 LICENSED** with its
@@ -48,8 +53,10 @@
 >   kinds by exactly the two kinds the re-seal added.
 > - **§4 release gate** → adjudicated clause by clause in
 >   [TRIAGE-v0.25](TRIAGE-v0.25.md) and summarized in **§4.1**. Ten of eleven
->   clauses met at the tag; `[SUITE-GATE-V25]` is the one that runs at the
->   frozen tip.
+>   clauses met at the tag; the full-suite clause below is the one that runs
+>   at the frozen tip, and its placeholder token is carried in
+>   [RELEASE-v0.25.0](RELEASE-v0.25.0.md) and README rather than repeated
+>   here, so a substitution at tag time cannot corrupt this sentence.
 
 # Roadmap v0.25 — the person declares a symbol, if the course's selection survives adjudication
 

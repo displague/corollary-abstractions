@@ -31,10 +31,12 @@ no mutant and never said so; two of B3's detectors could not fail; B9's
 control family was unregistered and structurally unable to fire on this
 corpus; and the served `declare` grammar example carried an ADMITTED fixture
 symbol — b3-m08's own vector — through H-P0 and through run 1, while B3
-scored that mutant STOPPED. All four are repaired or disclosed at
-H-P1-FIX-FREEZE, the preregistration carries five dated `amd-2026-09-02-*`
-amendments recording that every one of them was authored AFTER run 1's score
-and loosens nothing, and run 1's artifacts are kept with a README saying what
+scored that mutant STOPPED. Those are the **four High findings of fifteen**
+(F1–F15 in the amendments); the other eleven are disclosure and
+check-strength items that move no number a gate reads. All fifteen are
+repaired or disclosed at H-P1-FIX-FREEZE, the preregistration carries five
+dated `amd-2026-09-02-*` amendments recording that every one of them was
+authored AFTER run 1's score and loosens nothing, and run 1's artifacts are kept with a README saying what
 they are and are not evidence of. The measured readout is in
 `experiments/ANALYSIS.md`; three findings are in `docs/DISCOVERIES.md`.
 

@@ -64,8 +64,10 @@ And then the review.
 ## The four things a review found that no gate did
 
 An independent adversarial pass reproduced every number in the first
-registered run and returned *merge after fixes*. Not one of its findings was
-arithmetic. All four were about what the numbers were evidence **of**.
+registered run and returned *merge after fixes* — fifteen findings, of which
+four were High. Not one of them was arithmetic. The other eleven were
+disclosure and check-strength items; these four are the ones that changed what
+the numbers were evidence **of**.
 
 **The mutants were prose.** The thirty-two "attempts to smuggle a declared
 symbol somewhere it must not go" are *descriptions* of attempts. Nothing in
@@ -113,11 +115,14 @@ equalled the base rate by *arithmetic*, not by having learned anything.
 | 0.736842 | the best score **any** rule in the registered family could reach |
 | 0.784211 | the score needed to void the capability |
 
-A held-out half of nineteen rows moves 0.0526 per row. To clear ten points
-strictly you need three more rows than the majority, not two — which is
-fifteen points, not ten. Nobody had computed the family's own ceiling against
-its own threshold. It is one line of arithmetic and it would have caught this
-before any score existed.
+A held-out half of nineteen rows moves 0.0526 per row, so the ten points are
+not really ten: clearing them strictly takes **two** rows above the majority,
+which is 10.53 points. (Add one row to the half and it takes **three**, which
+is fifteen — a multiple of ten pushes a strict inequality onto the next grid
+point, so a twenty-row half is *harder* to fire than a nineteen-row one. That
+is the kind of thing you find only by computing it.) What nobody had computed
+was the family's own ceiling against its own threshold. It is one line of
+arithmetic and it would have caught this before any score existed.
 
 **And the leak.** The program publishes a small grammar so a person can see
 what to type, and the `declare` row carried an example line. The example was a
@@ -290,35 +295,66 @@ That is the whole lesson of this release, and next cycle it is a clause.
 
 *Where the other fourteen ideas went.* The design came out of three isolated
 outside inquiries — fifteen proposals, none of which had seen this
-repository's plans. Two finalists were declined for reasons that are on the
-record rather than on taste: **necessity certificates** for a turn's
-assumptions (declined because a refusal that names a premise may be naming it
-for a *lookup*, not because the answer needed it — and the control it
-proposed cannot reach exactly that case; it parks behind an afternoon's
-counting of recorded sessions) and **an attack on the project's own published
-cross-discipline identity claims** with a deliberately coarser instrument
-(the highest-ceiling decline; it parks behind counting whether at least eight
-such claims even depend on the machinery it would attack). The selected
-direction was itself **cut in half**: it had elegantly unified refusals with
-*budgets*, and shipping the budget half would have quietly un-parked a cost
-lane that has now been deliberately passed over nine consecutive times. It is
-recorded as that park's best available mechanism, and not taken.
+repository's plans. All fifteen are accounted for below, because a funnel that
+reports only its winner is a funnel you cannot check.
 
-Six proposals independently re-invented ground this project already holds —
-an English reader built by inverting its own writer; structural addresses for
-the unnamed bulk of the library; a genuinely independent second reading of
-any claim, arriving for the **fourth** time; pre-committed cost bounds,
-again. Those are recorded as evidence *for* keeping those lanes parked, not
-as new lanes. One arrived a **third** time at the overdue red-team of the
-durable-write gate, and this time carried the piece that park has always
-lacked: mutate the *gate* as well, so the kill matrix measures whether the
-attack corpus is any good, rather than whether the gate can tell an attack
+**One was selected** — the repair certificate above. **Two more reached the
+final three and were declined for reasons on the record rather than on taste.**
+*Necessity certificates* for a turn's assumptions: declined because a refusal
+that names a premise may be naming it for a *lookup* rather than because the
+answer needed it, and the control it proposed cannot reach exactly that case;
+it parks behind an afternoon's counting of recorded sessions. *An attack on
+the project's own published cross-discipline identity claims* with a
+deliberately coarser instrument: the highest-ceiling decline, parked behind
+counting whether at least eight such claims even depend on the machinery it
+would attack.
+
+The selected direction was itself **cut in half**. It had elegantly unified
+refusals with *budgets* — a budget, after all, is an edit algebra ordered by
+"at most" — and shipping the budget half would have quietly un-parked a cost
+lane that has now been deliberately passed over nine consecutive times. That
+is recorded as the park's best available mechanism, and not taken.
+
+**Six re-invented ground this project already holds**, and each is recorded as
+evidence *for* keeping a lane parked rather than as a new lane: an English
+reader built by inverting the project's own writer (second arrival, and it
+brought a cheap collision pre-test the park did not have); structural
+addresses for the unnamed bulk of the library (second arrival); a genuinely
+independent second reading of any claim (**fourth** arrival, now with a rule
+for refusing to compare when the overlap is too small); outside human judges
+of the project's own vocabulary (second arrival — dropped by its own series
+once it was told a pinned blind machine reader already exists); pre-committed
+cost bounds, again; and a red-team of the durable-write gate, arriving a
+**third** time across cycles and this time carrying the piece that park has
+always lacked — mutate the *gate* as well, so the kill matrix measures whether
+the attack corpus is any good rather than whether the gate can tell an attack
 from a friend.
 
-And three proposals folded, which is its own kind of finding. The most
-useful: a proposal to split and rejoin a goal collapsed on the discovery that
-**this program has no goal object at all** — nothing outlives a turn as an
-open obligation. That is now filed as a named gap rather than an assumption.
+**Two are genuinely new parks**, each behind a named prerequisite: substituting
+the worst legal ordering as a computed ceiling and diffing every certified
+artifact, which needs a census of how large those legal alternatives get; and
+a whole-tree index of literal lineage with a fingerprinting scheme, so a
+sealed value can be found **without republishing it** — the structural
+successor to the leak in this very post, and a reminder that the containment
+gate in the new design only carves out the places a sealed name legitimately
+lives, which is a stand-in rather than a solution.
+
+**One was cut by its own series**, which is worth its own sentence: a proposal
+to attribute a regression to the commit that caused it, dropped at round two
+once it was told that detection already exists and the recorded window holds
+**0 of 220** regressions — an attributor whose only live inputs would be
+seeded mutants is the prose-mutant failure wearing new clothes.
+
+**And three folded, which is its own kind of finding.** The most useful: a
+proposal to split and rejoin a goal collapsed on the discovery that **this
+program has no goal object at all** — nothing outlives a turn as an open
+obligation. The other two fold for the same reason. A "partial answer" object
+turns out to be the existing supposition channel with better words; and a lane
+to exhibit an inconsistent supposed world is *unreachable* rather than rare,
+because with rules about declared symbols refused in writing, a supposed world
+is bindings plus opaque text and nothing derives inside it. Refusing to state
+axioms has consequences, and this is one of them. The missing goal object is
+now filed as a named gap rather than an assumption.
 The obligation that carried over from the last roadmap — *re-examine the
 naming question once `declare` ships* — was examined, and the answer is
 **no**: a declared symbol is fresh by construction, because the checker

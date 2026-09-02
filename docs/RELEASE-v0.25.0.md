@@ -100,7 +100,8 @@ PYTHONIOENCODING=utf-8 python -c "import json; \
     print(d['result_gates']['R-H1']['licensed_sentence'])"
 ```
 
-The twelve-gate table, as scored on run 2 at `f9719a2`:
+The twelve-gate table, as scored on run 2 at the tip `32d505a` — the commit
+the run was scored *on*; `f9719a2` is the commit that added the artifacts:
 
 | gate | verdict | what it measured |
 |---|---|---|
@@ -161,7 +162,7 @@ still open**, and it is open in writing rather than counted as met.
 | **§1 H-PRE** | **SHIPPED** (`7a47a8a`). The fixture corpus sealed **before** any checker existed to fit it: 60 fixtures, 39 declarations, 13 admitted, 26 refused, all 8 refusal codes fired, plus the B3 mutant set and the `clause_order` copy the runner later had to be made to read |
 | **§1 H-P0** | **SHIPPED** (`c87b0ca`, sealed at `e3e3980`). The census (**286** equality members over 12,777 templates, 5 prefix-guard entries), `scripts/symbol_ledger.py`, the `declare` grammar row, **and in the same change every pin that row moves** |
 | **§1 H-P1** | **SHIPPED ON RUN 2** (`27d358d` freeze → `2ac8c9f` run 1 → `32d505a` fix-freeze → `f9719a2` run 2). Run 1 retained at `experiments/superseded/`, never re-scored |
-| **§1 construction refusals** | **NONE OCCURRED.** (1) One verdict kind ships; axioms refused by the grammar, not by dead code. (2) No persistence: B5 green, 0 of the run's documents carry an admitted name. (3) No byte toward a generated library file: B4's `working_tree_digest` byte-identical, `durable_digest` unmoved, **0** stage records, and `git status --porcelain --untracked-files=all` after the run listed exactly the two declared output paths |
+| **§1 construction refusals** | **NONE OCCURRED.** (1) One verdict kind ships; axioms refused by the grammar, not by dead code. (2) No persistence: B5 green, 0 of the run's documents carry an admitted name. (3) No byte toward a generated library file: B4's `working_tree_digest` byte-identical (`c792b8cb…` on both sides), `durable_digest` unmoved, **0** stage records, and — recorded in the artifact rather than observed by an operator — `paths_that_appeared: []` and `paths_that_vanished: []` |
 | **§1 R-H2** | **REPORTED, GATING NOTHING. 0 of 30.** None of the sealed inbound hypotheses parses as a declaration, counted under the more generous of two readings. The reading was pre-committed and stands |
 | **§2 the `sum_total` lane** | **SHIPPED as disclosure** (`156e94f`, `249f463`), ordered **before** H-P0 exactly as §2 required, so H-P0's prefix guard cannot be read as having discharged it |
 | **§2 B7 successor probes** (Plan-mode router / echoed `function_call`) | **CARRY, unrun, triggers unchanged.** Neither named a dependant by §1; the standing arithmetic travels with the second |
@@ -176,8 +177,12 @@ still open**, and it is open in writing rather than counted as met.
 
 An independent adversarial review of the freeze (`27d358d`) and the first
 registered run (`2ac8c9f`) **reproduced every number in run 1** and returned
-MERGE AFTER FIXES. Not one finding is arithmetic. All four are about what the
-numbers were evidence *of*.
+MERGE AFTER FIXES on **fifteen findings, four of them High** — the
+preregistration's five dated amendments cite them as F1 through F15. Not one
+is arithmetic. The four Highs, which are the ones that changed what a gate is
+evidence *of*, are below; the remaining eleven are disclosure and
+check-strength items carried by `amd-2026-09-02-disclosure-relabels`,
+`amd-2026-09-02-corpus-provenance` and `amd-2026-09-02-registered-date`.
 
 **F1 — B3 executes no mutant, and never said so.** The 32 mutants sealed at
 H-PRE are **prose descriptions**; nothing in this repository executes one,
@@ -311,8 +316,9 @@ hands to `ParsedNode.parse_rewrites` and which
 unchanged; all 12,777 committed trees are unmoved.
 
 **Why disclosure and not refusal — a census, not a preference.** Across
-14,830 committed `anonymized_template` strings (13,950 distinct, over 40
-files), exactly **17** hold a big-op-prefixed identifier: `sum_i` in 16 and
+14,830 committed `anonymized_template` strings (13,950 distinct, over the
+**29** committed files that carry a value — 43 mention the key), exactly
+**17** hold a big-op-prefixed identifier: `sum_i` in 16 and
 `lim_h` in 1, across nine disciplines. There is no `prod_`, `max_` or `min_`
 occurrence at all. Genuine big-operator usage is real, and a refusal would
 break sealed committed parses that are not defective. The heuristic that
@@ -393,15 +399,27 @@ this slice produced:
   authored example is a copy of that value, and a containment gate scoped to
   a run's outputs will never look at any of them."* Status: exact.
 
-## Resolved from BACKLOG
+## Resolved, and where each one actually lived
 
-- **HOUSE RULES — shipped as the v0.25 headline.** The design-input entry
-  filed at the v0.25 course is pruned; its record is this document.
-- **The `sum_total` silent-capture hazard**, filed at the v0.24 rotation
-  against the v0.25 design review, is **discharged as disclosure** — with the
-  parser's surviving behaviour stated above rather than glossed.
-- **The stale registry seal** left knowingly by `156e94f` is discharged by
-  the rotation's CR-P0 re-seal.
+One BACKLOG entry was pruned by this rotation. The other two discharges below
+were never BACKLOG entries, and they are grounded to the document that carried
+them rather than filed under a heading they did not come from:
+
+- **Pruned from [BACKLOG](BACKLOG.md): the `sum_total` silent-capture
+  hazard**, filed there at the v0.24 rotation against the v0.25 design review
+  and now **discharged as disclosure** — with the parser's surviving behaviour
+  stated above rather than glossed. It is the only entry this rotation
+  removes.
+- **Discharged from [ROADMAP-v0.25](ROADMAP-v0.25.md) §1, not from BACKLOG:
+  HOUSE RULES.** The design was scheduled by that roadmap's §1.1 and closed
+  out in its §1.2; there was never a BACKLOG entry for it. Its record is this
+  document.
+- **Discharged from a commit message, not from BACKLOG: the stale registry
+  seal.** `156e94f` recorded in its own message why it did not re-seal
+  `experiments/cold_registry_census.json` — re-sealing would have forced a
+  registered cold attestation to re-run as a side effect of a parser
+  disclosure — and assigned the re-seal to the CR-P0 lane, which took it at
+  `2b61a3e`.
 
 Kept, deliberately: the **two B7 successor probes**, unrun and untaken;
 **GUEST AXIOM's B6**, still unadjudicated rather than discharged, filed by
@@ -444,7 +462,7 @@ from the v0.26 course are filed in [BACKLOG](BACKLOG.md).
   gate about itself.
 - **The non-claims, verbatim** from
   `experiments/house_rules_verdicts.json`.`non_claims`:
-  ledger-groundedness, never correspondence — an admitted declaration is
+  ledger-groundedness, never correspondence: an admitted declaration is
   well-formed and fresh, never true or useful; no axioms or premises about
   declared symbols, and no conservativity; no use-side CATEGORY checking; no
   natural-language declaration; no persistence, and no export toward library
@@ -536,14 +554,19 @@ At ingested scale `reports/decompositions.json` is **not** rewritten as a
 release step; the committed file stays the declared pre-scale snapshot
 (TRIAGE-v0.11 §1.6).
 
-## Two citations found stale and deliberately left alone
+## Three citations found stale and deliberately left alone
 
-Both live inside sealed preregistration artifacts, and a stale citation
-inside a seal is a fact about the seal:
+Two live inside sealed preregistration artifacts, and a stale citation inside
+a seal is a fact about the seal:
 `experiments/plain_input_prereg.json:127` quotes SPEC lines `:159-173` inside
 a frozen `clause_verbatim` (today's correct range is `:401-412`), and
 `experiments/session_ledger_prereg.json:219` says "§7's normative table" where
-the normative line-grammar table is §5. The **eighteen** wrong line-number
+the normative line-grammar table is §5. The third is recorded rather than
+fixed for a different reason:
+`experiments/foreign_voice_prereg2.json`'s `parser` row disagreed with the
+tree **before** `156e94f` and disagrees after, so it was out of that lane's
+scope and stayed out of the triage lane's
+([TRIAGE-v0.25](TRIAGE-v0.25.md) §9). The **eighteen** wrong line-number
 citations that were fixable — all in documentation — were fixed at
 `[TRIAGE-V25-LOWS]`, with the finding worth keeping: every section-,
 paragraph- and anchor-form citation into the SPEC verified **correct**. What
@@ -616,7 +639,10 @@ registered run emits are program-bound like most of the tree's, and a
 capability that adds receipt kinds adds them to the side of the ledger that
 still needs the program to be re-checkable. B7 is **14 of 14** confirmed by
 removal, each with a succeeding with-program positive control, and B8's
-`survives_fraction` follows the denominator — **5.26% at 19 to 4.17% at 24**.
+`survives_fraction` follows the denominator — **4.55% at 22 to 4.17% at 24**,
+against the 22-kind baseline this section quotes (`cold/census_run2.json`
+records `survives_fraction: 0.0455` at `11d62b8`; the 5.26% at 19 belongs to
+the retained run 1 in `cold/census.json` and is not the comparison).
 All eleven gates B1–B11 green with an empty reds list, the voiding sentence
 unfired, R-C green, and the working tree byte-identical across the run
 (`[COLD-RUN2-V25-COMMIT]`).
@@ -653,7 +679,8 @@ or the notes refuse the sentence and the tag waits.
 
 Plan the run from the measured cost, not from folklore: v0.24's gate took
 four launches to get a verdict, and this cycle adds `tests/test_house_rules_*`
-(132 tests in the run file alone) on top of that base.
+(**133** tests in `test_house_rules_run.py` alone, measured by
+`unittest discover -p test_house_rules_run.py`) on top of that base.
 
 One gate state is already discharged rather than left to be discovered by the
 run: `tests/test_cold_receipt.py`'s

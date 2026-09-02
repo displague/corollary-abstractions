@@ -21,7 +21,8 @@ discards everything after the first underscore, with no refusal — the live
 hazard the v0.25 design review found. Asked how much real usage such a
 refusal would break, a census over every committed `anonymized_template`
 answered with a number nobody had: across **14,830** strings (**13,950**
-distinct, over the 40 committed files that carry one), exactly **17** hold a
+distinct, over the **29** committed files that carry a value — 43 mention the
+key), exactly **17** hold a
 big-op-prefixed identifier — `sum_i` in 16 and `lim_h` in 1, across nine
 disciplines. **There is no `prod_`, `max_` or `min_` occurrence in the
 committed corpus at all**, so three of the five prefixes the rule fires on

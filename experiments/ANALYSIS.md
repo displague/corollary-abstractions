@@ -386,8 +386,8 @@ above, which the v0.25 rotation's re-read is what caught.)
 | **B4** omission FAIL LOUD | exit **2**, names `lean.exe`, no silent pass — **over that same one kind** |
 | **B5** sham SURVIVES count | **0** — **over that same one kind**, and structurally: see below |
 | **B6** scrambled bundles | **0 of 200** passed; 10,000 invocations in **3422 s** against a 59-minute estimate; **1.5% rule-of-three UPPER BOUND**, not a rate. Carried forward from run 1 with its digest, because amendment 2 cannot move it |
-| **B7** NEEDS-PROGRAM confirmed by removal | **14 of 14**, each with a *succeeding* with-program positive control |
-| **B8** ≥90% SURVIVES voids | **4.17%** at a denominator of 24 |
+| **B7** NEEDS-PROGRAM confirmed by removal | **14 of 14**, each with a *succeeding* with-program positive control. (Read 10 of 10 until the v0.24 re-read, 12 of 12 from it until the v0.25 rotation's; each cycle's own receipt kinds enter as they gain committed instances, so the count tracks the partition rather than the instrument) |
+| **B8** ≥90% SURVIVES voids | **4.17%** at a denominator of 24. (5.26% at 19 in the retained run 1, then 4.55% at 22 from the v0.24 re-read — the numerator has never moved off 1, so every step here is the denominator growing) |
 | **B9** version drift | ceded; the `proofcurve` v4.29.1 divergence is recorded `adjudicated: false` |
 | **B10** seal before the harness | **3 census misses**, all published; no `harness/` file existed at the first sealing commit |
 | **B11** provenance downgrade | **0 downgrades**; `lean.exe` `third_party_pinned` on both limbs, recomputed from the bytes |
