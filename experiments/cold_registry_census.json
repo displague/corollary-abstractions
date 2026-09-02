@@ -132,13 +132,13 @@
     "note": "a vocabulary, never a kind list: LINE_GRAMMAR enumerates serving routes, and a serving route is not a receipt kind"
   },
   "counts": {
-    "program_tree_files_scanned": 194,
-    "receipt_marked_sites": 43,
-    "kinds": 22,
-    "excluded_sites": 11,
-    "kinds_with_committed_instances": 14,
+    "program_tree_files_scanned": 196,
+    "receipt_marked_sites": 47,
+    "kinds": 24,
+    "excluded_sites": 12,
+    "kinds_with_committed_instances": 16,
     "declared_raw_checker_invocation": 1,
-    "declared_program_replay": 13,
+    "declared_program_replay": 15,
     "declared_none": 8
   },
   "kinds": [
@@ -491,6 +491,98 @@
         "recheck_descriptor_fields": [
           "binary_sha256"
         ]
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
+      "kind_id": "corollary.house-rules-receipts/1",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 874398515,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [
+        "corollary.house-rules-receipts/1"
+      ],
+      "marking_rules": [
+        "RM-A"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "run_house_rules_gates._receipts_document",
+          "writer_file": "scripts/run_house_rules_gates.py",
+          "writer_symbol": "_receipts_document",
+          "line": 2792,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/run_house_rules_gates.py",
+          "line_range": [
+            2792,
+            2812
+          ],
+          "rule": "RM-A",
+          "symbol": "_receipts_document",
+          "key_set": [
+            "carries_no_admitted_symbol_name",
+            "date",
+            "design",
+            "emitted_by",
+            "preregistration",
+            "preregistration_id",
+            "preregistration_sha256_lf",
+            "provenance",
+            "receipt_count",
+            "receipts",
+            "registered_before_the_run",
+            "registration_commit",
+            "replay_definition",
+            "schema",
+            "stage"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "carries_no_admitted_symbol_name",
+        "date",
+        "design",
+        "emitted_by",
+        "preregistration",
+        "preregistration_id",
+        "preregistration_sha256_lf",
+        "provenance",
+        "receipt_count",
+        "receipts",
+        "registered_before_the_run",
+        "registration_commit",
+        "replay_definition",
+        "schema",
+        "stage"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 2,
+        "exact_count": 2,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I1"
+        ],
+        "sample_paths": [
+          "experiments/house_rules_receipts.json",
+          "experiments/superseded/house_rules_receipts.run1.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
       },
       "canonicalization_is_program_defined": false
     },
@@ -1227,6 +1319,130 @@
       "canonicalization_is_program_defined": false
     },
     {
+      "kind_id": "run_house_rules_gates:_receipts_document",
+      "scramble_rule": {
+        "type": "permute_instances_within_artifact",
+        "statement": "reassign this kind's committed instances across this kind's own records by a seeded permutation, preserving every file and every digest field's shape",
+        "seed": 3478660566,
+        "seed_derivation": "int(sha256(kind_id)[:8], 16) — derived, not chosen",
+        "applicable": true,
+        "why_not_applicable": null
+      },
+      "tags": [],
+      "marking_rules": [
+        "RM-B",
+        "RM-C"
+      ],
+      "emitting_routes": [
+        {
+          "route_id": "run_house_rules_gates._receipts_document",
+          "writer_file": "scripts/run_house_rules_gates.py",
+          "writer_symbol": "_receipts_document",
+          "line": 2792,
+          "route_source": "writer_is_the_route"
+        },
+        {
+          "route_id": "run_house_rules_gates._receipts_document",
+          "writer_file": "scripts/run_house_rules_gates.py",
+          "writer_symbol": "_receipts_document",
+          "line": 2792,
+          "route_source": "writer_is_the_route"
+        }
+      ],
+      "sites": [
+        {
+          "path": "scripts/run_house_rules_gates.py",
+          "line_range": [
+            2792,
+            2812
+          ],
+          "rule": "RM-B",
+          "symbol": "_receipts_document",
+          "key_set": [
+            "carries_no_admitted_symbol_name",
+            "date",
+            "design",
+            "emitted_by",
+            "preregistration",
+            "preregistration_id",
+            "preregistration_sha256_lf",
+            "provenance",
+            "receipt_count",
+            "receipts",
+            "registered_before_the_run",
+            "registration_commit",
+            "replay_definition",
+            "schema",
+            "stage"
+          ]
+        },
+        {
+          "path": "scripts/run_house_rules_gates.py",
+          "line_range": [
+            2792,
+            2812
+          ],
+          "rule": "RM-C",
+          "symbol": "_receipts_document",
+          "key_set": [
+            "carries_no_admitted_symbol_name",
+            "date",
+            "design",
+            "emitted_by",
+            "preregistration",
+            "preregistration_id",
+            "preregistration_sha256_lf",
+            "provenance",
+            "receipt_count",
+            "receipts",
+            "registered_before_the_run",
+            "registration_commit",
+            "replay_definition",
+            "schema",
+            "stage"
+          ]
+        }
+      ],
+      "site_key_set": [
+        "carries_no_admitted_symbol_name",
+        "date",
+        "design",
+        "emitted_by",
+        "preregistration",
+        "preregistration_id",
+        "preregistration_sha256_lf",
+        "provenance",
+        "receipt_count",
+        "receipts",
+        "registered_before_the_run",
+        "registration_commit",
+        "replay_definition",
+        "schema",
+        "stage"
+      ],
+      "declared_recheck_procedure": {
+        "type": "program_replay",
+        "basis": "committed instances exist and carry no self-contained recheck descriptor, so re-deriving the recorded verdict needs this repository's code"
+      },
+      "committed_instances": {
+        "count": 2,
+        "exact_count": 2,
+        "superset_only_count": 0,
+        "resolved_by": [
+          "I2"
+        ],
+        "sample_paths": [
+          "experiments/house_rules_receipts.json",
+          "experiments/superseded/house_rules_receipts.run1.json"
+        ],
+        "superset_sample_paths": [],
+        "instance_rule_note": "count = exact (I1/I2/I3) + superset-only (I2b). Amendment 2: the first run counted the exact match alone and read `none` for kinds with thousands of committed instances, because a site whose mapping gains one conditional key matches nothing exactly.",
+        "destination_constants": [],
+        "recheck_descriptor_fields": []
+      },
+      "canonicalization_is_program_defined": false
+    },
+    {
       "kind_id": "run_protocol_gates:run",
       "scramble_rule": {
         "type": "permute_instances_within_artifact",
@@ -1356,21 +1572,21 @@
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1637,
+          "line": 1649,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1641,
+          "line": 1653,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._evaluate_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_evaluate_receipt",
-          "line": 1642,
+          "line": 1654,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1378,8 +1594,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1637,
-            1637
+            1649,
+            1649
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1391,8 +1607,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1641,
-            1641
+            1653,
+            1653
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1403,8 +1619,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1642,
-            1646
+            1654,
+            1658
           ],
           "rule": "RM-B",
           "symbol": "_evaluate_receipt",
@@ -1464,21 +1680,21 @@
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1580,
+          "line": 1592,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1586,
+          "line": 1598,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat._resolution_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_resolution_receipt",
-          "line": 1588,
+          "line": 1600,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1486,8 +1702,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1580,
-            1580
+            1592,
+            1592
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1496,8 +1712,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1586,
-            1586
+            1598,
+            1598
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1506,8 +1722,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1588,
-            1591
+            1600,
+            1603
           ],
           "rule": "RM-B",
           "symbol": "_resolution_receipt",
@@ -1566,7 +1782,7 @@
           "route_id": "serve_chat._story_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "_story_receipt",
-          "line": 1656,
+          "line": 1668,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1574,8 +1790,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1656,
-            1659
+            1668,
+            1671
           ],
           "rule": "RM-B",
           "symbol": "_story_receipt",
@@ -1625,28 +1841,28 @@
           "route_id": "belief",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1700,
+          "line": 1712,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "supposition",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1700,
+          "line": 1712,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "write_gate",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1702,
+          "line": 1714,
           "route_source": "dominating_guard"
         },
         {
           "route_id": "serve_chat.kernel_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "kernel_receipt",
-          "line": 1706,
+          "line": 1718,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1654,8 +1870,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1700,
-            1700
+            1712,
+            1712
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1666,8 +1882,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1702,
-            1702
+            1714,
+            1714
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1678,8 +1894,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1706,
-            1706
+            1718,
+            1718
           ],
           "rule": "RM-B",
           "symbol": "kernel_receipt",
@@ -1741,14 +1957,14 @@
           "route_id": "serve_chat.protocol_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "protocol_receipt",
-          "line": 1280,
+          "line": 1292,
           "route_source": "writer_is_the_route"
         },
         {
           "route_id": "serve_chat.protocol_receipt",
           "writer_file": "scripts/serve_chat.py",
           "writer_symbol": "protocol_receipt",
-          "line": 1281,
+          "line": 1293,
           "route_source": "writer_is_the_route"
         }
       ],
@@ -1756,8 +1972,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1280,
-            1280
+            1292,
+            1292
           ],
           "rule": "RM-B",
           "symbol": "protocol_receipt",
@@ -1766,8 +1982,8 @@
         {
           "path": "scripts/serve_chat.py",
           "line_range": [
-            1281,
-            1288
+            1293,
+            1300
           ],
           "rule": "RM-B",
           "symbol": "protocol_receipt",
@@ -1929,12 +2145,12 @@
       "kind_id_candidate": "serve_chat:_ownership_receipt",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1617,
-        1617
+        1629,
+        1629
       ],
       "enclosing_line_range": [
-        1617,
-        1617
+        1629,
+        1629
       ],
       "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
     },
@@ -1943,12 +2159,12 @@
       "kind_id_candidate": "serve_chat:render_conversation_turn",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1812,
-        1812
+        1824,
+        1824
       ],
       "enclosing_line_range": [
-        1806,
-        1813
+        1818,
+        1825
       ],
       "reason": "committed voiding control or empty shape: every emitted mapping for this candidate is the empty display, so there is no content any procedure could re-check"
     },
@@ -1999,15 +2215,30 @@
     },
     {
       "rule_id": "X2",
+      "kind_id_candidate": "run_house_rules_gates:run",
+      "path": "scripts/run_house_rules_gates.py",
+      "line_range": [
+        2874,
+        2874
+      ],
+      "enclosing_line_range": [
+        2874,
+        2874
+      ],
+      "member_expression": "Name",
+      "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
+    },
+    {
+      "rule_id": "X2",
       "kind_id_candidate": "serve_chat:render_protocol_turn",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1316,
-        1316
+        1328,
+        1328
       ],
       "enclosing_line_range": [
-        1308,
-        1320
+        1320,
+        1332
       ],
       "member_expression": "IfExp",
       "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
@@ -2017,12 +2248,12 @@
       "kind_id_candidate": "serve_chat:render_kernel_turn",
       "path": "scripts/serve_chat.py",
       "line_range": [
-        1763,
-        1765
+        1775,
+        1777
       ],
       "enclosing_line_range": [
-        1756,
-        1767
+        1768,
+        1779
       ],
       "member_expression": "IfExp",
       "reason": "the receipt-named key's value is not a mapping-producing expression: the site names or measures a receipt rather than constructing one"
@@ -2101,14 +2332,14 @@
   },
   "recall_probe": {
     "substring_regex": "(?i)receipt|certificate|verdict|journal",
-    "wider_net_sites": 183,
-    "uncovered_site_count": 165,
+    "wider_net_sites": 203,
+    "uncovered_site_count": 183,
     "uncovered_sites": [
       {
         "path": "scripts/build_house_rules_fixtures.py",
         "line_range": [
-          1551,
-          1565
+          1630,
+          1644
         ],
         "symbol": "build_fixtures",
         "matched_keys": [
@@ -2118,8 +2349,8 @@
       {
         "path": "scripts/build_house_rules_fixtures.py",
         "line_range": [
-          1648,
-          1666
+          1727,
+          1745
         ],
         "symbol": "build_fixtures",
         "matched_keys": [
@@ -2129,8 +2360,8 @@
       {
         "path": "scripts/build_house_rules_fixtures.py",
         "line_range": [
-          1898,
-          1943
+          1985,
+          2030
         ],
         "symbol": "build_b9",
         "matched_keys": [
@@ -2890,8 +3121,8 @@
       {
         "path": "scripts/measure_throughput.py",
         "line_range": [
-          1431,
-          1484
+          1433,
+          1486
         ],
         "symbol": "build_records",
         "matched_keys": [
@@ -2902,8 +3133,8 @@
       {
         "path": "scripts/measure_throughput.py",
         "line_range": [
-          1617,
-          1623
+          1619,
+          1625
         ],
         "symbol": "summarize",
         "matched_keys": [
@@ -2913,8 +3144,8 @@
       {
         "path": "scripts/measure_throughput.py",
         "line_range": [
-          1670,
-          1676
+          1672,
+          1678
         ],
         "symbol": "summarize",
         "matched_keys": [
@@ -3177,6 +3408,209 @@
         "symbol": "artifact",
         "matched_keys": [
           "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          393,
+          413
+        ],
+        "symbol": "Replay._run",
+        "matched_keys": [
+          "verdict",
+          "verdict_id"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          662,
+          702
+        ],
+        "symbol": "score_b1_b7",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          723,
+          751
+        ],
+        "symbol": "score_b1_b7",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          813,
+          846
+        ],
+        "symbol": "score_b2",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          967,
+          973
+        ],
+        "symbol": "_detectors",
+        "matched_keys": [
+          "a_plant_in_a_copy_of_the_pending_receipts_was_caught",
+          "pending_receipts_carrying_an_admitted_name"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          1214,
+          1217
+        ],
+        "symbol": "_detectors",
+        "matched_keys": [
+          "a_tampered_digest_is_visible_in_the_verdict",
+          "verdict_digest_equals_the_live_schema_and_the_prereg_pin"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          1470,
+          1554
+        ],
+        "symbol": "score_b3",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          1683,
+          1726
+        ],
+        "symbol": "score_b6",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          1794,
+          1800
+        ],
+        "symbol": "score_b12",
+        "matched_keys": [
+          "verdict_matches_the_seal"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          1806,
+          1833
+        ],
+        "symbol": "score_b12",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          1898,
+          1915
+        ],
+        "symbol": "score_b8",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          2148,
+          2290
+        ],
+        "symbol": "score_b9",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          2372,
+          2400
+        ],
+        "symbol": "score_b4_b5",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          2507,
+          2581
+        ],
+        "symbol": "score_b4_b5",
+        "matched_keys": [
+          "journal_directories_checked",
+          "session_documents_or_journals_written",
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          2595,
+          2611
+        ],
+        "symbol": "score_b10",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          2638,
+          2651
+        ],
+        "symbol": "score_b11",
+        "matched_keys": [
+          "verdict"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          2998,
+          3093
+        ],
+        "symbol": "_verdicts_document",
+        "matched_keys": [
+          "receipts_artifact"
+        ]
+      },
+      {
+        "path": "scripts/run_house_rules_gates.py",
+        "line_range": [
+          3012,
+          3016
+        ],
+        "symbol": "_verdicts_document",
+        "matched_keys": [
+          "receipt_count"
         ]
       },
       {
@@ -3814,8 +4248,8 @@
       {
         "path": "scripts/serve_chat.py",
         "line_range": [
-          741,
-          751
+          753,
+          763
         ],
         "symbol": "foreign_voice_row",
         "matched_keys": [
@@ -3870,8 +4304,8 @@
       {
         "path": "scripts/symbol_ledger.py",
         "line_range": [
-          381,
-          390
+          393,
+          402
         ],
         "symbol": "AdmissibilityVerdict.payload",
         "matched_keys": [
@@ -3938,7 +4372,7 @@
     "means": "each uncovered site is a mapping whose key names mention this program's evidence vocabulary and that the census rule did not admit. They are candidate census misses under B10 — computed by the probe, not remembered by a maintainer — and the census claims no coverage over them."
   },
   "instance_recall_probe": {
-    "exact_instances": 514,
+    "exact_instances": 518,
     "superset_only_instances": 2639,
     "kinds_the_exact_rule_alone_would_have_read_as_none": [
       {
@@ -3979,7 +4413,7 @@
     ],
     "pins": {
       "corpora_digest": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
-      "line_grammar_digest": "43024c6781a9f6b8e3a9fc40361eb2e64fc7cb700676a102bc90491831cb958c",
+      "line_grammar_digest": "6cf86f0ca783ef05f254ba4aeb8cd3d12f15331e8e922b2e0d9c11f1a2e2ad85",
       "rendering_module_digests": {
         "scripts/answer.py": "fa2130c768668d53dfcb4e76a53f83d5bedd6ca80c2c7ab56d9651a5c8f0ecb9",
         "scripts/belief.py": "7284bd9860e2117697ceffb590070e9eb164d06502361483ff28aae9ba705089",
@@ -3994,7 +4428,7 @@
         "scripts/supposition.py": "6a64bf0541082533a0c76b729cbe368fcb12eecba9333ba8fec0780d484638cd"
       },
       "checker_toolchain_digest": "2bdc48adfa58d0017e538a0ad117c5d73d35deec879978f909406a80c8037273",
-      "capability_sheet_digest": "80f0ea19382ceb0f583c823a1c4fac480ee2c0ab8845fb00f2655f1adcec73f3"
+      "capability_sheet_digest": "79a0f6dc69c7861cde148203335196c7abe92f1152ae36a980a6316cb9bcfe13"
     },
     "status": "captured"
   },
@@ -4062,7 +4496,7 @@
     "fired": false,
     "b1_unmapped_emitting_routes": 0
   },
-  "census_seal": "edb44684eced4dc2f370c493ab9d178748abeb51b2f1836644972e8d2ec297ce",
+  "census_seal": "a4f38d5520dc148f4f4fa0c8f2b0db591f5c1ff63eae679009b2e920ca035974",
   "provenance": {
     "writer": "scripts/cold_registry_census.py",
     "writer_sha256_lf": "b6567cd10e7879070d9a8f0eb9c59278aca0869f5e27900be81773dc67bae6eb",
@@ -4093,7 +4527,7 @@
       },
       {
         "path": "scripts/build_house_rules_fixtures.py",
-        "sha256_lf": "d06e02d2c212ad99c75b81d4172538c39ba826838e04dcc748194931e7b86ec1"
+        "sha256_lf": "242bc89eaa7a666d83489a30ca3dc64a68d070e690031c909e9af99f07d5201a"
       },
       {
         "path": "scripts/build_protocol_corpus.py",
@@ -4110,6 +4544,10 @@
       {
         "path": "scripts/candidate_enumerator.py",
         "sha256_lf": "b5251631f7a220f8d599e3acf0787ae9027b1ad203000fbf9b7daf1211b5452e"
+      },
+      {
+        "path": "scripts/check_house_rules_receipts.py",
+        "sha256_lf": "81dd8269e4b5ecb11832aaa5645c986c13eaed74416d04958b2640d456917e1e"
       },
       {
         "path": "scripts/check_proposer_determinism.py",
@@ -4133,7 +4571,7 @@
       },
       {
         "path": "scripts/check_symbol_census.py",
-        "sha256_lf": "8ca952e5bfe64db93006c44c21ce283dd9bf1bef9921a70de6143da2cea01c76"
+        "sha256_lf": "43f301ac4ea06c66bcd70fc3f47eb3806768ce0001f8593416128f624e50ae39"
       },
       {
         "path": "scripts/closure_build.py",
@@ -4377,7 +4815,7 @@
       },
       {
         "path": "scripts/measure_command_bound.py",
-        "sha256_lf": "ac43af7e1e27034f34b076bbdeda00c0978aa73c8d765faddd50a9f2488fde10"
+        "sha256_lf": "3b4e36674c66d72c6f5f56ebdd66b7126d68471b4202836e9212c55986cb2d4d"
       },
       {
         "path": "scripts/measure_compression.py",
@@ -4465,7 +4903,7 @@
       },
       {
         "path": "scripts/measure_throughput.py",
-        "sha256_lf": "81970a7797b4520c26de900a3d6281720657daf34d9abbbb51557a9613f28063"
+        "sha256_lf": "6f0ea25866bf1d13d1defc30e513024d3dc533e396c837015fbef0dd5a6e0dc6"
       },
       {
         "path": "scripts/measure_transliteration.py",
@@ -4616,6 +5054,10 @@
         "sha256_lf": "9a35964b374cd60315028d8addb87f1a42dd4f99b842776b7895de3def80f21f"
       },
       {
+        "path": "scripts/run_house_rules_gates.py",
+        "sha256_lf": "ca9f2b727b1579078fc889164649829015a6317629ab8438e632beee3d769a5d"
+      },
+      {
         "path": "scripts/run_plain_gate.py",
         "sha256_lf": "4a411c7415b57b9e14811a3df9bdd43ea548c7a7909f7c8278a5178b26741981"
       },
@@ -4733,7 +5175,7 @@
       },
       {
         "path": "scripts/serve_chat.py",
-        "sha256_lf": "a71920758acd7101085e032d14bcd3d7c4334d54a6f50621c9ec659a658304af"
+        "sha256_lf": "f888accbc56579040a1601ca1b0630d266548f75091849e1214295696a8a52dc"
       },
       {
         "path": "scripts/session_keys.py",
@@ -4769,7 +5211,7 @@
       },
       {
         "path": "scripts/symbol_ledger.py",
-        "sha256_lf": "e2e6a3e0f4e0ed9df4dbee7a77471e555c1d892fa87068cd1189c20ea8ab28db"
+        "sha256_lf": "2a20d137f3650d0f8bc44c4aecfeda624515b226c868054759bb27595ca253b4"
       },
       {
         "path": "scripts/text_keys.py",
@@ -4858,15 +5300,38 @@
       "the site-side recall probe",
       "the route resolution rule"
     ],
-    "previous_seal": "d3d9bdc6eae689a120eed1dbcede8f8052405cf91711356aea299243f1c7fd33",
-    "new_seal": "edb44684eced4dc2f370c493ab9d178748abeb51b2f1836644972e8d2ec297ce",
+    "previous_seal": "edb44684eced4dc2f370c493ab9d178748abeb51b2f1836644972e8d2ec297ce",
+    "new_seal": "a4f38d5520dc148f4f4fa0c8f2b0db591f5c1ff63eae679009b2e920ca035974",
     "diff_shape": {
-      "kinds_added": [],
+      "kinds_added": [
+        "corollary.house-rules-receipts/1",
+        "run_house_rules_gates:_receipts_document"
+      ],
       "kinds_removed": [],
       "counts_moved": {
+        "declared_program_replay": [
+          13,
+          15
+        ],
+        "excluded_sites": [
+          11,
+          12
+        ],
+        "kinds": [
+          22,
+          24
+        ],
+        "kinds_with_committed_instances": [
+          14,
+          16
+        ],
         "program_tree_files_scanned": [
-          190,
-          194
+          194,
+          196
+        ],
+        "receipt_marked_sites": [
+          43,
+          47
         ]
       },
       "declared_recheck_procedure_moved": []

@@ -405,14 +405,18 @@ stronger arm is not run and is not claimed.
    leaves step 4 unchanged and only the digest comparison can catch it. The hour
    bought a control whose second half was structurally idle — measured in the
    artifact, not noticed after.
-4. **Both recall probes are numbers now.** Site side: a wider net reaches 183
-   receipt-vocabulary sites and the rule admits 18 of them, so 165 uncovered
-   sites are published as candidate B10 misses. (Read 179 / 18 / 161 until
-   the v0.25 H-P0 re-seal on 2026-09-01: the `declare` slice added four files
-   to the program tree, and the wider net's substring rule reaches four more
-   sites in them while the census rule admits none of them — so the admitted
-   count is unmoved and the uncovered count carries the whole difference,
-   which is what a candidate-miss number is supposed to do.) Instance side
+4. **Both recall probes are numbers now.** Site side: a wider net reaches 203
+   receipt-vocabulary sites and the rule admits 20 of them, so 183 uncovered
+   sites are published as candidate B10 misses. (Read 179 / 18 / 161 until the
+   v0.25 H-P0 re-seal on 2026-09-01, then 183 / 18 / 165 until the v0.25
+   rotation's re-seal on 2026-09-02. H-P0's `declare` slice added four files
+   whose extra sites the census rule admitted none of; H-P1's two files —
+   the gates runner and its checker — are the opposite case and the more
+   interesting one, because the census rule *did* admit four of their sites
+   and read two new kinds off them. So the admitted count moves for the first
+   time since the probe existed, and the uncovered count moves by more, which
+   is what a candidate-miss number does when a slice adds both evidence and
+   prose about evidence.) Instance side
    (added by
    amendment 2): the exact key-set rule read **0** committed instances for two
    kinds the tree holds **160** and **2,313** instances of. Instance brittleness
