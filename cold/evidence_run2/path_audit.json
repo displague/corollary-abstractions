@@ -9,7 +9,7 @@
     "flags_isolated": true,
     "inside_repository": false
   },
-  "cwd": "~\\AppData\\Local\\Temp\\cold-receipt-u9d9fq1y\\good",
+  "cwd": "~\\AppData\\Local\\Temp\\cold-receipt-lbsr3s1x\\good",
   "cwd_inside_repository": false,
   "assertion_1_program_tree_unresolvable": {
     "statement": "an import of a known program module raises, with the traceback quoted",

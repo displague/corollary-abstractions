@@ -3,7 +3,7 @@
   "missing_dependency": {
     "name": "lean.exe",
     "role": "the pinned external checker this procedure invokes by path",
-    "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-u9d9fq1y\\emptied_deps\\lean.exe",
+    "resolved_to": "~\\AppData\\Local\\Temp\\cold-receipt-lbsr3s1x\\emptied_deps\\lean.exe",
     "error": "the listed dependency is not present at the path the procedure resolves it to"
   }
 }

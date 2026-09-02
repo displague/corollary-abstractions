@@ -3,9 +3,9 @@
   "design": "docs/DESIGN-cold-receipt.md §13",
   "registered_before_the_run": true,
   "counts": {
-    "kinds": 22,
+    "kinds": 24,
     "SURVIVES": 1,
-    "NEEDS-PROGRAM": 12,
+    "NEEDS-PROGRAM": 14,
     "UNTESTED": 9
   },
   "verdicts": {
@@ -16,11 +16,13 @@
       "build_throughput_tasks:exact_value_task",
       "closure-receipt/1",
       "closure_query:query",
+      "corollary.house-rules-receipts/1",
       "corollary.protocol-uptake-receipts/1",
       "external_verifier:main",
       "foreign_voice:receipt",
       "harness:_route_twin",
       "measure_when_to_ask:_oewn_samples",
+      "run_house_rules_gates:_receipts_document",
       "run_protocol_gates:run",
       "serve_chat:_evaluate_receipt",
       "serve_chat:_resolution_receipt",
@@ -57,7 +59,7 @@
   "ordering": {
     "cr_p0_first_commit": "d93015000d057f06e301c4bb146ec3cf1047b7cd",
     "cr_p1_first_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
-    "cr_p0_latest_commit": "c87b0ca73bb4815e252153a627772423f66bd4c9",
+    "cr_p0_latest_commit": "2b61a3e2c27b74b328be2d08de6df98e07640685",
     "cr_p1_latest_commit": "af4fb078537bdd5cc909a053fc8d945e824e06db",
     "cr_p0_precedes_cr_p1": true,
     "how_checked": "git merge-base --is-ancestor over the commits that INTRODUCED each artifact; the latest commits are recorded beside them so a later amendment stays visible without falsifying an ordering that did hold"
@@ -77,11 +79,13 @@
       "build_throughput_tasks:exact_value_task",
       "closure-receipt/1",
       "closure_query:query",
+      "corollary.house-rules-receipts/1",
       "corollary.protocol-uptake-receipts/1",
       "external_verifier:main",
       "foreign_voice:receipt",
       "harness:_route_twin",
       "measure_when_to_ask:_oewn_samples",
+      "run_house_rules_gates:_receipts_document",
       "run_protocol_gates:run",
       "serve_chat:_evaluate_receipt",
       "serve_chat:_resolution_receipt",
@@ -104,7 +108,7 @@
     "inputs": [
       {
         "path": "cold/census_run2.json",
-        "sha256_lf": "84ec0358366bb767b22386258577479ada4b5fd9ce7beb0ca7004f23f6a942cf"
+        "sha256_lf": "85b1f6a98ef5595dacba9b8d3fa578678dbdae427146866f0fe2fabf0ec4903d"
       }
     ],
     "emitted_at_generation": true
