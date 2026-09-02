@@ -20,15 +20,16 @@ applied to in-memory copies and to files in a temporary directory; nothing
 here writes into the repository, which is the same rule the run itself is
 scored against.
 
-Three named failures are deliberately not tamper-tested, and the reason is
-that they are not properties of the artifacts at all: `replay-refused` (the
-runner declined to run), `replay-head` and `replay-digest` (the replay's own
-view of the tree disagrees with this checker's). They are conditions of the
-machine the replay ran on, reachable only by lying to git or to the
-filesystem, and the replay arm exercises the path they live on. The
-`receipts-*` half of every dual-labelled check (`{label}-date`,
-`{label}-writer-digest`, …) is the same code with the other label, driven by
-the `verdicts-*` tests.
+The checker names **79** distinct failures — 65 literals plus 14
+dual-labelled templates (`{label}-date`, `{label}-writer-digest`, …), whose
+`receipts-*` half is the same code with the other label and is driven by the
+`verdicts-*` tests. All 79 are tamper-tested here except three, and the
+reason they are excluded is that they are not properties of the artifacts at
+all: `replay-refused` (the runner declined to run), `replay-head` and
+`replay-digest` (the replay's own view of the tree disagrees with this
+checker's). They are conditions of the machine the replay ran on, reachable
+only by lying to git or to the filesystem, and the replay arm exercises the
+path they live on.
 
 Two rules this file follows deliberately:
 
@@ -1276,6 +1277,26 @@ class CheckerTamperTestsPartTwo(ScoredRunTestCase):
                 verdicts, self.fixtures, self.prereg, failures
             )
         self.assertIn("b12-pairs-denominator", names_of(failures))
+
+    def test_a_moved_b12_pair_pin_fails(self) -> None:
+        """The other half of the same check: the prereg's frozen pair count.
+
+        `b12-pairs-denominator` catches a run that misreports the denominator
+        it scored against. This catches the prior failure — a registration
+        whose frozen number no longer equals what the sealed corpus carries,
+        so that *both* the run and the pin could agree on a wrong number.
+        """
+
+        prereg = copy.deepcopy(self.prereg)
+        prereg["frozen_numbers"]["b12_round_trip_pairs"] = (
+            prereg["frozen_numbers"]["b12_round_trip_pairs"] + 1
+        )
+        failures = fresh()
+        with quiet():
+            checker.check_b12_pairs_against_the_seal(
+                self.verdicts, self.fixtures, prereg, failures
+            )
+        self.assertIn("b12-pairs-seal", names_of(failures))
 
     def test_a_restated_b8_target_list_fails(self) -> None:
         verdicts = copy.deepcopy(self.verdicts)

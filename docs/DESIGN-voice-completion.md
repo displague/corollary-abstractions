@@ -348,7 +348,7 @@ mints a `verified_by` link, and this cycle mints none.
 
 **Three witnessed modules, one retirement, one dated reason naming all five
 changes, one successor book, prior artifact untouched** — the standing rule at
-`docs/SPEC-chat-completions-skin.md:252–258`. The batch's obligation is
+`docs/SPEC-chat-completions-skin.md:593-599`. The batch's obligation is
 unchanged and this design takes no discount from it: **each change carries its
 own before/after evidence — a shared seal is not a shared measurement.**
 

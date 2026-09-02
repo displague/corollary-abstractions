@@ -855,7 +855,7 @@ Stated so that a later slice cannot approach it by accident.
   `experiments/throughput_tasks.json:83–95`). Adding `_route_conform` changes
   `harness.py`'s rendered bytes, and so does E0's exact-numeral path and
   E0e's bound wherever they land — under
-  `docs/SPEC-chat-completions-skin.md:252–258` each such change would retire
+  `docs/SPEC-chat-completions-skin.md:593-599` each such change would retire
   the current witness and seal a successor book.
 
   **The orchestrator's ruling is that the cycle pays that cost once.** All
@@ -1383,7 +1383,7 @@ following, so that a reader does not read an omission as an oversight. Four:
   > every one that landed *before* it. But `_route_conform` had to move from
   > refusing to answering **after** the registered run, and that change moves
   > `harness.py`'s rendered bytes — a witnessed module under
-  > `docs/SPEC-chat-completions-skin.md:237–258`. The seal rule there is not a
+  > `docs/SPEC-chat-completions-skin.md:578-599`. The seal rule there is not a
   > habit this design gets to suspend: it is the mechanism that makes the
   > throughput void condition checkable rather than honor-system, and a
   > design's own convenience does not outrank it. The rebuild was the correct

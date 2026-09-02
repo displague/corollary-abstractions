@@ -84,7 +84,7 @@ correction, built. Its properties, as committed:
 - **But the JSON receipt is nearly empty.** On the wire a supposition's
   receipt is one key: `scripts/serve_chat.py:927-928` returns
   `{"derivation": "session"}` for both `belief` and `supposition`, frozen
-  at `docs/SPEC-chat-completions-skin.md:308`. **A conditional answer
+  at `docs/SPEC-chat-completions-skin.md:649`. **A conditional answer
   needs a real receipt and this is not one.** §3b writes the schema; it
   is the largest concrete build in the design.
 - **And the frame is per-line, not session-scoped.** `suppose` builds a
@@ -116,13 +116,24 @@ that matter.
 
 ### 2.2 Where plain text lands today
 
-`route_line` is a first-match-wins chain of thirteen rows
-(`scripts/harness.py:1773-1824`; the spec's table is
-`docs/SPEC-chat-completions-skin.md:159-173`, whose in-line citation to
-`harness.py:1393-1437` is now **stale** and should be corrected to
-`:1773-1824` when this design or any other touches that file). Row 12 is
-`everything else → dispatcher → exhausted`
-(`scripts/harness.py:1824`; `docs/SPEC-chat-completions-skin.md:173`).
+`route_line` is a first-match-wins chain
+(`scripts/harness.py:2485-2550`; the spec's table is
+`docs/SPEC-chat-completions-skin.md:399-415`). The last row —
+`everything else → dispatcher → exhausted` — is
+`docs/SPEC-chat-completions-skin.md:415`.
+
+**Re-pinned 2026-09-02 (v0.25 triage).** As written in v0.21 this paragraph
+said "thirteen rows", pinned `harness.py:1773-1824` and
+`SPEC:159-173`, called the last row **row 12**, and instructed whoever next
+touched the file to correct the spec's own stale `harness.py:1393-1437`
+citation. All four pins have since moved and the instruction is discharged
+here: the chain grew a `conform` row (v0.20), a `gloss` row and a `declare`
+row (v0.25 H-P0), so the everything-else row is **row 14**, not row 12; the
+SPEC's own table carries the corrected `harness.py:2485-2550` at
+`SPEC:393` and records each shift in place. The prose above is corrected;
+the argument it supports — that this design touches only the
+everything-else row — is unchanged, because that row is still last and
+still exhausts.
 
 **That is the whole surface this design touches.** Plain conversational
 English that no route claims falls to row 12 and exhausts. The proposer
@@ -130,7 +141,7 @@ is a **pre-router for row 12 only**, and nothing else. That framing is
 what makes the quarantine gate in §5 mechanical rather than rhetorical.
 
 The status alphabet is **frozen as a closed set**
-(`docs/SPEC-chat-completions-skin.md:175-184`): *"The skin transports
+(`docs/SPEC-chat-completions-skin.md:443-452`): *"The skin transports
 the engine's vocabulary; it does not edit it."* A new answer type is
 therefore a **spec amendment with a version bump**, not a field added
 quietly — §3b prices it.
@@ -241,7 +252,7 @@ New, and worth a design:
 
 1. **The proposer emits queries, not answers.** Its entire output
    alphabet is the registered line grammar
-   (`docs/SPEC-chat-completions-skin.md:159-173`) instantiated with
+   (`docs/SPEC-chat-completions-skin.md:399-415`) instantiated with
    corpus vocabulary. A candidate is a **string that route_line already
    accepts**; the model cannot emit anything else, and anything else it
    emits is discarded before verification, not repaired. This is
@@ -294,15 +305,15 @@ a decorated `solved`. Concretely:
 On the wire it rides in `x_corollary`, whose required keys are already
 fixed — `schema`, `profile`, `route`, `status`, `detail`, `receipt`
 (`scripts/serve_chat.py:985-990`; normative at
-`docs/SPEC-chat-completions-skin.md:263-276`, where `receipt` is *"always
+`docs/SPEC-chat-completions-skin.md:601-616`, where `receipt` is *"always
 present"*). `suppositions` is therefore a **receipt field**, not a new
 envelope key, and the per-route receipt table
-(`docs/SPEC-chat-completions-skin.md:300-310`) gains one row rather than
+(`docs/SPEC-chat-completions-skin.md:641-652`) gains one row rather than
 the envelope gaining a concept.
 
 **The status, and here the tree contradicts the obvious move.** The
 tempting option is to reuse `held` — already registered for the `suppose`
-route (`docs/SPEC-chat-completions-skin.md:164`), already glossed *"held,
+route (`docs/SPEC-chat-completions-skin.md:404`), already glossed *"held,
 not answered"* (`scripts/harness.py:1488-1490`), zero alphabet change.
 **But `held` is already an ANSWERING status.**
 `scripts/serve_chat.py:141`:
@@ -317,7 +328,7 @@ design must not have. The course therefore chooses between:
 
 - **Mint `conditional`, non-answering for scoring, receipt-carrying.**
   The alphabet is **frozen as a closed set**
-  (`docs/SPEC-chat-completions-skin.md:175-184`;
+  (`docs/SPEC-chat-completions-skin.md:443-452`;
   `scripts/serve_chat.py:126-134`), so this is a spec amendment with a
   version bump and a capability-sheet change — a real but bounded cost.
 - **Reuse `held` and re-open `ANSWERING_STATUSES`**, which edits a
@@ -328,7 +339,7 @@ design must not have. The course therefore chooses between:
 receipts are keyed on **(route, answered?)**, and the `closure` route
 already has a status that is *non-answering for scoring* yet **carries
 its receipt verbatim** because the negative is certified
-(`docs/SPEC-chat-completions-skin.md:282-297`). A conditional answer is
+(`docs/SPEC-chat-completions-skin.md:623-635`). A conditional answer is
 the same shape: it carries evidence and is not scored as an answer. The
 engine also already draws finer answer-type distinctions than the
 alphabet suggests — `scripts/harness.py:1147-1154` explains why the
@@ -340,7 +351,7 @@ below `found` is a continuation of that reasoning, not a novelty.**
 **The consequence, and it is the reason to believe the design is
 honest:** refusal and clarification turns contribute **zero useful
 tokens** to the throughput metric whatever their content length
-(`docs/SPEC-chat-completions-skin.md:226-229`). With `conditional`
+(`docs/SPEC-chat-completions-skin.md:567-570`). With `conditional`
 non-answering, **this design cannot inflate K by converting exhaustions
 into conditionals.** The incentive that would corrupt it is removed by
 the metric that already exists. Any course that proposes to score
@@ -370,10 +381,11 @@ rather than accept:
    verify produces nothing — not a lowered threshold, not a weaker match.
    There is no global rule change to hide in.
 2. **It cannot reach the rows that already work.** By construction the
-   proposer only sees utterances row 12 already exhausted
-   (`scripts/harness.py:1824`). Rows 0–11 are byte-identical with the
-   proposer ON or OFF, and §5's quarantine gate is exactly that
-   assertion, tested.
+   proposer only sees utterances the everything-else row already
+   exhausted (`scripts/harness.py:2551`; re-pinned 2026-09-02 from
+   `:1824` — §2.2 records why the row number moved from 12 to 14). Every
+   registered row above it is byte-identical with the proposer ON or OFF,
+   and §5's quarantine gate is exactly that assertion, tested.
 3. **It adds paraphrase and intent, not looser matching.** What the
    proposer buys over the resolver is the residue §2.3 named: `greatest
    common divisor euclid` → `gcd`; "who owns x squared" → `owns x ^ 2`;
@@ -558,12 +570,12 @@ preregistration commit, and its own digests.
   tolerance and not the proposal, and the reading is void.* And C-V4's own
   failure mode is the warning: C-V4′ exists because C-V4 *"never
   establishes that the mutation should have moved"* what it measured
-  (`docs/ROADMAP-v0.20.md:102-110`). **G3 must verify that its distractors
+  (`docs/ROADMAP-v0.20.md:308-316`). **G3 must verify that its distractors
   really denote different registered queries before scoring** — the clause
   C-V4 dropped.
 - **G4 — the quarantine invariant.** Unconditional answers **never
   change**: over a preregistered corpus of lines exercising rows 0–11
-  (`docs/SPEC-chat-completions-skin.md:159-173`), every verdict dict is
+  (`docs/SPEC-chat-completions-skin.md:401-412`), every verdict dict is
   **byte-identical** with the proposer ON and OFF. Voiding sentence: *a
   single differing verdict voids the whole reading* — the house form of
   *"Frame truths never leak"* (`scripts/frames.py:8`), not a re-run of the

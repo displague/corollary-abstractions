@@ -263,7 +263,9 @@ and the change moves `harness.py`'s rendered bytes. So commit `4506f83`
 rebuilt `experiments/throughput_tasks.json` — **one leaf**,
 `/rendering_module_digests/scripts/harness.py`, with all 119 task ids,
 halves, turns and expected records byte-identical and `half_b_seal`
-unchanged. `docs/SPEC-chat-completions-skin.md:237–258` outranks the design's
+unchanged. `docs/SPEC-chat-completions-skin.md:578-599` (re-pinned 2026-09-02 from
+`:237–258`; the rule's bytes are unchanged, the SPEC grew beneath it)
+outranks the design's
 convenience here and the rebuild was correct; what was wrong is that
 `DESIGN-statements-that-run.md` §8.1 kept saying *"this slice does not seal
 its own witness book"* for a day after the commit disclosed that it had. §8.1

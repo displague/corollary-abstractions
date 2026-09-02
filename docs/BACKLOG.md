@@ -3,6 +3,39 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed at the v0.25 HOUSE RULES review (2026-09-02)
+
+- **B3's `name_sweep` positive control asserts hits over the LIVE repository
+  tree, coupling a run-scoped gate to a property of the checkout.** Recorded,
+  not fixed. The H-P1 review's repair for a control that could not fail
+  (`scripts/run_house_rules_gates.py`, the `name_sweep` detector, ~line 920)
+  made the sweep run against the real tree and the run's own pending output.
+  That is the right repair for the failure it addressed — a plant in a
+  temporary directory could not go red — but it buys the positive arm's power
+  with `bool(tree_hits)` over `REPO`: the detector `fires` only if some
+  committed file carries an admitted fixture name. Nothing in the run
+  guarantees that; what guarantees it is that
+  `experiments/house_rules_fixtures.json` is a committed file carrying every
+  admitted name by construction, which is a **tree** property, not a **run**
+  property. So a checkout that legitimately lacked the sealed corpus — a
+  sparse checkout, an export, an artifact-only replay, or a future cycle that
+  moves or renames the fixture file — would report the detector as
+  not-firing, and B3 would go red for a reason that has nothing to do with
+  what B3 measures. The pinned corpus makes this true today and the run
+  proves nothing about tomorrow.
+
+  Standing item for a successor, deliberately left as-is here because
+  changing a scored detector after the registered run is exactly the move
+  the freeze discipline forbids: the positive arm should either plant its
+  own witness inside the run's own scope (the way the PLANTED control
+  already does, on an in-memory copy of the pending output), or the
+  dependency on the committed corpus should be declared as a precondition
+  the runner checks and names *before* scoring, so a missing corpus refuses
+  the run instead of failing the gate. Evidence: run 2's B3 reads 32/32
+  stopped, `name_sweep` covering 8 mutants, with
+  `repository_files_carrying_an_admitted_name: 19` — the same 19 B5
+  discloses, which is the coupling.
+
 ## Filed by the v0.24 deep triage (2026-08-31): proposed-vs-delivered over v0.22 and v0.23
 
 Two artifact-verified audits of the agent-managed v0.22 and v0.23 cycles
@@ -604,7 +637,9 @@ gaps below are documentation-layer, filed here so they stop being gaps.
 
 - **`retract <assumption-id>` is a published normative surface that never
   serves on the chat skin (2026-08-26, said on the day it ships).**
-  `docs/SPEC-chat-completions-skin.md:175` registers the row; ¶DEV-1 replays
+  `docs/SPEC-chat-completions-skin.md:405` registers the row (re-pinned
+  2026-09-02 from `:175`, which the SPEC's growth had left pointing at §3's
+  protocol context signals); ¶DEV-1 replays
   every request into a fresh session with no assumption set, so the route
   always returns `refused`. That is correct behaviour and the spec says so.
   Filed anyway, because a published surface that never serves is exactly the
@@ -1649,7 +1684,7 @@ cycle inherits the disposition and not a rumour.
   byte-identical. This entry's hope that the batched retirement would make
   that unnecessary was wrong on the timing: the wiring had to follow the
   registered run, and §4's retirement was already behind it.
-  `docs/SPEC-chat-completions-skin.md:237–258` governs and outranks the
+  `docs/SPEC-chat-completions-skin.md:578-599` governs and outranks the
   convenience, `DESIGN-statements-that-run.md` §8.1 now carries the dated
   amendment saying so, and §8's "no throughput claim" is unweakened — a
   timed comparison still starts a fresh seal cycle.
