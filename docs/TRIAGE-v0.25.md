@@ -55,7 +55,7 @@ field inside twin groups. The tree the branch returns is unchanged; all
 12,777 committed trees are unmoved.
 
 **Why disclosure and not refusal — a census, not a preference.** Across
-14,830 committed `anonymized_template` strings (13,950 distinct, over the 40
+14,830 committed `anonymized_template` strings (13,950 distinct, over the 29
 committed files that carry one), exactly **17** hold a big-op-prefixed
 identifier: `sum_i` in 16 and `lim_h` in 1, across nine disciplines. There is
 no `prod_`, `max_` or `min_` occurrence in the committed corpus at all.
