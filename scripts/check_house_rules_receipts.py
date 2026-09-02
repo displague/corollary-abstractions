@@ -47,6 +47,30 @@ What is re-derived here, never trusted
   separate implementation of the same sweep, so it is verified rather than
   asserted.
 
+* **B12's pair count and B8's named targets** — both re-derived from the
+  SEALED corpus rather than from the run: the number of round-trip pairs the
+  corpus carries, and the set of admitted declarations citing the category
+  B8's census arm removes. Neither re-decides a line; both catch a run that
+  restated a count the seal does not support.
+* **the whole-repository disclosure's classification** — every disclosed path
+  carries a class, and the class counts sum to the hit count.
+
+WHAT THIS PROGRAM DOES **NOT** COVER, and it is most of the construction
+-----------------------------------------------------------------------
+
+Seven of the twelve gates are scored ONCE, by the runner, and nothing here
+re-derives them. **B1's ~13k-input sweep is not re-enumerated. B3's detectors
+are not re-exercised and no program in this repository executes a B3 mutant.
+B4's digests are not retaken. B6's replays are not re-run. B7's per-code
+counts are not recomputed. B11's import closure is not recomputed. B12's
+mutant arm is not re-decided, and B2's own admission set is not re-derived
+(B2 invokes the census checker, which is a second program for the CENSUS, not
+for B2).** What this file checks about those gates is internal consistency —
+a GREEN over a non-empty `misses` list, a clause softened after the score, a
+roll-up that disagrees with its table — which is worth having and is not the
+same thing as a second opinion. The run artifact publishes the same two lists
+under `provenance.second_program`, so the scope travels with the evidence.
+
 Names are derived in memory and never printed. This program's own stdout
 would otherwise become one more durable artifact carrying what B5 forbids.
 
@@ -685,6 +709,93 @@ def check_b9(
             "b9-reported-threshold",
             f"B9 carries threshold {b9.get('void_threshold')}; recomputed {threshold}",
         )
+    # The disclosure the H-P1 review's F3 asked for, RE-DERIVED rather than
+    # read: the best any member of the REGISTERED family reaches on the scored
+    # half. If it is at or below the threshold, no member could have fired and
+    # B9's green says the registered control did not separate the verdict —
+    # which is a very different sentence from the one the number alone tells.
+    # Enumerated here from the prereg's own allowed inputs, with this file's
+    # own feature reading, so the ceiling is checked and not echoed.
+    ceiling_rules: list[tuple[str, tuple]] = []
+    for feature in ("has_command_word", "line_length", "token_count"):
+        for value in sorted(
+            {_surface_features(lines[f])[feature] for f in fit_ids + scored_ids}
+        ):
+            for op in ("eq", "ge", "le"):
+                ceiling_rules.append((f"{feature}:{op}:{value}", (feature, op, value)))
+    ceiling_rules.append(("const:ADMITTED_DECLARED_SYMBOL", ("const", "", SL.VERDICT_ADMITTED)))
+    ceiling_rules.append(("const:REFUSED", ("const", "", SL.VERDICT_REFUSED)))
+
+    def score_rule(rule, ids) -> float:
+        feature, op, value = rule
+        correct = 0
+        for fixture_id in ids:
+            if feature == "const":
+                prediction = value
+            else:
+                actual = _surface_features(lines[fixture_id])[feature]
+                hit = (
+                    actual == value
+                    if op == "eq"
+                    else actual >= value
+                    if op == "ge"
+                    else actual <= value
+                )
+                prediction = SL.VERDICT_ADMITTED if hit else SL.VERDICT_REFUSED
+            correct += prediction == truth[fixture_id]
+        return round(correct / len(ids), 6)
+
+    ceiling = max(score_rule(rule, scored_ids) for _rid, rule in ceiling_rules)
+    if b9.get("family_ceiling_on_scored_half") != ceiling:
+        failures.add(
+            "b9-family-ceiling",
+            f"B9 discloses a registered-family ceiling of "
+            f"{b9.get('family_ceiling_on_scored_half')} on the scored half; a "
+            f"second enumeration of the same family reaches {ceiling}",
+        )
+    if bool(b9.get("no_member_of_the_registered_family_could_have_fired")) != (
+        ceiling <= threshold
+    ):
+        failures.add(
+            "b9-family-ceiling",
+            f"B9 records "
+            f"no_member_of_the_registered_family_could_have_fired="
+            f"{b9.get('no_member_of_the_registered_family_could_have_fired')!r}; "
+            f"the ceiling {ceiling} against threshold {threshold} says "
+            f"{ceiling <= threshold}",
+        )
+    if len(ceiling_rules) != b9.get("hypothesis_space"):
+        failures.add(
+            "b9-family-size",
+            f"B9 reports a hypothesis space of {b9.get('hypothesis_space')}; a "
+            f"second enumeration of the registered family holds "
+            f"{len(ceiling_rules)}",
+        )
+    # F3's second disclosure, recomputed: does the reported rule predict ONE
+    # class for every scored row? If so its agreement equals the majority rate
+    # by arithmetic and the "control" is a majority-class predictor.
+    predictions = {predict(lines[f]) for f in scored_ids}
+    degenerate = len(predictions) == 1
+    reported_predictions = b9.get("fitted_rule_scored_half_predictions") or {}
+    recounted: dict[str, int] = {}
+    for fixture_id in scored_ids:
+        prediction = predict(lines[fixture_id])
+        recounted[prediction] = recounted.get(prediction, 0) + 1
+    if reported_predictions != recounted:
+        failures.add(
+            "b9-degeneracy",
+            "B9's per-row prediction summary is not what the reported rule "
+            "predicts on the scored half",
+        )
+    if bool(b9.get("fitted_rule_degenerates_on_scored_half")) != degenerate:
+        failures.add(
+            "b9-degeneracy",
+            f"B9 records fitted_rule_degenerates_on_scored_half="
+            f"{b9.get('fitted_rule_degenerates_on_scored_half')!r}; the reported "
+            f"rule predicts {'one class' if degenerate else 'both classes'} on "
+            f"the scored half",
+        )
+
     fired = agreement > threshold
     if bool(b9.get("fired")) != fired:
         failures.add(
@@ -942,6 +1053,100 @@ def _sweep_repository(names: list[str], skip: tuple[str, ...]) -> tuple[list[str
     return hits, unreadable
 
 
+def check_second_program_scope(verdicts: dict, failures: Failures) -> None:
+    """The artifact must publish what this program does and does not cover."""
+
+    second = ((verdicts.get("provenance") or {}).get("second_program")) or {}
+    covers = second.get("covers")
+    does_not = second.get("does_not_cover")
+    if not isinstance(covers, list) or not covers:
+        failures.add(
+            "second-program-scope",
+            "the artifact does not publish what its second program covers",
+        )
+    if not isinstance(does_not, list) or not does_not:
+        failures.add(
+            "second-program-scope",
+            "the artifact does not publish what its second program leaves "
+            "uncovered, so a reader cannot tell how much of the run is "
+            "checked twice",
+        )
+    else:
+        print(
+            f"  second-program scope OK: {len(covers or [])} covered, "
+            f"{len(does_not)} explicitly not covered"
+        )
+
+
+def check_b12_pairs_against_the_seal(
+    verdicts: dict, fixtures: dict, prereg: dict, failures: Failures
+) -> None:
+    """The round-trip pair count, re-derived from the sealed corpus.
+
+    Independent of `symbol_ledger`: it counts the use fixtures the seal marks
+    as round-trip targets, which is a property of committed bytes. A run that
+    scored fewer pairs than the corpus carries, and reported the smaller
+    number as the denominator, is what this catches.
+    """
+
+    sealed_pairs = sum(
+        1
+        for row in fixtures["fixtures"]
+        if row["kind"] == "use" and row.get("round_trip_for")
+    )
+    frozen = prereg["frozen_numbers"].get("b12_round_trip_pairs")
+    if sealed_pairs != frozen:
+        failures.add(
+            "b12-pairs-seal",
+            f"the corpus carries {sealed_pairs} round-trip pair(s); the prereg "
+            f"freezes {frozen}",
+        )
+    b12 = (verdicts.get("construction_gate") or {}).get("B12") or {}
+    reported = str(b12.get("round_trip_pairs") or "")
+    denominator = reported.rpartition("/")[2]
+    if denominator != str(sealed_pairs):
+        failures.add(
+            "b12-pairs-denominator",
+            f"B12 reports {reported!r} pairs; the sealed corpus carries "
+            f"{sealed_pairs}",
+        )
+    else:
+        print(f"  B12 pairs OK: {sealed_pairs} re-derived from the seal")
+
+
+def check_b8_targets_against_the_seal(
+    verdicts: dict, fixtures: dict, prereg: dict, failures: Failures
+) -> None:
+    """B8's named schema targets, re-derived from the sealed corpus."""
+
+    targets = prereg["b8_named_targets"]
+    category = targets["schema_category_removed"]
+    derived = sorted(
+        row["fixture_id"]
+        for row in fixtures["fixtures"]
+        if row["kind"] == "declaration"
+        and row["expected_verdict"] == "ADMITTED_DECLARED_SYMBOL"
+        and category in (row.get("read_argument_categories") or [])
+    )
+    named = sorted(targets["schema_category_target_fixtures"])
+    if derived != named:
+        failures.add(
+            "b8-targets",
+            f"the prereg names {named} as every admitted fixture citing "
+            f"{category!r}; the sealed corpus yields {derived}",
+        )
+        return
+    b8 = (verdicts.get("construction_gate") or {}).get("B8") or {}
+    reported = sorted((b8.get("schema_arm") or {}).get("target_fixtures") or [])
+    if reported != named:
+        failures.add(
+            "b8-targets",
+            f"B8 reports target fixtures {reported}; the prereg names {named}",
+        )
+    else:
+        print(f"  B8 targets OK: {len(named)} re-derived from the seal")
+
+
 def check_b5_resweep(
     verdicts: dict,
     receipts: dict,
@@ -1022,6 +1227,30 @@ def check_b5_resweep(
             "b5-disclosure-paths",
             f"the disclosed path list differs from a second sweep: "
             f"artifact-only {only_artifact[:5]}, sweep-only {only_here[:5]}",
+        )
+    classification = disclosure.get("path_classification") or {}
+    unclassified = sorted(set(recomputed) - set(classification))
+    if unclassified:
+        failures.add(
+            "b5-disclosure-classification",
+            f"{len(unclassified)} disclosed path(s) carry no classification: "
+            f"{unclassified[:5]}",
+        )
+    counts = disclosure.get("classification_counts") or {}
+    if sum(counts.values()) != len(recomputed):
+        failures.add(
+            "b5-disclosure-classification",
+            f"the classification counts sum to {sum(counts.values())} over "
+            f"{len(recomputed)} disclosed path(s)",
+        )
+    recounted: dict[str, int] = {}
+    for name in classification.values():
+        recounted[name] = recounted.get(name, 0) + 1
+    if recounted != counts:
+        failures.add(
+            "b5-disclosure-classification",
+            "the published classification counts are not the counts of the "
+            "published per-path classification",
         )
     if not disclosure.get("all_hits_existed_before_the_run"):
         failures.add(
@@ -1201,6 +1430,9 @@ def main(argv: list[str] | None = None) -> int:
     check_result_gates(verdicts, prereg, failures)
     check_b9(verdicts, receipts, prereg, fixtures, failures)
     check_receipts(verdicts, receipts, fixtures, failures)
+    check_second_program_scope(verdicts, failures)
+    check_b12_pairs_against_the_seal(verdicts, fixtures, prereg, failures)
+    check_b8_targets_against_the_seal(verdicts, fixtures, prereg, failures)
     check_clause_order(verdicts, receipts, fixtures, failures)
     check_b5_resweep(
         verdicts,

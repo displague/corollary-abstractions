@@ -1,3 +1,176 @@
+# HOUSE RULES / R-H1: a person declares a relation symbol, the system decides on the record — and the review moved four of the instruments (2026-09-02)
+
+`experiments/house_rules_verdicts.json` (gate verdicts),
+`experiments/house_rules_receipts.json` (39 per-fixture receipts). Corpus
+`experiments/house_rules_fixtures.json` sealed at H-PRE `7a47a8a` from
+`scripts/build_house_rules_fixtures.py`; census
+`experiments/symbol_census.json` from `scripts/build_symbol_census.py`,
+recomputed by `scripts/check_symbol_census.py`. Checker
+`scripts/symbol_ledger.py`. Runner `scripts/run_house_rules_gates.py`; second
+program `scripts/check_house_rules_receipts.py`. Design
+`docs/DESIGN-house-rules.md`; prereg `experiments/house_rules_prereg.json`
+(commit `27d358d`, a proven strict ancestor of the scoring tip).
+
+**This is RUN 2 and it supersedes run 1.** Run 1 (`2ac8c9f`) is retained at
+`experiments/superseded/` with a README. An independent adversarial review
+reproduced every number in it and returned MERGE AFTER FIXES on four
+high-severity findings about the instruments rather than the arithmetic. The
+preregistration carries five dated amendments (`amd-2026-09-02-*`), each
+stating that it was authored AFTER run 1's score and that it loosens no
+threshold, floor, clause or requirement list.
+
+## The twelve-gate table
+
+| gate | verdict | what it measured on run 2 |
+| --- | --- | --- |
+| B1 | GREEN | 14,063 inputs decided — 14,024 enumerated sweep mutants plus 39 declaration fixtures — 0 fall-throughs, 0 clauses outside the committed order, 39/39 fixtures on the seal, all 6 multi-ground fixtures' ground sets matching the seal exactly |
+| B2 | GREEN | 0 of 17 swept admitted names collide with the 286-member census; the census checker reproduces the committed artifact; the reserved-prefix and library-collision named cases both refuse as sealed |
+| B3 | GREEN | 32/32 sealed mutants stopped **by a live detector**, floor 30 — and no mutant is executed by anything (below) |
+| B4 | GREEN | `working_tree_digest` and `durable_digest` byte-identical across the run; 0 paths appeared, 0 vanished, 0 stage records |
+| B5 | GREEN | 0 of the run's documents carry an admitted name; `session_state.encode` refuses both record types; a fresh session takes the opaque-atom path; 19 pre-existing repository files disclosed and classified |
+| B6 | GREEN | 3/3 wrong-arity uses refuse `USE_ARITY_MISMATCH` naming the declaration; 5/5 undeclared applied atoms byte-identical to the pre-slice path on the EMPTY-ledger arm **and 5/5 on the new POPULATED arm** (4 symbols admitted) |
+| B7 | GREEN | the enumerated sweep hits **8 of 8** refusal codes with no hand-only code, against a floor of 6; the stateless control reaches 5 of 8, and the difference is exactly the three session-state clauses |
+| B8 | GREEN | removing `meet` from a census copy flips `hr-fx-s3-t25` to admitted; removing `statistic` from a schema copy flips both `hr-fx-s1-t02` and `hr-fx-s2-t02` to `CATEGORY_NOT_IN_SCHEMA`, and those two are every admitted fixture citing it |
+| B9 | GREEN | the voiding sentence did not fire — and the registered family could not have fired it (below) |
+| B10 | GREEN | `7a47a8a` is a strict ancestor of the scoring tip; all 7 frozen pins re-digested and unmoved; clean tree; registered before the run |
+| B11 | GREEN | import closures of 3 files each, no learned or third-party import on the admission path |
+| B12 | GREEN | 13/13 round-trip pairs resolve to the LIVE ledger key; 16/16 mutants on the seal |
+
+**R-H1 is GREEN and its sentence is licensed, with a caveat that travels with
+it** (below). **R-H2 is 0 of 30** — none of the sealed inbound hypotheses
+parses as a declaration, whole or with its first token stripped, which is the
+more generous of the two readings. That is the number the design
+**pre-committed** before any run: approximately zero was expected, it is
+neither a failure nor evidence of demand, and it may not be read either way
+now. **R-H3** is not licensed by the registered run.
+
+**Numbers that moved from run 1, and why.** Three, all of them relabels or
+newly computed disclosures; no gate verdict moved. B2's `admissions: 17` is
+now `admitted_names_swept: 17` beside `live_admissions: 13` — the 17 was
+always the union of 13 live keys and 7 sealed B12 mutant keys with 3 in both,
+and the corpus's own `counts.admitted` is 13. B5's whole-repository
+disclosure moves **21 to 19**: `scripts/serve_chat.py` and
+`experiments/session_p1_command_bound.json` left the list when the grammar
+leak was repaired. B3's `mutants` now reads `32/32 stopped by a live
+detector` rather than `32/32 stopped`, because three mutants were re-pointed
+and one detector was retired.
+
+## B9, in full: the control did not fire and could not have
+
+- Registered family: 95 rules. Fitted `line_length:eq:28` on the fit half at
+  **0.700**, scoring **0.684211** out of half against a void threshold of
+  **0.784211** (anchor 0.684211 plus the declared ten-point margin). Not
+  fired, strictly.
+- **The fitted rule is degenerate on the scored half**: it predicts REFUSED
+  for all 19 rows, which is why its agreement equals the majority-class rate
+  to the digit. Run 1 reported the equality and not the reason.
+- **The registered family's ceiling on the scored half is 0.736842**
+  (`line_length:eq:32`, the lexicographically smallest of the rules tied
+  at that ceiling). It is below the threshold, so **no member of the
+  registered family could have fired the voiding sentence on this corpus,
+  whatever the fit half selected.** B9's green is evidence that the
+  registered control did not separate the verdict; it is not evidence that no
+  surface-only rule can.
+- The pre-run re-anchoring did not rescue it either: 0.684211 does not exceed
+  the superseded threshold 0.731579 recorded in the corpus's amendment 1.
+- **Richer family, reported and not the gate** (2,632 rules: closed intervals
+  on one of the three allowed features, and conjunctions of two such
+  intervals on two different features). Fitted on the FIT HALF ONLY with a
+  tie-break declared before the fit — highest fit accuracy, then narrowest
+  rule, then lexicographic. 150 rules tie at 0.700 on the fit half; the
+  tie-break selects `has_command_word:in:1..1&line_length:in:28..28`, a
+  zero-width interval, scoring **0.684211** out of half. **Not fired.** Its
+  own ceiling on the scored half is **0.789474**
+  (`has_command_word:in:1..1&line_length:in:43..53`) — which EXCEEDS the
+  threshold, and is labelled in the artifact for exactly what it is:
+  selection on the half it is scored on, not a control score.
+- Finding reported against its own author: "narrowest first" resolves a large
+  fit-half tie toward a point interval, which is the same degenerate shape
+  the registered family produced. A successor needs a tie-break that prefers
+  a rule which splits the half, and a held-out half larger than nineteen rows
+  — nineteen rows move 0.0526 apiece.
+
+R-H1's caveat, carried in the artifact beside the licensed sentence: the
+registered family's ceiling is below its own threshold, so B9's green says
+the registered control did not separate the verdict and not that nothing
+could.
+
+## B3, in full: what "stopped" means here
+
+**No mutant is executed by this run or by any other program in this
+repository, and the artifact says so in the first field a reader meets.** The
+32 mutants are prose descriptions sealed at H-PRE; the map from mutant id to
+detector is authored in the runner. What run 2 establishes is that each
+mapped detector was exercised on live material during the run and fired.
+
+Coverage, published as counts so no prose number can drift: `name_sweep` 8,
+`working_tree_digest` 8, `census_regeneration` 3, `encode_type_registry` 3,
+`record_shape_has_no_symbol_slot` 3, `id_resolution_against_the_merged_graph`
+2, and one each for `a_checked_use_is_still_a_supposition`,
+`fresh_session_has_no_ledger_entry`, `grammar_example_names`,
+`prereg_pin_chain`, `schema_digest_comparison`. (Run 1's own implementer
+report said `working_tree_digest` carried 15 of 32; the map carried 10.)
+
+Two detectors could not fail in run 1 and no longer exist in that form.
+`name_sweep` planted a name in a temporary directory and found it; it now
+runs the live B5 sweep, with its positive and negative controls on the REAL
+repository tree and a planted control on an in-memory copy of the bytes the
+run is about to write — and the arm that can go red is the unplanted pending
+output. `checker_inputs_exclude_the_runs_outputs` asserted that
+`symbol_ledger.py` holds no string constant equal to an output path, true of
+any module that never mentions them; it is RETIRED and its mutant b3-m24
+re-pointed to `name_sweep`, which is the half of b3-m24's own sealed sentence
+that can fail. Two further mutants moved to detectors that exercise the
+mechanism their seals name first: b3-m08 to `grammar_example_names`, b3-m29
+to `schema_digest_comparison`.
+
+A machine check now compares each detector's mechanism CLASS against the
+classes named in that mutant's sealed `stopper_mechanism`, by a keyword table
+published in the artifact. After the three re-points, 0 of 32 mismatch. The
+check is coarse by construction and is REPORTED rather than scored: turning a
+coarse instrument into a gate after a score is the move the registration
+forbids.
+
+## B5's scope, and the disclosure that replaced a wrong sentence
+
+**The scope sentence, unchanged and travelling with the verdict:** this
+evidences NO WRITES OBSERVED UNDER THIS HARNESS, never CANNOT WRITE. The
+standing SURVIVES-with-scope rule from the v0.24 deep triage applies.
+
+B5 sweeps the run's output tree with no carve-out, because the two declared
+outputs carry fixture ids and never an admitted name — a construction rule
+the prereg registers. The wider whole-repository sweep is disclosure and
+scores nothing: **19 pre-existing committed files** carry an admitted fixture
+name, every one of them present before the run. Run 1's artifact glossed
+those as "the sealed corpus, its builder, and the H-P0 tests"; the review
+found at least ten were none of the three. The gloss is gone and a published
+mechanical rule classifies each path instead: sealed corpus 1, corpus builder
+1, checker module 1, H-P0 tests 2, and **14 pre-existing unrelated uses of a
+common word** — a corpus data file, an old roadmap, a seeding script, four
+gate logs, and four tests belonging to other slices. Which admitted name each
+path carries is deliberately NOT published: this artifact is inside the swept
+tree, so the honest table would make B5 red by the act of disclosing.
+
+## What is scored once
+
+Seven of the twelve gates have no second program.
+`check_house_rules_receipts.py` re-derives B5's names and both sweeps, B9's
+arithmetic, B10's ancestry and pins, B8's named targets, B12's pair count,
+the clause order, the receipt set and byte-for-byte determinism. It does
+**not** re-enumerate B1's 14,024-input sweep, re-exercise B3's detectors,
+retake B4's digests, re-run B6's replays, recompute B7's counts or B11's
+closures, or re-decide B12's mutant arm. Both lists are published in the run
+artifact under `provenance.second_program`.
+
+## What no gate here licenses
+
+Ledger-groundedness, never correspondence: an admitted declaration is
+well-formed and fresh, never true or useful. No axioms, no premises, no
+conservativity, no use-side CATEGORY checking, no natural-language
+declaration, no persistence, no export toward library files, no behaviour on
+the served HTTP profiles beyond the published DEV-1 note, and no claim about
+what people will declare once they can.
+
 # PROTOCOL UPTAKE / R-U1: the same utterance takes different verified moves, and hello is not a command (2026-08-31)
 
 `experiments/protocol_uptake_run.json` (gate verdicts),

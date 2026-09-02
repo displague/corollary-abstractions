@@ -1,14 +1,41 @@
 # House rules: the person declares a symbol, and the system decides on the record
 
-**Status: design only, selected by the v0.25 course, reworked after
-adversarial review falsified its first draft; not scheduled.** Scheduling
-belongs to the next roadmap's own adjudication (`docs/ROADMAP-v0.25.md`,
-not yet written). Course receipt:
+**Status: IMPLEMENTED AND MEASURED through H-P1, on a superseding second
+registered run (2026-09-02).** Selected by the v0.25 course, reworked after
+adversarial review falsified its first draft (below), scheduled by
+`docs/ROADMAP-v0.25.md` §1. Course receipt:
 [`reports/design-direction-v0.25.json`](../reports/design-direction-v0.25.json);
-the dialect-free brief is committed beside it. Nothing here is implemented,
-and this document does not displace any parked lane or the STRANGER-GATE
-prohibition — the slice below opens no execution, no durable write, and no
-untrusted stream toward the write gate.
+the dialect-free brief is committed beside it. This document does not
+displace any parked lane or the STRANGER-GATE prohibition — the slice opens
+no execution, no durable write, and no untrusted stream toward the write
+gate.
+
+**The construction, in order, with its commits.**
+
+| stage | commit | what landed |
+| --- | --- | --- |
+| H-PRE | `7a47a8a` | the fixture seal, before any checker existed |
+| H-P0 | `c87b0ca` | the census, `scripts/symbol_ledger.py`, the `declare` row, and every pin the row moves |
+| H-P0-FIX | `e3e3980` | the clause-order discriminator sealed; corpus amendment 1, B9 re-anchored PRE-RUN |
+| CR-P0 | `11d62b8` | the cold reading re-attests the H-P0 registry |
+| H-P1-FREEZE | `27d358d` | `experiments/house_rules_prereg.json`, the runner, the second program, 100 tests |
+| H-P1 (run 1) | `2ac8c9f` | the first registered run — **SUPERSEDED**, retained at `experiments/superseded/` |
+| H-P1-FIX-FREEZE | this change | the review's fixes, five dated prereg amendments, the run-1 retirement |
+| H-P1-RUN2 | the commit adding `experiments/house_rules_verdicts.json` | the superseding registered run |
+
+**Run 1 was reviewed and superseded, and that is part of this design's
+record.** An independent adversarial review reproduced every number in run 1
+and returned MERGE AFTER FIXES. Its findings were not arithmetic: B3 executes
+no mutant and never said so; two of B3's detectors could not fail; B9's
+control family was unregistered and structurally unable to fire on this
+corpus; and the served `declare` grammar example carried an ADMITTED fixture
+symbol — b3-m08's own vector — through H-P0 and through run 1, while B3
+scored that mutant STOPPED. All four are repaired or disclosed at
+H-P1-FIX-FREEZE, the preregistration carries five dated `amd-2026-09-02-*`
+amendments recording that every one of them was authored AFTER run 1's score
+and loosens nothing, and run 1's artifacts are kept with a README saying what
+they are and are not evidence of. The measured readout is in
+`experiments/ANALYSIS.md`; three findings are in `docs/DISCOVERIES.md`.
 
 **The review that forced the rework is part of this design's record.** The
 first draft claimed the declaration would enter as an owned frame whose
@@ -467,11 +494,19 @@ else about the vocabulary discipline moves.
   the incumbent queue (STRANGER-GATE's prohibition is untouched by this
   slice and is not displaced by it).
 - **ANALYSIS:** receives H-P1's fixture numbers and the R-H2 census.
+  **Delivered** — `experiments/ANALYSIS.md`, the run-2 section, carrying the
+  twelve-gate table, B9's registered and richer-family numbers, R-H2 0/30
+  with its precommitted reading, and B5's scope sentence.
 - **DISCOVERIES:** only measured surprises — a fired B9, a nonzero R-H2,
   and the review's `sum_total` silent-capture find is already parked
   there-shaped: a reserved-prefix rewrite with no refusal is a live
   hazard of the shipped parser that this design converts into a named
-  refusal.
+  refusal. **Delivered** — three rows dated 2026-09-02: B3's
+  described-not-executed finding and what a containment gate must be next
+  time; B9's control-strength finding on a nineteen-row scored half; and the
+  grammar-example leak the review found in the committed tree. None of the
+  three is a surprise about the capability; all three are surprises about the
+  instruments, which is the kind this slice produced.
 - **BACKLOG:** carries the declined leads and folds with their triggers
   (recorded in the course receipt); MIRROR FRAGMENT parks behind its
   pre-gate; DIMENSION parks as a rider candidate.

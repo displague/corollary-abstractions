@@ -56,6 +56,34 @@ containing exactly what B5 forbids, and the gate would have to be read down to
 already committed them. Refused names are not admitted names and are quoted
 freely.
 
+## What the H-P1 adversarial review changed here (2026-09-02)
+
+Run 1 (`2ac8c9f`) scored twelve green and is retained under
+`experiments/superseded/`. An independent review returned MERGE AFTER FIXES:
+every number reproduced, and the findings were about checks that could not
+fail, scope that was not disclosed, and one real leak. What moved:
+
+* **B3 does not execute mutants and now says so.** The 32 mutants are prose;
+  the id-to-detector map is authored here; each row publishes its sealed
+  `stopper_mechanism` beside the detector, and a mechanical class check
+  reports every id whose detector belongs to no class the seal names.
+* **Two B3 detectors could not fail and were repaired or retired.**
+  `name_sweep` planted a name in a temporary directory and found it; it now
+  runs the live B5 sweep over the real tree and the run's own pending output.
+  `checker_inputs_exclude_the_runs_outputs` asserted an absence that is true
+  of every module; it is retired and its mutant re-pointed.
+* **b3-m08's vector was in the tree while run 1 scored it STOPPED.** The
+  served `declare` grammar example carried an ADMITTED fixture symbol. The
+  example is now a placeholder that appears nowhere in the corpus, and
+  `grammar_example_names` is the detector that sees such a leak.
+* **B9 discloses that its registered family could not fire.** The family
+  ceiling on the scored half, the fitted rule's degeneracy, and a richer
+  family fitted on the fit half with a pre-declared tie-break are all
+  reported. The gate stays computed from the REGISTERED family.
+* **B6 gained the populated-ledger arm**, B12's mutant arm compares against
+  the live ledger key, B2's counts are relabelled, and three hardcoded
+  booleans are computed.
+
 Usage::
 
     python scripts/run_house_rules_gates.py
@@ -68,6 +96,7 @@ from __future__ import annotations
 import argparse
 import ast
 import copy
+import hashlib
 import json
 import subprocess
 import sys
@@ -97,6 +126,8 @@ FIXTURES = "experiments/house_rules_fixtures.json"
 CENSUS = "experiments/symbol_census.json"
 SCHEMA = "schema/equation-node.schema.json"
 HYPOTHESES = "experiments/guest_hypotheses.json"
+COMMAND_BOUND = "experiments/session_p1_command_bound.json"
+SERVE_CHAT = "scripts/serve_chat.py"
 
 LEDGER_MODULE = "scripts/symbol_ledger.py"
 CENSUS_CHECKER = "scripts/check_symbol_census.py"
@@ -161,6 +192,13 @@ def _first_commit(path: str) -> str | None:
         if line.strip()
     ]
     return lines[0] if lines else None
+
+
+def _last_commit(path: str) -> str | None:
+    """The commit whose bytes the tree carries for `path` today."""
+
+    line = _git("log", "-1", "--format=%H", "--", path).strip()
+    return line or None
 
 
 def _is_ancestor(earlier: str, later: str) -> bool:
@@ -432,7 +470,12 @@ def build_sweep(document: dict, replay: Replay) -> tuple[list[tuple], dict]:
         tokens = text.split()
         for index in range(len(tokens)):
             sweep.append(
-                (_rest(" ".join(tokens[:index] + tokens[index + 1 :])), fixture_id, context)
+                (
+                    _rest(" ".join(tokens[:index] + tokens[index + 1 :])),
+                    fixture_id,
+                    context,
+                    index,
+                )
             )
             for replacement in alphabet:
                 sweep.append(
@@ -444,17 +487,36 @@ def build_sweep(document: dict, replay: Replay) -> tuple[list[tuple], dict]:
                         ),
                         fixture_id,
                         context,
+                        index,
                     )
                 )
     seen: set[tuple[str, str]] = set()
     ordered: list[tuple] = []
-    for text, fixture_id, context in sweep:
+    for text, fixture_id, context, index in sweep:
         key = (text, fixture_id)
         if key in seen:
             continue
         seen.add(key)
-        ordered.append((text, fixture_id, context))
+        ordered.append((text, fixture_id, context, index))
     ordered.sort(key=lambda item: (item[0], item[1]))
+
+    # F13's repair. These three fields were hardcoded booleans in run 1 — a
+    # runner asserting a property of its own output. They are computed here
+    # from the sweep that was actually built, and B7 reads the second one
+    # rather than a constant.
+    alphabet_set = set(alphabet)
+    outside = sorted(
+        {
+            token
+            for text, _fixture, _context, _index in ordered
+            for token in text.split()
+            if token not in alphabet_set
+        }
+    )
+    from_the_command_word = sum(1 for item in ordered if item[3] == 0)
+    alphabet_sha256 = hashlib.sha256(
+        json.dumps(alphabet, ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
     return ordered, {
         "source_lines": len(surfaces),
         "alphabet_size": len(alphabet),
@@ -472,7 +534,13 @@ def build_sweep(document: dict, replay: Replay) -> tuple[list[tuple], dict]:
             "every whitespace token occurring in any fixture LINE — command "
             "words included — enumerated from the sealed corpus, not chosen"
         ),
-        "mutation_covers_the_command_word": True,
+        "mutation_covers_the_command_word": from_the_command_word > 0,
+        "mutants_whose_mutated_token_index_is_zero": from_the_command_word,
+        "mutation_covers_the_command_word_how": (
+            "COMPUTED, not asserted: the mutated token index is carried on "
+            "every sweep row and this is the count of rows whose index is 0 — "
+            "the command word's own position"
+        ),
         "evaluated_in_context": True,
         "evaluated_in_context_note": (
             "each mutant is decided in the session context its SOURCE FIXTURE "
@@ -482,7 +550,22 @@ def build_sweep(document: dict, replay: Replay) -> tuple[list[tuple], dict]:
             "by any stateless input, so a context-free sweep would report a "
             "property of the harness as a property of the checker."
         ),
-        "authored_toward_a_code": False,
+        "authored_toward_a_code": bool(outside),
+        "authored_toward_a_code_how": (
+            "COMPUTED, not asserted: every token of every scored mutant is "
+            "checked for membership in the fixture alphabet, which is itself "
+            "enumerated from the sealed corpus. A sweep containing a token no "
+            "fixture line carries could only have been authored, and the "
+            "tokens that failed are listed below. The alphabet is pinned by "
+            "digest so a later reader can recompute the set this was checked "
+            "against"
+        ),
+        "tokens_outside_the_fixture_alphabet": outside,
+        "alphabet_sha256": alphabet_sha256,
+        "alphabet_sha256_rule": (
+            "sha256 of json.dumps(sorted_alphabet, ensure_ascii=False) encoded "
+            "utf-8"
+        ),
     }
 
 
@@ -511,7 +594,7 @@ def score_b1_b7(prereg: dict, document: dict, inputs, replay: Replay) -> tuple:
     admitted_on_sweep = 0
     fall_throughs = 0
     unknown_clauses = 0
-    for text, _source, (ctx_admitted, ctx_names) in sweep:
+    for text, _source, (ctx_admitted, ctx_names), _mutated_index in sweep:
         stateless = SL.decide(text, inputs, session_id="b1-sweep", turn_index=1)
         if not stateless.admitted:
             stateless_codes[stateless.verdict.refusal_code] = (
@@ -631,6 +714,11 @@ def score_b1_b7(prereg: dict, document: dict, inputs, replay: Replay) -> tuple:
         misses7.append("BLOCKED CONSTRUCTION: the sweep is all-admitted")
     if all_unparsed:
         misses7.append("BLOCKED CONSTRUCTION: the sweep is all-UNPARSED")
+    if meta["authored_toward_a_code"]:
+        misses7.append(
+            "the sweep carries tokens outside the fixture alphabet, so it was "
+            f"not enumerated from the seal: {meta['tokens_outside_the_fixture_alphabet'][:8]}"
+        )
 
     b7 = {
         "verdict": _verdict(misses7),
@@ -656,7 +744,9 @@ def score_b1_b7(prereg: dict, document: dict, inputs, replay: Replay) -> tuple:
         "sweep_admissions": admitted_on_sweep,
         "all_admitted": all_admitted,
         "all_unparsed": all_unparsed,
-        "no_sweep_input_authored_toward_a_code": True,
+        "no_sweep_input_authored_toward_a_code": not meta["authored_toward_a_code"],
+        "no_sweep_input_authored_toward_a_code_how": meta["authored_toward_a_code_how"],
+        "sweep_alphabet_sha256": meta["alphabet_sha256"],
         "misses": misses7,
     }
     return b1, b7, meta
@@ -712,10 +802,33 @@ def score_b2(prereg: dict, document: dict, inputs, replay: Replay) -> dict:
     if not library_rows:
         misses.append("no fixture exercised the library-collision named case")
 
+    live = sorted(set(replay.admitted_key_by_fixture.values()))
+    sealed_b12 = sorted(
+        {
+            mutant["expected_resolved_key"]
+            for mutant in document["b12_round_trip"]["mutants"]
+            if mutant["expected_resolved_key"]
+        }
+    )
     return {
         "verdict": _verdict(misses),
         "clause": prereg["gates"]["B2"],
-        "admissions": len(admitted),
+        # F12's relabel. Run 1 reported `admissions: 17` beside a corpus whose
+        # sealed `counts.admitted` is 13, and the two numbers are not the same
+        # thing: 17 is the UNION of the 13 keys this run's replay admitted and
+        # the 7 reserved-prefix-adjacent keys B12's mutants seal, three of
+        # which appear in both. The union is what B2 sweeps, because a name
+        # sealed as admissible is a name the census must not already hold
+        # whichever arm admits it.
+        "admitted_names_swept": len(admitted),
+        "live_admissions": len(live),
+        "sealed_b12_mutant_keys": len(sealed_b12),
+        "names_in_both": len(set(live) & set(sealed_b12)),
+        "union_note": (
+            "admitted_names_swept = |live_admissions U sealed_b12_mutant_keys|; "
+            "live_admissions is the corpus count the seal carries as "
+            "counts.admitted"
+        ),
         "admissions_colliding_with_the_census": len(collisions),
         "admissions_matching_a_reserved_prefix": len(prefixed),
         "census_checker": CENSUS_CHECKER,
@@ -775,7 +888,15 @@ def _sweep_tree_for_names(
     return hits, unreadable
 
 
-def _detectors(document: dict, inputs) -> dict[str, dict]:
+def _prereg_frozen() -> list[dict]:
+    """The prereg's `frozen` rows, read from the committed registration."""
+
+    return json.loads((REPO / PREREG).read_text(encoding="utf-8"))["frozen"]
+
+
+def _detectors(
+    document: dict, inputs, replay: Replay, pending_receipts: dict
+) -> dict[str, dict]:
     out: dict[str, dict] = {}
 
     decision = SL.decide(
@@ -793,15 +914,71 @@ def _detectors(document: dict, inputs) -> dict[str, dict]:
         "observed": observed,
     }
 
-    with tempfile.TemporaryDirectory() as tmp:
-        root = Path(tmp)
-        (root / "planted.json").write_text('{"x": "a_planted_name"}', encoding="utf-8")
-        found, _ = _sweep_tree_for_names(root, ["a_planted_name"])
-        clean, _ = _sweep_tree_for_names(root, ["a_name_that_is_absent"])
+    # F2's repair, and the reason this detector is now able to fail. Until the
+    # H-P1 review it planted a name in a `TemporaryDirectory` and found it
+    # again — a property of `str.__contains__`, true of any tree — and it
+    # carried seven mutants. It now runs the sweep B5 runs, against the LIVE
+    # repository tree and against the bytes this run is about to write:
+    #
+    #  * POSITIVE CONTROL, ON THE REAL TREE. The sealed corpus is a committed
+    #    file that carries every admitted fixture name by construction, so a
+    #    sweep that finds nothing in the repository is a broken sweep and not
+    #    a clean tree. The hit list is the one B5 discloses.
+    #  * NEGATIVE CONTROL, ON THE REAL TREE. A name no committed file carries
+    #    must find nothing, so the sweep is not matching everything.
+    #  * PLANTED CONTROL, on an IN-MEMORY COPY of the pending output bytes: an
+    #    admitted name appended to the receipts document is found, which shows
+    #    the sweep would catch a plant in the REAL output.
+    #  * THE VECTOR, and the half that can actually go red: the pending
+    #    receipts document, unplanted, carries no admitted name.
+    admitted_names = replay.admitted_names()
+    # The negative control's probe name is DERIVED rather than written down.
+    # A string literal for it would live in this file, this file is inside the
+    # tree the sweep covers, and the control would then find its own source
+    # and report that the sweep matches everything. Deterministic, no clock,
+    # no random source, and absent from the tree by construction.
+    absent_probe = "absent_" + hashlib.sha256(
+        b"house-rules/b3/name_sweep/negative-control"
+    ).hexdigest()[:24]
+    tree_hits, tree_unreadable = _sweep_tree_for_names(
+        REPO, admitted_names, skip=(RUN_OUT, RECEIPTS_OUT)
+    )
+    tree_clean, _ = _sweep_tree_for_names(
+        REPO, [absent_probe], skip=(RUN_OUT, RECEIPTS_OUT)
+    )
+    pending_text = json.dumps(pending_receipts, ensure_ascii=False).casefold()
+    pending_hits = sum(1 for name in admitted_names if name.casefold() in pending_text)
+    planted_text = pending_text + admitted_names[0].casefold()
+    planted_caught = any(name.casefold() in planted_text for name in admitted_names)
     out["name_sweep"] = {
-        "fires": bool(found) and not clean,
-        "kind": "sensitivity probe",
-        "observed": {"planted_found": len(found), "absent_found": len(clean)},
+        "fires": (
+            not tree_unreadable
+            and bool(tree_hits)
+            and not tree_clean
+            and pending_hits == 0
+            and planted_caught
+        ),
+        "kind": (
+            "the live B5 sweep: positive and negative controls on the REAL "
+            "repository tree, a planted control on an in-memory copy of the "
+            "bytes this run is about to write, and the vector itself — the "
+            "unplanted pending output — as the arm that can go red"
+        ),
+        "observed": {
+            "repository_files_carrying_an_admitted_name": len(tree_hits),
+            "repository_files_carrying_an_absent_probe_name": len(tree_clean),
+            "repository_files_the_sweep_could_not_read": len(tree_unreadable),
+            "pending_receipts_carrying_an_admitted_name": pending_hits,
+            "a_plant_in_a_copy_of_the_pending_receipts_was_caught": planted_caught,
+        },
+        "scope_note": (
+            "the pending VERDICTS document does not exist when B3 is scored — "
+            "it carries B3's own row — so the pending document swept here is "
+            "the receipts. The verdicts document is swept by B5 itself before "
+            "it is written, and re-swept from the COMMITTED bytes by "
+            "scripts/check_house_rules_receipts.py, which is the falsifiable "
+            "side of that half"
+        ),
     }
 
     # TWO HALVES, because a sensitivity probe on its own cannot be false. The
@@ -947,21 +1124,237 @@ def _detectors(document: dict, inputs) -> dict[str, dict]:
         },
     }
 
-    source = (REPO / LEDGER_MODULE).read_text(encoding="utf-8")
-    constants = {
-        node.value
-        for node in ast.walk(ast.parse(source))
-        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    # F4's detector, and the one that would have caught the leak the H-P1
+    # review found. `serve_chat.LINE_GRAMMAR`'s `declare` row shipped
+    # hr-fx-s1-t01's ADMITTED fixture symbol as its example, from H-P0 through
+    # H-P1's FIRST registered run. (The name is not repeated here: this file
+    # is inside the tree the sweep covers, and writing it would put it back.)
+    # That is b3-m08's vector verbatim — an admitted name inside a committed
+    # generated artifact — sitting in the tree while B3 scored b3-m08 STOPPED
+    # on a detector that never looked at a grammar row. So the grammar's own
+    # example strings, and the generated artifact that echoes them, are swept
+    # here on every run.
+    from serve_chat import LINE_GRAMMAR  # noqa: PLC0415
+
+    grammar_texts = {
+        f"serve_chat.LINE_GRAMMAR[{index}]": json.dumps(
+            row, sort_keys=True, default=list, ensure_ascii=False
+        )
+        for index, row in enumerate(LINE_GRAMMAR)
     }
-    named = [path for path in (RUN_OUT, RECEIPTS_OUT) if path in constants]
-    out["checker_inputs_exclude_the_runs_outputs"] = {
-        "fires": not named,
+    echo = json.loads((REPO / COMMAND_BOUND).read_text(encoding="utf-8"))
+    for index, row in enumerate(echo.get("classes", [])):
+        grammar_texts[f"{COMMAND_BOUND}#classes[{index}]"] = json.dumps(
+            row, sort_keys=True, ensure_ascii=False
+        )
+    grammar_hits = sorted(
+        key
+        for key, text in grammar_texts.items()
+        if any(name.casefold() in text.casefold() for name in admitted_names)
+    )
+    grammar_planted_caught = all(
+        any(
+            name.casefold() in (text + admitted_names[0]).casefold()
+            for name in admitted_names
+        )
+        for text in grammar_texts.values()
+    )
+    out["grammar_example_names"] = {
+        "fires": not grammar_hits and grammar_planted_caught,
+        "kind": (
+            "the vector itself, live over the committed tree: the served "
+            "grammar rows and the generated artifact that echoes them, swept "
+            "for admitted fixture symbol names, with a planted control on an "
+            "in-memory copy of each row"
+        ),
         "observed": {
-            "declared_outputs_named_in_the_checker": named,
-            "checker_inputs": [CENSUS, SCHEMA, "the declaration line"],
+            "grammar_rows_swept": len(LINE_GRAMMAR),
+            "generated_echo_rows_swept": len(echo.get("classes", [])),
+            "rows_carrying_an_admitted_name": len(grammar_hits),
+            "rows_carrying_an_admitted_name_keyed": grammar_hits,
+            "a_plant_in_every_row_copy_was_caught": grammar_planted_caught,
+        },
+        "sources_swept": [SERVE_CHAT + " LINE_GRAMMAR", COMMAND_BOUND],
+        "found_by_review_note": (
+            "run 1 scored b3-m08 STOPPED while this vector was present in the "
+            "committed tree; the H-P1 adversarial review found it, not the "
+            "run. This detector is what sees it, and the run-1 record is "
+            "reported rather than glossed because it is what makes the repair "
+            "checkable"
+        ),
+    }
+
+    # b3-m29's sealed mechanism names the SCHEMA DIGEST COMPARISON first —
+    # "the schema's sha256_lf is a sealed field of this artifact and of every
+    # AdmissibilityVerdict, so the digest comparison fails" — and run 1 mapped
+    # it to the working-tree digest, which is only the second half of that
+    # sentence. This exercises the first half: the digest a verdict carries is
+    # the live schema's and the prereg's pin, and a verdict built over a
+    # tampered digest is visibly not the committed schema's.
+    from dataclasses import replace as dc_replace  # noqa: PLC0415
+
+    live_schema_digest = sha256_lf(REPO / SCHEMA)
+    pinned = {row["path"]: row["sha256_lf"] for row in _prereg_frozen()}
+    agrees = (
+        decision.verdict.schema_digest
+        == live_schema_digest
+        == inputs.schema_sha256_lf
+        == pinned.get(SCHEMA)
+    )
+    tampered_decision = SL.decide(
+        "probe_of/2 (variable, variable)",
+        dc_replace(inputs, schema_sha256_lf="0" * 64),
+        session_id="b3",
+        turn_index=1,
+    )
+    detects = tampered_decision.verdict.schema_digest != live_schema_digest
+    out["schema_digest_comparison"] = {
+        "fires": agrees and detects,
+        "kind": "a live comparison, both directions",
+        "observed": {
+            "verdict_digest_equals_the_live_schema_and_the_prereg_pin": agrees,
+            "a_tampered_digest_is_visible_in_the_verdict": detects,
         },
     }
     return out
+
+
+#: THE MECHANISM CLASS EACH DETECTOR BELONGS TO, and the lowercase phrases
+#: that identify that class inside a mutant's SEALED `stopper_mechanism`
+#: sentence. Both halves are AUTHORED HERE and both are published in the run
+#: artifact, because the H-P1 review's first finding was that an authored
+#: id-to-detector map was never checked against the seal at all: b3-m29's seal
+#: names a schema-digest comparison and the map pointed it at the working-tree
+#: digest; b3-m07's names B5's receipt sweep and the map pointed it at a
+#: temporary-directory probe.
+#:
+#: WHAT THIS CHECK CAN AND CANNOT ESTABLISH, stated before its result is read.
+#: It can establish that the detector a mutant is mapped to belongs to a
+#: mechanism class the mutant's own seal NAMES. It cannot establish that the
+#: detector reproduces the mutant: the 32 mutants are PROSE DESCRIPTIONS of
+#: attempts, nothing here executes one, and a keyword match over a sentence is
+#: a coarse instrument by construction. It is published so the coarseness is
+#: inspectable rather than asserted, and a mismatch is REPORTED BY ID rather
+#: than folded into a pass.
+MECHANISM_CLASS_KEYWORDS: dict[str, tuple[str, ...]] = {
+    "name_sweep_over_written_bytes": (
+        "name sweep",
+        "sweep",
+        "finds the name",
+        "found string",
+    ),
+    "codec_type_registry": (
+        "session_state.encode",
+        "encode",
+        "_types",
+        "codec",
+        "sessionformaterror",
+    ),
+    "working_tree_digest": (
+        "working_tree_digest",
+        "durable_digest",
+        "tree digest",
+        "both digests",
+        "digest moves",
+        "digest comparison",
+        "digest difference",
+        "b4",
+    ),
+    "record_shape": (
+        "record shape",
+        "symbol-name field",
+        "cannot represent",
+        "no row can be built",
+        "framespec",
+        "literals",
+        "provenance rows",
+    ),
+    "graph_id_resolution": (
+        "node id",
+        "merged graph",
+        "resolves to nothing",
+        "corpus nodes",
+    ),
+    "supposition_status": ("still a supposition", "evidence status"),
+    "pin_chain": ("pinchainerror", "resolve_pin", "prereg_pins"),
+    "census_regeneration": (
+        "recomputes",
+        "recomputation",
+        "regeneration",
+        "census drift",
+        "re-derives",
+    ),
+    "fresh_session": ("fresh session", "replay_session", "ledger is empty"),
+    "schema_digest_pin": ("sha256_lf", "schema's sha256"),
+}
+
+#: Which class each shipped detector belongs to. Two detectors share
+#: `name_sweep_over_written_bytes` because they are the same mechanism pointed
+#: at two bodies of bytes.
+DETECTOR_MECHANISM_CLASS: dict[str, str] = {
+    "encode_type_registry": "codec_type_registry",
+    "name_sweep": "name_sweep_over_written_bytes",
+    "grammar_example_names": "name_sweep_over_written_bytes",
+    "working_tree_digest": "working_tree_digest",
+    "record_shape_has_no_symbol_slot": "record_shape",
+    "id_resolution_against_the_merged_graph": "graph_id_resolution",
+    "a_checked_use_is_still_a_supposition": "supposition_status",
+    "prereg_pin_chain": "pin_chain",
+    "census_regeneration": "census_regeneration",
+    "fresh_session_has_no_ledger_entry": "fresh_session",
+    "schema_digest_comparison": "schema_digest_pin",
+}
+
+#: The three mutants whose detector MOVED between run 1 and run 2, and why.
+#: Published so the map's change is a disclosed decision rather than a silent
+#: difference between two artifacts a reader might compare.
+B3_REPOINTED_SINCE_RUN_1: dict[str, str] = {
+    "b3-m08": (
+        "was `working_tree_digest`, now `grammar_example_names`. Its seal "
+        "names a committed GENERATED ARTIFACT carrying the name, and the "
+        "digest detector cannot see a name that is already committed — which "
+        "is exactly how the served grammar example carried an admitted symbol "
+        "through run 1 while this mutant scored STOPPED"
+    ),
+    "b3-m24": (
+        "was `checker_inputs_exclude_the_runs_outputs`, now `name_sweep`. The "
+        "retired detector could not fail; the sealed sentence's own first "
+        "clause — 'B4 excludes those paths from the DIGEST, not from B5's "
+        "name sweep' — is what `name_sweep` now runs against the run's real "
+        "pending output"
+    ),
+    "b3-m29": (
+        "was `working_tree_digest`, now `schema_digest_comparison`. Its seal "
+        "names the schema sha256 comparison FIRST and the tree digest second; "
+        "run 1 mapped it to the second half only"
+    ),
+}
+
+#: Detectors the H-P1 review retired, kept by name so the artifact can say
+#: which mutants moved and why rather than showing a map that silently
+#: changed shape between two runs.
+RETIRED_DETECTORS: dict[str, str] = {
+    "checker_inputs_exclude_the_runs_outputs": (
+        "RETIRED at H-P1-FIX. It asserted that scripts/symbol_ledger.py holds "
+        "no string constant equal to either declared output path — true of "
+        "every module that never mentions them, and so a check that could not "
+        "fail. Its one mutant, b3-m24, is re-pointed at `name_sweep`, which "
+        "now sweeps the run's real pending output for admitted names and is "
+        "the half of b3-m24's own sealed sentence that can go red: 'B4 "
+        "excludes those paths from the DIGEST, not from B5's name sweep'"
+    ),
+}
+
+
+def sealed_mechanism_classes(mechanism: str) -> list[str]:
+    """Every class whose keywords occur in a sealed stopper sentence."""
+
+    folded = (mechanism or "").casefold()
+    return sorted(
+        name
+        for name, keywords in MECHANISM_CLASS_KEYWORDS.items()
+        if any(keyword in folded for keyword in keywords)
+    )
 
 
 B3_DETECTORS = {
@@ -972,7 +1365,7 @@ B3_DETECTORS = {
     "b3-m05": "name_sweep",
     "b3-m06": "record_shape_has_no_symbol_slot",
     "b3-m07": "name_sweep",
-    "b3-m08": "working_tree_digest",
+    "b3-m08": "grammar_example_names",
     "b3-m09": "encode_type_registry",
     "b3-m10": "encode_type_registry",
     "b3-m11": "name_sweep",
@@ -988,12 +1381,12 @@ B3_DETECTORS = {
     "b3-m21": "fresh_session_has_no_ledger_entry",
     "b3-m22": "working_tree_digest",
     "b3-m23": "census_regeneration",
-    "b3-m24": "checker_inputs_exclude_the_runs_outputs",
+    "b3-m24": "name_sweep",
     "b3-m25": "working_tree_digest",
     "b3-m26": "census_regeneration",
     "b3-m27": "working_tree_digest",
     "b3-m28": "working_tree_digest",
-    "b3-m29": "working_tree_digest",
+    "b3-m29": "schema_digest_comparison",
     "b3-m30": "working_tree_digest",
     "b3-m31": "census_regeneration",
     "b3-m32": "working_tree_digest",
@@ -1001,25 +1394,62 @@ B3_DETECTORS = {
 
 
 def score_b3(prereg: dict, document: dict, detectors: dict) -> dict:
+    """Score the sealed mutant set against the LIVE detectors mapped to it.
+
+    Read the three disclosure fields at the top of the returned row before any
+    number below them. Nothing here executes a mutant; the mutants are prose,
+    the map from mutant id to detector is authored in this file, and what the
+    run establishes is that each mapped detector FIRES on live material this
+    run touched. The class check added at H-P1-FIX is the third leg: it asks,
+    mechanically, whether the detector a mutant is mapped to belongs to a
+    mechanism class the mutant's own seal names, and reports every id where it
+    does not.
+    """
+
     misses: list[str] = []
     rows = []
+    uncovered: list[str] = []
+    class_mismatches: list[str] = []
+    coverage: dict[str, int] = {}
     for mutant in document["b3_containment"]["mutants"]:
         name = B3_DETECTORS.get(mutant["mutant_id"])
         detector = detectors.get(name)
-        stopped = bool(detector and detector["fires"])
-        if not stopped:
-            misses.append(f"{mutant['mutant_id']} survived: detector {name!r} did not fire")
+        mechanism = mutant.get("stopper_mechanism") or ""
+        classes = sealed_mechanism_classes(mechanism)
+        detector_class = DETECTOR_MECHANISM_CLASS.get(name)
+        class_named_in_the_seal = bool(detector_class) and detector_class in classes
+        if detector is None:
+            uncovered.append(mutant["mutant_id"])
+            outcome = "NOT COVERED BY A LIVE DETECTOR"
+        elif detector["fires"]:
+            outcome = "STOPPED"
+        else:
+            outcome = "SURVIVED"
+            misses.append(
+                f"{mutant['mutant_id']} survived: detector {name!r} did not fire"
+            )
+        if detector is not None:
+            coverage[name] = coverage.get(name, 0) + 1
+        if not class_named_in_the_seal:
+            class_mismatches.append(mutant["mutant_id"])
         rows.append(
             {
                 "mutant_id": mutant["mutant_id"],
                 "vector": mutant["vector"],
-                "outcome": "STOPPED" if stopped else "SURVIVED",
+                "outcome": outcome,
                 "stopped_by": name,
+                "sealed_stopper_mechanism": mechanism,
+                "detector_mechanism_class": detector_class,
+                "mechanism_classes_named_in_the_seal": classes,
+                "detector_class_is_named_in_the_seal": class_named_in_the_seal,
             }
         )
     floor = prereg["frozen_numbers"]["b3_mutant_floor"]
-    if len(rows) < floor:
-        misses.append(f"{len(rows)} mutants, floor {floor}")
+    stopped = sum(1 for row in rows if row["outcome"] == "STOPPED")
+    if stopped < floor:
+        misses.append(
+            f"{stopped} mutant(s) stopped by a live detector, floor {floor}"
+        )
     sealed_ids = {mutant["mutant_id"] for mutant in document["b3_containment"]["mutants"]}
     unmapped = sorted(sealed_ids - set(B3_DETECTORS))
     invented = sorted(set(B3_DETECTORS) - sealed_ids)
@@ -1027,32 +1457,97 @@ def score_b3(prereg: dict, document: dict, detectors: dict) -> dict:
         misses.append(f"sealed mutants with no detector mapped: {unmapped}")
     if invented:
         misses.append(f"detector map carries ids absent from the seal: {invented}")
-    stopped = sum(1 for row in rows if row["outcome"] == "STOPPED")
+    # A mutant explicitly mapped to nothing is reported as uncovered above,
+    # not as an unexercised detector; only a NAMED detector that the run never
+    # exercised is a defect in the runner.
+    unexercised = sorted(
+        name
+        for name in set(B3_DETECTORS.values())
+        if name is not None and name not in detectors
+    )
+    if unexercised:
+        misses.append(f"detectors mapped but never exercised: {unexercised}")
     return {
         "verdict": _verdict(misses),
         "clause": prereg["gates"]["B3"],
-        "mutants": f"{stopped}/{len(rows)} stopped",
+        # ---- read these three first -------------------------------------
+        "mutants_are_descriptions_not_executions": True,
+        "mutants_are_descriptions_not_executions_note": (
+            "THE 32 MUTANTS ARE PROSE DESCRIPTIONS SEALED AT H-PRE AND NO "
+            "MUTANT IS EXECUTED BY THIS RUN OR BY ANY OTHER PROGRAM IN THIS "
+            "REPOSITORY. What the run establishes is narrower and is the whole "
+            "of what B3's numbers mean: for each sealed mutant, the detector "
+            "the runner maps it to was exercised on live material during this "
+            "run and fired. The word 'stopped' in the rows below is that "
+            "observation and nothing more — no attempt was made and none was "
+            "repelled. A successor that wants containment MEASURED needs "
+            "executable mutants, which is the standing item this run leaves "
+            "behind."
+        ),
+        "detector_map_is_authored": True,
+        "detector_map_is_authored_note": (
+            "the sealed corpus names each mutant's stopper in PROSE "
+            "(`stopper_mechanism`), never as a machine-readable detector id, "
+            "so the id-to-detector association is AUTHORED in "
+            f"{THIS}:B3_DETECTORS. It is committed before the run and required "
+            "to cover the sealed mutant set exactly in both directions, and "
+            "every row below carries the sealed sentence beside the detector "
+            "that was mapped to it so the association can be read rather than "
+            "taken."
+        ),
+        "detector_class_check": {
+            "what_it_establishes": (
+                "that the detector a mutant is mapped to belongs to a "
+                "MECHANISM CLASS the mutant's own sealed sentence names, "
+                "matched by the published keyword table"
+            ),
+            "what_it_does_not_establish": (
+                "that the detector reproduces the mutant. A keyword match over "
+                "a sentence is coarse by construction, and several sealed "
+                "sentences name two or three classes at once — every one they "
+                "name is listed per row"
+            ),
+            "keyword_table": {
+                name: list(keywords)
+                for name, keywords in sorted(MECHANISM_CLASS_KEYWORDS.items())
+            },
+            "detector_classes": dict(sorted(DETECTOR_MECHANISM_CLASS.items())),
+            "mutants_whose_detector_class_is_not_named_in_the_seal": class_mismatches,
+            "mismatches_are_reported_not_scored": True,
+            "mismatches_are_reported_not_scored_note": (
+                "a mismatch does not fail B3 here: the check is new, the "
+                "instrument is coarse, and turning a coarse instrument into a "
+                "gate after a score would be exactly the move this "
+                "registration forbids. It is published by id so a reader can "
+                "judge each one"
+            ),
+        },
+        # ---- the numbers -------------------------------------------------
+        "mutants": f"{stopped}/{len(rows)} stopped by a live detector",
         "floor": floor,
         "survivors": [r["mutant_id"] for r in rows if r["outcome"] == "SURVIVED"],
+        "not_covered_by_a_live_detector": uncovered,
+        "detector_coverage_counts": dict(sorted(coverage.items())),
+        "detector_coverage_counts_note": (
+            "published so no prose number can drift: run 1's own report said "
+            "`working_tree_digest` covered 15 of 32 mutants and the map "
+            "carried 10. The counts are computed from the map that scored "
+            "this run"
+        ),
         "detectors_exercised": {name: detectors[name] for name in sorted(detectors)},
+        "detectors_retired_at_this_stage": dict(sorted(RETIRED_DETECTORS.items())),
+        "mutants_repointed_since_run_1": dict(sorted(B3_REPOINTED_SINCE_RUN_1.items())),
         "detector_map": f"{THIS}:B3_DETECTORS",
         "detector_map_covers_the_seal_exactly": not unmapped and not invented,
-        "detector_map_note": (
-            "DISCLOSED rather than glossed: the sealed corpus names each "
-            "mutant's stopper in PROSE (`stopper_mechanism`), not as a "
-            "machine-readable detector id, so the id-to-detector association "
-            "is AUTHORED in the runner — committed with the prereg and before "
-            "the run, and required here to cover the sealed mutant set exactly "
-            "in both directions. What is not authored is whether the named "
-            "detector fires: every one is exercised on a planted case in this "
-            "run, and a detector that did not fire fails its mutants."
-        ),
         "how_stopping_was_established": (
-            "each mutant is stopped by the SHIPPED detector the runner maps it "
-            "to from its sealed stopper_mechanism, and the runner EXERCISES "
-            "that detector on a planted case rather than asserting the "
-            "mutant's name is absent from an output — which is what the clause "
-            "forbids"
+            "each mutant is associated with a SHIPPED detector by the authored "
+            "map, the detector is exercised on live material in this run — the "
+            "real repository tree, the bytes this run is about to write, the "
+            "committed census and schema, a live session — and a detector that "
+            "did not fire fails every mutant mapped to it. No test assertion "
+            "reads a mutant's name out of an output, which is what the clause "
+            "forbids; and no mutant is executed, which is what the clause "
+            "never provided for"
         ),
         "rows": rows,
         "misses": misses,
@@ -1095,6 +1590,26 @@ def score_b6(prereg: dict, document: dict, inputs) -> dict:
                     }
                 )
 
+    # F8's repair. The fence arm below compares a session carrying a symbol
+    # ledger against a session carrying none. Run 1 ran only the arm where the
+    # attached ledger was EMPTY — and `SymbolLedger.check_use` returns None
+    # whenever `_by_name` is empty, so the two code paths provably agree and
+    # the comparison could not fail. The empty arm is kept and labelled as the
+    # trivial one; the arm that can fail is the POPULATED one, where the
+    # session has actually admitted symbols and the undeclared applied atom
+    # still has to come back untouched.
+    #
+    # Only the SYMBOL ledger is populated: `SymbolLedger.declare` mutates
+    # nothing but itself, so the assumption ledger stays empty in both arms
+    # and the one variable that moves is the one the fence is about.
+    admitting_lines = [
+        _rest(row["line"])
+        for row in document["fixtures"]
+        if row["kind"] == "declaration"
+        and row["expected_verdict"] == SL.VERDICT_ADMITTED
+    ]
+    populated_rows = []
+    populated_admitted = 0
     for row in document["fixtures"]:
         if row["kind"] != "use":
             continue
@@ -1118,6 +1633,33 @@ def score_b6(prereg: dict, document: dict, inputs) -> dict:
             misses.append(f"{row['fixture_id']}: the regression fence moved")
         fence_rows.append(
             {"fixture_id": row["fixture_id"], "byte_identical_to_the_pre_slice_path": identical}
+        )
+
+        populated = _live_session("b6-fence-populated", inputs)
+        for line in admitting_lines:
+            if len(populated.symbols.admitted_names()) >= populated.symbols.cap:
+                break
+            populated.symbols.declare(line, len(populated.symbols.verdicts()) + 1)
+        populated_admitted = len(populated.symbols.admitted_names())
+        populated.assumptions.barrier.open_turn(1)
+        populated_verdict = harness.route_line(REPO, populated, row["line"])
+        populated.assumptions.barrier.close_turn()
+        populated_identical = populated_verdict == right
+        if not populated_identical:
+            misses.append(
+                f"{row['fixture_id']}: the regression fence moved with a "
+                f"POPULATED symbol ledger"
+            )
+        populated_rows.append(
+            {
+                "fixture_id": row["fixture_id"],
+                "byte_identical_to_the_pre_slice_path": populated_identical,
+            }
+        )
+    if not populated_admitted:
+        misses.append(
+            "the populated fence arm admitted no symbol, so it is the empty "
+            "arm again"
         )
 
     # NON-EMPTINESS FLOORS, read from the seal. Without them both legs are
@@ -1148,14 +1690,38 @@ def score_b6(prereg: dict, document: dict, inputs) -> dict:
             f"{len(mismatch_rows)}"
         ),
         "undeclared_atoms_fenced": f"{sum(1 for r in fence_rows if r['byte_identical_to_the_pre_slice_path'])}/{len(fence_rows)}",
+        "undeclared_atoms_fenced_populated_arm": (
+            f"{sum(1 for r in populated_rows if r['byte_identical_to_the_pre_slice_path'])}/"
+            f"{len(populated_rows)}"
+        ),
+        "symbols_admitted_in_the_populated_arm": populated_admitted,
         "how_the_fence_was_checked": (
             "the same line routed twice — once through a session with a symbol "
             "ledger attached and once through a session with none, which IS "
             "the pre-slice code path because the new block is guarded on that "
-            "field — and the two verdict dicts compared for equality"
+            "field — and the two verdict dicts compared for equality. TWO ARMS "
+            "since H-P1-FIX: the EMPTY-LEDGER arm and the POPULATED one"
+        ),
+        "empty_ledger_arm_is_the_trivial_one": True,
+        "empty_ledger_arm_note": (
+            "`SymbolLedger.check_use` returns None whenever its name table is "
+            "empty, so with an EMPTY ledger attached the two code paths are "
+            "provably the same path and the comparison cannot fail. Run 1 ran "
+            "only that arm. It is kept because it is the exact statement of "
+            "the guard, and it is labelled trivial rather than counted as "
+            "evidence"
+        ),
+        "populated_arm_note": (
+            "the arm that can fail: the session has actually admitted symbols "
+            "before the fence turn, so `check_use` runs its lookup on a "
+            "non-empty table and an undeclared applied atom must still come "
+            "back untouched. Only the SYMBOL ledger differs between the two "
+            "sides — declaring mutates nothing else — so the assumption "
+            "ledger is empty in both and the fence tests one variable"
         ),
         "refusal_rows": mismatch_rows,
         "fence_rows": fence_rows,
+        "populated_fence_rows": populated_rows,
         "misses": misses,
     }
 
@@ -1197,10 +1763,29 @@ def score_b12(prereg: dict, document: dict, inputs, replay: Replay) -> dict:
             and decision.verdict.refusal_code == mutant["expected_refusal_code"]
             and decision.verdict.deciding_clause == mutant["expected_deciding_clause"]
         )
+        # F14's repair. Run 1 compared the head the use line resolves to
+        # against the SEAL's `expected_resolved_key` — seal to seal, with the
+        # live ledger key never entering the comparison, which is the check
+        # B12's own docstring says the pairs arm exists to avoid. The live key
+        # is `decision.declaration.symbol_name`: what the checker admitted for
+        # this mutant, this run. The seal comparison is kept beside it as a
+        # separate reported field rather than dropped.
         resolved = True
+        seal_agrees = True
+        live_key = (
+            decision.declaration.symbol_name
+            if decision.admitted and decision.declaration is not None
+            else None
+        )
         if mutant["expected_resolved_key"]:
             head = SL.applied_head(_rest(mutant["use_line"]))
-            resolved = bool(head) and head[0] == mutant["expected_resolved_key"]
+            resolved = bool(head) and live_key is not None and head[0] == live_key
+            seal_agrees = live_key == mutant["expected_resolved_key"]
+            if not seal_agrees:
+                misses.append(
+                    f"{mutant['mutant_id']}: the LIVE ledger key is not the "
+                    f"key the seal expected"
+                )
         if not expected:
             misses.append(f"{mutant['mutant_id']}: verdict differs from the seal")
         if not resolved:
@@ -1211,6 +1796,7 @@ def score_b12(prereg: dict, document: dict, inputs, replay: Replay) -> dict:
                 "adjacency": mutant["adjacency"],
                 "verdict_matches_the_seal": expected,
                 "round_trips": resolved,
+                "live_ledger_key_matches_the_seal": seal_agrees,
             }
         )
 
@@ -1226,6 +1812,16 @@ def score_b12(prereg: dict, document: dict, inputs, replay: Replay) -> dict:
             "the surface the use-side checker resolves is compared against the "
             "LEDGER KEY, not against the bytes the person typed; session "
             "hr-fx-s5 is where those two come apart under casefold expansion"
+        ),
+        "mutant_arm_compares_against_the_live_key": True,
+        "mutant_arm_note": (
+            "the mutant arm resolves each use line against the key THIS RUN "
+            "admitted for that mutant — `decision.declaration.symbol_name` — "
+            "exactly as the pairs arm does. Run 1 compared the resolved head "
+            "against the seal's own `expected_resolved_key`, which is seal to "
+            "seal and could not see a checker that admitted something else. "
+            "Agreement between the live key and the seal is reported "
+            "separately as `live_ledger_key_matches_the_seal`"
         ),
         "ledger_key_source": (
             "the keys this run's replay actually admitted, accumulated in turn "
@@ -1328,14 +1924,90 @@ def _surface_features(line: str) -> dict:
     }
 
 
+#: F3's richer surface family, declared here and in the prereg amendment
+#: `amd-2026-09-02-b9-families` before it is fitted. Features are the same
+#: three the prereg ALLOWS; what changes is the shape of the rules over them:
+#: closed intervals on one feature, and conjunctions of two such intervals on
+#: two DIFFERENT features. The registered family — three comparison operators
+#: over single thresholds — is a strict subset of this one in expressive power
+#: and is what the prereg names, so it and it alone decides the gate.
+RICHER_FAMILY_FEATURES = ("has_command_word", "line_length", "token_count")
+
+#: The pre-declared, deterministic tie-break for the richer family: highest
+#: FIT-HALF accuracy, then the NARROWEST rule (the summed width of its
+#: intervals), then the lexicographically smallest rule id. Declared before
+#: the fit so no tie is resolved by looking at the scored half — which is the
+#: exact failure the review named when it observed that `44 <= line_length <=
+#: 57` ties on the fit half at 0.700 and reaches 0.789474 out of half.
+RICHER_FAMILY_TIE_BREAK = (
+    "highest fit-half accuracy; then the narrowest rule, measured as the sum "
+    "of (hi - lo) over its interval clauses; then the lexicographically "
+    "smallest rule id. Declared before the fit, in the runner and in the "
+    "prereg amendment, so a fit-half tie is never resolved by a scored-half "
+    "number"
+)
+
+
+def _interval_family(values: dict[str, list[int]]) -> list[tuple[str, int, tuple]]:
+    """Every one- and two-feature closed-interval rule, with its width.
+
+    Returns ``(rule_id, width, clauses)`` triples, sorted by rule id, where a
+    clause is ``(feature, lo, hi)`` and a row predicts ADMITTED exactly when
+    every clause holds.
+    """
+
+    singles: dict[str, list[tuple[str, int, tuple]]] = {}
+    for feature in RICHER_FAMILY_FEATURES:
+        rows = []
+        seen = sorted(values[feature])
+        for i, lo in enumerate(seen):
+            for hi in seen[i:]:
+                rows.append(
+                    (f"{feature}:in:{lo}..{hi}", hi - lo, ((feature, lo, hi),))
+                )
+        singles[feature] = rows
+    family: list[tuple[str, int, tuple]] = []
+    for rows in singles.values():
+        family.extend(rows)
+    names = list(RICHER_FAMILY_FEATURES)
+    for i, left in enumerate(names):
+        for right in names[i + 1 :]:
+            for lid, lwidth, lclauses in singles[left]:
+                for rid, rwidth, rclauses in singles[right]:
+                    family.append(
+                        (f"{lid}&{rid}", lwidth + rwidth, lclauses + rclauses)
+                    )
+    family.sort(key=lambda row: row[0])
+    return family
+
+
 def score_b9(prereg: dict, document: dict, replay: Replay) -> dict:
     """A surface-only admitter, fitted on the fit half and scored on the other.
 
-    The hypothesis space is every threshold rule over the three ALLOWED
-    features plus the two constant predictors, enumerated and scored on the
-    fit half; the best is carried to the scored half. Ties break on the
-    lexicographically smallest rule id, so the control is deterministic and
-    has no seed.
+    THE GATE IS THE REGISTERED FAMILY AND ONLY THE REGISTERED FAMILY: every
+    threshold rule over the three allowed features plus the two constant
+    predictors, enumerated and scored on the fit half, best carried to the
+    scored half, ties broken on the lexicographically smallest rule id. That
+    is what the prereg names, and moving the gate to a family invented after
+    run 1's score would be choosing the control after seeing the result.
+
+    THREE DISCLOSURES THE H-P1 REVIEW REQUIRED, all reported and none of them
+    scoring:
+
+    1. `family_ceiling_on_scored_half` — the best any member of the REGISTERED
+       family achieves on the scored half. Run 1 reported an agreement of
+       0.684211 against a 0.784211 threshold without saying that the family's
+       own ceiling is below the threshold, which means no member could have
+       fired and the control was structurally unable to void anything.
+    2. `fitted_rule_degenerates_on_scored_half` — the fitted rule predicted
+       one class for every scored row, which is why its agreement equalled the
+       majority rate exactly. A degenerate rule is a majority-class predictor
+       wearing a feature's name.
+    3. the RICHER family above: fitted on the fit half with a pre-declared
+       tie-break, scored out of half, and reported whatever it says —
+       including if it exceeds the threshold. Its ceiling on the scored half
+       is reported too and is labelled for what it is: selection on the scored
+       half, not a legitimate control score.
     """
 
     control = prereg["b9_control"]
@@ -1395,6 +2067,78 @@ def score_b9(prereg: dict, document: dict, replay: Replay) -> dict:
     anchor = prereg["frozen_numbers"]["b9_scored_half_majority_class_rate"]
     fired = agreement > threshold
 
+    # ---- disclosure 1: the registered family's own ceiling on the scored
+    # half. If it is at or below the threshold, no member of the family the
+    # prereg registers could have fired, whatever the fit half chose.
+    # Same tie-break both families use for their fit: highest score, then the
+    # lexicographically SMALLEST rule id. Written the same way in both places
+    # so the two ceilings are comparable and neither is an accident of `max`.
+    family_ceiling = max(
+        round(accuracy(rule, scored_ids), 6) for _rid, rule in candidates
+    )
+    ceiling_id = min(
+        rid
+        for rid, rule in candidates
+        if round(accuracy(rule, scored_ids), 6) == family_ceiling
+    )
+
+    # ---- disclosure 2: does the fitted rule predict one class on the scored
+    # half? A rule that does is a majority-class predictor with a feature's
+    # name on it, and its agreement equals the majority rate by arithmetic.
+    scored_predictions: dict[str, int] = {}
+    for fixture_id in scored_ids:
+        prediction = predict(best_rule, by_id[fixture_id]["line"])
+        scored_predictions[prediction] = scored_predictions.get(prediction, 0) + 1
+    degenerate = len(scored_predictions) == 1
+
+    # ---- disclosure 3: the richer family, fitted on the FIT HALF ONLY with
+    # the tie-break declared above before any of it was run.
+    fit_values = {
+        feature: sorted(
+            {_surface_features(by_id[f]["line"])[feature] for f in fit_ids}
+        )
+        for feature in RICHER_FAMILY_FEATURES
+    }
+    family = _interval_family(fit_values)
+
+    def interval_predict(clauses, line: str) -> str:
+        features = _surface_features(line)
+        hit = all(lo <= features[name] <= hi for name, lo, hi in clauses)
+        return SL.VERDICT_ADMITTED if hit else SL.VERDICT_REFUSED
+
+    def interval_accuracy(clauses, ids) -> float:
+        correct = sum(
+            1 for f in ids if interval_predict(clauses, by_id[f]["line"]) == truth[f]
+        )
+        return correct / len(ids)
+
+    richer_fit = [
+        (round(interval_accuracy(clauses, fit_ids), 6), width, rid, clauses)
+        for rid, width, clauses in family
+    ]
+    best_fit_accuracy = max(row[0] for row in richer_fit)
+    tied = [row for row in richer_fit if row[0] == best_fit_accuracy]
+    chosen = min(tied, key=lambda row: (row[1], row[2]))
+    richer_agreement = round(interval_accuracy(chosen[3], scored_ids), 6)
+    richer_fired = richer_agreement > threshold
+    richer_ceiling_rows = [
+        (round(interval_accuracy(clauses, scored_ids), 6), rid)
+        for rid, _width, clauses in family
+    ]
+    richer_ceiling = max(row[0] for row in richer_ceiling_rows)
+    richer_ceiling_id = min(
+        rid for score, rid in richer_ceiling_rows if score == richer_ceiling
+    )
+
+    # ---- F5's arithmetic: the pre-run re-anchoring did not rescue B9. The
+    # superseded threshold is read from the sealed corpus's own amendments
+    # block, never restated here.
+    superseded = None
+    for amendment in document.get("amendments") or ():
+        if amendment.get("superseded_b9"):
+            superseded = amendment["superseded_b9"]
+    superseded_threshold = (superseded or {}).get("void_threshold")
+
     misses: list[str] = []
     if fired:
         misses.append(
@@ -1402,6 +2146,105 @@ def score_b9(prereg: dict, document: dict, replay: Replay) -> dict:
             f"agreement {agreement:.6f} exceeds the threshold {threshold}"
         )
     return {
+        "family_ceiling_on_scored_half": family_ceiling,
+        "family_ceiling_rule": ceiling_id,
+        "no_member_of_the_registered_family_could_have_fired": (
+            family_ceiling <= threshold
+        ),
+        "family_ceiling_sentence": (
+            "The best agreement ANY member of the registered family reaches on "
+            f"the scored half is {family_ceiling:.6f}, against a void threshold "
+            f"of {threshold}. "
+            + (
+                "No member of the family the prereg registers could have fired "
+                "the voiding sentence on this corpus, whatever the fit half "
+                "selected. The control as registered was structurally unable "
+                "to void the capability, and that is a fact about the family "
+                "and the 19-row scored half, not a result about the checker."
+                if family_ceiling <= threshold
+                else "At least one member could have fired, so the family was "
+                "not structurally inert on this corpus."
+            )
+        ),
+        "fitted_rule_degenerates_on_scored_half": degenerate,
+        "fitted_rule_scored_half_predictions": dict(sorted(scored_predictions.items())),
+        "fitted_rule_degeneracy_note": (
+            "the fitted rule's predictions on the scored half, counted. One "
+            "class for every row means the rule is a majority-class predictor "
+            "with a feature's name on it, and its agreement equals the "
+            "majority-class rate by arithmetic rather than by any signal the "
+            "surface carries. Run 1 reported the equality without reporting "
+            "the reason for it"
+        ),
+        "superseded_anchor_arm": {
+            "superseded_void_threshold": superseded_threshold,
+            "would_have_fired_under_the_superseded_threshold": (
+                None if superseded_threshold is None else agreement > superseded_threshold
+            ),
+            "note": (
+                "the corpus was re-anchored PRE-RUN by the sealed corpus's own "
+                "amendment 1 (38 -> 39 declarations). Reported so the "
+                "re-anchoring can be seen not to have rescued the control: the "
+                "fitted rule is unfired against the superseded threshold as "
+                "well as against the registered one"
+            ),
+        },
+        "richer_family": {
+            "is_the_gate": False,
+            "why_not_the_gate": (
+                "the prereg registers the threshold family and the gate is "
+                "what the prereg names. This family was authored on "
+                "2026-09-02, AFTER run 1's score, in response to the H-P1 "
+                "review; scoring the capability against a control chosen after "
+                "a result is the move the registration exists to prevent. It "
+                "is reported in full, including if it exceeds the threshold"
+            ),
+            "shape": (
+                "closed intervals lo <= feature <= hi on one of the three "
+                "allowed features, and conjunctions of two such intervals on "
+                "two DIFFERENT features"
+            ),
+            "features": list(RICHER_FAMILY_FEATURES),
+            "size": len(family),
+            "values_enumerated_over": "the FIT half only",
+            "tie_break": RICHER_FAMILY_TIE_BREAK,
+            "fit_half_selected": {
+                "rule": chosen[2],
+                "width": chosen[1],
+                "fit_half_accuracy": chosen[0],
+                "out_of_half_agreement": richer_agreement,
+                "exceeds_the_void_threshold": richer_fired,
+                "rules_tied_on_the_fit_half": len(tied),
+                "selected_rule_is_a_point_interval": chosen[1] == 0,
+                "tie_break_finding": (
+                    "REPORTED AGAINST THE TIE-BREAK'S OWN AUTHOR: 'narrowest "
+                    "first' resolves a large fit-half tie toward a ZERO-WIDTH "
+                    "interval, which is a single-value equality test and "
+                    "therefore the same degenerate shape the registered "
+                    "family's fitted rule already had. The tie-break was "
+                    "declared before the fit and is not changed after it. What "
+                    "the finding says is that a successor's family needs a "
+                    "tie-break that prefers a rule which SPLITS the half — "
+                    "widest non-degenerate, or a complexity penalty — and a "
+                    "held-out half larger than nineteen rows for either to "
+                    "mean anything"
+                ),
+            },
+            "ceiling_on_scored_half": {
+                "agreement": richer_ceiling,
+                "rule": richer_ceiling_id,
+                "this_is_selection_on_the_scored_half": True,
+                "note": (
+                    "the maximum over the whole richer family evaluated ON THE "
+                    "SCORED HALF. It is NOT a control score and may not be "
+                    "read as one: choosing a rule by the half it is scored on "
+                    "is the leak a held-out half exists to prevent. It is "
+                    "published because it bounds what any surface-only "
+                    "admitter of this shape could reach on this corpus, and "
+                    "that bound is what a successor needs"
+                ),
+            },
+        },
         "verdict": _verdict(misses),
         "clause": prereg["gates"]["B9"],
         "fitted_rule": best_id,
@@ -1445,6 +2288,58 @@ def score_b9(prereg: dict, document: dict, replay: Replay) -> dict:
         "voiding_sentence": control["voiding_sentence"],
         "misses": misses,
     }
+
+
+#: F6's replacement for a prose gloss the H-P1 review falsified. Every path
+#: the whole-repository disclosure reports is classified by this rule and the
+#: rule is published beside the result, because the alternative — naming which
+#: admitted symbol each path carries — would put admitted names inside a
+#: declared output and make B5 red by the act of disclosing.
+DISCLOSURE_CLASSIFICATION_RULE = (
+    "applied in order, first match wins: (1) the path IS the sealed corpus -> "
+    "sealed_corpus; (2) the path IS the corpus builder -> corpus_builder; (3) "
+    "the path IS the checker module -> checker_module; (4) the path IS "
+    "scripts/serve_chat.py -> grammar_example; (5) the path IS the generated "
+    "command-bound artifact -> generated_from_grammar; (6) the path is under "
+    "tests/ AND its name contains 'symbol_ledger' or 'house_rules' -> "
+    "h_p0_tests; (7) the commit that ADDED the path is an ancestor of, or is, "
+    "the sealed H-PRE commit -> pre_existing_unrelated_use_of_a_common_word, "
+    "which is to say the file was in the tree before this slice's corpus was "
+    "sealed and uses the name as its own word; (8) anything else -> "
+    "added_after_the_seal_and_unclassified, which is a finding and not a "
+    "category"
+)
+
+
+def _classify_disclosure_path(relative: str, sealed_commit: str) -> str:
+    """The mechanical rule DISCLOSURE_CLASSIFICATION_RULE states, run."""
+
+    if relative == FIXTURES:
+        return "sealed_corpus"
+    if relative == "scripts/build_house_rules_fixtures.py":
+        return "corpus_builder"
+    if relative == LEDGER_MODULE:
+        return "checker_module"
+    if relative == SERVE_CHAT:
+        return "grammar_example"
+    if relative == COMMAND_BOUND:
+        return "generated_from_grammar"
+    if relative.startswith("tests/") and (
+        "symbol_ledger" in relative or "house_rules" in relative
+    ):
+        return "h_p0_tests"
+    added = _first_commit(relative)
+    if added and (added == sealed_commit or _is_ancestor(added, sealed_commit)):
+        return "pre_existing_unrelated_use_of_a_common_word"
+    return "added_after_the_seal_and_unclassified"
+
+
+def _classification_counts(paths: list[str], sealed_commit: str) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for path in paths:
+        name = _classify_disclosure_path(path, sealed_commit)
+        counts[name] = counts.get(name, 0) + 1
+    return dict(sorted(counts.items()))
 
 
 def score_b4_b5(
@@ -1506,16 +2401,26 @@ def score_b4_b5(
 
     misses5: list[str] = []
     admitted = replay.admitted_names()
+    sealed_commit = prereg["sealed_commit"]
 
-    # THE RUN'S OUTPUT TREE, and only that. Rehearsal is how the scope was
-    # settled: swept over the whole repository the sweep finds 21 files, every
-    # one of them a PRE-EXISTING committed file — the sealed corpus that names
-    # the fixtures, its builder, and the H-P0 tests. None is a document this
-    # run wrote, and a gate about what a run persists cannot be scored against
-    # files that predate it. So the sweep covers exactly what the run
+    # THE RUN'S OUTPUT TREE, and only that. Swept over the whole repository
+    # the sweep finds a set of PRE-EXISTING committed files. Run 1's comment
+    # here called them "the sealed corpus that names the fixtures, its
+    # builder, and the H-P0 tests" and the H-P1 review falsified that gloss:
+    # at least ten of the twenty-one were none of those three — a corpus data
+    # file, an old roadmap, a seeding script, gate logs, and four tests
+    # belonging to other slices, all of them carrying an admitted fixture name
+    # as an ordinary English word they used first. So the gloss is replaced by
+    # a MECHANICAL CLASSIFICATION published beside the path list
+    # (`_classify_disclosure_path`), and no sentence here summarises the set
+    # any more.
+    #
+    # What has not changed is the scoping argument: none of them is a document
+    # this run wrote, and a gate about what a run persists cannot be scored
+    # against files that predate it. So the sweep covers exactly what the run
     # produced: the two declared outputs, plus every path B4 observed
-    # appearing or changing while the run executed (B4 observed none), plus
-    # the directories a session write would land in, checked for new files.
+    # appearing or changing while the run executed, plus the directories a
+    # session write would land in, checked for new files.
     written = {
         RUN_OUT: json.dumps(pending_outputs["verdicts"], ensure_ascii=False),
         RECEIPTS_OUT: json.dumps(pending_outputs["receipts"], ensure_ascii=False),
@@ -1617,9 +2522,10 @@ def score_b4_b5(
             "document in FULL, with only the B4 and B5 rows held out because "
             "they are what this sweep produces — plus every path that "
             "appeared or changed while the run executed. Pre-existing "
-            "committed files are outside it: the sealed corpus names the "
-            "fixture symbols by construction and predates this run, and the "
-            "count of those files is disclosed below"
+            "committed files are outside it, because a gate about what a run "
+            "persists cannot be scored against files that predate it; their "
+            "count, their paths and a mechanical classification of each are "
+            "disclosed below, and no prose here characterises them"
         ),
         "held_out_of_the_swept_document": ["construction_gate.B4", "construction_gate.B5"],
         "held_out_note": (
@@ -1644,6 +2550,19 @@ def score_b4_b5(
             ),
             "hits": len(repo_hits),
             "paths": repo_hits,
+            "path_classification": {
+                path: _classify_disclosure_path(path, sealed_commit)
+                for path in repo_hits
+            },
+            "classification_counts": _classification_counts(repo_hits, sealed_commit),
+            "classification_rule": DISCLOSURE_CLASSIFICATION_RULE,
+            "why_the_names_are_not_published_per_path": (
+                "the honest table would say WHICH admitted name each path "
+                "carries, and this artifact is inside the swept tree: writing "
+                "that table would put admitted names in a declared output and "
+                "make B5 red by the act of disclosing. The classification is "
+                "what can be published without echoing a name"
+            ),
             "files_that_could_not_be_read": unreadable,
             "all_hits_existed_before_the_run": not not_pre_existing,
             "hits_that_did_not_exist_before_the_run": not_pre_existing,
@@ -1788,6 +2707,49 @@ def _digests() -> dict:
     }
 
 
+#: F7's scope note, stated rather than left to be inferred. The second
+#: program (`check_house_rules_receipts.py`) re-derives these from committed
+#: bytes; anything not on this list is scored ONCE, by this runner, and a
+#: reader should weigh it accordingly.
+SECOND_PROGRAM_COVERS = (
+    "B5 — the admitted-name set re-derived from the seal and both committed "
+    "outputs re-swept, plus the whole-repository disclosure recomputed by a "
+    "separate implementation of the sweep",
+    "B9 — the halves re-derived from the sealed fixture order, the anchor "
+    "recomputed from the receipts, the threshold recomputed as anchor plus "
+    "margin, the reported fitted rule re-evaluated on the committed lines, "
+    "the firing recomputed as a strict exceedance, and the REGISTERED "
+    "family's size, its ceiling on the scored half and the fitted rule's "
+    "per-row predictions re-enumerated by a second implementation",
+    "B10 — the ancestry re-run strictly, its proof sentence reconstructed, and "
+    "every prereg `frozen` pin re-digested",
+    "B12 — the sealed round-trip pair count re-derived from the corpus and "
+    "compared against the reported denominator and the prereg's frozen number",
+    "B8 — the prereg's named target fixtures re-derived from the corpus as "
+    "every admitted declaration citing the removed category",
+    "the clause order — every receipt's deciding clause re-checked against the "
+    "sealed clause_order, and the multi-ground fixtures re-derived",
+    "the verdict table's internal consistency, the result gates, the receipt "
+    "set, provenance digests and the absence of a wall clock",
+    "byte-for-byte determinism, through --replay",
+)
+
+#: The other side of the same sentence.
+SECOND_PROGRAM_DOES_NOT_COVER = (
+    "B1's sweep is not re-enumerated: no second program re-runs the ~13k "
+    "mutants or re-decides them",
+    "B2's census comparison is not recomputed here (the census checker is its "
+    "own second program, invoked by B2 itself, but nothing re-derives B2's "
+    "own admission set)",
+    "B3's detectors are not re-exercised, and no program executes a mutant",
+    "B4's digests are not retaken by a second implementation",
+    "B6's replays are not re-run",
+    "B7's per-code counts are not recomputed",
+    "B11's import closure is not recomputed",
+    "B12's mutant arm is not re-decided",
+)
+
+
 def provenance() -> dict:
     inputs = [PREREG, FIXTURES, CENSUS, SCHEMA, LEDGER_MODULE, CENSUS_CHECKER, HYPOTHESES]
     return {
@@ -1807,6 +2769,17 @@ def provenance() -> dict:
                 sha256_lf(REPO / RECEIPT_CHECKER)
                 if (REPO / RECEIPT_CHECKER).is_file()
                 else None
+            ),
+            "covers": list(SECOND_PROGRAM_COVERS),
+            "does_not_cover": list(SECOND_PROGRAM_DOES_NOT_COVER),
+            "scope_note": (
+                "SEVEN OF THE TWELVE GATES ARE SCORED ONCE. The second program "
+                "re-derives what a reader can recompute from committed bytes "
+                "and the sealed corpus; it does not re-run the sweep, the "
+                "detectors, the replays or the closures. That is a real limit "
+                "on how much of this run is independently checked, and it is "
+                "published here rather than implied by the list of things the "
+                "checker does do"
             ),
         },
         "emitted_at_generation": True,
@@ -1852,7 +2825,14 @@ def run(out_path: Path, receipts_path: Path, allow_dirty: bool = False) -> tuple
     digest_before = _digests()
 
     replay = Replay(document, inputs)
-    detectors = _detectors(document, inputs)
+    # The receipts document is assembled BEFORE the detectors, because B3's
+    # `name_sweep` detector sweeps the bytes this run is about to write and a
+    # detector that swept nothing was the review's second finding. The
+    # verdicts document cannot be swept here — it carries B3's own row — and
+    # its sweep is B5's, plus the second program's re-sweep of the COMMITTED
+    # bytes.
+    receipts = _receipts_document(prereg, tree, replay)
+    detectors = _detectors(document, inputs, replay, receipts)
     b1, b7, sweep_meta = score_b1_b7(prereg, document, inputs, replay)
     b2 = score_b2(prereg, document, inputs, replay)
     b3 = score_b3(prereg, document, detectors)
@@ -1865,7 +2845,6 @@ def run(out_path: Path, receipts_path: Path, allow_dirty: bool = False) -> tuple
 
     digest_after = _digests()
 
-    receipts = _receipts_document(prereg, tree, replay)
     r_h2 = score_r_h2(prereg)
 
     # B4 and B5 are scored LAST, against the documents this run is about to
@@ -1901,6 +2880,67 @@ def run(out_path: Path, receipts_path: Path, allow_dirty: bool = False) -> tuple
     return verdicts, receipts
 
 
+def _corpus_provenance(prereg: dict, document: dict, tree: dict) -> dict:
+    """F5's disclosure: what moved in the sealed corpus, and when.
+
+    The prereg's `sealed_commit_note` says the corpus was sealed at the H-PRE
+    commit "before scripts/symbol_ledger.py existed". That is true of the FILE
+    and false of the PINNED BYTES: the fixtures were amended twice after
+    H-PRE — both times before any registered run, both times disclosed in the
+    corpus's own `amendments` block — and the digest the prereg freezes is the
+    later one. The H-P1 review found that the run artifact never said so. It
+    says so here, without editing the frozen note, and the prereg carries the
+    correction as amendment `amd-2026-09-02-corpus-provenance`.
+    """
+
+    amendments = [
+        {
+            "amendment": row.get("amendment"),
+            "amendment_id": row.get("amendment_id"),
+            "dated": row.get("dated"),
+            "stage": row.get("stage"),
+            "adds": list(row.get("adds") or ()),
+            "edits": list(row.get("edits") or ()),
+            "removes": list(row.get("removes") or ()),
+            "finding": row.get("finding"),
+            "b9_reanchored": row.get("b9_reanchored"),
+            "superseded_b9": row.get("superseded_b9"),
+        }
+        for row in (document.get("amendments") or ())
+    ]
+    return {
+        "fixtures": FIXTURES,
+        "fixtures_first_committed_at": tree["first_commit_of"].get(FIXTURES),
+        "fixtures_pinned_bytes_committed_at": _last_commit(FIXTURES),
+        "census_first_committed_at": tree["first_commit_of"].get(CENSUS),
+        "census_pinned_bytes_committed_at": _last_commit(CENSUS),
+        "sealed_commit": prereg["sealed_commit"],
+        "sealed_commit_note_as_registered": prereg["sealed_commit_note"],
+        "correction": (
+            "The sealed commit is where the corpus FILE was first committed, "
+            "before scripts/symbol_ledger.py existed, and B10's ancestry proof "
+            "is about that commit. The BYTES the prereg pins are later: the "
+            "corpus was amended after H-PRE and the amendments are listed "
+            "above. Every amendment is PRE-RUN — no checker had scored a "
+            "verdict against this corpus when they were made, which is the "
+            "window the corpus's own amendment note says is the only one in "
+            "which it may move — but 'sealed before the checker existed' is "
+            "true of the file and not of the digest, and the two were not "
+            "distinguished in run 1's artifact"
+        ),
+        "amendments": amendments,
+        "amendments_are_pre_run": True,
+        "what_moved": (
+            "amendment 1 added one declaration fixture (hr-fx-s1-t14) to "
+            "discriminate a clause transposition the sealed corpus could not "
+            "discriminate, which moved the declaration population 38 -> 39 and "
+            "forced B9's split, class balance and void threshold to be "
+            "recomputed and re-sealed. B9's `superseded_anchor_arm` reports "
+            "whether the re-anchoring changed the control's outcome"
+        ),
+    }
+
+
 def _verdicts_document(
     prereg: dict,
     document: dict,
@@ -1925,6 +2965,35 @@ def _verdicts_document(
         and not b9["fired"]
         and tree["registered_before_the_run"]
     )
+    richer = b9["richer_family"]
+    r_h1_caveat = None
+    if richer["fit_half_selected"]["exceeds_the_void_threshold"]:
+        r_h1_caveat = (
+            "R-H1's `green` is computed from the REGISTERED B9 family, which "
+            "is what the preregistration names. A RICHER surface family — "
+            "single-feature closed intervals and two-feature conjunctions over "
+            "the same three allowed inputs — authored on 2026-09-02 after run "
+            "1's score and registered by prereg amendment "
+            "amd-2026-09-02-b9-families, selects "
+            f"{richer['fit_half_selected']['rule']} on the fit half and reaches "
+            f"{richer['fit_half_selected']['out_of_half_agreement']} out of "
+            f"half, which EXCEEDS the void threshold "
+            f"{b9['void_threshold']}. The sentence below therefore stands on a "
+            "control whose registered family could not separate the verdict, "
+            "and whose richer sibling can. A successor must fix the family "
+            "before its run and score it on a larger held-out half than "
+            "nineteen rows."
+        )
+    if b9["no_member_of_the_registered_family_could_have_fired"]:
+        inert = (
+            "The registered B9 family's ceiling on the scored half is "
+            f"{b9['family_ceiling_on_scored_half']} against a threshold of "
+            f"{b9['void_threshold']}: NO MEMBER of the registered family could "
+            "have fired the voiding sentence on this corpus. B9's green is "
+            "therefore evidence that the registered control did not separate "
+            "the verdict, and not evidence that no surface-only rule can."
+        )
+        r_h1_caveat = inert if r_h1_caveat is None else inert + " " + r_h1_caveat
     r_h3_reds = sorted(name for name in R_H3_GATES if name in reds)
     return {
         "schema": RUN_SCHEMA,
@@ -1939,6 +3008,7 @@ def _verdicts_document(
         "registered_before_the_run": tree["registered_before_the_run"],
         "scoring_tree": tree,
         "sealed_commit": prereg["sealed_commit"],
+        "corpus_provenance": _corpus_provenance(prereg, document, tree),
         "receipts_artifact": {
             "path": RECEIPTS_OUT,
             "receipt_count": len(replay.rows),
@@ -1962,12 +3032,27 @@ def _verdicts_document(
             "fired": b9["fired"],
             "agreement": b9["out_of_half_agreement"],
             "threshold": b9["void_threshold"],
+            "fired_under_richer_family": richer["fit_half_selected"][
+                "exceeds_the_void_threshold"
+            ],
+            "fired_under_richer_family_note": (
+                "the richer surface family was authored on 2026-09-02, after "
+                "run 1's score and in response to the H-P1 review, and is "
+                "registered by prereg amendment amd-2026-09-02-b9-families. "
+                "The sentence's own `fired` above is computed from the "
+                "REGISTERED family, because the registered control is what the "
+                "prereg names and a control chosen after a result is not a "
+                "control. This field reports the other reading rather than "
+                "hiding it"
+            ),
         },
         "result_gates": {
             "R-H1": {
                 "requires": r_h1_requires,
                 "requires_note": prereg["r_h1_requires_note"],
                 "green": r_h1_green,
+                "green_is_computed_from_the_registered_b9_family": True,
+                "caveat": r_h1_caveat,
                 "licensed_sentence": prereg["r_h1_sentence"] if r_h1_green else None,
                 "why_not": None
                 if r_h1_green

@@ -189,6 +189,95 @@
   },
   "r_h3": "Any failed construction gate B1-B8/B10/B11 or a fired B9 licenses the bounded negative with its verdict table; it does not license loosening a clause after the score.",
   "b5_scope_sentence": "This evidences NO WRITES OBSERVED UNDER THIS HARNESS, never CANNOT WRITE. The standing SURVIVES-with-scope rule from the v0.24 deep triage applies: the verdict travels with the harness that produced it.",
+  "amendments_note": "Every entry below was authored on 2026-09-02, AFTER commit 2ac8c9f scored H-P1's first registered run and AFTER an independent adversarial review of that run returned MERGE AFTER FIXES. That ordering is the first thing each entry states, because an amendment written after a score is only admissible if it cannot move the score. NOTHING BELOW LOOSENS ANYTHING: no threshold, no floor, no clause text and no gate requirement list is edited, and no frozen row is rewritten in place. What the amendments add is disclosure, two live detectors where run 1 had checks that could not fail, and one repair to the committed tree. Run 1's artifacts are retained under experiments/superseded/ and are never re-scored.",
+  "amendments": [
+    {
+      "amendment_id": "amd-2026-09-02-b9-families",
+      "dated": "2026-09-02",
+      "stage": "H-P1-FIX",
+      "authored_after_run_1_score": true,
+      "finding": "Review finding F3. B9's control family was never registered in this preregistration — it lived in the runner's code — and on the sealed corpus it is STRUCTURALLY UNABLE TO FIRE: the best agreement any member reaches on the 19-row scored half is 0.736842 against a void threshold of 0.784211. The fitted rule `line_length:eq:28` additionally predicts REFUSED for every scored row, which is why its agreement equals the majority-class rate exactly. Neither fact was disclosed in run 1's artifact.",
+      "registers_the_family_that_was_already_scored": {
+        "shape": "every rule `feature OP value` for feature in {token count, line length, presence of the command word} and OP in {le, ge, eq}, plus the two constant predictors ADMITTED and REFUSED",
+        "threshold_values_enumerated_over": "the whole declaration corpus, disclosed in run 1 as leakage in the control's favour",
+        "tie_break": "highest fit-half accuracy, then the lexicographically smallest rule id",
+        "note": "written down here for the first time. It is the family run 1 scored, transcribed without change: registering it after the fact does not make it a pre-registered family, and this entry says so rather than implying otherwise."
+      },
+      "adds_a_richer_family_as_a_reported_arm": {
+        "shape": "closed intervals lo <= feature <= hi on one of the same three allowed features, and conjunctions of two such intervals on two DIFFERENT features",
+        "fitted_on": "the FIT half only, values enumerated from the fit half only",
+        "tie_break": "highest fit-half accuracy; then the NARROWEST rule, measured as the sum of (hi - lo) over its interval clauses; then the lexicographically smallest rule id. Declared here and in the runner BEFORE the fit, so a fit-half tie is never resolved by a scored-half number — which is the leak the review named when it observed that an interval rule ties on the fit half and reaches 0.789474 out of half.",
+        "reported_as": "`construction_gate.B9.richer_family.fit_half_selected` — whatever it says, including if it exceeds 0.784211 — beside `richer_family.ceiling_on_scored_half`, which is EXPLICITLY LABELLED as selection on the scored half and is not a control score.",
+        "is_the_gate": false
+      },
+      "what_decides_the_gate": "B9's verdict, `voiding_sentence.fired`, and R-H1's `green` are all computed from the REGISTERED family and from nothing else, because the registered control is what this preregistration names and a control chosen after a result is not a control. If the richer family's fit-half-selected rule exceeds the threshold, the artifact records `voiding_sentence.fired_under_richer_family: true` and R-H1 carries a caveat naming it — the caveat travels with the sentence, and the sentence is not withdrawn by a family authored after the score.",
+      "what_a_successor_must_do": "fix the control family, its tie-break and its threshold BEFORE its run, and score them on a held-out half larger than nineteen rows. Both findings here are findings about a family and a corpus size, not about the checker: a control that cannot fire measures nothing, and a nineteen-row half moves 0.0526 per row.",
+      "loosens_nothing": "b9_void_threshold, b9_scored_half_majority_class_rate, b9_declared_margin_points, the voiding sentence and equality_is_not_a_firing are unchanged."
+    },
+    {
+      "amendment_id": "amd-2026-09-02-corpus-provenance",
+      "dated": "2026-09-02",
+      "stage": "H-P1-FIX",
+      "authored_after_run_1_score": true,
+      "finding": "Review finding F5. `sealed_commit_note` above says the H-PRE commit sealed experiments/house_rules_fixtures.json before scripts/symbol_ledger.py existed. That is true of the FILE and not of the PINNED BYTES: the corpus was first committed at 7a47a8a and its bytes last moved at e3e3980. Two commits moved them: c87b0ca rewrote the two `generator` fields when the builder moved into scripts/, and e3e3980 added the fixture hr-fx-s1-t14 together with the corpus's own `amendments` block and the B9 re-anchoring that addition forced. Run 1's artifact surfaced neither the amendments block nor the distinction.",
+      "corrects": "the FRAMING of `sealed_commit_note`, which is NOT edited in place. B10's ancestry claim is unaffected and is exactly what the note's second sentence says: the sealed commit must be a strict ancestor of the scoring tip, and it is.",
+      "fixtures_first_committed_at": "7a47a8aa73e51890d62306da8bf369a117b661a0",
+      "fixtures_pinned_bytes_committed_at": "e3e3980",
+      "amendments_are_pre_run": "Both corpus amendments predate any registered run: no checker had scored a verdict against this corpus when they were made, which is the only window the corpus's own amendment note permits it to move in.",
+      "the_re_anchoring_did_not_rescue_b9": "Corpus amendment 1 moved the declaration population 38 -> 39 and re-anchored B9 from 0.731579 to 0.784211. The fitted rule is unfired against BOTH: 0.684211 does not exceed 0.731579 either. The run artifact reports this as `construction_gate.B9.superseded_anchor_arm`.",
+      "requires_of_the_run_artifact": "a `corpus_provenance` block carrying the corpus's amendments block, `fixtures_first_committed_at` and `fixtures_pinned_bytes_committed_at`.",
+      "loosens_nothing": "no frozen row, digest or number moves."
+    },
+    {
+      "amendment_id": "amd-2026-09-02-b3-detectors",
+      "dated": "2026-09-02",
+      "stage": "H-P1-FIX",
+      "authored_after_run_1_score": true,
+      "finding": "Review findings F1, F2 and F4. (F1) B3 never executes a mutant: the 32 sealed mutants are prose descriptions, the id-to-detector map is authored in the runner, and run 1 never compared that map against each mutant's sealed `stopper_mechanism`. (F2) Two detectors could not fail — `name_sweep` planted a name in a temporary directory and found it, carrying seven mutants, and `checker_inputs_exclude_the_runs_outputs` asserted an absence true of every module that never mentions the run's outputs. (F4) The served `declare` grammar example carried an ADMITTED fixture symbol from H-P0 through run 1, which is b3-m08's own vector present in the committed tree while run 1 scored that mutant STOPPED.",
+      "requires_of_the_run_artifact": [
+        "`mutants_are_descriptions_not_executions: true`, stated plainly and first",
+        "`detector_map_is_authored: true`, with each row carrying its sealed `stopper_mechanism` beside the detector mapped to it",
+        "a published keyword table mapping mechanism CLASSES to the phrases that identify them, and a per-mutant report of every class the seal names and whether the mapped detector's class is one of them",
+        "`detector_coverage_counts`, so no prose number about how many mutants a detector carries can drift",
+        "any mutant with no live detector reported as NOT COVERED BY A LIVE DETECTOR, with B3's stopped count dropping accordingly against the unchanged floor of 30"
+      ],
+      "detector_changes": {
+        "name_sweep": "re-pointed at the LIVE repository tree and the run's own pending output, with its positive and negative controls taken on the real tree and its planted control on an in-memory copy of the pending bytes",
+        "checker_inputs_exclude_the_runs_outputs": "RETIRED; its mutant b3-m24 re-pointed to name_sweep",
+        "grammar_example_names": "NEW; sweeps serve_chat.LINE_GRAMMAR and its generated echo, and carries b3-m08",
+        "schema_digest_comparison": "NEW; carries b3-m29, whose seal names the schema sha256 comparison first"
+      },
+      "tree_repair": "scripts/serve_chat.py's `declare` example is changed to a placeholder verified absent from the census, the schema and the whole fixture corpus, and experiments/session_p1_command_bound.json is regenerated by scripts/measure_command_bound.py. The line_grammar_digest moves with it.",
+      "what_b3_still_cannot_claim": "containment MEASURED. No mutant is executed by this run or by any program in this repository; the gate observes that each mapped detector fires on live material, and the artifact says so in the first field a reader meets. A successor that wants containment measured needs executable mutants.",
+      "loosens_nothing": "b3_mutant_floor stays 30, b3_mutants_sealed stays 32, the B3 clause text is unchanged, and a detector that does not fire still fails every mutant mapped to it."
+    },
+    {
+      "amendment_id": "amd-2026-09-02-disclosure-relabels",
+      "dated": "2026-09-02",
+      "stage": "H-P1-FIX",
+      "authored_after_run_1_score": true,
+      "finding": "Review findings F6, F7, F8, F12, F13, F14 and F15 — seven items that are disclosure or check-strength and move no number a gate reads.",
+      "requires_of_the_run_artifact": {
+        "F6": "B5's whole-repository disclosure called its hits 'the sealed corpus, its builder, and the H-P0 tests'; at least ten of twenty-one were none of those. The gloss is replaced by a published mechanical classification of every disclosed path. The per-path ADMITTED NAME is deliberately NOT published: this artifact is inside the swept tree, so the honest table would make B5 red by the act of disclosing.",
+        "F7": "the artifact publishes `provenance.second_program.covers` and `.does_not_cover`; seven of the twelve gates are scored once and the artifact says which.",
+        "F8": "B6's regression fence gains the POPULATED-ledger arm; the empty-ledger arm is kept and labelled as the trivial one, because check_use returns None on an empty table and the two paths provably agree.",
+        "F12": "B2's `admissions: 17` is relabelled `admitted_names_swept` with `live_admissions` beside it and the union explained.",
+        "F13": "`mutation_covers_the_command_word`, `sweep.authored_toward_a_code` and `no_sweep_input_authored_toward_a_code` are COMPUTED from the sweep rather than hardcoded, and the fixture alphabet is pinned by digest.",
+        "F14": "B12's mutant arm resolves against the LIVE ledger key, as the pairs arm already did; agreement with the seal is reported separately.",
+        "F15": "the receipt checker's `unreadable-<artifact>` failure gains a tamper test."
+      },
+      "loosens_nothing": "every threshold, floor, clause and requirement list is unchanged; B6 and B7 gain checks that can fail and lose none."
+    },
+    {
+      "amendment_id": "amd-2026-09-02-registered-date",
+      "dated": "2026-09-02",
+      "stage": "H-P1-FIX",
+      "authored_after_run_1_score": true,
+      "finding": "Review finding F11. `registered_date` above reads 2026-09-01 while the commit that first added this file, 27d358d, is dated 2026-09-02.",
+      "reconciliation": "The registration was authored and its numbers fixed on 2026-09-01, in the same working session as H-P0's fix commit e3e3980; it was committed early on 2026-09-02. The field is NOT edited: it records when the registration was written, the commit records when it entered the history, and B10's ancestry proof reads the commit and never the field. The two are reconciled here rather than made to agree.",
+      "loosens_nothing": "nothing scored reads registered_date."
+    }
+  ],
   "non_claims": [
     "ledger-groundedness, never correspondence: an admitted declaration is well-formed and fresh, never true or useful",
     "no axioms or premises about declared symbols, and no conservativity",

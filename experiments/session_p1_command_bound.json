@@ -110,7 +110,7 @@
       "answering_vocabulary": 4,
       "bound_kind": "open",
       "class_index": 5,
-      "example": "declare parent_of/2 (variable, variable)",
+      "example": "declare rel_of/2 (variable, variable)",
       "form": "declare <name>/<arity> (<category>, ...)",
       "route": "declaration",
       "slots": [
@@ -356,7 +356,7 @@
   "design_clause": "\u00a76 P1 \u2014 compute and commit the bound on admitted commands per template class of the registered grammar",
   "determinism": "artifact committed from a deterministic runner; reproductions welcome and recorded (ROADMAP-v0.21 \u00a74.0(2))",
   "finding": "The registered grammar is NOT finite. Of 16 template classes, 5 are closed and together admit 34863 commands; 10 admit countably infinite languages (row 2 (owns <template-expr>), row 3 (suppose <claim>), row 5 (declare <name>/<arity> (<category>, ...)), row 8 (conform <statement-id> <bindings>), row 9 (<story request>), row 10 (<belief narration> / where does A think B is), row 11 (<computable relation or expression>), row 12 (<repo-relative path>), row 13 (<free text the graph claims>), row 15 (<everything else>)); 1 is closed in principle but unreadable on this boot. Series 1's fold \u2014 'the grammar is finite, so enumeration cost stops being an argument and becomes a number' \u2014 holds for the closed classes and FAILS for the open ones, and the open ones are exactly where plain prose lands (the resolver row and the complement row). So the number enumeration buys is the ANSWERING vocabulary, not the admitted language: an enumerating proposer has a finite target only because the committed material is finite, never because the grammar is. That is the correction P1 makes to the fold it was folded out of.",
-  "line_grammar_digest": "43024c6781a9f6b8e3a9fc40361eb2e64fc7cb700676a102bc90491831cb958c",
+  "line_grammar_digest": "6cf86f0ca783ef05f254ba4aeb8cd3d12f15331e8e922b2e0d9c11f1a2e2ad85",
   "line_grammar_source": "scripts/serve_chat.py LINE_GRAMMAR",
   "measured_against": "the grammar whose digest this artifact carries, and only that one. P1 was first computed against a 14-row grammar and committed; v0.21's session ledger then added the `retract <assumption-id>` row its own \u00a73 status alphabet required, which moved the grammar this measurement is OF. The artifact is recomputed rather than annotated: P1 is a computation over a committed input, not a control that ran and read unfavourably, so the record-over-rerun rule does not reach it, and a bound measured against a grammar that no longer exists would be a false sentence in a canonical artifact. The first reading and this one are both in the history, and `line_grammar_digest` dates each of them exactly. It happened a second time on 2026-09-01: DESIGN-house-rules \u00a76.2's `declare <name>/<arity> (<category>, ...)` row was inserted after `retract`, which shifted every class index at or above 5 by one exactly as the `retract` insertion shifted every index at or above 4. That cost was named in the design BEFORE the row was written and is paid in the same change as the row, which is the only way an index shift is a decision rather than a drift. `closed_total` is unmoved: the new class is open, so it adds no counted commands and removes none.",
   "prerequisite": "P1",

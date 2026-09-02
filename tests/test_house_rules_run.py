@@ -398,7 +398,29 @@ class GatesCanGoRedTests(ScoredRunTestCase):
         row = gates.score_b3(self.prereg, self.fixtures, detectors)
         self.assertEqual(row["verdict"], "RED")
         self.assertTrue(row["survivors"])
-        self.assertNotEqual(row["mutants"].split("/")[0], row["mutants"].split("/")[1])
+        stopped = int(row["mutants"].split("/")[0])
+        self.assertEqual(
+            stopped + len(row["survivors"]) + len(row["not_covered_by_a_live_detector"]),
+            len(row["rows"]),
+        )
+        self.assertLess(stopped, len(row["rows"]))
+
+    def test_b3_reports_a_mutant_no_live_detector_covers(self) -> None:
+        """A dropped detector must be reported, never counted as stopped."""
+
+        detectors = copy.deepcopy(self.table()["B3"]["detectors_exercised"])
+        target = sorted(detectors)[0]
+        carried = [m for m, d in gates.B3_DETECTORS.items() if d == target]
+        del detectors[target]
+        with mock.patch.dict(
+            gates.B3_DETECTORS,
+            {mutant: None for mutant in carried},
+        ):
+            row = gates.score_b3(self.prereg, self.fixtures, detectors)
+        self.assertEqual(sorted(row["not_covered_by_a_live_detector"]), sorted(carried))
+        self.assertEqual(row["survivors"], [])
+        stopped = int(row["mutants"].split("/")[0])
+        self.assertEqual(stopped, len(row["rows"]) - len(carried))
 
     def test_b8_goes_red_when_the_named_target_is_not_the_whole_set(self) -> None:
         prereg = copy.deepcopy(self.prereg)
@@ -1199,6 +1221,118 @@ class CheckerTamperTestsPartTwo(ScoredRunTestCase):
             ),
         )
 
+    def test_an_unreadable_artifact_is_a_named_failure(self) -> None:
+        """`unreadable-<artifact>` had no tamper; now it has one each way."""
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "house_rules_verdicts.json"
+            path.write_text("{not json,", encoding="utf-8")
+            failures = fresh()
+            with quiet():
+                loaded = checker.load_json(path, "verdicts", failures)
+            self.assertIsNone(loaded)
+            self.assertIn("unreadable-verdicts", names_of(failures))
+
+            missing = Path(tmp) / "absent.json"
+            failures = fresh()
+            with quiet():
+                checker.load_json(missing, "receipts", failures)
+            self.assertIn("missing-receipts", names_of(failures))
+
+    def test_a_dropped_path_classification_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        disclosure = verdicts["construction_gate"]["B5"][
+            "whole_repository_sweep_disclosure"
+        ]
+        dropped = sorted(disclosure["path_classification"])[0]
+        name = disclosure["path_classification"].pop(dropped)
+        disclosure["classification_counts"][name] -= 1
+        failures = fresh()
+        with quiet():
+            checker.check_b5_resweep(
+                verdicts,
+                self.receipts,
+                self.fixtures,
+                self.verdicts_path,
+                self.receipts_path,
+                failures,
+            )
+        self.assertIn("b5-disclosure-classification", names_of(failures))
+
+    def test_an_unpublished_second_program_scope_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        verdicts["provenance"]["second_program"].pop("does_not_cover")
+        failures = fresh()
+        with quiet():
+            checker.check_second_program_scope(verdicts, failures)
+        self.assertIn("second-program-scope", names_of(failures))
+
+    def test_a_restated_b12_pair_denominator_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        verdicts["construction_gate"]["B12"]["round_trip_pairs"] = "13/99"
+        failures = fresh()
+        with quiet():
+            checker.check_b12_pairs_against_the_seal(
+                verdicts, self.fixtures, self.prereg, failures
+            )
+        self.assertIn("b12-pairs-denominator", names_of(failures))
+
+    def test_a_restated_b8_target_list_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        verdicts["construction_gate"]["B8"]["schema_arm"]["target_fixtures"] = []
+        failures = fresh()
+        with quiet():
+            checker.check_b8_targets_against_the_seal(
+                verdicts, self.fixtures, self.prereg, failures
+            )
+        self.assertIn("b8-targets", names_of(failures))
+
+
+    def test_a_restated_family_ceiling_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        verdicts["construction_gate"]["B9"]["family_ceiling_on_scored_half"] = 0.99
+        failures = fresh()
+        with quiet():
+            checker.check_b9(
+                verdicts, self.receipts, self.prereg, self.fixtures, failures
+            )
+        self.assertIn("b9-family-ceiling", names_of(failures))
+
+    def test_a_denied_family_inertness_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        b9 = verdicts["construction_gate"]["B9"]
+        b9["no_member_of_the_registered_family_could_have_fired"] = not b9[
+            "no_member_of_the_registered_family_could_have_fired"
+        ]
+        failures = fresh()
+        with quiet():
+            checker.check_b9(
+                verdicts, self.receipts, self.prereg, self.fixtures, failures
+            )
+        self.assertIn("b9-family-ceiling", names_of(failures))
+
+    def test_a_restated_degeneracy_summary_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        verdicts["construction_gate"]["B9"][
+            "fitted_rule_scored_half_predictions"
+        ] = {"ADMITTED_DECLARED_SYMBOL": 19}
+        failures = fresh()
+        with quiet():
+            checker.check_b9(
+                verdicts, self.receipts, self.prereg, self.fixtures, failures
+            )
+        self.assertIn("b9-degeneracy", names_of(failures))
+
+    def test_a_restated_hypothesis_space_fails(self) -> None:
+        verdicts = copy.deepcopy(self.verdicts)
+        verdicts["construction_gate"]["B9"]["hypothesis_space"] = 3
+        failures = fresh()
+        with quiet():
+            checker.check_b9(
+                verdicts, self.receipts, self.prereg, self.fixtures, failures
+            )
+        self.assertIn("b9-family-size", names_of(failures))
+
     def test_a_restated_unreadable_list_fails(self) -> None:
         verdicts = copy.deepcopy(self.verdicts)
         verdicts["construction_gate"]["B5"]["whole_repository_sweep_disclosure"][
@@ -1216,6 +1350,325 @@ class CheckerTamperTestsPartTwo(ScoredRunTestCase):
                 whole_repository=True,
             ),
         )
+
+
+class ReviewFixTests(ScoredRunTestCase):
+    """The H-P1 review's findings, each with the check that would catch it."""
+
+    # ---- F1: B3 says what it is, and the class check runs ---------------
+
+    def test_b3_says_plainly_that_no_mutant_is_executed(self) -> None:
+        b3 = self.table()["B3"]
+        self.assertTrue(b3["mutants_are_descriptions_not_executions"])
+        self.assertTrue(b3["detector_map_is_authored"])
+        self.assertIn(
+            "NO MUTANT IS EXECUTED",
+            b3["mutants_are_descriptions_not_executions_note"],
+        )
+        # And nothing in the row claims a mutant ran. The only occurrences of
+        # the word are the two that DENY it, so the count of denials is the
+        # count of mentions.
+        text = json.dumps(b3, ensure_ascii=False).casefold()
+        self.assertEqual(text.count("executed"), text.count("no mutant is executed"))
+
+    def test_every_b3_row_carries_its_sealed_mechanism_beside_its_detector(self) -> None:
+        sealed = {
+            row["mutant_id"]: row["stopper_mechanism"]
+            for row in self.fixtures["b3_containment"]["mutants"]
+        }
+        for row in self.table()["B3"]["rows"]:
+            self.assertEqual(row["sealed_stopper_mechanism"], sealed[row["mutant_id"]])
+            self.assertIsInstance(row["mechanism_classes_named_in_the_seal"], list)
+            self.assertIsInstance(row["detector_class_is_named_in_the_seal"], bool)
+
+    def test_the_class_check_reports_mismatches_by_id(self) -> None:
+        check = self.table()["B3"]["detector_class_check"]
+        reported = check["mutants_whose_detector_class_is_not_named_in_the_seal"]
+        computed = sorted(
+            row["mutant_id"]
+            for row in self.table()["B3"]["rows"]
+            if not row["detector_class_is_named_in_the_seal"]
+        )
+        self.assertEqual(sorted(reported), computed)
+        self.assertTrue(check["mismatches_are_reported_not_scored"])
+
+    def test_the_class_check_can_find_a_mismatch(self) -> None:
+        """Point a mutant at a detector of a class its seal never names."""
+
+        with mock.patch.dict(gates.B3_DETECTORS, {"b3-m09": "prereg_pin_chain"}):
+            row = gates.score_b3(
+                self.prereg, self.fixtures, self.table()["B3"]["detectors_exercised"]
+            )
+        self.assertIn(
+            "b3-m09",
+            row["detector_class_check"]["mutants_whose_detector_class_is_not_named_in_the_seal"],
+        )
+        # reported, not scored: the gate itself is unmoved
+        self.assertEqual(row["verdict"], "GREEN")
+
+    def test_the_detector_coverage_counts_are_the_map(self) -> None:
+        b3 = self.table()["B3"]
+        counts = b3["detector_coverage_counts"]
+        self.assertEqual(sum(counts.values()), len(b3["rows"]))
+        for name, count in counts.items():
+            self.assertEqual(
+                count, sum(1 for v in gates.B3_DETECTORS.values() if v == name)
+            )
+
+    # ---- F2/F4: the two detectors that used to be unable to fail --------
+
+    def test_the_live_detectors_go_dark_on_a_planted_output_and_a_planted_grammar(
+        self,
+    ) -> None:
+        """One `_detectors` call, two poisons, each asserted on its own.
+
+        `_detectors` boots sessions and sweeps the repository twice, so the
+        two poisons ride one call. `name_sweep` is poisoned by putting an
+        admitted name into the pending receipts — the exact thing B5 forbids —
+        and `grammar_example_names` by putting one into a served grammar row.
+        Both names are derived from the sealed corpus at runtime; neither is
+        written into this file.
+        """
+
+        import serve_chat  # noqa: PLC0415
+
+        names = checker.admitted_names_from_the_seal(self.fixtures)
+        inputs = SL.load_inputs(REPO)
+        replay = gates.Replay(self.fixtures, inputs)
+        poisoned_receipts = copy.deepcopy(self.receipts)
+        poisoned_receipts["poisoned"] = names[0]
+        poisoned_grammar = tuple(serve_chat.LINE_GRAMMAR) + (
+            {"form": "x", "route": "x", "example": f"declare {names[0]}/2 (variable, variable)"},
+        )
+        with mock.patch.object(serve_chat, "LINE_GRAMMAR", poisoned_grammar):
+            detectors = gates._detectors(
+                self.fixtures, inputs, replay, poisoned_receipts
+            )
+        self.assertFalse(detectors["name_sweep"]["fires"])
+        self.assertEqual(
+            detectors["name_sweep"]["observed"][
+                "pending_receipts_carrying_an_admitted_name"
+            ],
+            1,
+        )
+        self.assertFalse(detectors["grammar_example_names"]["fires"])
+        self.assertEqual(
+            detectors["grammar_example_names"]["observed"][
+                "rows_carrying_an_admitted_name"
+            ],
+            1,
+        )
+
+    def test_the_name_sweep_controls_are_taken_on_the_real_tree(self) -> None:
+        observed = self.table()["B3"]["detectors_exercised"]["name_sweep"]["observed"]
+        self.assertGreater(observed["repository_files_carrying_an_admitted_name"], 0)
+        self.assertEqual(observed["repository_files_carrying_an_absent_probe_name"], 0)
+        self.assertEqual(observed["repository_files_the_sweep_could_not_read"], 0)
+        self.assertEqual(observed["pending_receipts_carrying_an_admitted_name"], 0)
+
+    def test_the_served_grammar_examples_name_no_admitted_fixture_symbol(self) -> None:
+        """The standing check for the leak the review found."""
+
+        import serve_chat  # noqa: PLC0415
+
+        names = [n.casefold() for n in checker.admitted_names_from_the_seal(self.fixtures)]
+        for row in serve_chat.LINE_GRAMMAR:
+            text = json.dumps(row, default=list).casefold()
+            for name in names:
+                self.assertNotIn(name, text, f"grammar row {row['route']!r}")
+
+    def test_the_retired_detector_is_named_and_its_mutant_re_pointed(self) -> None:
+        b3 = self.table()["B3"]
+        self.assertIn(
+            "checker_inputs_exclude_the_runs_outputs", b3["detectors_retired_at_this_stage"]
+        )
+        self.assertNotIn(
+            "checker_inputs_exclude_the_runs_outputs", gates.B3_DETECTORS.values()
+        )
+        self.assertEqual(
+            sorted(b3["mutants_repointed_since_run_1"]),
+            ["b3-m08", "b3-m24", "b3-m29"],
+        )
+
+    # ---- F3: B9's disclosures -------------------------------------------
+
+    def test_b9_publishes_the_registered_family_ceiling(self) -> None:
+        b9 = self.table()["B9"]
+        self.assertIn("family_ceiling_on_scored_half", b9)
+        self.assertEqual(
+            b9["no_member_of_the_registered_family_could_have_fired"],
+            b9["family_ceiling_on_scored_half"] <= b9["void_threshold"],
+        )
+        self.assertGreaterEqual(
+            b9["family_ceiling_on_scored_half"], b9["out_of_half_agreement"]
+        )
+
+    def test_b9_publishes_the_fitted_rule_degeneracy(self) -> None:
+        b9 = self.table()["B9"]
+        predictions = b9["fitted_rule_scored_half_predictions"]
+        self.assertEqual(
+            b9["fitted_rule_degenerates_on_scored_half"], len(predictions) == 1
+        )
+        scored = len(self.prereg["b9_control"]["scored_half_fixture_ids"])
+        self.assertEqual(sum(predictions.values()), scored)
+
+    def test_the_richer_family_is_reported_and_is_not_the_gate(self) -> None:
+        richer = self.table()["B9"]["richer_family"]
+        self.assertFalse(richer["is_the_gate"])
+        self.assertEqual(richer["values_enumerated_over"], "the FIT half only")
+        self.assertGreater(richer["size"], self.table()["B9"]["hypothesis_space"])
+        self.assertTrue(richer["ceiling_on_scored_half"]["this_is_selection_on_the_scored_half"])
+        self.assertGreaterEqual(
+            richer["ceiling_on_scored_half"]["agreement"],
+            richer["fit_half_selected"]["out_of_half_agreement"],
+        )
+
+    def test_the_voiding_sentence_carries_both_readings(self) -> None:
+        voiding = self.verdicts["voiding_sentence"]
+        richer = self.table()["B9"]["richer_family"]["fit_half_selected"]
+        self.assertEqual(
+            voiding["fired_under_richer_family"], richer["exceeds_the_void_threshold"]
+        )
+        self.assertEqual(
+            voiding["fired"],
+            self.table()["B9"]["out_of_half_agreement"]
+            > self.table()["B9"]["void_threshold"],
+        )
+
+    def test_r_h1_carries_the_caveat_when_the_registered_family_is_inert(self) -> None:
+        r_h1 = self.verdicts["result_gates"]["R-H1"]
+        self.assertTrue(r_h1["green_is_computed_from_the_registered_b9_family"])
+        if self.table()["B9"]["no_member_of_the_registered_family_could_have_fired"]:
+            self.assertIsNotNone(r_h1["caveat"])
+            self.assertIn("NO MEMBER", r_h1["caveat"])
+
+    def test_b9_reports_the_superseded_anchor_arm(self) -> None:
+        arm = self.table()["B9"]["superseded_anchor_arm"]
+        superseded = [
+            a["superseded_b9"]
+            for a in self.fixtures["amendments"]
+            if a.get("superseded_b9")
+        ][0]
+        self.assertEqual(
+            arm["superseded_void_threshold"], superseded["void_threshold"]
+        )
+        self.assertEqual(
+            arm["would_have_fired_under_the_superseded_threshold"],
+            self.table()["B9"]["out_of_half_agreement"]
+            > superseded["void_threshold"],
+        )
+
+    # ---- F5: the corpus provenance --------------------------------------
+
+    def test_the_artifact_surfaces_the_corpus_amendments(self) -> None:
+        block = self.verdicts["corpus_provenance"]
+        self.assertEqual(
+            [row["amendment"] for row in block["amendments"]],
+            [row["amendment"] for row in self.fixtures["amendments"]],
+        )
+        self.assertEqual(
+            block["fixtures_first_committed_at"], self.prereg["sealed_commit"]
+        )
+        self.assertNotEqual(
+            block["fixtures_pinned_bytes_committed_at"],
+            block["fixtures_first_committed_at"],
+        )
+        self.assertEqual(
+            block["sealed_commit_note_as_registered"], self.prereg["sealed_commit_note"]
+        )
+
+    # ---- F6: the disclosure classification ------------------------------
+
+    def test_every_disclosed_path_is_classified_by_the_published_rule(self) -> None:
+        disclosure = self.table()["B5"]["whole_repository_sweep_disclosure"]
+        self.assertEqual(
+            sorted(disclosure["path_classification"]), sorted(disclosure["paths"])
+        )
+        self.assertEqual(
+            sum(disclosure["classification_counts"].values()), disclosure["hits"]
+        )
+        for path, name in disclosure["path_classification"].items():
+            self.assertEqual(
+                name,
+                gates._classify_disclosure_path(path, self.prereg["sealed_commit"]),
+            )
+        self.assertNotIn(
+            "added_after_the_seal_and_unclassified",
+            disclosure["classification_counts"],
+        )
+
+    # ---- F7: the second program's scope ---------------------------------
+
+    def test_the_artifact_publishes_what_is_scored_only_once(self) -> None:
+        second = self.verdicts["provenance"]["second_program"]
+        self.assertEqual(second["covers"], list(gates.SECOND_PROGRAM_COVERS))
+        self.assertEqual(
+            second["does_not_cover"], list(gates.SECOND_PROGRAM_DOES_NOT_COVER)
+        )
+        for gate in ("B1", "B3", "B4", "B6", "B7", "B11"):
+            self.assertTrue(
+                any(row.startswith(gate) for row in second["does_not_cover"]),
+                f"{gate} is not named in the uncovered list",
+            )
+
+    # ---- F8: B6's populated arm ------------------------------------------
+
+    def test_b6_runs_the_populated_ledger_arm(self) -> None:
+        b6 = self.table()["B6"]
+        self.assertTrue(b6["empty_ledger_arm_is_the_trivial_one"])
+        self.assertGreater(b6["symbols_admitted_in_the_populated_arm"], 0)
+        self.assertEqual(
+            len(b6["populated_fence_rows"]), len(b6["fence_rows"])
+        )
+        for row in b6["populated_fence_rows"]:
+            self.assertTrue(row["byte_identical_to_the_pre_slice_path"])
+
+    # ---- F12/F13/F14 ------------------------------------------------------
+
+    def test_b2_relabels_the_swept_set_and_names_its_union(self) -> None:
+        b2 = self.table()["B2"]
+        self.assertNotIn("admissions", b2)
+        self.assertEqual(b2["live_admissions"], self.fixtures["counts"]["admitted"])
+        self.assertEqual(
+            b2["admitted_names_swept"],
+            b2["live_admissions"] + b2["sealed_b12_mutant_keys"] - b2["names_in_both"],
+        )
+
+    def test_the_sweep_booleans_are_computed_not_asserted(self) -> None:
+        sweep = self.table()["B1"]["sweep"]
+        self.assertFalse(sweep["authored_toward_a_code"])
+        self.assertEqual(sweep["tokens_outside_the_fixture_alphabet"], [])
+        self.assertGreater(sweep["mutants_whose_mutated_token_index_is_zero"], 0)
+        self.assertTrue(sweep["mutation_covers_the_command_word"])
+        alphabet = sorted(
+            {token for row in self.fixtures["fixtures"] for token in row["line"].split()}
+        )
+        import hashlib  # noqa: PLC0415
+
+        self.assertEqual(
+            sweep["alphabet_sha256"],
+            hashlib.sha256(
+                json.dumps(alphabet, ensure_ascii=False).encode("utf-8")
+            ).hexdigest(),
+        )
+        self.assertEqual(
+            self.table()["B7"]["no_sweep_input_authored_toward_a_code"], True
+        )
+
+    def test_b12_resolves_against_the_live_ledger_key(self) -> None:
+        b12 = self.table()["B12"]
+        self.assertTrue(b12["mutant_arm_compares_against_the_live_key"])
+        expecting = [
+            m["mutant_id"]
+            for m in self.fixtures["b12_round_trip"]["mutants"]
+            if m["expected_resolved_key"]
+        ]
+        checked = [
+            row["mutant_id"]
+            for row in b12["mutant_rows"]
+            if row["live_ledger_key_matches_the_seal"]
+        ]
+        self.assertEqual(sorted(expecting), sorted(set(checked) & set(expecting)))
 
 
 class ReplayTests(ScoredRunTestCase):

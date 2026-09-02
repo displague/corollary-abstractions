@@ -13,6 +13,103 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## A containment gate whose mutants are prose is a gate that has never been run (2026-09-02)
+
+**Claim.** HOUSE RULES' B3 asks that ">=30 seeded mutants attempt to move an
+admitted symbol into a rendered answer's evidence, a written session
+document, a journal, or a library path" and that "100% are stopped by the
+shipped machinery or the checker". The 32 mutants sealed at H-PRE are
+**descriptions of attempts**, not executable ones, and nothing in this
+repository executes one. What the gate can therefore observe is that a
+detector each mutant was mapped to — by an association authored in the
+runner, not sealed with the mutant — fires on live material. Run 1 reported
+"32/32 stopped" without that distinction, and the review found two of the
+detectors could not have failed: one planted a name in a temporary directory
+and found it again (carrying seven mutants), the other asserted that the
+checker module holds no string constant equal to the run's output paths,
+which is true of every module that never mentions them.
+
+**Evidence.** `experiments/superseded/house_rules_verdicts.run1.json` (run 1,
+`2ac8c9f`) against `experiments/house_rules_verdicts.json` (run 2), whose B3
+row now leads with `mutants_are_descriptions_not_executions` and publishes
+the sealed `stopper_mechanism` beside each mapped detector, a keyword table
+matching detector mechanism CLASSES against those sentences, and per-detector
+coverage counts. Two detectors repaired or retired, three mutants re-pointed;
+32/32 stopped by a live detector at the same unchanged floor of 30.
+
+**Status:** near-miss, kept deliberately. **What a containment gate must be
+next time:** the mutants must be EXECUTABLE — a program that performs the
+attempt against the live harness and returns what happened — and the seal
+must carry a machine-readable detector id per mutant rather than a prose
+sentence a later runner is free to interpret. Anything short of that measures
+that a detector fires, which is a fact about the detector.
+
+---
+
+## A blind control on nineteen rows could not have voided anything (2026-09-02)
+
+**Claim.** HOUSE RULES' B9 fits a surface-only admitter on half the
+declaration corpus and voids the capability if it agrees with the checker on
+the other half by more than ten points above that half's majority-class rate.
+On the sealed corpus the entire registered family of 95 threshold rules tops
+out at **0.736842** on the nineteen-row scored half, against a void threshold
+of **0.784211**. **No member could have fired.** The fitted rule
+`line_length:eq:28` additionally predicts REFUSED for every scored row, so
+its reported agreement of 0.684211 equals the majority-class rate by
+arithmetic and not by signal. A richer family authored after the score —
+closed intervals and two-feature conjunctions over the same three allowed
+inputs — reaches **0.789474** on the scored half, above the threshold, but
+only when the rule is chosen by the half it is scored on; fitted honestly on
+the fit half with a tie-break declared in advance it returns 0.684211 and
+does not fire.
+
+**Evidence.** `experiments/house_rules_verdicts.json`,
+`construction_gate.B9`: `family_ceiling_on_scored_half`,
+`fitted_rule_degenerates_on_scored_half`, `richer_family.fit_half_selected`,
+`richer_family.ceiling_on_scored_half`. Prereg amendment
+`amd-2026-09-02-b9-families`. R-H1's `caveat` field carries the finding
+beside the licensed sentence.
+
+**Status:** near-miss, kept deliberately. A control that cannot fire measures
+nothing, and a nineteen-row held-out half moves 0.0526 per row. The next
+slice to use a blind control must register the family, its tie-break and its
+threshold before the run, and must check the family's own ceiling against the
+threshold at registration time — which is a one-line computation that would
+have caught this before any score existed.
+
+---
+
+## The system published an admitted symbol in its own grammar example (2026-09-02)
+
+**Claim.** From `c87b0ca` through H-P1's first registered run, the `declare`
+row of `serve_chat.LINE_GRAMMAR` carried, as its example line, the ADMITTED
+fixture symbol of `hr-fx-s1-t01` — and so did
+`experiments/session_p1_command_bound.json`, the generated artifact that
+echoes the grammar, and the capability sheet served from it. That is b3-m08's
+sealed vector verbatim ("the capability sheet is a committed generated
+artifact inside `write_stage.working_tree_digest`... B5's sweep finds the
+name") present in the committed tree while B3 scored b3-m08 STOPPED. B5 did
+not see it because B5 is scoped to the run's OUTPUT tree, and the digest
+detector b3-m08 was mapped to cannot see a name that is already committed.
+**The adversarial review found it; no gate did.**
+
+**Evidence.** `scripts/serve_chat.py:368` at `2ac8c9f`, and
+`experiments/session_p1_command_bound.json:113` at the same tip. Repaired at
+H-P1-FIX-FREEZE: the example is a placeholder verified absent from the
+census, the schema and the whole fixture corpus, the generated artifact is
+regenerated by its writer, and the `line_grammar_digest` moves with it. The
+standing detector is `grammar_example_names`, which sweeps the served grammar
+rows and their generated echo on every run and now carries b3-m08; a test
+drives it red by planting a derived name in a grammar row.
+
+**Status:** exact. The general shape is worth carrying: **an example is a
+value, and a value drawn from a sealed corpus inherits that corpus's
+prohibitions.** Every generated artifact that echoes an authored example is a
+copy of that value, and a containment gate scoped to a run's outputs will
+never look at any of them.
+
+---
+
 ## The host bound the exact request and refused the tool in the same breath (2026-08-31)
 
 **Claim.** codex-cli 0.150.1's tool wire and its tool policy are separate

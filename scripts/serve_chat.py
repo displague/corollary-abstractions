@@ -365,7 +365,19 @@ LINE_GRAMMAR: tuple[dict, ...] = (
     {
         "form": "declare <name>/<arity> (<category>, ...)",
         "route": "declaration",
-        "example": "declare parent_of/2 (variable, variable)",
+        # THE EXAMPLE NAME IS A PLACEHOLDER THAT APPEARS NOWHERE IN THE SEALED
+        # CORPUS, and it is not named here either, for the same reason. From
+        # H-P0 through H-P1's first registered run this row's example was
+        # hr-fx-s1-t01's ADMITTED fixture symbol, which made this line — and
+        # every generated artifact that echoes it — an instance of b3-m08's
+        # own vector sitting in the committed tree while B3 scored that mutant
+        # STOPPED. The H-P1 adversarial review found it; the run did not.
+        # `rel_of` was checked against the census, the schema and the whole
+        # fixture corpus before it was chosen, and
+        # `run_house_rules_gates._detectors`' `grammar_example_names` detector
+        # now sweeps this row and its generated echoes on every run, so the
+        # next such leak fails B3 instead of hiding behind it.
+        "example": "declare rel_of/2 (variable, variable)",
         "statuses": ["held", "refused"],
         "requires": (),
         "note": (
