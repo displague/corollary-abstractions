@@ -17,7 +17,10 @@ exactly what it is and is not evidence of.
   machine-enumerated sweep; a misused declared symbol refused **by name**
   where yesterday it was opaque text. All **twelve** gates GREEN,
   `gate_reds: []`, the voiding sentence unfired, **R-H1 licensed**
-  (`experiments/house_rules_verdicts.json`).
+  (`experiments/house_rules_verdicts.json`). **The surface is a library and a
+  registered run, not a served one** — every session the prompt and the HTTP
+  skin construct attaches no ledger, and both publish that refusal rather than
+  hiding it (below).
 - **The review moved four instruments, and the green narrowed.** B3 executes
   no mutant and now says so in the first field a reader meets; two of its
   detectors could not fail and are repaired or retired; B9's registered
@@ -59,6 +62,33 @@ default toward refusal. One verdict kind ships —
 persistence and truth are all refused **in writing** by the same function. A
 use of a declared symbol at the wrong arity is refused as
 `USE_ARITY_MISMATCH`, naming the declaration it violates.
+
+**And exactly where that happens, because "shipped" means the acceptance a
+newcomer can try.** The `declare` row is registered and published on both
+surfaces, and on both surfaces it **refuses**: `_route_declare` returns
+`no_symbol_ledger` when the session carries no ledger, and no session the
+prompt or the HTTP skin constructs carries one. That is ¶DEV-1 working as
+published — served requests replay into fresh sessions and attach nothing, so
+declared vocabulary cannot cross an HTTP turn — and it is the design's own
+sixth non-claim rather than an omission. The ledger's decisions are exercised
+by the registered run and by any session that attaches one. Transcribed off
+the live prompt, not reconstructed:
+
+```
+$ printf 'declare rel_of/2 (variable, variable)
+' | python scripts/harness.py
+…
+--- one typed line ---
+line    : declare rel_of/2 (variable, variable)
+route   : declaration
+status  : refused
+detail  : this session keeps no symbol ledger, so there is nowhere to admit a symbol; nothing was held and nothing is claimed
+```
+
+`no_symbol_ledger` is deliberately **not** one of the sealed eight refusal
+codes: those are about a declaration that reached a checker, and this is about
+a turn that reached no checker at all — the same distinction that keeps
+`USE_ARITY_MISMATCH` out of the clause order.
 
 **Demonstrate.** Read the twelve verdicts off the committed ledger:
 
@@ -115,8 +145,14 @@ and did, in the freeze, until the review caught it.
 ## Roadmap triage
 
 Adjudicated clause by clause against primary artifacts in
-[TRIAGE-v0.25](TRIAGE-v0.25.md); that document is the source for every
-disposition below. **Eleven §4 clauses: nine settled, two named open.**
+[TRIAGE-v0.25](TRIAGE-v0.25.md), whose §1 table is the source for every
+disposition below, and restated in [ROADMAP-v0.25](ROADMAP-v0.25.md) §4.1 so
+the plan carries its own state. The triage settled **nine of eleven** §4
+clauses and named two as open; this rotation closes one of those two — **the
+v0.26 outside design inquiry is now named with its receipt**
+([DESIGN-repairable-refusal](DESIGN-repairable-refusal.md),
+`reports/design-direction-v0.26.json`). **`[SUITE-GATE-V25]` is the one clause
+still open**, and it is open in writing rather than counted as met.
 
 | item | outcome |
 |---|---|
@@ -132,8 +168,8 @@ disposition below. **Eleven §4 clauses: nine settled, two named open.**
 | **§2 GUEST AXIOM / ECHO / HANDBACK** | **PARK, unpark triggers unchanged.** No drawing rule, no dated amendment, no restricted population ≥15. GUEST AXIOM's B6 remains **unadjudicated, not discharged**, and is the lane's first act on unpark |
 | **§2.1 refinement adoptions** | **ALL FOUR SHIPPED.** B12 round-trip identity (13/13 pairs, 16/16 mutants, reported *beside* R-H1 and deliberately not folded in); the B9 class-balance seal (`0.684211` / `0.784211` / 10 points, frozen before the run); the B5 harness-scope sentence; R-H2's pre-committed reading |
 | **§3 carried lanes** | **CARRIED** to [ROADMAP-v0.26](ROADMAP-v0.26.md) §3, each with its trigger. The naming-layer question's own re-examination clause **fired and was answered NEGATIVE** at the v0.26 course. The cost ledger takes its **ninth** recorded pass-over |
-| **CR-P0 registry re-seal** | **SHIPPED TWICE.** `11d62b8` re-sealed after H-P0 (190 → 194 files, `d3d9bdc6…` → `edb44684…`) and the cold reading re-attested it — partition **1 SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED**, unmoved from v0.24. H-P1's two new programs then staled it again, and the rotation's own re-seal closes it: *"[CR-P0] Re-seal after H-P1's two programs: 196 files, two new kinds, and both moved pins are the grammar repair"* (**`[HASH-TO-CONFIRM-V25]`**) — 194 → **196** files, 43 → **47** receipt-marked sites, 22 → **24** kinds, seal `edb44684…` → `a4f38d55…` |
-| **the live cold re-read** | **`[COLD-RUN2-V25]`** — see the placeholder section below |
+| **CR-P0 registry re-seal** | **SHIPPED TWICE.** `11d62b8` re-sealed after H-P0 (190 → 194 files, `d3d9bdc6…` → `edb44684…`) and the cold reading re-attested it — partition **1 SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED**, unmoved from v0.24. H-P1's two new programs then staled it again, and the rotation's own re-seal closes it: *"[CR-P0] Re-seal after H-P1's two programs: 196 files, two new kinds, and both moved pins are the grammar repair"* (`2b61a3e`) — 194 → **196** files, 43 → **47** receipt-marked sites, 22 → **24** kinds, seal `edb44684…` → `a4f38d55…` |
+| **the live cold re-read** | **RE-ATTESTED.** Partition **1 SURVIVES / 14 NEEDS-PROGRAM / 9 UNTESTED** over **24** kinds, against 1/12/9 over 22. Nothing was re-adjudicated: SURVIVES and UNTESTED are byte-identical member for member, and the two arrivals are exactly the two kinds the re-seal added. B1–B11 green, voiding unfired, R-C green. See the section below |
 | **§4 `[SUITE-GATE-V25]`** | **OPEN at rotation.** See the placeholder section below |
 
 ## The review, in full, because the repair is this cycle's result
@@ -320,11 +356,13 @@ after H-P0 — `program_tree_files_scanned` **190 → 194**, seal `d3d9bdc6…` 
 eleven gates B1–B11 green, R-C green. H-P1 then added two programs under
 `scripts/**` and edited the served grammar, so the rotation's own re-seal
 closes it: **194 → 196** files, **43 → 47** receipt-marked sites, **22 → 24**
-kinds, **11 → 12** exclusions, seal `edb44684…` → `a4f38d55…`. The two new
-kinds arrive **with** committed instances, because the registered run's
-artifacts landed before the seal — a re-seal belongs after the last artifact
-the cycle commits, and this rotation applied that lesson on the first try
-rather than after a discarded run.
+kinds, **11 → 12** exclusions, seal `edb44684…` → **`a4f38d55…`** (`2b61a3e`).
+The two new kinds arrive **with** committed instances, because the registered
+run's artifacts landed before the seal — a re-seal belongs after the last
+artifact the cycle commits, and this rotation applied that lesson on the first
+try rather than after a discarded run. The live re-read against that committed
+registry then moved the partition to **1 / 14 / 9 over 24 kinds**, by exactly
+those two kinds and nothing else (below).
 
 **Two pins moved with it, and both are the same repair.**
 `line_grammar_digest` `43024c67…` → `6cf86f0c…` and `capability_sheet_digest`
@@ -381,6 +419,13 @@ from the v0.26 course are filed in [BACKLOG](BACKLOG.md).
   reading was pre-committed before the run: *approximately zero was expected,
   it is neither a failure nor evidence of demand, and it may not be read
   either way now.*
+- **No served surface admits a declaration.** The capability is a library
+  (`scripts/symbol_ledger.py`) plus a registered run, not a door a newcomer
+  can walk through. Both the prompt and the HTTP skin publish the `declare`
+  row **and** the `no_symbol_ledger` refusal that follows it, so nothing here
+  is hidden — but a later document must not inherit "a person can declare a
+  symbol at the prompt" as a fact. Attaching a ledger to a served session is
+  unshipped and unclaimed, and it is a surface question owing its own design.
 - **B3 measures detectors, not attempts.** No mutant is executed by this run
   or by any program in this repository. What the gate establishes is that
   each mapped detector was exercised on live material and fired. Anything
@@ -554,20 +599,47 @@ runner before scoring and by the second program after — and
 
 ## The cold reading at this rotation
 
-`[COLD-RUN2-V25]` — **NOT YET LANDED in this document.** The registry was
-re-sealed last, after every other artifact this rotation commits, and the
-~1 h live cold re-read runs against the committed registry in v0.23's order.
-This placeholder is resolved with the re-read's partition over 24 kinds, its
-R-C verdict, and the commit that carries it — or the notes refuse the
-sentence. The v0.25 predecessor is on the record for comparison: at
-`11d62b8` the partition was **1 SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED**
-over 22 kinds with all eleven gates green, byte-stable against v0.24's.
+The registry was re-sealed **last**, after every other artifact this rotation
+commits, and the live cold re-read then ran against the committed registry in
+v0.23's order — registry committed first, then the re-read, because B10's
+`registry_uncommitted_at_run` checks `git diff --quiet HEAD` on the registry
+at run time and v0.24 discarded a full re-read for exactly that red.
 
-A SURVIVES verdict travels with its scope, and the v0.24 standing rule
-applies to whatever partition lands here: the cold harness is a clean-PATH
-subprocess, deliberately weaker than a container — `%USERPROFILE%`, the
-registry, ambient DLL paths and the harness's own interpreter are not
-excluded.
+**The partition moved, and the movement is the whole of it: 1 SURVIVES / 14
+NEEDS-PROGRAM / 9 UNTESTED over 24 kinds**, against **1 / 12 / 9 over 22** at
+`11d62b8`. Nothing was re-adjudicated — SURVIVES and UNTESTED are
+byte-identical member for member — and the two arrivals are **exactly the two
+kinds the re-seal added**, `corollary.house-rules-receipts/1` and
+`run_house_rules_gates:_receipts_document`. Both read NEEDS-PROGRAM. That is
+this cycle's own evidence being told what v0.24's was told: the receipts a
+registered run emits are program-bound like most of the tree's, and a
+capability that adds receipt kinds adds them to the side of the ledger that
+still needs the program to be re-checkable. B7 is **14 of 14** confirmed by
+removal, each with a succeeding with-program positive control, and B8's
+`survives_fraction` follows the denominator — **5.26% at 19 to 4.17% at 24**.
+All eleven gates B1–B11 green with an empty reds list, the voiding sentence
+unfired, R-C green, and the working tree byte-identical across the run
+(`[COLD-RUN2-V25-COMMIT]`).
+
+**The second program earned its keep again.** `cold_harness.py` writes the
+census, the path audit, the scramble baseline and the evidence; it does *not*
+write `cold/result_gate_run2.json`. As at `11d62b8`, the harness finished and
+left the previous gate file in place holding the old 22-kind 1/12/9 reading,
+and `tests/test_cold_receipt.py`'s provenance check went red on precisely that
+mismatch. `harness/result_gate.py` was then run against `cold/census_run2.json`
+as DESIGN-cold-receipt §13 intends — the census returns a partition, a
+different program decides which sentence it licenses — and the gate is
+regenerated rather than hand-edited.
+
+A SURVIVES verdict travels with its scope, and the v0.24 standing rule applies
+to this partition: the cold harness is a clean-PATH subprocess, deliberately
+weaker than a container — `%USERPROFILE%`, the registry, ambient DLL paths and
+the harness's own interpreter are not excluded (`harness/recipe.json`). B6's
+**0 of 200** scrambled bundles is a **1.5% rule-of-three upper bound** on a
+chance rate, never a measured rate. This re-attests a seal and measures
+nothing new about the program: the two new NEEDS-PROGRAM kinds are the census
+noticing that this cycle's evidence joined the tree it measures, not a finding
+about HOUSE RULES.
 
 ## The suite at the tip
 
@@ -583,9 +655,11 @@ Plan the run from the measured cost, not from folklore: v0.24's gate took
 four launches to get a verdict, and this cycle adds `tests/test_house_rules_*`
 (132 tests in the run file alone) on top of that base.
 
-One gate state is already known and disclosed rather than discovered by the
+One gate state is already discharged rather than left to be discovered by the
 run: `tests/test_cold_receipt.py`'s
 `test_the_seal_and_counts_recompute_from_the_committed_tree` was **red** from
-`32d505a` until the rotation's CR-P0 re-seal, because the grammar repair
-moved `line_grammar_digest` again. That is the same drift already recorded,
-and the re-seal is the commit that closes it.
+`32d505a` until the rotation's CR-P0 re-seal at `2b61a3e`, because the grammar
+repair moved `line_grammar_digest` again — the same drift already recorded.
+The re-seal closed that one and left a single red on `cold/census_run2.json`'s
+provenance, which the cold re-attestation closes in turn. Both are ordered
+acts, not discoveries.

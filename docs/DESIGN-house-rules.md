@@ -20,8 +20,9 @@ gate.
 | CR-P0 | `11d62b8` | the cold reading re-attests the H-P0 registry |
 | H-P1-FREEZE | `27d358d` | `experiments/house_rules_prereg.json`, the runner, the second program, 100 tests |
 | H-P1 (run 1) | `2ac8c9f` | the first registered run — **SUPERSEDED**, retained at `experiments/superseded/` |
-| H-P1-FIX-FREEZE | this change | the review's fixes, five dated prereg amendments, the run-1 retirement |
-| H-P1-RUN2 | the commit adding `experiments/house_rules_verdicts.json` | the superseding registered run |
+| H-P1-FIX-FREEZE | `32d505a` | the review's fixes, five dated prereg amendments, the run-1 retirement |
+| H-P1-RUN2 | `f9719a2` | the superseding registered run |
+| CR-P0 | `2b61a3e` | the rotation re-seal after H-P1's two programs, and the cold re-read that re-attests it |
 
 **Run 1 was reviewed and superseded, and that is part of this design's
 record.** An independent adversarial review reproduced every number in run 1
@@ -492,7 +493,13 @@ else about the vocabulary discipline moves.
 - **ROADMAP-v0.25:** links this design as the course's selected
   direction; the roadmap's own adjudication schedules or parks it against
   the incumbent queue (STRANGER-GATE's prohibition is untouched by this
-  slice and is not displaced by it).
+  slice and is not displaced by it). **Delivered and closed** — §1.1
+  scheduled it at commission (`d11e3fb`), §1.2 closes the acceptance out
+  after the superseding run, §4.1 carries the release gate's status, and the
+  roadmap is closed at v0.25.0 with a banner naming every rotation-time
+  edit. The release record is
+  [RELEASE-v0.25.0](RELEASE-v0.25.0.md); the release-gate adjudication on
+  artifacts is [TRIAGE-v0.25](TRIAGE-v0.25.md).
 - **ANALYSIS:** receives H-P1's fixture numbers and the R-H2 census.
   **Delivered** — `experiments/ANALYSIS.md`, the run-2 section, carrying the
   twelve-gate table, B9's registered and richer-family numbers, R-H2 0/30
@@ -514,3 +521,21 @@ else about the vocabulary discipline moves.
   real declarations need — priced against the corpus of declarations this
   slice will have produced, with the grammar extension's pin movements
   named before any axiom is admitted.
+
+  **Superseded in scope by the v0.26 course, and the difference is stated
+  rather than glossed.** R-H1 landed, and this section's question was to be
+  priced against *the corpus of declarations this slice produced* — that is,
+  against its own self-authored fixtures.
+  [DESIGN-repairable-refusal](DESIGN-repairable-refusal.md) §10 asks for a
+  **non-author** corpus instead, which is a stronger thing than this section
+  asked for and is stated there as stronger rather than attributed here. This
+  section's question is not withdrawn; it is now downstream of a corpus this
+  repository would not have written.
+
+  **One limit this slice leaves unmoved, recorded here because §10 is where
+  status lands:** no served surface admits a declaration. `_route_declare`
+  returns `no_symbol_ledger` whenever the session carries no ledger, and no
+  session the prompt or the HTTP skin constructs carries one — published on
+  both surfaces, and covered by non-claim 6 (no behaviour on the served HTTP
+  profiles beyond the published ¶DEV-1 note). Attaching a ledger to a served
+  session is unshipped, unclaimed, and owes its own design.

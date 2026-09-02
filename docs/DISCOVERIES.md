@@ -13,6 +13,44 @@ bindings), **near-miss** (informative failure, kept deliberately).
 
 ---
 
+## Three of the five prefixes the parser rewrites never occur in the corpus, and every real occurrence is a single letter (2026-09-02)
+
+**Claim.** `scripts/match_signatures.py` rewrites any identifier beginning
+`sum_ / prod_ / lim_ / max_ / min_` into the corpus aggregate head and
+discards everything after the first underscore, with no refusal — the live
+hazard the v0.25 design review found. Asked how much real usage such a
+refusal would break, a census over every committed `anonymized_template`
+answered with a number nobody had: across **14,830** strings (**13,950**
+distinct, over the 40 committed files that carry one), exactly **17** hold a
+big-op-prefixed identifier — `sum_i` in 16 and `lim_h` in 1, across nine
+disciplines. **There is no `prod_`, `max_` or `min_` occurrence in the
+committed corpus at all**, so three of the five prefixes the rule fires on
+have never matched anything real. And all 17 genuine suffixes are
+**single-letter index names**, which means the obvious heuristic — *a
+word-shaped suffix is suspicious* — separates every real use from
+`sum_total` on today's corpus.
+
+**Evidence.** `reports/signature_matches.json`, the top-level
+`parse_rewrites` section added at `156e94f` and its per-member field inside
+twin groups; `scripts/match_signatures.py:92` (`BIG_OP_PREFIXES`) and
+`:541-563` (`Parser.parse_atom`); the census restated in
+[TRIAGE-v0.25](TRIAGE-v0.25.md) §2.
+
+**Status:** near-miss, kept deliberately — and it is the measurement that
+decided the lane. A refusal was the satisfying fix and the census forbids it:
+17 sealed committed parses are not defective and a refusal breaks them. The
+separating heuristic is **deliberately not implemented**, because it is a new
+authored judgement the design never priced and it would put the parser in the
+business of deciding which captures deserve a record. The disclosure is
+**total** instead — `sum_i` is recorded exactly as loudly as `sum_total` —
+and totality is what makes it judgement-free and safe to add underneath a
+freeze. Carried forward: **the parser still rewrites**, and a declaration-time
+`RESERVED_PREFIX` refusal is a different surface, not a fix to this one. The
+number a successor needs before reopening the refusal question is the 17, and
+it is here rather than only in a release note.
+
+---
+
 ## A containment gate whose mutants are prose is a gate that has never been run (2026-09-02)
 
 **Claim.** HOUSE RULES' B3 asks that ">=30 seeded mutants attempt to move an

@@ -30,13 +30,26 @@ So the debt was specific: let a person declare a symbol. A name, how many
 arguments it takes, what kind of thing goes in each slot. Admit it, or refuse
 it — with **exactly one** reason.
 
-That shipped. `declare holds_for/2 (variable, variable)` is admitted into a
-ledger that lives and dies with the conversation; `declare pairs_up/2
-(marsupial)` is refused, with one clause named, because `marsupial` is not
-one of the nine kinds the schema knows. From then on, using a declared symbol
-with the wrong number of arguments is refused **by name**, where the day
-before it was opaque text. Nothing declared survives the session. Nothing
-declared reaches a library file.
+That shipped, with one boundary worth stating up front rather than in a
+footnote. `declare holds_for/2 (variable, variable)` is admitted into a ledger
+that lives and dies with the conversation; `declare pairs_up/2 (marsupial)` is
+refused, with one clause named, because `marsupial` is not one of the nine
+kinds the schema knows. From then on, using a declared symbol with the wrong
+number of arguments is refused **by name**, where the day before it was opaque
+text. Nothing declared survives the session. Nothing declared reaches a
+library file.
+
+The boundary: **you cannot yet type that at the prompt and see it admitted.**
+The decider is a library, exercised by the registered run and by any session
+that attaches a ledger, and no session the prompt or the HTTP server actually
+builds attaches one — so both publish the command *and* the refusal that
+follows it, in those words: *this session keeps no symbol ledger, so there is
+nowhere to admit a symbol; nothing was held and nothing is claimed.* That is a
+published limit rather than a hidden one, and it is why the design's list of
+things it does not claim includes any behaviour on the served surfaces. A door
+that is built and not yet hung is worth saying out loud, because the next
+document along would otherwise inherit "a person can declare a symbol" as a
+fact about the product.
 
 The measurements are not small. Fourteen thousand and sixty-three inputs
 decided, every one of them landing on exactly one verdict with exactly one

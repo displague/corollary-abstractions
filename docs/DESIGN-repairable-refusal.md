@@ -8,18 +8,29 @@ machine's clock — and each says so where it appears. Selected by the v0.26 out
 with the dialect-free brief committed beside it as
 [`reports/design-direction-v0.26-brief.txt`](../reports/design-direction-v0.26-brief.txt).
 Scheduling is the next roadmap's decision against its own incumbent queue;
-this document does not schedule itself.
+this document does not schedule itself. **Lifecycle status, 2026-09-02:**
+[ROADMAP-v0.26](ROADMAP-v0.26.md) §1 carries it as the headline *conditional
+on that roadmap's own adjudication*, with §1.1 written in the
+pre-adjudication "Not yet decided" shape ROADMAP-v0.25 §1.1 used before its
+own commission. Nothing here is implemented, and §1's acceptance is the
+roadmap's summary of §6-§9 rather than a second specification.
 
 **It displaces no parked lane.** The slice executes nothing and opens no
 durable write and no untrusted stream toward the write gate: the searcher
 makes repeated calls to a pure function, and the corpus is a sealed committed
 file. STRANGER-GATE's prohibition is therefore honored, not displaced. **The cycle
-count is third or fourth, and the reason is a defect in the roadmap rather
-than an uncertainty here:** ROADMAP-v0.25 contradicts itself — §1.1 says
-"third consecutive cycle", §3's table says "second cycle
-honored-not-displaced" — so counting from §3 makes this the third and counting
-from §1.1 makes it the fourth. That row is flagged for repair; nothing in this
-design turns on which. The cost
+count is the FOURTH, settled 2026-09-02 by repairing the roadmap rather than
+by choosing a number here.** This paragraph previously read "third or fourth"
+because ROADMAP-v0.25 contradicted itself — §1.1 and §4.1 said "third
+consecutive cycle", §3's table said "second cycle honored-not-displaced" —
+and §11.2 M-7 flagged that rather than resolving it silently. The v0.25
+rotation resolved it on the artifacts: ROADMAP-v0.23 §4.3's STRANGER-GATE row
+adjudicated the prohibition in writing for v0.23 and is the row that created
+the trigger, ROADMAP-v0.24 §1.1 adjudicated it again, and ROADMAP-v0.25 §1.1
+a third time — so **v0.25 was the third and §3's row had omitted v0.23.** That
+row now reads "third" with the reasoning dated in place, and this design's
+first draft, which said fourth, was right. Nothing in this design turns on
+the count. The cost
 ledger's denominator is unchanged and this design does not unpark it: §2.3
 declines, in writing, the one surface that would have. Whether that park is
 carried again is the next roadmap's decision, not this document's.
@@ -1159,7 +1170,13 @@ names dropped (M-3); corruption arm 1 conditioned on a sole ground, because
 `sum_i` is both reserved-prefixed and a census member (M-4); corruption arm 2's
 target named in the prereg (M-5); the B3/B11 coupling stated with its
 consequence fixed (M-6); ROADMAP-v0.25's self-contradiction on the
-STRANGER-GATE cycle count flagged rather than silently resolved (M-7); B11b's
+STRANGER-GATE cycle count flagged rather than silently resolved (M-7 —
+**repaired at the v0.25 rotation on 2026-09-02**: §3's "second" was the
+defective row, v0.25 is the third honored cycle and this design's cycle is the
+fourth, which also means §11.0's M-1 "corrected to third in both" was a
+correction *toward* the defect; §1 above and ROADMAP-v0.26 §1.1 carry the
+determination and its evidence, and the course receipt is left unedited as a
+record of the course as it ran); B11b's
 prediction made conditional on c5's share (M-8); the ROADMAP §1.1→§3/§4 cite
 corrected (L-1); the optimization's real cost measured at 2.08 µs rather than
 0.67 (L-2); the certificate/population correspondence restated (L-3); and the

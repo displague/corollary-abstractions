@@ -1,3 +1,56 @@
+> **CLOSED at v0.25.0.** This plan is the historical plan-of-record. It is
+> **not** left unedited, and saying so is the point — the v0.24 deep triage
+> found a closed banner claiming "not edited" over a file that had been, so
+> this one names every rotation-time addition instead: §1.2 and §4.1 and the
+> links-row triage link were added by the release triage at `aa721e7`; §3's
+> STRANGER-GATE row carries a dated cycle-count repair (2026-09-02, below);
+> and this banner. Nothing else is edited. The headline shipped as a
+> capability, on a **second** registered run after an adversarial review moved
+> four of the first run's instruments. Where each item went:
+>
+> - **§1 HOUSE RULES** → **RELEASE-v0.25.0** headline. **Twelve** gates green,
+>   `gate_reds: []`, the voiding sentence unfired, **R-H1 LICENSED** with its
+>   caveat travelling inside the artifact. 14,063 inputs decided, 0
+>   fall-throughs, 39/39 fixtures on the seal, 8 of 8 refusal codes reached.
+>   `registered_before_the_run` true by git ancestry (`7a47a8a` a **strict**
+>   ancestor of `32d505a`). Closed out in **§1.2**.
+> - **§1 H-PRE** → **SHIPPED** (`7a47a8a`). The fixture corpus sealed before
+>   any checker existed to fit it, including the `clause_order` copy the
+>   runner was later made to read.
+> - **§1 H-P0** → **SHIPPED** (`c87b0ca`, sealed at `e3e3980`). Census of 286
+>   equality members over 12,777 templates, `scripts/symbol_ledger.py`, the
+>   `declare` grammar row, and every pin that row moves.
+> - **§1 H-P1** → **SHIPPED ON RUN 2** (`27d358d` freeze, `2ac8c9f` run 1,
+>   `32d505a` fixes, `f9719a2` run 2). Run 1 **retained and never re-scored**
+>   at `experiments/superseded/`, with a README saying what it is and is not
+>   evidence of.
+> - **§1 the three construction refusals** → **none occurred** (§1.2).
+> - **§1 R-H2** → **0 of 30**, reported and gating nothing, under the
+>   pre-committed reading. **R-H3** not licensed: no red in its scope.
+> - **§1.1 the course's selection** → **RECORDED as a decision** at
+>   commission (`d11e3fb`) with a disposition per incumbent; STRANGER-GATE
+>   honored not displaced; cost ledger's **ninth** parked cycle.
+> - **§2 the `sum_total` lane** → **RELEASE-v0.25.0**, shipped as *disclosure*
+>   (`156e94f`, `249f463`), ordered before H-P0 as §2 required. The parser
+>   still rewrites, and the notes say so.
+> - **§2 B7 successor probes ×2 / GUEST AXIOM / ECHO / HANDBACK** → **carry or
+>   park**, triggers unchanged → [ROADMAP-v0.26](ROADMAP-v0.26.md) §2.
+> - **§2.1 refinement outcomes** → **all four adopted and shipped** (B12, the
+>   B9 class-balance seal, the B5 harness-scope sentence, R-H2's pre-committed
+>   reading).
+> - **§3 carried lanes** → [ROADMAP-v0.26](ROADMAP-v0.26.md) §3, each with its
+>   trigger. The naming-layer question's own re-examination clause **fired and
+>   was answered NEGATIVE** at the v0.26 course. New parks (WITNESS,
+>   SEPARATOR, MUTANTS, SEEP, DEVIL'S RANKER, the control-ceiling audit, the
+>   missing goal object) → BACKLOG.
+> - **CR-P0** → **re-sealed twice** (`11d62b8`, `2b61a3e`) with the live cold
+>   re-read after each; the second moved the partition to 1 / 14 / 9 over 24
+>   kinds by exactly the two kinds the re-seal added.
+> - **§4 release gate** → adjudicated clause by clause in
+>   [TRIAGE-v0.25](TRIAGE-v0.25.md) and summarized in **§4.1**. Ten of eleven
+>   clauses met at the tag; `[SUITE-GATE-V25]` is the one that runs at the
+>   frozen tip.
+
 # Roadmap v0.25 — the person declares a symbol, if the course's selection survives adjudication
 
 v0.24 scheduled the smallest live failure the project had and got both a
@@ -342,7 +395,7 @@ documentation layer.
 | lane | state entering v0.25 | trigger to unpark |
 |---|---|---|
 | **The naming-layer question** — *how does a nameless library get names a person can ask by?* | Carried a **third** course unchanged, but no longer without a mechanism: the v0.25 course produced **HANDLE** (total canonical addresses for the unnamed bulk, decidable and injective), which survived to round two at rank 3. Its recorded anti-vacuity lesson travels with it — an address scheme that is total and injective can still be unaskable, so a HANDLE slice owes a person-side reachability arm, not just a construction proof | A design naming the mechanism *and* what would falsify its usefulness. HANDLEBAR parks behind it. If §1's `declare` row ships, the naming-layer question gains a second live surface and should be re-examined at the v0.26 course, not silently re-carried |
-| **STRANGER-GATE** — the write gate's overdue adversarial red-team | **Prohibition trigger intact, second cycle honored-not-displaced, now with a second independent arrival.** ERRAND→**CHOKE** re-derived its shape from an isolated context that had never seen it — the static quarantine check plus the red-team that discharges or confirms the prohibition. Convergence hardens the park's priority; it is not itself a trigger | MUST run before any untrusted stream reaches the write gate. Its residual risk is unchanged and recorded: one head authors the attacks, the twins, and the gate, so it measures whether the gate DISCRIMINATES, never whether the corpus is ADEQUATE. DEPUTY remains the named next asker, blocked behind it |
+| **STRANGER-GATE** — the write gate's overdue adversarial red-team | **Prohibition trigger intact, THIRD cycle honored-not-displaced, now with a second independent arrival.** *(Repaired 2026-09-02: this row read "second cycle" and contradicted §1.1 and §4.1, which both read "third". The determination is on the artifacts, not on the majority: ROADMAP-v0.23 §4.3's STRANGER-GATE row already adjudicated the prohibition in writing for v0.23 — "nothing this cycle opens one (GUEST AXIOM's guest text enters a frame, never the gate — B1 is the proof)" — and ROADMAP-v0.24 §1.1 adjudicated it again — "The prohibition is honored in writing, here. No untrusted execution or write stream opens in v0.24." v0.23, v0.24, v0.25 = three. This row undercounted by omitting v0.23, whose adjudication is the one that created the prohibition trigger. Flagged by DESIGN-repairable-refusal §11.2 M-7 and repaired here rather than resolved silently; the consequence is that v0.26 is the FOURTH, which [ROADMAP-v0.26](ROADMAP-v0.26.md) §3 records.)*** ERRAND→**CHOKE** re-derived its shape from an isolated context that had never seen it — the static quarantine check plus the red-team that discharges or confirms the prohibition. Convergence hardens the park's priority; it is not itself a trigger | MUST run before any untrusted stream reaches the write gate. Its residual risk is unchanged and recorded: one head authors the attacks, the twins, and the gate, so it measures whether the gate DISCRIMINATES, never whether the corpus is ADEQUATE. DEPUTY remains the named next asker, blocked behind it |
 | **PREMISE LEDGER** (supplementary-family, capability-class) | Carried unchanged for a **third** cycle, now with **two** new convergent arrivals in one course: **NEEDED-BY** (minimality certificates by replay-ablation → its measurement arm) and **COUNTERMODEL / WITNESSED-NO** (witnessed-no via finite countermodels → the *constructor* the incumbent still lacks, plus a new answer kind). LOADBEARING stays folded into it | A design that takes the necessity claim — explicitly not taken at v0.23, v0.24, or here. The countermodel constructor is now named as the missing half, which is progress on the park, not on the schedule |
 | **CANARY-CURVE** (instrument-class) | Carried unchanged | Still blocked on an enumeration layer that does not exist |
 | **TOLL** (cost-lane metrology; CEILING routes with it) | Carried unchanged, and now with a **named deciding mechanism**: PRICE FIRST folded into it with its log-probe — pre-committed cost bounds with calibration. Instrument (the v0.22 cold-census harness) and denominator path (ORPHAN) already recorded | Denominator still n=1. Unpark needs ORPHAN's denominator or the log-probe run as its own registered lane |
@@ -400,5 +453,5 @@ roadmap itself carries the state:
 | `check_report_regeneration.py` verdicts in the notes | **MET** — clean / clean / clean / declared_divergence, exit 0 (TRIAGE §5) |
 | `ingest_wold.py reach` runs or is reported *cannot verify* | **CANNOT VERIFY**, with the exact reason: the manifest-pinned WordNet archive is licensed data, absent by the no-licensed-data-in-git rule, and the stage refuses rather than computing a partial (TRIAGE §6) |
 | every unfinished item ships, carries, or parks in writing | **MET** (TRIAGE §7 for §2, §8 for §3) |
-| the v0.26 outside design inquiry named with its receipt | **OPEN** — owned by the parallel design course |
+| the v0.26 outside design inquiry named with its receipt | **MET at the rotation (2026-09-02)** — [DESIGN-repairable-refusal](DESIGN-repairable-refusal.md), receipt `reports/design-direction-v0.26.json`, brief `reports/design-direction-v0.26-brief.txt`. Adjudicated against the incumbent queue in [ROADMAP-v0.26](ROADMAP-v0.26.md) §1.1, which is written in the pre-adjudication shape this section's own §1.1 used |
 | full suite green on a frozen tip, `[SUITE-GATE-V25]` resolved | **OPEN** — runs at the frozen tip after the rotation |

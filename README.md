@@ -7,17 +7,43 @@ compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
 interface.
-<!-- Suite gate v0.24.0: 2,986 tests OK (skipped=5), 22,504.4s (6h15m)
-     at tip d1e37b9, green on the final launch. Run 1 red by 3 instrument
-     issues (freeze-group drift under a registered edit, --allow-dirty
-     counting as registered, B7-pending assertion in pre-artifact shape),
-     all fixed in cf5cba5 with the registry re-sealed after; one
-     near-green run killed by the operator at 2,950 ok is retained.
-     Receipts: reports/test_gate_v024/ (runs.md, run1-red.log,
-     run2-killed-partial.log, run3-green.log). Prior gates: v0.23 green
-     on run 2, v0.22 green first run, v0.21 green on run 3, v0.20 green
-     on run 2. -->
-Latest release: [v0.24.0](docs/RELEASE-v0.24.0.md) — **the ordinary turn
+<!-- Suite gate v0.25.0: [SUITE-GATE-V25] — NOT YET RUN at the rotation.
+     Resolved before the tag with counts, wall-clock, and receipts under
+     reports/test_gate_v025/, or the notes refuse the sentence and the tag
+     waits. Last resolved gate, v0.24.0: 2,986 tests OK (skipped=5),
+     22,504.4s (6h15m) at tip d1e37b9, green on the final launch (run 1
+     red by 3 instrument issues -- freeze-group drift under a registered
+     edit, --allow-dirty counting as registered, a B7-pending assertion
+     in pre-artifact shape -- all fixed in cf5cba5 with the registry
+     re-sealed after; one near-green run killed by the operator at 2,950
+     ok retained); receipts reports/test_gate_v024/. Prior gates: v0.23
+     green on run 2, v0.22 green first run, v0.21 green on run 3, v0.20
+     green on run 2. -->
+Latest release: [v0.25.0](docs/RELEASE-v0.25.0.md) — **the person declares a
+symbol, and the review found what green was carrying.** A person can now name
+a fresh relation symbol — `declare rel_of/2 (variable, variable)` — and the
+system either admits it into a session-scoped ledger or refuses with
+**exactly one** deciding clause, totally and by default toward refusal; a
+misused declared symbol is refused **by name** where the day before it was
+opaque text. **14,063** inputs decided with **0** fall-throughs, **8 of 8**
+refusal codes reached by a machine-enumerated sweep nobody authored, **twelve**
+gates green, **R-H1 licensed**, and nothing declared survives the session or
+touches the library. The scope is stated where the capability is: this is a
+library and a registered run, **not yet a served surface** — every session the
+prompt and the HTTP skin construct attaches no ledger, and both publish that
+refusal (`no_symbol_ledger`) rather than hiding it. The cycle's other result is the one worth reading: an
+adversarial review reproduced every number in the first registered run and
+found that two of the containment detectors **could not have failed**, that
+the blind control **could not have fired** (its whole registered family tops
+out at 0.736842 against a 0.784211 threshold), and that the served `declare`
+grammar example was carrying a sealed **admitted** fixture symbol in the
+committed tree while the gate scored that exact vector *stopped*. All four
+findings are repaired or disclosed, five dated amendments record that each was
+written **after** the first score and loosens nothing, and run 1 is retained
+under `experiments/superseded/` with a note saying what it is and is not
+evidence of. See [the checks that could not have said
+no](docs/blog/the-checks-that-could-not-have-said-no.md).
+[v0.24.0](docs/RELEASE-v0.24.0.md) is the floor under it — **the ordinary turn
 became an uptake, and the tool bridge failed honestly.** `hello` on
 `corollary/kernel` is still a refusal, and that is still that profile's
 honest answer; the same four bytes addressed to a new third profile,
@@ -54,8 +80,8 @@ design's stop clause **fired**, and firing it is the result: *the ingested
 library is effectively nameless; the naming layer must be built, not indexed.*
 The sharpest overlay: of the **9,048** statements the engine can consume in one
 step, **125** are nameable — the library computes far more than anyone can ask it
-for. Separately, of 22 kinds of receipt this program emits, **1 survives** the
-program's deletion, **12 need the program**, and **9 could not be re-checked at
+for. Separately, of 24 kinds of receipt this program emits, **1 survives** the
+program's deletion, **14 need the program**, and **9 could not be re-checked at
 all** — offline-checkability is earned by naming an adjudicator that is not the
 program, not by carrying a digest of your own work. Both are published stops
 against clauses frozen before the numbers were known. See [the library that had
@@ -122,7 +148,10 @@ $ curl -s http://127.0.0.1:8377/v1/capabilities | python -m json.tool
   "profiles": { "corollary/kernel": ..., "corollary/conversation": ...,
                 "corollary/protocol": ... },
   "line_grammar": [ { "form": "owns <template-expr>", "route": "ownership",
-                      "example": "owns x ^ 2", "served": true }, ... ],
+                      "example": "owns x ^ 2", "served": true },
+                    { "form": "declare <name>/<arity> (<category>, ...)",
+                      "route": "declaration", "served": true,
+                      "example": "declare rel_of/2 (variable, variable)" }, ... ],
   "protocol_grammar": { "served": true, "corpus_path": "protocol/protocols.json",
                         "families": ["greeting","probe_reply","quoted_datum",
                                      "expected_output"], ... },
@@ -131,6 +160,45 @@ $ curl -s http://127.0.0.1:8377/v1/capabilities | python -m json.tool
 $ curl -s http://127.0.0.1:8377/v1/chat/completions -H 'Content-Type: application/json' \
     -d '{"model":"corollary/kernel","messages":[{"role":"user","content":"owns x ^ 2"}]}'
 ```
+
+**Since [v0.25.0](docs/RELEASE-v0.25.0.md) a person's own vocabulary is
+decidable — and the surface that decides it is deliberately not a served
+one.** `declare <name>/<arity> (<category>, ...)` is a registered grammar row:
+the decision belongs entirely to `scripts/symbol_ledger.py`, which is total,
+returns **exactly one** deciding clause from a committed order, and defaults
+toward refusal. A declared symbol lives in a session-scoped ledger that
+`session_state.encode` refuses to serialize, so it is gone when the session
+is. **Every session this repository actually serves attaches no ledger**, and
+both the prompt and the HTTP skin publish that refusal instead of hiding it:
+
+```
+$ printf 'declare rel_of/2 (variable, variable)
+' | python scripts/harness.py
+…
+--- one typed line ---
+line    : declare rel_of/2 (variable, variable)
+route   : declaration
+status  : refused
+detail  : this session keeps no symbol ledger, so there is nowhere to admit a symbol; nothing was held and nothing is claimed
+```
+
+That is ¶DEV-1 working as published — served requests replay into fresh
+sessions and attach nothing, so declared vocabulary cannot cross an HTTP turn
+— and it is why the design's non-claims include *no behaviour on the served
+HTTP profiles beyond the published ¶DEV-1 note*. **A newcomer cannot yet type
+a declaration and see it admitted.** What a newcomer can run is the registered
+run's committed verdicts, and the ledger's own decisions through the gates
+runner:
+
+```
+$ python -c "import json; d=json.load(open('experiments/house_rules_verdicts.json',encoding='utf-8'));              print(d['gate_greens']); print(d['gate_reds']); print(d['voiding_sentence']['fired'])"
+$ python scripts/check_house_rules_receipts.py     # the second program, exit 0
+```
+
+Refusal codes are a closed set of eight and the clause order is committed and
+sealed; a `sum_`-prefixed name is refused `RESERVED_PREFIX` **at the
+declaration boundary**, which is not a fix to the shipped template parser and
+[RELEASE-v0.25.0](docs/RELEASE-v0.25.0.md) says so in those words.
 
 **Three profiles, and the contrast between two of them is the v0.24 story.**
 Send the *same four bytes* to `corollary/kernel` and to `corollary/protocol`:
@@ -536,6 +604,7 @@ the graded residual.
 | A recorded conversation can carry its own premises, and the fence is what proves it | a per-turn journal records which suppositions each answer consumed. Mutate a **cited** one and the answer must move or refuse: **58 of 58**, 30 of them by typed conflict refusal. Mutate an **uncited** one, or inject a sham, and the answer must not move **at all**: **0 flips of 42** and **0 of 60**. One flip would have meant the replayer was hashing the transcript, and the capability was pre-declared void. Replay reproduces **410 of 410** sealed turns, and tamper detection is **20/20 on each of four arms** — including an adversary who re-signs the whole file under their own key ring. Not claimed: correctness. A wrong answer replays as faithfully as a right one |
 | A metric that counts successes cannot see a correct refusal | a capability-blind coin flip beat a small model **22 verified selections to 17** on a rule requiring **≤ 8.5**, and the draw was typical rather than lucky (analytic expectation **20.62**). All six of the model's `NONE` answers were **verified correct refusals** on questions with acceptable candidates available — which the blind arm, having no `NONE`, took. On nine questions written to have no answer the model selected for **zero** and the blind arm for **five**. The floor was also unmeetable: the frozen chance rate was `1/8`, the measured expectation **0.687**. The rule was scored exactly as frozen and nothing shipped |
 | An obligation built from one reading compares that reading with itself | a proof-backed conformance instrument discharged **0 of 6** pilot obligations, every one rejected as trivial, because both sides of *"the evaluator agrees with the statement"* descend from **one parser's** parse tree. Handed to the checker with the triviality clause switched off, the same six were **accepted 6 of 6** — what an instrument without the clause would have published as a capability. The lane stopped before it opened, and parks behind an independent second reading as a **construction prerequisite** |
+| A person's own vocabulary can be decided on the record, and a green gate can still be carrying a check that could not fail | a declaration line reaches a total function that returns exactly one verdict with exactly one deciding clause in a committed order: **14,063** inputs, **0** fall-throughs, **39/39** sealed fixtures on the seal, **8 of 8** refusal codes reached by a sweep that mutated every fixture line against an alphabet enumerated from the corpus, **0** admissions colliding with the 286-member census, **0** bytes toward a library file, **0** declared names surviving the session. Then the review: two containment detectors could not have failed (one planted a name in a temporary directory and found it), the blind control's entire registered family ceilings at **0.736842** against a **0.784211** void threshold so no member could have fired, and the served grammar example was carrying a sealed admitted symbol in the committed tree while the gate scored that vector *stopped*. Repaired, re-run, and run 1 retained as the record of what the run-1 runner scored — not as evidence that the capability was contained |
 | A reader that scores half as well on nonsense is not reading | a pinned local model read served sentences blind and reconstructed the term at 0.8417 — and scored 0.5000 on scrambled surfaces, ratio 0.594 against a 0.5 voiding threshold frozen in advance. The machine-reader claim is not made; the human-reader claim has never been attempted, because a one-maintainer repository has no non-maintainer to mark a sheet blind |
 
 Two retractions are part of the record (a too-easy test caught by external
@@ -597,6 +666,17 @@ scripts/
                         the capability-blind controls, the receipt-replay
                         checker, and the registered-run writer (refuses an
                         existing output path or a dirty/wrong-tip tree)
+  symbol_ledger.py      the declaration decider: one verdict, one deciding
+                        clause, totally and by default toward refusal; pure,
+                        total, mutation-free, and never serialized
+  build_symbol_census.py / check_symbol_census.py  the 286-member library
+                        symbol census and the second program that recomputes
+                        it from source rather than reading the artifact
+  build_house_rules_fixtures.py / run_house_rules_gates.py /
+  check_house_rules_receipts.py  the sealed fixture corpus, the registered-run
+                        writer (refuses an existing output path, a dirty tree,
+                        a non-strict-ancestor tip, or a moved pin) and the
+                        import-independent replay checker
   realize_term.py       canonical term -> English sentence, gated by a
                         re-parse through the byte-frozen parser; --census
                         publishes R0's denominator, --term shows a receipt

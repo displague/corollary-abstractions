@@ -36,6 +36,168 @@ or commit history. Each item names the evidence that motivated it.
   `repository_files_carrying_an_admitted_name: 19` — the same 19 B5
   discloses, which is the coupling.
 
+## Filed at the v0.25 rotation (the declaration surface, and the v0.26 course's parks)
+
+Three standing requirements the H-P1 run leaves behind, and the v0.26 course's
+declines. The `name_sweep` coupling filed above at the HOUSE RULES review is
+the third standing item and is not repeated here.
+
+- **A containment gate's mutants must EXECUTE, and the seal must name the
+  detector (2026-09-02).** HOUSE RULES B3 sealed 32 mutants as **prose
+  descriptions**; nothing in this repository executes one, and the
+  id-to-detector map is authored in the runner rather than sealed with the
+  mutant. What such a gate can observe is that a detector fires, which is a
+  fact about the detector — and the review found two detectors that could not
+  have failed at all. Requirement for any successor: a mutant is **a program
+  that performs the attempt against the live harness and returns what
+  happened**, scored solely by whether the value landed where it must not, and
+  each carries a **machine-readable detector id in the seal** rather than a
+  prose sentence a later runner is free to interpret. Evidence:
+  `experiments/house_rules_verdicts.json` `construction_gate.B3`
+  (`mutants_are_descriptions_not_executions`, `detector_map_is_authored`),
+  DISCOVERIES 2026-09-02. First discharge:
+  [DESIGN-repairable-refusal](DESIGN-repairable-refusal.md) B12 (12 executable
+  mutants across five site types); the requirement binds whether or not that
+  design is scheduled.
+
+- **A blind control's own ceiling must be computed against its voiding
+  threshold, and a nineteen-row half is too small (2026-09-02).** HOUSE RULES
+  B9's entire registered family of 95 rules tops out at **0.736842** on the
+  nineteen-row scored half against a void threshold of **0.784211**: no member
+  could have fired, whatever the fit half selected, and the fitted rule
+  predicted one class for every scored row so its agreement equalled the
+  majority rate by arithmetic. Requirement for any successor using a blind
+  control: register the family, its tie-break and its threshold before the
+  run; compute the **family ceiling** against the threshold at the earliest
+  point that is not circular and treat a ceiling below the threshold as a
+  **construction defect, not a pass**; publish the fitted rule's
+  predicted-class distribution beside its agreement. And size the half against
+  the **operative** bar rather than the nominal one — at n=19 a strict
+  `k/n > m/n + 0.10` fires at `m+2` (10.53 points), at n=20 at `m+3` (**15**
+  points), because a multiple of ten pushes a strict inequality onto the next
+  grid point. Evidence: `experiments/house_rules_verdicts.json`
+  `construction_gate.B9`, prereg amendment `amd-2026-09-02-b9-families`,
+  DISCOVERIES 2026-09-02.
+
+- **WITNESS — necessity certificates, parked behind a census nobody has taken
+  (2026-09-02).** The **fourth** independent arrival at PREMISE LEDGER, and the
+  first to carry the constructor that park has never had: a premise counts as
+  **necessary** only when ablating it drives the system into a refusal or
+  signed question that **names that premise**, with mere output difference
+  demoted to `sensitive`. Declined as a v0.26 headline on two grounded reasons.
+  (1) Its residual risk is unpriced by its own gate and lands where its control
+  cannot reach: a naming refusal may fire for *symbol lookup* rather than for
+  derivation, so a certificate can be true as written and wrong as evidence,
+  and the phantom control is unreferenced by construction — the failure lives
+  exactly among premises that *are* referenced but inert. (2) Its denominator
+  is unmeasured and plausibly below its own floor of 20 recorded turns carrying
+  two or more assumptions in force; `session_ledger.LIVE_ASSUMPTION_CAP` is 8
+  and the journals under `experiments/sessions/` have never been counted for
+  this. **That count is the trigger and it is an afternoon's work.** Evidence:
+  `reports/design-direction-v0.26.json`, `synthesis.declined.WITNESS`.
+
+- **SEPARATOR — the highest-ceiling decline of the v0.26 course, parked behind
+  an 8-entry pre-gate (2026-09-02).** Attack this repository's own published
+  cross-discipline identity claims with the falsification-only pinned-point
+  checker — an instrument coarser than, and import-independent of, the matcher
+  that made them — and publish, per audited claim, either a separating
+  substitution that kills it by name or an honest silence that is never
+  phrased as equivalence. Re-scoped under pressure to EXACT, SPECIALIZATION
+  and exhaustively-enumerated FAMILY entries only, after conceding that a
+  separator against a SHAPE entry refutes nothing that was ever claimed.
+  Unpark only above its own pre-gate, stated exactly: **at least 8 published
+  EXACT / SPECIALIZATION / exhaustively-enumerable FAMILY entries whose
+  collapse chain contains `match_signatures.HEAD_ALIASES` or the
+  `BIG_OP_PREFIXES` truncation rule.** Below 8 the instrument has nothing
+  load-bearing to attack; counting that population is an afternoon and is not
+  done. **Residual risk carried with it:** the pinned-point domain is drawn
+  from the same committed templates the prefix rule was kept for, so a clean
+  run of concordant records could mean only that the domain never looked where
+  the difference lives. Evidence: `reports/design-direction-v0.26.json`,
+  `synthesis.declined.SEPARATOR`.
+
+- **MUTANTS — folded into STRANGER-GATE as a THIRD independent arrival, and
+  the first to carry the missing half (2026-09-02).** Mechanically generated
+  weakenings of the existing durable-write gate, so a kill matrix measures
+  **whether the attack corpus is adequate** rather than whether the gate
+  discriminates. That is a direct answer to STRANGER-GATE's own recorded
+  residual risk — one head authors the attacks, the twins and the gate — which
+  three cycles of parking have restated without addressing. Convergence
+  **hardens the park's priority; it is not a trigger.** Unpark unchanged:
+  STRANGER-GATE MUST run before any untrusted stream reaches the write gate.
+  Evidence: `reports/design-direction-v0.26.json`, `synthesis.declined.MUTANTS`.
+
+- **The budget/cost surface — DECLINED ON SELECTION so it could not unpark the
+  cost lane by side effect (2026-09-02).** Series 2 unified declaration lines
+  with *budgets* on the observation that **a budget is an edit algebra ordered
+  by less-or-equal**, and that the least-sufficient search is itself the
+  partition witness a minted question owes. The unification is elegant and it
+  was cut: shipping it would have unparked TOLL (denominator n=1) and the cost
+  ledger (ninth consecutive pass-over, recorded as a decision) without either
+  lane's trigger firing. **Recorded as the strongest available successor
+  mechanism for that park, and not taken.** Evidence:
+  `reports/design-direction-v0.26.json`, `synthesis.cut_on_selection`.
+
+- **The missing goal object — a named gap, not a decline (2026-09-02).** SEAM
+  (a decomposition that provably rejoins) folded, and the fold is the finding:
+  **no goal, proof obligation or subgoal exists anywhere in this program.** A
+  turn is served or refused and nothing outlives it as an open obligation, so
+  a join/split algebra would be an algebra over nothing. Two further folds are
+  consequences of the same fact: FRONTIER (a partial answer as a first-class
+  object) is "the supposition channel with better words", and EXHIBIT (exhibit
+  an inconsistent supposed world) is **unreachable rather than rare**, because
+  with rules about declared symbols refused in writing a scope is bindings
+  plus opaque atoms and nothing derives inside it. Refusing to state axioms
+  has consequences and this is one of them. Filed so it is not re-derived a
+  fourth time; unpark needs a design saying what an obligation *is* here and
+  what would falsify its usefulness.
+
+- **SEEP — a whole-committed-tree literal-lineage index with a fingerprint
+  scheme (2026-09-02).** The structural successor to the grammar-example leak:
+  a way to find a sealed value anywhere in the committed tree **without
+  republishing it**. Note what it would replace — a containment sweep can
+  either name the forbidden value (and thereby carry it) or carve out the
+  places it legitimately lives, and DESIGN-repairable-refusal's B8 does the
+  second, with frozen carve-outs, because without them the gate is
+  unsatisfiable. That is a stand-in, not a solution. Unpark behind a design
+  for the fingerprint scheme.
+
+- **DEVIL'S RANKER — adversary-equivalence for the learned component
+  (2026-09-02).** Substitute the worst legal ordering as a computed ceiling and
+  diff every certified artifact. Distinct from the absence-equivalence already
+  proven by test in its weaker form (the proposer sits last, after every exact
+  route has declined, and switching it off leaves every other route
+  byte-identical). Parks behind a **census of legal-alternative set sizes**.
+
+- **The per-gate control-ceiling audit — an instrument, not a headline
+  (2026-09-02).** A per-gate audit of whether each capability-blind control in
+  this repository could have fired at all. Conceded by its own author to be an
+  instrument rather than a headline, and to need a **held-out defect chosen by
+  a hand that never saw its category list**. Its bounded lesson is already
+  imported into DESIGN-repairable-refusal's B11; the audit itself parks behind
+  that prerequisite.
+
+- **Lexical repair of unparseable declaration lines (2026-09-02).**
+  DESIGN-repairable-refusal's own recorded next extension, named there and not
+  taken: its algebra reaches clauses c2-c5 only, and an `UNPARSED` line is
+  `EXCLUDED` at registration because its remedy already exists — the published
+  grammar row. Filed so the exclusion is not mistaken for coverage.
+
+- **Convergent arrivals recorded as evidence for existing parks, not as lanes
+  (2026-09-02).** PREIMAGE (read English by inverting the renderer) is a
+  **second** arrival at MIRROR FRAGMENT and contributes a cheap
+  injectivity/collision pre-test the park did not have — cheaper than the
+  population count, and it may be run first. COORDINATES is a **second**
+  arrival at the naming-layer lane and contributes the finding that
+  **exhaustiveness is separable from addressing**. CROSSTALK is a **fourth**
+  arrival at the independent-second-reading lane and contributes an
+  **UNCOMPARED-below-overlap-floor** discipline. STRANGER-DECODES was dropped
+  by its own series once told a grading-only pinned blind machine reader
+  already exists — a second independent confirmation of v0.25's decline of the
+  outside-judge headline. HALFLIFE was cut by its own series once told
+  detection already exists at 0 of 220 regressions. None of these is a lane;
+  each is evidence for the park it landed on.
+
 ## Filed by the v0.24 deep triage (2026-08-31): proposed-vs-delivered over v0.22 and v0.23
 
 Two artifact-verified audits of the agent-managed v0.22 and v0.23 cycles
@@ -120,24 +282,6 @@ gaps below are documentation-layer, filed here so they stop being gaps.
   rotation had in fact rewritten nine sections of the plan body.
 
 ## Filed at the v0.24 rotation (the uptake, and the v0.25 course's parks)
-
-- **The shipped template parser silently rewrites `sum_total(x)` into the
-  aggregate head, with no refusal (2026-08-31).** `scripts/match_signatures.py`
-  rewrites any identifier beginning `sum_ / prod_ / lim_ / max_ / min_` into a
-  corpus aggregate head (`HEAD_ALIASES`, `BIG_OP_PREFIXES`), so a term written
-  `sum_total(x)` is reinterpreted as `aggregate` and nothing anywhere says so.
-  Found by the v0.25 adversarial review of a design for code that does not
-  exist yet — a live hazard of code that ships today. Acceptance for the fix:
-  **a refusal or a disclosure, never a silent rewrite** — either the parser
-  refuses the capture by name, or the rewrite rides the term's own receipt
-  where a reader can see it — plus a test that goes red on today's behaviour.
-  **It does not ride H-P0.** HOUSE RULES' census carries the reserved
-  prefixes as a declaration-time prefix guard, which converts the hazard only
-  at the declaration boundary; the parser keeps rewriting, and "declaring
-  `sum_total` is refused" must not be allowed to read as "the parser no longer
-  rewrites `sum_total`." Evidence: `docs/DESIGN-house-rules.md` §4 and the
-  v0.25 course receipt's `post_review.review_finds_kept`. Ordered in
-  [ROADMAP-v0.25](ROADMAP-v0.25.md) §2 as its own lane.
 
 - **MIRROR FRAGMENT — parked behind an exact pre-gate (2026-08-31).** An
   exact-grammar English reader provably disjoint from the renderer's module

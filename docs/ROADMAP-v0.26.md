@@ -194,15 +194,27 @@ preference. The adjudication has two questions this time as well.
   at selection. Convergence is evidence *for* a park, not a trigger, and the
   adjudication must say which of those is which in writing.
 
-**One correction this adjudication owes before it counts anything.**
-ROADMAP-v0.25 contradicts itself on the STRANGER-GATE cycle count: §1.1 says
-"third consecutive cycle" and §3's table says "second cycle
-honored-not-displaced". Counting from §3 makes v0.26 the third; counting from
-§1.1 makes it the fourth. The defect is in that roadmap's rows, not here, and
-nothing in this document or in
-[DESIGN-repairable-refusal](DESIGN-repairable-refusal.md) turns on which is
-right — but the adjudication must repair the row rather than pick a number
-silently.
+**The correction this adjudication owed is made, and the count is settled at
+FOUR.** ROADMAP-v0.25 contradicted itself on the STRANGER-GATE cycle count —
+§1.1 and §4.1 read "third consecutive cycle", §3's table read "second cycle
+honored-not-displaced" — and DESIGN-repairable-refusal §11.2 M-7 flagged it
+rather than resolving it silently. Resolved here on the artifacts: **v0.25 is
+the third** honored cycle and §3's row was the wrong one. ROADMAP-v0.23 §4.3's
+STRANGER-GATE row adjudicated the prohibition in writing for v0.23 — *"nothing
+this cycle opens one (GUEST AXIOM's guest text enters a frame, never the gate
+— B1 is the proof)"* — and it is the row that created the prohibition trigger;
+ROADMAP-v0.24 §1.1 adjudicated it again — *"The prohibition is honored in
+writing, here. No untrusted execution or write stream opens in v0.24."*
+v0.23 + v0.24 + v0.25 = three, and §3's row had simply omitted v0.23. The row
+is repaired in place with that reasoning and today's date (2026-09-02), so
+**this cycle would be the fourth**, and §3 below counts it that way.
+
+One consequence is recorded rather than buried: the v0.26 course receipt's own
+parenthetical (*"ROADMAP-v0.25 §3 records the second; the first draft of the
+design said fourth and the review corrected it"*) means the design's **first
+draft was right** and its M-1 "correction" was made against the defective row.
+The receipt is a record of the course as it ran and is **not** edited; the
+correction lives here and in DESIGN-repairable-refusal §11.2.
 
 ## 2. Prerequisites and small lanes that are not this cycle's headline
 
@@ -277,7 +289,7 @@ artifacts.
 | lane | state entering v0.26 | trigger to unpark |
 |---|---|---|
 | **The naming-layer question** — *how does a nameless library get names a person can ask by?* | **RE-EXAMINED as ROADMAP-v0.25 §3 required, and the answer is NEGATIVE — recorded rather than silently re-carried.** `declare` shipped and does **not** advance the question: a declared symbol is *fresh by construction*, because clause `c5_collides_with_library_symbol` refuses any name already a census member, so the surface is built to **bounce off** the library's namespace rather than reach into it. The unnamed bulk is exactly as unreachable as it was. The obligation is discharged; the lane carries | A design naming the mechanism *and* what would falsify its usefulness. HANDLE's anti-vacuity lesson still travels with it (total and injective can still be unaskable), and COORDINATES' transferable finding is now attached: **exhaustiveness is separable from addressing** — a completeness certificate can be built over whatever naming already exists, so an address language is not on the critical path of the program's first completeness claim. HANDLEBAR parks behind it |
-| **STRANGER-GATE** — the write gate's overdue adversarial red-team | **Prohibition intact and honored, now with run evidence rather than only a design argument** (v0.25's B4/B5/B11 fences scored and readable off the artifact), and with a **third** independent arrival: MUTANTS, mechanically generated weakenings of the durable-write gate itself, so a kill matrix measures whether the **attack corpus is adequate** rather than whether the gate discriminates. That is a direct answer to the park's own recorded residual risk, and the first arrival to carry it. **The cycle count is disputed and the dispute is a defect in ROADMAP-v0.25, not an uncertainty here** — §1.1 there says "third consecutive", §3's table says "second", so this is the third or the fourth; §1.1 above owes the repair | MUST run before any untrusted stream reaches the write gate. Residual risk unchanged and recorded: one head authors the attacks, the twins and the gate, so it measures whether the gate DISCRIMINATES, never whether the corpus is ADEQUATE — which is exactly the half MUTANTS supplies. DEPUTY remains the named next asker, blocked behind it |
+| **STRANGER-GATE** — the write gate's overdue adversarial red-team | **Prohibition intact and honored, now with run evidence rather than only a design argument** (v0.25's B4/B5/B11 fences scored and readable off the artifact), and with a **third** independent arrival: MUTANTS, mechanically generated weakenings of the durable-write gate itself, so a kill matrix measures whether the **attack corpus is adequate** rather than whether the gate discriminates. That is a direct answer to the park's own recorded residual risk, and the first arrival to carry it. **FOURTH cycle honored-not-displaced**, settled 2026-09-02: ROADMAP-v0.25 §3's row read "second", contradicting its own §1.1 and §4.1, and the repair is dated in that row — v0.23 (ROADMAP-v0.23 §4.3, the row that created the prohibition trigger), v0.24 (§1.1), v0.25 (§1.1) makes v0.25 the third and this the fourth | MUST run before any untrusted stream reaches the write gate. Residual risk unchanged and recorded: one head authors the attacks, the twins and the gate, so it measures whether the gate DISCRIMINATES, never whether the corpus is ADEQUATE — which is exactly the half MUTANTS supplies. DEPUTY remains the named next asker, blocked behind it |
 | **PREMISE LEDGER** (supplementary-family, capability-class) | Carried a **fourth** cycle, with a **fourth** independent arrival: WITNESS, and it carries the constructor the lane has never had — a premise counts as **necessary** only when ablating it drives the system into a refusal or signed question that **names that premise**, with mere output difference demoted to `sensitive`. Declined as a v0.26 headline on two grounded reasons, not taste: its residual risk (a naming refusal firing for *symbol lookup* rather than derivation) is unpriced by its own gate and lands exactly where its phantom control cannot reach, and its denominator is **unmeasured** | A design that takes the necessity claim. Its named prerequisite is now concrete and cheap: **count the recorded journals under `experiments/sessions/` for turns carrying two or more assumptions in force**, against the lane's own floor of 20. `session_ledger.LIVE_ASSUMPTION_CAP` is 8 and that count has never been taken. An afternoon's work, and it is the gate |
 | **CANARY-CURVE** (instrument-class) | Carried unchanged | Still blocked on an enumeration layer that does not exist |
 | **TOLL** (cost-lane metrology; CEILING routes with it) | Carried unchanged, and **explicitly not unparked by this cycle's decline**. The v0.26 course's METER arrived at it again and was merged into the selected direction at round 2 on the observation that *a budget is an edit algebra ordered by ≤* — then **declined at selection**, in writing, precisely because shipping it would unpark this lane by side effect | Denominator still n=1. Unpark needs ORPHAN's denominator or the log-probe run as its own registered lane. **The declined budget surface is recorded in the receipt as the strongest available successor mechanism for this park, and it is not taken** |
@@ -307,9 +319,12 @@ run.
 v0.26 is ready only if:
 
 - the course's selection is **adjudicated in this document** with every
-  declined disposition recorded, v0.24 §1.1's shape — **and the
-  STRANGER-GATE cycle-count contradiction in ROADMAP-v0.25 is repaired in
-  writing rather than resolved silently**;
+  declined disposition recorded, v0.24 §1.1's shape. *(The STRANGER-GATE
+  cycle-count clause this gate originally carried is **already discharged**:
+  ROADMAP-v0.25 §3's row was repaired in writing on 2026-09-02 with its
+  evidence, and §1.1 above records the determination. The gate keeps the
+  general form instead: any count this document states must be traceable to
+  the rows that produced it.)*
 - the selected slice meets its own construction stops, or the slice ships as
   the honest negative its gates license — a fired B11, a met B11b floor, or a
   failed construction gate is a **result**, and B7's red at v0.24 is the

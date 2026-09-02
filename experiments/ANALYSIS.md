@@ -320,7 +320,7 @@ Per B9, this publication decides R3's v0.23 candidacy by the count, not by
 re-running — folded into v0.23's rider R-NF. No forgery claim (MACs are not
 verified on this path).
 
-# COLD RECEIPT: 1 of 22 receipt kinds survives the program's deletion (2026-08-27; re-read 2026-08-31 against the v0.24 twice-re-sealed registry)
+# COLD RECEIPT: 1 of 24 receipt kinds survives the program's deletion (2026-08-27; re-read 2026-08-31 against the v0.24 twice-re-sealed registry, and again 2026-09-02 against the v0.25 rotation's re-seal)
 
 `cold/census_run2.json`, harness `harness/cold_harness.py`, registry
 `experiments/cold_registry_census.json` (sealed before the harness existed),
@@ -336,21 +336,45 @@ verdicts rested on a check that could not go red for the reason it claimed.
 Under ROADMAP-v0.21 §4.0(1) that is a **bug, not a reading**, and amendment 2
 re-ran the census with a two-limb arm.
 
+**The registry the 2026-09-02 re-read ran against.** The v0.25 rotation
+re-sealed `experiments/cold_registry_census.json` twice, and each movement has
+a name. H-P0's `declare` slice took `program_tree_files_scanned` **190 → 194**
+and the seal `d3d9bdc6…` → `edb44684…` (`11d62b8`, re-attested there with the
+partition unmoved at 1/12/9 over 22). H-P1's two new programs — the gates
+runner and its receipt checker — then took it **194 → 196** files, **43 → 47**
+receipt-marked sites, **22 → 24** kinds, **11 → 12** excluded sites, **14 →
+16** kinds with committed instances, and the seal `edb44684…` →
+**`a4f38d55…`** (`2b61a3e`). The two new kinds are
+`corollary.house-rules-receipts/1` and
+`run_house_rules_gates:_receipts_document`, and they arrive **with** committed
+instances because the registered run's artifacts landed at `f9719a2`, before
+the seal: a registry re-seal belongs after the last artifact the cycle
+commits. Two pins moved with it and both are the same repair —
+`line_grammar_digest` `43024c67…` → `6cf86f0c…` and `capability_sheet_digest`
+`80f0ea19…` → `79a0f6dc…`, from `32d505a`'s fix of the grammar-example leak,
+not from H-P0's `declare` row (which moved them at `c87b0ca` and was sealed
+there).
+
 **The partition, which is the deliverable.** With this repository's `scripts/`
 tree renamed away and no `sys.path` entry resolving inside the repository:
 
 | verdict | kinds | what it means |
 |---|---|---|
 | **SURVIVES** | **1** | `conformance_ce3_supplement:decide_both_directions` — 25 rows, 50 checker invocations, re-checked from the bundle and a `third_party_pinned` binary alone |
-| **NEEDS-PROGRAM** | **12** | for each: the *same* import, *same* argv, *same* `PYTHONPATH`, SUCCEEDED with `scripts/` present and FAILED with it renamed away. The v0.24 re-read moved two v0.24 protocol kinds here (`corollary.protocol-uptake-receipts/1`, `run_protocol_gates:run`): they gained committed instances, so the removal arm could finally test them, and they need the program |
+| **NEEDS-PROGRAM** | **14** | for each: the *same* import, *same* argv, *same* `PYTHONPATH`, SUCCEEDED with `scripts/` present and FAILED with it renamed away. Each cycle's own evidence lands here as it gains committed instances: the v0.24 re-read moved two protocol kinds in (`corollary.protocol-uptake-receipts/1`, `run_protocol_gates:run`), and the v0.25 rotation's re-read moved two HOUSE RULES kinds in the same way (`corollary.house-rules-receipts/1`, `run_house_rules_gates:_receipts_document`) — the registered run's artifacts joined the tree before the seal, so the removal arm could test them, and they need the program |
 | **UNTESTED** | **9** | 8 with no committed instance or no published reconstruction rule (`serve_chat:protocol_receipt` among them); 1 (`retraction_radius:certify`) blocked by a dependency that is not the program |
 
-The ten NEEDS-PROGRAM kinds, published by name because B7 scores a correct one
-as a hit: `build_throughput_tasks:exact_value_task`, `closure-receipt/1`,
-`closure_query:query`, `external_verifier:main`, `foreign_voice:receipt`,
-`harness:_route_twin`, `measure_when_to_ask:_oewn_samples`,
+All fourteen NEEDS-PROGRAM kinds, published by name because B7 scores a
+correct one as a hit: `build_throughput_tasks:exact_value_task`,
+`closure-receipt/1`, `closure_query:query`,
+`corollary.house-rules-receipts/1`, `corollary.protocol-uptake-receipts/1`,
+`external_verifier:main`, `foreign_voice:receipt`, `harness:_route_twin`,
+`measure_when_to_ask:_oewn_samples`,
+`run_house_rules_gates:_receipts_document`, `run_protocol_gates:run`,
 `serve_chat:_evaluate_receipt`, `serve_chat:_resolution_receipt`,
-`serve_chat:kernel_receipt`.
+`serve_chat:kernel_receipt`. (Read "the ten" here until 2026-09-02: the list
+was run 1's and the two v0.24 protocol kinds only ever reached the table cell
+above, which the v0.25 rotation's re-read is what caught.)
 
 **Every floor, as a number.**
 
@@ -362,8 +386,8 @@ as a hit: `build_throughput_tasks:exact_value_task`, `closure-receipt/1`,
 | **B4** omission FAIL LOUD | exit **2**, names `lean.exe`, no silent pass — **over that same one kind** |
 | **B5** sham SURVIVES count | **0** — **over that same one kind**, and structurally: see below |
 | **B6** scrambled bundles | **0 of 200** passed; 10,000 invocations in **3422 s** against a 59-minute estimate; **1.5% rule-of-three UPPER BOUND**, not a rate. Carried forward from run 1 with its digest, because amendment 2 cannot move it |
-| **B7** NEEDS-PROGRAM confirmed by removal | **10 of 10**, each with a *succeeding* with-program positive control |
-| **B8** ≥90% SURVIVES voids | **5.26%** at a denominator of 19 |
+| **B7** NEEDS-PROGRAM confirmed by removal | **14 of 14**, each with a *succeeding* with-program positive control |
+| **B8** ≥90% SURVIVES voids | **4.17%** at a denominator of 24 |
 | **B9** version drift | ceded; the `proofcurve` v4.29.1 divergence is recorded `adjudicated: false` |
 | **B10** seal before the harness | **3 census misses**, all published; no `harness/` file existed at the first sealing commit |
 | **B11** provenance downgrade | **0 downgrades**; `lean.exe` `third_party_pinned` on both limbs, recomputed from the bytes |
