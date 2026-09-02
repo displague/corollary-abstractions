@@ -1,0 +1,1024 @@
+{
+  "schema": "corollary.house-rules-run/1",
+  "design": "docs/DESIGN-house-rules.md",
+  "design_clause": "§6.3 the registered run; §7 gates B1-B12; §8 result gates; §9 stop conditions.",
+  "stage": "H-P1",
+  "date": "2026-09-02",
+  "preregistration": "experiments/house_rules_prereg.json",
+  "preregistration_id": "house-rules.h-p1.registered-run.v1",
+  "preregistration_sha256_lf": "f1dcb2a3d98c1e252982da2d5a66986f060c792652852e5edabfbec851ad7bda",
+  "registration_commit": "27d358dc635e07c4224fe16a6595d7a653571a93",
+  "registered_before_the_run": true,
+  "scoring_tree": {
+    "head_commit": "27d358dc635e07c4224fe16a6595d7a653571a93",
+    "sealed_commit": "7a47a8aa73e51890d62306da8bf369a117b661a0",
+    "sealed_commit_is_strict_ancestor_of_head": true,
+    "dirty": false,
+    "dirty_entries": [],
+    "uncommitted_registration_inputs": [],
+    "first_commit_of": {
+      "experiments/house_rules_prereg.json": "27d358dc635e07c4224fe16a6595d7a653571a93",
+      "experiments/house_rules_fixtures.json": "7a47a8aa73e51890d62306da8bf369a117b661a0",
+      "experiments/symbol_census.json": "c87b0ca73bb4815e252153a627772423f66bd4c9",
+      "scripts/symbol_ledger.py": "c87b0ca73bb4815e252153a627772423f66bd4c9",
+      "scripts/check_symbol_census.py": "c87b0ca73bb4815e252153a627772423f66bd4c9",
+      "scripts/check_house_rules_receipts.py": "27d358dc635e07c4224fe16a6595d7a653571a93",
+      "scripts/run_house_rules_gates.py": "27d358dc635e07c4224fe16a6595d7a653571a93"
+    },
+    "frozen_pins_that_moved": [],
+    "wrong_tip": false,
+    "how_checked": "git status --porcelain --untracked-files=all for dirty; git merge-base --is-ancestor (STRICT: same-commit is not an ancestor) for the sealed commit against HEAD; and every prereg `frozen` pin re-digested with sha256_lf",
+    "allow_dirty": false,
+    "registered_before_the_run": true
+  },
+  "sealed_commit": "7a47a8aa73e51890d62306da8bf369a117b661a0",
+  "receipts_artifact": {
+    "path": "experiments/house_rules_receipts.json",
+    "receipt_count": 39,
+    "note": "the per-fixture verdict table; gate scoring lives here"
+  },
+  "counts": {
+    "fixtures_total": 60,
+    "declaration_fixtures": 39,
+    "use_fixtures": 21,
+    "admitted": 13,
+    "refused": 26,
+    "b3_mutants": 32,
+    "b12_mutants": 16,
+    "sweep_inputs": 14024
+  },
+  "construction_gate": {
+    "B1": {
+      "verdict": "GREEN",
+      "clause": "Over the sealed fixtures AND a machine-enumerated input sweep (every fixture line mutated by single-token deletion/substitution from the fixture alphabet — an enumerated set, not an authored one): 100% receive exactly one verdict with exactly one `deciding_clause`, zero fall-throughs.",
+      "sweep": {
+        "source_lines": 60,
+        "alphabet_size": 95,
+        "generated": 19872,
+        "distinct_scored": 14024,
+        "rule": "for every fixture line — the command word included — delete each token once, and substitute each token once with every member of the fixture alphabet; the route's convention (everything after the first token reaches the checker) is then applied to the mutant, and the results are de-duplicated on (surface, source fixture) and sorted",
+        "alphabet_rule": "every whitespace token occurring in any fixture LINE — command words included — enumerated from the sealed corpus, not chosen",
+        "mutation_covers_the_command_word": true,
+        "evaluated_in_context": true,
+        "evaluated_in_context_note": "each mutant is decided in the session context its SOURCE FIXTURE occupied — the symbols admitted in that session before that turn, and the three-source session-name union as it stood. Three of the eight codes are clauses about session state and are unreachable by any stateless input, so a context-free sweep would report a property of the harness as a property of the checker.",
+        "authored_toward_a_code": false
+      },
+      "sweep_inputs_scored": 14024,
+      "sweep_admissions": 304,
+      "fixture_declarations_scored": 39,
+      "fixtures_matching_the_seal": "39/39",
+      "inputs_scored_total": 14063,
+      "fall_throughs": 0,
+      "deciding_clauses_outside_the_committed_order": 0,
+      "multi_ground_fixtures": [
+        "hr-fx-s1-t06",
+        "hr-fx-s1-t14",
+        "hr-fx-s2-t05",
+        "hr-fx-s3-t19",
+        "hr-fx-s3-t23",
+        "hr-fx-s3-t27"
+      ],
+      "multi_ground_fixtures_off_the_seal": [],
+      "shipped_clause_order_equals_the_sealed_order": true,
+      "how_exclusivity_was_checked": "for every input the deciding_clause was compared against the clause the SEALED clause_order maps its refusal code to — the copy H-PRE committed before the checker existed — per input rather than once for the set, and the shipped CLAUSE_ORDER was compared against that seal as a whole. Comparing the module's own code-to-clause map against the clause the module built from it would compare a value to itself",
+      "how_the_order_was_shown_to_decide": "the fixtures where MORE THAN ONE clause holds are the only ones an order can be wrong about; their computed ground sets are compared against the seal EXACTLY rather than by containment, so a fixture that omitted an earlier ground fails",
+      "admission_clause_note": "the admit clause has no sealed row — `clause_order` seals the eight REFUSAL clauses — so an admission's deciding clause is checked against the module's constant. Disclosed rather than counted as sealed evidence",
+      "misses": []
+    },
+    "B2": {
+      "verdict": "GREEN",
+      "clause": "Zero admissions collide with any member of the committed `symbol_census.json` (the checker compares against the committed artifact; the census *checker*, a separate invocation, proves the artifact matches a fresh recomputation — two sides, two programs, so a mismatch can actually go red). The `sum_total` fixture must refuse `RESERVED_PREFIX`; a fixture head equal to a casefolded corpus call head must refuse `COLLIDES_WITH_LIBRARY_SYMBOL`.",
+      "admissions": 17,
+      "admissions_colliding_with_the_census": 0,
+      "admissions_matching_a_reserved_prefix": 0,
+      "census_checker": "scripts/check_symbol_census.py",
+      "census_checker_exit": 0,
+      "census_checker_output": [
+        "CENSUS OK: experiments/symbol_census.json reproduces from source — 286 equality members over 12777 templates, 5 prefix-guard entries"
+      ],
+      "census_ref": {
+        "path": "experiments/symbol_census.json",
+        "sha256_lf": "2083be5d25e36bc8ca58a3a7b994d773ea0029521dc775cba93dd1ad689fbc2e"
+      },
+      "named_case_reserved_prefix": [
+        {
+          "fixture_id": "hr-fx-s3-t21",
+          "refusal_code": "RESERVED_PREFIX"
+        },
+        {
+          "fixture_id": "hr-fx-s3-t22",
+          "refusal_code": "RESERVED_PREFIX"
+        },
+        {
+          "fixture_id": "hr-fx-s3-t27",
+          "refusal_code": "RESERVED_PREFIX"
+        }
+      ],
+      "named_case_library_collision": [
+        {
+          "fixture_id": "hr-fx-s3-t24",
+          "refusal_code": "COLLIDES_WITH_LIBRARY_SYMBOL"
+        },
+        {
+          "fixture_id": "hr-fx-s3-t25",
+          "refusal_code": "COLLIDES_WITH_LIBRARY_SYMBOL"
+        },
+        {
+          "fixture_id": "hr-fx-s3-t26",
+          "refusal_code": "COLLIDES_WITH_LIBRARY_SYMBOL"
+        }
+      ],
+      "two_programs_note": "the checker compares against the COMMITTED artifact at the digest every verdict cites; the census checker is a separate invocation of a separate program that recomputes from source",
+      "misses": []
+    },
+    "B3": {
+      "verdict": "GREEN",
+      "clause": "≥30 seeded mutants attempt to move an admitted symbol into a rendered answer's evidence, a written session document, a journal, or a library path. 100% are stopped by the shipped machinery or the checker — not by test assertions reading the mutant's name. One survivor fails the slice.",
+      "mutants": "32/32 stopped",
+      "floor": 30,
+      "survivors": [],
+      "detectors_exercised": {
+        "a_checked_use_is_still_a_supposition": {
+          "fires": true,
+          "observed": {
+            "route": "supposition",
+            "status": "waiting"
+          }
+        },
+        "census_regeneration": {
+          "fires": true,
+          "observed": {
+            "committed_problems": 0,
+            "problems_after_inserting_a_member": 1
+          }
+        },
+        "checker_inputs_exclude_the_runs_outputs": {
+          "fires": true,
+          "observed": {
+            "declared_outputs_named_in_the_checker": [],
+            "checker_inputs": [
+              "experiments/symbol_census.json",
+              "schema/equation-node.schema.json",
+              "the declaration line"
+            ]
+          }
+        },
+        "encode_type_registry": {
+          "fires": true,
+          "observed": [
+            "refused: SessionFormatError",
+            "refused: SessionFormatError"
+          ]
+        },
+        "fresh_session_has_no_ledger_entry": {
+          "fires": true,
+          "observed": {
+            "admitted_in_a_fresh_session": 0,
+            "use_check_returned_none": true,
+            "fixture_id": "hr-fx-s4-t01"
+          }
+        },
+        "id_resolution_against_the_merged_graph": {
+          "fires": true,
+          "observed": {
+            "corpus_statement_ids": 12777,
+            "decl_id_resolves_to_a_node": false
+          }
+        },
+        "name_sweep": {
+          "fires": true,
+          "kind": "sensitivity probe",
+          "observed": {
+            "planted_found": 1,
+            "absent_found": 0
+          }
+        },
+        "prereg_pin_chain": {
+          "fires": true,
+          "kind": "sensitivity probe, both directions",
+          "observed": {
+            "unrecorded_retirement": "PinChainError",
+            "unretired_row_resolves_to_itself": true
+          },
+          "refusal_type_required": "prereg_pins.PinChainError"
+        },
+        "record_shape_has_no_symbol_slot": {
+          "fires": true,
+          "observed": {
+            "ReadEvent_fields": [
+              "assumption_id",
+              "turn_index"
+            ]
+          }
+        },
+        "working_tree_digest": {
+          "fires": true,
+          "kind": "sensitivity probe AND a live observation of the vector",
+          "observed": {
+            "moved_on_a_planted_file": true,
+            "repository_digest_unmoved_by_a_declaration_and_a_use": true
+          }
+        }
+      },
+      "detector_map": "scripts/run_house_rules_gates.py:B3_DETECTORS",
+      "detector_map_covers_the_seal_exactly": true,
+      "detector_map_note": "DISCLOSED rather than glossed: the sealed corpus names each mutant's stopper in PROSE (`stopper_mechanism`), not as a machine-readable detector id, so the id-to-detector association is AUTHORED in the runner — committed with the prereg and before the run, and required here to cover the sealed mutant set exactly in both directions. What is not authored is whether the named detector fires: every one is exercised on a planted case in this run, and a detector that did not fire fails its mutants.",
+      "how_stopping_was_established": "each mutant is stopped by the SHIPPED detector the runner maps it to from its sealed stopper_mechanism, and the runner EXERCISES that detector on a planted case rather than asserting the mutant's name is absent from an output — which is what the clause forbids",
+      "rows": [
+        {
+          "mutant_id": "b3-m01",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "id_resolution_against_the_merged_graph"
+        },
+        {
+          "mutant_id": "b3-m02",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "a_checked_use_is_still_a_supposition"
+        },
+        {
+          "mutant_id": "b3-m03",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "id_resolution_against_the_merged_graph"
+        },
+        {
+          "mutant_id": "b3-m04",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "record_shape_has_no_symbol_slot"
+        },
+        {
+          "mutant_id": "b3-m05",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "name_sweep"
+        },
+        {
+          "mutant_id": "b3-m06",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "record_shape_has_no_symbol_slot"
+        },
+        {
+          "mutant_id": "b3-m07",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "name_sweep"
+        },
+        {
+          "mutant_id": "b3-m08",
+          "vector": "answer_evidence",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m09",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "encode_type_registry"
+        },
+        {
+          "mutant_id": "b3-m10",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "encode_type_registry"
+        },
+        {
+          "mutant_id": "b3-m11",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "name_sweep"
+        },
+        {
+          "mutant_id": "b3-m12",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "encode_type_registry"
+        },
+        {
+          "mutant_id": "b3-m13",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "name_sweep"
+        },
+        {
+          "mutant_id": "b3-m14",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "record_shape_has_no_symbol_slot"
+        },
+        {
+          "mutant_id": "b3-m15",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "name_sweep"
+        },
+        {
+          "mutant_id": "b3-m16",
+          "vector": "session_document",
+          "outcome": "STOPPED",
+          "stopped_by": "name_sweep"
+        },
+        {
+          "mutant_id": "b3-m17",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m18",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "prereg_pin_chain"
+        },
+        {
+          "mutant_id": "b3-m19",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m20",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "name_sweep"
+        },
+        {
+          "mutant_id": "b3-m21",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "fresh_session_has_no_ledger_entry"
+        },
+        {
+          "mutant_id": "b3-m22",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m23",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "census_regeneration"
+        },
+        {
+          "mutant_id": "b3-m24",
+          "vector": "journal",
+          "outcome": "STOPPED",
+          "stopped_by": "checker_inputs_exclude_the_runs_outputs"
+        },
+        {
+          "mutant_id": "b3-m25",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m26",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "census_regeneration"
+        },
+        {
+          "mutant_id": "b3-m27",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m28",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m29",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m30",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        },
+        {
+          "mutant_id": "b3-m31",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "census_regeneration"
+        },
+        {
+          "mutant_id": "b3-m32",
+          "vector": "library_path",
+          "outcome": "STOPPED",
+          "stopped_by": "working_tree_digest"
+        }
+      ],
+      "misses": []
+    },
+    "B4": {
+      "verdict": "GREEN",
+      "clause": "`write_stage.working_tree_digest` is byte-identical before and after the full registered run (excluding the run's own declared output paths, named in the prereg); `durable_digest` over `data/` is the narrow named control. Zero stage records exist.",
+      "working_tree_digest_before": "c0113c8ee5b2ad82a57865df1e32850dad367da214d72404159fc805ab95d92c",
+      "working_tree_digest_after": "c0113c8ee5b2ad82a57865df1e32850dad367da214d72404159fc805ab95d92c",
+      "working_tree_digest_byte_identical": true,
+      "durable_digest_before": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "durable_digest_after": "22091b1f6edce1f5c30780422cf30bc3bbc855042c40e48ff1d1ad5a45980a2c",
+      "durable_digest_byte_identical": true,
+      "narrow_control_note": "durable_digest covers data/ only and is the NARROW named control; the gate is the wider working_tree_digest, because durable_digest's own docstring names the scripts/ escape it cannot see",
+      "declared_output_paths": [
+        "experiments/house_rules_verdicts.json",
+        "experiments/house_rules_receipts.json"
+      ],
+      "declared_output_paths_note": "both digests are taken BEFORE either output is written, so the two declared paths are absent from both sides of the comparison rather than subtracted from one — the exclusion is structural",
+      "paths_that_appeared": [],
+      "paths_that_vanished": [],
+      "stage_records": 0,
+      "misses": []
+    },
+    "B5": {
+      "verdict": "GREEN",
+      "clause": "No written session document, journal, or durable artifact from the run contains any admitted fixture symbol name (swept over the run's full output tree); `session_state.encode` refuses both record types; a fresh session's use of an admitted fixture symbol takes the opaque-atom path (the declaration is gone).",
+      "admitted_symbol_names_swept_for": 17,
+      "admitted_names_are_not_listed_here": "the count is reported and the names are not, because this artifact is itself inside the swept tree; they are in the sealed corpus",
+      "documents_the_run_produced": [
+        "experiments/house_rules_receipts.json",
+        "experiments/house_rules_verdicts.json"
+      ],
+      "documents_containing_an_admitted_name": 0,
+      "paths_that_appeared_during_the_run": [],
+      "session_documents_or_journals_written": [],
+      "journal_directories_checked": [
+        "experiments/sessions",
+        "reports",
+        "staging"
+      ],
+      "sweep_scope": "the run's OUTPUT tree: the two declared outputs — the verdicts document in FULL, with only the B4 and B5 rows held out because they are what this sweep produces — plus every path that appeared or changed while the run executed. Pre-existing committed files are outside it: the sealed corpus names the fixture symbols by construction and predates this run, and the count of those files is disclosed below",
+      "held_out_of_the_swept_document": [
+        "construction_gate.B4",
+        "construction_gate.B5"
+      ],
+      "held_out_note": "those two rows carry digests, counts and paths and no symbol name; the re-sweep in check_house_rules_receipts.py covers the committed bytes including them, which is the falsifiable side",
+      "sweep_scope_note": "A construction rule this registration adopts so B5 needs no carve-out: the two declared outputs cite fixtures by ID and never echo an admitted symbol name, so B5 sweeps the run's FULL output tree — the declared outputs included — with no exclusion at all. Refused names are not admitted names and may be quoted. Without this rule B5's own clause would have to be read down to mean 'except my own evidence' before the gate could pass.",
+      "no_carve_out_for_the_declared_outputs": true,
+      "whole_repository_sweep_disclosure": {
+        "is_the_gate": false,
+        "why_reported": "the clause scopes the sweep to the run's output tree, so this wider number scores nothing — it is published so the scoping can be judged against a measurement instead of a description",
+        "scope": "every file in the repository under the write_stage integrity exclusions, minus the two declared output paths — skipped so the figure is identical before they exist and after they are committed, and so a replay reproduces it",
+        "hits": 21,
+        "paths": [
+          "data/calculus/nodes.json",
+          "docs/ROADMAP-v0.11.md",
+          "experiments/goedel_pset_coverage.json",
+          "experiments/house_rules_fixtures.json",
+          "experiments/session_p1_command_bound.json",
+          "reports/test_gate_v014/modules/test_session_dispatcher.json",
+          "reports/test_gate_v014/modules/test_session_dispatcher.log",
+          "reports/test_gate_v023/run1-red.log",
+          "reports/test_gate_v024/run1-red.log",
+          "reports/test_gate_v024/run2-killed-partial.log",
+          "reports/test_gate_v024/run3-green.log",
+          "scripts/build_house_rules_fixtures.py",
+          "scripts/seed_calculus.py",
+          "scripts/serve_chat.py",
+          "scripts/symbol_ledger.py",
+          "tests/test_conform_ce3_supplement.py",
+          "tests/test_decompose_channels.py",
+          "tests/test_house_rules_fixtures.py",
+          "tests/test_plain_input.py",
+          "tests/test_session_dispatcher.py",
+          "tests/test_symbol_ledger.py"
+        ],
+        "files_that_could_not_be_read": [],
+        "all_hits_existed_before_the_run": true,
+        "hits_that_did_not_exist_before_the_run": [],
+        "how_pre_existence_was_established": "membership in the path list taken before any gate was scored, not an author's claim about which files are old",
+        "recomputable_by": "scripts/check_house_rules_receipts.py"
+      },
+      "encode": [
+        "refused PersonSymbolDeclaration",
+        "refused AdmissibilityVerdict"
+      ],
+      "fresh_session_takes_the_opaque_path": true,
+      "fresh_session_fixture": "hr-fx-s4-t01",
+      "fresh_session_status": "waiting",
+      "scope_sentence": "This evidences NO WRITES OBSERVED UNDER THIS HARNESS, never CANNOT WRITE. The standing SURVIVES-with-scope rule from the v0.24 deep triage applies: the verdict travels with the harness that produced it.",
+      "misses": []
+    },
+    "B6": {
+      "verdict": "GREEN",
+      "clause": "Every fixture use of a declared symbol with wrong arity refuses `USE_ARITY_MISMATCH` naming the declaration; every fixture use of an *undeclared* applied atom produces byte-identical behavior to the same line on a tip without this slice (the regression fence, checked by replaying those lines against both code paths).",
+      "sealed_wrong_arity_uses": 3,
+      "sealed_fenced_uses": 5,
+      "wrong_arity_uses": "3/3",
+      "undeclared_atoms_fenced": "5/5",
+      "how_the_fence_was_checked": "the same line routed twice — once through a session with a symbol ledger attached and once through a session with none, which IS the pre-slice code path because the new block is guarded on that field — and the two verdict dicts compared for equality",
+      "refusal_rows": [
+        {
+          "fixture_id": "hr-fx-s1-t11",
+          "refusal_type": "USE_ARITY_MISMATCH",
+          "names_the_declaration": true,
+          "refused_as_sealed": true
+        },
+        {
+          "fixture_id": "hr-fx-s1-t12",
+          "refusal_type": "USE_ARITY_MISMATCH",
+          "names_the_declaration": true,
+          "refused_as_sealed": true
+        },
+        {
+          "fixture_id": "hr-fx-s2-t10",
+          "refusal_type": "USE_ARITY_MISMATCH",
+          "names_the_declaration": true,
+          "refused_as_sealed": true
+        }
+      ],
+      "fence_rows": [
+        {
+          "fixture_id": "hr-fx-s1-t13",
+          "byte_identical_to_the_pre_slice_path": true
+        },
+        {
+          "fixture_id": "hr-fx-s3-t01",
+          "byte_identical_to_the_pre_slice_path": true
+        },
+        {
+          "fixture_id": "hr-fx-s3-t02",
+          "byte_identical_to_the_pre_slice_path": true
+        },
+        {
+          "fixture_id": "hr-fx-s4-t01",
+          "byte_identical_to_the_pre_slice_path": true
+        },
+        {
+          "fixture_id": "hr-fx-s4-t02",
+          "byte_identical_to_the_pre_slice_path": true
+        }
+      ],
+      "misses": []
+    },
+    "B7": {
+      "verdict": "GREEN",
+      "clause": "the machine-enumerated B1 sweep must hit at least 6 of the 8 refusal codes without any sweep input having been authored toward a code; a code reachable only by hand-crafted fixtures is reported by name in the artifact. All-admitted or all-UNPARSED on the sweep is BLOCKED CONSTRUCTION.",
+      "codes_hit_on_the_sweep": "8/8",
+      "floor": 6,
+      "per_code_counts": {
+        "ARITY_CATEGORY_MISMATCH": 748,
+        "CATEGORY_NOT_IN_SCHEMA": 346,
+        "COLLIDES_WITH_LIBRARY_SYMBOL": 72,
+        "COLLIDES_WITH_SESSION_NAME": 37,
+        "REDEFINITION_ATTEMPT": 42,
+        "RESERVED_PREFIX": 49,
+        "SYMBOL_BUDGET": 27,
+        "UNPARSED": 12399
+      },
+      "codes_hit_stateless": "5/8",
+      "per_code_counts_stateless": {
+        "ARITY_CATEGORY_MISMATCH": 748,
+        "CATEGORY_NOT_IN_SCHEMA": 346,
+        "COLLIDES_WITH_LIBRARY_SYMBOL": 72,
+        "RESERVED_PREFIX": 49,
+        "UNPARSED": 12399
+      },
+      "stateless_note": "reported beside the scored figure so the contextual choice is visible: decided in a fresh session with nothing admitted, the same sweep reaches only the codes that do not depend on session state. The difference is the three session-state clauses.",
+      "hand_only_codes": [],
+      "hand_only_note": "codes reachable only by hand-crafted fixtures, reported by name as the clause requires",
+      "sweep_admissions": 304,
+      "all_admitted": false,
+      "all_unparsed": false,
+      "no_sweep_input_authored_toward_a_code": true,
+      "misses": []
+    },
+    "B8": {
+      "verdict": "GREEN",
+      "clause": "Remove one member from a copy of the census: the fixture admission that member blocked must flip to admitted (the freshness verdict moves). Remove one category from a copy of the schema enum: every fixture declaration citing that category must flip to `CATEGORY_NOT_IN_SCHEMA`. Both mutations name their target fixture in the prereg.",
+      "census_arm": {
+        "member_removed": "meet",
+        "target_fixture": "hr-fx-s3-t25",
+        "before": "COLLIDES_WITH_LIBRARY_SYMBOL",
+        "after": "ADMITTED_DECLARED_SYMBOL",
+        "flipped": true
+      },
+      "schema_arm": {
+        "category_removed": "statistic",
+        "target_fixtures": [
+          "hr-fx-s1-t02",
+          "hr-fx-s2-t02"
+        ],
+        "rows": [
+          {
+            "fixture_id": "hr-fx-s1-t02",
+            "before": "ADMITTED_DECLARED_SYMBOL",
+            "after": "CATEGORY_NOT_IN_SCHEMA"
+          },
+          {
+            "fixture_id": "hr-fx-s2-t02",
+            "before": "ADMITTED_DECLARED_SYMBOL",
+            "after": "CATEGORY_NOT_IN_SCHEMA"
+          }
+        ]
+      },
+      "mutations_applied_to": "in-memory COPIES; the committed census and schema are never written",
+      "misses": []
+    },
+    "B9": {
+      "verdict": "GREEN",
+      "clause": "A surface-only admitter (token count, line length, presence of the command word; no census, no schema, no ledger) is fitted on a held-out half of the fixture corpus and scored on the other half, on the 2-valued verdict. The threshold is anchored to the scored half's majority-class rate, with a declared ten-point margin (a bound, not a measurement).",
+      "fitted_rule": "line_length:eq:28",
+      "fit_half_accuracy": 0.7,
+      "out_of_half_agreement": 0.684211,
+      "compared_at_precision": 6,
+      "scored_half_majority_class_rate": 0.684211,
+      "declared_margin_points": 10,
+      "void_threshold": 0.784211,
+      "fired": false,
+      "comparison": "strict >: the agreement must EXCEED the threshold to fire",
+      "agreement_equals_the_threshold": false,
+      "equality_is_not_a_firing": true,
+      "equality_note": "The sentence says EXCEEDS by more than ten points. Agreement exactly equal to the threshold does not fire, and the runner records that explicitly rather than leaving a strict-vs-loose comparison to be read off code.",
+      "sealed_class_balance": {
+        "n": 19,
+        "admitted": 6,
+        "refused": 13,
+        "majority_class": "REFUSED",
+        "majority_class_is_a_tie": false,
+        "majority_class_rate": 0.684211
+      },
+      "hypothesis_space": 95,
+      "inputs_used": [
+        "token count",
+        "line length",
+        "presence of the command word"
+      ],
+      "inputs_refused": [
+        "the census",
+        "the schema enum",
+        "the ledger"
+      ],
+      "candidate_values_enumerated_over": "both halves",
+      "candidate_values_note": "DELIBERATE and disclosed: the threshold VALUES a rule may test are enumerated over the whole declaration corpus, not the fit half alone. That is leakage in the control's favour — it can only raise the surface-only admitter's agreement and therefore makes the voiding sentence EASIER to fire. Restricting the enumeration to the fit half would hand the control less power, which is the wrong direction for a check whose job is to void the capability if it can",
+      "degenerate_features": [
+        "has_command_word"
+      ],
+      "degenerate_features_note": "an allowed feature that takes ONE value across the whole declaration corpus carries no signal and its threshold rules collapse to the two constant predictors; reported rather than left to be inferred from the fitted rule",
+      "voiding_sentence": "if the surface-only admitter's out-of-half agreement with the checker exceeds the scored half's majority-class rate by more than ten points, the verdict is separable from every ledger and schema input, the capability is void, and the slice ships as an honest negative.",
+      "misses": []
+    },
+    "B10": {
+      "verdict": "GREEN",
+      "clause": "Fixtures, mutants, census, budget, and digests commit before the checker runs them; the run artifact cites the sealed commit; a dirty or wrong-tip tree refuses.",
+      "sealed_commit": "7a47a8aa73e51890d62306da8bf369a117b661a0",
+      "head_commit": "27d358dc635e07c4224fe16a6595d7a653571a93",
+      "ancestry_proof": "git merge-base --is-ancestor 7a47a8aa73e5 27d358dc635e -> true",
+      "ancestry_is_strict": true,
+      "frozen_pins_verified": 7,
+      "frozen_pins_that_moved": [],
+      "first_commit_of": {
+        "experiments/house_rules_prereg.json": "27d358dc635e07c4224fe16a6595d7a653571a93",
+        "experiments/house_rules_fixtures.json": "7a47a8aa73e51890d62306da8bf369a117b661a0",
+        "experiments/symbol_census.json": "c87b0ca73bb4815e252153a627772423f66bd4c9",
+        "scripts/symbol_ledger.py": "c87b0ca73bb4815e252153a627772423f66bd4c9",
+        "scripts/check_symbol_census.py": "c87b0ca73bb4815e252153a627772423f66bd4c9",
+        "scripts/check_house_rules_receipts.py": "27d358dc635e07c4224fe16a6595d7a653571a93",
+        "scripts/run_house_rules_gates.py": "27d358dc635e07c4224fe16a6595d7a653571a93"
+      },
+      "registered_before_the_run": true,
+      "misses": []
+    },
+    "B11": {
+      "verdict": "GREEN",
+      "clause": "The import-closure assertion over the checker and ledger, in the `echo_population_audit` pattern.",
+      "closures": {
+        "scripts/symbol_ledger.py": [
+          "scripts/match_signatures.py",
+          "scripts/report_provenance.py",
+          "scripts/symbol_ledger.py"
+        ],
+        "scripts/check_symbol_census.py": [
+          "scripts/check_symbol_census.py",
+          "scripts/match_signatures.py",
+          "scripts/report_provenance.py"
+        ],
+        "scripts/build_symbol_census.py": [
+          "scripts/build_symbol_census.py",
+          "scripts/match_signatures.py",
+          "scripts/report_provenance.py"
+        ]
+      },
+      "closure_size": {
+        "scripts/symbol_ledger.py": 3,
+        "scripts/check_symbol_census.py": 3,
+        "scripts/build_symbol_census.py": 3
+      },
+      "forbidden_modules": [
+        "torch",
+        "numpy",
+        "scipy",
+        "sklearn",
+        "transformers",
+        "sentence_transformers",
+        "tensorflow",
+        "jax",
+        "openai",
+        "anthropic",
+        "plain_router",
+        "proposer",
+        "wordnet",
+        "nltk",
+        "retrieve"
+      ],
+      "two_checks_note": "import_closure resolves REPOSITORY-LOCAL files only, so a third-party import is invisible to it; the source scan over every closure member is what covers the third-party names, and it parses with ast so a name in a docstring is not mistaken for an import",
+      "misses": []
+    },
+    "B12": {
+      "verdict": "GREEN",
+      "clause": "for every admitted fixture symbol, declare then use, and assert the surface the use-side checker resolves is byte-identical to the ledger key. Mutants for this gate are seeded specifically at reserved-prefix-adjacent names.",
+      "round_trip_pairs": "13/13",
+      "mutants": "16/16",
+      "byte_identity_note": "the surface the use-side checker resolves is compared against the LEDGER KEY, not against the bytes the person typed; session hr-fx-s5 is where those two come apart under casefold expansion",
+      "ledger_key_source": "the keys this run's replay actually admitted, accumulated in turn order, so a use may only resolve to a symbol declared before it",
+      "pairs": [
+        {
+          "fixture_id": "hr-fx-s1-t07",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s1-t08",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s1-t09",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s1-t10",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s2-t06",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s2-t07",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s2-t08",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s2-t09",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s3-t06",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s3-t07",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s3-t08",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s5-t04",
+          "resolves_to_the_ledger_key": true
+        },
+        {
+          "fixture_id": "hr-fx-s5-t05",
+          "resolves_to_the_ledger_key": true
+        }
+      ],
+      "mutant_rows": [
+        {
+          "mutant_id": "b12-m01",
+          "adjacency": "starts_with_prefix",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m02",
+          "adjacency": "prefix_exactly",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m03",
+          "adjacency": "starts_with_prefix_uppercased",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m04",
+          "adjacency": "starts_with_prefix",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m05",
+          "adjacency": "starts_with_prefix",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m06",
+          "adjacency": "starts_with_prefix",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m07",
+          "adjacency": "starts_with_prefix",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m08",
+          "adjacency": "one_character_from_prefix",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m09",
+          "adjacency": "prefix_without_underscore",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m10",
+          "adjacency": "contains_prefix_not_leading",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m11",
+          "adjacency": "prefix_minus_underscore_then_letters",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m12",
+          "adjacency": "prefix_minus_underscore_then_letters",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m13",
+          "adjacency": "prefix_minus_underscore_then_letters",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m14",
+          "adjacency": "prefix_minus_underscore_then_letters",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m15",
+          "adjacency": "prefix_minus_underscore_exactly",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        },
+        {
+          "mutant_id": "b12-m16",
+          "adjacency": "starts_with_prefix_and_is_a_census_member",
+          "verdict_matches_the_seal": true,
+          "round_trips": true
+        }
+      ],
+      "misses": []
+    }
+  },
+  "gate_greens": {
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "B4": true,
+    "B5": true,
+    "B6": true,
+    "B7": true,
+    "B8": true,
+    "B9": true,
+    "B10": true,
+    "B11": true,
+    "B12": true
+  },
+  "gate_reds": [],
+  "voiding_sentence": {
+    "text": "if the surface-only admitter's out-of-half agreement with the checker exceeds the scored half's majority-class rate by more than ten points, the verdict is separable from every ledger and schema input, the capability is void, and the slice ships as an honest negative.",
+    "fired": false,
+    "agreement": 0.684211,
+    "threshold": 0.784211
+  },
+  "result_gates": {
+    "R-H1": {
+      "requires": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B9",
+        "B10",
+        "B11"
+      ],
+      "requires_note": "DESIGN §8 gates R-H1 on B1-B11 in its own words. B12 was added by the 2026-08-31 refinement round after §8's sentence was written; it is scored and reported beside them. The runner does not silently widen R-H1's requirement list, and a red B12 would be reported in the artifact rather than folded into R-H1 — stated here, before the score, so neither reading can be chosen after it.",
+      "green": true,
+      "licensed_sentence": "A person can declare a fresh relation symbol with arity and argument categories; the system admits it into a session-scoped ledger or refuses with one deciding clause, totally; a misused declared symbol is refused by name where yesterday it was opaque text; and nothing declared survives the session or touches the library.",
+      "why_not": null,
+      "b12_reported_beside": {
+        "green": true,
+        "note": "B12 postdates §8's R-H1 sentence and is not in its requirement list; it is scored and reported, never folded in"
+      }
+    },
+    "R-H2": {
+      "population": "experiments/guest_hypotheses.json",
+      "population_size": 30,
+      "population_size_sealed": 30,
+      "parse_as_declarations": 0,
+      "rows": [],
+      "threshold": null,
+      "gates_nothing": true,
+      "how_counted": "each hypothesis_text is offered to symbol_ledger.parse_declaration whole AND with its first token stripped; the more generous reading is taken, so the number can only be too high",
+      "precommitted_reading": "Approximately zero is the expected result and is neither a failure (the capability never claimed to serve those questions) nor evidence of demand — the number may not be read either way after the fact."
+    },
+    "R-H3": {
+      "clause": "Any failed construction gate B1-B8/B10/B11 or a fired B9 licenses the bounded negative with its verdict table; it does not license loosening a clause after the score.",
+      "gates_in_scope": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B10",
+        "B11"
+      ],
+      "gates_in_scope_source": "the clause names 'any failed construction gate B1-B8/B10/B11 or a fired B9'. B9 enters through the firing clause rather than through its verdict, and B12 postdates the sentence: a red B12 alone is REPORTED and does not by itself license the bounded negative. Read off the clause here rather than widened to every scored gate, which is what `bool(reds)` would have done",
+      "licensed": false,
+      "reds_in_scope": [],
+      "reds_outside_the_scope": [],
+      "reds": []
+    }
+  },
+  "non_claims": [
+    "ledger-groundedness, never correspondence: an admitted declaration is well-formed and fresh, never true or useful",
+    "no axioms or premises about declared symbols, and no conservativity",
+    "no use-side CATEGORY checking",
+    "no natural-language declaration",
+    "no persistence, and no export toward library files",
+    "no behaviour on the served HTTP profiles beyond the published ¶DEV-1 note",
+    "no claim about what people will declare once they can"
+  ],
+  "provenance": {
+    "writer": "scripts/run_house_rules_gates.py",
+    "writer_sha256_lf": "380d375aee7c4dc55b28f4f04f5c1d08ea4ce61ab0ce79a26be06eace1734088",
+    "inputs": [
+      {
+        "path": "experiments/guest_hypotheses.json",
+        "sha256_lf": "de82128eb228ba1de3b8f186ceecd7b302d1a26e82828787d015ab00aa842183"
+      },
+      {
+        "path": "experiments/house_rules_fixtures.json",
+        "sha256_lf": "3fc8f9fbc9f5eef1edb777049ac649e33a85a896ffffba5dda37d83466e22739"
+      },
+      {
+        "path": "experiments/house_rules_prereg.json",
+        "sha256_lf": "f1dcb2a3d98c1e252982da2d5a66986f060c792652852e5edabfbec851ad7bda"
+      },
+      {
+        "path": "experiments/symbol_census.json",
+        "sha256_lf": "2083be5d25e36bc8ca58a3a7b994d773ea0029521dc775cba93dd1ad689fbc2e"
+      },
+      {
+        "path": "schema/equation-node.schema.json",
+        "sha256_lf": "c109586bb3f8cca0a8557af5c1243439d5a6f42b4ba6e0d174adc189d1ee0fcd"
+      },
+      {
+        "path": "scripts/check_symbol_census.py",
+        "sha256_lf": "43f301ac4ea06c66bcd70fc3f47eb3806768ce0001f8593416128f624e50ae39"
+      },
+      {
+        "path": "scripts/symbol_ledger.py",
+        "sha256_lf": "2a20d137f3650d0f8bc44c4aecfeda624515b226c868054759bb27595ca253b4"
+      }
+    ],
+    "second_program": {
+      "path": "scripts/check_house_rules_receipts.py",
+      "sha256_lf": "7f771f1711a5f67e147b9dd3b875ad3018e2076df29aa29aed71edae986b237a"
+    },
+    "emitted_at_generation": true
+  }
+}
