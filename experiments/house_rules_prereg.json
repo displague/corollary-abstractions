@@ -1,0 +1,201 @@
+{
+  "preregistration_id": "house-rules.h-p1.registered-run.v1",
+  "schema": "corollary.house-rules-prereg/1",
+  "status": "REGISTERED",
+  "registered_date": "2026-09-01",
+  "stage": "H-P1",
+  "design": "docs/DESIGN-house-rules.md",
+  "design_clause": "§6.3 the registered run; §7 gates B1-B12; §8 result gates; §9 stop conditions.",
+  "roadmap": "docs/ROADMAP-v0.25.md#1",
+  "scope_note": "The registration for H-P1, committed WITH the runner and BEFORE the run, so every number the runner compares against is frozen in a file the runner READS rather than in code the runner could be edited to agree with. The corpus it scores was sealed two commits earlier at H-PRE, before any checker existed.",
+  "registered_before": [
+    "experiments/house_rules_verdicts.json — the run's first declared output; does not exist at this commit",
+    "experiments/house_rules_receipts.json — the run's second declared output; does not exist at this commit",
+    "any AdmissibilityVerdict scored by a registered run",
+    "any B9 blind-control agreement figure"
+  ],
+  "frozen": [
+    {
+      "path": "experiments/house_rules_fixtures.json",
+      "role": "the sealed corpus, and the B3/B9/B12 seals",
+      "sha256_lf": "3fc8f9fbc9f5eef1edb777049ac649e33a85a896ffffba5dda37d83466e22739"
+    },
+    {
+      "path": "experiments/symbol_census.json",
+      "role": "the committed census every verdict cites",
+      "sha256_lf": "2083be5d25e36bc8ca58a3a7b994d773ea0029521dc775cba93dd1ad689fbc2e"
+    },
+    {
+      "path": "schema/equation-node.schema.json",
+      "role": "the nine-member syntactic_category enum",
+      "sha256_lf": "c109586bb3f8cca0a8557af5c1243439d5a6f42b4ba6e0d174adc189d1ee0fcd"
+    },
+    {
+      "path": "scripts/symbol_ledger.py",
+      "role": "the checker under test",
+      "sha256_lf": "2a20d137f3650d0f8bc44c4aecfeda624515b226c868054759bb27595ca253b4"
+    },
+    {
+      "path": "scripts/check_symbol_census.py",
+      "role": "B2's second program",
+      "sha256_lf": "43f301ac4ea06c66bcd70fc3f47eb3806768ce0001f8593416128f624e50ae39"
+    },
+    {
+      "path": "scripts/build_symbol_census.py",
+      "role": "the census writer",
+      "sha256_lf": "dbebb6aaed599f5aead690a8fb46d8570490eab447a4f22dda75c9afb6dddf5d"
+    },
+    {
+      "path": "scripts/build_house_rules_fixtures.py",
+      "role": "the fixture writer",
+      "sha256_lf": "242bc89eaa7a666d83489a30ca3dc64a68d070e690031c909e9af99f07d5201a"
+    }
+  ],
+  "sealed_commit": "7a47a8aa73e51890d62306da8bf369a117b661a0",
+  "sealed_commit_note": "The H-PRE commit that sealed experiments/house_rules_fixtures.json before scripts/symbol_ledger.py existed. B10 requires the run artifact to cite it and requires it to be an ancestor of the scoring tip; the runner proves that with git merge-base --is-ancestor and records the proof.",
+  "declared_output_paths": [
+    "experiments/house_rules_verdicts.json",
+    "experiments/house_rules_receipts.json"
+  ],
+  "declared_output_paths_note": "DESIGN §6.3 fixes these as EXACTLY two and calls them the complete B4 exclusion list. B4 compares write_stage.working_tree_digest before and after the run excluding them; nothing else may appear.",
+  "outputs_name_no_admitted_symbol": true,
+  "outputs_name_no_admitted_symbol_note": "A construction rule this registration adopts so B5 needs no carve-out: the two declared outputs cite fixtures by ID and never echo an admitted symbol name, so B5 sweeps the run's FULL output tree — the declared outputs included — with no exclusion at all. Refused names are not admitted names and may be quoted. Without this rule B5's own clause would have to be read down to mean 'except my own evidence' before the gate could pass.",
+  "gates": {
+    "B1": "Over the sealed fixtures AND a machine-enumerated input sweep (every fixture line mutated by single-token deletion/substitution from the fixture alphabet — an enumerated set, not an authored one): 100% receive exactly one verdict with exactly one `deciding_clause`, zero fall-throughs.",
+    "B2": "Zero admissions collide with any member of the committed `symbol_census.json` (the checker compares against the committed artifact; the census *checker*, a separate invocation, proves the artifact matches a fresh recomputation — two sides, two programs, so a mismatch can actually go red). The `sum_total` fixture must refuse `RESERVED_PREFIX`; a fixture head equal to a casefolded corpus call head must refuse `COLLIDES_WITH_LIBRARY_SYMBOL`.",
+    "B3": "≥30 seeded mutants attempt to move an admitted symbol into a rendered answer's evidence, a written session document, a journal, or a library path. 100% are stopped by the shipped machinery or the checker — not by test assertions reading the mutant's name. One survivor fails the slice.",
+    "B4": "`write_stage.working_tree_digest` is byte-identical before and after the full registered run (excluding the run's own declared output paths, named in the prereg); `durable_digest` over `data/` is the narrow named control. Zero stage records exist.",
+    "B5": "No written session document, journal, or durable artifact from the run contains any admitted fixture symbol name (swept over the run's full output tree); `session_state.encode` refuses both record types; a fresh session's use of an admitted fixture symbol takes the opaque-atom path (the declaration is gone).",
+    "B6": "Every fixture use of a declared symbol with wrong arity refuses `USE_ARITY_MISMATCH` naming the declaration; every fixture use of an *undeclared* applied atom produces byte-identical behavior to the same line on a tip without this slice (the regression fence, checked by replaying those lines against both code paths).",
+    "B7": "the machine-enumerated B1 sweep must hit at least 6 of the 8 refusal codes without any sweep input having been authored toward a code; a code reachable only by hand-crafted fixtures is reported by name in the artifact. All-admitted or all-UNPARSED on the sweep is BLOCKED CONSTRUCTION.",
+    "B8": "Remove one member from a copy of the census: the fixture admission that member blocked must flip to admitted (the freshness verdict moves). Remove one category from a copy of the schema enum: every fixture declaration citing that category must flip to `CATEGORY_NOT_IN_SCHEMA`. Both mutations name their target fixture in the prereg.",
+    "B9": "A surface-only admitter (token count, line length, presence of the command word; no census, no schema, no ledger) is fitted on a held-out half of the fixture corpus and scored on the other half, on the 2-valued verdict. The threshold is anchored to the scored half's majority-class rate, with a declared ten-point margin (a bound, not a measurement).",
+    "B10": "Fixtures, mutants, census, budget, and digests commit before the checker runs them; the run artifact cites the sealed commit; a dirty or wrong-tip tree refuses.",
+    "B11": "The import-closure assertion over the checker and ledger, in the `echo_population_audit` pattern.",
+    "B12": "for every admitted fixture symbol, declare then use, and assert the surface the use-side checker resolves is byte-identical to the ledger key. Mutants for this gate are seeded specifically at reserved-prefix-adjacent names."
+  },
+  "frozen_numbers": {
+    "b3_mutant_floor": 30,
+    "b3_mutants_sealed": 32,
+    "b7_codes_floor": 6,
+    "b7_codes_of": 8,
+    "b9_declared_margin_points": 10,
+    "b9_scored_half_majority_class_rate": 0.684211,
+    "b9_void_threshold": 0.784211,
+    "b12_round_trip_pairs": 13,
+    "b12_mutants": 16,
+    "declaration_fixtures": 39,
+    "admitted_fixtures": 13,
+    "symbol_budget": 4
+  },
+  "frozen_numbers_note": "The 8/3/4 floors, B3's 30, B7's 6-of-8 and B9's ten-point margin are DECLARED CONSTRUCTION BOUNDS, NOT MEASUREMENTS. B9's anchor was recomputed and re-sealed PRE-RUN when amendment 1 moved the declaration population 38 -> 39; the superseded anchor is recorded in the fixtures artifact's amendments block.",
+  "b8_named_targets": {
+    "census_member_removed": "meet",
+    "census_member_target_fixture": "hr-fx-s3-t25",
+    "census_member_expected_flip": "COLLIDES_WITH_LIBRARY_SYMBOL -> ADMITTED_DECLARED_SYMBOL",
+    "schema_category_removed": "statistic",
+    "schema_category_target_fixtures": [
+      "hr-fx-s1-t02",
+      "hr-fx-s2-t02"
+    ],
+    "schema_category_expected_flip": "ADMITTED_DECLARED_SYMBOL -> CATEGORY_NOT_IN_SCHEMA",
+    "note": "Both mutations are applied to COPIES held in memory; the committed census and the committed schema are never written. The target fixtures are named HERE, before the run, which is what B8 asks the prereg to do."
+  },
+  "b9_control": {
+    "admitter_inputs_allowed": [
+      "token count",
+      "line length",
+      "presence of the command word"
+    ],
+    "admitter_inputs_forbidden": [
+      "the census",
+      "the schema enum",
+      "the ledger"
+    ],
+    "scored_verdict_space": [
+      "ADMITTED_DECLARED_SYMBOL",
+      "REFUSED"
+    ],
+    "split_rule": "Enumerate the declaration fixtures in this artifact's sealed `fixtures` order, 0-based. Even index -> FIT half; odd index -> SCORED (held-out) half. Deterministic, committed before any admitter exists, and recomputable from these bytes alone.",
+    "fit_half_fixture_ids": [
+      "hr-fx-s1-t01",
+      "hr-fx-s1-t03",
+      "hr-fx-s1-t05",
+      "hr-fx-s1-t14",
+      "hr-fx-s2-t02",
+      "hr-fx-s2-t04",
+      "hr-fx-s3-t03",
+      "hr-fx-s3-t05",
+      "hr-fx-s3-t10",
+      "hr-fx-s3-t12",
+      "hr-fx-s3-t14",
+      "hr-fx-s3-t16",
+      "hr-fx-s3-t18",
+      "hr-fx-s3-t20",
+      "hr-fx-s3-t22",
+      "hr-fx-s3-t24",
+      "hr-fx-s3-t26",
+      "hr-fx-s3-t28",
+      "hr-fx-s5-t01",
+      "hr-fx-s5-t03"
+    ],
+    "scored_half_fixture_ids": [
+      "hr-fx-s1-t02",
+      "hr-fx-s1-t04",
+      "hr-fx-s1-t06",
+      "hr-fx-s2-t01",
+      "hr-fx-s2-t03",
+      "hr-fx-s2-t05",
+      "hr-fx-s3-t04",
+      "hr-fx-s3-t09",
+      "hr-fx-s3-t11",
+      "hr-fx-s3-t13",
+      "hr-fx-s3-t15",
+      "hr-fx-s3-t17",
+      "hr-fx-s3-t19",
+      "hr-fx-s3-t21",
+      "hr-fx-s3-t23",
+      "hr-fx-s3-t25",
+      "hr-fx-s3-t27",
+      "hr-fx-s3-t29",
+      "hr-fx-s5-t02"
+    ],
+    "voiding_sentence": "if the surface-only admitter's out-of-half agreement with the checker exceeds the scored half's majority-class rate by more than ten points, the verdict is separable from every ledger and schema input, the capability is void, and the slice ships as an honest negative.",
+    "equality_is_not_a_firing": true,
+    "equality_note": "The sentence says EXCEEDS by more than ten points. Agreement exactly equal to the threshold does not fire, and the runner records that explicitly rather than leaving a strict-vs-loose comparison to be read off code."
+  },
+  "r_h1_sentence": "A person can declare a fresh relation symbol with arity and argument categories; the system admits it into a session-scoped ledger or refuses with one deciding clause, totally; a misused declared symbol is refused by name where yesterday it was opaque text; and nothing declared survives the session or touches the library.",
+  "r_h1_requires": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "B9",
+    "B10",
+    "B11"
+  ],
+  "r_h1_requires_note": "DESIGN §8 gates R-H1 on B1-B11 in its own words. B12 was added by the 2026-08-31 refinement round after §8's sentence was written; it is scored and reported beside them. The runner does not silently widen R-H1's requirement list, and a red B12 would be reported in the artifact rather than folded into R-H1 — stated here, before the score, so neither reading can be chosen after it.",
+  "r_h2": {
+    "population": "experiments/guest_hypotheses.json",
+    "population_size": 30,
+    "population_field": "hypothesis_text",
+    "arm": "run the 30 sealed inbound hypotheses through the declaration parser and count how many parse as declarations at all",
+    "threshold": null,
+    "precommitted_reading": "Approximately zero is the expected result and is neither a failure (the capability never claimed to serve those questions) nor evidence of demand — the number may not be read either way after the fact."
+  },
+  "r_h3": "Any failed construction gate B1-B8/B10/B11 or a fired B9 licenses the bounded negative with its verdict table; it does not license loosening a clause after the score.",
+  "b5_scope_sentence": "This evidences NO WRITES OBSERVED UNDER THIS HARNESS, never CANNOT WRITE. The standing SURVIVES-with-scope rule from the v0.24 deep triage applies: the verdict travels with the harness that produced it.",
+  "non_claims": [
+    "ledger-groundedness, never correspondence: an admitted declaration is well-formed and fresh, never true or useful",
+    "no axioms or premises about declared symbols, and no conservativity",
+    "no use-side CATEGORY checking",
+    "no natural-language declaration",
+    "no persistence, and no export toward library files",
+    "no behaviour on the served HTTP profiles beyond the published ¶DEV-1 note",
+    "no claim about what people will declare once they can"
+  ]
+}
