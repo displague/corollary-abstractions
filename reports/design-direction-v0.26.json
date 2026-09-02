@@ -1,0 +1,188 @@
+{
+  "schema": "design_direction_receipt.v1",
+  "cycle": "v0.26",
+  "status": "complete",
+  "requested_utc": "2026-09-02",
+  "enforced_isolation_mode": {
+    "method": "claude -p (headless) cwd C:/Users/displ/AppData/Local/Temp/f26-9b3d -- empty non-git dir, no project name in path; verified empty and outside any git repository before first use",
+    "denylist": "strict-mcp-config with empty MCP config plus disallowedTools over file, shell, network, agent, notebook, and skill tools (Read, Write, Edit, MultiEdit, NotebookEdit, Bash, PowerShell, Glob, Grep, LS, WebFetch, WebSearch, Agent, Task, Skill, TodoWrite, BashOutput, KillShell, ExitPlanMode, SlashCommand, Artifact, Monitor, SendMessage, TaskStop, EnterWorktree, ExitWorktree)",
+    "env_guard": "CLAUDECODE and CLAUDE_CODE_ENTRYPOINT cleared for the child process only; the nested headless run started without refusal and every round reported permission_denials: []",
+    "residual_gap": "tools existed in the host but were blocked by denylist and permission mode rather than absent",
+    "channel_probe": {
+      "note": "one throwaway probe verified the channel before the brief was sent; not a series and carrying no design content",
+      "session_id": "7714f67f-dd19-4186-afdf-49bd37fb48dd",
+      "cost_usd": 0.040266
+    }
+  },
+  "brief_sha256_canonical_lf": "9087962b7266e1f1f180e00f2736353fa4ecba829710fc62990abe3485f15a8b",
+  "brief_on_file": "reports/design-direction-v0.26-brief.txt",
+  "round_prompt_sha256_canonical_lf": {
+    "series_1": {
+      "r1": "9087962b7266e1f1f180e00f2736353fa4ecba829710fc62990abe3485f15a8b",
+      "r2": "2bf30dfb3fcdb01134ef52e959acbe5bf08d44d4c6244505df8d9bb0a5cc71a7",
+      "r3": "618111411ef62380e2e7ef091ef9d625e58c9ab3e595f9c0aac8c2651994dce6"
+    },
+    "series_2": {
+      "r1": "95d4162805bd8eba4fde9d303a6b63474afeb404cc7bf3117473558737bc3f29",
+      "r2": "5aaf5e46ca345b46e4909f21090f4cfc9c4aedaf022619e6d41920dec3737303",
+      "r3": "040eb70aae0578adf50a6602fa2ee9891afc221b9ad72d1526f2a2c6d5e21207"
+    },
+    "series_3": {
+      "r1": "0ed9d2233e1312437b318e73c4db6213d539ef35e369f08f9942088bb6ba65bf",
+      "r2": "fc9a55bc32db48f040ff514ed244cfc80581eb0edcad3f63ad2bb6b239447929",
+      "r3": "3ec869bb47e4b7f18948f866c20102cb8e7d767bd7d06931ad5329dd0ccd9709"
+    },
+    "note": "series_1.r1 equals brief_sha256_canonical_lf by construction; series_2.r1 and series_3.r1 are the brief with the exclusion card(s) spliced in before its closing five-directions ask. Rounds 2 and 3 were written only after reading the previous round and react to each proposal by name."
+  },
+  "exclusion_card_sha256_canonical_lf": {
+    "for_series_2": "696da3f45e7c59bac46dcb0360f52958f63dabd0a8e4f76ef1aff43abc67c6fb",
+    "for_series_3": "8ebe02340d7cddab37175a3909ee8a60f3f6731fc36d440f3b026856f6120fcd",
+    "series_3_second_card_alone": "8c3e3734f0b5e0a07445c4d8898fdcd8425bed597989bdae67719c77db756e0a"
+  },
+  "exclusion_cards_on_file": "not committed; the hashes above pin the cards handed to series 2 and series 3",
+  "exclusion_note": "series 2 excluded all five series-1 round-one territories; series 3 excluded all ten from series 1 and 2. Each card names problem boundary, mechanism and success shape per direction, and instructs the later series to disclose and replace any of its own ideas that drift toward one. Three drift disclosures were made and are recorded in the funnel below.",
+  "contexts": [
+    {
+      "series": 1,
+      "session_id": "a8ba0838-b222-49e7-8768-e35e751afbb4",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.849962
+    },
+    {
+      "series": 2,
+      "session_id": "89cb3b92-501f-40dd-843f-af8c841fb5fb",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.898877
+    },
+    {
+      "series": 3,
+      "session_id": "a0d58a60-7b41-47b4-bfd1-f17f6490c298",
+      "provider": "Anthropic via Claude Code",
+      "model": "claude-opus-5",
+      "rounds": 3,
+      "cost_usd": 0.969778
+    }
+  ],
+  "total_cost_usd": 2.718617,
+  "incumbent_record": {
+    "reviewed_but_unadjudicated_forward_design": "none. ROADMAP-v0.25 §1.1 adjudicated the v0.25 course's selection (HOUSE RULES) as SCHEDULED and it shipped through H-P1 run 2, so no design entered this course awaiting adjudication.",
+    "incumbent_queue": "ROADMAP-v0.25 §3's carried lanes, each with its recorded trigger. Not revealed to any outside context in round one; disclosed as occupied ground in round two, in plain terms and without project vocabulary.",
+    "standing_obligations_this_course_inherited": [
+      "ROADMAP-v0.25 §3: the naming-layer question must be RE-EXAMINED at this course now that `declare` gives it a second live surface, not silently re-carried. Re-examined; the answer is negative and is recorded in DESIGN-repairable-refusal §2.5.",
+      "STRANGER-GATE's prohibition: no untrusted execution or write stream opens before its red-team runs. The selected design opens none; the prohibition is honored, not displaced, for a THIRD consecutive cycle (ROADMAP-v0.25 §3 records the second; the first draft of the design said fourth and the review corrected it)."
+    ]
+  },
+  "round_one_funnel": {
+    "series_1": [
+      "NEEDED, NOT PRESENT: minimal-support certificates by leave-one-out replay (fourth independent arrival at the carried PREMISE LEDGER lane; survived as the series lead WITNESS after being given the constructor the park lacked)",
+      "PREIMAGE: read English by inverting the renderer, total refusal outside the image (second independent arrival at the parked MIRROR FRAGMENT; folded at round 2 into the outside-judge instrument, contributing a cheap injectivity/collision pre-test the park did not have)",
+      "RECEIPTS: real execution with genuinely executing attacks (third arrival across cycles at STRANGER-GATE; re-scoped at round 2 to the admissible half and survived as MUTANTS, the series runner-up, carrying the mutation-adequacy mechanism the park has never had)",
+      "COORDINATES: structural addresses whose extension is certified exhaustive (second independent arrival at the carried naming-layer lane; absorbed into WITNESS at round 2, contributing the finding that exhaustiveness is SEPARABLE from addressing)",
+      "STRANGERS: outside judges anchor the authored move vocabulary (second arrival at v0.25's declined STRANGER; merged with PREIMAGE into STRANGER-DECODES, ranked first at round 2, then dropped by the series itself at round 3 when told a grading-only blind machine reader already exists)"
+    ],
+    "series_2": [
+      "NEAREST YES: a refusal carries a certified minimal repair in a declared edit algebra (became the series lead and the selected direction)",
+      "CROSSTALK: pairwise agreement between the program's own routes, with a pre-registered minimum genuine overlap and an UNCOMPARED verdict below it (fourth arrival at the parked independent-second-reading lane; declined by the series itself at round 2, its overlap-denominator discipline retained)",
+      "METER: reproducible per-turn resource receipts and a re-enterable priced pause (arrival at the cost lane, parked nine consecutive cycles; merged into NEAREST YES at round 2 on the observation that a budget is an edit algebra ordered by <=, then DECLINED at selection because shipping it would unpark the cost lane by side effect)",
+      "HALFLIFE: replay against today's build, scored on localizing a divergence to the responsible commit (cut by the series itself at round 2 once told detection already exists and the recorded window is 0 of 220 regressions: an attributor's only live inputs would be seeded mutants, which is the prose-mutant failure's own shape)",
+      "DEVIL'S RANKER: substitute the worst legal ordering as a computed ceiling and diff every certified artifact (new ground; series runner-up; parks behind a census of legal-alternative set sizes)"
+    ],
+    "series_3": [
+      "CARRYOVER: a certified partition of a prior session's register across a session boundary (proposed reopening HOUSE RULES' published persistence construction refusal; re-aimed at round 2 to LEDGER, an offline census that reopens nothing)",
+      "SEAM: a decomposition that provably rejoins (FOLDED, and the fold is the finding: no goal or proof-obligation object exists anywhere in the program, so join/split would be an algebra over nothing)",
+      "SAMESHAPE: differently-written statements certified same by a replayable witness chain, or separated (became the series lead SEPARATOR after being re-scoped to the published identity claims)",
+      "FRONTIER: a partial answer as a first-class object with an exactly stated residual (FOLDED by the series itself: a residual the person can supply is the supposition channel with better words, and a residual that is a subgoal needs SEAM's missing object)",
+      "EXHIBIT: exhibit an inconsistent supposed world by deriving a pair inside it (FOLDED on the denominator: with rules about declared symbols refused in writing, a scope is bindings plus opaque atoms and nothing derives inside it, so exhibitions are unreachable rather than rare)"
+    ],
+    "drift_disclosures": [
+      "series 2 disclosed that NEAREST YES borrows closed territory 1's naming-refusal signal, and differentiated on object (input surface, not premise register) and on replaying nothing",
+      "series 2 disclosed that HALFLIFE is not the closed staleness-stamp direction: nothing expires and no claim is made about the world, only about the system's agreement with its own past self",
+      "series 3 disclosed three adjacencies unprompted (SAMESHAPE toward more-matches, FRONTIER toward closed 6 and 8, CARRYOVER toward closed 9) and defended or withdrew each"
+    ]
+  },
+  "outcomes": {
+    "series_1": {
+      "lead": "WITNESS - necessity witnessed only when ablating a premise drives the system into a refusal that NAMES it; mere output difference demoted to `sensitive`",
+      "runner_up": "MUTANTS - mechanically generated weakenings of the existing durable-write gate, so a kill matrix measures whether the ATTACK CORPUS is adequate rather than whether the gate discriminates",
+      "changed_under_pressure": "COORDINATES was absorbed into WITNESS, supplying the answer that exhaustiveness is separable from addressing (completeness over one turn's small frozen register needs no address language); PREIMAGE merged with STRANGERS and the merged instrument was then dropped by the series itself when told a grading-only blind machine reader already exists, on the ground that the honest increment was generation-instead-of-selection and not a cycle's worth; RECEIPTS re-scoped from opening an execution channel to attacking the existing gate once the prohibition's ordering was disclosed",
+      "residual_risk": "the naming refusal may fire for symbol lookup rather than derivation - a certificate then certifies name-reachability, not need, and it survives every clause; phantoms cannot catch it because phantoms are unreferenced by construction and the failure lives among premises that ARE referenced but inert"
+    },
+    "series_2": {
+      "lead": "NEAREST YES - a refused line carries the least-cost edit, over an algebra frozen as data, that the unmodified admitter admits, proved by exhaustive enumeration below that cost and re-checked by an import-disjoint program",
+      "runner_up": "DEVIL'S RANKER - adversary-equivalence for the learned component, distinct from the absence-equivalence already proven by test",
+      "changed_under_pressure": "CROSSTALK was declined by the series itself on the disclosed second-witness ground and replaced by CEILING LEDGER; CEILING LEDGER then conceded BOTH contests at round 3 - that a checker whose categories were generalized from the three defects it is scored on is validating its own authoring (3/3 is a smoke test, the real gate needs a held-out defect chosen by a hand that never saw the category list), and that an instrument is not a headline - and reduced itself to a rider; the budget surface was merged into the lead on the <=-ordering observation and the merged search was identified as the partition witness a minted question owes",
+      "residual_risk": "the algebra defines the corpus's difficulty: freezing it before the corpus is drawn prices anticipation-by-inspection but not anticipation-by-familiarity, so every certificate can be sound and genuinely minimal WITHIN the algebra while the artifact reads as 'refusals here are repairable' and means 'the algebra covers the errors that were anticipated'"
+    },
+    "series_3": {
+      "lead": "SEPARATOR - attack the published cross-discipline identity claims with the falsification-only pinned-point checker, an instrument coarser than and import-independent of the matcher that made them",
+      "runner_up": "SEEP - a whole-committed-tree literal-lineage index with a fingerprint scheme for sealed values",
+      "changed_under_pressure": "three of the five folded outright and each fold is a finding (SEAM on the missing goal object, FRONTIER as the supposition channel with better words, EXHIBIT unreachable rather than rare); CARRYOVER was re-aimed away from reopening the persistence refusal; the lead conceded SHAPE and NEAR-MISS entries outright when told a separator there refutes nothing that was claimed, and re-scoped to EXACT, SPECIALIZATION and exhaustively-enumerated FAMILY with a registration-time kill clause; both of the series' first control designs had computable ceilings that made them useless in opposite directions (one that could never fire, one that always would) and the series found both before scoring",
+      "residual_risk": "the pinned-point domain is drawn from the same committed templates the prefix rule was kept for, so a clean run of concordant records may mean only that the domain never looked where the difference lives; the control prices this globally but not per entry, and convention-dependent entries are plausibly clustered in exactly the blind region"
+    }
+  },
+  "synthesis": {
+    "selected": "NEAREST YES (series 2) -> docs/DESIGN-repairable-refusal.md",
+    "selection_grounds": [
+      "it changes what a PERSON can do on the surface the previous cycle built: the declaration surface exists precisely so the person can use vocabulary the program never authored, and today a refusal names the rule that stopped the line and never what would have worked",
+      "the trust boundary is exact and narrower than the claim: the searcher calls the shipped total function rather than re-implementing any clause, the admitter's bytes are pinned, the certificate COPIES the deciding clause rather than deriving it, a repair is an offer that is never applied, and nothing is executed, written or persisted",
+      "it reuses substance verified in the code before the design was written: symbol_ledger.decide is pure, total and mutation-free (which is what makes exhaustive ball enumeration a construction rather than a wish); load_inputs already takes census and schema paths as parameters, which is what makes the corruption arms real; and the registered-run refusal pattern exists. NOTE, corrected by review: the first draft also claimed an import-disjoint checker precedent exists in this family. It does not - scripts/check_house_rules_receipts.py imports run_house_rules_gates, symbol_ledger and write_stage, and scripts/check_symbol_census.py imports match_signatures. The real precedent is independent RE-DERIVATION, and check_repair_certificates.py would be the first import-disjoint checker in the tree.",
+      "it can be defeated before implementation (corpus floors, and a blind-control ceiling that stops the slice at registration) and after (one unsound certificate fails it at zero tolerance)",
+      "it would produce a corpus of declaration attempts the repository did not author. Stated exactly, after review: DESIGN-house-rules §10 asked for its premise-grammar question to be priced against 'the corpus of declarations this slice will have produced' - its own self-authored fixtures. A NON-AUTHOR corpus is a stronger thing than that section asked for, and the design claims it as stronger rather than attributing the ask to §10, which the first draft did."
+    ],
+    "cut_on_selection": "the budget/cost surface, which the series had elegantly unified with the declaration surface. Shipping it would unpark the cost lane - parked nine consecutive cycles at an n=1 denominator, its ninth pass-over recorded as a decision at ROADMAP-v0.25 §1.1 - by side effect. Recorded against that park as its strongest available successor mechanism; not taken.",
+    "declined": {
+      "WITNESS": "declined as headline on two grounded reasons, not on taste: its residual risk (a naming refusal firing for symbol lookup rather than derivation) is unpriced by its own gate and lands exactly where its phantom control cannot reach; and its denominator - recorded turns carrying two or more assumptions in force - is unmeasured and plausibly below its own floor of 20. Folds into the carried PREMISE LEDGER lane as the CONSTRUCTOR that park has always lacked, with the assumption-count census as its named prerequisite. Fourth independent arrival at that lane.",
+      "SEPARATOR": "the highest-ceiling decline. Parks behind its own registration-time pre-gate, exactly: at least 8 published EXACT / SPECIALIZATION / exhaustively-enumerable FAMILY entries whose collapse chain contains the alias table or the prefix-truncation rule. Counting that population is an afternoon and is the lane's trigger; it is not done here. Its residual risk travels with the park.",
+      "MUTANTS": "third arrival across cycles at STRANGER-GATE, and the first to carry a mechanism for the half that park's own recorded residual risk names as missing - mutating the gate to measure ADEQUACY of the attack corpus rather than DISCRIMINATION of the gate. Hardens the park's priority and schedules nothing; unpark unchanged.",
+      "DEVIL'S RANKER": "new park. Absence-equivalence is already proven by test in the weaker form (the proposer sits last, after every exact route has declined, and switching it off leaves every other route byte-identical); adversary-equivalence is a different theorem and is not proven. Parks behind its own census: at least 50 recorded turns where the legal-alternative set has size 2 or more, else 'untested for want of choice points'.",
+      "CEILING LEDGER": "conceded by its own author as a rider rather than a headline, on this repository's own recorded history of redirecting away from an instrument-first cycle. Its bounded lesson is imported into the selected design as B11; the wider per-gate audit parks behind the prerequisite the series named for it - a held-out defect chosen by a hand that never saw the category list.",
+      "SEEP": "new park: a whole-committed-tree literal-lineage index plus a fingerprint scheme that can find a sealed value without republishing it. The structural successor to the 2026-09-02 grammar-example leak. Its scope lesson is imported as B8; the index itself is not built here.",
+      "STRANGER-DECODES": "dropped by its own series at round 3 once told a grading-only pinned blind machine reader already exists - a second independent confirmation of v0.25's decline of the outside-judge headline, and on the same lineage ceiling.",
+      "the missing goal object": "not a decline but a newly named gap, surfaced by SEAM's fold: no goal, proof obligation or subgoal exists anywhere in this program, so nothing outlives a turn as an open obligation. Filed as a park with no trigger yet.",
+      "the naming-layer question": "RE-EXAMINED as ROADMAP-v0.25 §3 required, and the answer is negative: `declare` does not advance it, because a declared symbol is fresh by construction (clause c5 refuses any name already a census member), so the surface bounces off the library namespace rather than reaching into it. Carried, now with COORDINATES' transferable finding attached - exhaustiveness is separable from addressing."
+    },
+    "imported_lessons": [
+      "from WITNESS: naming is not consuming. The repair certificate COPIES `refusal_code_before`, `deciding_clause_before` and `also_grounds_for_before` from the admitter's own output and never re-derives them, so a certificate can never claim a clause the admitter did not name.",
+      "from SEPARATOR: silence must have its own bucket, and never be phrased as its opposite. The certificate carries three distinct silences - NO_REPAIR_WITHIN_K (the ball was finished and held no admission), EXCLUDED (the line fell outside a frozen bound, decided at R-PRE) and, as the legal (status, minimality) cross-product records, no third way for a row to leave the denominator after the score. None is ever written as 'unrepairable'. NOTE: an earlier version of this entry listed BUDGET_EXHAUSTED as a third silence; the design removed that status when the ball was proved enumerable under the frozen exclusions, and the budget is now a defensive assertion whose breach turns B3 red.",
+      "from CEILING LEDGER: a control family's own ceiling must be computed against its voiding threshold and a family that cannot fire is a construction defect, not a pass. B11 does this - but NOT 'at registration', which the design had to correct as circular: B11 predicts the searcher's own label, so the ceiling cannot precede the searcher. The timing is split instead - family, features, tie-break, split, clause-wise class balance, margin, operative bar and the registered enrichment all frozen at R-PRE; ceiling and fitted agreement computed at R-P1 the moment labels exist and strictly before B3's aggregate is read. The wider per-gate audit parks behind its held-out-defect prerequisite.",
+      "from SEEP: a containment sweep must cover the COMMITTED tree, not the run's outputs. B8 does, and names this design document itself as in scope - which is why the design quotes no corpus value.",
+      "from MUTANTS: an attack that is a description is not an attack. B12 requires every containment mutant to be a program that performs the attempt and returns what happened, scored by whether the value landed and never by whether a detector fired, with a machine-readable detector id in the seal rather than a prose sentence a later runner interprets."
+    ],
+    "grounding_corrections_made_at_step_5": [
+      "no machine-stranger provisioning script exists in this repository; the design does not claim one. It names the digest-pinned local model that DOES exist (scripts/machine_reader.py, weights blob SHA-256 pinned, verify_weights refuses rather than downloads) and registers drawing the corpus as an R-PRE construction step.",
+      "machine_reader's own manifest records that no seed field exists anywhere in this tree, so temperature-0 determinism has never been tested here. The design turns that into a STOP - the corpus seal requires two byte-identical decode passes - rather than a caveat.",
+      "the outside series assumed a repair surface with no prior art. Two pieces of adjacent prior art were found and are disclosed in §1.1 rather than discovered by review: retrieval.ClarificationRequest.suggested_key (which proposes a store key for a MISSING datum and is asserted equal to the unresolved literal, so it never edits the person's input), and the only edit-distance code in the tree, which is a blind control inside experiments/ and on no serving path.",
+      "the design's ball arithmetic is stated over the ACTUAL alphabet and enum: nine syntactic categories in schema/equation-node.schema.json, five reserved prefixes, 286 census equality members, SYMBOL_CAP 4, and the committed name production ^[a-z][a-z0-9_]*$. k_max is 2 and a per-line ball budget is frozen, because a cost-3 name ball is not enumerable at this alphabet size.",
+      "the sum_total prefix-capture hazard flagged at v0.25 was fixed at HEAD by DISCLOSURE, not refusal - the parser still truncates and now records a parse_rewrites row, because 17 committed templates depend on the rule. The design says so where it matters (SEPARATOR's pre-gate) and does not describe it as refused."
+    ],
+    "post_review": {
+      "verdict_on_first_draft": "REWORK - an independent adversarial review returned 1 Critical, 9 High, 6 Medium and 3 Low, every finding checked against the code and two demonstrated by execution.",
+      "the_three_structural_ones": [
+        "C-1: B8's containment sweep could not pass. A line refused COLLIDES_WITH_LIBRARY_SYMBOL is refused precisely because its name is a member of experiments/symbol_census.json, so a sweep forbidding stranger-drawn names anywhere in the committed tree goes red on the exact refusal class the algebra was extended to serve. B8 now carries frozen carve-outs (census members, schema enum, reserved prefixes, the algebra's own vocabulary) and is scoped to whole lines plus non-census names.",
+        "H-1: the capability-blind control was a strict subset of the searcher's own ball - every constant edit is a cost-1 point an exhaustive searcher already reaches - so the voiding sentence was monotone by construction and could fire only on an exact tie. That is the v0.25 B9 defect rebuilt inside the gate advertised as its remedy. B11 is now a surface-only LABEL predictor that never searches, with a family-ceiling check whose timing the design then had to correct again (see self_caught_after_the_rework); the constant-edit family is demoted to B11b, a triviality STOP, and is not called a control.",
+        "H-2: B7 was false against the shipped decide, shown by running it - decide selects by min(held, key=REFUSAL_CODES.index) and REFUSAL_CODES derives from CLAUSE_ORDER, so a clause transposition moves refusal_code_before and cert_id too, not only deciding_clause_before."
+      ],
+      "also_fixed": "H-3 (the impossible 'shares no imports' claim, and B5's shared-misreading risk, now priced arithmetically via ball_size_by_op); H-4 (the cost-1 formula omitted category_delete, counted self-substitution, and indexed categories by arity); H-5 (an unbounded arity codomain and no bound on category-token count left the ball infinite on a line the grammar accepts; BUDGET_EXHAUSTED was unreachable); H-6 (the algebra is undefined on UNPARSED lines and clauses c6/c7/c8 cannot fire on a standalone line at all, so the reach is exactly c2-c5); H-7 (no floor on the scored denominator and no de-duplication rule for a temperature-0 generator); H-8 and H-9 as above and below; M-1 through M-6 and L-1 through L-3.",
+      "H-9_the_missing_trusted_component": "machine_reader.ask cannot write a declaration line - it is hard-wired to forced-choice grading with max_tokens 4 and a single-capital-letter system prompt - and the program that would author the ENTIRE scored population was unnamed and absent from the trusted-components section. scripts/draw_repair_corpus.py is now named in §4 and R-PRE, and §5's present tense was moved to the future conditional.",
+      "the_design_caught_one_on_itself": "before the review returned, the design's own B8 rule was run against the design: §1's worked examples were three SEALED FIXTURE VALUES (an admitted symbol, a refused symbol and a bogus category), which is the 2026-09-02 grammar-example finding's own vector. Replaced with placeholders verified absent from the fixture corpus, the census, the schema enum, the served grammar rows and their generated echoes.",
+      "review_finds_kept": "the containment carve-out reasoning, the exhaustive-searcher-dominates-its-own-subset argument, and the arithmetic blind spot in a two-program re-enumeration are all recorded in the design itself (§7 B5, §7.1, §11) rather than only in this receipt, because each is a general lesson about instruments and not a fact about this slice.",
+      "self_caught_after_the_rework": "One more, found by the design's own author against the reworked text and before the second review returned: B11's replacement control predicts the SEARCHER'S OWN LABEL, so its family ceiling cannot be computed 'at registration, before any searcher output exists' - that would be circular. The first draft's control could be checked at registration only because it was a subset of the searcher and therefore measured nothing, which is the same defect wearing the opposite face. §7.1 now splits the timing: the family, features, tie-break, split, clause-wise class balance, margin and the defect-rule are frozen at R-PRE; the ceiling and the fitted agreement are computed at R-P1 the moment labels exist and strictly before B3's aggregate is read, with the runner refusing to emit B3's fraction until the ceiling is recorded. B11b remains a genuine registration-time computation, which is the honest asymmetry between them.",
+      "second_self_catch_the_tie_break": "Also found by the author against the reworked text: the design had no tie-break for equal-cost repairs. Measured against the shipped admitter and the committed census, a name colliding with a library symbol admits on the order of 200-400 distinct cost-1 name edits (measured over all 286 name-shaped census members: min 57, median 234, mean 320.5, max 1329), so 'the least-cost repair' was selector freedom on two of the four reachable clauses. §3.1 now freezes a total order on the ball (operation order, then position, then target token in the declared alphabet order) so a certificate is a deterministic function of the line and the algebra, and every certificate carries `tie_count` with R-R2 publishing its distribution. The same measurement makes B11b's triviality stop the most likely outcome of the slice, and the design says so rather than discovering it after a run.",
+      "third_self_catch_a_failing_test_not_a_review_note": "The design's §3.2 illustrated the admitter's silent casefolding using the CAPITALIZED spelling of a sealed admitted fixture symbol, on the wrong assumption that a different capitalization is a different string. run_house_rules_gates._sweep_tree_for_names casefolds the tree before matching, so the shipped B5 whole-repository disclosure classified docs/DESIGN-repairable-refusal.md as `added_after_the_seal_and_unclassified` and tests.test_house_rules_run's test_every_disclosed_path_is_classified_by_the_published_rule went RED. This was a failing test in the repository, not a reviewer's note - the previous cycle's instrument caught this cycle's design document. Fixed with a non-sealed placeholder; B8 now states in writing that its sweep casefolds and that a re-spelling is not an escape; the suite is green again (132 tests).",
+      "fourth_self_catch_b11_degeneracy_and_ordering": "Two more closed against the reworked text. First, the ordering claim was doing more work than it can: the runner's refusal to emit B3 before the ceiling is discipline in the runner's own code, so the design now states that the SUBSTANTIVE protection is the R-PRE freeze of family, features, tie-break, split and margin - nothing that voids the capability can be chosen after seeing a number - and that the ordering protects the author's reasoning, not the arithmetic. Second, v0.25's B9 fitted rule predicted one class for every scored row, so its agreement equalled the majority-class rate by arithmetic rather than by signal; B11 now requires the fitted rule's predicted-class distribution on the scored half to be published beside the agreement, and a one-class rule is reported as degenerate with its agreement read as evidence in neither direction.",
+      "second_review": {
+        "verdict": "REWORK again - one Critical and six High against the REWORKED text, plus eight Medium and four Low, all taken.",
+        "its_critical_was_introduced_by_the_first_rework": "B3, the headline gate, had been rewritten as `max(0.60, B11's derived floor)` while B11 was being replaced wholesale. B11 sets a threshold on a CONTROL'S AGREEMENT and defines no yield floor at all, and the phrase 'derived floor' occurs exactly once in the document - in that line - while §3.1 called the undefined term the BINDING one. The slice's pass condition, on which R-R1's licensed sentence depends, was preregistered against a symbol nothing defines. B3 is now a flat frozen 0.60.",
+        "the_derivation_that_ran_backwards": "The scorable floor of 40 was claimed as DERIVED from B11's ten-point margin and instead made the cited failure worse. What decides whether a control can fire is rows-above-majority: for a strict k/n > m/n + 0.10, a 19-row half fires at m+2 (operative bar 10.53 points) but a 20-row half fires at m+3 (15 points), because any multiple of ten pushes the strict inequality onto the next grid point. The floor is now 38, and R-PRE computes the operative bar from n and adjusts under a frozen rule if it exceeds 12 points, publishing it beside the nominal ten.",
+        "the_command_word": "`decide` reads the line MINUS the command word, so §1's opening assertion was false against the shipped code, the algebra was defined over a string parse_declaration cannot parse, no component stripped the word, and B2's contamination arm compared stripped lines against `declare`-prefixed strings and could never fire. Both forms are now stored, the strip is frozen in the algebra file and owned by draw_repair_corpus.py, and B2 compares served-against-served.",
+        "the_measurement_that_was_a_filtered_sample": "The tie-count figures were described as 'the first six name-shaped members of the census'. They were the first six OF LENGTH THREE TO FIVE - a selection criterion presented as an observation, dropping the genuinely-first three at 57, 151 and 142 - and the design used that sample to predict its own most likely outcome. Replaced with the distribution over all 286.",
+        "also_fixed_2": "H-2 (§9's stop condition referenced an enrichment that was never registered - the one stop that fires when the control turns out unfireable licensed widening the family after labels exist; the enrichment is now frozen at R-PRE and capped); H-5 (B8 forbade whole lines and repaired names but not SOURCE names, though the leak it discharges was a leaked name); H-6 (this receipt re-asserted two defects the design had fixed - corrected above); and all twelve Medium and Low findings.",
+        "what_the_second_review_verified_clean": "B7's three-move/four-hold split against the shipped decide; the whole ball arithmetic (1813, 225, 8, 2046, 2138, 4,376,394, ~9.8e9) recomputed and confirmed as genuine upper bounds; §3.2's reach derivation including the casefolding paragraph; B5's arithmetic second half; B3's population partition, called airtight; B11's escape from the searcher's ball; every cited API, digest, import list and timing; and 'Status: DESIGN ONLY' as honest, with all seven proposed artifacts verified absent from the tree."
+      }
+    }
+  }
+}

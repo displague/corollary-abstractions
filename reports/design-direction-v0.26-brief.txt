@@ -1,0 +1,92 @@
+You are an outside advisor to a small research program you have never seen.
+Everything you know about it is in this message; no code or data will be
+provided. Your value here is precisely that you are outside it.
+
+The program is building an inspectable system that lets a person work across
+mathematics, logic, language, physical relations, and programming without
+hiding exact operations inside a large learned model. It holds a generated
+library of formal statements, exact matchers and checkers, scoped hypothetical
+worlds, a persistent conversation, and a small amount of learned machinery for
+the residual choices that cannot be decided exactly. A person should eventually
+be able to speak naturally, introduce assumptions, obtain conditional answers,
+ask the running environment for observations, and continue a conversation whose
+claims remain auditable.
+
+Where it stands. The library already contains far more relations than a person
+can name or reach: only a small named fraction can currently be requested, and
+the bulk shares a handful of boilerplate glossary words. The conversation can
+remember assumptions, pause for missing information over a signed question
+channel, and resume exactly. It can render a bounded formal subset into checked
+English and evaluate some pinned numeric substitutions. It takes a small set of
+ordinary conversational turns -- a greeting, a liveness reply, a quoted datum,
+an expected program output -- as verified interaction moves on a served
+surface: the same short utterance takes different moves depending on exact
+session context and exact vocabulary evidence, and when more than one
+materially different move survives, the system pauses and asks instead of
+guessing. That move vocabulary is small and authored by the program itself, and
+conformance to its transition rules does not establish that the rules model
+human convention.
+
+Most recently the person gained a small authoring power of their own. A
+declaration line admits one fresh relation symbol -- a name, a number of
+argument places, and a category for each place -- into a session-scoped
+register, or refuses it with exactly one deciding clause, totally and by
+default toward refusal. From that turn on, a supposition applying the declared
+symbol with the wrong number of arguments is refused by name, where yesterday
+it was held as opaque text. Nothing declared survives the session, reaches a
+generated library file, or carries any claim of truth or usefulness; rules,
+axioms and premises ABOUT a declared symbol are refused in writing by the same
+function that admits the symbol. What premise grammar real declarations would
+need is the program's own recorded next question, and there is as yet no corpus
+of real declarations to price it against.
+
+The system still does not invoke general programming work, use environmental
+observations as live input, certify which assumptions an answer actually
+needed, read ordinary English as input rather than only writing it, or let a
+person reach the unnamed bulk of the library. An attempt to bridge its
+pause-and-ask channel into an existing command-line chat client's structured
+prompting tool failed honestly and is recorded: the client advertises a
+prompting tool its own policy refuses to execute in the mode people actually
+use, and a plain-text pause remains the working path.
+
+Measurement culture. Every new behavior must produce a first-class inspectable
+artifact, a capability-blind control, corruption and vacuity checks, gates
+frozen in writing before any measurement, honest negative results, and a
+smallest slice one maintainer can finish inside one release cycle. Three
+failures of that culture were found by adversarial review in the last cycle,
+after all its gates had been reported green, and they are worth knowing because
+they shape what counts here as a good proposal:
+
+1. A capability-blind control was scored green. The review then computed the
+   best score any member of the registered blind family could reach on the
+   scored half; it fell below the voiding threshold. No member could have
+   fired. Comparing a control family's own ceiling against its threshold is a
+   one-line computation, and nobody had done it before the score existed.
+2. A containment gate reported that thirty-two seeded attacks were all
+   stopped. The attacks were prose DESCRIPTIONS of attempts; nothing in the
+   program executes one. What was actually observed is that a detector fires,
+   which is a fact about the detector.
+3. A value drawn from a sealed corpus was published inside the system's own
+   documentation of its command grammar, and every generated artifact echoing
+   that documentation copied it. A containment check scoped to a run's outputs
+   cannot see anything already committed.
+
+Standing constraints. Exact work must remain ordinary code: parsing, equality,
+scope, provenance, authorization, resource limits, process results, status, and
+durable receipts. A small learned component may rank or compose only among
+legal alternatives; it cannot declare truth, authorize side effects,
+manufacture missing user input, or turn an observation into a library fact.
+Generated library files come only from committed sources. There is one
+maintainer and no user population, so any direction that needs outside
+participants must degrade honestly to "untested" rather than block a cycle.
+More library entries, more matches, or placing a model on an exactly computable
+operation are suspended proxies, not directions.
+
+Propose FIVE distinct forward directions. For each, in under 150 words:
+(a) the new kind of claim it would make true; (b) why the current shape
+cannot make that claim today; (c) a falsifiable construction gate -- what,
+decided in advance, would count as the idea failing; (d) the cheapest honest
+failure. Do not propose more entries, more matches, or a model trained on an
+exactly computable capability. Range widely; at least one should feel risky to
+you. The five must not be five flavors of one idea. Number them with short
+memorable names.
