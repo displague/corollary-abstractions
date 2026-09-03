@@ -575,12 +575,27 @@ preregistration commit, and its own digests.
   C-V4 dropped.
 - **G4 — the quarantine invariant.** Unconditional answers **never
   change**: over a preregistered corpus of lines exercising rows 0–11
-  (`docs/SPEC-chat-completions-skin.md:401-412`), every verdict dict is
+  (`docs/SPEC-chat-completions-skin.md:159-173`), every verdict dict is
   **byte-identical** with the proposer ON and OFF. Voiding sentence: *a
   single differing verdict voids the whole reading* — the house form of
   *"Frame truths never leak"* (`scripts/frames.py:8`), not a re-run of the
   differing case. Cheap, mechanical, and the gate that makes the rest of
   the design believable.
+
+  > **Citation note, 2026-09-02 (v0.25 gate fix).** The clause above is
+  > quoted verbatim by `experiments/plain_input_prereg.json`'s frozen
+  > `gates.G4.clause_verbatim`, and `tests/test_plain_input.py`'s
+  > `PreregIsVerbatim` checks the two against each other. Its
+  > `SPEC:159-173` pin was correct when the clause was sealed and is
+  > stale now: the row table has since moved to
+  > `docs/SPEC-chat-completions-skin.md:399-415`, with **rows 0–11 at
+  > `:401-412`** — which is what the clause means today. The
+  > `[TRIAGE-V25-LOWS]` citation sweep (`2aadbfd`) re-pinned the number
+  > *inside* the clause; that edit is reverted here and carried in this
+  > note instead. A frozen quotation is a record of what was said, not a
+  > line that gets maintained — the same reason that commit left the
+  > prereg's own copy alone.
+
 - **G4b — the supposition never grounds another answer.** A conditional
   answer's supposition must not be readable by any later turn as a
   premise. `scripts/frames.py:832-843` enforces the analogue for belief

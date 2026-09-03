@@ -3,6 +3,70 @@
 Actionable friction found while working, kept here so it isn't lost in chat
 or commit history. Each item names the evidence that motivated it.
 
+## Filed by the v0.25 suite gate, run 1 (2026-09-02)
+
+- **B5's whole-repository disclosure sweep walks gitignored virtualenvs that
+  are not at the repository root, so "every file in the repository" is wider
+  than the repository.** Recorded, not fixed. The sweep
+  (`scripts/run_house_rules_gates.py`, `score_b4_b5`) enumerates paths with
+  `write_stage.working_tree_file_digests`, and
+  `write_stage.INTEGRITY_EXCLUDED_RUNTIME` names `.venv` as a **root-relative
+  prefix** (`posix == prefix or posix.startswith(prefix + "/")`). A
+  virtualenv anywhere else is therefore hashed and swept. On the release
+  checkout that is `experiments/.venv/`: the sweep reported **32** hits where
+  a clean worktree reports **19**, and all 13 extras were third-party
+  site-packages sources plus two CUDA DLLs read with `errors="ignore"` —
+  `networkx`, `sympy`, `torch`, `protobuf`, `fmt`. They landed in
+  classification rule (8), `added_after_the_seal_and_unclassified`, "a
+  finding and not a category", which is the rule doing its job on input it
+  should never have been given.
+
+  Two consequences worth naming. The disclosed **number varies with what a
+  developer has installed**, so it is not a property of the tree it claims to
+  describe; and `write_stage`'s working-tree digest — which B4 scores — is
+  hashing that virtualenv on every run, which is where a good part of B4's
+  wall-clock goes. Left as-is here because both files are `scripts/**` and
+  the CR-P0 registry census seals them: a one-line exclusion change costs a
+  re-seal plus a cold re-attestation, which is not a price a suite-gate
+  repair should spend. The successor should either match `.venv` at any depth
+  in `INTEGRITY_EXCLUDED_RUNTIME` or have the sweep enumerate git's tracked
+  set rather than the filesystem's, and should say which of B4's digest and
+  B5's sweep it is changing, because they are the same enumeration today.
+  Evidence: gate run 1's `classification_counts`
+  (`added_after_the_seal_and_unclassified: 13`) against the committed
+  artifact's 19-hit disclosure, unchanged since `32d505a`.
+
+- **Between one registered house-rules run and the next, no file carrying an
+  admitted name can be added to the repository — and the published
+  classification rule has no class for one.** Recorded, not fixed, and the
+  more consequential half of the item above.
+  `scripts/check_house_rules_receipts.py` re-sweeps the **live** tree for the
+  admitted names and compares the hit list with the disclosure committed in
+  `experiments/house_rules_verdicts.json`, scored at `32d505a` over 19 such
+  files. Any twentieth file makes the checker red four ways
+  (`b5-disclosure-count`, `-paths`, `-classification` twice) — and that
+  checker is step 1 of `docs/RELEASE-v0.25.0.md`'s Reproduce block, so the
+  breakage is published, not internal. Meanwhile
+  `run_house_rules_gates._classify_disclosure_path` has no class for a path
+  added after the seal: rule (8) drops it into
+  `added_after_the_seal_and_unclassified`, "a finding and not a category".
+
+  Evidence, and it is not hypothetical: the v0.25 suite gate's run-1 log
+  could not be retained at `reports/test_gate_v025/` — three of its
+  `unittest -v` test-name lines carry admitted names — and is cited by
+  digest from `.runtime/` instead (`reports/test_gate_v025/runs.md`). The
+  discipline is already being obeyed by hand, unwritten:
+  `docs/RELEASE-v0.25.0.md` tells the leak story without quoting a name, and
+  `tests/test_house_rules_run.py`'s module docstring states the rule for
+  itself. A successor should decide which of two things the project means —
+  that the re-sweep is a **live** check (then the rule needs a
+  `post_seal_document_quoting_the_corpus` class, and the constraint should
+  be written down where an author will meet it), or that it is a check
+  against the tree **as of the scoring tip** (then it should read
+  `git ls-tree 32d505a` and stop moving) — and say so in
+  `docs/DESIGN-house-rules.md` rather than leaving it to whoever next adds a
+  document.
+
 ## Filed at the v0.25 HOUSE RULES review (2026-09-02)
 
 - **B3's `name_sweep` positive control asserts hits over the LIVE repository

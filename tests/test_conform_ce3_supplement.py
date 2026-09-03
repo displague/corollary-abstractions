@@ -454,6 +454,17 @@ class TheAmendmentIsDatedRetrospectiveAndAppendOnly(unittest.TestCase):
         gate's first run caught its undeclared move). Removing BOTH restores
         the blob sealed at `BASE_COMMIT`; anything else that moved still
         fails.
+
+        Re-aimed again 2026-09-02, by the v0.25 gate's first run. A marker
+        has TWO legitimate placements inside a frozen row and this rule
+        knew only one. The evaluator's marker sits mid-object and carries
+        its own trailing comma; the `parser` row's marker, appended
+        2026-09-01 by `big-op-disclosure-2026-09-01`, is that row's LAST
+        key, so the comma separating it from `sha256_lf` lands on the
+        PRECEDING line. Both are pure appends -- `git diff 156e94f~1 HEAD`
+        moves no sealed byte -- and the rule now undoes both. What the
+        check forbids is unchanged: an edit to a sealed row still fails,
+        because stripping a marker cannot put back bytes an edit removed.
         """
         try:
             original = subprocess.run(
@@ -467,12 +478,14 @@ class TheAmendmentIsDatedRetrospectiveAndAppendOnly(unittest.TestCase):
         start = current.index(b'  "amendments": [')
         end = current.index(b'  "census": {')
         reconstructed = current[:start] + current[end:]
-        # Strip retirement markers: a contiguous object under the key,
-        # including its leading newline and trailing comma, exactly the
-        # shape the dated amendments splice in.
-        reconstructed = re.sub(
-            rb'\n\s*"retired_for_future_comparisons": \{[^}]*\},',
-            b"", reconstructed)
+        # Strip retirement markers: a brace-balanced object under the key,
+        # in either of the two shapes a dated amendment splices in -- with
+        # its own trailing comma when it is not the row's last key, and
+        # taking the preceding key's comma when it is.
+        marker = (rb'\n[ ]*"retired_for_future_comparisons": '
+                  rb'\{(?:[^{}]|\{[^{}]*\})*\}')
+        reconstructed = re.sub(marker + rb',', b"", reconstructed)
+        reconstructed = re.sub(rb',' + marker, b"", reconstructed)
         self.assertEqual(
             reconstructed, original.replace(b"\r\n", b"\n"),
             "the amendment chain is not append-only: removing the "
