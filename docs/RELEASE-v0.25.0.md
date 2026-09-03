@@ -149,11 +149,12 @@ Adjudicated clause by clause against primary artifacts in
 [TRIAGE-v0.25](TRIAGE-v0.25.md), whose §1 table is the source for every
 disposition below, and restated in [ROADMAP-v0.25](ROADMAP-v0.25.md) §4.1 so
 the plan carries its own state. The triage settled **nine of eleven** §4
-clauses and named two as open; this rotation closes one of those two — **the
-v0.26 outside design inquiry is now named with its receipt**
+clauses and named two as open; both are closed by the time of the tag. **The
+v0.26 outside design inquiry is named with its receipt**
 ([DESIGN-repairable-refusal](DESIGN-repairable-refusal.md),
-`reports/design-direction-v0.26.json`). **`[SUITE-GATE-V25]` is the one clause
-still open**, and it is open in writing rather than counted as met.
+`reports/design-direction-v0.26.json`), and **the full suite is green on the
+frozen tip** (below). **Eleven of eleven §4 clauses are met**, and the one
+that took two launches says so with both of them.
 
 | item | outcome |
 |---|---|
@@ -171,7 +172,7 @@ still open**, and it is open in writing rather than counted as met.
 | **§3 carried lanes** | **CARRIED** to [ROADMAP-v0.26](ROADMAP-v0.26.md) §3, each with its trigger. The naming-layer question's own re-examination clause **fired and was answered NEGATIVE** at the v0.26 course. The cost ledger takes its **ninth** recorded pass-over |
 | **CR-P0 registry re-seal** | **SHIPPED TWICE.** `11d62b8` re-sealed after H-P0 (190 → 194 files, `d3d9bdc6…` → `edb44684…`) and the cold reading re-attested it — partition **1 SURVIVES / 12 NEEDS-PROGRAM / 9 UNTESTED**, unmoved from v0.24. H-P1's two new programs then staled it again, and the rotation's own re-seal closes it: *"[CR-P0] Re-seal after H-P1's two programs: 196 files, two new kinds, and both moved pins are the grammar repair"* (`2b61a3e`) — 194 → **196** files, 43 → **47** receipt-marked sites, 22 → **24** kinds, seal `edb44684…` → `a4f38d55…` |
 | **the live cold re-read** | **RE-ATTESTED.** Partition **1 SURVIVES / 14 NEEDS-PROGRAM / 9 UNTESTED** over **24** kinds, against 1/12/9 over 22. Nothing was re-adjudicated: SURVIVES and UNTESTED are byte-identical member for member, and the two arrivals are exactly the two kinds the re-seal added. B1–B11 green, voiding unfired, R-C green. See the section below |
-| **§4 `[SUITE-GATE-V25]`** | **OPEN at rotation.** See the placeholder section below |
+| **§4 the full-suite gate** | **CLOSED GREEN.** **3,281** tests, `OK (skipped=5)`, **24,437.2 s (6 h 47 m)** at the frozen tip `8b90821`, on run 2 of two. Run 1 at `e66de24` was `FAILED (failures=3, skipped=5)` over the same 3,281 tests — three checks whose *rule* was narrower than its subject, no gate verdict or frozen number implicated, all repaired at `8b90821`. The equal test count across the two runs is the evidence that the repairs fixed rules rather than deleted cases. Receipts: `reports/test_gate_v025/runs.md`; the four log files are release assets, pinned there by size and sha256 |
 
 ## The review, in full, because the repair is this cycle's result
 
@@ -645,7 +646,7 @@ records `survives_fraction: 0.0455` at `11d62b8`; the 5.26% at 19 belongs to
 the retained run 1 in `cold/census.json` and is not the comparison).
 All eleven gates B1–B11 green with an empty reds list, the voiding sentence
 unfired, R-C green, and the working tree byte-identical across the run
-(`[COLD-RUN2-V25-COMMIT]`).
+(`e66de24`).
 
 **The second program earned its keep again.** `cold_harness.py` writes the
 census, the path audit, the scramble baseline and the evidence; it does *not*
@@ -669,24 +670,82 @@ about HOUSE RULES.
 
 ## The suite at the tip
 
-`[SUITE-GATE-V25]` — **NOT YET RUN at this rotation.** The full
-`unittest discover -s tests` on the frozen tip is the tag's gate, and the
-skill forbids tagging while it is PARTIAL. This placeholder is resolved
-before the tag with the run's counts, its wall-clock, and its retained
-receipts under `reports/test_gate_v025/`, exactly as `[SUITE-GATE-V24]` was
-closed with 2,986 tests OK (skipped=5), 22,504.4 s (6 h 15 m) at `d1e37b9` —
-or the notes refuse the sentence and the tag waits.
+**CLOSED GREEN before the tag.** The full `unittest discover -s tests -v` at
+the frozen tip `8b90821`: **3,281 tests, `OK (skipped=5)`, 24,437.2 s
+(6 h 47 m)**, launched 2026-09-03 00:03 EDT and exited 06:50 EDT, with
+`git status --porcelain` clean before and after. Two launches, and the full
+story is retained at `reports/test_gate_v025/runs.md`.
 
-Plan the run from the measured cost, not from folklore: v0.24's gate took
-four launches to get a verdict, and this cycle adds `tests/test_house_rules_*`
-(**133** tests in `test_house_rules_run.py` alone, measured by
-`unittest discover -p test_house_rules_run.py`) on top of that base.
+**Run 1** at `e66de24` was `FAILED (failures=3, skipped=5)` over the same
+**3,281** tests in 24,209.9 s (6 h 43 m). No gate verdict, no frozen number
+and no registered artifact is implicated by any of the three: each was a
+check whose *rule* was narrower than the thing it was checking, and each is
+repaired at `8b90821`. **That the two runs scored the same 3,281 tests is the
+evidence that the repairs fixed rules rather than removed subjects** — a
+deleted case would have moved the count.
 
-One gate state is already discharged rather than left to be discovered by the
-run: `tests/test_cold_receipt.py`'s
+*The append-only reconstruction knew one marker shape and there are two.*
+A retirement-chain check demanded back the bytes of a sealed prereg, and its
+strip regex required a marker to be followed by `},` — true of a marker that
+sits mid-object, false of one appended as a row's **last** key, which is the
+shape `156e94f`'s dated amendment used. `git diff` moves no sealed byte: the
+amendment is a pure append. The rule now undoes both placements with a
+brace-balanced match, and an edit to a sealed row still fails
+(`reports/test_gate_v025/runs.md`).
+
+*A disclosure sweep walked a virtualenv that is not at the root.* B5's
+whole-repository sweep reported a bucket the committed artifact does not
+have, and all thirteen hits were under `experiments/.venv/**` — the runtime
+exclusion matches `.venv` only as a **root** prefix, so the number moved with
+what the operator had installed rather than with the tree it claims to
+describe. The assertion was also aimed at a live re-run while demanding the
+registered run's shape, which made any later addition to the repository a
+suite failure. It now asks the **committed** artifact's own empty finding
+bucket, re-derives the published rule path by path, and keeps the tooth that
+matters: an unclassified path git neither tracks nor ignores is a stray write
+and still fails (`reports/test_gate_v025/runs.md`).
+
+*A citation sweep re-pinned a line number inside a frozen quotation.*
+`[TRIAGE-V25-LOWS]` corrected twelve stale SPEC citations in a design
+document, and one of them sat **inside** the clause a prereg freezes
+verbatim — the same commit that deliberately left the prereg's own copy
+alone, on the ground that a stale citation inside a seal is a fact about the
+seal. The design side of the same quotation is the same fact. The bytes are
+restored and the corrected pin rides a dated note beside the clause; a sweep
+of every verbatim-pinned string under `experiments/**` and every string
+literal under `tests/**` against all five documents that commit touched finds
+this as the **only** collision (`reports/test_gate_v025/runs.md`).
+
+**The logs are not in the tree, and that is a finding rather than a filing
+preference.** Retaining the stderr log under `reports/test_gate_v025/` — the
+v0.23 and v0.24 practice — was tried and **reverted**: three of its
+`unittest -v` test-name lines carry admitted symbol names from the H-P0
+corpus, so adding the file takes B5's disclosed tree from 19 files to 20 and
+`scripts/check_house_rules_receipts.py` — the checker these notes tell a
+reader to run from a fresh clone — goes red four ways. Scrubbing three lines
+out of the evidence to make a checker pass is the move the whole apparatus
+exists to prevent. So all four log files (both streams of both runs) are
+**attached to the GitHub release as assets** and pinned in
+`reports/test_gate_v025/runs.md` by size and sha256; the stderr streams are
+557,261 and 553,508 bytes, the two stdout streams 4,201 each. The general
+rule this leaves behind is filed: **between a registered house-rules run and
+the next one, no file carrying an admitted name can be added to the
+repository.**
+
+**Eighteen `FAIL`-bearing log lines, none of them a failure** — the same
+count v0.24 reported, and worth breaking down because a grep for `FAIL` over
+a green suite log is a bad detector. Fifteen are stdout diagnostics printed
+by adversarial checks that themselves pass (**6** `FAIL [number-*]` showing a
+deliberately-wrong sealed table disagreeing with a frozen prereg number,
+**9** `FAIL [invariant-*]` showing a planted table violating an invariant);
+the other three are stderr `unittest -v` test-name lines that contain the
+word because the test's own name does, and all three end `... ok`.
+
+Two gate states were discharged before the run rather than discovered by it.
+`tests/test_cold_receipt.py`'s
 `test_the_seal_and_counts_recompute_from_the_committed_tree` was **red** from
 `32d505a` until the rotation's CR-P0 re-seal at `2b61a3e`, because the grammar
-repair moved `line_grammar_digest` again — the same drift already recorded.
-The re-seal closed that one and left a single red on `cold/census_run2.json`'s
-provenance, which the cold re-attestation closes in turn. Both are ordered
-acts, not discoveries.
+repair moved `line_grammar_digest` again — the same drift already recorded;
+the re-seal closed it and left a single red on `cold/census_run2.json`'s
+provenance, which the cold re-attestation at `e66de24` closed in turn. Both
+are ordered acts, not discoveries.

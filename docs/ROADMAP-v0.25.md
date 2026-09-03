@@ -1,14 +1,15 @@
 > **CLOSED at v0.25.0.** This plan is the historical plan-of-record. It is
 > **not** left unedited, and saying so is the point — the v0.24 deep triage
 > found a closed banner claiming "not edited" over a file that had been. So
-> this one names every rotation-time edit instead, and there are five:
+> this one names every rotation-time edit instead, and there are six:
 > **(1)** §1.2 and **(2)** §4.1 were added by the release triage at
 > `aa721e7`, which also **(3)** added the triage link to the links row;
 > **(4)** §3's STRANGER-GATE row carries a dated cycle-count repair
 > (2026-09-02, and the row states its own evidence); **(5)** one §4.1 row
 > moved at the rotation — the v0.26 outside design inquiry, from OPEN to MET,
-> now that its design and receipt exist. Plus this banner. Nothing else is
-> edited; no clause, floor, threshold or trigger anywhere in this file is
+> now that its design and receipt exist; and **(6)** the §4.1 full-suite row
+> moved from OPEN to MET on 2026-09-03, when the gate closed green. Plus this
+> banner. Nothing else is edited; no clause, floor, threshold or trigger anywhere in this file is
 > touched. The headline shipped as a capability, on a **second** registered
 > run after an adversarial review returned fifteen findings, four of them
 > High, and moved four of the first run's instruments. Where each item went:
@@ -52,11 +53,10 @@
 >   re-read after each; the second moved the partition to 1 / 14 / 9 over 24
 >   kinds by exactly the two kinds the re-seal added.
 > - **§4 release gate** → adjudicated clause by clause in
->   [TRIAGE-v0.25](TRIAGE-v0.25.md) and summarized in **§4.1**. Ten of eleven
->   clauses met at the tag; the full-suite clause below is the one that runs
->   at the frozen tip, and its placeholder token is carried in
->   [RELEASE-v0.25.0](RELEASE-v0.25.0.md) and README rather than repeated
->   here, so a substitution at tag time cannot corrupt this sentence.
+>   [TRIAGE-v0.25](TRIAGE-v0.25.md) and summarized in **§4.1**. **Eleven of
+>   eleven clauses met at the tag**: the last of them, the full-suite gate,
+>   closed GREEN on run 2 of two — 3,281 tests, `OK (skipped=5)`, 6 h 47 m at
+>   tip `8b90821`, receipts `reports/test_gate_v025/runs.md`.
 
 # Roadmap v0.25 — the person declares a symbol, if the course's selection survives adjudication
 
@@ -461,4 +461,4 @@ roadmap itself carries the state:
 | `ingest_wold.py reach` runs or is reported *cannot verify* | **CANNOT VERIFY**, with the exact reason: the manifest-pinned WordNet archive is licensed data, absent by the no-licensed-data-in-git rule, and the stage refuses rather than computing a partial (TRIAGE §6) |
 | every unfinished item ships, carries, or parks in writing | **MET** (TRIAGE §7 for §2, §8 for §3) |
 | the v0.26 outside design inquiry named with its receipt | **MET at the rotation (2026-09-02)** — [DESIGN-repairable-refusal](DESIGN-repairable-refusal.md), receipt `reports/design-direction-v0.26.json`, brief `reports/design-direction-v0.26-brief.txt`. Adjudicated against the incumbent queue in [ROADMAP-v0.26](ROADMAP-v0.26.md) §1.1, which is written in the pre-adjudication shape this section's own §1.1 used |
-| full suite green on a frozen tip, `[SUITE-GATE-V25]` resolved | **OPEN** — runs at the frozen tip after the rotation |
+| full suite green on a frozen tip, `[SUITE-GATE-V25]` resolved | **MET (2026-09-03)** — 3,281 tests, `OK (skipped=5)`, 24,437.2 s (6 h 47 m) at tip `8b90821`, green on run 2 of two; run 1's three reds were checks narrower than their subjects, all repaired at that tip. Receipts `reports/test_gate_v025/runs.md`; the four logs are release assets |

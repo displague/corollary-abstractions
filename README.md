@@ -7,18 +7,23 @@ compositional language and math work** — provided everything with a closed
 form (parsing, canonicalization, equality, the lexicon, structural
 addresses) is computed *outside* the weights and handed to the model as an
 interface.
-<!-- Suite gate v0.25.0: [SUITE-GATE-V25] — NOT YET RUN at the rotation.
-     Resolved before the tag with counts, wall-clock, and receipts under
-     reports/test_gate_v025/, or the notes refuse the sentence and the tag
-     waits. Last resolved gate, v0.24.0: 2,986 tests OK (skipped=5),
-     22,504.4s (6h15m) at tip d1e37b9, green on the final launch (run 1
-     red by 3 instrument issues -- freeze-group drift under a registered
-     edit, --allow-dirty counting as registered, a B7-pending assertion
-     in pre-artifact shape -- all fixed in cf5cba5 with the registry
-     re-sealed after; one near-green run killed by the operator at 2,950
-     ok retained); receipts reports/test_gate_v024/. Prior gates: v0.23
-     green on run 2, v0.22 green first run, v0.21 green on run 3, v0.20
-     green on run 2. -->
+<!-- Suite gate v0.25.0: 3,281 tests OK (skipped=5), 24,437.2s (6h47m)
+     at tip 8b90821, green on run 2 of two. Run 1 (e66de24) was red by
+     exactly three, and every one was a rule narrower than its subject:
+     an append-only reconstruction that knew one marker shape when there
+     are two, a disclosure sweep that walked experiments/.venv because
+     the runtime exclusion matches .venv only at the root, and a
+     citation sweep that re-pinned a line number inside a frozen
+     quotation. All repaired at 8b90821, and both runs scored the SAME
+     3,281 tests -- which is the check that the repairs fixed rules
+     rather than deleted cases. Receipts: reports/test_gate_v025/runs.md.
+     The four log files are NOT in the tree (three unittest -v test-name
+     lines carry admitted symbol names, which would take B5's disclosed
+     tree from 19 files to 20 and turn check_house_rules_receipts.py
+     red); they are attached to the v0.25.0 release as assets and pinned
+     by size and sha256 in runs.md. Prior gates: v0.24 green on the
+     final launch of four, v0.23 green on run 2, v0.22 green first run,
+     v0.21 green on run 3, v0.20 green on run 2. -->
 Latest release: [v0.25.0](docs/RELEASE-v0.25.0.md) — **the person declares a
 symbol, and the review found what green was carrying.** A person can now name
 a fresh relation symbol — `declare rel_of/2 (variable, variable)` — and the
@@ -870,6 +875,24 @@ python -m unittest discover -s tests -v     # controller contracts + vacuity che
 # test_protocol_gates -- and grows test_serve_chat and
 # test_cold_receipt. Receipts: reports/test_gate_v024/ (runs.md,
 # run1-red.log, run2-killed-partial.log, run3-green.log).
+# 3,281 tests, OK (skipped=5) at v0.25.0 -- 6h47m serial (24,437.2s)
+# at tip 8b90821, green on run 2 of two. Run 1 (e66de24) was red by
+# exactly three, all of them a rule narrower than its subject: a
+# retirement-chain strip regex that required a marker to be followed by
+# "}," and so missed one appended as a row's LAST key; a B5 disclosure
+# sweep that counted experiments/.venv/** because the runtime exclusion
+# matches .venv only as a ROOT prefix, and that asserted a live re-run
+# against the REGISTERED run's shape; and a citation sweep that re-pinned
+# a line number inside a clause a prereg freezes verbatim. Fixed at
+# 8b90821, registry re-sealed earlier at 2b61a3e (a4f38d55) and the cold
+# reading re-attested at e66de24 BEFORE the re-run. Both runs scored the
+# same 3,281 tests. v0.25 adds four wholly new modules --
+# test_symbol_ledger, test_house_rules_fixtures, test_house_rules_run
+# (133 alone) and test_big_op_disclosure -- and grows
+# test_conform_ce3_supplement, test_echo_population_audit and
+# test_transliteration. Receipts:
+# reports/test_gate_v025/runs.md -- logs OUT of the tree by a published
+# finding, attached to the release as assets and pinned by digest.
 cd experiments
 python demo_answer.py                       # the demo (self-bootstraps)
 python solvex2.py --out-dir data            # regenerate any dataset

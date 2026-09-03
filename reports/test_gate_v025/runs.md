@@ -2,9 +2,15 @@
 
 The tag's gate is one complete `unittest discover -s tests -v` at the
 frozen tip, logged OUTSIDE the hashed tree (`.runtime/`, the v0.23 run-1
-lesson). Unlike v0.23 and v0.24, the logs are **not** retained in this
-directory; §"Where run 1's log is" says why, and it is a finding of this
-gate rather than a filing preference.
+lesson). Unlike v0.23 and v0.24, **no log is retained in this directory**;
+§"Where the logs are" says why, and it is a finding of this gate rather than
+a filing preference. All four log files — both streams of both runs — are
+attached to the **v0.25.0 GitHub release as assets**, and every one is pinned
+by size and sha256 below, so a reader can check that the asset they downloaded
+is the file this document describes.
+
+**Verdict: GREEN on run 2.** 3,281 tests, `OK (skipped=5)`, 24,437.2 s
+(6 h 47 m) at tip `8b90821`. Two launches, no killed runs.
 
 ## Run 1 — RED by exactly three, all instrument
 
@@ -74,12 +80,19 @@ string under `experiments/**` and every string literal under `tests/**`
 against all five documents that commit touched finds this as the **only**
 collision.
 
-## Where run 1's log is, and why it is not in this directory
+## Where the logs are, and why they are not in this directory
 
-`.runtime/gate_v025_run1.log` (the `unittest -v` stderr stream, 557,261
-bytes, `sha256 ccb5740261707c0c83961ad79a2b23527770b35beeb6009ca80a823704f9b0ef`)
-and `.runtime/gate_v025_run1.log.out` (stdout, 4,201 bytes,
-`sha256 885b66f84c8316c471e3005545a6b474b9baa153bb53a11345c7b9dde21abe7a`).
+Four files, none of them in the tree, all four attached to the v0.25.0
+GitHub release:
+
+| file | stream | bytes | sha256 |
+|---|---|---|---|
+| `gate_v025_run1.log` | stderr (`unittest -v`) | 557,261 | `ccb5740261707c0c83961ad79a2b23527770b35beeb6009ca80a823704f9b0ef` |
+| `gate_v025_run1.log.out` | stdout | 4,201 | `885b66f84c8316c471e3005545a6b474b9baa153bb53a11345c7b9dde21abe7a` |
+| `gate_v025_run2.log` | stderr (`unittest -v`) | 553,508 | `97cfabb725563c8f4dec797aadb7694118ba341e3b4a4ef306edb16f7b6a5936` |
+| `gate_v025_run2.log.out` | stdout | 4,201 | `cf27bb054f71d49452b534e5acd5d5c70cde5e3d670a08fba2591d817531ca93` |
+
+They live at `.runtime/` on the machine that ran them, which is gitignored.
 
 Retaining the stderr log here — the v0.23 and v0.24 practice — was tried and
 **reverted**, because it breaks a published check. Three of the log's
@@ -99,8 +112,11 @@ FAIL [b5-disclosure-classification] ... counts sum to 19 over 20 disclosed path(
 
 That is not a defect this gate should route around by editing the log:
 scrubbing three lines out of the evidence to make a checker pass is the
-move the whole apparatus exists to prevent. So the log stays outside the
-tree and is cited by digest.
+move the whole apparatus exists to prevent. So the logs stay outside the
+tree, are cited by digest here, and are distributed as **release assets** —
+which puts them in a reader's hands without putting them in the hashed tree.
+Run 2's stderr carries the same three test-name lines and is retained the
+same way, for the same reason.
 
 The general shape is worth stating because it will recur: **between a
 registered house-rules run and the next one, no file carrying an admitted
@@ -111,4 +127,31 @@ published classification rule has no class for post-seal repository
 content, which is the other half of the same gap; both are filed in
 `docs/BACKLOG.md`.
 
-## Run 2 — pending
+## Run 2 — GREEN
+
+- tip `8b90821`, 3,281 tests in **24,437.2 s (6 h 47 m)**:
+  **`OK (skipped=5)`**. Launched 2026-09-03 00:03 EDT, exited 06:50 EDT.
+- `git status --porcelain` clean **before and after** the run.
+- Same 3,281 tests as run 1, which is the check that the three repairs at
+  `8b90821` fixed rules rather than removed subjects: had a repair deleted a
+  case, the count would have fallen.
+- Receipts: `gate_v025_run2.log` / `.out`, pinned above and attached to the
+  release.
+
+### The 18 `FAIL`-bearing lines, and why none of them is a failure
+
+Counted over both streams of `gate_v025_run2.log`(`.out`), the same way
+v0.24 counted its 18:
+
+- **15 in stdout** — diagnostics printed by adversarial checks that
+  themselves pass, showing what a red would look like: **6** `FAIL [number-*]`
+  lines where a deliberately-wrong sealed table is shown disagreeing with a
+  frozen prereg number, and **9** `FAIL [invariant-*]` lines where a planted
+  table is shown violating an invariant.
+- **3 in stderr** — `unittest -v` test-name lines that contain the word
+  because the *test's own name* does — one reads *"P3: decide on
+  14 | 2^30 + 3^60 (false) is FAIL, never PASS."*, and two are of the same
+  shape. All three end `... ok`.
+
+A grep for `FAIL` over a green suite log is a bad detector, and this
+paragraph exists so nobody has to re-derive that at the next gate.
