@@ -24,8 +24,8 @@ describes it.
 | `check_report_regeneration.py` verdicts are in the notes | **MET — verdicts in §5, exit 0** | run at this lane's tip |
 | `ingest_wold.py reach` either runs or is reported as *cannot verify* rather than as a skip | **CANNOT VERIFY**, with the exact reason | §6 below |
 | every unfinished item ships, carries, or parks in writing | **MET** | §7 (roadmap §2) and §8 (roadmap §3) |
-| the outside design inquiry for v0.26 is named with its receipt | **NOT SETTLED BY THIS LANE — owned by the parallel v0.26 design course** | its deliverables are `docs/DESIGN-*.md` and `reports/design-direction-v0.26.json`; this lane touches neither |
-| the full suite is green on a frozen tip with retained receipts, and `[SUITE-GATE-V25]` is resolved rather than left as a placeholder | **NOT SETTLED BY THIS LANE — the suite gate runs at the frozen tip after the rotation**, `[SUITE-GATE-V24]` / `d320fce` being the precedent | open |
+| the outside design inquiry for v0.26 is named with its receipt | **NOT SETTLED BY THIS LANE — owned by the parallel v0.26 design course** (settled after this lane: **MET** at `491462a`, `docs/DESIGN-repairable-refusal.md` + `reports/design-direction-v0.26.json`, 2026-09-02) | its deliverables are `docs/DESIGN-*.md` and `reports/design-direction-v0.26.json`; this lane touches neither |
+| the full suite is green on a frozen tip with retained receipts, and `[SUITE-GATE-V25]` is resolved rather than left as a placeholder | **NOT SETTLED BY THIS LANE — the suite gate runs at the frozen tip after the rotation**, `[SUITE-GATE-V24]` / `d320fce` being the precedent (settled after this lane: **MET** 2026-09-03, run 2 GREEN at `8b90821`, 3,281 tests `OK (skipped=5)`, 24,437.2 s; `reports/test_gate_v025/runs.md`) | closed at the tag |
 
 ## 2. The `sum_total` hazard, discharged — and exactly what the parser still does
 
@@ -276,9 +276,9 @@ verified **correct**. What rots is the citation that names a line.
 - The CR-P0 registry re-seal and the live cold re-read — the last
   scripts-affecting act of the lane, taken after everything above, and
   `156e94f`'s named discharge for the census it knowingly left stale.
-- `[SUITE-GATE-V25]`, open, to be resolved at the frozen tip.
+- `[SUITE-GATE-V25]`, open at the time of this lane, resolved at the frozen tip on 2026-09-03 (run 2 GREEN at `8b90821`; `reports/test_gate_v025/runs.md`).
 - The v0.26 outside design inquiry and its receipt, owned by the parallel
-  design course.
+  design course (landed at `491462a` on 2026-09-02).
 - Two standing items: B3's `name_sweep` positive control's coupling to a tree
   property (filed at `[TRIAGE-V25-LOWS]`), and — from the v0.24 triage, still
   open — GUEST AXIOM's unadjudicated B6.
